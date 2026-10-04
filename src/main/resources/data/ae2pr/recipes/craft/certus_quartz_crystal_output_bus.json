@@ -6,11 +6,11 @@
     " C "
   ],
   "key": {
-    "C": {
+    "M": {
       "item": "ae2pr:crystal_reinforced_composite_machine_casing"
     },
-    "M": {
-      "item": "ae2:export_bus"
+    "C": {
+      "item": "ae2:output_bus"
     }
   },
   "result": {

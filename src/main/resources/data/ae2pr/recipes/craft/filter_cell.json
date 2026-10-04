@@ -10,13 +10,13 @@
       "item": "ae2:quartz_glass"
     },
     "B": {
-      "item": "minecraft:redstone"
+      "tag": "forge:dusts/redstone"
     },
     "C": {
-      "item": "ae2:fluix_crystal"
+      "tag": "ae2:all_fluix"
     },
     "D": {
-      "item": "minecraft:iron_ingot"
+      "tag": "forge:ingots/iron"
     }
   },
   "result": {

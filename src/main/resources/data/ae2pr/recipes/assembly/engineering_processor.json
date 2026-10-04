@@ -1,0 +1,24 @@
+{
+  "type": "ae2pr:crystal_assembly_line",
+  "duration": 40,
+  "item_inputs": [
+    {
+      "item": "ae2:printed_engineering_processor",
+      "count": 32
+    },
+    {
+      "item": "ae2:printed_silicon",
+      "count": 32
+    },
+    {
+      "item": "minecraft:redstone",
+      "count": 32
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2:engineering_processor",
+      "count": 32
+    }
+  ]
+}

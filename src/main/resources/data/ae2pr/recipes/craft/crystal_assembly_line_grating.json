@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "CGC",
-    "GCG",
-    "CGC"
+    "CCC",
+    "GGG",
+    "CCC"
   ],
   "key": {
     "C": {
-      "item": "ae2:certus_quartz_crystal"
+      "tag": "ae2:all_certus_quartz"
     },
     "G": {
-      "item": "ae2:quartz_glass"
+      "item": "ae2pr:crystal_assembly_line_casing"
     }
   },
   "result": {
     "item": "ae2pr:crystal_assembly_line_grating",
-    "count": 4
+    "count": 3
   }
 }

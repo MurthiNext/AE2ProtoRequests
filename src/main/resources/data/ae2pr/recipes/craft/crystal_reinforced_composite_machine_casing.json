@@ -1,20 +1,23 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "CCC",
+    "ACA",
     "CSC",
-    "CCC"
+    "ACA"
   ],
   "key": {
     "C": {
-      "item": "ae2:certus_quartz_crystal"
+      "tag": "ae2:all_certus_quartz"
     },
     "S": {
-      "item": "ae2:sky_stone_block"
+      "item": "ae2:smooth_sky_stone_block"
+    },
+    "A": {
+      "item": "ae2pr:meteor_steel_ingot"
     }
   },
   "result": {
     "item": "ae2pr:crystal_reinforced_composite_machine_casing",
-    "count": 4
+    "count": 1
   }
 }

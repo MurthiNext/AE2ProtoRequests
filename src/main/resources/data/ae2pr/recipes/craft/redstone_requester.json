@@ -22,7 +22,7 @@
       "tag": "forge:ingots/copper"
     },
     "s": {
-      "item": "ae2:fluix_crystal"
+      "tag": "ae2:all_fluix"
     }
   },
   "result": {

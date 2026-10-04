@@ -10,7 +10,7 @@
       "item": "ae2pr:crystal_assembly_line_casing"
     },
     "U": {
-      "item": "ae2:fluix_crystal"
+      "tag": "ae2:all_fluix"
     }
   },
   "result": {

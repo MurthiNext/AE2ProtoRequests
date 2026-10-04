@@ -5,7 +5,7 @@
       "item": "ae2:item_cell_housing"
     },
     {
-      "item": "ae2:fluix_crystal"
+      "tag": "ae2:all_fluix"
     }
   ],
   "result": {

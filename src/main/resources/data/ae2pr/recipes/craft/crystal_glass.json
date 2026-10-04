@@ -2,18 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "QGQ",
-    "GFG",
+    "GQG",
     "QGQ"
   ],
   "key": {
     "Q": {
-      "item": "ae2:certus_quartz_crystal"
+      "tag": "ae2:all_certus_quartz"
     },
     "G": {
       "item": "ae2:quartz_glass"
-    },
-    "F": {
-      "item": "ae2:fluix_crystal"
     }
   },
   "result": {

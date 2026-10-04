@@ -1,16 +1,21 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " C ",
+    "DMD",
+    " C "
+  ],
+  "key": {
+    "M": {
       "item": "ae2pr:crystal_reinforced_composite_machine_casing"
     },
-    {
+    "D": {
       "item": "ae2:import_bus"
     },
-    {
+    "C": {
       "item": "minecraft:bucket"
     }
-  ],
+  },
   "result": {
     "item": "ae2pr:certus_quartz_crystal_input_hatch",
     "count": 1
