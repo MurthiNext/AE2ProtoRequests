@@ -1,8 +1,8 @@
 ---
 navigation:
   title: ME 通式阈值发信器
-  parent: index.md
-  icon: multi_threshold_level_emitter
+  parent: machines/machines_index.md
+  icon: ae2pr:multi_threshold_level_emitter
   position: 3
 item_ids:
   - ae2pr:multi_threshold_level_emitter
@@ -10,9 +10,9 @@ item_ids:
 
 # ME 通式阈值发信器
 
-<ItemImage id="multi_threshold_level_emitter" scale="3" />
+<ItemImage id="ae2pr:multi_threshold_level_emitter" scale="3" />
 
-<ItemLink id="multi_threshold_level_emitter" />在 ExtendedAE 阈值发信器的基础上，使配置槽兼容<ItemLink id="filter_cell" />，用于同时监控多个触发项。
+<ItemLink id="ae2pr:multi_threshold_level_emitter" />在 ExtendedAE 阈值发信器的基础上，使配置槽兼容<ItemLink id="ae2pr:filter_cell" />，用于同时监控多个触发项。
 
 ## 判定规则
 

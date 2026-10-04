@@ -1,7 +1,7 @@
 ---
 navigation:
   title: 水晶装配线
-  parent: index.md
+  parent: multiblocks/multiblocks_index.md
   icon: crystal_assembly_line
   position: 0
 item_ids:
