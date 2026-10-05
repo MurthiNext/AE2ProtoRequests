@@ -10,6 +10,7 @@ import com.murthinext.ae2pr.block.assembly_line.AssemblyLineControllerBlockEntit
 import com.murthinext.ae2pr.block.assembly_line.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.assembly_line.FluixCrystalEnergyHatchBlockEntity;
 import com.murthinext.ae2pr.block.assembly_line.ItemBusBlockEntity;
+import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
 import com.murthinext.ae2pr.block.redstone_requester.RedstoneRequesterBlockEntity;
 
 /**
@@ -51,4 +52,10 @@ public final class ModBlockEntities {
             .register("fluix_crystal_energy_hatch", () -> BlockEntityType.Builder.of(
                     FluixCrystalEnergyHatchBlockEntity::new,
                     ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()).build(null));
+
+    /** 名称压印工厂 */
+    public static final RegistryObject<BlockEntityType<NamingFactoryBlockEntity>> NAMING_FACTORY = BLOCK_ENTITIES
+            .register("naming_factory", () -> BlockEntityType.Builder.of(
+                    NamingFactoryBlockEntity::new,
+                    ModBlocks.NAMING_FACTORY.get()).build(null));
 }

@@ -2,7 +2,7 @@
 navigation:
   title: 材料
   parent: index.md
-  icon: ae2pr:alien_lava_bucket
+  icon: ae2pr:meteor_steel_ingot
   position: 0
 ---
 

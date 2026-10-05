@@ -15,6 +15,18 @@
     {
       "type": "single",
       "resource": "ae2pr:block/certus_quartz_crystal/casing_ctm"
+    },
+    {
+      "type": "single",
+      "resource": "ae2pr:block/naming_factory"
+    },
+    {
+      "type": "single",
+      "resource": "ae2pr:block/naming_factory_rod"
+    },
+    {
+      "type": "single",
+      "resource": "ae2pr:block/naming_factory_glass"
     }
   ]
 }

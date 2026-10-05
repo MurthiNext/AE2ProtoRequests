@@ -10,6 +10,7 @@ import com.murthinext.ae2pr.block.assembly_line.FluidHatchMenu;
 import com.murthinext.ae2pr.block.assembly_line.ItemBusMenu;
 import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterMenu;
 import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterMenu;
+import com.murthinext.ae2pr.block.naming_factory.NamingFactoryMenu;
 import com.murthinext.ae2pr.block.redstone_requester.RedstoneRequesterMenu;
 
 /**
@@ -40,4 +41,7 @@ public final class ModMenus {
 
     public static final RegistryObject<MenuType<FluidHatchMenu>> CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH = MENUS
             .register("certus_quartz_crystal_input_hatch", () -> FluidHatchMenu.TYPE);
+
+    public static final RegistryObject<MenuType<NamingFactoryMenu>> NAMING_FACTORY = MENUS
+            .register("naming_factory", () -> NamingFactoryMenu.TYPE);
 }

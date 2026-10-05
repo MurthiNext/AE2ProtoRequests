@@ -24,6 +24,9 @@ public final class Config {
     private static final ForgeConfigSpec.IntValue ASSEMBLY_MAX_SLICES;
     private static final ForgeConfigSpec.DoubleValue ASSEMBLY_ENERGY_PER_PARALLEL;
 
+    private static final ForgeConfigSpec.DoubleValue NAMING_FACTORY_MAX_POWER;
+    private static final ForgeConfigSpec.DoubleValue NAMING_FACTORY_ENERGY_PER_ITEM;
+
     static final ForgeConfigSpec SPEC;
 
     static {
@@ -71,8 +74,17 @@ public final class Config {
                 .comment("结构允许的最大片数（最长长度，默认 31 格）")
                 .defineInRange("maxSlices", 31, 5, 1024);
         ASSEMBLY_ENERGY_PER_PARALLEL = BUILDER
-                .comment("每并行一次执行从 ME 网络扣除的能量（AE；50k AE = 100k FE）")
+                .comment("每并行一次执行从 ME 网络扣除的能量")
                 .defineInRange("energyPerParallel", 50000.0, 0.0, Double.MAX_VALUE);
+        BUILDER.pop();
+
+        BUILDER.push("namingFactory");
+        NAMING_FACTORY_MAX_POWER = BUILDER
+                .comment("名称压印工厂的内部能量缓存上限（AE）")
+                .defineInRange("maxPower", 16000.0, 0.0, Double.MAX_VALUE);
+        NAMING_FACTORY_ENERGY_PER_ITEM = BUILDER
+                .comment("每重命名一个物品消耗的能量（AE）")
+                .defineInRange("energyPerItem", 250.0, 0.0, Double.MAX_VALUE);
         BUILDER.pop();
 
         SPEC = BUILDER.build();
@@ -131,5 +143,13 @@ public final class Config {
 
     public static double assemblyEnergyPerParallel() {
         return ASSEMBLY_ENERGY_PER_PARALLEL.get();
+    }
+
+    public static double namingFactoryMaxPower() {
+        return NAMING_FACTORY_MAX_POWER.get();
+    }
+
+    public static double namingFactoryEnergyPerItem() {
+        return NAMING_FACTORY_ENERGY_PER_ITEM.get();
     }
 }

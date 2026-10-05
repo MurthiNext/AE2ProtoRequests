@@ -14,6 +14,7 @@ import com.murthinext.ae2pr.block.assembly_line.AssemblyLineUnitBlock;
 import com.murthinext.ae2pr.block.assembly_line.CertusQuartzCrystalMachinePartBlock;
 import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
 import com.murthinext.ae2pr.block.assembly_line.FluixCrystalEnergyHatchBlock;
+import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlock;
 import com.murthinext.ae2pr.block.redstone_requester.RedstoneRequesterBlock;
 
 /**
@@ -86,6 +87,10 @@ public final class ModBlocks {
                     .pushReaction(PushReaction.DESTROY)
                     .lightLevel(state -> 15)
                     .noLootTable()));
+
+    /** 名称压印工厂 */
+    public static final RegistryObject<NamingFactoryBlock> NAMING_FACTORY = BLOCKS.register(
+            "naming_factory", NamingFactoryBlock::new);
 
     private static Block.Properties casingProperties() {
         return Block.Properties.of()

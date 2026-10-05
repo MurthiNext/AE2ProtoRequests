@@ -96,4 +96,8 @@ public final class ModItems {
     public static final RegistryObject<BucketItem> ALIEN_LAVA_BUCKET = ITEMS.register("alien_lava_bucket",
             () -> new BucketItem(ModFluids.ALIEN_LAVA,
                     new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+
+    /** 名称压印工厂 */
+    public static final RegistryObject<BlockItem> NAMING_FACTORY = ITEMS.register("naming_factory",
+            () -> new BlockItem(ModBlocks.NAMING_FACTORY.get(), new Item.Properties()));
 }

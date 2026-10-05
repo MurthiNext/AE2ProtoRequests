@@ -4,6 +4,7 @@ import com.murthinext.ae2pr.network.AssemblyLineJobPacket;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 import com.murthinext.ae2pr.network.MachinePartStackPacket;
+import com.murthinext.ae2pr.network.NamingFactoryRenamePacket;
 import com.murthinext.ae2pr.network.RepeatOrderConfirmRoundsPacket;
 import com.murthinext.ae2pr.network.RepeatOrderFailedPacket;
 import com.murthinext.ae2pr.network.RepeatOrderFinishedPacket;
@@ -87,6 +88,12 @@ public final class ModNetwork {
                 AssemblyLineJobPacket::encode,
                 AssemblyLineJobPacket::decode,
                 AssemblyLineJobPacket::handle);
+
+        CHANNEL.registerMessage(nextMessageId++,
+                NamingFactoryRenamePacket.class,
+                NamingFactoryRenamePacket::encode,
+                NamingFactoryRenamePacket::decode,
+                NamingFactoryRenamePacket::handle);
     }
 
     public static void sendToPlayer(ServerPlayer player, RepeatOrderStatusPacket packet) {
@@ -122,6 +129,10 @@ public final class ModNetwork {
     }
 
     public static void sendToServer(BusSlotClickPacket packet) {
+        CHANNEL.sendToServer(packet);
+    }
+
+    public static void sendToServer(NamingFactoryRenamePacket packet) {
         CHANNEL.sendToServer(packet);
     }
 }

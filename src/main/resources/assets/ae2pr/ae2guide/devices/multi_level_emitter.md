@@ -1,7 +1,7 @@
 ---
 navigation:
   title: ME 通式标准发信器
-  parent: machines/machines_index.md
+  parent: devices/devices_index.md
   icon: ae2pr:multi_level_emitter
   position: 2
 item_ids:

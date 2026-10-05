@@ -118,11 +118,6 @@ public class ItemBusMenu extends AbstractContainerMenu {
 
     /**
      * 存储区点击（由客户端点击包调用）：
-     * <ul>
-     * <li>Shift：全部取出并尽量放进玩家背包</li>
-     * <li>手持物品：存入（左键整组、右键 1 件）</li>
-     * <li>空手：取出（左键最多 64 件、右键 1 件）到光标</li>
-     * </ul>
      * @param button 0 = 左键，1 = 右键
      */
     public void handleStorageClick(int button, boolean shift) {

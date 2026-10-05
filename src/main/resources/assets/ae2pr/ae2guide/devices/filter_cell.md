@@ -1,7 +1,7 @@
 ---
 navigation:
   title: 过滤元件
-  parent: machines/machines_index.md
+  parent: devices/devices_index.md
   icon: ae2pr:filter_cell
   position: 1
 item_ids:

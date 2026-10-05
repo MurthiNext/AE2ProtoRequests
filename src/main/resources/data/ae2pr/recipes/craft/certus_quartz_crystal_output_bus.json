@@ -10,7 +10,7 @@
       "item": "ae2pr:crystal_reinforced_composite_machine_casing"
     },
     "C": {
-      "item": "ae2:output_bus"
+      "item": "ae2:export_bus"
     }
   },
   "result": {

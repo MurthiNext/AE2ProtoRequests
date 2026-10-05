@@ -1,7 +1,7 @@
 ---
 navigation:
   title: ME 通式阈值发信器
-  parent: machines/machines_index.md
+  parent: devices/devices_index.md
   icon: ae2pr:multi_threshold_level_emitter
   position: 3
 item_ids:

@@ -1,19 +1,15 @@
 ---
 navigation:
-  title: 设备与元件
+  title: 加工与生产
   parent: index.md
-  icon: ae2pr:filter_cell
+  icon: ae2pr:naming_factory
   position: 0
 ---
 
-# 设备与元件
+# 加工与生产
 
-AE2 Proto Requests 添加了许多基于原版 AE2 或其他附属模组，功能进一步延伸强化的 ME 网络元件。
+很多时候，你需要用到这些单方块机器来加工一些东西……
 
-包括用于物流的元件，用于调度网络的元件等等……
+## AEV 阶段
 
-[过滤元件](filter_cell.md)
-
-[ME 通式标准发信器](multi_level_emitter.md)
-
-[ME 通式阈值发信器](multi_threshold_level_emitter.md)
+[名称压印工厂](naming_factory.md)

@@ -1,0 +1,88 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "machine": "ae2pr:block/naming_factory",
+    "glass": "ae2pr:block/naming_factory_glass",
+    "particle": "ae2pr:block/naming_factory"
+  },
+  "elements": [
+    {
+      "name": "forge",
+      "from": [
+        3,
+        12,
+        3
+      ],
+      "to": [
+        13,
+        14,
+        13
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          2,
+          12,
+          0
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            6.875,
+            5.375,
+            8.125,
+            5.625
+          ],
+          "texture": "#machine"
+        },
+        "east": {
+          "uv": [
+            6.875,
+            5.625,
+            8.125,
+            5.875
+          ],
+          "texture": "#machine"
+        },
+        "south": {
+          "uv": [
+            7,
+            1.25,
+            8.25,
+            1.5
+          ],
+          "texture": "#machine"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            0.625,
+            8.5,
+            0.875
+          ],
+          "texture": "#machine"
+        },
+        "up": {
+          "uv": [
+            6.75,
+            6,
+            8,
+            7.25
+          ],
+          "texture": "#machine"
+        },
+        "down": {
+          "uv": [
+            7.25,
+            1.75,
+            8.5,
+            3
+          ],
+          "texture": "#machine"
+        }
+      }
+    }
+  ]
+}

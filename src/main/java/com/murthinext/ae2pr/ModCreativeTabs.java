@@ -42,6 +42,7 @@ public final class ModCreativeTabs {
 
                         output.accept(ModItems.METEOR_STEEL_INGOT.get());
                         output.accept(ModItems.ALIEN_LAVA_BUCKET.get());
+                        output.accept(ModItems.NAMING_FACTORY.get());
                     })
                     .build());
 }

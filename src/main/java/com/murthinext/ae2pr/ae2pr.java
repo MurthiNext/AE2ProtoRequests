@@ -86,6 +86,14 @@ public class ae2pr {
                     energyHatchType, null, null);
             appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(energyHatchType,
                     ModItems.FLUIX_CRYSTAL_ENERGY_HATCH.get());
+
+            // 名称压印工厂：绑定方块实体类型并登记代表物品
+            var namingFactoryType = ModBlockEntities.NAMING_FACTORY.get();
+            ModBlocks.NAMING_FACTORY.get().setBlockEntity(
+                    com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity.class,
+                    namingFactoryType, null, null);
+            appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(namingFactoryType,
+                    ModItems.NAMING_FACTORY.get());
         });
     }
 }

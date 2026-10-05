@@ -14,4 +14,4 @@ navigation:
 
 ## AEV 阶段
 
-AE2：源请求科技树的起点：[水晶装配线](crystal_assembly_line.md)！利用子网与优先级驾驭这台精密机器吧！
+AE2 Proto Requests 科技树的起点：[水晶装配线](crystal_assembly_line.md)！利用子网与优先级驾驭这台精密机器吧！

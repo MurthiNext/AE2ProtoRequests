@@ -17,11 +17,13 @@ public final class ModTags {
 
     /**
      * 扳手：用于旋转本模组的机器与部件。
-     * <p>
-     * 默认引用通用约定标签 {@code forge:tools/wrench}（AE2、沉浸工程等多数扳手均已加入），
-     * 因此无需额外配置即可兼容常见扳手；也可直接向本标签追加物品。
      */
     public static final TagKey<Item> WRENCHES = ItemTags.create(new ResourceLocation(ae2pr.MODID, "wrenches"));
+
+    /**
+     * 石英切割刀：右击本模组机器可为其写入自定义名称。
+     */
+    public static final TagKey<Item> KNIVES = ItemTags.create(new ResourceLocation("ae2", "knife"));
 
     public static final TagKey<Fluid> ALIEN_LAVA = TagKey.create(Registries.FLUID,
             new ResourceLocation(ae2pr.MODID, "alien_lava"));
