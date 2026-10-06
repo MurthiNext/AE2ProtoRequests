@@ -43,6 +43,14 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.METEOR_STEEL_INGOT.get());
                         output.accept(ModItems.ALIEN_LAVA_BUCKET.get());
                         output.accept(ModItems.NAMING_FACTORY.get());
+                        output.accept(ModItems.METEORITE_IRON_ORE.get());
+                        output.accept(ModItems.METEORITE_COPPER_ORE.get());
+                        output.accept(ModItems.METEORITE_GOLD_ORE.get());
+                        output.accept(ModItems.METEORITE_LAPIS_ORE.get());
+                        output.accept(ModItems.METEORITE_DIAMOND_ORE.get());
+                        output.accept(ModItems.METEORITE_EMERALD_ORE.get());
+                        output.accept(ModItems.METEORITE_ZIRCON_ORE.get());
+                        output.accept(ModItems.ZIRCON.get());
                     })
                     .build());
 }

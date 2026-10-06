@@ -15,6 +15,9 @@
     "CraftingStatusMenuBroadcastMixin",
     "ItemEntityMixin",
     "MenuOpenerMixin",
+    "MeteoritePlacerItemMixin",
+    "MeteoritePlacerMixin",
+    "MeteoriteStructureMixin",
     "NetworkHandlerMixin"
   ],
   "client": [

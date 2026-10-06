@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr;
 
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -14,6 +16,7 @@ import com.murthinext.ae2pr.block.assembly_line.AssemblyLineUnitBlock;
 import com.murthinext.ae2pr.block.assembly_line.CertusQuartzCrystalMachinePartBlock;
 import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
 import com.murthinext.ae2pr.block.assembly_line.FluixCrystalEnergyHatchBlock;
+import com.murthinext.ae2pr.block.meteorite.MeteoriteOreBlock;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlock;
 import com.murthinext.ae2pr.block.redstone_requester.RedstoneRequesterBlock;
 
@@ -91,6 +94,43 @@ public final class ModBlocks {
     /** 名称压印工厂 */
     public static final RegistryObject<NamingFactoryBlock> NAMING_FACTORY = BLOCKS.register(
             "naming_factory", NamingFactoryBlock::new);
+
+    /** 陨石铁矿石 */
+    public static final RegistryObject<MeteoriteOreBlock> METEORITE_IRON_ORE = BLOCKS.register(
+            "meteorite_iron_ore", () -> new MeteoriteOreBlock(meteoriteOreProperties(), ConstantInt.of(0)));
+
+    /** 陨石铜矿石 */
+    public static final RegistryObject<MeteoriteOreBlock> METEORITE_COPPER_ORE = BLOCKS.register(
+            "meteorite_copper_ore", () -> new MeteoriteOreBlock(meteoriteOreProperties(), ConstantInt.of(0)));
+
+    /** 陨石金矿石 */
+    public static final RegistryObject<MeteoriteOreBlock> METEORITE_GOLD_ORE = BLOCKS.register(
+            "meteorite_gold_ore", () -> new MeteoriteOreBlock(meteoriteOreProperties(), ConstantInt.of(0)));
+
+    /** 陨石青金石矿石 */
+    public static final RegistryObject<MeteoriteOreBlock> METEORITE_LAPIS_ORE = BLOCKS.register(
+            "meteorite_lapis_ore", () -> new MeteoriteOreBlock(meteoriteOreProperties(), UniformInt.of(2, 5)));
+
+    /** 陨石钻石矿石 */
+    public static final RegistryObject<MeteoriteOreBlock> METEORITE_DIAMOND_ORE = BLOCKS.register(
+            "meteorite_diamond_ore", () -> new MeteoriteOreBlock(meteoriteOreProperties(), UniformInt.of(3, 7)));
+
+    /** 陨石绿宝石矿石 */
+    public static final RegistryObject<MeteoriteOreBlock> METEORITE_EMERALD_ORE = BLOCKS.register(
+            "meteorite_emerald_ore", () -> new MeteoriteOreBlock(meteoriteOreProperties(), UniformInt.of(3, 7)));
+
+    /** 陨石锆英石矿石 */
+    public static final RegistryObject<MeteoriteOreBlock> METEORITE_ZIRCON_ORE = BLOCKS.register(
+            "meteorite_zircon_ore", () -> new MeteoriteOreBlock(meteoriteOreProperties(), UniformInt.of(3, 7)));
+
+    private static Block.Properties meteoriteOreProperties() {
+        return Block.Properties.of()
+                .mapColor(MapColor.STONE)
+                .sound(SoundType.STONE)
+                .strength(50.0F, 150.0F)
+                .requiresCorrectToolForDrops()
+                .forceSolidOn();
+    }
 
     private static Block.Properties casingProperties() {
         return Block.Properties.of()

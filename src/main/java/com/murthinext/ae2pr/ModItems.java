@@ -100,4 +100,35 @@ public final class ModItems {
     /** 名称压印工厂 */
     public static final RegistryObject<BlockItem> NAMING_FACTORY = ITEMS.register("naming_factory",
             () -> new BlockItem(ModBlocks.NAMING_FACTORY.get(), new Item.Properties()));
+
+    /** 陨石铁矿石 */
+    public static final RegistryObject<BlockItem> METEORITE_IRON_ORE = ITEMS.register("meteorite_iron_ore",
+            () -> new BlockItem(ModBlocks.METEORITE_IRON_ORE.get(), new Item.Properties()));
+
+    /** 陨石铜矿石 */
+    public static final RegistryObject<BlockItem> METEORITE_COPPER_ORE = ITEMS.register("meteorite_copper_ore",
+            () -> new BlockItem(ModBlocks.METEORITE_COPPER_ORE.get(), new Item.Properties()));
+
+    /** 陨石金矿石 */
+    public static final RegistryObject<BlockItem> METEORITE_GOLD_ORE = ITEMS.register("meteorite_gold_ore",
+            () -> new BlockItem(ModBlocks.METEORITE_GOLD_ORE.get(), new Item.Properties()));
+
+    /** 陨石青金石矿石 */
+    public static final RegistryObject<BlockItem> METEORITE_LAPIS_ORE = ITEMS.register("meteorite_lapis_ore",
+            () -> new BlockItem(ModBlocks.METEORITE_LAPIS_ORE.get(), new Item.Properties()));
+
+    /** 陨石钻石矿石 */
+    public static final RegistryObject<BlockItem> METEORITE_DIAMOND_ORE = ITEMS.register("meteorite_diamond_ore",
+            () -> new BlockItem(ModBlocks.METEORITE_DIAMOND_ORE.get(), new Item.Properties()));
+
+    /** 陨石绿宝石矿石 */
+    public static final RegistryObject<BlockItem> METEORITE_EMERALD_ORE = ITEMS.register("meteorite_emerald_ore",
+            () -> new BlockItem(ModBlocks.METEORITE_EMERALD_ORE.get(), new Item.Properties()));
+
+    /** 陨石锆英石矿石 */
+    public static final RegistryObject<BlockItem> METEORITE_ZIRCON_ORE = ITEMS.register("meteorite_zircon_ore",
+            () -> new BlockItem(ModBlocks.METEORITE_ZIRCON_ORE.get(), new Item.Properties()));
+
+    /** 锆英石 */
+    public static final RegistryObject<Item> ZIRCON = ITEMS.register("zircon", () -> new Item(new Item.Properties()));
 }

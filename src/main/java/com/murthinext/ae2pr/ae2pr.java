@@ -8,6 +8,7 @@ import com.mojang.logging.LogUtils;
 import com.murthinext.ae2pr.block.assembly_line.CertusQuartzCrystalMachinePartBlock;
 import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterPart;
 import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterPart;
+import com.murthinext.ae2pr.block.meteorite.MeteoriteOres;
 import com.murthinext.ae2pr.logic.repeat.GenericRepeatOrders;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -51,6 +52,8 @@ public class ae2pr {
         MinecraftForge.EVENT_BUS.addListener(GenericRepeatOrders::onServerStopped);
         // 水晶机器部件：潜行时原版会跳过 Block#use，用事件放行以实现扳手 Shift+右键拆卸
         MinecraftForge.EVENT_BUS.addListener(CertusQuartzCrystalMachinePartBlock::onRightClickBlock);
+        // 陨石矿石：铁镐以上挖掘时速度与天空石一致
+        MinecraftForge.EVENT_BUS.addListener(MeteoriteOres::onBreakSpeed);
 
         // 客户端：构建并注册 GuideME 指南
         if (FMLEnvironment.dist == Dist.CLIENT) {

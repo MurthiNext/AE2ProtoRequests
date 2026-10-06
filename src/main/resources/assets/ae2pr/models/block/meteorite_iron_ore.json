@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "ae2pr:block/meteorite_ore/meteorite_iron_ore"
+  }
+}
