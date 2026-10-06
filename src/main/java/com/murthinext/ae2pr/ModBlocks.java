@@ -16,6 +16,7 @@ import com.murthinext.ae2pr.block.assembly_line.AssemblyLineUnitBlock;
 import com.murthinext.ae2pr.block.assembly_line.CertusQuartzCrystalMachinePartBlock;
 import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
 import com.murthinext.ae2pr.block.assembly_line.FluixCrystalEnergyHatchBlock;
+import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOreBlock;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlock;
 import com.murthinext.ae2pr.block.redstone_requester.RedstoneRequesterBlock;
@@ -126,6 +127,10 @@ public final class ModBlocks {
     /** 陨钢块 */
     public static final RegistryObject<Block> METEOR_STEEL_BLOCK = BLOCKS.register(
             "meteor_steel_block", () -> new Block(storageBlockProperties(MapColor.METAL)));
+
+    /** 陨钢管道方块 */
+    public static final RegistryObject<MeteorSteelPipeBlock> METEOR_STEEL_PIPE_BLOCK = BLOCKS.register(
+            "meteor_steel_pipe_block", MeteorSteelPipeBlock::new);
 
     /** 锆英石块 */
     public static final RegistryObject<Block> ZIRCON_BLOCK = BLOCKS.register(

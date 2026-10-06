@@ -36,6 +36,7 @@ public final class CtmSprites {
         register("block/crystal/crystal_glass");
         register("block/certus_quartz_crystal/casing");
         register("block/zircon/zirconia_corundum_bricks");
+        register("block/meteor_steel_pipe_block/side");
     }
 
     private CtmSprites() {

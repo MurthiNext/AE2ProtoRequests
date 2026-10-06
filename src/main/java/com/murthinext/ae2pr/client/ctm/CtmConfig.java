@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
 
 /**
  * 连接纹理的逐方块配置。
@@ -61,12 +62,29 @@ public final class CtmConfig {
     }
 
     /**
+     * 邻居是否可沿 {@code dir} 方向与本方块连接。
+     * <p>
+     * 管道方块额外要求连接方向与其轴向一致：轴向直线相连的侧面包边连续，
+     * 转角/T 字等垂直相邻的管道不连接。
+     */
+    public static boolean connects(BlockState neighbor, BlockState self, Direction dir) {
+        if (!connects(neighbor, self)) {
+            return false;
+        }
+        if (self.getBlock() == ModBlocks.METEOR_STEEL_PIPE_BLOCK.get()) {
+            return dir.getAxis() == self.getValue(MeteorSteelPipeBlock.FACING).getAxis();
+        }
+        return true;
+    }
+
+    /**
      * 连接族标识：同一标识之间才连接。
      * <ul>
      * <li>{@code 1} 机身族：水晶强化复合机械方块 + 三种仓室 + 能源仓（未成型用赛特斯机壳贴图，也与机壳相连）</li>
      * <li>{@code 2} 装配线格栅（同种相连）</li>
      * <li>{@code 3} 水晶玻璃（同种相连）</li>
      * <li>{@code 4} 锆刚玉砖块（同种相连）</li>
+     * <li>{@code 5~7} 陨钢管道方块（按轴向分族，同种相连且仅沿自身轴向连接）</li>
      * <li>{@code 0} 不参与连接纹理（控制器、装配线外壳、控制外壳）</li>
      * </ul>
      */
@@ -88,6 +106,10 @@ public final class CtmConfig {
         if (block == ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get()) {
             return 4;
         }
+        if (block == ModBlocks.METEOR_STEEL_PIPE_BLOCK.get()) {
+            // 管道按轴向分族：只有轴向相同的管道才可能连接
+            return 5 + state.getValue(MeteorSteelPipeBlock.FACING).getAxis().ordinal();
+        }
         return 0;
     }
 
@@ -98,7 +120,7 @@ public final class CtmConfig {
     public static int worldMask(BlockAndTintGetter level, BlockPos pos, BlockState state) {
         int mask = 0;
         for (Direction dir : Direction.values()) {
-            if (connects(level.getBlockState(pos.relative(dir)), state)) {
+            if (connects(level.getBlockState(pos.relative(dir)), state, dir)) {
                 mask |= 1 << dir.ordinal();
             }
         }

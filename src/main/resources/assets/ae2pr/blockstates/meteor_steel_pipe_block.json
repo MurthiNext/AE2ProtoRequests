@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "ae2pr:block/meteor_steel_pipe_block_axis_y"
+    },
+    "facing=down": {
+      "model": "ae2pr:block/meteor_steel_pipe_block_axis_y"
+    },
+    "facing=east": {
+      "model": "ae2pr:block/meteor_steel_pipe_block_axis_x"
+    },
+    "facing=west": {
+      "model": "ae2pr:block/meteor_steel_pipe_block_axis_x"
+    },
+    "facing=north": {
+      "model": "ae2pr:block/meteor_steel_pipe_block_axis_z"
+    },
+    "facing=south": {
+      "model": "ae2pr:block/meteor_steel_pipe_block_axis_z"
+    }
+  }
+}

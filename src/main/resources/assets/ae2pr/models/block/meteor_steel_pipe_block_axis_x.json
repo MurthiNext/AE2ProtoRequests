@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "ae2pr:block/meteor_steel_pipe_block/side",
+    "east": "ae2pr:block/meteor_steel_pipe_block/end",
+    "west": "ae2pr:block/meteor_steel_pipe_block/end",
+    "down": "ae2pr:block/meteor_steel_pipe_block/side",
+    "up": "ae2pr:block/meteor_steel_pipe_block/side",
+    "north": "ae2pr:block/meteor_steel_pipe_block/side",
+    "south": "ae2pr:block/meteor_steel_pipe_block/side"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IPI",
+    "I I",
+    "IPI"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/meteor_steel"
+    },
+    "P": {
+      "tag": "forge:plates/meteor_steel"
+    }
+  },
+  "result": {
+    "item": "ae2pr:meteor_steel_pipe_block"
+  }
+}

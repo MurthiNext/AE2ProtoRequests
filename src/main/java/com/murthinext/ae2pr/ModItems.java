@@ -144,6 +144,10 @@ public final class ModItems {
     public static final RegistryObject<BlockItem> METEOR_STEEL_BLOCK = ITEMS.register("meteor_steel_block",
             () -> new BlockItem(ModBlocks.METEOR_STEEL_BLOCK.get(), new Item.Properties()));
 
+    /** 陨钢管道方块 */
+    public static final RegistryObject<BlockItem> METEOR_STEEL_PIPE_BLOCK = ITEMS.register("meteor_steel_pipe_block",
+            () -> new BlockItem(ModBlocks.METEOR_STEEL_PIPE_BLOCK.get(), new Item.Properties()));
+
     /** 锆英石块 */
     public static final RegistryObject<BlockItem> ZIRCON_BLOCK = ITEMS.register("zircon_block",
             () -> new BlockItem(ModBlocks.ZIRCON_BLOCK.get(), new Item.Properties()));

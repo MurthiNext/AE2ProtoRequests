@@ -44,6 +44,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.METEOR_STEEL_PLATE.get());
                         output.accept(ModItems.METEOR_STEEL_DUST.get());
                         output.accept(ModItems.METEOR_STEEL_BLOCK.get());
+                        output.accept(ModItems.METEOR_STEEL_PIPE_BLOCK.get());
                         output.accept(ModItems.SINGLE_PLATE_PRESS.get());
                         output.accept(ModItems.ALIEN_LAVA_BUCKET.get());
                         output.accept(ModItems.NAMING_FACTORY.get());

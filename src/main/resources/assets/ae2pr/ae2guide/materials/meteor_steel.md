@@ -6,9 +6,17 @@ navigation:
   position: 20
 item_ids:
   - ae2pr:meteor_steel_ingot
+  - ae2pr:meteor_steel_dust
+  - ae2pr:meteor_steel_plate
 ---
 
 # 陨钢锭
+
+<ItemGrid>
+  <ItemIcon id="ae2pr:meteor_steel_ingot" />
+  <ItemIcon id="ae2pr:meteor_steel_dust" />
+  <ItemIcon id="ae2pr:meteor_steel_plate" />
+</ItemGrid>
 
 **AEV 级材料**
 
