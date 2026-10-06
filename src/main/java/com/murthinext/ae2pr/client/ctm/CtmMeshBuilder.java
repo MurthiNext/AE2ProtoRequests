@@ -28,7 +28,7 @@ public final class CtmMeshBuilder {
      * 角仅在两条邻边都连接时有效；下标 = 边掩码（bit0=min-U、bit1=max-U、bit2=min-V、bit3=max-V）。
      */
     private static final int[] VALID_CORNERS = {
-            0, 0, 0, 0, 0, 1, 2, 3, 0, 4, 8, 12, 0, 9, 10, 15
+            0, 0, 0, 0, 0, 1, 2, 3, 0, 4, 8, 12, 0, 5, 10, 15
     };
 
     /** 各边掩码的图块起始序号（图块序号 = 起始序号 + 角状态变体），与纹理生成脚本保持一致。 */
