@@ -131,4 +131,28 @@ public final class ModItems {
 
     /** 锆英石 */
     public static final RegistryObject<Item> ZIRCON = ITEMS.register("zircon", () -> new Item(new Item.Properties()));
+
+    /** 陨钢块 */
+    public static final RegistryObject<BlockItem> METEOR_STEEL_BLOCK = ITEMS.register("meteor_steel_block",
+            () -> new BlockItem(ModBlocks.METEOR_STEEL_BLOCK.get(), new Item.Properties()));
+
+    /** 锆英石块 */
+    public static final RegistryObject<BlockItem> ZIRCON_BLOCK = ITEMS.register("zircon_block",
+            () -> new BlockItem(ModBlocks.ZIRCON_BLOCK.get(), new Item.Properties()));
+
+    /** 陨钢粉 */
+    public static final RegistryObject<Item> METEOR_STEEL_DUST = ITEMS.register("meteor_steel_dust",
+            () -> new Item(new Item.Properties()));
+
+    /** 锆英石粉 */
+    public static final RegistryObject<Item> ZIRCON_DUST = ITEMS.register("zircon_dust",
+            () -> new Item(new Item.Properties()));
+
+    /** 锆英石砖 */
+    public static final RegistryObject<Item> ZIRCON_BRICK = ITEMS.register("zircon_brick",
+            () -> new Item(new Item.Properties()));
+
+    /** 锆刚玉砖块 */
+    public static final RegistryObject<BlockItem> ZIRCONIA_CORUNDUM_BRICKS = ITEMS.register("zirconia_corundum_bricks",
+            () -> new BlockItem(ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get(), new Item.Properties()));
 }

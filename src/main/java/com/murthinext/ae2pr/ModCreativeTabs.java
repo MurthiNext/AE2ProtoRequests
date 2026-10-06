@@ -41,6 +41,8 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.FLUIX_CRYSTAL_ENERGY_HATCH.get());
 
                         output.accept(ModItems.METEOR_STEEL_INGOT.get());
+                        output.accept(ModItems.METEOR_STEEL_DUST.get());
+                        output.accept(ModItems.METEOR_STEEL_BLOCK.get());
                         output.accept(ModItems.ALIEN_LAVA_BUCKET.get());
                         output.accept(ModItems.NAMING_FACTORY.get());
                         output.accept(ModItems.METEORITE_IRON_ORE.get());
@@ -51,6 +53,10 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.METEORITE_EMERALD_ORE.get());
                         output.accept(ModItems.METEORITE_ZIRCON_ORE.get());
                         output.accept(ModItems.ZIRCON.get());
+                        output.accept(ModItems.ZIRCON_DUST.get());
+                        output.accept(ModItems.ZIRCON_BLOCK.get());
+                        output.accept(ModItems.ZIRCON_BRICK.get());
+                        output.accept(ModItems.ZIRCONIA_CORUNDUM_BRICKS.get());
                     })
                     .build());
 }

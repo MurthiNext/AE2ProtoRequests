@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "ae2pr:zircon_block"
+  },
+  "result": "ae2pr:zircon_brick",
+  "count": 6
+}

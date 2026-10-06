@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    "MMM",
+    "MMM"
+  ],
+  "key": {
+    "M": {
+      "tag": "forge:ingots/meteor_steel"
+    }
+  },
+  "result": {
+    "item": "ae2pr:meteor_steel_block"
+  }
+}

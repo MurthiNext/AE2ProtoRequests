@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "ae2pr:zircon_block"
+    }
+  ],
+  "result": {
+    "item": "ae2pr:zircon",
+    "count": 9
+  }
+}

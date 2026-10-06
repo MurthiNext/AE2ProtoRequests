@@ -18,6 +18,10 @@
     },
     {
       "type": "single",
+      "resource": "ae2pr:block/zircon/zirconia_corundum_bricks_ctm"
+    },
+    {
+      "type": "single",
       "resource": "ae2pr:block/naming_factory"
     },
     {

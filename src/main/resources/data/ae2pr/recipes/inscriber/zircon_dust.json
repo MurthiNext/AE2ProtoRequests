@@ -1,0 +1,12 @@
+{
+  "type": "ae2:inscriber",
+  "ingredients": {
+    "middle": {
+      "tag": "forge:gems/zircon"
+    }
+  },
+  "mode": "inscribe",
+  "result": {
+    "item": "ae2pr:zircon_dust"
+  }
+}

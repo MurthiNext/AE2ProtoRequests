@@ -35,6 +35,7 @@ public final class CtmSprites {
         register("block/crystal/assembly_line_grating");
         register("block/crystal/crystal_glass");
         register("block/certus_quartz_crystal/casing");
+        register("block/zircon/zirconia_corundum_bricks");
     }
 
     private CtmSprites() {

@@ -123,6 +123,30 @@ public final class ModBlocks {
     public static final RegistryObject<MeteoriteOreBlock> METEORITE_ZIRCON_ORE = BLOCKS.register(
             "meteorite_zircon_ore", () -> new MeteoriteOreBlock(meteoriteOreProperties(), UniformInt.of(3, 7)));
 
+    /** 陨钢块 */
+    public static final RegistryObject<Block> METEOR_STEEL_BLOCK = BLOCKS.register(
+            "meteor_steel_block", () -> new Block(storageBlockProperties(MapColor.METAL)));
+
+    /** 锆英石块 */
+    public static final RegistryObject<Block> ZIRCON_BLOCK = BLOCKS.register(
+            "zircon_block", () -> new Block(storageBlockProperties(MapColor.COLOR_LIGHT_GRAY)));
+
+    /** 锆刚玉砖块 */
+    public static final RegistryObject<Block> ZIRCONIA_CORUNDUM_BRICKS = BLOCKS.register(
+            "zirconia_corundum_bricks", () -> new Block(Block.Properties.of()
+                    .mapColor(MapColor.COLOR_YELLOW)
+                    .strength(3.5F)
+                    .sound(SoundType.STONE)
+                    .requiresCorrectToolForDrops()));
+
+    private static Block.Properties storageBlockProperties(MapColor mapColor) {
+        return Block.Properties.of()
+                .mapColor(mapColor)
+                .strength(5.0F, 6.0F)
+                .sound(SoundType.METAL)
+                .requiresCorrectToolForDrops();
+    }
+
     private static Block.Properties meteoriteOreProperties() {
         return Block.Properties.of()
                 .mapColor(MapColor.STONE)
