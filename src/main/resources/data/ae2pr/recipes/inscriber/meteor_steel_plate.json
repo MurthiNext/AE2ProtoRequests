@@ -1,0 +1,15 @@
+{
+  "type": "ae2:inscriber",
+  "ingredients": {
+    "top": {
+      "item": "ae2pr:single_plate_press"
+    },
+    "middle": {
+      "tag": "forge:ingots/meteor_steel"
+    }
+  },
+  "mode": "inscribe",
+  "result": {
+    "item": "ae2pr:meteor_steel_plate"
+  }
+}

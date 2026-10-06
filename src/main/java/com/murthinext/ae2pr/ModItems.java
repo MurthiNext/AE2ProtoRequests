@@ -92,6 +92,14 @@ public final class ModItems {
     public static final RegistryObject<Item> METEOR_STEEL_INGOT = ITEMS.register("meteor_steel_ingot",
             () -> new Item(new Item.Properties()));
 
+    /** 陨钢板 */
+    public static final RegistryObject<Item> METEOR_STEEL_PLATE = ITEMS.register("meteor_steel_plate",
+            () -> new Item(new Item.Properties()));
+
+    /** 单层板压印模板 */
+    public static final RegistryObject<Item> SINGLE_PLATE_PRESS = ITEMS.register("single_plate_press",
+            () -> new Item(new Item.Properties()));
+
     /** 异星熔岩桶 */
     public static final RegistryObject<BucketItem> ALIEN_LAVA_BUCKET = ITEMS.register("alien_lava_bucket",
             () -> new BucketItem(ModFluids.ALIEN_LAVA,

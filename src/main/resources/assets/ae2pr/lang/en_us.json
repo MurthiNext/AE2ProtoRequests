@@ -68,6 +68,8 @@
   "screen.ae2pr.naming_factory.rename.hint": "Enter a new name",
   "screen.ae2pr.naming_factory.rename.tip": "Press Enter to confirm, leave empty to clear",
   "item.ae2pr.meteor_steel_ingot": "Meteor Steel Ingot",
+  "item.ae2pr.meteor_steel_plate": "Meteor Steel Plate",
+  "item.ae2pr.single_plate_press": "Single Plate Press",
   "item.ae2pr.meteor_steel_dust": "Meteor Steel Dust",
   "block.ae2pr.meteor_steel_block": "Block of Meteor Steel",
   "item.ae2pr.alien_lava_bucket": "Alien Lava Bucket",

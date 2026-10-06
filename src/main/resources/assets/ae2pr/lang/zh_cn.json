@@ -68,6 +68,8 @@
   "screen.ae2pr.naming_factory.rename.hint": "输入新名称",
   "screen.ae2pr.naming_factory.rename.tip": "回车确认，留空则清除名称",
   "item.ae2pr.meteor_steel_ingot": "陨钢锭",
+  "item.ae2pr.meteor_steel_plate": "陨钢板",
+  "item.ae2pr.single_plate_press": "单层板压印模板",
   "item.ae2pr.meteor_steel_dust": "陨钢粉",
   "block.ae2pr.meteor_steel_block": "陨钢块",
   "item.ae2pr.alien_lava_bucket": "异星熔岩桶",
