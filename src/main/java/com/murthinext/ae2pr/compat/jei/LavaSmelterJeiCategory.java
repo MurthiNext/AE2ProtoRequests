@@ -6,14 +6,11 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -25,23 +22,23 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 
-import com.murthinext.ae2pr.ModItems;
-import com.murthinext.ae2pr.ModTags;
+import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.fluid.AlienLavaFluid;
-import com.murthinext.ae2pr.recipe.AlienLavaRecipe;
+import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
+import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
 
 /**
- * 异星熔岩世界交互配方的 JEI 分类：左侧原料，中间催化剂流体，右侧产物。
+ * 熔岩冶炼炉配方的 JEI 分类：左侧原料、中间配方耐久来源（陨石粉）、右侧产物，
+ * 底部标注加工时长与配方耐久消耗。
  */
-public class AlienLavaJeiCategory implements IRecipeCategory<AlienLavaRecipe> {
+public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe> {
 
-    public static final RecipeType<AlienLavaRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID, "alien_lava",
-            AlienLavaRecipe.class);
+    public static final RecipeType<LavaSmelterRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID, "lava_smelter",
+            LavaSmelterRecipe.class);
 
     private static final int WIDTH = 130;
-    private static final int HEIGHT = 74;
+    private static final int HEIGHT = 84;
     private static final int SLOT = 18;
     private static final int ARROW_WIDTH = 22;
     private static final int ARROW_HEIGHT = 16;
@@ -51,21 +48,22 @@ public class AlienLavaJeiCategory implements IRecipeCategory<AlienLavaRecipe> {
     private static final int COLOR_TEXT = 0x404040;
     private static final ResourceLocation ARROW = new ResourceLocation(ae2pr.MODID,
             "textures/gui/jei/recipe_arrow.png");
+    private static final ResourceLocation SKY_DUST_ID = new ResourceLocation("ae2", "sky_dust");
 
     private final IDrawable icon;
 
-    public AlienLavaJeiCategory(IGuiHelper guiHelper) {
-        this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModItems.ALIEN_LAVA_BUCKET.get()));
+    public LavaSmelterJeiCategory(IGuiHelper guiHelper) {
+        this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()));
     }
 
     @Override
-    public RecipeType<AlienLavaRecipe> getRecipeType() {
+    public RecipeType<LavaSmelterRecipe> getRecipeType() {
         return RECIPE_TYPE;
     }
 
     @Override
     public Component getTitle() {
-        return Component.translatable("jei.ae2pr.alien_lava");
+        return Component.translatable("block.ae2pr.high_reactivity_lava_smelter");
     }
 
     @Override
@@ -84,13 +82,13 @@ public class AlienLavaJeiCategory implements IRecipeCategory<AlienLavaRecipe> {
     }
 
     @Override
-    public ResourceLocation getRegistryName(AlienLavaRecipe recipe) {
+    public ResourceLocation getRegistryName(LavaSmelterRecipe recipe) {
         return recipe.getId();
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, AlienLavaRecipe recipe, IFocusGroup focuses) {
-        // 原料：单列排布，超过 3 个换到第二列，与 AE2 的物质转化分类一致
+    public void setRecipe(IRecipeLayoutBuilder builder, LavaSmelterRecipe recipe, IFocusGroup focuses) {
+        // 原料：单列排布，超过 3 个换到第二列，与异星熔岩分类一致
         int x = 5;
         int y = 5;
         int index = 0;
@@ -110,58 +108,40 @@ public class AlienLavaJeiCategory implements IRecipeCategory<AlienLavaRecipe> {
             }
         }
 
-        // 催化剂流体
-        IRecipeSlotBuilder catalystSlot = builder.addSlot(RecipeIngredientRole.CATALYST, CATALYST_X + 1, ARROW_Y + 1);
-        catalystSlot.setStandardSlotBackground();
-        List<Fluid> catalysts = sourceFluids(recipe.getCatalyst());
-        for (Fluid fluid : catalysts) {
-            catalystSlot.addFluidStack(fluid, FluidType.BUCKET_VOLUME);
+        // 配方耐久来源：陨石粉
+        IRecipeSlotBuilder durabilitySlot = builder.addSlot(RecipeIngredientRole.CATALYST, CATALYST_X + 1,
+                ARROW_Y + 1);
+        durabilitySlot.setStandardSlotBackground();
+        Item skyDust = ForgeRegistries.ITEMS.getValue(SKY_DUST_ID);
+        if (skyDust != null) {
+            durabilitySlot.addItemStack(new ItemStack(skyDust));
         }
-        catalystSlot.setFluidRenderer(FluidType.BUCKET_VOLUME, true, 16, 16);
+        durabilitySlot.addRichTooltipCallback((view, tooltip) -> tooltip.add(
+                Component.translatable("jei.ae2pr.lava_smelter.dust",
+                        LavaSmelterControllerBlockEntity.DURABILITY_PER_DUST)));
 
-        // 产物：物品或流体
+        // 产物
         IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_X + 1, ARROW_Y + 1);
         outputSlot.setStandardSlotBackground();
-        if (recipe.convertsCatalyst() && recipe.getResultFluid() != null) {
-            outputSlot.addFluidStack(recipe.getResultFluid(), FluidType.BUCKET_VOLUME)
-                    .setFluidRenderer(FluidType.BUCKET_VOLUME, true, 16, 16);
-        } else {
-            outputSlot.addItemStack(recipe.getResultItem());
-        }
+        outputSlot.addItemStack(recipe.getResultItem());
     }
 
     @Override
-    public void draw(AlienLavaRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics graphics, double mouseX,
+    public void draw(LavaSmelterRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics graphics, double mouseX,
             double mouseY) {
         var font = Minecraft.getInstance().font;
         graphics.blit(ARROW, 25, ARROW_Y, 0, 0, ARROW_WIDTH, ARROW_HEIGHT);
         graphics.blit(ARROW, 76, ARROW_Y, 0, 0, ARROW_WIDTH, ARROW_HEIGHT);
-        drawCentered(graphics, font, Component.translatable("jei.ae2pr.alien_lava.submerge"),
+        drawCentered(graphics, font, Component.translatable("jei.ae2pr.lava_smelter.durability"),
                 CATALYST_X + SLOT / 2, 11);
-        // 只有以异星熔岩为催化剂的配方才会消耗转化次数
-        if (isAlienLava(recipe.getCatalyst())) {
-            drawCentered(graphics, font,
-                    Component.translatable("jei.ae2pr.alien_lava.uses", AlienLavaFluid.MAX_CONVERSIONS),
-                    WIDTH / 2, HEIGHT - 11);
-        }
+        drawCentered(graphics, font, Component.translatable("jei.ae2pr.lava_smelter.catalyst"),
+                WIDTH / 2, HEIGHT - 21);
+        drawCentered(graphics, font, Component.translatable("jei.ae2pr.lava_smelter.duration",
+                recipe.getDuration()), WIDTH / 2, HEIGHT - 10);
     }
 
     /** 无阴影居中绘制文本，避免深色文字出现重影。 */
     private static void drawCentered(GuiGraphics graphics, Font font, Component text, int centerX, int y) {
         graphics.drawString(font, text, centerX - font.width(text) / 2, y, COLOR_TEXT, false);
-    }
-
-    /** 取标签中可作为源方块的流体用于展示。 */
-    private static List<Fluid> sourceFluids(TagKey<Fluid> tag) {
-        return BuiltInRegistries.FLUID.getTag(tag)
-                .map(holders -> holders.stream()
-                        .map(Holder::value)
-                        .filter(fluid -> fluid.isSource(fluid.defaultFluidState()))
-                        .toList())
-                .orElse(List.of());
-    }
-
-    private static boolean isAlienLava(TagKey<Fluid> tag) {
-        return ModTags.ALIEN_LAVA.location().equals(tag.location());
     }
 }

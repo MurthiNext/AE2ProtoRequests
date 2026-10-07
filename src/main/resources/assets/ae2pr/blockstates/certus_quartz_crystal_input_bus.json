@@ -3,38 +3,56 @@
     "facing=down,formed=false": {
       "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_down"
     },
-    "facing=down,formed=true": {
+    "facing=down,formed=true,style=1": {
       "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_down_formed"
+    },
+    "facing=down,formed=true,style=2": {
+      "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_down_formed_zirconia"
     },
     "facing=up,formed=false": {
       "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_up"
     },
-    "facing=up,formed=true": {
+    "facing=up,formed=true,style=1": {
       "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_up_formed"
+    },
+    "facing=up,formed=true,style=2": {
+      "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_up_formed_zirconia"
     },
     "facing=north,formed=false": {
       "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_north"
     },
-    "facing=north,formed=true": {
+    "facing=north,formed=true,style=1": {
       "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_north_formed"
+    },
+    "facing=north,formed=true,style=2": {
+      "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_north_formed_zirconia"
     },
     "facing=south,formed=false": {
       "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_south"
     },
-    "facing=south,formed=true": {
+    "facing=south,formed=true,style=1": {
       "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_south_formed"
+    },
+    "facing=south,formed=true,style=2": {
+      "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_south_formed_zirconia"
     },
     "facing=west,formed=false": {
       "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_west"
     },
-    "facing=west,formed=true": {
+    "facing=west,formed=true,style=1": {
       "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_west_formed"
+    },
+    "facing=west,formed=true,style=2": {
+      "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_west_formed_zirconia"
     },
     "facing=east,formed=false": {
       "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_east"
     },
-    "facing=east,formed=true": {
+    "facing=east,formed=true,style=1": {
       "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_east_formed"
+    },
+    "facing=east,formed=true,style=2": {
+      "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_east_formed_zirconia"
     }
   }
 }

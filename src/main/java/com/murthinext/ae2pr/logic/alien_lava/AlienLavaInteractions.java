@@ -22,6 +22,7 @@ import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.block.alien_lava.AlienLavaBlock;
 import com.murthinext.ae2pr.fluid.AlienLavaFluid;
 import com.murthinext.ae2pr.recipe.AlienLavaRecipe;
+import com.murthinext.ae2pr.recipe.CountedIngredient;
 
 /**
  * 异星熔岩世界交互逻辑（服务端）：
@@ -181,7 +182,7 @@ public final class AlienLavaInteractions {
             available.put(entity, entity.getItem().getCount());
         }
         int parallel = cap;
-        for (AlienLavaRecipe.CountedIngredient ingredient : recipe.getCountedIngredients()) {
+        for (CountedIngredient ingredient : recipe.getCountedIngredients()) {
             int matched = 0;
             for (Map.Entry<ItemEntity, Integer> entry : available.entrySet()) {
                 if (entry.getValue() > 0 && ingredient.ingredient().test(entry.getKey().getItem())) {
@@ -219,7 +220,7 @@ public final class AlienLavaInteractions {
         for (ItemEntity entity : nearby) {
             remaining.put(entity, entity.getItem().getCount());
         }
-        for (AlienLavaRecipe.CountedIngredient ingredient : recipe.getCountedIngredients()) {
+        for (CountedIngredient ingredient : recipe.getCountedIngredients()) {
             int need = ingredient.count() * parallel;
             for (Map.Entry<ItemEntity, Integer> entry : remaining.entrySet()) {
                 if (need <= 0) {

@@ -2,6 +2,7 @@ package com.murthinext.ae2pr;
 
 import com.murthinext.ae2pr.network.AssemblyLineJobPacket;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
+import com.murthinext.ae2pr.network.LavaSmelterJobPacket;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 import com.murthinext.ae2pr.network.MachinePartStackPacket;
 import com.murthinext.ae2pr.network.NamingFactoryRenamePacket;
@@ -90,6 +91,12 @@ public final class ModNetwork {
                 AssemblyLineJobPacket::handle);
 
         CHANNEL.registerMessage(nextMessageId++,
+                LavaSmelterJobPacket.class,
+                LavaSmelterJobPacket::encode,
+                LavaSmelterJobPacket::decode,
+                LavaSmelterJobPacket::handle);
+
+        CHANNEL.registerMessage(nextMessageId++,
                 NamingFactoryRenamePacket.class,
                 NamingFactoryRenamePacket::encode,
                 NamingFactoryRenamePacket::decode,
@@ -125,6 +132,10 @@ public final class ModNetwork {
     }
 
     public static void sendToPlayer(ServerPlayer player, AssemblyLineJobPacket packet) {
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
+    }
+
+    public static void sendToPlayer(ServerPlayer player, LavaSmelterJobPacket packet) {
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
     }
 

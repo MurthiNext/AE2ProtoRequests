@@ -27,6 +27,8 @@ public final class Config {
     private static final ForgeConfigSpec.DoubleValue NAMING_FACTORY_MAX_POWER;
     private static final ForgeConfigSpec.DoubleValue NAMING_FACTORY_ENERGY_PER_ITEM;
 
+    private static final ForgeConfigSpec.IntValue LAVA_SMELTER_PARALLEL;
+
     static final ForgeConfigSpec SPEC;
 
     static {
@@ -85,6 +87,12 @@ public final class Config {
         NAMING_FACTORY_ENERGY_PER_ITEM = BUILDER
                 .comment("每重命名一个物品消耗的能量（AE）")
                 .defineInRange("energyPerItem", 250.0, 0.0, Double.MAX_VALUE);
+        BUILDER.pop();
+
+        BUILDER.push("lavaSmelter");
+        LAVA_SMELTER_PARALLEL = BUILDER
+                .comment("熔岩冶炼炉的最大并行数（每并行一份消耗 1 点配方耐久）")
+                .defineInRange("parallel", 64, 1, 1_000_000);
         BUILDER.pop();
 
         SPEC = BUILDER.build();
@@ -151,5 +159,9 @@ public final class Config {
 
     public static double namingFactoryEnergyPerItem() {
         return NAMING_FACTORY_ENERGY_PER_ITEM.get();
+    }
+
+    public static int lavaSmelterParallel() {
+        return LAVA_SMELTER_PARALLEL.get();
     }
 }

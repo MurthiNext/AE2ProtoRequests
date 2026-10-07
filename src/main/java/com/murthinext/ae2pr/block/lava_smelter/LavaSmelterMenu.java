@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.block.lava_smelter;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -11,9 +12,13 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.items.SlotItemHandler;
+
+import com.murthinext.ae2pr.ModNetwork;
+import com.murthinext.ae2pr.network.LavaSmelterJobPacket;
 
 /**
- * 高反应性熔岩冶炼炉主机的容器菜单：同步结构状态与诊断信息并承载玩家背包。
+ * 高反应性熔岩冶炼炉主机的容器菜单。
  */
 public class LavaSmelterMenu extends AbstractContainerMenu {
 
@@ -27,16 +32,28 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
     private static final int INV_Y = 122;
     private static final int HOTBAR_Y = 180;
 
-    /** 同步数据位：bit0=已成型，bit1=正在运行，bit2=暂停，bit3=存在不符位置 */
+    /** 陨石粉槽（机器区右下角） */
+    private static final int DUST_SLOT_X = 151;
+    private static final int DUST_SLOT_Y = 95;
+
+    /** 同步数据位：bit0=已成型，bit1=正在运行，bit2=暂停 */
     private static final int FLAG_FORMED = 1;
     private static final int FLAG_RUNNING = 2;
     private static final int FLAG_PAUSED = 4;
-    private static final int FLAG_HAS_MISMATCH_POS = 8;
+
+    /** 同步数据下标 */
+    private static final int DATA_FLAGS = 0;
+    private static final int DATA_DURABILITY = 1;
+    private static final int DATA_ERROR = 2;
+    private static final int DATA_ELAPSED = 3;
+    private static final int DATA_DURATION = 4;
 
     private final LavaSmelterControllerBlockEntity controller;
     private final Player owner;
-    private final SimpleContainerData data = new SimpleContainerData(4);
+    private final SimpleContainerData data = new SimpleContainerData(5);
     private final boolean clientSide;
+    private ItemStack lastJobOutput = ItemStack.EMPTY;
+    private boolean jobOutputSynced;
 
     public LavaSmelterMenu(int id, Inventory playerInventory, LavaSmelterControllerBlockEntity controller) {
         super(TYPE, id);
@@ -44,6 +61,9 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
         this.owner = playerInventory.player;
         this.clientSide = playerInventory.player.level().isClientSide;
 
+        if (controller != null) {
+            addSlot(new SlotItemHandler(controller.getDustSlot(), 0, DUST_SLOT_X, DUST_SLOT_Y));
+        }
         for (int row = 0; row < INV_ROWS; row++) {
             for (int col = 0; col < INV_COLS; col++) {
                 addSlot(new Slot(playerInventory, col + row * INV_COLS + INV_COLS,
@@ -61,7 +81,7 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
                 .getBlockEntity(buffer.readBlockPos()));
     }
 
-    /** 每 tick 把成型/运行/暂停状态与不符诊断写入同步数据。 */
+    /** 每 tick 把状态、配方耐久与作业进度写入同步数据，并在作业产物变化时推送同步包。 */
     @Override
     public void broadcastChanges() {
         if (!clientSide && controller != null) {
@@ -69,51 +89,88 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
             int flags = (controller.isFormed() ? FLAG_FORMED : 0)
                     | (state.getValue(HighReactivityLavaSmelterBlock.RUNNING) ? FLAG_RUNNING : 0)
                     | (state.getValue(HighReactivityLavaSmelterBlock.PAUSED) ? FLAG_PAUSED : 0);
-            BlockPos mismatchPos = controller.getLastMismatchPos();
-            long packed = mismatchPos != null ? mismatchPos.asLong() : 0L;
-            if (mismatchPos != null) {
-                flags |= FLAG_HAS_MISMATCH_POS;
+            data.set(DATA_FLAGS, flags);
+            data.set(DATA_DURABILITY, controller.getDurability());
+            data.set(DATA_ERROR, controller.getError().ordinal());
+            data.set(DATA_ELAPSED, controller.getJobElapsed());
+            data.set(DATA_DURATION, controller.getJobDuration());
+
+            ItemStack jobOutput = controller.getJobOutput();
+            if (owner instanceof ServerPlayer serverPlayer
+                    && (!jobOutputSynced || !ItemStack.matches(jobOutput, lastJobOutput))) {
+                jobOutputSynced = true;
+                lastJobOutput = jobOutput.copy();
+                ModNetwork.sendToPlayer(serverPlayer,
+                        new LavaSmelterJobPacket(controller.getBlockPos(), lastJobOutput));
             }
-            data.set(0, flags);
-            data.set(1, controller.getLastMismatches());
-            data.set(2, (int) (packed & 0xFFFFFFFFL));
-            data.set(3, (int) (packed >>> 32));
         }
         super.broadcastChanges();
     }
 
     public boolean isFormed() {
-        return (data.get(0) & FLAG_FORMED) != 0;
+        return (data.get(DATA_FLAGS) & FLAG_FORMED) != 0;
     }
 
     public boolean isRunning() {
-        return (data.get(0) & FLAG_RUNNING) != 0;
+        return (data.get(DATA_FLAGS) & FLAG_RUNNING) != 0;
     }
 
     public boolean isPaused() {
-        return (data.get(0) & FLAG_PAUSED) != 0;
+        return (data.get(DATA_FLAGS) & FLAG_PAUSED) != 0;
     }
 
-    /** 最近一次检测的不符方块数量。 */
-    public int getMismatches() {
-        return data.get(1);
+    /** 剩余配方耐久。 */
+    public int getDurability() {
+        return data.get(DATA_DURABILITY);
     }
 
-    /** 是否存在首个不符位置。 */
-    public boolean hasMismatchPos() {
-        return (data.get(0) & FLAG_HAS_MISMATCH_POS) != 0;
+    /** 配方耐久上限。 */
+    public int getMaxDurability() {
+        return LavaSmelterControllerBlockEntity.MAX_DURABILITY;
     }
 
-    /** 首个不符位置（不存在时返回原点）。 */
-    public BlockPos getMismatchPos() {
-        long packed = (data.get(2) & 0xFFFFFFFFL) | ((long) data.get(3) << 32);
-        return BlockPos.of(packed);
+    /** 暂停原因序号（0 = 无，1 = 耐久耗尽，2 = 输出不足）。 */
+    public int getErrorCode() {
+        return data.get(DATA_ERROR);
+    }
+
+    /** 当前作业已进行的时间（tick）；空闲为 0。 */
+    public int getJobElapsed() {
+        return data.get(DATA_ELAPSED);
+    }
+
+    /** 当前作业的配方总耗时（tick）；空闲为 0。 */
+    public int getJobDuration() {
+        return data.get(DATA_DURATION);
+    }
+
+    /** 当前作业的展示产物；空闲返回空。 */
+    public ItemStack getJobOutput() {
+        return controller != null ? controller.getClientJobOutput() : ItemStack.EMPTY;
     }
 
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        // 仅玩家背包，无需跨容器搬运
-        return ItemStack.EMPTY;
+        Slot slot = slots.get(index);
+        if (!slot.hasItem()) {
+            return ItemStack.EMPTY;
+        }
+        ItemStack stack = slot.getItem();
+        ItemStack original = stack.copy();
+        if (index == 0) {
+            // 陨石粉槽 -> 玩家背包
+            if (!moveItemStackTo(stack, 1, slots.size(), true)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (!moveItemStackTo(stack, 0, 1, false)) {
+            return ItemStack.EMPTY;
+        }
+        if (stack.isEmpty()) {
+            slot.setByPlayer(ItemStack.EMPTY);
+        } else {
+            slot.setChanged();
+        }
+        return original;
     }
 
     @Override

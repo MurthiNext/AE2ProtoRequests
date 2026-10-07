@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -50,6 +51,8 @@ public class CertusQuartzCrystalMachinePartBlock extends Block implements Entity
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty FORMED = BooleanProperty.create("formed");
+    /** 成型后的外壳外观：1 = 水晶机壳（装配线），2 = 锆刚玉砖块（熔岩冶炼炉）。 */
+    public static final IntegerProperty STYLE = IntegerProperty.create("style", 1, 2);
 
     public CertusQuartzCrystalMachinePartBlock() {
         super(Properties.of()
@@ -59,19 +62,21 @@ public class CertusQuartzCrystalMachinePartBlock extends Block implements Entity
                 .requiresCorrectToolForDrops());
         registerDefaultState(stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
-                .setValue(FORMED, false));
+                .setValue(FORMED, false)
+                .setValue(STYLE, 1));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, FORMED);
+        builder.add(FACING, FORMED, STYLE);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return defaultBlockState()
                 .setValue(FACING, context.getNearestLookingDirection().getOpposite())
-                .setValue(FORMED, false);
+                .setValue(FORMED, false)
+                .setValue(STYLE, 1);
     }
 
     @Nullable

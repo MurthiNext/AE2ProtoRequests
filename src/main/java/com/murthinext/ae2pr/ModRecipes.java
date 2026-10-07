@@ -9,6 +9,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import com.murthinext.ae2pr.recipe.AlienLavaRecipe;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
+import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
 
 /**
  * 配方注册入口：配方类型与序列化器都通过注册事件注册，避免注册表冻结问题。
@@ -50,4 +51,17 @@ public final class ModRecipes {
     /** 异星熔岩世界交互配方序列化器 */
     public static final RegistryObject<AlienLavaRecipe.Serializer> ALIEN_LAVA = SERIALIZERS
             .register("alien_lava", AlienLavaRecipe.Serializer::new);
+
+    /** 熔岩冶炼炉配方类型 */
+    public static final RegistryObject<RecipeType<LavaSmelterRecipe>> LAVA_SMELTER_TYPE = RECIPE_TYPES
+            .register("lava_smelter", () -> new RecipeType<LavaSmelterRecipe>() {
+                @Override
+                public String toString() {
+                    return ae2pr.MODID + ":lava_smelter";
+                }
+            });
+
+    /** 熔岩冶炼炉配方序列化器 */
+    public static final RegistryObject<LavaSmelterRecipe.Serializer> LAVA_SMELTER = SERIALIZERS
+            .register("lava_smelter", LavaSmelterRecipe.Serializer::new);
 }

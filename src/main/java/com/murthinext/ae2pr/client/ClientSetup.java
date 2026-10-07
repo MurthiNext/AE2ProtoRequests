@@ -25,6 +25,7 @@ import com.murthinext.ae2pr.client.assembly_line.FluidHatchScreen;
 import com.murthinext.ae2pr.client.assembly_line.ItemBusScreen;
 import com.murthinext.ae2pr.client.emitter.MultiLevelEmitterScreen;
 import com.murthinext.ae2pr.client.emitter.MultiThresholdLevelEmitterScreen;
+import com.murthinext.ae2pr.client.lava_smelter.LavaSmelterRenderer;
 import com.murthinext.ae2pr.client.lava_smelter.LavaSmelterScreen;
 import com.murthinext.ae2pr.client.naming_factory.NamingFactoryRenderer;
 import com.murthinext.ae2pr.client.naming_factory.NamingFactoryScreen;
@@ -81,6 +82,8 @@ public final class ClientSetup {
     @SubscribeEvent
     public static void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.NAMING_FACTORY.get(), NamingFactoryRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.HIGH_REACTIVITY_LAVA_SMELTER.get(),
+                LavaSmelterRenderer::new);
     }
 
     /** 为 ae2pr 的方块模型套上连接纹理包装（按世界邻居重写 UV）。 */

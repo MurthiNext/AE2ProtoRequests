@@ -1,0 +1,21 @@
+{
+  "type": "ae2pr:lava_smelter",
+  "ingredients": [
+    {
+      "item": "ae2pr:meteor_steel_ingot",
+      "count": 2
+    },
+    {
+      "item": "ae2pr:zircon_brick",
+      "count": 1
+    },
+    {
+      "item": "ae2:certus_quartz_dust",
+      "count": 16
+    }
+  ],
+  "result": {
+    "item": "ae2pr:zirconia_corundum_bricks",
+    "count": 1
+  }
+}

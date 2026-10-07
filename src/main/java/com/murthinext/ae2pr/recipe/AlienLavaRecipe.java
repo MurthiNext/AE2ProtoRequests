@@ -33,10 +33,6 @@ import com.murthinext.ae2pr.ModTags;
 /** 异星熔岩世界交互配方：物品实体浸入指定流体后，按数量消耗并产出。 */
 public class AlienLavaRecipe implements Recipe<Container> {
 
-    /** 带数量的原料：AE2 的世界交互配方每次只消耗 1 个，这里扩展为任意数量。 */
-    public record CountedIngredient(Ingredient ingredient, int count) {
-    }
-
     private final ResourceLocation id;
     private final List<CountedIngredient> ingredients;
     private final TagKey<Fluid> catalyst;

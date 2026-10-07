@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.block.assembly_line.CertusQuartzCrystalMachinePartBlock;
 import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
 
 /**
@@ -78,7 +79,7 @@ public final class CtmConfig {
      * <li>{@code 1} 机身族</li>
      * <li>{@code 2} 装配线格栅</li>
      * <li>{@code 3} 水晶玻璃</li>
-     * <li>{@code 4} 锆刚玉砖块 / 高反应性熔岩冶炼炉主机</li>
+     * <li>{@code 4} 锆刚玉砖块 / 高反应性熔岩冶炼炉主机 / 冶炼炉成型的机器部件（style=2）</li>
      * <li>{@code 5~7} 陨钢管道方块（按轴向分族，同种相连且仅沿自身轴向连接）</li>
      * <li>{@code 8} 耐火水晶玻璃</li>
      * <li>{@code 0} 不参与连接纹理</li>
@@ -86,11 +87,20 @@ public final class CtmConfig {
      */
     private static int familyKey(BlockState state) {
         Block block = state.getBlock();
-        if (block == ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()
-                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get()
+        if (block == ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()) {
+            return 1;
+        }
+        if (block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get()
                 || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()
-                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()
-                || block == ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()) {
+                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()) {
+            // 熔岩冶炼炉成型的部件外观为锆刚玉砖块，归入砖块族；其余情况为水晶机身族
+            if (state.getValue(CertusQuartzCrystalMachinePartBlock.FORMED)
+                    && state.getValue(CertusQuartzCrystalMachinePartBlock.STYLE) == 2) {
+                return 4;
+            }
+            return 1;
+        }
+        if (block == ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()) {
             return 1;
         }
         if (block == ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get()) {
