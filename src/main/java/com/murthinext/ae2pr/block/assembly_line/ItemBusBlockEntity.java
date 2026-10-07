@@ -23,8 +23,8 @@ import com.murthinext.ae2pr.ModBlocks;
  * <p>
  * 输出总线只接收配方输出，禁止玩家/外部存入。
  * <p>
- * 对外通过 {@code ITEM_HANDLER} 能力暴露存储，供其他模组的物流（如 AE2 输出/存储总线）交互；
- * 默认开启自动搬运：输入总线从朝向面容器拉取，输出总线向朝向面容器推出，可在界面左侧工具栏关闭。
+ * 对外通过 {@code ITEM_HANDLER} 能力暴露存储，供其他模组的物流交互；
+ * 默认开启自动搬运。
  */
 public class ItemBusBlockEntity extends BlockEntity {
 

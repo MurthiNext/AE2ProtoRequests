@@ -1,9 +1,6 @@
 package com.murthinext.ae2pr.block.assembly_line;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,17 +10,22 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.multiblock.MultiblockPattern;
+import com.murthinext.ae2pr.multiblock.RelativeDirection;
+import com.murthinext.ae2pr.multiblock.StructurePredicate;
+import com.murthinext.ae2pr.multiblock.StructureResult;
 
 /**
- * 水晶装配线结构定义与检测。
+ * 水晶装配线结构定义与外观同步。
  * <p>
+ * 模式基于通用多方块模块（{@code com.murthinext.ae2pr.multiblock}）声明：
  * <ul>
- * <li><b>片（slice）</b>：默认沿控制器<b>右侧</b>延伸，共 5~17 片（首尾固定，中间 3~15 可重复）</li>
- * <li><b>行（string）</b>：沿<b>上</b>递增，即字符串自下而上书写（第 0 行是最底行）</li>
- * <li><b>列（char）</b>：默认沿控制器<b>背面</b>递增，即 3 个字符是前→后的深度</li>
+ * <li><b>片（slice）</b>：沿控制器<b>右侧</b>延伸，首尾片固定，中间 3 片起可重复，总片数上限由配置决定</li>
+ * <li><b>行（string）</b>：沿<b>上</b>递增（第 0 行是最底行）</li>
+ * <li><b>列（char）</b>：沿控制器<b>背面</b>递增（前→后深度）</li>
  * </ul>
- * 结构允许<b>左右镜像</b>（片沿另一侧延伸）与<b>前后镜像</b>（深度方向取反），
- * 检测时逐一尝试正常与三种镜像布局，任一匹配即成型，因此镜像搭建同样有效。
+ * 匹配支持左右 / 前后镜像，任一布局成立即成型。
+ * <p>
  * 每片横截面（3 深 × 4 高，自下而上、前→后）：
  *
  * <pre>
@@ -32,85 +34,43 @@ import com.murthinext.ae2pr.ModBlocks;
  *     R T R      R=夹层玻璃 T=装配线控制外壳
  * 底  F I F      F=水晶机壳 I=输入总线
  * </pre>
+ *
+ * 机壳位 'F' 可用输入仓或能源仓替代，其中<b>能源仓整结构最多 1 个</b>。
  */
 public final class AssemblyLineStructure {
 
-    /** 第 0 行（最底行）→ 第 3 行（最顶行），字符自前向后 */
-    private static final String[] SLICE_FIRST = { "FIF", "RTR", "SAG", "#Y#" };
-    private static final String[] SLICE_MIDDLE = { "FIF", "RTR", "DAG", "#Y#" };
-    private static final String[] SLICE_LAST = { "FOF", "RTR", "DAG", "#Y#" };
+    /** 结构模式：控制器位于第 2 行、第 0 列。 */
+    public static final MultiblockPattern PATTERN = MultiblockPattern
+            .builder(RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.BACK)
+            .origin(2, 0)
+            .slice("FIF", "RTR", "SAG", "#Y#")
+            .sliceRepeatable(3, Integer.MAX_VALUE, "FIF", "RTR", "DAG", "#Y#")
+            .slice("FOF", "RTR", "DAG", "#Y#")
+            .where('S', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE.get()))
+            // 机壳位允许输入仓替代；能源仓同样可替代机壳，但整结构最多 1 个
+            .where('F', StructurePredicate.blocks(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get())
+                    .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()))
+                    .or(StructurePredicate.blocks(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()).maxCount(1)))
+            .where('Y', StructurePredicate.blocks(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()))
+            .where('I', StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get()))
+            .where('O', StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()))
+            .where('A', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_CASING.get()))
+            .where('G', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get()))
+            .where('D', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get()))
+            .where('R', StructurePredicate.blocks(ModBlocks.CRYSTAL_GLASS.get()))
+            .where('T', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_UNIT.get()))
+            .where('#', StructurePredicate.any())
+            .build();
 
-    /** 中间片最少可重复次数 */
-    public static final int MIN_MIDDLE = 3;
     /** 整体最小片数（首尾固定 + 最少中间片） */
-    public static final int MIN_SLICES = MIN_MIDDLE + 2;
-
-    /** 当前配置允许的最大片数（下限为最小片数）。 */
-    public static int maxSlices() {
-        return Math.max(MIN_SLICES, Config.assemblyLineMaxSlices());
-    }
-
-    private static final int ROWS = 4;
-    private static final int COLS = 3;
-    /** 控制器所在单元格：第 2 行（自下而上）、第 0 列（最前） */
-    private static final int CONTROLLER_ROW = 2;
-    private static final int CONTROLLER_COL = 0;
+    public static final int MIN_SLICES = PATTERN.minSlices();
 
     private AssemblyLineStructure() {
     }
 
-    /**
-     * 结构检测结果。
-     *
-     * @param formed       是否成型
-     * @param slices       成型时的片数（未成型为 0）
-     * @param mirrorSide   匹配到的左右镜像（片延伸方向取反）
-     * @param mirrorFront  匹配到的前后镜像（深度方向取反）
-     * @param mismatches   不符方块数量（用于诊断）
-     * @param mismatchPos  第一个不符方块的位置
-     * @param expected     该位置期望的字符
-     * @param found        该位置实际方块
-     */
-    public record Result(boolean formed, int slices, boolean mirrorSide, boolean mirrorFront, int mismatches,
-            @Nullable BlockPos mismatchPos, char expected, @Nullable Block found) {
-
-        public static final Result EMPTY = new Result(false, 0, false, false, 0, null, ' ', null);
-    }
-
-    /** 四种镜像组合：正常、左右镜像、前后镜像、双镜像。 */
-    private static final boolean[][] MIRRORS = { { false, false }, { true, false }, { false, true },
-            { true, true } };
-
-    /** 片延伸方向：默认控制器右侧，左右镜像时取左侧。 */
-    private static Direction sliceDir(Direction facing, boolean mirrorSide) {
-        return mirrorSide ? facing.getCounterClockWise() : facing.getClockWise();
-    }
-
-    /** 深度方向（列递增方向）：默认控制器背向，前后镜像时取面向。 */
-    private static Direction depthDir(Direction facing, boolean mirrorFront) {
-        return mirrorFront ? facing : facing.getOpposite();
-    }
-
-    /**
-     * 以控制器为原点检测结构（只读，不修改世界），依次尝试正常与三种镜像布局，任一匹配即成型；
-     * 未成型时返回最接近的候选片数与首个不符位置。
-     */
-    public static Result match(Level level, BlockPos controllerPos, Direction facing) {
-        Result best = null;
-        for (boolean[] mirror : MIRRORS) {
-            Direction sliceDir = sliceDir(facing, mirror[0]);
-            Direction depthDir = depthDir(facing, mirror[1]);
-            for (int slices = maxSlices(); slices >= MIN_SLICES; slices--) {
-                Result result = check(level, controllerPos, sliceDir, depthDir, slices, mirror[0], mirror[1]);
-                if (result.formed()) {
-                    return result;
-                }
-                if (best == null || result.mismatches() < best.mismatches()) {
-                    best = result;
-                }
-            }
-        }
-        return best != null ? best : Result.EMPTY;
+    /** 当前配置允许的最大片数（下限为最小片数）。 */
+    public static int maxSlices() {
+        return Math.max(MIN_SLICES, Config.assemblyLineMaxSlices());
     }
 
     /**
@@ -120,16 +80,16 @@ public final class AssemblyLineStructure {
      * <li>失活：逐一复位全部镜像布局的可能位置（含结构损坏或控制器被拆后的残留状态）</li>
      * </ul>
      */
-    public static void updateFormed(Level level, BlockPos controllerPos, Direction facing, boolean mirrorSide,
-            boolean mirrorFront, int slices, boolean formed, boolean running) {
-        if (formed) {
-            applyState(level, controllerPos, sliceDir(facing, mirrorSide), depthDir(facing, mirrorFront), slices,
-                    true, running);
+    public static void updateFormed(Level level, BlockPos controllerPos, Direction facing, StructureResult result,
+            boolean running) {
+        if (result.formed()) {
+            applyState(level, PATTERN.cells(controllerPos, facing, Direction.UP, result.mirrorSide(),
+                    result.mirrorFront(), result.slices()), true, running);
             return;
         }
         // 未成型：不确定此前是哪种镜像布局，逐一复位全部组合
-        for (boolean[] mirror : MIRRORS) {
-            applyState(level, controllerPos, sliceDir(facing, mirror[0]), depthDir(facing, mirror[1]), maxSlices(),
+        for (boolean[] mirror : MultiblockPattern.MIRRORS) {
+            applyState(level, PATTERN.cells(controllerPos, facing, Direction.UP, mirror[0], mirror[1], maxSlices()),
                     false, false);
         }
     }
@@ -138,111 +98,32 @@ public final class AssemblyLineStructure {
      * @param partsFormed 部件（总线/仓）是否切换成型贴图
      * @param unitActive  控制外壳是否点亮工作态贴图（仅运行配方时为 true）
      */
-    private static void applyState(Level level, BlockPos controllerPos, Direction sliceDir, Direction depthDir,
-            int count, boolean partsFormed, boolean unitActive) {
-        for (int s = 0; s < count; s++) {
-            for (int r = 0; r < ROWS; r++) {
-                for (int c = 0; c < COLS; c++) {
-                    BlockPos pos = cell(controllerPos, sliceDir, depthDir, s, r, c);
-                    BlockState state = level.getBlockState(pos);
-                    BlockState updated = null;
-                    if (state.is(ModBlocks.CRYSTAL_ASSEMBLY_LINE_UNIT.get())) {
-                        if (state.getValue(AssemblyLineUnitBlock.ACTIVE) != unitActive) {
-                            updated = state.setValue(AssemblyLineUnitBlock.ACTIVE, unitActive);
-                        }
-                    } else if (state.is(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get())) {
-                        if (state.getValue(FluixCrystalEnergyHatchBlock.FORMED) != partsFormed) {
-                            updated = state.setValue(FluixCrystalEnergyHatchBlock.FORMED, partsFormed);
-                        }
-                    } else if (isPart(state)) {
-                        if (state.getValue(CertusQuartzCrystalMachinePartBlock.FORMED) != partsFormed) {
-                            updated = state.setValue(CertusQuartzCrystalMachinePartBlock.FORMED, partsFormed);
-                        }
-                    }
-                    if (updated != null) {
-                        level.setBlock(pos, updated, Block.UPDATE_ALL);
-                    }
+    private static void applyState(Level level, List<BlockPos> cells, boolean partsFormed, boolean unitActive) {
+        for (BlockPos pos : cells) {
+            BlockState state = level.getBlockState(pos);
+            BlockState updated = null;
+            if (state.is(ModBlocks.CRYSTAL_ASSEMBLY_LINE_UNIT.get())) {
+                if (state.getValue(AssemblyLineUnitBlock.ACTIVE) != unitActive) {
+                    updated = state.setValue(AssemblyLineUnitBlock.ACTIVE, unitActive);
+                }
+            } else if (state.is(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get())) {
+                if (state.getValue(FluixCrystalEnergyHatchBlock.FORMED) != partsFormed) {
+                    updated = state.setValue(FluixCrystalEnergyHatchBlock.FORMED, partsFormed);
+                }
+            } else if (isPart(state)) {
+                if (state.getValue(CertusQuartzCrystalMachinePartBlock.FORMED) != partsFormed) {
+                    updated = state.setValue(CertusQuartzCrystalMachinePartBlock.FORMED, partsFormed);
                 }
             }
-        }
-    }
-
-    /** 计算单元格世界坐标：片沿右侧、行沿上、列沿后。 */
-    private static BlockPos cell(BlockPos controllerPos, Direction sliceDir, Direction depthDir, int s, int r, int c) {
-        return controllerPos.relative(sliceDir, s)
-                .relative(Direction.UP, r - CONTROLLER_ROW)
-                .relative(depthDir, c - CONTROLLER_COL);
-    }
-
-    /** 结构内全部单元格坐标（按 片 → 行 → 列 顺序，供查找能源仓等部件使用）。 */
-    public static List<BlockPos> cells(BlockPos controllerPos, Direction facing, boolean mirrorSide,
-            boolean mirrorFront, int slices) {
-        Direction sliceDir = sliceDir(facing, mirrorSide);
-        Direction depthDir = depthDir(facing, mirrorFront);
-        List<BlockPos> result = new ArrayList<>(slices * ROWS * COLS);
-        for (int s = 0; s < slices; s++) {
-            for (int r = 0; r < ROWS; r++) {
-                for (int c = 0; c < COLS; c++) {
-                    result.add(cell(controllerPos, sliceDir, depthDir, s, r, c));
-                }
+            if (updated != null) {
+                level.setBlock(pos, updated, Block.UPDATE_ALL);
             }
         }
-        return result;
     }
 
     private static boolean isPart(BlockState state) {
         return state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get())
                 || state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get())
                 || state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get());
-    }
-
-    private static Result check(Level level, BlockPos controllerPos, Direction sliceDir, Direction depthDir,
-            int slices, boolean mirrorSide, boolean mirrorFront) {
-        int mismatches = 0;
-        BlockPos firstPos = null;
-        char firstExpected = ' ';
-        Block firstFound = null;
-        for (int s = 0; s < slices; s++) {
-            String[] slice = s == 0 ? SLICE_FIRST : s == slices - 1 ? SLICE_LAST : SLICE_MIDDLE;
-            for (int r = 0; r < ROWS; r++) {
-                String row = slice[r];
-                for (int c = 0; c < COLS; c++) {
-                    char ch = row.charAt(c);
-                    if (ch == '#') {
-                        continue;
-                    }
-                    BlockState state = level.getBlockState(cell(controllerPos, sliceDir, depthDir, s, r, c));
-                    if (!matches(ch, state)) {
-                        mismatches++;
-                        if (firstPos == null) {
-                            firstPos = cell(controllerPos, sliceDir, depthDir, s, r, c);
-                            firstExpected = ch;
-                            firstFound = state.getBlock();
-                        }
-                    }
-                }
-            }
-        }
-        return new Result(mismatches == 0, mismatches == 0 ? slices : 0, mirrorSide, mirrorFront, mismatches,
-                firstPos, firstExpected, firstFound);
-    }
-
-    /** 单元格字符 → 可接受的方块。 */
-    private static boolean matches(char ch, BlockState state) {
-        return switch (ch) {
-            case 'S' -> state.is(ModBlocks.CRYSTAL_ASSEMBLY_LINE.get());
-            // 机壳位允许用输入仓 / 能源仓替代（对应 GT 的“带流体仓 / 能源仓外壳”）
-            case 'F' -> state.is(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get())
-                    || state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get())
-                    || state.is(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get());
-            case 'Y' -> state.is(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get());
-            case 'I' -> state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get());
-            case 'O' -> state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get());
-            case 'A' -> state.is(ModBlocks.CRYSTAL_ASSEMBLY_LINE_CASING.get());
-            case 'G', 'D' -> state.is(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get());
-            case 'R' -> state.is(ModBlocks.CRYSTAL_GLASS.get());
-            case 'T' -> state.is(ModBlocks.CRYSTAL_ASSEMBLY_LINE_UNIT.get());
-            default -> false;
-        };
     }
 }

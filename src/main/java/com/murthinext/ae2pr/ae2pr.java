@@ -62,7 +62,7 @@ public class ae2pr {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        LOGGER.info("AE2 Proto Req initialized");
+        LOGGER.info("AE2 Proto Requests initialized");
         event.enqueueWork(() -> {
             // 过滤元件的可用升级：仅模糊卡（1 张），与元件工作台的模糊模式开关联动
             Upgrades.add(AEItems.FUZZY_CARD, ModItems.FILTER_CELL.get(), 1);

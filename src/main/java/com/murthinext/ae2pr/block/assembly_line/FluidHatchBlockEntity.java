@@ -22,11 +22,10 @@ import com.murthinext.ae2pr.ModBlockEntities;
 /**
  * 赛特斯石英水晶输入仓方块实体：单类流体存储，上限 16K 桶（16,384,000 mB）。
  * <p>
- * 容器槽为「输入 → 输出」两格：输入格放入流体容器，每 {@link #TRANSFER_INTERVAL} tick 处理一次，
- * 空容器从罐中取液、满容器向罐中注液，处理后的容器移到输出格（输出格被占用时等待）。
+ * 输入格放入流体容器，每 {@link #TRANSFER_INTERVAL} tick 处理一次，
  * <p>
- * 对外通过 {@code FLUID_HANDLER} 能力暴露罐体，供其他模组的物流（如 AE2 输出/存储总线）交互；
- * 默认开启自动搬运：从朝向面容器拉取流体，可在界面左侧工具栏关闭。
+ * 对外通过 {@code FLUID_HANDLER} 能力暴露罐体，供其他模组的物流交互；
+ * 默认开启自动搬运。
  */
 public class FluidHatchBlockEntity extends BlockEntity {
 

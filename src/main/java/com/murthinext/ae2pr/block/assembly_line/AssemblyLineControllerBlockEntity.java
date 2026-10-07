@@ -23,14 +23,17 @@ import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.multiblock.StructureResult;
+import com.murthinext.ae2pr.multiblock.StructureValidator;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
 
 /**
  * 水晶装配线控制器方块实体：结构检测 + 配方执行。
  * <p>
- * 执行流程：匹配配方（物品默认有序：第 i 个输入对应第 i 个输入总线；流体默认无序）→
- * 检查输出空间 → 按并行数一次性从 ME 网络扣电（不足则不扣任何内容并进入暂停态）→
- * 扣除原料 → 加工 {@code duration} tick 后产出到输出总线。
+ * 结构检测由 {@link StructureValidator} 完成：结构未变化时走缓存快速路径，
+ * 保证有序匹配使用的部件顺序稳定。
+ * <p>
+ * 执行流程：匹配配方、检查输出空间、扣除所需电力与原料、加工 {@code duration} tick 后产出到输出总线。
  * <p>
  * 实际并行数 = 各输入现有份数（物品 / 流体）中的较小值，上限为
  * 基础并行 + (片数 - 最小片数) × 每片增量；能量 = 单位耗电 × 实际并行数。
@@ -71,15 +74,17 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
     @Nullable
     private Block lastFound;
 
-    /** 结构内的输入总线（按片顺序，从主机侧到另一侧） */
+    /** 结构内的输入总线（按 片 → 行 → 列 排序，从主机侧到另一侧） */
     private final List<ItemBusBlockEntity> inputBuses = new ArrayList<>();
     /** 结构内的输出总线（最后一片） */
     @Nullable
     private ItemBusBlockEntity outputBus;
-    /** 结构内的输入仓（按片、列顺序） */
+    /** 结构内的输入仓（按 片 → 行 → 列 排序） */
     private final List<FluidHatchBlockEntity> inputHatches = new ArrayList<>();
     /** 结构内的能源仓 */
     private final List<FluixCrystalEnergyHatchBlockEntity> energyHatches = new ArrayList<>();
+    /** 结构验证器：模式匹配 + 缓存快速路径 */
+    private final StructureValidator structure = new StructureValidator(AssemblyLineStructure.PATTERN);
 
     public AssemblyLineControllerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CRYSTAL_ASSEMBLY_LINE.get(), pos, state);
@@ -401,7 +406,7 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
 
     // ---------------------------------------------------------------- 结构检测
 
-    /** 立即检测一次结构，并按结果切换控制器与结构内方块的状态。 */
+    /** 立即检测一次结构，并按结果切换控制器与结构内方块的状态；结构未变化时走缓存快速路径。 */
     public void validateStructure() {
         Level level = this.level;
         if (level == null || level.isClientSide) {
@@ -412,7 +417,12 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
             return;
         }
         Direction facing = state.getValue(CrystalAssemblyLineBlock.FACING);
-        var result = AssemblyLineStructure.match(level, worldPosition, facing);
+        StructureResult result = structure.validate(level, worldPosition, facing, Direction.UP,
+                AssemblyLineStructure.maxSlices());
+        if (result.fromCache()) {
+            // 缓存命中：方块类型与方块实体均未变化，无需刷新外观与部件引用
+            return;
+        }
 
         lastSlices = result.slices();
         lastMismatches = result.mismatches();
@@ -424,15 +434,13 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
         // 运行态仅在成型后生效：控制外壳与主机的工作态贴图由作业驱动
         boolean active = formed && jobTicksLeft > 0;
 
-        AssemblyLineStructure.updateFormed(level, worldPosition, facing, result.mirrorSide(), result.mirrorFront(),
-                result.slices(), formed, active);
-        refreshParts(level, worldPosition, facing, result);
+        AssemblyLineStructure.updateFormed(level, worldPosition, facing, result, active);
+        refreshParts(level, result);
         applyControllerState(formed);
     }
 
     /** 收集结构内的总线、输入仓与能源仓（仅在结构成型时收集）。 */
-    private void refreshParts(Level level, BlockPos controllerPos, Direction facing,
-            AssemblyLineStructure.Result result) {
+    private void refreshParts(Level level, StructureResult result) {
         inputBuses.clear();
         inputHatches.clear();
         energyHatches.clear();
@@ -440,8 +448,12 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
         if (!result.formed()) {
             return;
         }
-        for (BlockPos pos : AssemblyLineStructure.cells(controllerPos, facing, result.mirrorSide(),
-                result.mirrorFront(), result.slices())) {
+        // 显式按 片 → 行 → 列 排序，保证有序匹配使用的部件顺序稳定（对应 GT 的 partSorter）
+        List<BlockPos> cells = new ArrayList<>(result.cells());
+        cells.sort(AssemblyLineStructure.PATTERN.posComparator(
+                getBlockState().getValue(CrystalAssemblyLineBlock.FACING), Direction.UP, result.mirrorSide(),
+                result.mirrorFront()));
+        for (BlockPos pos : cells) {
             BlockEntity blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof ItemBusBlockEntity bus) {
                 if (bus.isOutputBus()) {
@@ -492,8 +504,9 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
         if (level == null || level.isClientSide) {
             return;
         }
+        structure.invalidate();
         AssemblyLineStructure.updateFormed(level, worldPosition,
-                getBlockState().getValue(CrystalAssemblyLineBlock.FACING), false, false, 0, false, false);
+                getBlockState().getValue(CrystalAssemblyLineBlock.FACING), StructureResult.EMPTY, false);
     }
 
     // ---------------------------------------------------------------- 持久化（加工中的作业）
