@@ -13,11 +13,6 @@ import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
 
 /**
  * 连接纹理的逐方块配置。
- * <p>
- * 规则：默认<strong>只有同种方块才互相连接</strong>（跨方块种类不连接），
- * 且方块必须在此登记才启用连接纹理；未登记的方块（控制器、装配线外壳、控制外壳）完全不参与连接。
- * 例外：<strong>水晶强化复合机械方块 / 赛特斯石英水晶输入总线 / 输入仓 / 输出总线</strong>归为同一"机身族"，
- * 彼此相邻（无论是否成型）都会连接，因为它们最终使用同一张机壳贴图。
  */
 public final class CtmConfig {
 
@@ -83,7 +78,7 @@ public final class CtmConfig {
      * <li>{@code 1} 机身族</li>
      * <li>{@code 2} 装配线格栅</li>
      * <li>{@code 3} 水晶玻璃</li>
-     * <li>{@code 4} 锆刚玉砖块</li>
+     * <li>{@code 4} 锆刚玉砖块 / 高反应性熔岩冶炼炉主机</li>
      * <li>{@code 5~7} 陨钢管道方块（按轴向分族，同种相连且仅沿自身轴向连接）</li>
      * <li>{@code 8} 耐火水晶玻璃</li>
      * <li>{@code 0} 不参与连接纹理</li>
@@ -107,7 +102,9 @@ public final class CtmConfig {
         if (block == ModBlocks.FIREPROOF_CRYSTAL_GLASS.get()) {
             return 8;
         }
-        if (block == ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get()) {
+        if (block == ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get()
+                || block == ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()) {
+            // 熔岩冶炼炉主机同用锆刚玉砖块贴图，与砖块互相连接
             return 4;
         }
         if (block == ModBlocks.METEOR_STEEL_PIPE_BLOCK.get()) {

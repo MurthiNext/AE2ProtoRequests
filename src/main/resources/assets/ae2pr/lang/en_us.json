@@ -54,6 +54,7 @@
   "block.ae2pr.crystal_assembly_line_casing": "Crystal Assembly Line Casing",
   "block.ae2pr.crystal_assembly_line_unit": "Crystal Assembly Line Control Casing",
   "block.ae2pr.crystal_assembly_line_grating": "Crystal Assembly Line Grating",
+  "block.ae2pr.high_reactivity_lava_smelter": "High Reactivity Lava Smelter",
   "block.ae2pr.crystal_glass": "Crystal Glass",
   "block.ae2pr.fireproof_crystal_glass": "Fireproof Crystal Glass",
   "block.ae2pr.certus_quartz_crystal_input_bus": "Certus Quartz Crystal Input Bus",
@@ -126,5 +127,13 @@
   "jade.ae2pr.crystal_assembly_line.job": "Crafting: %s x %s",
   "jade.ae2pr.crystal_assembly_line.progress": "Progress: %s / %s s",
   "jade.ae2pr.crystal_assembly_line.energy": "ME network energy: %s",
-  "config.jade.plugin_ae2pr.assembly_line": "Crystal Assembly Line"
+  "config.jade.plugin_ae2pr.assembly_line": "Crystal Assembly Line",
+  "gui.ae2pr.lava_smelter.status.unformed": "Not Formed",
+  "gui.ae2pr.lava_smelter.status.formed": "Formed",
+  "gui.ae2pr.lava_smelter.status.running": "Running",
+  "gui.ae2pr.lava_smelter.status.paused": "Paused",
+  "gui.ae2pr.lava_smelter.mismatch": "Mismatched blocks: %s (first: %s)",
+  "gui.ae2pr.lava_smelter.mismatch.none": "Mismatched blocks: %s",
+  "jade.ae2pr.lava_smelter.status": "Status: %s",
+  "config.jade.plugin_ae2pr.lava_smelter": "High Reactivity Lava Smelter"
 }

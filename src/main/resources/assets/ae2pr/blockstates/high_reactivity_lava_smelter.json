@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "facing=north,running=false,paused=false": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_north"
+    },
+    "facing=north,running=false,paused=true": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_north_paused"
+    },
+    "facing=north,running=true,paused=false": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_north_active"
+    },
+    "facing=north,running=true,paused=true": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_north_active"
+    },
+    "facing=south,running=false,paused=false": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_south"
+    },
+    "facing=south,running=false,paused=true": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_south_paused"
+    },
+    "facing=south,running=true,paused=false": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_south_active"
+    },
+    "facing=south,running=true,paused=true": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_south_active"
+    },
+    "facing=west,running=false,paused=false": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_west"
+    },
+    "facing=west,running=false,paused=true": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_west_paused"
+    },
+    "facing=west,running=true,paused=false": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_west_active"
+    },
+    "facing=west,running=true,paused=true": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_west_active"
+    },
+    "facing=east,running=false,paused=false": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_east"
+    },
+    "facing=east,running=false,paused=true": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_east_paused"
+    },
+    "facing=east,running=true,paused=false": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_east_active"
+    },
+    "facing=east,running=true,paused=true": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_east_active"
+    }
+  }
+}

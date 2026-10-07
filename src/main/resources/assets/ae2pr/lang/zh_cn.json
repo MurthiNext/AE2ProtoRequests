@@ -54,6 +54,7 @@
   "block.ae2pr.crystal_assembly_line_casing": "水晶装配线外壳",
   "block.ae2pr.crystal_assembly_line_unit": "水晶装配线控制外壳",
   "block.ae2pr.crystal_assembly_line_grating": "水晶装配线格栅",
+  "block.ae2pr.high_reactivity_lava_smelter": "高反应性熔岩冶炼炉",
   "block.ae2pr.crystal_glass": "水晶玻璃",
   "block.ae2pr.fireproof_crystal_glass": "耐火水晶玻璃",
   "block.ae2pr.certus_quartz_crystal_input_bus": "赛特斯石英水晶输入总线",
@@ -126,5 +127,13 @@
   "jade.ae2pr.crystal_assembly_line.job": "正在合成：%s x %s",
   "jade.ae2pr.crystal_assembly_line.progress": "进度：%s / %s s",
   "jade.ae2pr.crystal_assembly_line.energy": "ME 网络能源：%s",
-  "config.jade.plugin_ae2pr.assembly_line": "水晶装配线"
+  "config.jade.plugin_ae2pr.assembly_line": "水晶装配线",
+  "gui.ae2pr.lava_smelter.status.unformed": "未成型",
+  "gui.ae2pr.lava_smelter.status.formed": "已成型",
+  "gui.ae2pr.lava_smelter.status.running": "正在运行",
+  "gui.ae2pr.lava_smelter.status.paused": "暂停",
+  "gui.ae2pr.lava_smelter.mismatch": "结构不符：%s 处（首个：%s）",
+  "gui.ae2pr.lava_smelter.mismatch.none": "结构不符：%s 处",
+  "jade.ae2pr.lava_smelter.status": "状态：%s",
+  "config.jade.plugin_ae2pr.lava_smelter": "高反应性熔岩冶炼炉"
 }

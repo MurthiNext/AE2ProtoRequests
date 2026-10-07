@@ -1,0 +1,90 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "#all",
+    "all": "ae2pr:block/zircon/zirconia_corundum_bricks",
+    "overlay_front": "ae2pr:block/lava_smelter/front_paused",
+    "overlay_front_emissive": "ae2pr:block/lava_smelter/front_paused_emissive"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#all",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#all",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#all",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#all",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#all",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#all",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        16.01
+      ],
+      "to": [
+        16,
+        16,
+        16.01
+      ],
+      "faces": {
+        "south": {
+          "texture": "#overlay_front",
+          "cullface": "south"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        16.02
+      ],
+      "to": [
+        16,
+        16,
+        16.02
+      ],
+      "faces": {
+        "south": {
+          "texture": "#overlay_front_emissive",
+          "cullface": "south"
+        }
+      },
+      "forge_data": {
+        "block_light": 15,
+        "sky_light": 15
+      },
+      "shade": false
+    }
+  ]
+}

@@ -92,6 +92,11 @@ public final class ModItems {
             "fluix_crystal_energy_hatch",
             () -> new BlockItem(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get(), new Item.Properties()));
 
+    /** 高反应性熔岩冶炼炉 */
+    public static final RegistryObject<BlockItem> HIGH_REACTIVITY_LAVA_SMELTER = ITEMS.register(
+            "high_reactivity_lava_smelter",
+            () -> new BlockItem(ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get(), new Item.Properties()));
+
     /** 物流控制机械方块 */
     public static final RegistryObject<BlockItem> LOGISTICS_CONTROL_CASING = ITEMS.register(
             "logistics_control_casing",

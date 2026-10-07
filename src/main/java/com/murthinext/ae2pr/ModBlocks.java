@@ -16,6 +16,7 @@ import com.murthinext.ae2pr.block.assembly_line.AssemblyLineUnitBlock;
 import com.murthinext.ae2pr.block.assembly_line.CertusQuartzCrystalMachinePartBlock;
 import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
 import com.murthinext.ae2pr.block.assembly_line.FluixCrystalEnergyHatchBlock;
+import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOreBlock;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlock;
@@ -88,6 +89,10 @@ public final class ModBlocks {
     /** 福鲁伊克斯水晶能源仓 */
     public static final RegistryObject<FluixCrystalEnergyHatchBlock> FLUIX_CRYSTAL_ENERGY_HATCH = BLOCKS.register(
             "fluix_crystal_energy_hatch", FluixCrystalEnergyHatchBlock::new);
+
+    /** 高反应性熔岩冶炼炉 */
+    public static final RegistryObject<HighReactivityLavaSmelterBlock> HIGH_REACTIVITY_LAVA_SMELTER = BLOCKS.register(
+            "high_reactivity_lava_smelter", HighReactivityLavaSmelterBlock::new);
 
     /** 物流控制机械方块 */
     public static final RegistryObject<Block> LOGISTICS_CONTROL_CASING = BLOCKS.register(

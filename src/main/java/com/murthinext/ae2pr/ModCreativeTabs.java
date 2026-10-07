@@ -40,6 +40,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get());
                         output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get());
                         output.accept(ModItems.FLUIX_CRYSTAL_ENERGY_HATCH.get());
+                        output.accept(ModItems.HIGH_REACTIVITY_LAVA_SMELTER.get());
                         output.accept(ModItems.LOGISTICS_CONTROL_CASING.get());
 
                         output.accept(ModItems.METEOR_STEEL_INGOT.get());

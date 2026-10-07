@@ -66,10 +66,10 @@ public final class Config {
                 .define("fluidInputsOrdered", false);
         ASSEMBLY_BASE_PARALLEL = BUILDER
                 .comment("最短结构（5 片）的最大并行数")
-                .defineInRange("baseParallel", 64, 1, 1_000_000);
+                .defineInRange("baseParallel", 16, 1, 1_000_000);
         ASSEMBLY_PARALLEL_PER_SLICE = BUILDER
                 .comment("结构每超出最短长度 1 片增加的最大并行数")
-                .defineInRange("parallelPerSlice", 64, 0, 1_000_000);
+                .defineInRange("parallelPerSlice", 8, 0, 1_000_000);
         ASSEMBLY_MAX_SLICES = BUILDER
                 .comment("结构允许的最大片数（最长长度，默认 31 格）")
                 .defineInRange("maxSlices", 31, 5, 1024);
