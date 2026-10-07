@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.client.lava_smelter;
 
 import java.text.NumberFormat;
 
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -28,18 +29,19 @@ public class LavaSmelterScreen extends AbstractContainerScreen<LavaSmelterMenu> 
     private static final int TITLE_Y = 9;
     private static final int STATUS_Y = 30;
     private static final int DURABILITY_Y = 44;
-    private static final int ERROR_Y = 58;
+    private static final int ERROR_Y = 92;
 
-    /** 作业展示区 */
+    /** 作业展示区：标签行与图标行（与 GUI 贴图留白对齐） */
+    private static final int JOB_LABEL_Y = 58;
     private static final int JOB_ITEM_X = 7;
     private static final int JOB_ITEM_Y = 70;
     private static final int JOB_TEXT_X = 27;
     private static final int JOB_TEXT_Y = 74;
-    private static final int JOB_TIME_Y = 92;
-    private static final int PROGRESS_X = 7;
-    private static final int PROGRESS_Y = 105;
-    private static final int PROGRESS_W = 136;
-    private static final int PROGRESS_H = 6;
+    /** 名称区与数量/时间块之间的间距 */
+    private static final int JOB_TAIL_GAP = 4;
+    /** 名称滚动速度（像素/秒）与循环间距 */
+    private static final double JOB_NAME_SCROLL_SPEED = 12.0D;
+    private static final int JOB_NAME_SCROLL_GAP = 24;
 
     private static final int COLOR_TITLE = 0xFFC46B;
     private static final int COLOR_OK = 0x55FF55;
@@ -48,9 +50,6 @@ public class LavaSmelterScreen extends AbstractContainerScreen<LavaSmelterMenu> 
     private static final int COLOR_PAUSED = 0xFFDE00;
     private static final int COLOR_DURABILITY = 0xFFC46B;
     private static final int COLOR_GRAY = 0x7A8794;
-    private static final int COLOR_PROGRESS = 0xE0681C;
-    private static final int COLOR_PROGRESS_BG = 0x1B222B;
-    private static final int COLOR_PROGRESS_BORDER = 0x39424E;
 
     public LavaSmelterScreen(LavaSmelterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -77,23 +76,11 @@ public class LavaSmelterScreen extends AbstractContainerScreen<LavaSmelterMenu> 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
-        renderJob(graphics);
-    }
-
-    /** 作业区：进度条（无作业时不绘制）。 */
-    private void renderJob(GuiGraphics graphics) {
-        int duration = menu.getJobDuration();
-        if (duration <= 0) {
-            return;
+        // 作业产物图标（无作业时不绘制）
+        ItemStack output = menu.getJobOutput();
+        if (!output.isEmpty() && menu.getJobDuration() > 0) {
+            graphics.renderItem(output, leftPos + JOB_ITEM_X, topPos + JOB_ITEM_Y);
         }
-        int track = PROGRESS_W - 2;
-        int filled = (int) Math.min(track, (long) track * menu.getJobElapsed() / duration);
-        graphics.fill(leftPos + PROGRESS_X, topPos + PROGRESS_Y, leftPos + PROGRESS_X + PROGRESS_W,
-                topPos + PROGRESS_Y + PROGRESS_H, COLOR_PROGRESS_BORDER);
-        graphics.fill(leftPos + PROGRESS_X + 1, topPos + PROGRESS_Y + 1,
-                leftPos + PROGRESS_X + PROGRESS_W - 1, topPos + PROGRESS_Y + PROGRESS_H - 1, COLOR_PROGRESS_BG);
-        graphics.fill(leftPos + PROGRESS_X + 1, topPos + PROGRESS_Y + 1,
-                leftPos + PROGRESS_X + 1 + filled, topPos + PROGRESS_Y + PROGRESS_H - 1, COLOR_PROGRESS);
     }
 
     @Override
@@ -107,27 +94,50 @@ public class LavaSmelterScreen extends AbstractContainerScreen<LavaSmelterMenu> 
         graphics.drawString(font, Component.translatable("gui.ae2pr.lava_smelter.durability",
                 durability, menu.getMaxDurability()), TEXT_X, DURABILITY_Y,
                 durability > 0 ? COLOR_DURABILITY : COLOR_FAIL, false);
-        // 第四行：暂停原因（左对齐，仅暂停时显示）
+        // 作业行下方：暂停原因（左对齐，仅暂停时显示）
         Component error = errorText();
         if (error != null) {
             graphics.drawString(font, error, TEXT_X, ERROR_Y, COLOR_FAIL, false);
         }
-        // 作业区：产物名称 × 数量 + 进行时间 / 配方总耗时
+        // 作业区：标签行 + 图标行（名称超宽时缓慢滚动，数量与时间固定右对齐）
         ItemStack output = menu.getJobOutput();
         int duration = menu.getJobDuration();
         if (output.isEmpty() || duration <= 0) {
             graphics.drawString(font, Component.translatable("gui.ae2pr.lava_smelter.job.idle"),
-                    JOB_ITEM_X, JOB_TEXT_Y, COLOR_GRAY, false);
+                    TEXT_X, JOB_LABEL_Y, COLOR_GRAY, false);
             return;
         }
-        graphics.renderItem(output, leftPos + JOB_ITEM_X, topPos + JOB_ITEM_Y);
+        graphics.drawString(font, Component.translatable("gui.ae2pr.lava_smelter.job.label"),
+                TEXT_X, JOB_LABEL_Y, COLOR_RUNNING, false);
         String count = "x" + NumberFormat.getIntegerInstance().format(output.getCount());
-        int maxNameWidth = imageWidth - 2 - JOB_TEXT_X - font.width(" ") - font.width(count);
-        graphics.drawString(font, Component.translatable("gui.ae2pr.lava_smelter.job.item",
-                clip(output.getHoverName().getString(), maxNameWidth), count),
-                JOB_TEXT_X, JOB_TEXT_Y, COLOR_RUNNING, false);
-        graphics.drawString(font, Component.translatable("gui.ae2pr.lava_smelter.job.time",
-                seconds(menu.getJobElapsed()), seconds(duration)), JOB_ITEM_X, JOB_TIME_Y, COLOR_GRAY, false);
+        Component tail = Component.literal(count).append(Component.translatable(
+                "gui.ae2pr.lava_smelter.job.time",
+                seconds(menu.getJobElapsed()), seconds(duration)));
+        int tailX = imageWidth - 2 - font.width(tail);
+        renderJobName(graphics, output.getHoverName().getString(), tailX - JOB_TAIL_GAP - JOB_TEXT_X);
+        graphics.drawString(font, tail, tailX, JOB_TEXT_Y, COLOR_RUNNING, false);
+    }
+
+    /** 作业名称：空间不足时缓慢向左循环滚动，并裁剪在名称区内。 */
+    private void renderJobName(GuiGraphics graphics, String name, int maxWidth) {
+        if (maxWidth <= 0) {
+            return;
+        }
+        int width = font.width(name);
+        if (width <= maxWidth) {
+            graphics.drawString(font, name, JOB_TEXT_X, JOB_TEXT_Y, COLOR_RUNNING, false);
+            return;
+        }
+        int cycle = width + JOB_NAME_SCROLL_GAP;
+        int shift = (int) (Util.getMillis() * JOB_NAME_SCROLL_SPEED / 1000.0D % cycle);
+        // 名称按局部坐标绘制，裁剪矩形则用屏幕绝对坐标（不受 renderLabels 位姿平移影响）
+        graphics.flush();
+        graphics.enableScissor(leftPos + JOB_TEXT_X, topPos + JOB_TEXT_Y,
+                leftPos + JOB_TEXT_X + maxWidth, topPos + JOB_TEXT_Y + font.lineHeight);
+        graphics.drawString(font, name, JOB_TEXT_X - shift, JOB_TEXT_Y, COLOR_RUNNING, false);
+        graphics.drawString(font, name, JOB_TEXT_X - shift + cycle, JOB_TEXT_Y, COLOR_RUNNING, false);
+        graphics.flush();
+        graphics.disableScissor();
     }
 
     /** 作业区物品悬停：显示产物 tooltip。 */
@@ -146,13 +156,6 @@ public class LavaSmelterScreen extends AbstractContainerScreen<LavaSmelterMenu> 
         int x = leftPos + JOB_ITEM_X;
         int y = topPos + JOB_ITEM_Y;
         return mouseX >= x - 1 && mouseX < x + 17 && mouseY >= y - 1 && mouseY < y + 17;
-    }
-
-    private String clip(String text, int maxWidth) {
-        if (font.width(text) <= maxWidth) {
-            return text;
-        }
-        return font.plainSubstrByWidth(text, Math.max(0, maxWidth - font.width("…"))) + "…";
     }
 
     private static String seconds(int ticks) {
