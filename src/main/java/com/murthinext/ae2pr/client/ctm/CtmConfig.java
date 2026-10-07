@@ -80,12 +80,13 @@ public final class CtmConfig {
     /**
      * 连接族标识：同一标识之间才连接。
      * <ul>
-     * <li>{@code 1} 机身族：水晶强化复合机械方块 + 三种仓室 + 能源仓（未成型用赛特斯机壳贴图，也与机壳相连）</li>
-     * <li>{@code 2} 装配线格栅（同种相连）</li>
-     * <li>{@code 3} 水晶玻璃（同种相连）</li>
-     * <li>{@code 4} 锆刚玉砖块（同种相连）</li>
+     * <li>{@code 1} 机身族</li>
+     * <li>{@code 2} 装配线格栅</li>
+     * <li>{@code 3} 水晶玻璃</li>
+     * <li>{@code 4} 锆刚玉砖块</li>
      * <li>{@code 5~7} 陨钢管道方块（按轴向分族，同种相连且仅沿自身轴向连接）</li>
-     * <li>{@code 0} 不参与连接纹理（控制器、装配线外壳、控制外壳）</li>
+     * <li>{@code 8} 耐火水晶玻璃</li>
+     * <li>{@code 0} 不参与连接纹理</li>
      * </ul>
      */
     private static int familyKey(BlockState state) {
@@ -102,6 +103,9 @@ public final class CtmConfig {
         }
         if (block == ModBlocks.CRYSTAL_GLASS.get()) {
             return 3;
+        }
+        if (block == ModBlocks.FIREPROOF_CRYSTAL_GLASS.get()) {
+            return 8;
         }
         if (block == ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get()) {
             return 4;

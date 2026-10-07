@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "ae2pr:crystal_glass"
+    "ae2pr:crystal_glass",
+    "ae2pr:fireproof_crystal_glass"
   ]
 }

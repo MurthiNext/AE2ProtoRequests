@@ -35,10 +35,12 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_GRATING.get());
                         output.accept(ModItems.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get());
                         output.accept(ModItems.CRYSTAL_GLASS.get());
+                        output.accept(ModItems.FIREPROOF_CRYSTAL_GLASS.get());
                         output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get());
                         output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get());
                         output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get());
                         output.accept(ModItems.FLUIX_CRYSTAL_ENERGY_HATCH.get());
+                        output.accept(ModItems.LOGISTICS_CONTROL_CASING.get());
 
                         output.accept(ModItems.METEOR_STEEL_INGOT.get());
                         output.accept(ModItems.METEOR_STEEL_PLATE.get());

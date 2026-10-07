@@ -64,6 +64,15 @@ public final class ModBlocks {
                     .sound(SoundType.GLASS)
                     .noOcclusion()));
 
+    /** 耐火水晶玻璃 */
+    public static final RegistryObject<GlassBlock> FIREPROOF_CRYSTAL_GLASS = BLOCKS.register(
+            "fireproof_crystal_glass",
+            () -> new GlassBlock(Block.Properties.of()
+                    .mapColor(MapColor.COLOR_ORANGE)
+                    .strength(0.8F)
+                    .sound(SoundType.GLASS)
+                    .noOcclusion()));
+
     /** 赛特斯石英水晶输入总线 */
     public static final RegistryObject<CertusQuartzCrystalMachinePartBlock> CERTUS_QUARTZ_CRYSTAL_INPUT_BUS = BLOCKS.register(
             "certus_quartz_crystal_input_bus", CertusQuartzCrystalMachinePartBlock::new);
@@ -79,6 +88,14 @@ public final class ModBlocks {
     /** 福鲁伊克斯水晶能源仓 */
     public static final RegistryObject<FluixCrystalEnergyHatchBlock> FLUIX_CRYSTAL_ENERGY_HATCH = BLOCKS.register(
             "fluix_crystal_energy_hatch", FluixCrystalEnergyHatchBlock::new);
+
+    /** 物流控制机械方块 */
+    public static final RegistryObject<Block> LOGISTICS_CONTROL_CASING = BLOCKS.register(
+            "logistics_control_casing", () -> new Block(Block.Properties.of()
+                    .mapColor(MapColor.COLOR_PURPLE)
+                    .strength(3.5F)
+                    .sound(SoundType.METAL)
+                    .requiresCorrectToolForDrops()));
 
     /** 异星熔岩 */
     public static final RegistryObject<AlienLavaBlock> ALIEN_LAVA = BLOCKS.register("alien_lava",

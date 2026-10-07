@@ -34,6 +34,7 @@ public final class CtmSprites {
         register("block/crystal/crystal_reinforced_composite_machine_casing");
         register("block/crystal/assembly_line_grating");
         register("block/crystal/crystal_glass");
+        register("block/crystal/fireproof_crystal_glass");
         register("block/certus_quartz_crystal/casing");
         register("block/zircon/zirconia_corundum_bricks");
         register("block/meteor_steel_pipe_block/side");

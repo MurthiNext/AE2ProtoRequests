@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ZGZ",
+    "GZG",
+    "ZGZ"
+  ],
+  "key": {
+    "Z": {
+      "item": "ae2pr:zircon_dust"
+    },
+    "G": {
+      "item": "ae2pr:crystal_glass"
+    }
+  },
+  "result": {
+    "item": "ae2pr:fireproof_crystal_glass",
+    "count": 4
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "ae2pr:meteorite_zircon_ore"
+  },
+  "result": "ae2pr:zircon",
+  "experience": 1.0,
+  "cookingtime": 200
+}

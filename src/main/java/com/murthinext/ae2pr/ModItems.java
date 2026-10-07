@@ -70,6 +70,10 @@ public final class ModItems {
     public static final RegistryObject<BlockItem> CRYSTAL_GLASS = ITEMS.register("crystal_glass",
             () -> new BlockItem(ModBlocks.CRYSTAL_GLASS.get(), new Item.Properties()));
 
+    /** 耐火水晶玻璃 */
+    public static final RegistryObject<BlockItem> FIREPROOF_CRYSTAL_GLASS = ITEMS.register("fireproof_crystal_glass",
+            () -> new BlockItem(ModBlocks.FIREPROOF_CRYSTAL_GLASS.get(), new Item.Properties()));
+
     /** 赛特斯石英水晶输入总线 */
     public static final RegistryObject<BlockItem> CERTUS_QUARTZ_CRYSTAL_INPUT_BUS = ITEMS.register("certus_quartz_crystal_input_bus",
             () -> new BlockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get(), new Item.Properties()));
@@ -87,6 +91,11 @@ public final class ModItems {
     public static final RegistryObject<BlockItem> FLUIX_CRYSTAL_ENERGY_HATCH = ITEMS.register(
             "fluix_crystal_energy_hatch",
             () -> new BlockItem(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get(), new Item.Properties()));
+
+    /** 物流控制机械方块 */
+    public static final RegistryObject<BlockItem> LOGISTICS_CONTROL_CASING = ITEMS.register(
+            "logistics_control_casing",
+            () -> new BlockItem(ModBlocks.LOGISTICS_CONTROL_CASING.get(), new Item.Properties()));
 
     /** 陨钢锭 */
     public static final RegistryObject<Item> METEOR_STEEL_INGOT = ITEMS.register("meteor_steel_ingot",

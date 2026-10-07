@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "ae2pr:meteorite_copper_ore"
+  },
+  "result": "minecraft:copper_ingot",
+  "experience": 0.7,
+  "cookingtime": 200
+}
