@@ -20,6 +20,7 @@ import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -33,7 +34,7 @@ import com.murthinext.ae2pr.recipe.AlienLavaRecipe;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 
 /**
- * 异星熔岩世界交互配方的 JEI 分类：左侧原料，中间催化剂流体，右侧产物。
+ * 异星熔岩世界交互配方的 JEI 分类。
  */
 public class AlienLavaJeiCategory implements IRecipeCategory<AlienLavaRecipe> {
 
@@ -112,19 +113,18 @@ public class AlienLavaJeiCategory implements IRecipeCategory<AlienLavaRecipe> {
 
         // 催化剂流体
         IRecipeSlotBuilder catalystSlot = builder.addSlot(RecipeIngredientRole.CATALYST, CATALYST_X + 1, ARROW_Y + 1);
-        catalystSlot.setStandardSlotBackground();
         List<Fluid> catalysts = sourceFluids(recipe.getCatalyst());
         for (Fluid fluid : catalysts) {
             catalystSlot.addFluidStack(fluid, FluidType.BUCKET_VOLUME);
         }
-        catalystSlot.setFluidRenderer(FluidType.BUCKET_VOLUME, true, 16, 16);
+        catalystSlot.setCustomRenderer(ForgeTypes.FLUID_STACK, new FluidBlockIngredientRenderer());
 
         // 产物：物品或流体
         IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_X + 1, ARROW_Y + 1);
         outputSlot.setStandardSlotBackground();
         if (recipe.convertsCatalyst() && recipe.getResultFluid() != null) {
             outputSlot.addFluidStack(recipe.getResultFluid(), FluidType.BUCKET_VOLUME)
-                    .setFluidRenderer(FluidType.BUCKET_VOLUME, true, 16, 16);
+                    .setFluidRenderer(FluidType.BUCKET_VOLUME, false, 16, 16);
         } else {
             outputSlot.addItemStack(recipe.getResultItem());
         }

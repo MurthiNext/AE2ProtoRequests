@@ -10,13 +10,13 @@
       "item": "ae2pr:crystal_assembly_line_unit"
     },
     "P": {
-      "item": "ae2:calculation_processor"
+      "item": "ae2pr:computation_cell_component_256tops"
     },
     "F": {
       "tag": "ae2:all_fluix"
     },
     "U": {
-      "item": "ae2:engineering_processor"
+      "item": "ae2pr:crystal_assembly_line_casing"
     }
   },
   "result": {

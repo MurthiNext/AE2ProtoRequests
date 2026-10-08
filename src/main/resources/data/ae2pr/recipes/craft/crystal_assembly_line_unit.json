@@ -7,10 +7,10 @@
   ],
   "key": {
     "C": {
-      "item": "ae2pr:crystal_assembly_line_casing"
+      "item": "ae2:molecular_assembler"
     },
     "U": {
-      "tag": "ae2:all_fluix"
+      "item": "ae2pr:crystal_assembly_line_casing"
     }
   },
   "result": {
