@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ABC",
+    "ASC",
+    "ABC"
+  ],
+  "key": {
+    "S": {
+      "item": "ae2:spatial_cell_component_2"
+    },
+    "A": {
+      "item": "ae2:logic_processor"
+    },
+    "B": {
+      "item": "ae2:engineering_processor"
+    },
+    "C": {
+      "item": "ae2:calculation_processor"
+    }
+  },
+  "result": {
+    "item": "ae2pr:computation_cell_component_1tops",
+    "count": 1
+  }
+}

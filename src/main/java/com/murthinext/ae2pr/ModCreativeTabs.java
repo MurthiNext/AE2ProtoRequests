@@ -25,6 +25,11 @@ public final class ModCreativeTabs {
                     .displayItems((params, output) -> {
                         output.accept(ModItems.FILTER_CELL.get());
                         output.accept(ModItems.ADVANCED_FILTER_CELL.get());
+                        output.accept(ModItems.COMPUTATION_CELL_COMPONENT_1TOPS.get());
+                        output.accept(ModItems.COMPUTATION_CELL_COMPONENT_4TOPS.get());
+                        output.accept(ModItems.COMPUTATION_CELL_COMPONENT_16TOPS.get());
+                        output.accept(ModItems.COMPUTATION_CELL_COMPONENT_64TOPS.get());
+                        output.accept(ModItems.COMPUTATION_CELL_COMPONENT_256TOPS.get());
                         output.accept(ModItems.MULTI_LEVEL_EMITTER.get());
                         output.accept(ModItems.MULTI_THRESHOLD_LEVEL_EMITTER.get());
                         output.accept(ModItems.REDSTONE_REQUESTER.get());

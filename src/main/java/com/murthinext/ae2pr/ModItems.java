@@ -30,6 +30,26 @@ public final class ModItems {
     public static final RegistryObject<AdvancedFilterCellItem> ADVANCED_FILTER_CELL = ITEMS.register(
             "advanced_filter_cell", () -> new AdvancedFilterCellItem(new Item.Properties().stacksTo(1)));
 
+    /** 1TOPS ME计算组件 */
+    public static final RegistryObject<Item> COMPUTATION_CELL_COMPONENT_1TOPS = ITEMS.register("computation_cell_component_1tops",
+            () -> new Item(new Item.Properties()));
+
+    /** 4TOPS ME计算组件 */
+    public static final RegistryObject<Item> COMPUTATION_CELL_COMPONENT_4TOPS = ITEMS.register("computation_cell_component_4tops",
+            () -> new Item(new Item.Properties()));
+
+    /** 16TOPS ME计算组件 */
+    public static final RegistryObject<Item> COMPUTATION_CELL_COMPONENT_16TOPS = ITEMS.register("computation_cell_component_16tops",
+            () -> new Item(new Item.Properties()));
+
+    /** 64TOPS ME计算组件 */
+    public static final RegistryObject<Item> COMPUTATION_CELL_COMPONENT_64TOPS = ITEMS.register("computation_cell_component_64tops",
+            () -> new Item(new Item.Properties()));
+
+    /** 256TOPS ME计算组件 */
+    public static final RegistryObject<Item> COMPUTATION_CELL_COMPONENT_256TOPS = ITEMS.register("computation_cell_component_256tops",
+            () -> new Item(new Item.Properties()));
+
     /** ME 通式标准发信器 */
     public static final RegistryObject<MultiLevelEmitterPartItem> MULTI_LEVEL_EMITTER = ITEMS.register(
             "multi_level_emitter", () -> new MultiLevelEmitterPartItem(new Item.Properties()));
