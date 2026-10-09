@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "ae2pr:meteor_steel_dust",
+    "ae2pr:coal_dust",
+    "ae2pr:carbon_dust",
     "ae2pr:zircon_dust"
   ]
 }

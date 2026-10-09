@@ -195,6 +195,14 @@ public final class ModItems {
     public static final RegistryObject<Item> METEOR_STEEL_DUST = ITEMS.register("meteor_steel_dust",
             () -> new Item(new Item.Properties()));
 
+    /** 煤炭粉 */
+    public static final RegistryObject<Item> COAL_DUST = ITEMS.register("coal_dust",
+            () -> new Item(new Item.Properties()));
+
+    /** 碳粉 */
+    public static final RegistryObject<Item> CARBON_DUST = ITEMS.register("carbon_dust",
+            () -> new Item(new Item.Properties()));
+
     /** 锆英石粉 */
     public static final RegistryObject<Item> ZIRCON_DUST = ITEMS.register("zircon_dust",
             () -> new Item(new Item.Properties()));

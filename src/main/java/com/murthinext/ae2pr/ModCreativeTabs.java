@@ -42,6 +42,8 @@ public final class ModCreativeTabs {
 
                         // 粉末
                         output.accept(ModItems.METEOR_STEEL_DUST.get());
+                        output.accept(ModItems.COAL_DUST.get());
+                        output.accept(ModItems.CARBON_DUST.get());
                         output.accept(ModItems.ZIRCON_DUST.get());
 
                         // 单层板

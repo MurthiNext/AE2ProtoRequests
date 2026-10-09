@@ -1,0 +1,9 @@
+{
+  "type": "ae2:charger",
+  "ingredient": {
+    "tag": "forge:dusts/coal"
+  },
+  "result": {
+    "item": "ae2pr:carbon_dust"
+  }
+}
