@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "ae2pr:block/aev_output_bus_facing_down"
+    },
+    "facing=up": {
+      "model": "ae2pr:block/aev_output_bus_facing_up"
+    },
+    "facing=north": {
+      "model": "ae2pr:block/aev_output_bus_facing_north"
+    },
+    "facing=south": {
+      "model": "ae2pr:block/aev_output_bus_facing_south"
+    },
+    "facing=west": {
+      "model": "ae2pr:block/aev_output_bus_facing_west"
+    },
+    "facing=east": {
+      "model": "ae2pr:block/aev_output_bus_facing_east"
+    }
+  }
+}

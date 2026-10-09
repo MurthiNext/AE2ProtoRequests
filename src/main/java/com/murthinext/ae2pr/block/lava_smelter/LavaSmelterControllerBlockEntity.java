@@ -297,14 +297,16 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         return null;
     }
 
-    /** 输入总线内是否有满足配方的原料（只校验种类与总数量，份数按并行计算）。 */
+    /** 输入总线内是否有满足配方的原料（统计所有槽位，只校验种类与总数量）。 */
     private boolean hasIngredients(LavaSmelterRecipe recipe) {
         for (CountedIngredient ingredient : recipe.getCountedIngredients()) {
             int available = 0;
             for (ItemBusBlockEntity bus : inputBuses) {
-                ItemStack stack = bus.getStorage().getStackInSlot(0);
-                if (!stack.isEmpty() && ingredient.ingredient().test(stack)) {
-                    available += stack.getCount();
+                for (int slot = 0; slot < bus.getSlotCount(); slot++) {
+                    ItemStack stack = bus.getStorage().getStackInSlot(slot);
+                    if (!stack.isEmpty() && ingredient.ingredient().test(stack)) {
+                        available += stack.getCount();
+                    }
                 }
             }
             if (available < ingredient.count()) {
@@ -318,20 +320,22 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         for (CountedIngredient ingredient : recipe.getCountedIngredients()) {
             int remaining = ingredient.count() * parallel;
             for (ItemBusBlockEntity bus : inputBuses) {
+                for (int slot = 0; slot < bus.getSlotCount() && remaining > 0; slot++) {
+                    // 单次抽取最多只能取走物品的堆叠上限（64），按需求量分批抽取
+                    while (remaining > 0) {
+                        ItemStack current = bus.getStorage().getStackInSlot(slot);
+                        if (current.isEmpty() || !ingredient.ingredient().test(current)) {
+                            break;
+                        }
+                        ItemStack taken = bus.getStorage().extractItem(slot, remaining, false);
+                        if (taken.isEmpty()) {
+                            break;
+                        }
+                        remaining -= taken.getCount();
+                    }
+                }
                 if (remaining <= 0) {
                     break;
-                }
-                // 单次抽取最多只能取走物品的堆叠上限（64），按需求量分批抽取
-                while (remaining > 0) {
-                    ItemStack current = bus.getStorage().getStackInSlot(0);
-                    if (current.isEmpty() || !ingredient.ingredient().test(current)) {
-                        break;
-                    }
-                    ItemStack taken = bus.getStorage().extractItem(0, remaining, false);
-                    if (taken.isEmpty()) {
-                        break;
-                    }
-                    remaining -= taken.getCount();
                 }
             }
         }
@@ -347,9 +351,11 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         for (CountedIngredient ingredient : recipe.getCountedIngredients()) {
             int available = 0;
             for (ItemBusBlockEntity bus : inputBuses) {
-                ItemStack stack = bus.getStorage().getStackInSlot(0);
-                if (!stack.isEmpty() && ingredient.ingredient().test(stack)) {
-                    available += stack.getCount();
+                for (int slot = 0; slot < bus.getSlotCount(); slot++) {
+                    ItemStack stack = bus.getStorage().getStackInSlot(slot);
+                    if (!stack.isEmpty() && ingredient.ingredient().test(stack)) {
+                        available += stack.getCount();
+                    }
                 }
             }
             parallel = Math.min(parallel, available / ingredient.count());
@@ -372,23 +378,28 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         return low;
     }
 
-    /** 模拟多个产物依次进入单类型输出总线，防止不同产物重复占用同一空总线。 */
+    /** 模拟多个产物依次进入输出总线（逐槽位），防止不同产物重复占用同一空槽。 */
     private boolean canFitOutputs(LavaSmelterRecipe recipe, int parallel) {
-        List<ItemStack> simulated = new ArrayList<>(outputBuses.size());
+        List<ItemBusBlockEntity> owners = new ArrayList<>();
+        List<ItemStack> simulated = new ArrayList<>();
         for (ItemBusBlockEntity bus : outputBuses) {
-            simulated.add(bus.getStorage().getStackInSlot(0).copy());
+            for (int slot = 0; slot < bus.getSlotCount(); slot++) {
+                owners.add(bus);
+                simulated.add(bus.getStorage().getStackInSlot(slot).copy());
+            }
         }
         for (ItemStack result : recipe.getResults()) {
             long remaining = (long) result.getCount() * parallel;
             for (int index = 0; index < simulated.size() && remaining > 0; index++) {
                 ItemStack stored = simulated.get(index);
+                int capacity = owners.get(index).getCapacityPerSlot();
                 if (stored.isEmpty()) {
-                    int inserted = (int) Math.min(remaining, ItemBusBlockEntity.CAPACITY);
+                    int inserted = (int) Math.min(remaining, capacity);
                     simulated.set(index, result.copyWithCount(inserted));
                     remaining -= inserted;
                 } else if (ItemStack.isSameItemSameTags(stored, result)) {
                     int inserted = (int) Math.min(remaining,
-                            Math.max(0, ItemBusBlockEntity.CAPACITY - stored.getCount()));
+                            Math.max(0, capacity - stored.getCount()));
                     stored.grow(inserted);
                     remaining -= inserted;
                 }

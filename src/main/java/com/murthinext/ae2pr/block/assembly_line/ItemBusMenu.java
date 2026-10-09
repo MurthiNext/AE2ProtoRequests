@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.block.assembly_line;
 
+import java.util.List;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -16,12 +18,11 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.network.MachinePartStackPacket;
 
 /**
- * 赛特斯石英水晶输入/输出总线的容器菜单：机器存储单类、上限 32K 件。
+ * 机器部件物品总线的容器菜单。
  * <p>
  * 存储量超过原版槽位同步上限（数量按 byte 传输），因此不占槽位：
  * 展示由 {@link MachinePartStackPacket} 同步，操作由点击包驱动（见 {@link #handleStorageClick}）。
@@ -40,7 +41,7 @@ public class ItemBusMenu extends AbstractContainerMenu {
     private final Player owner;
     private final boolean serverSide;
     private final ItemBusBlockEntity blockEntity;
-    private ItemStack lastSentStack = ItemStack.EMPTY;
+    private List<ItemStack> lastSentStacks;
     private boolean stackSynced;
     private boolean lastAutoTransfer;
     private boolean autoTransferSynced;
@@ -79,28 +80,33 @@ public class ItemBusMenu extends AbstractContainerMenu {
 
     /** 是否是输出总线（决定客户端界面贴图）。 */
     public boolean isOutputBus() {
-        return blockEntity != null && blockEntity.getBlockState().is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get());
+        return blockEntity != null && blockEntity.isOutputBus();
     }
 
-    /** 机器存储内容（数量即储量；客户端为同步数据）。 */
-    public ItemStack getStoredStack() {
-        return blockEntity != null ? blockEntity.getStorage().getStackInSlot(0) : ItemStack.EMPTY;
+    /** 物品槽数量。 */
+    public int getSlotCount() {
+        return blockEntity != null ? blockEntity.getSlotCount() : 1;
+    }
+
+    /** 指定槽位的机器存储内容（数量即储量；客户端为同步数据）。 */
+    public ItemStack getStoredStack(int slot) {
+        return blockEntity != null ? blockEntity.getStorage().getStackInSlot(slot) : ItemStack.EMPTY;
     }
 
     /** 服务端每 tick：存储内容或自动搬运开关变化时向打开界面的玩家发送同步包；首次广播强制同步一次。 */
     @Override
     public void broadcastChanges() {
         if (blockEntity != null && owner instanceof ServerPlayer serverPlayer) {
-            ItemStack current = blockEntity.getStorage().getStackInSlot(0);
+            List<ItemStack> current = blockEntity.getStorageSnapshots();
             boolean autoTransfer = blockEntity.isAutoTransfer();
             if (!stackSynced || !autoTransferSynced || autoTransfer != lastAutoTransfer
-                    || !ItemStack.matches(current, lastSentStack)) {
+                    || !sameStacks(current, lastSentStacks)) {
                 stackSynced = true;
                 autoTransferSynced = true;
-                lastSentStack = current.copy();
+                lastSentStacks = current;
                 lastAutoTransfer = autoTransfer;
                 ModNetwork.sendToPlayer(serverPlayer,
-                        new MachinePartStackPacket(pos, lastSentStack, autoTransfer));
+                        new MachinePartStackPacket(pos, lastSentStacks, autoTransfer));
             }
         }
         super.broadcastChanges();
@@ -116,18 +122,32 @@ public class ItemBusMenu extends AbstractContainerMenu {
         return false;
     }
 
+    private static boolean sameStacks(List<ItemStack> a, @Nullable List<ItemStack> b) {
+        if (a == null || b == null || a.size() != b.size()) {
+            return false;
+        }
+        for (int i = 0; i < a.size(); i++) {
+            if (!ItemStack.matches(a.get(i), b.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * 存储区点击（由客户端点击包调用）：
+     *
+     * @param slot   槽位序号
      * @param button 0 = 左键，1 = 右键
      */
-    public void handleStorageClick(int button, boolean shift) {
-        if (!serverSide || blockEntity == null) {
+    public void handleStorageClick(int slot, int button, boolean shift) {
+        if (!serverSide || blockEntity == null || slot < 0 || slot >= blockEntity.getSlotCount()) {
             return;
         }
         if (shift) {
-            // 单次抽取最多只能取走物品的堆叠上限（64），循环取到背包放不下或总线清空
+            // 单次抽取最多只能取走物品的堆叠上限（64），循环取到背包放不下或该槽清空
             while (true) {
-                ItemStack taken = blockEntity.getStorage().extractItem(0, Integer.MAX_VALUE, false);
+                ItemStack taken = blockEntity.getStorage().extractItem(slot, Integer.MAX_VALUE, false);
                 if (taken.isEmpty()) {
                     break;
                 }
@@ -142,12 +162,11 @@ public class ItemBusMenu extends AbstractContainerMenu {
             }
             ItemStack carried = getCarried();
             int count = button == 1 ? 1 : carried.getCount();
-            ItemStack remainder = ItemHandlerHelper.insertItemStacked(blockEntity.getStorage(),
-                    carried.copyWithCount(count), false);
+            ItemStack remainder = blockEntity.getStorage().insertItem(slot, carried.copyWithCount(count), false);
             carried.shrink(count - remainder.getCount());
             setCarried(carried.isEmpty() ? ItemStack.EMPTY : carried);
         } else {
-            ItemStack taken = blockEntity.getStorage().extractItem(0, button == 1 ? 1 : 64, false);
+            ItemStack taken = blockEntity.getStorage().extractItem(slot, button == 1 ? 1 : 64, false);
             if (!taken.isEmpty()) {
                 setCarried(taken);
             }

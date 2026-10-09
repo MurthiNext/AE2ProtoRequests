@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.block.assembly_line;
 
+import java.util.List;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -25,7 +27,7 @@ import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 
 /**
- * 赛特斯石英水晶输入/输出仓的容器菜单。
+ * 机器部件流体仓的容器菜单。
  */
 public class FluidHatchMenu extends AbstractContainerMenu {
 
@@ -41,7 +43,7 @@ public class FluidHatchMenu extends AbstractContainerMenu {
     private final Player owner;
     private final boolean serverSide;
     private final FluidHatchBlockEntity blockEntity;
-    private FluidStack lastSentFluid = FluidStack.EMPTY;
+    private List<FluidStack> lastSentFluids;
     private boolean fluidSynced;
     private boolean lastAutoTransfer;
     private boolean autoTransferSynced;
@@ -83,20 +85,30 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         return blockEntity != null && blockEntity.isOutputHatch();
     }
 
+    /** 流体槽数量。 */
+    public int getTankCount() {
+        return blockEntity != null ? blockEntity.getTankCount() : 1;
+    }
+
+    /** 单槽容量（mB），供界面按占比绘制流体。 */
+    public int getCapacityPerTank() {
+        return blockEntity != null ? blockEntity.getCapacityPerTank() : FluidHatchBlockEntity.CAPACITY;
+    }
+
     /** 服务端每 tick：罐内流体或自动搬运开关变化时向打开界面的玩家发送同步包；首次广播强制同步一次。 */
     @Override
     public void broadcastChanges() {
         if (blockEntity != null && owner instanceof ServerPlayer serverPlayer) {
-            FluidStack current = blockEntity.getTank().getFluid();
+            List<FluidStack> current = blockEntity.getFluidSnapshots();
             boolean autoTransfer = blockEntity.isAutoTransfer();
             if (!fluidSynced || !autoTransferSynced || autoTransfer != lastAutoTransfer
-                    || !sameFluid(current, lastSentFluid)) {
+                    || !sameFluids(current, lastSentFluids)) {
                 fluidSynced = true;
                 autoTransferSynced = true;
-                lastSentFluid = current.copy();
+                lastSentFluids = current;
                 lastAutoTransfer = autoTransfer;
                 ModNetwork.sendToPlayer(serverPlayer,
-                        new MachinePartFluidPacket(pos, lastSentFluid, autoTransfer));
+                        new MachinePartFluidPacket(pos, lastSentFluids, autoTransfer));
             }
         }
         super.broadcastChanges();
@@ -112,6 +124,18 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         return false;
     }
 
+    private static boolean sameFluids(List<FluidStack> a, @Nullable List<FluidStack> b) {
+        if (a == null || b == null || a.size() != b.size()) {
+            return false;
+        }
+        for (int i = 0; i < a.size(); i++) {
+            if (!sameFluid(a.get(i), b.get(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private static boolean sameFluid(FluidStack a, FluidStack b) {
         if (a.isEmpty() || b.isEmpty()) {
             return a.isEmpty() && b.isEmpty();
@@ -122,10 +146,11 @@ public class FluidHatchMenu extends AbstractContainerMenu {
     /**
      * 流体槽点击（由客户端点击包调用）：
      *
+     * @param tank   罐序号（石英仓只有一个）
      * @param button 0 = 左键（从罐内取出），1 = 右键（存入罐内）
      */
-    public void handleTankClick(int button) {
-        if (!serverSide || blockEntity == null) {
+    public void handleTankClick(int tank, int button) {
+        if (!serverSide || blockEntity == null || tank < 0 || tank >= blockEntity.getTankCount()) {
             return;
         }
         ItemStack carried = getCarried();
@@ -133,18 +158,18 @@ public class FluidHatchMenu extends AbstractContainerMenu {
             return;
         }
         if (button == 0) {
-            takeFluid(carried);
+            takeFluid(carried, tank);
         } else if (button == 1) {
             if (!blockEntity.acceptsPlayerInsert()) {
                 return; // 输出仓仅接受机器内部产出
             }
-            storeFluid(carried);
+            storeFluid(carried, tank);
         }
         broadcastChanges();
     }
 
     /** 右键：用光标上的流体容器向罐内存入流体。 */
-    private void storeFluid(ItemStack carried) {
+    private void storeFluid(ItemStack carried, int tank) {
         ItemStack single = carried.copyWithCount(1);
         IFluidHandlerItem handler = single.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
         if (handler == null) {
@@ -154,23 +179,23 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         if (drained.isEmpty()) {
             return;
         }
-        int accepted = blockEntity.getTank().fill(drained, IFluidHandler.FluidAction.SIMULATE);
+        int accepted = blockEntity.getTank(tank).fill(drained, IFluidHandler.FluidAction.SIMULATE);
         if (accepted <= 0) {
             return;
         }
         FluidStack moved = handler.drain(accepted, IFluidHandler.FluidAction.EXECUTE);
-        blockEntity.getTank().fill(moved, IFluidHandler.FluidAction.EXECUTE);
+        blockEntity.getTank(tank).fill(moved, IFluidHandler.FluidAction.EXECUTE);
         replaceCarried(carried, handler.getContainer());
     }
 
     /** 左键：把罐内流体装入光标上的流体容器。 */
-    private void takeFluid(ItemStack carried) {
+    private void takeFluid(ItemStack carried, int tank) {
         ItemStack single = carried.copyWithCount(1);
         IFluidHandlerItem handler = single.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
         if (handler == null) {
             return;
         }
-        FluidStack stored = blockEntity.getTank().getFluid();
+        FluidStack stored = blockEntity.getTank(tank).getFluid();
         if (stored.isEmpty()) {
             return;
         }
@@ -179,7 +204,7 @@ public class FluidHatchMenu extends AbstractContainerMenu {
             return;
         }
         handler.fill(stored.copy(), IFluidHandler.FluidAction.EXECUTE);
-        blockEntity.getTank().drain(filled, IFluidHandler.FluidAction.EXECUTE);
+        blockEntity.getTank(tank).drain(filled, IFluidHandler.FluidAction.EXECUTE);
         replaceCarried(carried, handler.getContainer());
     }
 

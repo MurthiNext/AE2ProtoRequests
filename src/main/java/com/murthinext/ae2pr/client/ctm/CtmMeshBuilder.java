@@ -68,6 +68,26 @@ public final class CtmMeshBuilder {
         return new BakedQuad(out, quad.getTintIndex(), quad.getDirection(), atlas, quad.isShade());
     }
 
+    /** 仅替换四边形引用的贴图并重映射 UV（保持贴图内相对位置）：用于多方块成型换装。 */
+    public static BakedQuad retarget(BakedQuad quad, TextureAtlasSprite from, TextureAtlasSprite to) {
+        int[] src = quad.getVertices();
+        int[] out = src.clone();
+        float fromWidth = from.getU1() - from.getU0();
+        float fromHeight = from.getV1() - from.getV0();
+        float toWidth = to.getU1() - to.getU0();
+        float toHeight = to.getV1() - to.getV0();
+        for (int i = 0; i < 4; i++) {
+            int offset = i * STRIDE + UV_OFFSET;
+            float u = Float.intBitsToFloat(src[offset]);
+            float v = Float.intBitsToFloat(src[offset + 1]);
+            float localU = fromWidth == 0.0F ? 0.5F : (u - from.getU0()) / fromWidth;
+            float localV = fromHeight == 0.0F ? 0.5F : (v - from.getV0()) / fromHeight;
+            out[offset] = Float.floatToRawIntBits(to.getU0() + localU * toWidth);
+            out[offset + 1] = Float.floatToRawIntBits(to.getV0() + localV * toHeight);
+        }
+        return new BakedQuad(out, quad.getTintIndex(), quad.getDirection(), to, quad.isShade());
+    }
+
     /**
      * 计算该面的 47-tile 图块序号。
      * <p>

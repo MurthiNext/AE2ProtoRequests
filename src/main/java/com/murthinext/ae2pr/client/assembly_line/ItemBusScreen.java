@@ -1,6 +1,5 @@
 package com.murthinext.ae2pr.client.assembly_line;
 
-import java.text.NumberFormat;
 import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
@@ -8,7 +7,6 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,109 +20,97 @@ import com.murthinext.ae2pr.block.assembly_line.ItemBusMenu;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
 
 /**
- * 赛特斯石英水晶输入/输出总线界面。
+ * 机器部件物品总线界面。
  */
-public class ItemBusScreen extends AbstractContainerScreen<ItemBusMenu> {
+public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> {
 
     private static final ResourceLocation TEXTURE_INPUT = new ResourceLocation(ae2pr.MODID,
             "textures/gui/certus_quartz_crystal_input_bus.png");
     private static final ResourceLocation TEXTURE_OUTPUT = new ResourceLocation(ae2pr.MODID,
             "textures/gui/certus_quartz_crystal_output_bus.png");
+    private static final ResourceLocation TEXTURE_AEV_INPUT = new ResourceLocation(ae2pr.MODID,
+            "textures/gui/aev_input_bus.png");
+    private static final ResourceLocation TEXTURE_AEV_OUTPUT = new ResourceLocation(ae2pr.MODID,
+            "textures/gui/aev_output_bus.png");
 
-    /** 存储区物品位（与 GUI 贴图一致） */
-    private static final int STORAGE_X = 80;
-    private static final int STORAGE_Y = 47;
-
-    private static final int TEXT_X = 7;
-    private static final int TITLE_Y = 9;
-
-    private static final int COLOR_TITLE = 0x55FFFF;
-
-    private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
-
-    /** 左侧工具栏位置（相对 GUI 左上角） */
-    private static final int TOOLBAR_X = -22;
-    private static final int TOOLBAR_Y = 2;
-
-    @Nullable
-    private AutoTransferButton autoTransferButton;
+    /** 存储区物品位（与 GUI 贴图一致）：多槽为一行四格、整体居中 */
+    private static final int SLOT_Y = 47;
+    private static final int SLOT_X_MULTI = 52;
+    private static final int SLOT_X_SINGLE = 80;
+    private static final int SLOT_STEP = 18;
 
     public ItemBusScreen(ItemBusMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        this.imageWidth = 176;
-        this.imageHeight = 200;
     }
 
-    /** 客户端同步入口：把服务端存储内容与自动搬运开关写入本地方块实体（仅由同步包调用）。 */
-    public static void applyStackSync(BlockPos pos, ItemStack stack, boolean autoTransfer) {
+    /** 客户端同步入口：把服务端各槽存储内容与自动搬运开关写入本地方块实体（仅由同步包调用）。 */
+    public static void applyStackSync(BlockPos pos, List<ItemStack> stacks, boolean autoTransfer) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level != null && minecraft.level.getBlockEntity(pos) instanceof ItemBusBlockEntity bus) {
-            bus.getStorage().setStackInSlot(0, stack);
+            for (int i = 0; i < stacks.size() && i < bus.getSlotCount(); i++) {
+                bus.getStorage().setStackInSlot(i, stacks.get(i));
+            }
             bus.setAutoTransfer(autoTransfer);
         }
     }
 
     @Override
-    protected void init() {
-        super.init();
-        autoTransferButton = new AutoTransferButton(leftPos + TOOLBAR_X + 1, topPos + TOOLBAR_Y + 1,
-                menu.isOutputBus() ? AutoTransferButton.Type.PUSH : AutoTransferButton.Type.PULL,
-                this::autoTransferEnabled,
-                () -> Minecraft.getInstance().gameMode.handleInventoryButtonClick(menu.containerId, 0));
-        addRenderableWidget(autoTransferButton);
+    protected boolean isOutput() {
+        return menu.isOutputBus();
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(graphics);
-        super.render(graphics, mouseX, mouseY, partialTick);
-        this.renderTooltip(graphics, mouseX, mouseY);
+    protected boolean autoTransferEnabled() {
+        ItemBusBlockEntity bus = clientBus();
+        return bus == null || bus.isAutoTransfer();
     }
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.blit(menu.isOutputBus() ? TEXTURE_OUTPUT : TEXTURE_INPUT, leftPos, topPos, 0, 0,
-                imageWidth, imageHeight);
-        AutoTransferButton.renderToolbar(graphics, leftPos + TOOLBAR_X, topPos + TOOLBAR_Y, 1);
-        renderStoredItem(graphics);
-        if (isHoveringStorage(mouseX, mouseY)) {
-            // 与原生槽位一致：白色高亮叠加在物品之上
-            AbstractContainerScreen.renderSlotHighlight(graphics, leftPos + STORAGE_X, topPos + STORAGE_Y, 0,
-                    0x80FFFFFF);
+        graphics.blit(texture(), leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        renderToolbar(graphics);
+        int hovered = hoveredSlot(mouseX, mouseY);
+        for (int slot = 0; slot < menu.getSlotCount(); slot++) {
+            renderStoredItem(graphics, slot);
+            if (slot == hovered) {
+                // 与原生槽位一致：白色高亮叠加在物品之上
+                renderSlotHighlight(graphics, slotX(slot), topPos + SLOT_Y, 0, 0x80FFFFFF);
+            }
         }
     }
 
-    @Override
-    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.drawString(font, title, TEXT_X, TITLE_Y, COLOR_TITLE, false);
+    private ResourceLocation texture() {
+        boolean output = menu.isOutputBus();
+        if (menu.getSlotCount() > 1) {
+            return output ? TEXTURE_AEV_OUTPUT : TEXTURE_AEV_INPUT;
+        }
+        return output ? TEXTURE_OUTPUT : TEXTURE_INPUT;
+    }
+
+    private int slotX(int slot) {
+        int x = menu.getSlotCount() > 1 ? SLOT_X_MULTI + slot * SLOT_STEP : SLOT_X_SINGLE;
+        return leftPos + x;
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if ((button == 0 || button == 1) && isHoveringStorage((int) mouseX, (int) mouseY)) {
-            ModNetwork.sendToServer(new BusSlotClickPacket(menu.getBlockPos(), button, hasShiftDown()));
+        int slot = hoveredSlot((int) mouseX, (int) mouseY);
+        if ((button == 0 || button == 1) && slot >= 0) {
+            ModNetwork.sendToServer(new BusSlotClickPacket(menu.getBlockPos(), slot, button, hasShiftDown()));
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    /** 存储区悬停：按槽位惯例显示物品 tooltip。 */
+    /** 存储区悬停：按槽位惯例显示物品 tooltip；工具栏提示由基类统一处理。 */
     @Override
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
-        if (autoTransferButton != null && autoTransferButton.isHovered()) {
-            boolean enabled = autoTransferEnabled();
-            boolean output = menu.isOutputBus();
-            graphics.renderComponentTooltip(font, List.of(
-                    Component.translatable(output ? "gui.ae2pr.machine_part.auto.push"
-                            : "gui.ae2pr.machine_part.auto.pull"),
-                    Component.translatable(enabled ? "gui.ae2pr.machine_part.auto.enabled"
-                            : "gui.ae2pr.machine_part.auto.disabled"),
-                    Component.translatable("gui.ae2pr.machine_part.auto.desc")),
-                    mouseX, mouseY);
+        if (renderAutoTransferTooltip(graphics, mouseX, mouseY)) {
             return;
         }
-        if (isHoveringStorage(mouseX, mouseY)) {
-            ItemStack stored = menu.getStoredStack();
+        int slot = hoveredSlot(mouseX, mouseY);
+        if (slot >= 0) {
+            ItemStack stored = menu.getStoredStack(slot);
             if (!stored.isEmpty()) {
                 graphics.renderTooltip(font, Screen.getTooltipFromItem(Minecraft.getInstance(), stored),
                         stored.getTooltipImage(), stored, mouseX, mouseY);
@@ -135,13 +121,13 @@ public class ItemBusScreen extends AbstractContainerScreen<ItemBusMenu> {
     }
 
     /** 绘制存储物品与数量（数量超宽时缩小，贴物品格右下角）。 */
-    private void renderStoredItem(GuiGraphics graphics) {
-        ItemStack stored = menu.getStoredStack();
+    private void renderStoredItem(GuiGraphics graphics, int slot) {
+        ItemStack stored = menu.getStoredStack(slot);
         if (stored.isEmpty()) {
             return;
         }
-        int x = leftPos + STORAGE_X;
-        int y = topPos + STORAGE_Y;
+        int x = slotX(slot);
+        int y = topPos + SLOT_Y;
         graphics.renderItem(stored, x, y);
         String text = String.valueOf(stored.getCount());
         float scale = Math.min(1.0F, 16.0F / font.width(text));
@@ -152,15 +138,16 @@ public class ItemBusScreen extends AbstractContainerScreen<ItemBusMenu> {
         graphics.pose().popPose();
     }
 
-    private boolean isHoveringStorage(int mouseX, int mouseY) {
-        int x = leftPos + STORAGE_X;
-        int y = topPos + STORAGE_Y;
-        return mouseX >= x - 1 && mouseX < x + 17 && mouseY >= y - 1 && mouseY < y + 17;
-    }
-
-    private boolean autoTransferEnabled() {
-        ItemBusBlockEntity bus = clientBus();
-        return bus == null || bus.isAutoTransfer();
+    /** 返回鼠标所在存储槽序号，不在存储区时返回 -1。 */
+    private int hoveredSlot(int mouseX, int mouseY) {
+        for (int slot = 0; slot < menu.getSlotCount(); slot++) {
+            int x = slotX(slot);
+            int y = topPos + SLOT_Y;
+            if (mouseX >= x - 1 && mouseX < x + 17 && mouseY >= y - 1 && mouseY < y + 17) {
+                return slot;
+            }
+        }
+        return -1;
     }
 
     @Nullable

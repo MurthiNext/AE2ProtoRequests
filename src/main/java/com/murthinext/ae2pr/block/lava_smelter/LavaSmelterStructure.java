@@ -11,7 +11,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
 import com.murthinext.ae2pr.ModBlocks;
-import com.murthinext.ae2pr.block.assembly_line.CertusQuartzCrystalMachinePartBlock;
+import com.murthinext.ae2pr.block.assembly_line.MachinePartBlock;
+import com.murthinext.ae2pr.block.assembly_line.MachinePartFacade;
 import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.multiblock.StructurePredicate;
@@ -31,6 +32,7 @@ import com.murthinext.ae2pr.multiblock.StructureResult;
  * {@code G}=耐火水晶玻璃 {@code P}=陨钢管道（NBT 中炉膛顶朝下、烟囱朝上，结构只校验方块类型）
  * {@code L}=物流控制机械方块 {@code #}=任意（炉膛内部与烟囱周围留空）。
  * <p>
+ * 砖块位可由机器部件替代：输入、输出总线或输入、输出仓（石英 / AEV 系列均可）。
  * 成型后，结构内仓室切换为锆刚玉砖块外观（style=2，仓口保留），
  * 与周围的砖块使用同一连接纹理族。
  */
@@ -48,7 +50,12 @@ public final class LavaSmelterStructure {
             .where('B', StructurePredicate.blocks(ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get())
                     .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get()))
                     .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()))
-                    .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get())))
+                    .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()))
+                    .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()))
+                    .or(StructurePredicate.blocks(ModBlocks.AEV_INPUT_BUS.get()))
+                    .or(StructurePredicate.blocks(ModBlocks.AEV_OUTPUT_BUS.get()))
+                    .or(StructurePredicate.blocks(ModBlocks.AEV_INPUT_HATCH.get()))
+                    .or(StructurePredicate.blocks(ModBlocks.AEV_OUTPUT_HATCH.get())))
             .where('G', StructurePredicate.blocks(ModBlocks.FIREPROOF_CRYSTAL_GLASS.get()))
             .where('P', StructurePredicate.blocks(ModBlocks.METEOR_STEEL_PIPE_BLOCK.get()))
             .where('L', StructurePredicate.blocks(ModBlocks.LOGISTICS_CONTROL_CASING.get()))
@@ -84,23 +91,35 @@ public final class LavaSmelterStructure {
     private static void applyParts(Level level, List<BlockPos> cells, boolean formed) {
         for (BlockPos pos : cells) {
             BlockState state = level.getBlockState(pos);
-            if (!(state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get())
-                    || state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get())
-                    || state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()))) {
+            if (!isPart(state)) {
                 continue;
             }
             BlockState updated = state;
-            if (updated.getValue(CertusQuartzCrystalMachinePartBlock.FORMED) != formed) {
-                updated = updated.setValue(CertusQuartzCrystalMachinePartBlock.FORMED, formed);
+            if (updated.getValue(MachinePartBlock.FORMED) != formed) {
+                updated = updated.setValue(MachinePartBlock.FORMED, formed);
             }
-            int style = formed ? 2 : 1;
-            if (updated.getValue(CertusQuartzCrystalMachinePartBlock.STYLE) != style) {
-                updated = updated.setValue(CertusQuartzCrystalMachinePartBlock.STYLE, style);
+            // 冶炼炉成型外观：锆刚玉砖块；未成型时回默认值
+            int style = formed ? MachinePartFacade.ZIRCONIA.style() : MachinePartBlock.DEFAULT_STYLE;
+            if (updated.getValue(MachinePartBlock.STYLE) != style) {
+                updated = updated.setValue(MachinePartBlock.STYLE, style);
             }
             if (updated != state) {
                 level.setBlock(pos, updated, Block.UPDATE_ALL);
             }
         }
+    }
+
+    /** 可占据砖块位的机器部件（石英 / AEV 的输入、输出总线与输入、输出仓）。 */
+    private static boolean isPart(BlockState state) {
+        Block block = state.getBlock();
+        return block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get()
+                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()
+                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()
+                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()
+                || block == ModBlocks.AEV_INPUT_BUS.get()
+                || block == ModBlocks.AEV_OUTPUT_BUS.get()
+                || block == ModBlocks.AEV_INPUT_HATCH.get()
+                || block == ModBlocks.AEV_OUTPUT_HATCH.get();
     }
 
     /** 炉膛底面 2×2 池面（空腔最底层）的世界坐标：用于假熔岩渲染与伤害判定。 */

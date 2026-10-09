@@ -117,6 +117,26 @@ public final class ModItems {
             "certus_quartz_crystal_output_hatch",
             () -> new BlockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get(), new Item.Properties()));
 
+    /** AEV 机械方块 */
+    public static final RegistryObject<BlockItem> AEV_MACHINE_CASING = ITEMS.register("aev_machine_casing",
+            () -> new BlockItem(ModBlocks.AEV_MACHINE_CASING.get(), new Item.Properties()));
+
+    /** AEV 输入总线 */
+    public static final RegistryObject<BlockItem> AEV_INPUT_BUS = ITEMS.register("aev_input_bus",
+            () -> new BlockItem(ModBlocks.AEV_INPUT_BUS.get(), new Item.Properties()));
+
+    /** AEV 输出总线 */
+    public static final RegistryObject<BlockItem> AEV_OUTPUT_BUS = ITEMS.register("aev_output_bus",
+            () -> new BlockItem(ModBlocks.AEV_OUTPUT_BUS.get(), new Item.Properties()));
+
+    /** AEV 输入仓 */
+    public static final RegistryObject<BlockItem> AEV_INPUT_HATCH = ITEMS.register("aev_input_hatch",
+            () -> new BlockItem(ModBlocks.AEV_INPUT_HATCH.get(), new Item.Properties()));
+
+    /** AEV 输出仓 */
+    public static final RegistryObject<BlockItem> AEV_OUTPUT_HATCH = ITEMS.register("aev_output_hatch",
+            () -> new BlockItem(ModBlocks.AEV_OUTPUT_HATCH.get(), new Item.Properties()));
+
     /** 福鲁伊克斯水晶能源仓 */
     public static final RegistryObject<BlockItem> FLUIX_CRYSTAL_ENERGY_HATCH = ITEMS.register(
             "fluix_crystal_energy_hatch",

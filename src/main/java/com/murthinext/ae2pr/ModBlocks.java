@@ -13,9 +13,9 @@ import net.minecraftforge.registries.RegistryObject;
 
 import com.murthinext.ae2pr.block.alien_lava.AlienLavaBlock;
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineUnitBlock;
-import com.murthinext.ae2pr.block.assembly_line.CertusQuartzCrystalMachinePartBlock;
 import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
 import com.murthinext.ae2pr.block.assembly_line.FluixCrystalEnergyHatchBlock;
+import com.murthinext.ae2pr.block.assembly_line.MachinePartBlock;
 import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOreBlock;
@@ -75,20 +75,40 @@ public final class ModBlocks {
                     .noOcclusion()));
 
     /** 赛特斯石英水晶输入总线 */
-    public static final RegistryObject<CertusQuartzCrystalMachinePartBlock> CERTUS_QUARTZ_CRYSTAL_INPUT_BUS = BLOCKS.register(
-            "certus_quartz_crystal_input_bus", CertusQuartzCrystalMachinePartBlock::new);
+    public static final RegistryObject<MachinePartBlock> CERTUS_QUARTZ_CRYSTAL_INPUT_BUS = BLOCKS.register(
+            "certus_quartz_crystal_input_bus", MachinePartBlock::new);
 
     /** 赛特斯石英水晶输入仓 */
-    public static final RegistryObject<CertusQuartzCrystalMachinePartBlock> CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH = BLOCKS.register(
-            "certus_quartz_crystal_input_hatch", CertusQuartzCrystalMachinePartBlock::new);
+    public static final RegistryObject<MachinePartBlock> CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH = BLOCKS.register(
+            "certus_quartz_crystal_input_hatch", MachinePartBlock::new);
 
     /** 赛特斯石英水晶输出总线 */
-    public static final RegistryObject<CertusQuartzCrystalMachinePartBlock> CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS = BLOCKS.register(
-            "certus_quartz_crystal_output_bus", CertusQuartzCrystalMachinePartBlock::new);
+    public static final RegistryObject<MachinePartBlock> CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS = BLOCKS.register(
+            "certus_quartz_crystal_output_bus", MachinePartBlock::new);
 
     /** 赛特斯石英水晶输出仓 */
-    public static final RegistryObject<CertusQuartzCrystalMachinePartBlock> CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH = BLOCKS.register(
-            "certus_quartz_crystal_output_hatch", CertusQuartzCrystalMachinePartBlock::new);
+    public static final RegistryObject<MachinePartBlock> CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH = BLOCKS.register(
+            "certus_quartz_crystal_output_hatch", MachinePartBlock::new);
+
+    /** AEV 机械方块（陨钢机壳） */
+    public static final RegistryObject<Block> AEV_MACHINE_CASING = BLOCKS.register(
+            "aev_machine_casing", () -> new Block(casingProperties()));
+
+    /** AEV 输入总线（4 槽，每槽 2048 件） */
+    public static final RegistryObject<MachinePartBlock> AEV_INPUT_BUS = BLOCKS.register(
+            "aev_input_bus", MachinePartBlock::new);
+
+    /** AEV 输出总线（4 槽，每槽 2048 件） */
+    public static final RegistryObject<MachinePartBlock> AEV_OUTPUT_BUS = BLOCKS.register(
+            "aev_output_bus", MachinePartBlock::new);
+
+    /** AEV 输入仓（2 槽，每槽 1024 桶） */
+    public static final RegistryObject<MachinePartBlock> AEV_INPUT_HATCH = BLOCKS.register(
+            "aev_input_hatch", MachinePartBlock::new);
+
+    /** AEV 输出仓（2 槽，每槽 1024 桶） */
+    public static final RegistryObject<MachinePartBlock> AEV_OUTPUT_HATCH = BLOCKS.register(
+            "aev_output_hatch", MachinePartBlock::new);
 
     /** 福鲁伊克斯水晶能源仓 */
     public static final RegistryObject<FluixCrystalEnergyHatchBlock> FLUIX_CRYSTAL_ENERGY_HATCH = BLOCKS.register(

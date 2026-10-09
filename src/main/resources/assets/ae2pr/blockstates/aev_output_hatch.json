@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "ae2pr:block/aev_output_hatch_facing_down"
+    },
+    "facing=up": {
+      "model": "ae2pr:block/aev_output_hatch_facing_up"
+    },
+    "facing=north": {
+      "model": "ae2pr:block/aev_output_hatch_facing_north"
+    },
+    "facing=south": {
+      "model": "ae2pr:block/aev_output_hatch_facing_south"
+    },
+    "facing=west": {
+      "model": "ae2pr:block/aev_output_hatch_facing_west"
+    },
+    "facing=east": {
+      "model": "ae2pr:block/aev_output_hatch_facing_east"
+    }
+  }
+}

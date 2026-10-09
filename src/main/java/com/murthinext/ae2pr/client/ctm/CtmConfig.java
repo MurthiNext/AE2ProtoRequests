@@ -2,6 +2,9 @@ package com.murthinext.ae2pr.client.ctm;
 
 import java.util.Arrays;
 
+import org.jetbrains.annotations.Nullable;
+
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -9,7 +12,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.ModBlocks;
-import com.murthinext.ae2pr.block.assembly_line.CertusQuartzCrystalMachinePartBlock;
+import com.murthinext.ae2pr.block.assembly_line.MachinePartBlock;
+import com.murthinext.ae2pr.block.assembly_line.MachinePartFacade;
 import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
 
 /**
@@ -82,6 +86,7 @@ public final class CtmConfig {
      * <li>{@code 4} 锆刚玉砖块 / 高反应性熔岩冶炼炉主机 / 冶炼炉成型的机器部件（style=2）</li>
      * <li>{@code 5~7} 陨钢管道方块（按轴向分族，同种相连且仅沿自身轴向连接）</li>
      * <li>{@code 8} 耐火水晶玻璃</li>
+     * <li>{@code 9} AEV 机械方块 / AEV 机器部件（未成型）</li>
      * <li>{@code 0} 不参与连接纹理</li>
      * </ul>
      */
@@ -94,12 +99,18 @@ public final class CtmConfig {
                 || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()
                 || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()
                 || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()) {
-            // 熔岩冶炼炉成型的部件外观为锆刚玉砖块，归入砖块族；其余情况为水晶机身族
-            if (state.getValue(CertusQuartzCrystalMachinePartBlock.FORMED)
-                    && state.getValue(CertusQuartzCrystalMachinePartBlock.STYLE) == 2) {
-                return 4;
-            }
-            return 1;
+
+            return partFamily(state, 1);
+        }
+        if (block == ModBlocks.AEV_MACHINE_CASING.get()) {
+            return 9;
+        }
+        if (block == ModBlocks.AEV_INPUT_BUS.get()
+                || block == ModBlocks.AEV_INPUT_HATCH.get()
+                || block == ModBlocks.AEV_OUTPUT_BUS.get()
+                || block == ModBlocks.AEV_OUTPUT_HATCH.get()) {
+
+            return partFamily(state, 9);
         }
         if (block == ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()) {
             return 1;
@@ -123,6 +134,40 @@ public final class CtmConfig {
             return 5 + state.getValue(MeteorSteelPipeBlock.FACING).getAxis().ordinal();
         }
         return 0;
+    }
+
+    /** 机器部件的连接族：成型时用外观注册的连接族，否则为所属机壳族。 */
+    private static int partFamily(BlockState state, int casingFamily) {
+        MachinePartFacade facade = facade(state);
+        return facade != null ? facade.ctmFamily() : casingFamily;
+    }
+
+    /** 成型部件的多方块外观；非机器部件或未成型返回 null。 */
+    @Nullable
+    public static MachinePartFacade facade(BlockState state) {
+        if (state.getBlock() instanceof MachinePartBlock && state.getValue(MachinePartBlock.FORMED)) {
+            return MachinePartFacade.byStyle(state.getValue(MachinePartBlock.STYLE));
+        }
+        return null;
+    }
+
+    /** 成型部件应换成的结构外观贴图；无外观或贴图缺失返回 null。 */
+    @Nullable
+    public static TextureAtlasSprite facadeSprite(BlockState state) {
+        MachinePartFacade facade = facade(state);
+        return facade != null ? CtmSprites.baseSprite(facade.texture()) : null;
+    }
+
+    /** 部件未成型时的基础面贴图（成型换装时用于匹配需要替换的四边形）。 */
+    @Nullable
+    public static TextureAtlasSprite partBaseSprite(BlockState state) {
+        Block block = state.getBlock();
+        if (!(block instanceof MachinePartBlock)) {
+            return null;
+        }
+        return MachinePartBlock.isAevPart(block)
+                ? CtmSprites.baseSprite(CtmSprites.AEV_PART_CASING)
+                : CtmSprites.baseSprite(CtmSprites.CERTUS_PART_CASING);
     }
 
     /**

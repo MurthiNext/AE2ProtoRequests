@@ -1,5 +1,8 @@
 package com.murthinext.ae2pr.block.assembly_line;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -19,19 +22,18 @@ import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModBlocks;
 
 /**
- * 赛特斯石英水晶输入/输出总线方块实体：单格物品存储，仅存一类，上限 32K（32768）件。
+ * 机器部件物品总线方块实体。
  * <p>
  * 输出总线只接收配方输出，禁止玩家/外部存入。
  * <p>
- * 对外通过 {@code ITEM_HANDLER} 能力暴露存储，供其他模组的物流交互；
- * 默认开启自动搬运。
+ * 对外通过 {@code ITEM_HANDLER} 能力暴露存储，供其他模组的物流交互；默认开启自动搬运。
  */
 public class ItemBusBlockEntity extends BlockEntity {
 
-    /** 存储上限：32K 件 */
+    /** 石英总线单槽上限：32K 件 */
     public static final int CAPACITY = 32 * 1024;
-    /** 可存储的类型数（预留多种类扩展） */
-    public static final int TYPE_CAPACITY = 1;
+    /** AEV 总线单槽上限：2048 件 */
+    public static final int AEV_CAPACITY = 2048;
 
     private static final String STORAGE_ID = "storage";
     private static final String AUTO_TRANSFER_ID = "autoTransfer";
@@ -39,30 +41,7 @@ public class ItemBusBlockEntity extends BlockEntity {
     /** 自动搬运开关：输入总线拉取、输出总线推出，仅作用于朝向面，默认启用。 */
     private boolean autoTransfer = true;
 
-    private final ItemStackHandler storage = new ItemStackHandler(1) {
-        @Override
-        public int getSlotLimit(int slot) {
-            return CAPACITY;
-        }
-
-        @Override
-        protected int getStackLimit(int slot, ItemStack stack) {
-            // 原版实现还会按物品自身堆叠上限（64）截断，这里按槽位上限放开
-            return getSlotLimit(slot);
-        }
-
-        @Override
-        public boolean isItemValid(int slot, ItemStack stack) {
-            // 仅一类：空槽接受任意物品，非空槽只接受同种物品
-            ItemStack current = getStackInSlot(slot);
-            return current.isEmpty() || ItemStack.isSameItemSameTags(current, stack);
-        }
-
-        @Override
-        protected void onContentsChanged(int slot) {
-            setChanged();
-        }
-    };
+    private final ItemStackHandler storage;
 
     /** 输出总线对外视图：拒绝外部存入，仅允许抽出。 */
     private final IItemHandler externalStorage = new IItemHandler() {
@@ -103,12 +82,56 @@ public class ItemBusBlockEntity extends BlockEntity {
 
     public ItemBusBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CERTUS_QUARTZ_CRYSTAL_MACHINE_PART.get(), pos, state);
+        int slotLimit = MachinePartBlock.itemCapacity(state);
+        this.storage = new ItemStackHandler(MachinePartBlock.itemSlotCount(state)) {
+            @Override
+            public int getSlotLimit(int slot) {
+                return slotLimit;
+            }
+
+            @Override
+            protected int getStackLimit(int slot, ItemStack stack) {
+                // 原版实现还会按物品自身堆叠上限（64）截断，这里按槽位上限放开
+                return getSlotLimit(slot);
+            }
+
+            @Override
+            public boolean isItemValid(int slot, ItemStack stack) {
+                // 单槽仅一类：空槽接受任意物品，非空槽只接受同种物品
+                ItemStack current = getStackInSlot(slot);
+                return current.isEmpty() || ItemStack.isSameItemSameTags(current, stack);
+            }
+
+            @Override
+            protected void onContentsChanged(int slot) {
+                setChanged();
+            }
+        };
         this.exposedStorage = isOutputBus() ? externalStorage : storage;
         this.storageCapability = LazyOptional.of(() -> exposedStorage);
     }
 
     public ItemStackHandler getStorage() {
         return storage;
+    }
+
+    /** 物品槽数量（石英 1、AEV 4）。 */
+    public int getSlotCount() {
+        return storage.getSlots();
+    }
+
+    /** 单槽物品上限。 */
+    public int getCapacityPerSlot() {
+        return storage.getSlotLimit(0);
+    }
+
+    /** 当前存储的只读快照，用于界面同步。 */
+    public List<ItemStack> getStorageSnapshots() {
+        List<ItemStack> stacks = new ArrayList<>(storage.getSlots());
+        for (int slot = 0; slot < storage.getSlots(); slot++) {
+            stacks.add(storage.getStackInSlot(slot).copy());
+        }
+        return stacks;
     }
 
     @Override
@@ -130,9 +153,10 @@ public class ItemBusBlockEntity extends BlockEntity {
         return !isOutputBus();
     }
 
-    /** 是否是输出总线。 */
+    /** 是否是输出总线（含 AEV）。 */
     public boolean isOutputBus() {
-        return getBlockState().is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get());
+        return getBlockState().is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get())
+                || getBlockState().is(ModBlocks.AEV_OUTPUT_BUS.get());
     }
 
     public boolean isAutoTransfer() {
@@ -149,7 +173,7 @@ public class ItemBusBlockEntity extends BlockEntity {
         if (!autoTransfer || level == null || level.isClientSide) {
             return;
         }
-        Direction facing = getBlockState().getValue(CertusQuartzCrystalMachinePartBlock.FACING);
+        Direction facing = getBlockState().getValue(MachinePartBlock.FACING);
         BlockEntity target = level.getBlockEntity(worldPosition.relative(facing));
         if (target == null) {
             return;
@@ -185,19 +209,21 @@ public class ItemBusBlockEntity extends BlockEntity {
 
     /** 向外部容器推出物品，直到总线清空或外部容器存满。 */
     private void pushItems(IItemHandler target) {
-        ItemStack content = storage.getStackInSlot(0);
-        if (content.isEmpty()) {
-            return;
-        }
-        ItemStack remainder = ItemHandlerHelper.insertItemStacked(target, content.copy(), false);
-        // 单次抽取最多只能取走物品的堆叠上限（64），按实际推入量分批移除
-        int remaining = content.getCount() - remainder.getCount();
-        while (remaining > 0) {
-            ItemStack taken = storage.extractItem(0, remaining, false);
-            if (taken.isEmpty()) {
-                break;
+        for (int slot = 0; slot < storage.getSlots(); slot++) {
+            ItemStack content = storage.getStackInSlot(slot);
+            if (content.isEmpty()) {
+                continue;
             }
-            remaining -= taken.getCount();
+            ItemStack remainder = ItemHandlerHelper.insertItemStacked(target, content.copy(), false);
+            // 单次抽取最多只能取走物品的堆叠上限（64），按实际推入量分批移除
+            int remaining = content.getCount() - remainder.getCount();
+            while (remaining > 0) {
+                ItemStack taken = storage.extractItem(slot, remaining, false);
+                if (taken.isEmpty()) {
+                    break;
+                }
+                remaining -= taken.getCount();
+            }
         }
     }
 

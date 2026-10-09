@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.block.assembly_line.MachinePartBlock;
 import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.multiblock.StructurePredicate;
@@ -112,12 +113,13 @@ public final class AssemblyLineStructure {
                 }
             } else if (isPart(state)) {
                 BlockState candidate = state;
-                if (candidate.getValue(CertusQuartzCrystalMachinePartBlock.FORMED) != partsFormed) {
-                    candidate = candidate.setValue(CertusQuartzCrystalMachinePartBlock.FORMED, partsFormed);
+                if (candidate.getValue(MachinePartBlock.FORMED) != partsFormed) {
+                    candidate = candidate.setValue(MachinePartBlock.FORMED, partsFormed);
                 }
-                // 由装配线成型时外观为水晶机壳（style=1）
-                if (candidate.getValue(CertusQuartzCrystalMachinePartBlock.STYLE) != 1) {
-                    candidate = candidate.setValue(CertusQuartzCrystalMachinePartBlock.STYLE, 1);
+                // 由装配线成型时外观为水晶机壳
+                int style = MachinePartFacade.CRYSTAL.style();
+                if (candidate.getValue(MachinePartBlock.STYLE) != style) {
+                    candidate = candidate.setValue(MachinePartBlock.STYLE, style);
                 }
                 if (candidate != state) {
                     updated = candidate;

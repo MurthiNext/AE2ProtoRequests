@@ -96,6 +96,11 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get());
                         output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get());
                         output.accept(ModItems.FLUIX_CRYSTAL_ENERGY_HATCH.get());
+                        output.accept(ModItems.AEV_MACHINE_CASING.get());
+                        output.accept(ModItems.AEV_INPUT_BUS.get());
+                        output.accept(ModItems.AEV_INPUT_HATCH.get());
+                        output.accept(ModItems.AEV_OUTPUT_BUS.get());
+                        output.accept(ModItems.AEV_OUTPUT_HATCH.get());
                     })
                     .build());
 }

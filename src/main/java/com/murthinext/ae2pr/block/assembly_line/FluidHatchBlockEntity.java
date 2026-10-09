@@ -1,10 +1,15 @@
 package com.murthinext.ae2pr.block.assembly_line;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -18,79 +23,156 @@ import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModBlocks;
 
 /**
- * 赛特斯石英水晶输入/输出仓方块实体：单类流体存储，上限 16K 桶（16,384,000 mB）。
+ * 机器部件流体仓方块实体。
+ * <p>
+ * 输出仓只接收机器内部产出，禁止玩家/外部注入。
  */
 public class FluidHatchBlockEntity extends BlockEntity {
 
-    /** 存储上限：16K 桶 */
+    /** 石英仓单槽容量：16K 桶 */
     public static final int CAPACITY = 16 * 1024 * 1000;
-    /** 可存储的类型数（预留多种类扩展） */
-    public static final int TYPE_CAPACITY = 1;
+    /** AEV 仓单槽容量：1024 桶 */
+    public static final int AEV_CAPACITY = 1024 * 1000;
 
+    private static final String TANKS_ID = "tanks";
+    /** 旧版单罐存档键 */
     private static final String TANK_ID = "tank";
     private static final String AUTO_TRANSFER_ID = "autoTransfer";
 
     /** 自动搬运开关：输入仓拉取、输出仓推出，仅作用于朝向面，默认启用。 */
     private boolean autoTransfer = true;
 
-    private final FluidTank tank = new FluidTank(CAPACITY) {
-        @Override
-        protected void onContentsChanged() {
-            setChanged();
-        }
-    };
+    private final FluidTank[] tanks;
 
-    /** 输出仓对外视图：拒绝外部注入，仅允许抽出。 */
-    private final IFluidHandler externalTank = new IFluidHandler() {
-        @Override
-        public int getTanks() {
-            return tank.getTanks();
-        }
-
-        @Override
-        public FluidStack getFluidInTank(int tankIndex) {
-            return tank.getFluidInTank(tankIndex);
-        }
-
-        @Override
-        public int getTankCapacity(int tankIndex) {
-            return tank.getTankCapacity(tankIndex);
-        }
-
-        @Override
-        public boolean isFluidValid(int tankIndex, FluidStack stack) {
-            return false;
-        }
-
-        @Override
-        public int fill(FluidStack resource, FluidAction action) {
-            return 0;
-        }
-
-        @Override
-        public FluidStack drain(FluidStack resource, FluidAction action) {
-            return tank.drain(resource, action);
-        }
-
-        @Override
-        public FluidStack drain(int maxDrain, FluidAction action) {
-            return tank.drain(maxDrain, action);
-        }
-    };
-
-    /** 对外暴露的罐体：输入仓双向可交互，输出仓只出不进。 */
-    private final IFluidHandler exposedTank;
+    /** 统一的多罐视图：输入仓可注入，输出仓只出不进。 */
+    private final IFluidHandler tanksView;
     private final LazyOptional<IFluidHandler> tankCapability;
 
     public FluidHatchBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CERTUS_QUARTZ_CRYSTAL_MACHINE_PART.get(), pos, state);
-        this.exposedTank = isOutputHatch() ? externalTank : tank;
-        this.tankCapability = LazyOptional.of(() -> exposedTank);
+        int capacity = MachinePartBlock.fluidCapacity(state);
+        this.tanks = new FluidTank[MachinePartBlock.fluidTankCount(state)];
+        for (int i = 0; i < tanks.length; i++) {
+            tanks[i] = new FluidTank(capacity) {
+                @Override
+                protected void onContentsChanged() {
+                    setChanged();
+                }
+            };
+        }
+        this.tanksView = new TanksView(!isOutputHatch());
+        this.tankCapability = LazyOptional.of(() -> tanksView);
     }
 
-    /** 内部罐体（机器内部读写不受对外视图限制）。 */
+    /** 多罐视图：按槽顺序注入/抽出，行为与单罐一致。 */
+    private final class TanksView implements IFluidHandler {
+
+        private final boolean allowFill;
+
+        private TanksView(boolean allowFill) {
+            this.allowFill = allowFill;
+        }
+
+        @Override
+        public int getTanks() {
+            return tanks.length;
+        }
+
+        @Override
+        public FluidStack getFluidInTank(int tank) {
+            return tanks[tank].getFluid();
+        }
+
+        @Override
+        public int getTankCapacity(int tank) {
+            return tanks[tank].getTankCapacity(0);
+        }
+
+        @Override
+        public boolean isFluidValid(int tank, FluidStack stack) {
+            return allowFill && tanks[tank].isFluidValid(stack);
+        }
+
+        @Override
+        public int fill(FluidStack resource, FluidAction action) {
+            if (!allowFill || resource.isEmpty()) {
+                return 0;
+            }
+            int filled = 0;
+            for (FluidTank tank : tanks) {
+                filled += tank.fill(new FluidStack(resource, resource.getAmount() - filled), action);
+                if (filled >= resource.getAmount()) {
+                    break;
+                }
+            }
+            return filled;
+        }
+
+        @Override
+        public FluidStack drain(FluidStack resource, FluidAction action) {
+            if (resource.isEmpty()) {
+                return FluidStack.EMPTY;
+            }
+            int drained = 0;
+            FluidStack moved = FluidStack.EMPTY;
+            for (FluidTank tank : tanks) {
+                FluidStack part = tank.drain(new FluidStack(resource, resource.getAmount() - drained), action);
+                if (!part.isEmpty()) {
+                    drained += part.getAmount();
+                    moved = part;
+                }
+                if (drained >= resource.getAmount()) {
+                    break;
+                }
+            }
+            return moved.isEmpty() ? FluidStack.EMPTY : new FluidStack(moved, drained);
+        }
+
+        @Override
+        public FluidStack drain(int maxDrain, FluidAction action) {
+            int drained = 0;
+            FluidStack moved = FluidStack.EMPTY;
+            for (FluidTank tank : tanks) {
+                FluidStack part = tank.drain(maxDrain - drained, action);
+                if (!part.isEmpty()) {
+                    drained += part.getAmount();
+                    moved = part;
+                }
+                if (drained >= maxDrain) {
+                    break;
+                }
+            }
+            return moved.isEmpty() ? FluidStack.EMPTY : new FluidStack(moved, drained);
+        }
+    }
+
+    /** 流体槽数量（石英 1、AEV 2）。 */
+    public int getTankCount() {
+        return tanks.length;
+    }
+
+    /** 按槽读取罐体（机器内部读写不受对外视图限制）。 */
+    public FluidTank getTank(int tank) {
+        return tanks[tank];
+    }
+
+    /** 首个罐体（单槽部件的兼容入口）。 */
     public FluidTank getTank() {
-        return tank;
+        return tanks[0];
+    }
+
+    /** 单槽容量（mB）。 */
+    public int getCapacityPerTank() {
+        return tanks[0].getTankCapacity(0);
+    }
+
+    /** 当前罐内流体的只读快照，用于界面同步。 */
+    public List<FluidStack> getFluidSnapshots() {
+        List<FluidStack> fluids = new ArrayList<>(tanks.length);
+        for (FluidTank tank : tanks) {
+            fluids.add(tank.getFluid().copy());
+        }
+        return fluids;
     }
 
     /** 是否为输出仓。 */
@@ -98,9 +180,10 @@ public class FluidHatchBlockEntity extends BlockEntity {
         return isOutputHatch(getBlockState());
     }
 
-    /** 静态判定：是否为输出仓方块。 */
+    /** 静态判定：是否为输出仓方块（含 AEV）。 */
     public static boolean isOutputHatch(BlockState state) {
-        return state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get());
+        return state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get())
+                || state.is(ModBlocks.AEV_OUTPUT_HATCH.get());
     }
 
     /** 是否允许玩家存入（输出仓仅接受机器内部产出）。 */
@@ -136,7 +219,7 @@ public class FluidHatchBlockEntity extends BlockEntity {
         if (!autoTransfer || level == null || level.isClientSide) {
             return;
         }
-        Direction facing = getBlockState().getValue(CertusQuartzCrystalMachinePartBlock.FACING);
+        Direction facing = getBlockState().getValue(MachinePartBlock.FACING);
         BlockEntity target = level.getBlockEntity(worldPosition.relative(facing));
         if (target == null) {
             return;
@@ -159,45 +242,57 @@ public class FluidHatchBlockEntity extends BlockEntity {
         if (drained.isEmpty()) {
             return;
         }
-        int accepted = tank.fill(drained, IFluidHandler.FluidAction.SIMULATE);
+        int accepted = tanksView.fill(drained, IFluidHandler.FluidAction.SIMULATE);
         if (accepted <= 0) {
             return;
         }
         FluidStack moved = source.drain(accepted, IFluidHandler.FluidAction.EXECUTE);
-        tank.fill(moved, IFluidHandler.FluidAction.EXECUTE);
+        tanksView.fill(moved, IFluidHandler.FluidAction.EXECUTE);
     }
 
     /** 向外部流体容器推出流体，直到罐空或外部容器存满。 */
     private void pushFluid(IFluidHandler target) {
-        FluidStack stored = tank.getFluid();
-        if (stored.isEmpty()) {
-            return;
+        for (FluidTank tank : tanks) {
+            FluidStack stored = tank.getFluid();
+            if (stored.isEmpty()) {
+                continue;
+            }
+            int accepted = target.fill(stored.copy(), IFluidHandler.FluidAction.SIMULATE);
+            if (accepted <= 0) {
+                continue;
+            }
+            FluidStack moved = tank.drain(accepted, IFluidHandler.FluidAction.EXECUTE);
+            target.fill(moved, IFluidHandler.FluidAction.EXECUTE);
         }
-        int accepted = target.fill(stored.copy(), IFluidHandler.FluidAction.SIMULATE);
-        if (accepted <= 0) {
-            return;
-        }
-        FluidStack moved = tank.drain(accepted, IFluidHandler.FluidAction.EXECUTE);
-        target.fill(moved, IFluidHandler.FluidAction.EXECUTE);
     }
 
-    /** 客户端展示同步：直接覆盖本地罐内容（仅由同步包调用）。 */
-    public void applyClientFluid(FluidStack fluid) {
-        tank.setFluid(fluid.copy());
+    /** 客户端展示同步：直接覆盖本地指定罐内容（仅由同步包调用）。 */
+    public void applyClientFluid(int tank, FluidStack fluid) {
+        tanks[tank].setFluid(fluid.copy());
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.put(TANK_ID, tank.writeToNBT(new CompoundTag()));
+        ListTag list = new ListTag();
+        for (FluidTank tank : tanks) {
+            list.add(tank.writeToNBT(new CompoundTag()));
+        }
+        tag.put(TANKS_ID, list);
         tag.putBoolean(AUTO_TRANSFER_ID, autoTransfer);
     }
 
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        if (tag.contains(TANK_ID)) {
-            tank.readFromNBT(tag.getCompound(TANK_ID));
+        if (tag.contains(TANKS_ID, Tag.TAG_LIST)) {
+            ListTag list = tag.getList(TANKS_ID, Tag.TAG_COMPOUND);
+            for (int i = 0; i < tanks.length && i < list.size(); i++) {
+                tanks[i].readFromNBT(list.getCompound(i));
+            }
+        } else if (tag.contains(TANK_ID)) {
+            // 旧版单罐存档
+            tanks[0].readFromNBT(tag.getCompound(TANK_ID));
         }
         if (tag.contains(AUTO_TRANSFER_ID)) {
             autoTransfer = tag.getBoolean(AUTO_TRANSFER_ID);

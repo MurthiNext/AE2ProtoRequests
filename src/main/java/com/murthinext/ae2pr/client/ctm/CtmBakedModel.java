@@ -41,11 +41,22 @@ public class CtmBakedModel extends BakedModelWrapper<BakedModel> {
             ModelData data, @Nullable RenderType renderType) {
         ModelData parent = data.has(CtmModelProperties.PARENT) ? data.get(CtmModelProperties.PARENT) : data;
         List<BakedQuad> quads = super.getQuads(state, side, rand, parent, renderType);
+        if (state == null || quads.isEmpty()) {
+            return quads;
+        }
+
+        // 多方块成型换装：把部件自身的基础面贴图换成结构外观贴图（UV 不变，连接纹理由下方重写）
+        TextureAtlasSprite facade = CtmConfig.facadeSprite(state);
+        if (facade != null) {
+            TextureAtlasSprite base = CtmConfig.partBaseSprite(state);
+            if (base != null && base != facade) {
+                quads = retargetFacade(quads, base, facade);
+            }
+        }
 
         BlockAndTintGetter level = data.get(CtmModelProperties.LEVEL);
         BlockPos pos = data.get(CtmModelProperties.POS);
-        if (state == null || level == null || pos == null || quads.isEmpty()
-                || !CtmConfig.enabled(state)) {
+        if (level == null || pos == null || !CtmConfig.enabled(state)) {
             return quads;
         }
 
@@ -67,5 +78,15 @@ public class CtmBakedModel extends BakedModelWrapper<BakedModel> {
             result.add(CtmMeshBuilder.rewrite(quad, quad.getSprite(), atlas, worldMask));
         }
         return result != null ? result : quads;
+    }
+
+    /** 把基础面的四边形换成结构外观贴图（UV 随之重映射）；其余四边形原样保留。 */
+    private static List<BakedQuad> retargetFacade(List<BakedQuad> quads, TextureAtlasSprite base,
+            TextureAtlasSprite facade) {
+        List<BakedQuad> result = new ArrayList<>(quads.size());
+        for (BakedQuad quad : quads) {
+            result.add(quad.getSprite() == base ? CtmMeshBuilder.retarget(quad, base, facade) : quad);
+        }
+        return result;
     }
 }

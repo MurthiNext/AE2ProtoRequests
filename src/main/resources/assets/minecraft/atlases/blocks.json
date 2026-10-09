@@ -22,6 +22,10 @@
     },
     {
       "type": "single",
+      "resource": "ae2pr:block/aev/aev_machine_casing_ctm"
+    },
+    {
+      "type": "single",
       "resource": "ae2pr:block/zircon/zirconia_corundum_bricks_ctm"
     },
     {
