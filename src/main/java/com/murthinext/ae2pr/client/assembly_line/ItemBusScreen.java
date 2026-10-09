@@ -37,10 +37,8 @@ public class ItemBusScreen extends AbstractContainerScreen<ItemBusMenu> {
 
     private static final int TEXT_X = 7;
     private static final int TITLE_Y = 9;
-    private static final int CAPACITY_Y = 72;
 
     private static final int COLOR_TITLE = 0x55FFFF;
-    private static final int COLOR_GRAY = 0x7A8794;
 
     private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
@@ -99,9 +97,6 @@ public class ItemBusScreen extends AbstractContainerScreen<ItemBusMenu> {
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         graphics.drawString(font, title, TEXT_X, TITLE_Y, COLOR_TITLE, false);
-        graphics.drawString(font, Component.translatable("gui.ae2pr.machine_part.capacity.items",
-                NUMBER.format(ItemBusBlockEntity.CAPACITY), NUMBER.format(ItemBusBlockEntity.TYPE_CAPACITY)),
-                TEXT_X, CAPACITY_Y, COLOR_GRAY, false);
     }
 
     @Override

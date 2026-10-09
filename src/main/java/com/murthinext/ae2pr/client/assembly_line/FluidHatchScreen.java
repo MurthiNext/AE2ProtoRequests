@@ -36,16 +36,13 @@ public class FluidHatchScreen extends AbstractContainerScreen<FluidHatchMenu> {
     /** 罐内填充区（与 GUI 贴图一致） */
     private static final int TANK_X = 22;
     private static final int TANK_Y = 36;
-    private static final int TANK_W = 24;
+    private static final int TANK_W = 14;
     private static final int TANK_H = 64;
 
     private static final int TITLE_X = 7;
     private static final int TITLE_Y = 9;
-    private static final int INFO_X = 56;
-    private static final int CAPACITY_Y = 40;
 
     private static final int COLOR_TITLE = 0x55FFFF;
-    private static final int COLOR_GRAY = 0x7A8794;
 
     private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
@@ -122,11 +119,11 @@ public class FluidHatchScreen extends AbstractContainerScreen<FluidHatchMenu> {
         }
         if (isHoveringTank(mouseX, mouseY)) {
             FluidStack fluid = clientFluid();
-            if (!fluid.isEmpty()) {
-                graphics.renderComponentTooltip(font, List.of(fluid.getDisplayName(),
-                        Component.translatable("gui.ae2pr.machine_part.tank.mb", NUMBER.format(fluid.getAmount()))),
-                        mouseX, mouseY);
-            }
+            graphics.renderComponentTooltip(font, List.of(
+                    fluid.isEmpty() ? Component.translatable("gui.ae2pr.machine_part.tank.empty")
+                            : fluid.getDisplayName(),
+                    Component.translatable("gui.ae2pr.machine_part.tank.mb", NUMBER.format(fluid.getAmount()))),
+                    mouseX, mouseY);
             return;
         }
         super.renderTooltip(graphics, mouseX, mouseY);
@@ -141,10 +138,6 @@ public class FluidHatchScreen extends AbstractContainerScreen<FluidHatchMenu> {
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         graphics.drawString(font, title, TITLE_X, TITLE_Y, COLOR_TITLE, false);
-        graphics.drawString(font, Component.translatable("gui.ae2pr.machine_part.capacity.fluid",
-                NUMBER.format(FluidHatchBlockEntity.CAPACITY / 1000),
-                NUMBER.format(FluidHatchBlockEntity.TYPE_CAPACITY)),
-                INFO_X, CAPACITY_Y, COLOR_GRAY, false);
     }
 
     /** 按储量占比从底部向上平铺流体贴图；按罐内区域裁剪，避免溢出到边框。 */

@@ -1,9 +1,13 @@
 package com.murthinext.ae2pr.block.assembly_line;
 
+import java.text.NumberFormat;
+import java.util.List;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -13,7 +17,9 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -48,6 +54,8 @@ public class CertusQuartzCrystalMachinePartBlock extends Block implements Entity
     /** 扳手旋转顺序 */
     private static final Direction[] ROTATION_ORDER = { Direction.DOWN, Direction.UP, Direction.NORTH,
             Direction.SOUTH, Direction.WEST, Direction.EAST };
+
+    private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty FORMED = BooleanProperty.create("formed");
@@ -207,5 +215,18 @@ public class CertusQuartzCrystalMachinePartBlock extends Block implements Entity
                 Block.popResource(level, pos, stack.split(Math.min(stack.getCount(), 64)));
             }
         }
+    }
+
+    /** 物品 Tooltip：显示该部件的堆叠上限与类型数量。 */
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+        boolean fluid = stack.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get().asItem())
+                || stack.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get().asItem());
+        tooltip.add(Component.translatable(fluid
+                ? "tooltip.ae2pr.machine_part.stack_limit.fluid"
+                : "tooltip.ae2pr.machine_part.stack_limit.items",
+                NUMBER.format(fluid ? FluidHatchBlockEntity.CAPACITY : ItemBusBlockEntity.CAPACITY)));
+        tooltip.add(Component.translatable("tooltip.ae2pr.machine_part.type_count",
+                NUMBER.format(fluid ? FluidHatchBlockEntity.TYPE_CAPACITY : ItemBusBlockEntity.TYPE_CAPACITY)));
     }
 }
