@@ -3,7 +3,7 @@ navigation:
   title: 材料
   parent: index.md
   icon: ae2pr:meteor_steel_ingot
-  position: 0
+  position: 1
 ---
 
 # 材料

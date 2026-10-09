@@ -1,0 +1,23 @@
+{
+  "type": "ae2pr:lava_smelter",
+  "ingredients": [
+    {
+      "tag": "forge:gems/zircon",
+      "count": 16
+    },
+    {
+      "tag": "forge:dusts/carbon",
+      "count": 7
+    }
+  ],
+  "results": [
+    {
+      "item": "ae2pr:zirconium_ingot",
+      "count": 12
+    },
+    {
+      "item": "ae2pr:carbon_zirconium_mixture_dust",
+      "count": 4
+    }
+  ]
+}

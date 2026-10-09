@@ -354,26 +354,50 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
             }
             parallel = Math.min(parallel, available / ingredient.count());
         }
-        // 输出容量：产物单份数量 × 并行需全部放得下
-        ItemStack result = recipe.getResultItem();
-        if (!result.isEmpty()) {
-            parallel = Math.min(parallel, outputRoom(result) / result.getCount());
-        }
-        return parallel;
+        return outputParallel(recipe, parallel);
     }
 
-    /** 输出总线还能容纳多少个该类产物（单格、同种叠加、上限 32K）。 */
-    private int outputRoom(ItemStack result) {
-        int room = 0;
-        for (ItemBusBlockEntity bus : outputBuses) {
-            ItemStack stored = bus.getStorage().getStackInSlot(0);
-            if (stored.isEmpty()) {
-                room += ItemBusBlockEntity.CAPACITY;
-            } else if (ItemStack.isSameItemSameTags(stored, result)) {
-                room += ItemBusBlockEntity.CAPACITY - stored.getCount();
+    /** 在输入与耐久允许的并行范围内，二分求出全部产物都能放下的最大并行数。 */
+    private int outputParallel(LavaSmelterRecipe recipe, int maximum) {
+        int low = 0;
+        int high = maximum;
+        while (low < high) {
+            int middle = low + (high - low + 1) / 2;
+            if (canFitOutputs(recipe, middle)) {
+                low = middle;
+            } else {
+                high = middle - 1;
             }
         }
-        return room;
+        return low;
+    }
+
+    /** 模拟多个产物依次进入单类型输出总线，防止不同产物重复占用同一空总线。 */
+    private boolean canFitOutputs(LavaSmelterRecipe recipe, int parallel) {
+        List<ItemStack> simulated = new ArrayList<>(outputBuses.size());
+        for (ItemBusBlockEntity bus : outputBuses) {
+            simulated.add(bus.getStorage().getStackInSlot(0).copy());
+        }
+        for (ItemStack result : recipe.getResults()) {
+            long remaining = (long) result.getCount() * parallel;
+            for (int index = 0; index < simulated.size() && remaining > 0; index++) {
+                ItemStack stored = simulated.get(index);
+                if (stored.isEmpty()) {
+                    int inserted = (int) Math.min(remaining, ItemBusBlockEntity.CAPACITY);
+                    simulated.set(index, result.copyWithCount(inserted));
+                    remaining -= inserted;
+                } else if (ItemStack.isSameItemSameTags(stored, result)) {
+                    int inserted = (int) Math.min(remaining,
+                            Math.max(0, ItemBusBlockEntity.CAPACITY - stored.getCount()));
+                    stored.grow(inserted);
+                    remaining -= inserted;
+                }
+            }
+            if (remaining > 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void insertOutputs(LavaSmelterRecipe recipe, int parallel) {
@@ -381,17 +405,19 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         if (level == null) {
             return;
         }
-        ItemStack remaining = recipe.getResultItem().copyWithCount(recipe.getResultItem().getCount() * parallel);
-        for (ItemBusBlockEntity bus : outputBuses) {
-            if (remaining.isEmpty()) {
-                break;
+        for (ItemStack result : recipe.getResults()) {
+            ItemStack remaining = result.copyWithCount(result.getCount() * parallel);
+            for (ItemBusBlockEntity bus : outputBuses) {
+                if (remaining.isEmpty()) {
+                    break;
+                }
+                remaining = ItemHandlerHelper.insertItemStacked(bus.getStorage(), remaining, false);
             }
-            remaining = ItemHandlerHelper.insertItemStacked(bus.getStorage(), remaining, false);
-        }
-        if (!remaining.isEmpty()) {
-            // 启动前已检查；兜底掉落到主机处，避免产物丢失
-            ae2pr.LOGGER.warn("熔岩冶炼炉产物无法放入输出总线，已掉落 {}", remaining);
-            Block.popResource(level, worldPosition, remaining);
+            if (!remaining.isEmpty()) {
+                // 启动前已检查；兜底掉落到主机处，避免产物丢失
+                ae2pr.LOGGER.warn("熔岩冶炼炉产物无法放入输出总线，已掉落 {}", remaining);
+                Block.popResource(level, worldPosition, remaining);
+            }
         }
     }
 

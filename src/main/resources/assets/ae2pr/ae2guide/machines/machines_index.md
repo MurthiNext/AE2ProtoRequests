@@ -3,7 +3,7 @@ navigation:
   title: 加工与生产
   parent: index.md
   icon: ae2pr:naming_factory
-  position: 0
+  position: 3
 ---
 
 # 加工与生产

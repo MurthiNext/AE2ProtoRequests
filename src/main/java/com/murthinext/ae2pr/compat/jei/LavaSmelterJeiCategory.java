@@ -35,7 +35,8 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
     private static final int WIDTH = 142;
     private static final int HEIGHT = 88;
     private static final int OUTPUT_X = 117;
-    private static final int OUTPUT_Y = 23;
+    private static final int OUTPUT_Y = 12;
+    private static final int OUTPUT_GAP = 18;
     private static final int COLOR_TEXT = 0x404040;
 
     private final IDrawable icon;
@@ -92,10 +93,16 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
             }
         }
 
-        // 产物
-        IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_X, OUTPUT_Y);
-        outputSlot.setStandardSlotBackground();
-        outputSlot.addItemStack(recipe.getResultItem());
+        // 主产物与副产物槽固定显示，并与两行输入槽对齐
+        List<ItemStack> results = recipe.getResults();
+        for (int index = 0; index < LavaSmelterRecipe.MAX_RESULTS; index++) {
+            IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT,
+                    OUTPUT_X, OUTPUT_Y + index * OUTPUT_GAP);
+            outputSlot.setStandardSlotBackground();
+            if (index < results.size()) {
+                outputSlot.addItemStack(results.get(index));
+            }
+        }
     }
 
     @Override

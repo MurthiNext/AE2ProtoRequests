@@ -37,6 +37,7 @@ public final class ModCreativeTabs {
 
                         // 锭 & 宝石
                         output.accept(ModItems.METEOR_STEEL_INGOT.get());
+                        output.accept(ModItems.ZIRCONIUM_INGOT.get());
                         output.accept(ModItems.ZIRCON_BRICK.get());
                         output.accept(ModItems.ZIRCON.get());
 
@@ -44,6 +45,8 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.METEOR_STEEL_DUST.get());
                         output.accept(ModItems.COAL_DUST.get());
                         output.accept(ModItems.CARBON_DUST.get());
+                        output.accept(ModItems.ZIRCONIUM_DUST.get());
+                        output.accept(ModItems.CARBON_ZIRCONIUM_MIXTURE_DUST.get());
                         output.accept(ModItems.ZIRCON_DUST.get());
 
                         // 单层板

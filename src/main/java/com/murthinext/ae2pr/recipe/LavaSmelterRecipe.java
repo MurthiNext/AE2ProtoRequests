@@ -3,8 +3,10 @@ package com.murthinext.ae2pr.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
@@ -30,27 +32,30 @@ import com.murthinext.ae2pr.ModRecipes;
  * {
  *   "type": "ae2pr:lava_smelter",
  *   "ingredients": [ { "item": "...", "count": 10 }, ... ],
- *   "result": { "item": "...", "count": 10 },
+ *   "results": [ { "item": "...", "count": 10 }, ... ],
  *   "duration": 100
  * }
  * </pre>
+ * {@code results} 支持一至两个产物；旧版单产物字段 {@code result} 仍可使用。
  * {@code duration} 可省略，默认 {@value #DEFAULT_DURATION} tick。
  */
 public class LavaSmelterRecipe implements Recipe<Container> {
 
     /** 缺省加工时长（tick） */
     public static final int DEFAULT_DURATION = 100;
+    /** 单份配方的最大产物种类数 */
+    public static final int MAX_RESULTS = 2;
 
     private final ResourceLocation id;
     private final List<CountedIngredient> ingredients;
-    private final ItemStack result;
+    private final List<ItemStack> results;
     private final int duration;
 
-    public LavaSmelterRecipe(ResourceLocation id, List<CountedIngredient> ingredients, ItemStack result,
+    public LavaSmelterRecipe(ResourceLocation id, List<CountedIngredient> ingredients, List<ItemStack> results,
             int duration) {
         this.id = id;
         this.ingredients = List.copyOf(ingredients);
-        this.result = result;
+        this.results = List.copyOf(results);
         this.duration = duration;
     }
 
@@ -58,9 +63,14 @@ public class LavaSmelterRecipe implements Recipe<Container> {
         return ingredients;
     }
 
-    /** 配方产物。 */
+    /** 配方主产物。 */
     public ItemStack getResultItem() {
-        return result;
+        return results.isEmpty() ? ItemStack.EMPTY : results.get(0);
+    }
+
+    /** 配方的全部产物。 */
+    public List<ItemStack> getResults() {
+        return results;
     }
 
     /** 加工时长（tick）。 */
@@ -75,7 +85,7 @@ public class LavaSmelterRecipe implements Recipe<Container> {
 
     @Override
     public ItemStack assemble(Container container, RegistryAccess registryAccess) {
-        return result.copy();
+        return getResultItem().copy();
     }
 
     @Override
@@ -85,7 +95,7 @@ public class LavaSmelterRecipe implements Recipe<Container> {
 
     @Override
     public ItemStack getResultItem(RegistryAccess registryAccess) {
-        return result;
+        return getResultItem();
     }
 
     @Override
@@ -124,11 +134,32 @@ public class LavaSmelterRecipe implements Recipe<Container> {
             for (JsonElement element : GsonHelper.getAsJsonArray(json, "ingredients")) {
                 JsonObject entry = element.getAsJsonObject();
                 int count = GsonHelper.getAsInt(entry, "count", 1);
+                if (count < 1) {
+                    throw new JsonSyntaxException("ingredients 的 count 必须 >= 1");
+                }
                 ingredients.add(new CountedIngredient(Ingredient.fromJson(entry), count));
             }
-            ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
+            if (ingredients.isEmpty()) {
+                throw new JsonSyntaxException("配方至少需要一个输入");
+            }
+
+            List<ItemStack> results = new ArrayList<>();
+            if (json.has("results")) {
+                JsonArray resultArray = GsonHelper.getAsJsonArray(json, "results");
+                for (JsonElement element : resultArray) {
+                    results.add(ShapedRecipe.itemStackFromJson(element.getAsJsonObject()));
+                }
+            } else if (json.has("result")) {
+                results.add(ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result")));
+            }
+            if (results.isEmpty() || results.size() > MAX_RESULTS) {
+                throw new JsonSyntaxException("配方产物数量必须为 1 至 " + MAX_RESULTS);
+            }
             int duration = GsonHelper.getAsInt(json, "duration", DEFAULT_DURATION);
-            return new LavaSmelterRecipe(id, ingredients, result, duration);
+            if (duration < 1) {
+                throw new JsonSyntaxException("duration 必须 >= 1");
+            }
+            return new LavaSmelterRecipe(id, ingredients, results, duration);
         }
 
         @Override
@@ -139,9 +170,15 @@ public class LavaSmelterRecipe implements Recipe<Container> {
                 int count = buffer.readVarInt();
                 ingredients.add(new CountedIngredient(Ingredient.fromNetwork(buffer), count));
             }
-            ItemStack result = buffer.readItem();
+            int resultCount = buffer.readVarInt();
+            List<ItemStack> results = new ArrayList<>(resultCount);
+            for (int i = 0; i < resultCount; i++) {
+                ItemStack result = buffer.readItem();
+                result.setCount(buffer.readVarInt());
+                results.add(result);
+            }
             int duration = buffer.readVarInt();
-            return new LavaSmelterRecipe(id, ingredients, result, duration);
+            return new LavaSmelterRecipe(id, ingredients, results, duration);
         }
 
         @Override
@@ -151,7 +188,11 @@ public class LavaSmelterRecipe implements Recipe<Container> {
                 buffer.writeVarInt(entry.count());
                 entry.ingredient().toNetwork(buffer);
             }
-            buffer.writeItem(recipe.result);
+            buffer.writeVarInt(recipe.results.size());
+            for (ItemStack result : recipe.results) {
+                buffer.writeItem(result.copyWithCount(1));
+                buffer.writeVarInt(result.getCount());
+            }
             buffer.writeVarInt(recipe.duration);
         }
     }

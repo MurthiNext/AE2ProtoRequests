@@ -3,7 +3,7 @@ navigation:
   title: 多方块结构
   parent: index.md
   icon: ae2pr:crystal_assembly_line
-  position: 0
+  position: 4
 ---
 
 # 多方块结构
