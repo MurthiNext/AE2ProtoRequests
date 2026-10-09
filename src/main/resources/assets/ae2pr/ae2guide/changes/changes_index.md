@@ -4,6 +4,14 @@ navigation:
   parent: index.md
   icon: ae2:sky_stone_block
   position: 5
+item_ids:
+  - ae2pr:meteorite_iron_ore
+  - ae2pr:meteorite_copper_ore
+  - ae2pr:meteorite_gold_ore
+  - ae2pr:meteorite_lapis_ore
+  - ae2pr:meteorite_diamond_ore
+  - ae2pr:meteorite_emerald_ore
+  - ae2pr:meteorite_zircon_ore
 ---
 
 # 更改
