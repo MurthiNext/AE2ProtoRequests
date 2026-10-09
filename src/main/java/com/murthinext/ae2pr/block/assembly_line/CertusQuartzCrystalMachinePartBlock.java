@@ -39,7 +39,7 @@ import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ModTags;
 
 /**
- * 赛特斯石英水晶机器部件方块（输入总线 / 输入仓 / 输出总线）。
+ * 赛特斯石英水晶机器部件方块（输入总线 / 输入仓 / 输出总线 / 输出仓）。
  * <p>
  * 扳手右键旋转，Shift+右键拆卸。
  */
@@ -82,9 +82,13 @@ public class CertusQuartzCrystalMachinePartBlock extends Block implements Entity
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return isFluidHatch(state) ? new FluidHatchBlockEntity(pos, state) : new ItemBusBlockEntity(pos, state);
+    }
+
+    /** 是否为流体仓（输入仓 / 输出仓）。 */
+    public static boolean isFluidHatch(BlockState state) {
         return state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get())
-                ? new FluidHatchBlockEntity(pos, state)
-                : new ItemBusBlockEntity(pos, state);
+                || state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get());
     }
 
     @Nullable
@@ -190,9 +194,6 @@ public class CertusQuartzCrystalMachinePartBlock extends Block implements Entity
         if (!state.is(newState.getBlock()) && !level.isClientSide) {
             if (level.getBlockEntity(pos) instanceof ItemBusBlockEntity bus) {
                 dropContents(level, pos, bus.getStorage());
-            } else if (level.getBlockEntity(pos) instanceof FluidHatchBlockEntity hatch) {
-                dropContents(level, pos, hatch.getInputSlot());
-                dropContents(level, pos, hatch.getOutputSlot());
             }
         }
         super.onRemove(state, level, pos, newState, isMoving);

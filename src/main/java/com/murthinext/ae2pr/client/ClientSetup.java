@@ -109,6 +109,7 @@ public final class ClientSetup {
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.NAMING_FACTORY.get(), RenderType.cutoutMipped());

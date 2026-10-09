@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -13,19 +12,13 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.ItemStackHandler;
 
 import com.murthinext.ae2pr.ModBlockEntities;
+import com.murthinext.ae2pr.ModBlocks;
 
 /**
- * 赛特斯石英水晶输入仓方块实体：单类流体存储，上限 16K 桶（16,384,000 mB）。
- * <p>
- * 输入格放入流体容器，每 {@link #TRANSFER_INTERVAL} tick 处理一次，
- * <p>
- * 对外通过 {@code FLUID_HANDLER} 能力暴露罐体，供其他模组的物流交互；
- * 默认开启自动搬运。
+ * 赛特斯石英水晶输入/输出仓方块实体：单类流体存储，上限 16K 桶（16,384,000 mB）。
  */
 public class FluidHatchBlockEntity extends BlockEntity {
 
@@ -33,15 +26,11 @@ public class FluidHatchBlockEntity extends BlockEntity {
     public static final int CAPACITY = 16 * 1024 * 1000;
     /** 可存储的类型数（预留多种类扩展） */
     public static final int TYPE_CAPACITY = 1;
-    /** 流体容器处理周期（tick） */
-    private static final int TRANSFER_INTERVAL = 10;
 
     private static final String TANK_ID = "tank";
-    private static final String INPUT_ID = "input";
-    private static final String OUTPUT_ID = "output";
     private static final String AUTO_TRANSFER_ID = "autoTransfer";
 
-    /** 自动搬运开关：从朝向面容器拉取流体，默认启用。 */
+    /** 自动搬运开关：输入仓拉取、输出仓推出，仅作用于朝向面，默认启用。 */
     private boolean autoTransfer = true;
 
     private final FluidTank tank = new FluidTank(CAPACITY) {
@@ -50,40 +39,73 @@ public class FluidHatchBlockEntity extends BlockEntity {
             setChanged();
         }
     };
-    private final LazyOptional<IFluidHandler> tankCapability = LazyOptional.of(() -> tank);
-    /** 容器输入格 */
-    private final ItemStackHandler inputSlot = new ItemStackHandler(1) {
+
+    /** 输出仓对外视图：拒绝外部注入，仅允许抽出。 */
+    private final IFluidHandler externalTank = new IFluidHandler() {
         @Override
-        public boolean isItemValid(int slot, ItemStack stack) {
-            return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent();
+        public int getTanks() {
+            return tank.getTanks();
         }
 
         @Override
-        protected void onContentsChanged(int slot) {
-            setChanged();
+        public FluidStack getFluidInTank(int tankIndex) {
+            return tank.getFluidInTank(tankIndex);
         }
-    };
-    /** 容器输出格 */
-    private final ItemStackHandler outputSlot = new ItemStackHandler(1) {
+
         @Override
-        public boolean isItemValid(int slot, ItemStack stack) {
+        public int getTankCapacity(int tankIndex) {
+            return tank.getTankCapacity(tankIndex);
+        }
+
+        @Override
+        public boolean isFluidValid(int tankIndex, FluidStack stack) {
             return false;
         }
 
         @Override
-        protected void onContentsChanged(int slot) {
-            setChanged();
+        public int fill(FluidStack resource, FluidAction action) {
+            return 0;
+        }
+
+        @Override
+        public FluidStack drain(FluidStack resource, FluidAction action) {
+            return tank.drain(resource, action);
+        }
+
+        @Override
+        public FluidStack drain(int maxDrain, FluidAction action) {
+            return tank.drain(maxDrain, action);
         }
     };
 
-    private int transferCounter;
+    /** 对外暴露的罐体：输入仓双向可交互，输出仓只出不进。 */
+    private final IFluidHandler exposedTank;
+    private final LazyOptional<IFluidHandler> tankCapability;
 
     public FluidHatchBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CERTUS_QUARTZ_CRYSTAL_MACHINE_PART.get(), pos, state);
+        this.exposedTank = isOutputHatch() ? externalTank : tank;
+        this.tankCapability = LazyOptional.of(() -> exposedTank);
     }
 
+    /** 内部罐体（机器内部读写不受对外视图限制）。 */
     public FluidTank getTank() {
         return tank;
+    }
+
+    /** 是否为输出仓。 */
+    public boolean isOutputHatch() {
+        return isOutputHatch(getBlockState());
+    }
+
+    /** 静态判定：是否为输出仓方块。 */
+    public static boolean isOutputHatch(BlockState state) {
+        return state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get());
+    }
+
+    /** 是否允许玩家存入（输出仓仅接受机器内部产出）。 */
+    public boolean acceptsPlayerInsert() {
+        return !isOutputHatch();
     }
 
     @Override
@@ -100,14 +122,6 @@ public class FluidHatchBlockEntity extends BlockEntity {
         tankCapability.invalidate();
     }
 
-    public ItemStackHandler getInputSlot() {
-        return inputSlot;
-    }
-
-    public ItemStackHandler getOutputSlot() {
-        return outputSlot;
-    }
-
     public boolean isAutoTransfer() {
         return autoTransfer;
     }
@@ -117,18 +131,8 @@ public class FluidHatchBlockEntity extends BlockEntity {
         setChanged();
     }
 
-    /** 服务端 tick：自动拉取流体 + 定期处理输入格的流体容器。 */
+    /** 服务端 tick：与朝向面的外部流体容器搬运流体（输入拉取 / 输出推出），直到装满或清空。 */
     public void serverTick() {
-        pullFluid();
-        if (++transferCounter < TRANSFER_INTERVAL) {
-            return;
-        }
-        transferCounter = 0;
-        processContainer();
-    }
-
-    /** 从朝向面的外部流体容器拉取流体，直到罐满或外部无可取之物。 */
-    private void pullFluid() {
         if (!autoTransfer || level == null || level.isClientSide) {
             return;
         }
@@ -137,11 +141,20 @@ public class FluidHatchBlockEntity extends BlockEntity {
         if (target == null) {
             return;
         }
-        IFluidHandler source = target.getCapability(ForgeCapabilities.FLUID_HANDLER, facing.getOpposite())
+        IFluidHandler handler = target.getCapability(ForgeCapabilities.FLUID_HANDLER, facing.getOpposite())
                 .orElse(null);
-        if (source == null) {
+        if (handler == null) {
             return;
         }
+        if (isOutputHatch()) {
+            pushFluid(handler);
+        } else {
+            pullFluid(handler);
+        }
+    }
+
+    /** 从外部流体容器拉取流体，直到罐满或外部无可取之物。 */
+    private void pullFluid(IFluidHandler source) {
         FluidStack drained = source.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
         if (drained.isEmpty()) {
             return;
@@ -154,88 +167,18 @@ public class FluidHatchBlockEntity extends BlockEntity {
         tank.fill(moved, IFluidHandler.FluidAction.EXECUTE);
     }
 
-    /**
-     * 处理输入格容器：每次取一个容器，先在副本容器与临时罐上试算转移，
-     * 结果容器能放入输出格（可与同类容器堆叠）时才真正执行。
-     * 无法转移（流体不同、罐满或空）或输出格放不下时留在输入格等待。
-     */
-    private void processContainer() {
-        ItemStack input = inputSlot.getStackInSlot(0);
-        if (input.isEmpty()) {
-            return;
-        }
-        ItemStack preview = input.copyWithCount(1);
-        IFluidHandlerItem previewHandler = preview.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
-        if (previewHandler == null) {
-            return;
-        }
-        FluidTank previewTank = new FluidTank(CAPACITY);
-        previewTank.setFluid(tank.getFluid().copy());
-        if (!transferFluid(previewHandler, previewTank)) {
-            return;
-        }
-        if (!canAcceptResult(previewHandler.getContainer())) {
-            return;
-        }
-
-        ItemStack single = input.copyWithCount(1);
-        IFluidHandlerItem handler = single.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
-        if (handler == null || !transferFluid(handler, tank)) {
-            return;
-        }
-        inputSlot.extractItem(0, 1, false);
-        storeResult(handler.getContainer());
-        setChanged();
-    }
-
-    /** 在容器与给定罐之间执行一次转移（容器→罐优先），返回是否发生转移。 */
-    private static boolean transferFluid(IFluidHandlerItem handler, FluidTank destination) {
-        FluidStack drained = handler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-        if (!drained.isEmpty()) {
-            int accepted = destination.fill(drained, IFluidHandler.FluidAction.SIMULATE);
-            if (accepted <= 0) {
-                return false;
-            }
-            FluidStack moved = handler.drain(accepted, IFluidHandler.FluidAction.EXECUTE);
-            if (moved.isEmpty()) {
-                return false;
-            }
-            destination.fill(moved, IFluidHandler.FluidAction.EXECUTE);
-            return true;
-        }
-
-        FluidStack stored = destination.getFluid();
+    /** 向外部流体容器推出流体，直到罐空或外部容器存满。 */
+    private void pushFluid(IFluidHandler target) {
+        FluidStack stored = tank.getFluid();
         if (stored.isEmpty()) {
-            return false;
+            return;
         }
-        int filled = handler.fill(stored.copy(), IFluidHandler.FluidAction.SIMULATE);
-        if (filled <= 0) {
-            return false;
+        int accepted = target.fill(stored.copy(), IFluidHandler.FluidAction.SIMULATE);
+        if (accepted <= 0) {
+            return;
         }
-        handler.fill(stored.copy(), IFluidHandler.FluidAction.EXECUTE);
-        destination.drain(filled, IFluidHandler.FluidAction.EXECUTE);
-        return true;
-    }
-
-    /** 输出格能否接受该结果容器（空槽或与同类容器堆叠且不超上限）。 */
-    private boolean canAcceptResult(ItemStack result) {
-        ItemStack existing = outputSlot.getStackInSlot(0);
-        if (existing.isEmpty()) {
-            return true;
-        }
-        return ItemStack.isSameItemSameTags(existing, result)
-                && existing.getCount() + result.getCount() <= existing.getMaxStackSize();
-    }
-
-    /** 把结果容器放入输出格（合并到已有同类容器）。 */
-    private void storeResult(ItemStack result) {
-        ItemStack existing = outputSlot.getStackInSlot(0);
-        if (existing.isEmpty()) {
-            outputSlot.setStackInSlot(0, result);
-        } else {
-            existing.grow(result.getCount());
-            outputSlot.setStackInSlot(0, existing);
-        }
+        FluidStack moved = tank.drain(accepted, IFluidHandler.FluidAction.EXECUTE);
+        target.fill(moved, IFluidHandler.FluidAction.EXECUTE);
     }
 
     /** 客户端展示同步：直接覆盖本地罐内容（仅由同步包调用）。 */
@@ -247,8 +190,6 @@ public class FluidHatchBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put(TANK_ID, tank.writeToNBT(new CompoundTag()));
-        tag.put(INPUT_ID, inputSlot.serializeNBT());
-        tag.put(OUTPUT_ID, outputSlot.serializeNBT());
         tag.putBoolean(AUTO_TRANSFER_ID, autoTransfer);
     }
 
@@ -257,12 +198,6 @@ public class FluidHatchBlockEntity extends BlockEntity {
         super.load(tag);
         if (tag.contains(TANK_ID)) {
             tank.readFromNBT(tag.getCompound(TANK_ID));
-        }
-        if (tag.contains(INPUT_ID)) {
-            inputSlot.deserializeNBT(tag.getCompound(INPUT_ID));
-        }
-        if (tag.contains(OUTPUT_ID)) {
-            outputSlot.deserializeNBT(tag.getCompound(OUTPUT_ID));
         }
         if (tag.contains(AUTO_TRANSFER_ID)) {
             autoTransfer = tag.getBoolean(AUTO_TRANSFER_ID);

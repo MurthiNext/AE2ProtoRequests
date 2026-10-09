@@ -92,7 +92,8 @@ public final class CtmConfig {
         }
         if (block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get()
                 || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()
-                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()) {
+                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()
+                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()) {
             // 熔岩冶炼炉成型的部件外观为锆刚玉砖块，归入砖块族；其余情况为水晶机身族
             if (state.getValue(CertusQuartzCrystalMachinePartBlock.FORMED)
                     && state.getValue(CertusQuartzCrystalMachinePartBlock.STYLE) == 2) {

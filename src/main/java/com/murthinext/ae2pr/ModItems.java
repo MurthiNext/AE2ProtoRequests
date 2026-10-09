@@ -112,6 +112,11 @@ public final class ModItems {
     public static final RegistryObject<BlockItem> CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS = ITEMS.register("certus_quartz_crystal_output_bus",
             () -> new BlockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get(), new Item.Properties()));
 
+    /** 赛特斯石英水晶输出仓 */
+    public static final RegistryObject<BlockItem> CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH = ITEMS.register(
+            "certus_quartz_crystal_output_hatch",
+            () -> new BlockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get(), new Item.Properties()));
+
     /** 福鲁伊克斯水晶能源仓 */
     public static final RegistryObject<BlockItem> FLUIX_CRYSTAL_ENERGY_HATCH = ITEMS.register(
             "fluix_crystal_energy_hatch",

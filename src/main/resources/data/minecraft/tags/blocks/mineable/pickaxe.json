@@ -12,6 +12,7 @@
     "ae2pr:certus_quartz_crystal_input_bus",
     "ae2pr:certus_quartz_crystal_input_hatch",
     "ae2pr:certus_quartz_crystal_output_bus",
+    "ae2pr:certus_quartz_crystal_output_hatch",
     "ae2pr:fluix_crystal_energy_hatch",
     "ae2pr:logistics_control_casing",
     "ae2pr:redstone_requester",

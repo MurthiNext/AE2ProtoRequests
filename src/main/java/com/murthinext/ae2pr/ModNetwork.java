@@ -2,6 +2,7 @@ package com.murthinext.ae2pr;
 
 import com.murthinext.ae2pr.network.AssemblyLineJobPacket;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
+import com.murthinext.ae2pr.network.HatchTankClickPacket;
 import com.murthinext.ae2pr.network.LavaSmelterJobPacket;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 import com.murthinext.ae2pr.network.MachinePartStackPacket;
@@ -85,6 +86,12 @@ public final class ModNetwork {
                 BusSlotClickPacket::handle);
 
         CHANNEL.registerMessage(nextMessageId++,
+                HatchTankClickPacket.class,
+                HatchTankClickPacket::encode,
+                HatchTankClickPacket::decode,
+                HatchTankClickPacket::handle);
+
+        CHANNEL.registerMessage(nextMessageId++,
                 AssemblyLineJobPacket.class,
                 AssemblyLineJobPacket::encode,
                 AssemblyLineJobPacket::decode,
@@ -140,6 +147,10 @@ public final class ModNetwork {
     }
 
     public static void sendToServer(BusSlotClickPacket packet) {
+        CHANNEL.sendToServer(packet);
+    }
+
+    public static void sendToServer(HatchTankClickPacket packet) {
         CHANNEL.sendToServer(packet);
     }
 

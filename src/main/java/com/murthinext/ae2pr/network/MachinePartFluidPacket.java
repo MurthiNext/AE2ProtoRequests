@@ -10,7 +10,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 /**
- * 服务端 -> 客户端：赛特斯石英水晶输入仓的罐内流体与自动搬运开关同步（仅发给打开对应界面的玩家）。
+ * 服务端 -> 客户端：赛特斯石英水晶输入/输出仓的罐内流体与自动搬运开关同步（仅发给打开对应界面的玩家）。
  */
 public class MachinePartFluidPacket {
 

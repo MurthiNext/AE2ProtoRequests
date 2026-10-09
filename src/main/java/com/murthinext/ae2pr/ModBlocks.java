@@ -86,6 +86,10 @@ public final class ModBlocks {
     public static final RegistryObject<CertusQuartzCrystalMachinePartBlock> CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS = BLOCKS.register(
             "certus_quartz_crystal_output_bus", CertusQuartzCrystalMachinePartBlock::new);
 
+    /** 赛特斯石英水晶输出仓 */
+    public static final RegistryObject<CertusQuartzCrystalMachinePartBlock> CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH = BLOCKS.register(
+            "certus_quartz_crystal_output_hatch", CertusQuartzCrystalMachinePartBlock::new);
+
     /** 福鲁伊克斯水晶能源仓 */
     public static final RegistryObject<FluixCrystalEnergyHatchBlock> FLUIX_CRYSTAL_ENERGY_HATCH = BLOCKS.register(
             "fluix_crystal_energy_hatch", FluixCrystalEnergyHatchBlock::new);

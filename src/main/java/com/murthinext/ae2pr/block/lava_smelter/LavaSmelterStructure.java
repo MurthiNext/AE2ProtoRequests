@@ -27,11 +27,11 @@ import com.murthinext.ae2pr.multiblock.StructureResult;
  * <li><b>行（string）</b>：沿上递增（第 0 行是最底行），共 8 行</li>
  * <li><b>列（char）</b>：沿控制器背面递增（前→后深度），共 4 列</li>
  * </ul>
- * 字符含义：{@code C}=主机（原 NBT 木桶位） {@code B}=锆刚玉砖块（可替换为输入/输出总线）
+ * 字符含义：{@code C}=主机（原 NBT 木桶位） {@code B}=锆刚玉砖块
  * {@code G}=耐火水晶玻璃 {@code P}=陨钢管道（NBT 中炉膛顶朝下、烟囱朝上，结构只校验方块类型）
  * {@code L}=物流控制机械方块 {@code #}=任意（炉膛内部与烟囱周围留空）。
  * <p>
- * 成型后，结构内的输入/输出总线切换为锆刚玉砖块外观（style=2，仓口保留），
+ * 成型后，结构内仓室切换为锆刚玉砖块外观（style=2，仓口保留），
  * 与周围的砖块使用同一连接纹理族。
  */
 public final class LavaSmelterStructure {
@@ -47,7 +47,8 @@ public final class LavaSmelterStructure {
             .where('C', StructurePredicate.blocks(ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()))
             .where('B', StructurePredicate.blocks(ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get())
                     .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get()))
-                    .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get())))
+                    .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()))
+                    .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get())))
             .where('G', StructurePredicate.blocks(ModBlocks.FIREPROOF_CRYSTAL_GLASS.get()))
             .where('P', StructurePredicate.blocks(ModBlocks.METEOR_STEEL_PIPE_BLOCK.get()))
             .where('L', StructurePredicate.blocks(ModBlocks.LOGISTICS_CONTROL_CASING.get()))
@@ -84,7 +85,8 @@ public final class LavaSmelterStructure {
         for (BlockPos pos : cells) {
             BlockState state = level.getBlockState(pos);
             if (!(state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get())
-                    || state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()))) {
+                    || state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get())
+                    || state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()))) {
                 continue;
             }
             BlockState updated = state;

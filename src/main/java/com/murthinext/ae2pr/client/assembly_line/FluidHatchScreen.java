@@ -17,17 +17,21 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.assembly_line.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.assembly_line.FluidHatchMenu;
+import com.murthinext.ae2pr.network.HatchTankClickPacket;
 
 /**
- * 赛特斯石英水晶输入仓界面：机器区左侧为流体罐（按储量平铺流体贴图），右侧为储量信息与容器槽。
+ * 赛特斯石英水晶输入/输出仓界面。
  */
 public class FluidHatchScreen extends AbstractContainerScreen<FluidHatchMenu> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation TEXTURE_INPUT = new ResourceLocation(ae2pr.MODID,
             "textures/gui/certus_quartz_crystal_input_hatch.png");
+    private static final ResourceLocation TEXTURE_OUTPUT = new ResourceLocation(ae2pr.MODID,
+            "textures/gui/certus_quartz_crystal_output_hatch.png");
 
     /** 罐内填充区（与 GUI 贴图一致） */
     private static final int TANK_X = 22;
@@ -38,15 +42,9 @@ public class FluidHatchScreen extends AbstractContainerScreen<FluidHatchMenu> {
     private static final int TITLE_X = 7;
     private static final int TITLE_Y = 9;
     private static final int INFO_X = 56;
-    private static final int STORED_Y = 40;
-    private static final int TYPE_Y = 54;
-    private static final int CAPACITY_Y = 68;
-    /** 类型行可用的最大宽度（面板内右侧留 2px） */
-    private static final int TYPE_MAX_WIDTH = 176 - 2 - INFO_X;
+    private static final int CAPACITY_Y = 40;
 
     private static final int COLOR_TITLE = 0x55FFFF;
-    private static final int COLOR_VALUE = 0xACE9FF;
-    private static final int COLOR_TEXT = 0xAAB8C6;
     private static final int COLOR_GRAY = 0x7A8794;
 
     private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
@@ -77,7 +75,8 @@ public class FluidHatchScreen extends AbstractContainerScreen<FluidHatchMenu> {
     protected void init() {
         super.init();
         autoTransferButton = new AutoTransferButton(leftPos + TOOLBAR_X + 1, topPos + TOOLBAR_Y + 1,
-                AutoTransferButton.Type.PULL, this::autoTransferEnabled,
+                menu.isOutputHatch() ? AutoTransferButton.Type.PUSH : AutoTransferButton.Type.PULL,
+                this::autoTransferEnabled,
                 () -> Minecraft.getInstance().gameMode.handleInventoryButtonClick(menu.containerId, 0));
         addRenderableWidget(autoTransferButton);
     }
@@ -91,9 +90,20 @@ public class FluidHatchScreen extends AbstractContainerScreen<FluidHatchMenu> {
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        graphics.blit(menu.isOutputHatch() ? TEXTURE_OUTPUT : TEXTURE_INPUT, leftPos, topPos, 0, 0,
+                imageWidth, imageHeight);
         AutoTransferButton.renderToolbar(graphics, leftPos + TOOLBAR_X, topPos + TOOLBAR_Y, 1);
         renderFluid(graphics);
+    }
+
+    /** 流体槽点击：左键取出、右键存入（由服务端菜单校验执行）。 */
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if ((button == 0 || button == 1) && isHoveringTank((int) mouseX, (int) mouseY)) {
+            ModNetwork.sendToServer(new HatchTankClickPacket(menu.getBlockPos(), button));
+            return true;
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     /** 罐区悬停：显示所存流体与数量。 */
@@ -102,7 +112,8 @@ public class FluidHatchScreen extends AbstractContainerScreen<FluidHatchMenu> {
         if (autoTransferButton != null && autoTransferButton.isHovered()) {
             boolean enabled = autoTransferEnabled();
             graphics.renderComponentTooltip(font, List.of(
-                    Component.translatable("gui.ae2pr.machine_part.auto.pull"),
+                    Component.translatable(menu.isOutputHatch() ? "gui.ae2pr.machine_part.auto.push"
+                            : "gui.ae2pr.machine_part.auto.pull"),
                     Component.translatable(enabled ? "gui.ae2pr.machine_part.auto.enabled"
                             : "gui.ae2pr.machine_part.auto.disabled"),
                     Component.translatable("gui.ae2pr.machine_part.auto.desc")),
@@ -113,7 +124,7 @@ public class FluidHatchScreen extends AbstractContainerScreen<FluidHatchMenu> {
             FluidStack fluid = clientFluid();
             if (!fluid.isEmpty()) {
                 graphics.renderComponentTooltip(font, List.of(fluid.getDisplayName(),
-                        Component.translatable("gui.ae2pr.machine_part.stored.mb", NUMBER.format(fluid.getAmount()))),
+                        Component.translatable("gui.ae2pr.machine_part.tank.mb", NUMBER.format(fluid.getAmount()))),
                         mouseX, mouseY);
             }
             return;
@@ -129,33 +140,11 @@ public class FluidHatchScreen extends AbstractContainerScreen<FluidHatchMenu> {
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        FluidStack fluid = clientFluid();
         graphics.drawString(font, title, TITLE_X, TITLE_Y, COLOR_TITLE, false);
-        graphics.drawString(font, storedText(fluid), INFO_X, STORED_Y,
-                fluid.isEmpty() ? COLOR_GRAY : COLOR_VALUE, false);
-        drawType(graphics, fluid.isEmpty() ? null : fluid.getDisplayName());
         graphics.drawString(font, Component.translatable("gui.ae2pr.machine_part.capacity.fluid",
-                NUMBER.format(FluidHatchBlockEntity.CAPACITY / 1000), NUMBER.format(FluidHatchBlockEntity.TYPE_CAPACITY)),
+                NUMBER.format(FluidHatchBlockEntity.CAPACITY / 1000),
+                NUMBER.format(FluidHatchBlockEntity.TYPE_CAPACITY)),
                 INFO_X, CAPACITY_Y, COLOR_GRAY, false);
-    }
-
-    /** 类型行：标签 + 截断后的名称。 */
-    private void drawType(GuiGraphics graphics, @Nullable Component name) {
-        Component label = Component.translatable("gui.ae2pr.machine_part.type_label");
-        graphics.drawString(font, label, INFO_X, TYPE_Y, COLOR_TEXT, false);
-        if (name == null) {
-            return;
-        }
-        int labelWidth = font.width(label);
-        graphics.drawString(font, clip(name.getString(), TYPE_MAX_WIDTH - labelWidth),
-                INFO_X + labelWidth, TYPE_Y, COLOR_VALUE, false);
-    }
-
-    private String clip(String text, int maxWidth) {
-        if (font.width(text) <= maxWidth) {
-            return text;
-        }
-        return font.plainSubstrByWidth(text, maxWidth - font.width("…")) + "…";
     }
 
     /** 按储量占比从底部向上平铺流体贴图；按罐内区域裁剪，避免溢出到边框。 */
@@ -203,12 +192,5 @@ public class FluidHatchScreen extends AbstractContainerScreen<FluidHatchMenu> {
             return hatch;
         }
         return null;
-    }
-
-    private static Component storedText(FluidStack fluid) {
-        if (fluid.isEmpty()) {
-            return Component.translatable("gui.ae2pr.machine_part.stored.empty");
-        }
-        return Component.translatable("gui.ae2pr.machine_part.stored.mb", NUMBER.format(fluid.getAmount()));
     }
 }

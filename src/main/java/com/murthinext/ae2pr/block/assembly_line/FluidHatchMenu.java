@@ -13,20 +13,19 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
 
 import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 
 /**
- * 赛特斯石英水晶输入仓的容器菜单：容器输入格 + 容器输出格 + 玩家背包。
- * <p>
- * 罐内流体不占槽位，打开界面期间由本菜单在内容变化时发送同步包（仅发给本人）。
+ * 赛特斯石英水晶输入/输出仓的容器菜单。
  */
 public class FluidHatchMenu extends AbstractContainerMenu {
 
@@ -37,15 +36,10 @@ public class FluidHatchMenu extends AbstractContainerMenu {
     private static final int INV_X = 8;
     private static final int INV_Y = 122;
     private static final int HOTBAR_Y = 180;
-    /** 容器输入格物品位（与 GUI 贴图一致） */
-    private static final int INPUT_SLOT_X = 60;
-    private static final int INPUT_SLOT_Y = 86;
-    /** 容器输出格物品位（与 GUI 贴图一致） */
-    private static final int OUTPUT_SLOT_X = 100;
-    private static final int OUTPUT_SLOT_Y = 86;
 
     private final BlockPos pos;
     private final Player owner;
+    private final boolean serverSide;
     private final FluidHatchBlockEntity blockEntity;
     private FluidStack lastSentFluid = FluidStack.EMPTY;
     private boolean fluidSynced;
@@ -56,9 +50,8 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         super(TYPE, id);
         this.pos = pos;
         this.owner = playerInventory.player;
+        this.serverSide = !playerInventory.player.level().isClientSide;
         this.blockEntity = blockEntity;
-        addSlot(new SlotItemHandler(input(), 0, INPUT_SLOT_X, INPUT_SLOT_Y));
-        addSlot(new SlotItemHandler(output(), 0, OUTPUT_SLOT_X, OUTPUT_SLOT_Y));
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < INV_COLS; col++) {
                 addSlot(new Slot(playerInventory, col + row * INV_COLS + INV_COLS,
@@ -81,16 +74,13 @@ public class FluidHatchMenu extends AbstractContainerMenu {
                 blockEntity instanceof FluidHatchBlockEntity hatch ? hatch : null);
     }
 
-    private IItemHandler input() {
-        return blockEntity != null ? blockEntity.getInputSlot() : new ItemStackHandler(1);
-    }
-
-    private IItemHandler output() {
-        return blockEntity != null ? blockEntity.getOutputSlot() : new ItemStackHandler(1);
-    }
-
     public BlockPos getBlockPos() {
         return pos;
+    }
+
+    /** 是否是输出仓（决定客户端界面贴图与自动搬运方向）。 */
+    public boolean isOutputHatch() {
+        return blockEntity != null && blockEntity.isOutputHatch();
     }
 
     /** 服务端每 tick：罐内流体或自动搬运开关变化时向打开界面的玩家发送同步包；首次广播强制同步一次。 */
@@ -115,7 +105,7 @@ public class FluidHatchMenu extends AbstractContainerMenu {
     /** 工具栏按钮点击：id 0 = 切换自动搬运。 */
     @Override
     public boolean clickMenuButton(Player player, int id) {
-        if (id == 0 && blockEntity != null && !player.level().isClientSide) {
+        if (id == 0 && serverSide && blockEntity != null) {
             blockEntity.setAutoTransfer(!blockEntity.isAutoTransfer());
             return true;
         }
@@ -129,38 +119,89 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         return a.getAmount() == b.getAmount() && a.isFluidEqual(b);
     }
 
-    /** Shift 点击：容器格 → 背包；背包 → 容器输入格（仅接受流体容器）。 */
+    /**
+     * 流体槽点击（由客户端点击包调用）：
+     *
+     * @param button 0 = 左键（从罐内取出），1 = 右键（存入罐内）
+     */
+    public void handleTankClick(int button) {
+        if (!serverSide || blockEntity == null) {
+            return;
+        }
+        ItemStack carried = getCarried();
+        if (carried.isEmpty()) {
+            return;
+        }
+        if (button == 0) {
+            takeFluid(carried);
+        } else if (button == 1) {
+            if (!blockEntity.acceptsPlayerInsert()) {
+                return; // 输出仓仅接受机器内部产出
+            }
+            storeFluid(carried);
+        }
+        broadcastChanges();
+    }
+
+    /** 右键：用光标上的流体容器向罐内存入流体。 */
+    private void storeFluid(ItemStack carried) {
+        ItemStack single = carried.copyWithCount(1);
+        IFluidHandlerItem handler = single.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
+        if (handler == null) {
+            return;
+        }
+        FluidStack drained = handler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
+        if (drained.isEmpty()) {
+            return;
+        }
+        int accepted = blockEntity.getTank().fill(drained, IFluidHandler.FluidAction.SIMULATE);
+        if (accepted <= 0) {
+            return;
+        }
+        FluidStack moved = handler.drain(accepted, IFluidHandler.FluidAction.EXECUTE);
+        blockEntity.getTank().fill(moved, IFluidHandler.FluidAction.EXECUTE);
+        replaceCarried(carried, handler.getContainer());
+    }
+
+    /** 左键：把罐内流体装入光标上的流体容器。 */
+    private void takeFluid(ItemStack carried) {
+        ItemStack single = carried.copyWithCount(1);
+        IFluidHandlerItem handler = single.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
+        if (handler == null) {
+            return;
+        }
+        FluidStack stored = blockEntity.getTank().getFluid();
+        if (stored.isEmpty()) {
+            return;
+        }
+        int filled = handler.fill(stored.copy(), IFluidHandler.FluidAction.SIMULATE);
+        if (filled <= 0) {
+            return;
+        }
+        handler.fill(stored.copy(), IFluidHandler.FluidAction.EXECUTE);
+        blockEntity.getTank().drain(filled, IFluidHandler.FluidAction.EXECUTE);
+        replaceCarried(carried, handler.getContainer());
+    }
+
+    /** 用转移后的容器替换光标物品；整堆时把结果塞进玩家背包，放不下则丢到脚边。 */
+    private void replaceCarried(ItemStack carried, ItemStack result) {
+        if (carried.getCount() <= 1) {
+            setCarried(result);
+            return;
+        }
+        carried.shrink(1);
+        setCarried(carried.isEmpty() ? ItemStack.EMPTY : carried);
+        ItemStack remainder = ItemHandlerHelper.insertItemStacked(
+                new PlayerMainInvWrapper(owner.getInventory()), result, false);
+        if (!remainder.isEmpty()) {
+            owner.drop(remainder, false);
+        }
+    }
+
+    /** 界面无机器槽位，Shift 点击不参与搬运。 */
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        Slot slot = slots.get(index);
-        if (!slot.hasItem()) {
-            return ItemStack.EMPTY;
-        }
-        ItemStack original = slot.getItem().copy();
-        if (index <= 1) {
-            // 容器格 → 背包：整堆取出后按背包容量分配，未放入的部分退回原格
-            IItemHandler machineSlot = index == 0 ? input() : output();
-            ItemStack moved = machineSlot.extractItem(0, Integer.MAX_VALUE, false);
-            if (moved.isEmpty()) {
-                return ItemStack.EMPTY;
-            }
-            if (!moveItemStackTo(moved, 2, slots.size(), true)) {
-                machineSlot.insertItem(0, moved, false);
-                return ItemStack.EMPTY;
-            }
-            if (!moved.isEmpty()) {
-                machineSlot.insertItem(0, moved, false);
-            }
-        } else {
-            // 背包 → 容器输入格
-            ItemStack remainder = ItemHandlerHelper.insertItemStacked(input(), slot.getItem().copy(), false);
-            if (remainder.getCount() == slot.getItem().getCount()) {
-                return ItemStack.EMPTY;
-            }
-            slot.set(remainder);
-        }
-        slot.setChanged();
-        return original;
+        return ItemStack.EMPTY;
     }
 
     @Override
