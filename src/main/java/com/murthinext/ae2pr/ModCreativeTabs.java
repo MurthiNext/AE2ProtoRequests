@@ -25,6 +25,7 @@ public final class ModCreativeTabs {
                     .displayItems((params, output) -> {
                         output.accept(ModItems.FILTER_CELL.get());
                         output.accept(ModItems.ADVANCED_FILTER_CELL.get());
+                        output.accept(ModItems.PROTO_TERMINAL.get());
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_1TOPS.get());
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_4TOPS.get());
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_16TOPS.get());

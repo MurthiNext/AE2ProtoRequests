@@ -4,6 +4,7 @@ import com.murthinext.ae2pr.item.level_emitter.MultiLevelEmitterPartItem;
 import com.murthinext.ae2pr.item.level_emitter.MultiThresholdLevelEmitterPartItem;
 import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
 import com.murthinext.ae2pr.item.filter_cell.FilterCellItem;
+import com.murthinext.ae2pr.item.ProtoTerminalItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
@@ -29,6 +30,10 @@ public final class ModItems {
     /** 高级过滤元件 */
     public static final RegistryObject<AdvancedFilterCellItem> ADVANCED_FILTER_CELL = ITEMS.register(
             "advanced_filter_cell", () -> new AdvancedFilterCellItem(new Item.Properties().stacksTo(1)));
+
+    /** 源始终端 */
+    public static final RegistryObject<Item> PROTO_TERMINAL = ITEMS.register("proto_terminal",
+            () -> new ProtoTerminalItem(new Item.Properties().stacksTo(1)));
 
     /** 1TOPS ME计算组件 */
     public static final RegistryObject<Item> COMPUTATION_CELL_COMPONENT_1TOPS = ITEMS.register("computation_cell_component_1tops",

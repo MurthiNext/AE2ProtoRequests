@@ -1,0 +1,29 @@
+{
+  "nodes": [
+    {
+      "id": "connection",
+      "x": 30,
+      "y": 94,
+      "speaker": "gui.ae2pr.proto_terminal.speaker",
+      "title": "gui.ae2pr.proto_terminal.connection.title",
+      "text": "gui.ae2pr.proto_terminal.connection.text",
+      "connections": ["resonance", "standby"]
+    },
+    {
+      "id": "resonance",
+      "x": 306,
+      "y": 34,
+      "speaker": "gui.ae2pr.proto_terminal.speaker",
+      "title": "gui.ae2pr.proto_terminal.resonance.title",
+      "text": "gui.ae2pr.proto_terminal.resonance.text"
+    },
+    {
+      "id": "standby",
+      "x": 306,
+      "y": 154,
+      "speaker": "gui.ae2pr.proto_terminal.speaker",
+      "title": "gui.ae2pr.proto_terminal.standby.title",
+      "text": "gui.ae2pr.proto_terminal.standby.text"
+    }
+  ]
+}
