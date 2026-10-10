@@ -7,11 +7,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineControllerBlockEntity;
-import com.murthinext.ae2pr.block.assembly_line.FluidHatchBlockEntity;
-import com.murthinext.ae2pr.block.assembly_line.FluixCrystalEnergyHatchBlockEntity;
-import com.murthinext.ae2pr.block.assembly_line.ItemBusBlockEntity;
-import com.murthinext.ae2pr.block.assembly_line.MachinePartBlock;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
+import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
+import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntity;
+import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
+import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
 import com.murthinext.ae2pr.block.redstone_requester.RedstoneRequesterBlockEntity;
 

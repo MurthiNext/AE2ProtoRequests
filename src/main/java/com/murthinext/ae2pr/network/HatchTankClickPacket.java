@@ -7,7 +7,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
-import com.murthinext.ae2pr.block.assembly_line.FluidHatchMenu;
+import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
 
 /**
  * 客户端 -> 服务端：机器部件流体仓的流体槽点击（存入/取出），由打开的菜单校验并执行。

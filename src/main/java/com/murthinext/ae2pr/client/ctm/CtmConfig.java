@@ -12,8 +12,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.ModBlocks;
-import com.murthinext.ae2pr.block.assembly_line.MachinePartBlock;
-import com.murthinext.ae2pr.block.assembly_line.MachinePartFacade;
+import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
+import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
 import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
 
 /**

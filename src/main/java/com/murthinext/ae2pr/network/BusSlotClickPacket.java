@@ -7,7 +7,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
-import com.murthinext.ae2pr.block.assembly_line.ItemBusMenu;
+import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
 
 /**
  * 客户端 -> 服务端：机器部件总线存储区点击（取出/存入），由打开的菜单校验并执行。

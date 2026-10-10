@@ -11,9 +11,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
 import com.murthinext.ae2pr.ModBlocks;
-import com.murthinext.ae2pr.block.assembly_line.FluixCrystalEnergyHatchBlock;
-import com.murthinext.ae2pr.block.assembly_line.MachinePartBlock;
-import com.murthinext.ae2pr.block.assembly_line.MachinePartFacade;
+import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlock;
+import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
+import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
 import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.multiblock.StructurePredicate;

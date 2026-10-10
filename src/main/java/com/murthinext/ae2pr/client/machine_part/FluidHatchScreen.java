@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.client.assembly_line;
+package com.murthinext.ae2pr.client.machine_part;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -18,8 +18,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.block.assembly_line.FluidHatchBlockEntity;
-import com.murthinext.ae2pr.block.assembly_line.FluidHatchMenu;
+import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
+import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 
 /**

@@ -6,11 +6,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineMenu;
-import com.murthinext.ae2pr.block.assembly_line.FluidHatchMenu;
-import com.murthinext.ae2pr.block.assembly_line.ItemBusMenu;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterMenu;
 import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterMenu;
 import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterMenu;
+import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
+import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryMenu;
 import com.murthinext.ae2pr.block.redstone_requester.RedstoneRequesterMenu;
 

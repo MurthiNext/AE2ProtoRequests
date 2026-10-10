@@ -16,7 +16,7 @@ import net.minecraft.world.level.ItemLike;
 import appeng.api.upgrades.Upgrades;
 
 import com.murthinext.ae2pr.client.ModGuide;
-import com.murthinext.ae2pr.client.assembly_line.AutoTransferButton;
+import com.murthinext.ae2pr.client.machine_part.AutoTransferButton;
 
 /**
  * 机器界面基类。

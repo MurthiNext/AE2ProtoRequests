@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.block.assembly_line;
+package com.murthinext.ae2pr.block.machine_part;
 
 import java.util.List;
 

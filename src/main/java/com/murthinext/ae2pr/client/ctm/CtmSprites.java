@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.block.assembly_line.MachinePartFacade;
+import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
 
 /**
  * 连接纹理图集登记表：建立「基础贴图 → CTM 图集」的映射，并缓存基础 sprite

@@ -56,7 +56,7 @@ public class MachinePartStackPacket {
     public static void handle(MachinePartStackPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> com.murthinext.ae2pr.client.assembly_line.ItemBusScreen
+                () -> () -> com.murthinext.ae2pr.client.machine_part.ItemBusScreen
                         .applyStackSync(packet.pos, packet.stacks, packet.autoTransfer)));
         context.setPacketHandled(true);
     }

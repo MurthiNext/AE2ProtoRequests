@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.client.assembly_line;
+package com.murthinext.ae2pr.client.machine_part;
 
 import java.util.List;
 
@@ -15,8 +15,8 @@ import net.minecraft.world.item.ItemStack;
 
 import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.block.assembly_line.ItemBusBlockEntity;
-import com.murthinext.ae2pr.block.assembly_line.ItemBusMenu;
+import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
+import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
 
 /**

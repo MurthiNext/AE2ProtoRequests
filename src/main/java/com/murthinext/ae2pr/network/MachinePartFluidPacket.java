@@ -48,7 +48,7 @@ public class MachinePartFluidPacket {
     public static void handle(MachinePartFluidPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> com.murthinext.ae2pr.client.assembly_line.FluidHatchScreen
+                () -> () -> com.murthinext.ae2pr.client.machine_part.FluidHatchScreen
                         .applyFluidSync(packet.pos, packet.fluids, packet.autoTransfer)));
         context.setPacketHandled(true);
     }

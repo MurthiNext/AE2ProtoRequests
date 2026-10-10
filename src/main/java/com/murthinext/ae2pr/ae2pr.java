@@ -90,7 +90,7 @@ public class ae2pr {
             // 福鲁伊克斯水晶能源仓：绑定方块实体类型并登记代表物品
             var energyHatchType = ModBlockEntities.FLUIX_CRYSTAL_ENERGY_HATCH.get();
             ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get().setBlockEntity(
-                    com.murthinext.ae2pr.block.assembly_line.FluixCrystalEnergyHatchBlockEntity.class,
+                    com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntity.class,
                     energyHatchType, null, null);
             appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(energyHatchType,
                     ModItems.FLUIX_CRYSTAL_ENERGY_HATCH.get());
