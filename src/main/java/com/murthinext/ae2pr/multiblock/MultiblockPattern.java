@@ -16,6 +16,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import com.murthinext.ae2pr.multiblock.module.ModuleInstance;
+import com.murthinext.ae2pr.multiblock.module.ModuleSnapshot;
+
 /**
  * 可复用的多方块结构模式：声明式描述 + 匹配。
  * <p>
@@ -159,6 +162,7 @@ public final class MultiblockPattern {
             leaf.resetCount();
         }
         List<BlockPos> cells = new ArrayList<>();
+        List<ModuleInstance> modules = new ArrayList<>();
         int mismatches = 0;
         BlockPos firstPos = null;
         char firstExpected = ' ';
@@ -182,6 +186,8 @@ public final class MultiblockPattern {
                             matched.incrementCount();
                             if (matched.maxCount() >= 0 && matched.count() > matched.maxCount()) {
                                 matched = null;
+                            } else {
+                                matched.collectModules(pos, state, modules);
                             }
                         }
                         if (matched == null) {
@@ -207,16 +213,26 @@ public final class MultiblockPattern {
                 }
             }
         }
+        // 模块安装上限校验
+        ModuleInstance conflict = ModuleSnapshot.firstConflict(modules);
+        if (conflict != null) {
+            mismatches++;
+            if (firstPos == null) {
+                firstPos = conflict.pos();
+                firstExpected = '?';
+                firstFound = level.getBlockState(conflict.pos()).getBlock();
+            }
+        }
         int totalSlices = 0;
         for (int repeat : repeats) {
             totalSlices += repeat;
         }
         if (mismatches == 0) {
             attempt.formed = new StructureResult(true, totalSlices, mirrorSide, mirrorFront, 0, null, ' ', null,
-                    List.copyOf(cells), false);
+                    List.copyOf(cells), ModuleSnapshot.of(modules), false);
         } else if (attempt.best == null || mismatches < attempt.best.mismatches()) {
             attempt.best = new StructureResult(false, 0, mirrorSide, mirrorFront, mismatches, firstPos, firstExpected,
-                    firstFound, List.of(), false);
+                    firstFound, List.of(), ModuleSnapshot.EMPTY, false);
         }
     }
 

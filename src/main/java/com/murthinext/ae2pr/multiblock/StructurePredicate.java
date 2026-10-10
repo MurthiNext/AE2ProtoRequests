@@ -12,6 +12,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import com.murthinext.ae2pr.multiblock.module.ModuleInstance;
+import com.murthinext.ae2pr.multiblock.module.ModuleProvider;
+import com.murthinext.ae2pr.multiblock.module.ModuleType;
+
 /**
  * 结构单元格谓词：判断某位置是否匹配，并支持整结构数量上下限。
  * <p>
@@ -59,6 +63,10 @@ public abstract class StructurePredicate {
     @Nullable
     public abstract StructurePredicate test(Level level, BlockPos pos, BlockState state);
 
+    /** 命中后收集模块信息（仅模块插槽谓词覆写）。 */
+    public void collectModules(BlockPos pos, BlockState state, List<ModuleInstance> modules) {
+    }
+
     /** 匹配任意方块（不参与计数与诊断）。 */
     public boolean isAny() {
         return false;
@@ -78,6 +86,11 @@ public abstract class StructurePredicate {
         return new Blocks(new HashSet<>(List.of(blocks)));
     }
 
+    /** 模块插槽：接受基础方块，或提供允许功能之一的模块方块。 */
+    public static StructurePredicate moduleSlot(Block base, ModuleType... allowed) {
+        return new ModuleSlot(base, Set.of(allowed));
+    }
+
     public static StructurePredicate any() {
         return Any.INSTANCE;
     }
@@ -95,6 +108,35 @@ public abstract class StructurePredicate {
         @Override
         public StructurePredicate test(Level level, BlockPos pos, BlockState state) {
             return blocks.contains(state.getBlock()) ? this : null;
+        }
+    }
+
+    /** 模块插槽谓词：基础方块不计模块，允许的模块方块计入并收集。 */
+    private static final class ModuleSlot extends StructurePredicate {
+
+        private final Block base;
+        private final Set<ModuleType> allowed;
+
+        private ModuleSlot(Block base, Set<ModuleType> allowed) {
+            this.base = base;
+            this.allowed = allowed;
+        }
+
+        @Nullable
+        @Override
+        public StructurePredicate test(Level level, BlockPos pos, BlockState state) {
+            if (state.is(base)) {
+                return this;
+            }
+            return state.getBlock() instanceof ModuleProvider provider
+                    && allowed.contains(provider.moduleDefinition().type()) ? this : null;
+        }
+
+        @Override
+        public void collectModules(BlockPos pos, BlockState state, List<ModuleInstance> modules) {
+            if (state.getBlock() instanceof ModuleProvider provider) {
+                modules.add(new ModuleInstance(pos, provider.moduleDefinition()));
+            }
         }
     }
 

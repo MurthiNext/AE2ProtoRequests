@@ -1,0 +1,8 @@
+{
+  "parent": "ae2pr:block/crystal_assembly_line_unit_active",
+  "textures": {
+    "particle": "#all",
+    "all": "ae2pr:block/crystal/assembly_line_unit_parallel",
+    "overlay": "ae2pr:block/crystal/assembly_line_unit_parallel_bloom"
+  }
+}

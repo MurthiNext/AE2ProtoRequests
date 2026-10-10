@@ -23,6 +23,10 @@ public final class Config {
     private static final ForgeConfigSpec.IntValue ASSEMBLY_PARALLEL_PER_SLICE;
     private static final ForgeConfigSpec.IntValue ASSEMBLY_MAX_SLICES;
     private static final ForgeConfigSpec.DoubleValue ASSEMBLY_ENERGY_PER_PARALLEL;
+    private static final ForgeConfigSpec.IntValue ASSEMBLY_MODULE_PARALLEL_PER_UNIT;
+    private static final ForgeConfigSpec.DoubleValue ASSEMBLY_MODULE_SPEED_PER_UNIT;
+    private static final ForgeConfigSpec.IntValue ASSEMBLY_MAX_PARALLEL;
+    private static final ForgeConfigSpec.DoubleValue ASSEMBLY_MAX_SPEED_MULTIPLIER;
 
     private static final ForgeConfigSpec.DoubleValue NAMING_FACTORY_MAX_POWER;
     private static final ForgeConfigSpec.DoubleValue NAMING_FACTORY_ENERGY_PER_ITEM;
@@ -78,6 +82,18 @@ public final class Config {
         ASSEMBLY_ENERGY_PER_PARALLEL = BUILDER
                 .comment("每并行一次执行从 ME 网络扣除的能量")
                 .defineInRange("energyPerParallel", 50000.0, 0.0, Double.MAX_VALUE);
+        ASSEMBLY_MODULE_PARALLEL_PER_UNIT = BUILDER
+                .comment("每个并行控制外壳增加的并行上限")
+                .defineInRange("moduleParallelPerUnit", 8, 0, 1_000_000);
+        ASSEMBLY_MODULE_SPEED_PER_UNIT = BUILDER
+                .comment("每个速度控制外壳增加的速度比例（0.25 表示 +25%）")
+                .defineInRange("moduleSpeedPerUnit", 0.25, 0.0, 100.0);
+        ASSEMBLY_MAX_PARALLEL = BUILDER
+                .comment("并行上限（包含结构长度与模块的全部加成）")
+                .defineInRange("maxParallel", Integer.MAX_VALUE, 1, Integer.MAX_VALUE);
+        ASSEMBLY_MAX_SPEED_MULTIPLIER = BUILDER
+                .comment("速度倍率上限")
+                .defineInRange("maxSpeedMultiplier", 64.0, 1.0, Double.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("namingFactory");
@@ -151,6 +167,22 @@ public final class Config {
 
     public static double assemblyEnergyPerParallel() {
         return ASSEMBLY_ENERGY_PER_PARALLEL.get();
+    }
+
+    public static int assemblyModuleParallelPerUnit() {
+        return ASSEMBLY_MODULE_PARALLEL_PER_UNIT.get();
+    }
+
+    public static double assemblyModuleSpeedPerUnit() {
+        return ASSEMBLY_MODULE_SPEED_PER_UNIT.get();
+    }
+
+    public static int assemblyMaxParallel() {
+        return ASSEMBLY_MAX_PARALLEL.get();
+    }
+
+    public static double assemblyMaxSpeedMultiplier() {
+        return ASSEMBLY_MAX_SPEED_MULTIPLIER.get();
     }
 
     public static double namingFactoryMaxPower() {

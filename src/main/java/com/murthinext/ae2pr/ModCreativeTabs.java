@@ -79,12 +79,17 @@ public final class ModCreativeTabs {
 
                         // 多方块结构 - 普通结构方块
                         output.accept(ModItems.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get());
+                        output.accept(ModItems.AEV_MACHINE_CASING.get());
                         output.accept(ModItems.ZIRCONIA_CORUNDUM_BRICKS.get());
                         output.accept(ModItems.CRYSTAL_GLASS.get());
                         output.accept(ModItems.FIREPROOF_CRYSTAL_GLASS.get());
 
                         // 多方块结构 - 特色结构方块
                         output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_UNIT.get());
+                        output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT.get());
+                        output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT.get());
+                        output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT.get());
+                        output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT.get());
                         output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_CASING.get());
                         output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_GRATING.get());
                         output.accept(ModItems.LOGISTICS_CONTROL_CASING.get());
@@ -96,7 +101,6 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get());
                         output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get());
                         output.accept(ModItems.FLUIX_CRYSTAL_ENERGY_HATCH.get());
-                        output.accept(ModItems.AEV_MACHINE_CASING.get());
                         output.accept(ModItems.AEV_INPUT_BUS.get());
                         output.accept(ModItems.AEV_INPUT_HATCH.get());
                         output.accept(ModItems.AEV_OUTPUT_BUS.get());

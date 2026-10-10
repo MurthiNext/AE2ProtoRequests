@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.ModModules;
 import com.murthinext.ae2pr.block.assembly_line.MachinePartBlock;
 import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.RelativeDirection;
@@ -37,6 +38,7 @@ import com.murthinext.ae2pr.multiblock.StructureResult;
  * </pre>
  *
  * 机壳位 'F' 可用输入仓或能源仓替代，其中<b>能源仓整结构最多 1 个</b>。
+ * 控制外壳位 'T' 可用各类替换模块替代，模块按功能类型受安装上限约束。
  */
 public final class AssemblyLineStructure {
 
@@ -59,7 +61,9 @@ public final class AssemblyLineStructure {
             .where('G', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get()))
             .where('D', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get()))
             .where('R', StructurePredicate.blocks(ModBlocks.CRYSTAL_GLASS.get()))
-            .where('T', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_UNIT.get()))
+            // 控制外壳位：普通控制外壳或允许的替换模块（充能 / 并行 / 速度）
+            .where('T', StructurePredicate.moduleSlot(ModBlocks.CRYSTAL_ASSEMBLY_LINE_UNIT.get(),
+                    ModModules.CHARGING, ModModules.PARALLEL, ModModules.SPEED))
             .where('#', StructurePredicate.any())
             .build();
 
@@ -103,7 +107,8 @@ public final class AssemblyLineStructure {
         for (BlockPos pos : cells) {
             BlockState state = level.getBlockState(pos);
             BlockState updated = null;
-            if (state.is(ModBlocks.CRYSTAL_ASSEMBLY_LINE_UNIT.get())) {
+            if (state.getBlock() instanceof AssemblyLineUnitBlock) {
+                // 普通控制外壳与替换模块共用工作态贴图
                 if (state.getValue(AssemblyLineUnitBlock.ACTIVE) != unitActive) {
                     updated = state.setValue(AssemblyLineUnitBlock.ACTIVE, unitActive);
                 }

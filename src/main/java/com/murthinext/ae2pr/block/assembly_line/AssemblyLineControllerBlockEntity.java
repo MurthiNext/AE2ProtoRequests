@@ -21,10 +21,13 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.ModModules;
 import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.multiblock.StructureResult;
 import com.murthinext.ae2pr.multiblock.StructureValidator;
+import com.murthinext.ae2pr.multiblock.module.ModuleSnapshot;
+import com.murthinext.ae2pr.multiblock.module.ModuleType;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
 
 /**
@@ -33,10 +36,10 @@ import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
  * 结构检测由 {@link StructureValidator} 完成：结构未变化时走缓存快速路径，
  * 保证有序匹配使用的部件顺序稳定。
  * <p>
- * 执行流程：匹配配方、检查输出空间、扣除所需电力与原料、加工 {@code duration} tick 后产出到输出总线。
+ * 执行流程：匹配配方、检查输出空间、扣除所需电力与原料、加工一定 tick 后产出到输出总线。
  * <p>
  * 实际并行数 = 各输入现有份数（物品 / 流体）中的较小值，上限为
- * 基础并行 + (片数 - 最小片数) × 每片增量；能量 = 单位耗电 × 实际并行数。
+ * 基础并行 + (片数 - 最小片数) × 每片增量 + 模块加成；能量 = 每并行耗电（配方可覆盖，默认取配置）× 实际并行数。
  */
 public class AssemblyLineControllerBlockEntity extends BlockEntity {
 
@@ -54,6 +57,8 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
 
     /** 加工剩余 tick（<= 0 表示空闲或暂停） */
     private int jobTicksLeft;
+    /** 当前作业的实际总耗时（tick，含速度模块加成） */
+    private int jobTotalTicks;
     /** 是否处于暂停态（电力/输出不足，黄色贴图） */
     private boolean paused;
     private Error error = Error.NONE;
@@ -61,6 +66,13 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
     /** 当前作业（加工中保留，用于结算产物） */
     @Nullable
     private Match currentMatch;
+
+    /** 待恢复的作业数据（load 时 world 可能未就绪，首个服务端 tick 再解析） */
+    @Nullable
+    private ResourceLocation pendingRecipeId;
+    private int pendingParallel;
+    private int pendingTicks;
+    private int pendingTotalTicks;
 
     /** 客户端展示用：当前作业产物（仅由同步包写入） */
     private ItemStack clientJobOutput = ItemStack.EMPTY;
@@ -83,6 +95,10 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
     private final List<FluidHatchBlockEntity> inputHatches = new ArrayList<>();
     /** 结构内的能源仓 */
     private final List<FluixCrystalEnergyHatchBlockEntity> energyHatches = new ArrayList<>();
+    /** 结构内模块快照（结构未变化时沿用） */
+    private ModuleSnapshot modules = ModuleSnapshot.EMPTY;
+    /** 结构内控制外壳单元格（含模块），用于每 tick 轻量检查 */
+    private final List<UnitCell> unitCells = new ArrayList<>();
     /** 结构验证器：模式匹配 + 缓存快速路径 */
     private final StructureValidator structure = new StructureValidator(AssemblyLineStructure.PATTERN);
 
@@ -95,6 +111,7 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
         if (level == null || level.isClientSide) {
             return;
         }
+        restorePendingJob();
         if (++tickCounter >= CHECK_INTERVAL) {
             tickCounter = 0;
             validateStructure();
@@ -106,12 +123,16 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
 
     private void tickJob() {
         if (!isFormed()) {
-            if (jobTicksLeft > 0 || paused || error != Error.NONE) {
-                jobTicksLeft = 0;
-                currentMatch = null;
-                clearPause();
-            }
+            cancelJob();
             return;
+        }
+        // 加工中每 tick 轻量检查控制外壳/模块是否被替换，变化时立即完整验证
+        if (jobTicksLeft > 0 && unitCellsChanged()) {
+            validateStructure();
+            if (!isFormed()) {
+                cancelJob();
+                return;
+            }
         }
         if (jobTicksLeft > 0) {
             if (--jobTicksLeft == 0) {
@@ -127,10 +148,25 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
         tryStartJob();
     }
 
+    /** 取消当前作业（结构损坏或模块资格失效；已投入的材料与能量不返还）。 */
+    private void cancelJob() {
+        if (jobTicksLeft > 0 || jobTotalTicks > 0 || currentMatch != null || paused || error != Error.NONE) {
+            jobTicksLeft = 0;
+            jobTotalTicks = 0;
+            currentMatch = null;
+            clearPause();
+        }
+    }
+
     /** 尝试开始一次加工：匹配配方 → 输出检查 → 扣电 → 扣料 → 进入运行态。 */
     private void tryStartJob() {
         Level level = this.level;
         if (level == null) {
+            return;
+        }
+        // 启动前再次验证结构与模块（缓存命中时开销极低），避免结构检测间隔内的短窗口
+        validateStructure();
+        if (!isFormed()) {
             return;
         }
         Match match = findMatch();
@@ -142,7 +178,7 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
             pause(Error.OUTPUT);
             return;
         }
-        double cost = Config.assemblyEnergyPerParallel() * match.parallel();
+        double cost = match.recipe().getEnergyPerParallel() * match.parallel();
         if (extractNetworkEnergy(cost, true) < cost) {
             pause(Error.POWER);
             return;
@@ -151,7 +187,8 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
         extractNetworkEnergy(cost, false);
         consumeInputs(match);
 
-        jobTicksLeft = Math.max(1, match.recipe().getDuration());
+        jobTotalTicks = scaledDuration(match.recipe().getDuration());
+        jobTicksLeft = jobTotalTicks;
         currentMatch = match;
         paused = false;
         error = Error.NONE;
@@ -166,6 +203,7 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
             insertOutputs(match.recipe(), match.parallel());
         }
         jobTicksLeft = 0;
+        jobTotalTicks = 0;
         applyControllerState();
         if (isFormed()) {
             tryStartJob();
@@ -174,6 +212,7 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
 
     private void pause(Error reason) {
         jobTicksLeft = 0;
+        jobTotalTicks = 0;
         paused = true;
         error = reason;
         applyControllerState();
@@ -194,10 +233,36 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
             List<Integer> hatchIndices) {
     }
 
-    /** 结构允许的最大并行数 = 基础并行 + (片数 - 最小片数) × 每片增量。 */
+    /** 控制外壳单元格：位置与方块类型（用于轻量检查模块是否被替换）。 */
+    private record UnitCell(BlockPos pos, Block block) {
+    }
+
+    /** 结构允许的最大并行数 = 基础并行 + (片数 - 最小片数) × 每片增量 + 模块加成。 */
     public int maxParallel() {
-        return Config.assemblyBaseParallel()
+        int base = Config.assemblyBaseParallel()
                 + Math.max(0, lastSlices - AssemblyLineStructure.MIN_SLICES) * Config.assemblyParallelPerSlice();
+        return Math.min(base + moduleParallelBonus(), Config.assemblyMaxParallel());
+    }
+
+    /** 模块提供的并行上限加成。 */
+    private int moduleParallelBonus() {
+        return modules.count(ModModules.PARALLEL) * Config.assemblyModuleParallelPerUnit();
+    }
+
+    /** 模块提供的速度倍率（1.0 为基础速度，受配置上限约束）。 */
+    public double getSpeedMultiplier() {
+        double multiplier = 1.0 + modules.count(ModModules.SPEED) * Config.assemblyModuleSpeedPerUnit();
+        return Math.min(multiplier, Config.assemblyMaxSpeedMultiplier());
+    }
+
+    /** 指定功能模块的当前等级；未安装返回 0。 */
+    public int getModuleLevel(ModuleType type) {
+        return modules.level(type);
+    }
+
+    /** 按速度模块倍率折算实际耗时。 */
+    private int scaledDuration(int baseTicks) {
+        return Math.max(1, (int) Math.ceil(baseTicks / getSpeedMultiplier()));
     }
 
     @Nullable
@@ -208,6 +273,10 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
         }
         for (CrystalAssemblyLineRecipe recipe : level.getRecipeManager()
                 .getAllRecipesFor(ModRecipes.CRYSTAL_ASSEMBLY_LINE_TYPE.get())) {
+            // 模块要求不满足的配方直接跳过，不阻塞其他合法配方
+            if (!modules.satisfies(recipe.getModuleRequirements())) {
+                continue;
+            }
             List<Integer> busIndices = matchItems(recipe);
             if (busIndices == null) {
                 continue;
@@ -430,6 +499,14 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
         lastExpected = result.expected();
         lastFound = result.found();
 
+        ModuleSnapshot snapshot = result.formed() ? result.modules() : ModuleSnapshot.EMPTY;
+        // 模块资格失效（拆除 / 降级 / 重复安装）：取消当前作业，已投入的材料与能量不返还
+        if (jobTicksLeft > 0 && currentMatch != null
+                && !snapshot.satisfies(currentMatch.recipe().getModuleRequirements())) {
+            cancelJob();
+        }
+        modules = snapshot;
+
         boolean formed = result.formed();
         // 运行态仅在成型后生效：控制外壳与主机的工作态贴图由作业驱动
         boolean active = formed && jobTicksLeft > 0;
@@ -439,11 +516,12 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
         applyControllerState(formed);
     }
 
-    /** 收集结构内的总线、输入仓与能源仓（仅在结构成型时收集）。 */
+    /** 收集结构内的总线、输入仓、能源仓与控制外壳（仅在结构成型时收集）。 */
     private void refreshParts(Level level, StructureResult result) {
         inputBuses.clear();
         inputHatches.clear();
         energyHatches.clear();
+        unitCells.clear();
         outputBus = null;
         if (!result.formed()) {
             return;
@@ -466,7 +544,25 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
             } else if (blockEntity instanceof FluixCrystalEnergyHatchBlockEntity energy) {
                 energyHatches.add(energy);
             }
+            Block block = level.getBlockState(pos).getBlock();
+            if (block instanceof AssemblyLineUnitBlock) {
+                unitCells.add(new UnitCell(pos, block));
+            }
         }
+    }
+
+    /** 结构内控制外壳单元格的方块类型是否发生变化（模块被替换 / 拆除）。 */
+    private boolean unitCellsChanged() {
+        Level level = this.level;
+        if (level == null) {
+            return false;
+        }
+        for (UnitCell cell : unitCells) {
+            if (level.getBlockState(cell.pos()).getBlock() != cell.block()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** 按当前方块状态读取成型标记并刷新控制器状态。 */
@@ -518,21 +614,41 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
             tag.putString("jobRecipe", currentMatch.recipe().getId().toString());
             tag.putInt("jobParallel", currentMatch.parallel());
             tag.putInt("jobTicks", jobTicksLeft);
+            tag.putInt("jobTotalTicks", jobTotalTicks);
         }
     }
 
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        Level level = this.level;
-        if (level == null || level.isClientSide || !tag.contains("jobRecipe")) {
+        if (!tag.contains("jobRecipe")) {
             return;
         }
-        var recipe = level.getRecipeManager().byKey(new ResourceLocation(tag.getString("jobRecipe")));
-        if (recipe.orElse(null) instanceof CrystalAssemblyLineRecipe lineRecipe) {
+        // world 在 load 时可能尚未就绪，先记录待恢复数据，首个服务端 tick 再解析配方
+        pendingRecipeId = ResourceLocation.tryParse(tag.getString("jobRecipe"));
+        pendingParallel = tag.getInt("jobParallel");
+        pendingTicks = tag.getInt("jobTicks");
+        pendingTotalTicks = tag.getInt("jobTotalTicks");
+    }
+
+    /** 解析待恢复的作业（配方已删除或类型不符时直接放弃恢复）。 */
+    private void restorePendingJob() {
+        ResourceLocation recipeId = pendingRecipeId;
+        if (recipeId == null) {
+            return;
+        }
+        pendingRecipeId = null;
+        Level level = this.level;
+        if (level == null) {
+            return;
+        }
+        var recipe = level.getRecipeManager().byKey(recipeId);
+        if (recipe.orElse(null) instanceof CrystalAssemblyLineRecipe lineRecipe && pendingTicks > 0) {
             // 恢复加工进度；输入下标只在启动时使用，恢复后无需重算
-            jobTicksLeft = tag.getInt("jobTicks");
-            currentMatch = new Match(lineRecipe, tag.getInt("jobParallel"), List.of(), List.of());
+            jobTicksLeft = pendingTicks;
+            // 旧存档缺少实际总耗时字段：按配方时长兼容
+            jobTotalTicks = pendingTotalTicks > 0 ? pendingTotalTicks : Math.max(1, lineRecipe.getDuration());
+            currentMatch = new Match(lineRecipe, pendingParallel, List.of(), List.of());
         }
     }
 
@@ -572,9 +688,9 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
         return main.copyWithCount((int) Math.min(total, Integer.MAX_VALUE));
     }
 
-    /** 当前作业的配方总耗时（tick）；空闲为 0。 */
+    /** 当前作业的实际总耗时（tick，含速度模块加成）；空闲为 0。 */
     public int getJobDuration() {
-        return currentMatch != null ? Math.max(1, currentMatch.recipe().getDuration()) : 0;
+        return jobTotalTicks;
     }
 
     /** 当前作业已进行的时间（tick）；空闲为 0。 */

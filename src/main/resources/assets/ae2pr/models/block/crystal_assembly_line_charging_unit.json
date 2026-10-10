@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "ae2pr:block/crystal/assembly_line_unit_charging"
+  },
+  "ambientocclusion": true
+}

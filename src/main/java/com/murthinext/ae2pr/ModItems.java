@@ -86,6 +86,26 @@ public final class ModItems {
             "crystal_assembly_line_unit",
             () -> new BlockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_UNIT.get(), new Item.Properties()));
 
+    /** 水晶装配线充能控制外壳 */
+    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT = ITEMS.register(
+            "crystal_assembly_line_charging_unit",
+            () -> new BlockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT.get(), new Item.Properties()));
+
+    /** 水晶装配线高级充能控制外壳 */
+    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT = ITEMS.register(
+            "crystal_assembly_line_advanced_charging_unit",
+            () -> new BlockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT.get(), new Item.Properties()));
+
+    /** 水晶装配线并行控制外壳 */
+    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT = ITEMS.register(
+            "crystal_assembly_line_parallel_unit",
+            () -> new BlockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT.get(), new Item.Properties()));
+
+    /** 水晶装配线速度控制外壳 */
+    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT = ITEMS.register(
+            "crystal_assembly_line_speed_unit",
+            () -> new BlockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT.get(), new Item.Properties()));
+
     /** 水晶装配线格栅 */
     public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_GRATING = ITEMS.register(
             "crystal_assembly_line_grating",

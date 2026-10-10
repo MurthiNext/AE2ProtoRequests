@@ -22,6 +22,7 @@ import snownee.jade.api.ui.BoxStyle;
 import snownee.jade.api.ui.IProgressStyle;
 
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.ModModules;
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineControllerBlockEntity;
 import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
 
@@ -40,6 +41,9 @@ public class AssemblyLineJadePlugin implements IWailaPlugin {
     private static final String KEY_COUNT = "count";
     private static final String KEY_ENERGY_CONNECTED = "energyConnected";
     private static final String KEY_POWER = "power";
+    private static final String KEY_CHARGING = "charging";
+    private static final String KEY_PARALLEL = "parallel";
+    private static final String KEY_SPEED = "speed";
 
     @Override
     public void register(IWailaCommonRegistration registration) {
@@ -72,6 +76,9 @@ public class AssemblyLineJadePlugin implements IWailaPlugin {
             }
             data.putBoolean(KEY_ENERGY_CONNECTED, controller.isEnergyConnected());
             data.putDouble(KEY_POWER, controller.getNetworkStoredPower());
+            data.putInt(KEY_CHARGING, controller.getModuleLevel(ModModules.CHARGING));
+            data.putInt(KEY_PARALLEL, controller.maxParallel());
+            data.putDouble(KEY_SPEED, controller.getSpeedMultiplier());
         }
 
         @Override
@@ -92,6 +99,16 @@ public class AssemblyLineJadePlugin implements IWailaPlugin {
             }
             tooltip.add(Component.translatable("jade.ae2pr.crystal_assembly_line.status",
                     Component.translatable(statusKey(data))));
+
+            int charging = data.getInt(KEY_CHARGING);
+            if (charging > 0) {
+                tooltip.add(Component.translatable("jade.ae2pr.crystal_assembly_line.charging", charging));
+            }
+            tooltip.add(Component.translatable("jade.ae2pr.crystal_assembly_line.parallel", data.getInt(KEY_PARALLEL)));
+            double speed = data.getDouble(KEY_SPEED);
+            if (speed > 1.0D) {
+                tooltip.add(Component.translatable("jade.ae2pr.crystal_assembly_line.speed", Math.round(speed * 100)));
+            }
 
             int duration = data.getInt(KEY_DURATION);
             String itemId = data.getString(KEY_ITEM);

@@ -31,7 +31,7 @@ public class AssemblyLineMenu extends AbstractContainerMenu {
 
     private final AssemblyLineControllerBlockEntity controller;
     private final Player owner;
-    private final SimpleContainerData data = new SimpleContainerData(7);
+    private final SimpleContainerData data = new SimpleContainerData(9);
     private final boolean clientSide;
     private ItemStack lastJobOutput = ItemStack.EMPTY;
     private boolean jobOutputSynced;
@@ -73,6 +73,8 @@ public class AssemblyLineMenu extends AbstractContainerMenu {
             data.set(4, controller.getError().ordinal());
             data.set(5, controller.getJobElapsed());
             data.set(6, controller.getJobDuration());
+            data.set(7, controller.maxParallel());
+            data.set(8, (int) Math.round(controller.getSpeedMultiplier() * 100.0));
 
             ItemStack jobOutput = controller.getJobOutput();
             if (owner instanceof ServerPlayer serverPlayer
@@ -124,9 +126,19 @@ public class AssemblyLineMenu extends AbstractContainerMenu {
         return data.get(5);
     }
 
-    /** 当前作业的配方总耗时（tick）；空闲为 0。 */
+    /** 当前作业的实际总耗时（tick，含速度模块加成）；空闲为 0。 */
     public int getJobDuration() {
         return data.get(6);
+    }
+
+    /** 当前模块加成下的并行上限。 */
+    public int getMaxParallel() {
+        return data.get(7);
+    }
+
+    /** 当前模块加成下的速度百分比（100 = 基础速度）。 */
+    public int getSpeedPercent() {
+        return data.get(8);
     }
 
     @Override

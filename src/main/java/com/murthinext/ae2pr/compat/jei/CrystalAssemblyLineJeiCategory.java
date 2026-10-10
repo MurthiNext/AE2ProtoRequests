@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.compat.jei;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import net.minecraft.ChatFormatting;
@@ -11,7 +12,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -26,6 +30,9 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.multiblock.module.ModuleDefinition;
+import com.murthinext.ae2pr.multiblock.module.ModuleProvider;
+import com.murthinext.ae2pr.multiblock.module.ModuleRequirement;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
 
 /**
@@ -53,6 +60,10 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
     private static final int OUTPUT_Y = PADDING;
     private static final int PIPE_X = PADDING + 71;
     private static final int PIPE_Y = PADDING;
+    // 模块要求栏：产物下方一列，不绘制槽位背景
+    private static final int MODULE_X = OUTPUT_X;
+    private static final int MODULE_Y = OUTPUT_Y + SLOT + 2;
+    private static final int MODULE_SLOT_COUNT = 5;
     // 管道贴图
     private static final int PIPE_WIDTH = 54;
     private static final int PIPE_HEIGHT = 72;
@@ -160,6 +171,41 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
         if (!outputs.isEmpty()) {
             outputSlot.addItemStack(outputs.get(0));
         }
+
+        // 模块要求：产物下方一列，无槽位背景，满足要求的模块物品轮换展示
+        List<ModuleRequirement> requirements = recipe.getModuleRequirements();
+        for (int i = 0; i < requirements.size() && i < MODULE_SLOT_COUNT; i++) {
+            ModuleRequirement requirement = requirements.get(i);
+            List<ItemStack> candidates = moduleCandidates(requirement);
+            if (candidates.isEmpty()) {
+                continue;
+            }
+            IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, MODULE_X, MODULE_Y + i * SLOT);
+            slot.addItemStacks(candidates);
+            slot.addRichTooltipCallback(
+                    (view, tooltip) -> tooltip.add(requirementHint(requirement)));
+        }
+    }
+
+    /** 满足要求的功能模块物品：等级升序排列，JEI 会以此顺序在同一槽位轮换显示。 */
+    private static List<ItemStack> moduleCandidates(ModuleRequirement requirement) {
+        List<Block> blocks = new ArrayList<>();
+        for (Block block : ForgeRegistries.BLOCKS.getValues()) {
+            if (block instanceof ModuleProvider provider) {
+                ModuleDefinition definition = provider.moduleDefinition();
+                if (definition.type().equals(requirement.type()) && definition.level() >= requirement.minLevel()) {
+                    blocks.add(block);
+                }
+            }
+        }
+        blocks.sort(Comparator.comparingInt(block -> ((ModuleProvider) block).moduleDefinition().level()));
+        List<ItemStack> stacks = new ArrayList<>(blocks.size());
+        for (Block block : blocks) {
+            if (block.asItem() != Items.AIR) {
+                stacks.add(new ItemStack(block));
+            }
+        }
+        return stacks;
     }
 
     @Override
@@ -170,7 +216,7 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
         graphics.drawString(font, Component.translatable("jei.ae2pr.crystal_assembly_line.duration",
                 recipe.getDuration()), PADDING, INFO_Y, COLOR_TEXT, false);
         graphics.drawString(font, Component.translatable("jei.ae2pr.crystal_assembly_line.energy",
-                NUMBER.format(Config.assemblyEnergyPerParallel())), PADDING, INFO_Y + 10, COLOR_TEXT, false);
+                NUMBER.format(recipe.getEnergyPerParallel())), PADDING, INFO_Y + 10, COLOR_TEXT, false);
         int hidden = recipe.getItemInputs().size() - MAX_ITEM_INPUTS;
         if (hidden > 0) {
             graphics.drawString(font, Component.translatable("jei.ae2pr.crystal_assembly_line.more_inputs",
@@ -179,6 +225,13 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
             graphics.drawString(font, Component.translatable("jei.ae2pr.crystal_assembly_line.more_outputs",
                     recipe.getItemOutputs().size() - 1), PADDING, INFO_Y + 20, COLOR_HINT, false);
         }
+    }
+
+    /** 模块要求提示：如“需要1级充能”。 */
+    private static Component requirementHint(ModuleRequirement requirement) {
+        return Component.translatable("jei.ae2pr.crystal_assembly_line.module_requirement.hint",
+                requirement.minLevel(), Component.translatable(requirement.type().translationKey()))
+                .withStyle(ChatFormatting.GRAY);
     }
 
     /** 管道进度 */

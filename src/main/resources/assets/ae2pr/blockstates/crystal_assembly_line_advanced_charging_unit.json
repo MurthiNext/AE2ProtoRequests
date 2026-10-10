@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "ae2pr:block/crystal_assembly_line_advanced_charging_unit"
+    },
+    "active=true": {
+      "model": "ae2pr:block/crystal_assembly_line_advanced_charging_unit_active"
+    }
+  }
+}

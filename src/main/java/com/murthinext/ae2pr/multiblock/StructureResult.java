@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 
+import com.murthinext.ae2pr.multiblock.module.ModuleSnapshot;
+
 /**
  * 结构匹配结果。
  *
@@ -19,18 +21,19 @@ import net.minecraft.world.level.block.Block;
  * @param expected    该位置期望的字符
  * @param found       该位置实际方块
  * @param cells       成型结构内的单元格（不含任意方块位，顺序为 片 → 行 → 列）
+ * @param modules     成型结构内收集到的模块快照（未成型为空）
  * @param fromCache   结果来自缓存（结构未变化）
  */
 public record StructureResult(boolean formed, int slices, boolean mirrorSide, boolean mirrorFront, int mismatches,
         @Nullable BlockPos mismatchPos, char expected, @Nullable Block found, List<BlockPos> cells,
-        boolean fromCache) {
+        ModuleSnapshot modules, boolean fromCache) {
 
     public static final StructureResult EMPTY = new StructureResult(false, 0, false, false, 0, null, ' ', null,
-            List.of(), false);
+            List.of(), ModuleSnapshot.EMPTY, false);
 
     /** 缓存命中版本。 */
     public StructureResult asCached() {
         return new StructureResult(formed, slices, mirrorSide, mirrorFront, mismatches, mismatchPos, expected, found,
-                cells, true);
+                cells, modules, true);
     }
 }

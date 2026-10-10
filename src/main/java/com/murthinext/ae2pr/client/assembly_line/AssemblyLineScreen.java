@@ -31,6 +31,7 @@ public class AssemblyLineScreen extends AbstractContainerScreen<AssemblyLineMenu
     private static final int TITLE_Y = 9;
     private static final int STATUS_Y = 30;
     private static final int POWER_Y = 44;
+    private static final int PERF_Y = 104;
     private static final int ERROR_Y = 92;
 
     /** 作业展示区：标签行与图标行（与 GUI 贴图留白对齐） */
@@ -94,6 +95,9 @@ public class AssemblyLineScreen extends AbstractContainerScreen<AssemblyLineMenu
         // 第三行：电力连接情况（左对齐）
         graphics.drawString(font, powerText(), TEXT_X, POWER_Y,
                 menu.isEnergyConnected() ? COLOR_POWER : COLOR_GRAY, false);
+        // 模块性能行：并行上限与速度
+        graphics.drawString(font, Component.translatable("gui.ae2pr.crystal_assembly_line.perf",
+                menu.getMaxParallel(), menu.getSpeedPercent()), TEXT_X, PERF_Y, COLOR_POWER, false);
         // 作业行下方：暂停原因（左对齐，仅暂停时显示）
         Component error = errorText();
         if (error != null) {

@@ -12,6 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import com.murthinext.ae2pr.block.alien_lava.AlienLavaBlock;
+import com.murthinext.ae2pr.block.assembly_line.AssemblyLineModuleBlock;
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineUnitBlock;
 import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
 import com.murthinext.ae2pr.block.assembly_line.FluixCrystalEnergyHatchBlock;
@@ -21,6 +22,7 @@ import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOreBlock;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlock;
 import com.murthinext.ae2pr.block.redstone_requester.RedstoneRequesterBlock;
+import com.murthinext.ae2pr.multiblock.module.ModuleDefinition;
 
 /**
  * 方块注册入口。
@@ -51,6 +53,26 @@ public final class ModBlocks {
     /** 水晶装配线控制外壳 */
     public static final RegistryObject<AssemblyLineUnitBlock> CRYSTAL_ASSEMBLY_LINE_UNIT = BLOCKS.register(
             "crystal_assembly_line_unit", AssemblyLineUnitBlock::new);
+
+    /** 水晶装配线充能控制外壳 */
+    public static final RegistryObject<AssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT = BLOCKS.register(
+            "crystal_assembly_line_charging_unit",
+            () -> new AssemblyLineModuleBlock(ModuleDefinition.of(ModModules.CHARGING, 1)));
+
+    /** 水晶装配线高级充能控制外壳 */
+    public static final RegistryObject<AssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT = BLOCKS
+            .register("crystal_assembly_line_advanced_charging_unit",
+                    () -> new AssemblyLineModuleBlock(ModuleDefinition.of(ModModules.CHARGING, 2)));
+
+    /** 水晶装配线并行控制外壳 */
+    public static final RegistryObject<AssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT = BLOCKS.register(
+            "crystal_assembly_line_parallel_unit",
+            () -> new AssemblyLineModuleBlock(ModuleDefinition.of(ModModules.PARALLEL, 1)));
+
+    /** 水晶装配线速度控制外壳 */
+    public static final RegistryObject<AssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT = BLOCKS.register(
+            "crystal_assembly_line_speed_unit",
+            () -> new AssemblyLineModuleBlock(ModuleDefinition.of(ModModules.SPEED, 1)));
 
     /** 水晶装配线格栅 */
     public static final RegistryObject<Block> CRYSTAL_ASSEMBLY_LINE_GRATING = BLOCKS.register(

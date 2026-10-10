@@ -106,6 +106,10 @@ public final class ClientSetup {
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.FIREPROOF_CRYSTAL_GLASS.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRYSTAL_ASSEMBLY_LINE.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRYSTAL_ASSEMBLY_LINE_UNIT.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get(), RenderType.cutoutMipped());
