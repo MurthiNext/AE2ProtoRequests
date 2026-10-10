@@ -54,6 +54,7 @@ public final class ProtoTerminalScreen extends Screen {
 
     private final TerminalStoryTree story;
     private final TerminalAnimation animation;
+    private final OpeningPixelStream openingPixels = new OpeningPixelStream(MAIN_WIDTH, MAIN_HEIGHT);
     private final List<Star> stars = new ArrayList<>();
     private final Map<String, TerminalStoryTree.Node> nodesById = new HashMap<>();
     private final List<NarrativeButton> nodeButtons = new ArrayList<>();
@@ -158,8 +159,6 @@ public final class ProtoTerminalScreen extends Screen {
             int localMouseY = (int) localY(mouseY);
             if (elapsed >= TerminalAnimation.OPEN_DURATION) {
                 renderTree(graphics, localMouseX, localMouseY, partialTick, elapsed);
-                graphics.drawManaged(() -> CrystalNarrativeGraphics.outline(graphics,
-                        MAIN_X, MAIN_Y, MAIN_WIDTH, MAIN_HEIGHT, MAIN_SLANT, CrystalNarrativeGraphics.BORDER));
                 float headerOpacity = animation.headerOpacity(elapsed);
                 if (headerOpacity >= 4.0F / 255) {
                     CrystalNarrativeGraphics.panel(graphics, TITLE_X, MAIN_Y, TITLE_WIDTH, TITLE_HEIGHT, TITLE_SLANT,
@@ -177,6 +176,8 @@ public final class ProtoTerminalScreen extends Screen {
                     backButton.render(graphics, localMouseX, localMouseY, partialTick);
                 }
                 closeButton.render(graphics, localMouseX, localMouseY, partialTick);
+                graphics.drawManaged(() -> CrystalNarrativeGraphics.outline(graphics,
+                        MAIN_X, MAIN_Y, MAIN_WIDTH, MAIN_HEIGHT, MAIN_SLANT, CrystalNarrativeGraphics.BORDER));
             }
         } finally {
             graphics.setColor(1, 1, 1, 1);
@@ -205,7 +206,9 @@ public final class ProtoTerminalScreen extends Screen {
         int y = MAIN_Y + (MAIN_HEIGHT - panelHeight) / 2;
         float slant = CrystalNarrativeGraphics.slant(panelHeight);
         CrystalNarrativeGraphics.cosmicPanel(graphics, x, y, panelWidth, panelHeight, slant, progress,
-                seconds, MAIN_Y, MAIN_HEIGHT);
+                MAIN_Y, MAIN_HEIGHT);
+        openingPixels.render(graphics, x, y, panelWidth, panelHeight, slant, progress, seconds,
+                MAIN_Y, MAIN_HEIGHT);
         renderStarlight(graphics, x, y, panelWidth, panelHeight, slant, seconds, 1);
     }
 

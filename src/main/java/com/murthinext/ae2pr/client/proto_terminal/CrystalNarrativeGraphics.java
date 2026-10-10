@@ -36,9 +36,9 @@ final class CrystalNarrativeGraphics {
         });
     }
 
-    /** 固定星云底面与连续的平行四边形边框。 */
+    /** 固定星云渐变底面。 */
     static void cosmicPanel(GuiGraphics graphics, int x, int y, int width, int height, float slant,
-            float progress, float seconds, int spaceY, int spaceHeight) {
+            float progress, int spaceY, int spaceHeight) {
         if (width <= slant || height <= 0 || progress <= 0) {
             return;
         }
@@ -52,37 +52,10 @@ final class CrystalNarrativeGraphics {
                         spaceColor(bottom, spaceY, spaceHeight));
                 top = bottom;
             }
-            outline(graphics, x, y, width, height, slant, alpha(BORDER, ease(progress)));
-            if (progress < 1) {
-                for (int edge = 0; edge < 4; edge++) {
-                    openingPixels(graphics, x, y, width, height, slant, edge, progress, seconds);
-                }
+            if (progress >= 1) {
+                outline(graphics, x, y, width, height, slant, BORDER);
             }
         });
-    }
-
-    /** 入场时沿四条边缘汇聚的离散像素。 */
-    private static void openingPixels(GuiGraphics graphics, int x, int y, int width, int height,
-            float slant, int edge, float progress, float seconds) {
-        boolean horizontal = edge < 2;
-        int length = horizontal ? (int) Math.ceil(width - slant) : height;
-        float remaining = 1 - progress;
-        for (int step = 0; step < length; step += 4) {
-            int hash = (step + edge * 739) * 0x45D9F3B;
-            hash = (hash ^ (hash >>> 16)) * 0x45D9F3B;
-            float seed = (hash & 0xFFFF) / 65535.0F;
-            float phase = seconds * (11 + seed * 9) + seed * 35;
-            float scatter = remaining * remaining;
-            float px = horizontal ? x + step + (edge == 0 ? slant : 0)
-                    : x + slant * (1 - step / (float) height) + (edge == 3 ? width - slant : 0);
-            float py = horizontal ? y + (edge == 1 ? height : 0) : y + step;
-            int dx = Math.round(Mth.sin(phase) * (6 + seed * 19) * scatter);
-            int dy = Math.round(Mth.cos(phase * 1.3F) * (6 + (1 - seed) * 19) * scatter);
-            int size = 1 + Math.round(seed * 3 * remaining);
-            int color = alpha(seed > 0.7F ? ACCENT : BORDER, (0.3F + seed * 0.5F) * remaining);
-            graphics.fill(Math.round(px) + dx, Math.round(py) + dy,
-                    Math.round(px) + dx + size, Math.round(py) + dy + size, color);
-        }
     }
 
     static int spaceColor(int y, int spaceY, int spaceHeight) {
