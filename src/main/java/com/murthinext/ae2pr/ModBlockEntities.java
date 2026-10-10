@@ -13,7 +13,6 @@ import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntit
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
-import com.murthinext.ae2pr.block.redstone_requester.RedstoneRequesterBlockEntity;
 
 /**
  * 方块实体注册入口。
@@ -25,13 +24,6 @@ public final class ModBlockEntities {
 
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(
             ForgeRegistries.BLOCK_ENTITY_TYPES, ae2pr.MODID);
-
-    /** ME 红石请求器 */
-    public static final RegistryObject<BlockEntityType<RedstoneRequesterBlockEntity>> REDSTONE_REQUESTER = BLOCK_ENTITIES
-            .register("redstone_requester", () -> BlockEntityType.Builder.of(
-                    (pos, state) -> new RedstoneRequesterBlockEntity(
-                            ModBlockEntities.REDSTONE_REQUESTER.get(), pos, state),
-                    ModBlocks.REDSTONE_REQUESTER.get()).build(null));
 
     /** 水晶装配线控制器 */
     public static final RegistryObject<BlockEntityType<AssemblyLineControllerBlockEntity>> CRYSTAL_ASSEMBLY_LINE = BLOCK_ENTITIES

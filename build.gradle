@@ -27,6 +27,16 @@ java {
     toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
+// 独立源码集：ME 红石请求器（含 LGPL-3.0 派生代码，见 src/requester 与 licenses/）
+// 目录遵循默认约定：src/requester/java、src/requester/resources
+sourceSets {
+    requester {
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.output + sourceSets.main.runtimeClasspath
+    }
+}
+sourceSets.main.runtimeClasspath += sourceSets.requester.output
+
 minecraft {
     mappings channel: mapping_channel, version: mapping_version
     copyIdeResources = true
@@ -38,6 +48,7 @@ minecraft {
             mods {
                 "${mod_id}" {
                     source sourceSets.main
+                    source sourceSets.requester
                 }
             }
         }
@@ -61,9 +72,11 @@ minecraft {
 
 mixin {
     add sourceSets.main, "${mod_id}.refmap.json"
+    add sourceSets.requester, "${mod_id}.requester.refmap.json"
 
     config "${mod_id}.mixins.json"
     config "${mod_id}.merequester.mixins.json"
+    config "${mod_id}.requester.mixins.json"
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
@@ -125,6 +138,8 @@ dependencies {
     // 离线时从 libs/maven 提供（见 repositories），在线时从 maven 拉取。
     compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge:${jei_version}")
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    // 独立源码集的 mixin 注解处理器
+    requesterAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 }
 
@@ -140,6 +155,10 @@ tasks.named('processResources', ProcessResources).configure {
     filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
         expand replaceProperties + [project: project]
     }
+
+    // 许可证与沿用说明随发布 jar 分发
+    from('LICENSE')
+    from('licenses') { into 'META-INF/licenses' }
 }
 
 tasks.named('jar', Jar).configure {
@@ -152,6 +171,8 @@ tasks.named('jar', Jar).configure {
                     "Implementation-Vendor"   : mod_authors,
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")])
     }
+    // 独立源码集产物并入主 jar
+    from sourceSets.requester.output
     finalizedBy 'reobfJar'
 }
 

@@ -46,7 +46,6 @@ public class ae2pr {
         PartModels.registerModels(PartModelsHelper.createModels(MultiLevelEmitterPart.class));
         PartModels.registerModels(PartModelsHelper.createModels(MultiThresholdLevelEmitterPart.class));
         ModNetwork.register();
-        com.murthinext.ae2pr.block.redstone_requester.network.RequesterNetwork.init();
         // 通用（VCPU）重复订单：由服务端 tick 驱动，状态包钩子负责轮次推进
         MinecraftForge.EVENT_BUS.addListener(GenericRepeatOrders::onServerTick);
         MinecraftForge.EVENT_BUS.addListener(GenericRepeatOrders::onServerStopped);
@@ -79,13 +78,6 @@ public class ae2pr {
             Upgrades.add(AEItems.SPEED_CARD, ModBlocks.NAMING_FACTORY.get(), 4);
             Upgrades.add(AEItems.SPEED_CARD, ModBlocks.CRYSTAL_ASSEMBLY_LINE.get(), 4);
             Upgrades.add(AEItems.SPEED_CARD, ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get(), 4);
-
-            // ME 红石请求器：绑定方块实体类型并登记代表物品
-            var requesterType = ModBlockEntities.REDSTONE_REQUESTER.get();
-            ModBlocks.REDSTONE_REQUESTER.get().setBlockEntity(
-                    com.murthinext.ae2pr.block.redstone_requester.RedstoneRequesterBlockEntity.class, requesterType, null, null);
-            appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(requesterType,
-                    ModItems.REDSTONE_REQUESTER.get());
 
             // 福鲁伊克斯水晶能源仓：绑定方块实体类型并登记代表物品
             var energyHatchType = ModBlockEntities.FLUIX_CRYSTAL_ENERGY_HATCH.get();

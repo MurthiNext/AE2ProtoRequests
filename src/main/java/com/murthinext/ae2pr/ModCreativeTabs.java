@@ -76,7 +76,6 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.MULTI_THRESHOLD_LEVEL_EMITTER.get());
 
                         // 单方块机器
-                        output.accept(ModItems.REDSTONE_REQUESTER.get());
                         output.accept(ModItems.NAMING_FACTORY.get());
 
                         // 多方块结构 - 主机

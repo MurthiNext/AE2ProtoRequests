@@ -1,21 +1,35 @@
 ME Requester 代码沿用说明
 =========================
 
-本模组中的“ME 红石请求器”（redstone_requester）相关代码在结构上沿用了 ME Requester
-项目（https://github.com/AlmostReliable/merequester）的源代码，该项目以
-GNU Lesser General Public License v3.0（LGPL-3.0）授权发布。
+本模组中的“ME 红石请求器”相关代码在结构上沿用了 ME Requester 项目
+（https://github.com/AlmostReliable/merequester，对应上游版本 1.20.1-1.2.1+forge）
+的源代码，该项目以 GNU Lesser General Public License v3.0（LGPL-3.0）授权发布。
 
-沿用范围（均位于本模组源码中，包名已调整为 com.murthinext.ae2pr）：
-- requester/ 与 client/requester/ 下的请求器数据模型、菜单、界面与控件
-- requester/network/ 下的网络包结构
-- mixin/ 下的 EditBoxMixin、SlotMixin、WidgetContainerMixin
-- compat/merequester/ 下的兼容 mixin（在编译期仅以 compileOnly 方式引用 ME Requester 类，
-  运行期仅当安装 ME Requester 时通过 mixin 插件启用）
-- assets/ae2pr/textures/gui/ 下的 redstone_requester.png、state_box.png、submit_button.png
+沿用范围（独立源码集 src/requester，包名 com.murthinext.ae2pr.requester）：
+- 通用代码（requester/ 根与 abstraction/、platform/、status/、network/ 子包）：
+  请求器数据模型（Requests、RequestStatus）、工具与常量（RequesterUtils、
+  RequesterConstants）、菜单及其抽象层、平台与网络层、RedstoneRequesterBlock、
+  RedstoneRequesterBlockEntity、RedstoneRequesterMenu
+- 客户端代码（client/ 子包）：RedstoneRequesterScreen、RequestSlot、界面抽象层
+  （client/abstraction/）与控件（client/widgets/）
+- Mixin 访问器（mixin/ 子包）：EditBoxMixin、SlotMixin、WidgetContainerMixin
+- 兼容层（compat/ 子包）：与 ME Requester 的兼容 mixin（编译期仅以 compileOnly 引用
+  ME Requester 类，运行期仅当安装 ME Requester 时通过 mixin 插件启用）
+- 贴图资源：assets/ae2pr/textures/gui/ 下的 redstone_requester.png、state_box.png、
+  submit_button.png
 
-上述文件/资源在原有基础上做了如下修改：
-- 包名、类名与工具类替换为本模组的命名；
+不属于沿用范围（本项目原创、MIT 授权）：
+- src/requester/java/com/murthinext/ae2pr/requester/setup/ 下的注册与初始化代码
+- 除上述贴图外的方块/物品模型与贴图、配方、战利品表、语言文件与 screens 配置
+
+上述沿用文件在原项目基础上做了如下修改：
+- 包名、类名与工具类替换为本模组的命名，并重组为独立源码集 src/requester；
 - 移除原项目的“持续补足库存”状态机，改为“红石上升沿一次下单”语义；
 - 新增可配置的可标记物品数量、红石触发与其它适配。
 
-根据 LGPL-3.0 的要求，本说明与许可证全文随源码一同提供。
+根据 LGPL-3.0 的要求：
+- 本说明与许可证全文随源码一同提供（仓库根 licenses/ 目录）；
+- 发布的 jar 在 META-INF/licenses/ 内包含本说明与许可证全文；
+- 对应源码即本仓库源码，含 src/requester 全部内容。
+
+每个沿用文件头部带有 SPDX-License-Identifier: LGPL-3.0-only 标识。

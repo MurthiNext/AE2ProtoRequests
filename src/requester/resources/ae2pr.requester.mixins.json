@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.murthinext.ae2pr.requester.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "ae2pr.requester.refmap.json",
+  "client": [
+    "EditBoxMixin",
+    "SlotMixin",
+    "WidgetContainerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

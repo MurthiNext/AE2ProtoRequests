@@ -63,10 +63,6 @@ public final class ModItems {
     public static final RegistryObject<MultiThresholdLevelEmitterPartItem> MULTI_THRESHOLD_LEVEL_EMITTER = ITEMS.register(
             "multi_threshold_level_emitter", () -> new MultiThresholdLevelEmitterPartItem(new Item.Properties()));
 
-    /** ME 红石请求器 */
-    public static final RegistryObject<BlockItem> REDSTONE_REQUESTER = ITEMS.register("redstone_requester",
-            () -> new BlockItem(ModBlocks.REDSTONE_REQUESTER.get(), new Item.Properties()));
-
     /** 水晶强化复合机械方块 */
     public static final RegistryObject<BlockItem> CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING = ITEMS.register(
             "crystal_reinforced_composite_machine_casing",

@@ -29,7 +29,6 @@ import com.murthinext.ae2pr.client.lava_smelter.LavaSmelterRenderer;
 import com.murthinext.ae2pr.client.lava_smelter.LavaSmelterScreen;
 import com.murthinext.ae2pr.client.naming_factory.NamingFactoryRenderer;
 import com.murthinext.ae2pr.client.naming_factory.NamingFactoryScreen;
-import com.murthinext.ae2pr.client.requester.RedstoneRequesterScreen;
 
 /**
  * 客户端初始化：注册界面。
@@ -48,9 +47,6 @@ public final class ClientSetup {
         InitScreens.register(ModMenus.MULTI_THRESHOLD_LEVEL_EMITTER.get(),
                 MultiThresholdLevelEmitterScreen::new,
                 "/screens/multi_threshold_level_emitter.json");
-        InitScreens.register(ModMenus.REDSTONE_REQUESTER.get(),
-                RedstoneRequesterScreen::new,
-                "/screens/redstone_requester.json");
         MenuScreens.register(ModMenus.CRYSTAL_ASSEMBLY_LINE.get(), AssemblyLineScreen::new);
         MenuScreens.register(ModMenus.HIGH_REACTIVITY_LAVA_SMELTER.get(), LavaSmelterScreen::new);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_ITEM_BUS.get(), ItemBusScreen::new);

@@ -23,7 +23,6 @@ import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOreBlock;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlock;
-import com.murthinext.ae2pr.block.redstone_requester.RedstoneRequesterBlock;
 import com.murthinext.ae2pr.multiblock.module.ModuleDefinition;
 
 /**
@@ -35,10 +34,6 @@ public final class ModBlocks {
     }
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ae2pr.MODID);
-
-    /** ME 红石请求器 */
-    public static final RegistryObject<RedstoneRequesterBlock> REDSTONE_REQUESTER = BLOCKS.register(
-            "redstone_requester", RedstoneRequesterBlock::new);
 
     /** 水晶强化复合机械方块 */
     public static final RegistryObject<Block> CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING = BLOCKS.register(

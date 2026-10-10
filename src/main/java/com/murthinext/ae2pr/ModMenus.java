@@ -12,7 +12,6 @@ import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterMenu;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
 import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryMenu;
-import com.murthinext.ae2pr.block.redstone_requester.RedstoneRequesterMenu;
 
 /**
  * 菜单类型注册入口。
@@ -30,9 +29,6 @@ public final class ModMenus {
 
     public static final RegistryObject<MenuType<MultiThresholdLevelEmitterMenu>> MULTI_THRESHOLD_LEVEL_EMITTER = MENUS
             .register("multi_threshold_level_emitter", () -> MultiThresholdLevelEmitterMenu.TYPE);
-
-    public static final RegistryObject<MenuType<RedstoneRequesterMenu>> REDSTONE_REQUESTER = MENUS
-            .register("redstone_requester", () -> RedstoneRequesterMenu.TYPE);
 
     public static final RegistryObject<MenuType<AssemblyLineMenu>> CRYSTAL_ASSEMBLY_LINE = MENUS
             .register("crystal_assembly_line", () -> AssemblyLineMenu.TYPE);

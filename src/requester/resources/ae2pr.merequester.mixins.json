@@ -1,0 +1,14 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "com.murthinext.ae2pr.requester.compat",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "com.murthinext.ae2pr.requester.compat.MERequesterCompatPlugin",
+  "mixins": [
+    "RequesterTerminalMenuMixin",
+    "AbstractRequesterMenuMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
