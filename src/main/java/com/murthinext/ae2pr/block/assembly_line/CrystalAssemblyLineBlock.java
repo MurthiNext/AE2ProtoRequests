@@ -8,8 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -35,11 +33,12 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraftforge.network.NetworkHooks;
 
 import com.murthinext.ae2pr.ModTags;
+import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
 /**
  * 水晶装配线控制器方块。
  */
-public class CrystalAssemblyLineBlock extends Block implements EntityBlock {
+public class CrystalAssemblyLineBlock extends Block implements EntityBlock, Wrenchable {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty FORMED = BooleanProperty.create("formed");
@@ -96,11 +95,29 @@ public class CrystalAssemblyLineBlock extends Block implements EntityBlock {
     }
 
     @Override
+    public DirectionProperty wrenchFacing() {
+        return FACING;
+    }
+
+    /** 仅未成型时允许旋转，避免误操作破坏已建成的机器。 */
+    @Override
+    public boolean canRotateWithWrench(BlockState state) {
+        return !state.getValue(FORMED);
+    }
+
+    @Override
+    public void onWrenchRotated(Level level, BlockPos pos, BlockState state) {
+        if (level.getBlockEntity(pos) instanceof AssemblyLineControllerBlockEntity controller) {
+            controller.validateStructure();
+        }
+    }
+
+    @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
             BlockHitResult hit) {
-        ItemStack stack = player.getItemInHand(hand);
-        if (stack.is(ModTags.WRENCHES)) {
-            return rotate(level, pos, state, player);
+        // 扳手交互
+        if (player.getItemInHand(hand).is(ModTags.WRENCHES)) {
+            return InteractionResult.PASS;
         }
         // 非扳手：打开主机界面（含玩家背包，ESC/E 关闭）
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer
@@ -112,22 +129,6 @@ public class CrystalAssemblyLineBlock extends Block implements EntityBlock {
                     buffer -> buffer.writeBlockPos(pos));
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
-    }
-
-    /** 扳手旋转：仅未成型时允许，避免误操作破坏已建成的机器。 */
-    private static InteractionResult rotate(Level level, BlockPos pos, BlockState state, Player player) {
-        if (level.isClientSide) {
-            return InteractionResult.SUCCESS;
-        }
-        if (state.getValue(FORMED)) {
-            return InteractionResult.PASS;
-        }
-        level.setBlock(pos, state.setValue(FACING, state.getValue(FACING).getClockWise()), Block.UPDATE_ALL);
-        level.playSound(null, pos, SoundEvents.ITEM_FRAME_ROTATE_ITEM, SoundSource.BLOCKS, 0.8F, 1.0F);
-        if (level.getBlockEntity(pos) instanceof AssemblyLineControllerBlockEntity controller) {
-            controller.validateStructure();
-        }
-        return InteractionResult.SUCCESS;
     }
 
     @Override

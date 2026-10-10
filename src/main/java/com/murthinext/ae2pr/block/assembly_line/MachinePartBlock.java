@@ -9,8 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -35,26 +33,17 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.network.NetworkHooks;
 
 import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ModTags;
+import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
 /**
- * 机器部件方块（赛特斯石英水晶 / AEV 的输入总线、输入仓、输出总线、输出仓）。
- * <p>
- * 仓为流体存储（AEV 2 槽、石英 1 槽），总线为物品存储（AEV 4 槽、石英 1 槽）；
- * 扳手右键旋转，Shift+右键拆卸。
+ * 机器部件方块。
  */
-public class MachinePartBlock extends Block implements EntityBlock {
-
-    /** 扳手旋转顺序 */
-    private static final Direction[] ROTATION_ORDER = { Direction.DOWN, Direction.UP, Direction.NORTH,
-            Direction.SOUTH, Direction.WEST, Direction.EAST };
+public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
 
     private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
@@ -157,14 +146,16 @@ public class MachinePartBlock extends Block implements EntityBlock {
     }
 
     @Override
+    public DirectionProperty wrenchFacing() {
+        return FACING;
+    }
+
+    @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
             BlockHitResult hit) {
-        ItemStack stack = player.getItemInHand(hand);
-        if (stack.is(ModTags.WRENCHES)) {
-            if (player.isSecondaryUseActive()) {
-                return disassemble(level, pos, state, player);
-            }
-            return rotate(level, pos, state);
+        // 扳手交互
+        if (player.getItemInHand(hand).is(ModTags.WRENCHES)) {
+            return InteractionResult.PASS;
         }
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
             openMenu(serverPlayer, level, pos, state);
@@ -186,55 +177,6 @@ public class MachinePartBlock extends Block implements EntityBlock {
         if (provider != null) {
             NetworkHooks.openScreen(player, provider, pos);
         }
-    }
-
-    /** 扳手旋转：成型后也可调整朝向面（仅影响该部件的拉取/推出方向，不影响结构检测）。 */
-    private static InteractionResult rotate(Level level, BlockPos pos, BlockState state) {
-        if (level.isClientSide) {
-            return InteractionResult.SUCCESS;
-        }
-        level.setBlock(pos, state.setValue(FACING, nextFacing(state.getValue(FACING))), Block.UPDATE_ALL);
-        level.playSound(null, pos, SoundEvents.ITEM_FRAME_ROTATE_ITEM, SoundSource.BLOCKS, 0.8F, 1.0F);
-        return InteractionResult.SUCCESS;
-    }
-
-    /** 扳手 Shift+右键快速拆卸：部件本体回收到玩家背包，内部物品经 {@link #onRemove} 照常掉落。 */
-    private static InteractionResult disassemble(Level level, BlockPos pos, BlockState state, Player player) {
-        if (!level.isClientSide) {
-            level.removeBlock(pos, false);
-            ItemStack part = new ItemStack(state.getBlock());
-            ItemHandlerHelper.giveItemToPlayer(player, part);
-            level.playSound(null, pos, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.BLOCKS, 0.8F, 1.0F);
-        }
-        return InteractionResult.sidedSuccess(level.isClientSide);
-    }
-
-    /**
-     * Shift+右键手持扳手时放行方块交互。
-     * <p>
-     * 原版在潜行且手持物品时会跳过 {@link Block#use}，导致 {@link #disassemble} 永远无法触发；
-     * 这里把事件的使用方块结果改为 ALLOW，让两侧照常走 {@link Block#use}。
-     */
-    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getUseBlock() == Event.Result.DENY) {
-            return;
-        }
-        Player player = event.getEntity();
-        if (!player.isSecondaryUseActive() || !event.getItemStack().is(ModTags.WRENCHES)) {
-            return;
-        }
-        if (event.getLevel().getBlockState(event.getPos()).getBlock() instanceof MachinePartBlock) {
-            event.setUseBlock(Event.Result.ALLOW);
-        }
-    }
-
-    private static Direction nextFacing(Direction current) {
-        for (int i = 0; i < ROTATION_ORDER.length; i++) {
-            if (ROTATION_ORDER[i] == current) {
-                return ROTATION_ORDER[(i + 1) % ROTATION_ORDER.length];
-            }
-        }
-        return Direction.NORTH;
     }
 
     @Override

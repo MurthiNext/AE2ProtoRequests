@@ -9,8 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
@@ -35,11 +33,12 @@ import net.minecraftforge.network.NetworkHooks;
 
 import com.murthinext.ae2pr.ModTags;
 import com.murthinext.ae2pr.client.naming_factory.NamingFactoryRenameScreen;
+import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
 /**
  * 名称压印工厂方块：使用 AE2 名称压印模板批量命名物品。
  */
-public class NamingFactoryBlock extends AEBaseEntityBlock<NamingFactoryBlockEntity> {
+public class NamingFactoryBlock extends AEBaseEntityBlock<NamingFactoryBlockEntity> implements Wrenchable {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -78,11 +77,17 @@ public class NamingFactoryBlock extends AEBaseEntityBlock<NamingFactoryBlockEnti
     }
 
     @Override
+    public DirectionProperty wrenchFacing() {
+        return FACING;
+    }
+
+    @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
             BlockHitResult hit) {
+        // 扳手交互
         ItemStack stack = player.getItemInHand(hand);
         if (stack.is(ModTags.WRENCHES)) {
-            return rotate(level, pos, state, player);
+            return InteractionResult.PASS;
         }
         if (stack.is(ModTags.KNIVES)) {
             if (player.isShiftKeyDown()) {
@@ -110,15 +115,6 @@ public class NamingFactoryBlock extends AEBaseEntityBlock<NamingFactoryBlockEnti
         String currentName = level.getBlockEntity(pos) instanceof NamingFactoryBlockEntity factory
                 && factory.getCustomName() != null ? factory.getCustomName().getString() : "";
         NamingFactoryRenameScreen.open(pos, currentName);
-    }
-
-    private static InteractionResult rotate(Level level, BlockPos pos, BlockState state, Player player) {
-        if (level.isClientSide) {
-            return InteractionResult.SUCCESS;
-        }
-        level.setBlock(pos, state.setValue(FACING, state.getValue(FACING).getClockWise()), Block.UPDATE_ALL);
-        level.playSound(null, pos, SoundEvents.ITEM_FRAME_ROTATE_ITEM, SoundSource.BLOCKS, 0.8F, 1.0F);
-        return InteractionResult.SUCCESS;
     }
 
     @Override

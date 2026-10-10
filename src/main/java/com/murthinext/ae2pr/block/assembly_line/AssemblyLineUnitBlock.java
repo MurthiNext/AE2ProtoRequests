@@ -7,10 +7,12 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.MapColor;
 
+import com.murthinext.ae2pr.logic.wrench.Wrenchable;
+
 /**
  * 水晶装配线控制外壳。
  */
-public class AssemblyLineUnitBlock extends Block {
+public class AssemblyLineUnitBlock extends Block implements Wrenchable {
 
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 

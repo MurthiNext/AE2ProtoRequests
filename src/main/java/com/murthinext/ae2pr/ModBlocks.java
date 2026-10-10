@@ -11,6 +11,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import com.murthinext.ae2pr.block.DisassemblableBlock;
+import com.murthinext.ae2pr.block.DisassemblableGlassBlock;
 import com.murthinext.ae2pr.block.alien_lava.AlienLavaBlock;
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineModuleBlock;
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineUnitBlock;
@@ -40,7 +42,7 @@ public final class ModBlocks {
 
     /** 水晶强化复合机械方块 */
     public static final RegistryObject<Block> CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING = BLOCKS.register(
-            "crystal_reinforced_composite_machine_casing", () -> new Block(casingProperties()));
+            "crystal_reinforced_composite_machine_casing", () -> new DisassemblableBlock(casingProperties()));
 
     /** 水晶装配线 */
     public static final RegistryObject<CrystalAssemblyLineBlock> CRYSTAL_ASSEMBLY_LINE = BLOCKS.register(
@@ -48,7 +50,7 @@ public final class ModBlocks {
 
     /** 水晶装配线外壳 */
     public static final RegistryObject<Block> CRYSTAL_ASSEMBLY_LINE_CASING = BLOCKS.register(
-            "crystal_assembly_line_casing", () -> new Block(casingProperties()));
+            "crystal_assembly_line_casing", () -> new DisassemblableBlock(casingProperties()));
 
     /** 水晶装配线控制外壳 */
     public static final RegistryObject<AssemblyLineUnitBlock> CRYSTAL_ASSEMBLY_LINE_UNIT = BLOCKS.register(
@@ -76,12 +78,12 @@ public final class ModBlocks {
 
     /** 水晶装配线格栅 */
     public static final RegistryObject<Block> CRYSTAL_ASSEMBLY_LINE_GRATING = BLOCKS.register(
-            "crystal_assembly_line_grating", () -> new Block(casingProperties()));
+            "crystal_assembly_line_grating", () -> new DisassemblableBlock(casingProperties()));
 
     /** 水晶玻璃 */
     public static final RegistryObject<GlassBlock> CRYSTAL_GLASS = BLOCKS.register(
             "crystal_glass",
-            () -> new GlassBlock(Block.Properties.of()
+            () -> new DisassemblableGlassBlock(Block.Properties.of()
                     .mapColor(MapColor.COLOR_LIGHT_BLUE)
                     .strength(0.8F)
                     .sound(SoundType.GLASS)
@@ -90,7 +92,7 @@ public final class ModBlocks {
     /** 耐火水晶玻璃 */
     public static final RegistryObject<GlassBlock> FIREPROOF_CRYSTAL_GLASS = BLOCKS.register(
             "fireproof_crystal_glass",
-            () -> new GlassBlock(Block.Properties.of()
+            () -> new DisassemblableGlassBlock(Block.Properties.of()
                     .mapColor(MapColor.COLOR_ORANGE)
                     .strength(0.8F)
                     .sound(SoundType.GLASS)
@@ -112,23 +114,23 @@ public final class ModBlocks {
     public static final RegistryObject<MachinePartBlock> CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH = BLOCKS.register(
             "certus_quartz_crystal_output_hatch", MachinePartBlock::new);
 
-    /** AEV 机械方块（陨钢机壳） */
+    /** AEV 机械方块 */
     public static final RegistryObject<Block> AEV_MACHINE_CASING = BLOCKS.register(
-            "aev_machine_casing", () -> new Block(casingProperties()));
+            "aev_machine_casing", () -> new DisassemblableBlock(casingProperties()));
 
-    /** AEV 输入总线（4 槽，每槽 2048 件） */
+    /** AEV 输入总线 */
     public static final RegistryObject<MachinePartBlock> AEV_INPUT_BUS = BLOCKS.register(
             "aev_input_bus", MachinePartBlock::new);
 
-    /** AEV 输出总线（4 槽，每槽 2048 件） */
+    /** AEV 输出总线 */
     public static final RegistryObject<MachinePartBlock> AEV_OUTPUT_BUS = BLOCKS.register(
             "aev_output_bus", MachinePartBlock::new);
 
-    /** AEV 输入仓（2 槽，每槽 1024 桶） */
+    /** AEV 输入仓 */
     public static final RegistryObject<MachinePartBlock> AEV_INPUT_HATCH = BLOCKS.register(
             "aev_input_hatch", MachinePartBlock::new);
 
-    /** AEV 输出仓（2 槽，每槽 1024 桶） */
+    /** AEV 输出仓 */
     public static final RegistryObject<MachinePartBlock> AEV_OUTPUT_HATCH = BLOCKS.register(
             "aev_output_hatch", MachinePartBlock::new);
 
@@ -142,7 +144,7 @@ public final class ModBlocks {
 
     /** 物流控制机械方块 */
     public static final RegistryObject<Block> LOGISTICS_CONTROL_CASING = BLOCKS.register(
-            "logistics_control_casing", () -> new Block(Block.Properties.of()
+            "logistics_control_casing", () -> new DisassemblableBlock(Block.Properties.of()
                     .mapColor(MapColor.COLOR_PURPLE)
                     .strength(3.5F)
                     .sound(SoundType.METAL)
@@ -206,7 +208,7 @@ public final class ModBlocks {
 
     /** 锆刚玉砖块 */
     public static final RegistryObject<Block> ZIRCONIA_CORUNDUM_BRICKS = BLOCKS.register(
-            "zirconia_corundum_bricks", () -> new Block(Block.Properties.of()
+            "zirconia_corundum_bricks", () -> new DisassemblableBlock(Block.Properties.of()
                     .mapColor(MapColor.COLOR_YELLOW)
                     .strength(3.5F)
                     .sound(SoundType.STONE)
