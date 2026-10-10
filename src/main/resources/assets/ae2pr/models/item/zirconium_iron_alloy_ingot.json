@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "ae2pr:item/zirconium_iron_alloy_ingot"
+  }
+}

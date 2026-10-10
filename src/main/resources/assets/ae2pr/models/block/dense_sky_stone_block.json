@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "ae2pr:block/dense_sky_stone_block"
+  }
+}

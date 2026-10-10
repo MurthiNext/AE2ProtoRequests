@@ -2,12 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "PPP",
-    "P P",
+    "PCP",
     "PPP"
   ],
   "key": {
     "P": {
       "item": "ae2pr:meteor_steel_plate"
+    },
+    "C": {
+      "item": "ae2pr:dense_sky_stone_block"
     }
   },
   "result": {

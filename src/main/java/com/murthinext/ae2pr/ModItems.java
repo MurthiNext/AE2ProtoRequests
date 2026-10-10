@@ -180,6 +180,10 @@ public final class ModItems {
     public static final RegistryObject<Item> ZIRCONIUM_INGOT = ITEMS.register("zirconium_ingot",
             () -> new Item(new Item.Properties()));
 
+    /** 锆铁合金锭 */
+    public static final RegistryObject<Item> ZIRCONIUM_IRON_ALLOY_INGOT = ITEMS.register("zirconium_iron_alloy_ingot",
+            () -> new Item(new Item.Properties()));
+
     /** 陨钢板 */
     public static final RegistryObject<Item> METEOR_STEEL_PLATE = ITEMS.register("meteor_steel_plate",
             () -> new Item(new Item.Properties()));
@@ -247,6 +251,10 @@ public final class ModItems {
     /** 锆英石块 */
     public static final RegistryObject<BlockItem> ZIRCON_BLOCK = ITEMS.register("zircon_block",
             () -> new BlockItem(ModBlocks.ZIRCON_BLOCK.get(), new Item.Properties()));
+
+    /** 致密陨石块 */
+    public static final RegistryObject<BlockItem> DENSE_SKY_STONE_BLOCK = ITEMS.register("dense_sky_stone_block",
+            () -> new BlockItem(ModBlocks.DENSE_SKY_STONE_BLOCK.get(), new Item.Properties()));
 
     /** 陨钢粉 */
     public static final RegistryObject<Item> METEOR_STEEL_DUST = ITEMS.register("meteor_steel_dust",

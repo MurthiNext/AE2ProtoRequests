@@ -206,6 +206,14 @@ public final class ModBlocks {
     public static final RegistryObject<Block> ZIRCON_BLOCK = BLOCKS.register(
             "zircon_block", () -> new Block(storageBlockProperties(MapColor.COLOR_LIGHT_GRAY)));
 
+    /** 致密陨石块 */
+    public static final RegistryObject<Block> DENSE_SKY_STONE_BLOCK = BLOCKS.register(
+            "dense_sky_stone_block", () -> new Block(Block.Properties.of()
+                    .mapColor(MapColor.STONE)
+                    .strength(5.0F, 150.0F)
+                    .sound(SoundType.STONE)
+                    .requiresCorrectToolForDrops()));
+
     /** 锆刚玉砖块 */
     public static final RegistryObject<Block> ZIRCONIA_CORUNDUM_BRICKS = BLOCKS.register(
             "zirconia_corundum_bricks", () -> new DisassemblableBlock(Block.Properties.of()

@@ -42,6 +42,7 @@ public final class ModCreativeTabs {
                         // 锭 & 宝石
                         output.accept(ModItems.METEOR_STEEL_INGOT.get());
                         output.accept(ModItems.ZIRCONIUM_INGOT.get());
+                        output.accept(ModItems.ZIRCONIUM_IRON_ALLOY_INGOT.get());
                         output.accept(ModItems.ZIRCON_BRICK.get());
                         output.accept(ModItems.ZIRCON.get());
 
@@ -59,6 +60,7 @@ public final class ModCreativeTabs {
                         // 储存方块
                         output.accept(ModItems.METEOR_STEEL_BLOCK.get());
                         output.accept(ModItems.ZIRCON_BLOCK.get());
+                        output.accept(ModItems.DENSE_SKY_STONE_BLOCK.get());
 
                         // 矿石
                         output.accept(ModItems.METEORITE_IRON_ORE.get());
