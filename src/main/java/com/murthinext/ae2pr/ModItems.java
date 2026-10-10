@@ -188,6 +188,14 @@ public final class ModItems {
     public static final RegistryObject<Item> SINGLE_PLATE_PRESS = ITEMS.register("single_plate_press",
             () -> new Item(new Item.Properties()));
 
+    /** 未充能的奇点 */
+    public static final RegistryObject<Item> UNCHARGED_SINGULARITY = ITEMS.register("uncharged_singularity",
+            () -> new Item(new Item.Properties()));
+
+    /** 高能奇点 */
+    public static final RegistryObject<Item> HIGH_ENERGY_SINGULARITY = ITEMS.register("high_energy_singularity",
+            () -> new Item(new Item.Properties()));
+
     /** 异星熔岩桶 */
     public static final RegistryObject<BucketItem> ALIEN_LAVA_BUCKET = ITEMS.register("alien_lava_bucket",
             () -> new BucketItem(ModFluids.ALIEN_LAVA,

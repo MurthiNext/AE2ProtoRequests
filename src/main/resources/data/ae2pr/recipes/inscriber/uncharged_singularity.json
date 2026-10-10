@@ -1,0 +1,18 @@
+{
+  "type": "ae2:inscriber",
+  "ingredients": {
+    "top": {
+      "item": "ae2:charged_certus_quartz_crystal"
+    },
+    "middle": {
+      "item": "ae2:singularity"
+    },
+    "bottom": {
+      "item": "ae2:fluix_crystal"
+    }
+  },
+  "mode": "press",
+  "result": {
+    "item": "ae2pr:uncharged_singularity"
+  }
+}

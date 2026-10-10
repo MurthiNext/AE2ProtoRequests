@@ -1,0 +1,31 @@
+{
+  "type": "ae2pr:crystal_assembly_line",
+  "duration": 600,
+  "energy_per_parallel": 500000,
+  "module_requirements": [
+    {
+      "module": "ae2pr:charging",
+      "min_level": 1
+    }
+  ],
+  "item_inputs": [
+    {
+      "item": "ae2pr:uncharged_singularity",
+      "count": 1
+    },
+    {
+      "item": "ae2:singularity",
+      "count": 64
+    },
+    {
+      "item": "ae2:charged_certus_quartz_crystal",
+      "count": 512
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:high_energy_singularity",
+      "count": 1
+    }
+  ]
+}

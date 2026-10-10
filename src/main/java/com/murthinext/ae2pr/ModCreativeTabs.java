@@ -33,6 +33,10 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_64TOPS.get());
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_256TOPS.get());
                         output.accept(ModItems.SINGLE_PLATE_PRESS.get());
+
+                        // 奇点
+                        output.accept(ModItems.UNCHARGED_SINGULARITY.get());
+                        output.accept(ModItems.HIGH_ENERGY_SINGULARITY.get());
                         output.accept(ModItems.ALIEN_LAVA_BUCKET.get());
 
                         // 锭 & 宝石
