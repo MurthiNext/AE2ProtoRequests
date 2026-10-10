@@ -14,6 +14,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.items.SlotItemHandler;
 
+import appeng.api.upgrades.Upgrades;
+
 import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.network.LavaSmelterJobPacket;
 
@@ -36,6 +38,16 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
     private static final int DUST_SLOT_X = 151;
     private static final int DUST_SLOT_Y = 95;
 
+    /** 陨石粉槽下标 */
+    private static final int DUST_SLOT_INDEX = 0;
+    /** 升级槽 */
+    private static final int UPGRADE_SLOTS = 4;
+    private static final int UPGRADE_X = 180;
+    private static final int UPGRADE_Y = 4;
+    private static final int UPGRADE_STEP = 20;
+    /** 玩家背包起始下标 */
+    private static final int PLAYER_SLOT_FIRST = DUST_SLOT_INDEX + 1 + UPGRADE_SLOTS;
+
     /** 同步数据位：bit0=已成型，bit1=正在运行，bit2=暂停 */
     private static final int FLAG_FORMED = 1;
     private static final int FLAG_RUNNING = 2;
@@ -47,10 +59,14 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
     private static final int DATA_ERROR = 2;
     private static final int DATA_ELAPSED = 3;
     private static final int DATA_DURATION = 4;
+    private static final int DATA_ENERGY_CONNECTED = 5;
+    private static final int DATA_POWER_LO = 6;
+    private static final int DATA_POWER_HI = 7;
+    private static final int DATA_PARALLEL = 8;
 
     private final LavaSmelterControllerBlockEntity controller;
     private final Player owner;
-    private final SimpleContainerData data = new SimpleContainerData(5);
+    private final SimpleContainerData data = new SimpleContainerData(9);
     private final boolean clientSide;
     private ItemStack lastJobOutput = ItemStack.EMPTY;
     private boolean jobOutputSynced;
@@ -63,6 +79,10 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
 
         if (controller != null) {
             addSlot(new SlotItemHandler(controller.getDustSlot(), 0, DUST_SLOT_X, DUST_SLOT_Y));
+            var upgrades = controller.getUpgrades().toItemHandler();
+            for (int i = 0; i < UPGRADE_SLOTS; i++) {
+                addSlot(new SlotItemHandler(upgrades, i, UPGRADE_X, UPGRADE_Y + i * UPGRADE_STEP));
+            }
         }
         for (int row = 0; row < INV_ROWS; row++) {
             for (int col = 0; col < INV_COLS; col++) {
@@ -94,6 +114,11 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
             data.set(DATA_ERROR, controller.getError().ordinal());
             data.set(DATA_ELAPSED, controller.getJobElapsed());
             data.set(DATA_DURATION, controller.getJobDuration());
+            long power = (long) Math.min(Math.max(controller.getNetworkStoredPower(), 0), Long.MAX_VALUE);
+            data.set(DATA_ENERGY_CONNECTED, controller.isEnergyConnected() ? 1 : 0);
+            data.set(DATA_POWER_LO, (int) (power & 0xFFFFFFFFL));
+            data.set(DATA_POWER_HI, (int) (power >>> 32));
+            data.set(DATA_PARALLEL, controller.maxParallel());
 
             ItemStack jobOutput = controller.getJobOutput();
             if (owner instanceof ServerPlayer serverPlayer
@@ -129,7 +154,7 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
         return LavaSmelterControllerBlockEntity.MAX_DURABILITY;
     }
 
-    /** 暂停原因序号（0 = 无，1 = 耐久耗尽，2 = 输出不足）。 */
+    /** 暂停原因序号（0 = 无，1 = 耐久耗尽，2 = 电力不足，3 = 输出不足）。 */
     public int getErrorCode() {
         return data.get(DATA_ERROR);
     }
@@ -139,7 +164,7 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
         return data.get(DATA_ELAPSED);
     }
 
-    /** 当前作业的配方总耗时（tick）；空闲为 0。 */
+    /** 当前作业的实际总耗时（tick，含加速卡加成）；空闲为 0。 */
     public int getJobDuration() {
         return data.get(DATA_DURATION);
     }
@@ -147,6 +172,21 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
     /** 当前作业的展示产物；空闲返回空。 */
     public ItemStack getJobOutput() {
         return controller != null ? controller.getClientJobOutput() : ItemStack.EMPTY;
+    }
+
+    /** 结构内是否有能源仓接入 ME 网络。 */
+    public boolean isEnergyConnected() {
+        return (data.get(DATA_ENERGY_CONNECTED) & 1) != 0;
+    }
+
+    /** 结构内能源仓所接 ME 网络的可用能量合计（AE）。 */
+    public long getNetworkStoredPower() {
+        return (data.get(DATA_POWER_LO) & 0xFFFFFFFFL) | ((long) data.get(DATA_POWER_HI) << 32);
+    }
+
+    /** 结构允许的最大并行数（即最多同时执行的配方数）。 */
+    public int getMaxParallel() {
+        return data.get(DATA_PARALLEL);
     }
 
     @Override
@@ -157,13 +197,17 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
         }
         ItemStack stack = slot.getItem();
         ItemStack original = stack.copy();
-        if (index == 0) {
-            // 陨石粉槽 -> 玩家背包
-            if (!moveItemStackTo(stack, 1, slots.size(), true)) {
+        if (index < PLAYER_SLOT_FIRST) {
+            if (!moveItemStackTo(stack, PLAYER_SLOT_FIRST, slots.size(), true)) {
                 return ItemStack.EMPTY;
             }
-        } else if (!moveItemStackTo(stack, 0, 1, false)) {
-            return ItemStack.EMPTY;
+        } else {
+            // 加速卡优先进入升级槽
+            boolean moved = Upgrades.isUpgradeCardItem(stack)
+                    && moveItemStackTo(stack, DUST_SLOT_INDEX + 1, PLAYER_SLOT_FIRST, false);
+            if (!moved && !moveItemStackTo(stack, DUST_SLOT_INDEX, DUST_SLOT_INDEX + 1, false)) {
+                return ItemStack.EMPTY;
+            }
         }
         if (stack.isEmpty()) {
             slot.setByPlayer(ItemStack.EMPTY);

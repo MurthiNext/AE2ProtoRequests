@@ -18,9 +18,14 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
+import appeng.api.upgrades.IUpgradeInventory;
+import appeng.api.upgrades.UpgradeInventories;
+import appeng.core.definitions.AEItems;
+
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.ModItems;
 import com.murthinext.ae2pr.ModModules;
 import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.ae2pr;
@@ -101,6 +106,9 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
     private final List<UnitCell> unitCells = new ArrayList<>();
     /** 结构验证器：模式匹配 + 缓存快速路径 */
     private final StructureValidator structure = new StructureValidator(AssemblyLineStructure.PATTERN);
+    /** 升级槽 */
+    private final IUpgradeInventory upgrades = UpgradeInventories.forMachine(ModItems.CRYSTAL_ASSEMBLY_LINE.get(), 4,
+            this::onUpgradesChanged);
 
     public AssemblyLineControllerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CRYSTAL_ASSEMBLY_LINE.get(), pos, state);
@@ -178,7 +186,7 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
             pause(Error.OUTPUT);
             return;
         }
-        double cost = match.recipe().getEnergyPerParallel() * match.parallel();
+        double cost = match.recipe().getEnergyPerParallel() * match.parallel() * lossyEnergyMultiplier();
         if (extractNetworkEnergy(cost, true) < cost) {
             pause(Error.POWER);
             return;
@@ -228,39 +236,64 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
 
     // ---------------------------------------------------------------- 配方匹配
 
-    /** 一次匹配的结果：配方、并行数、以及物品/流体输入到部件下标的分配。 */
+    /** 一次匹配的结果 */
     private record Match(CrystalAssemblyLineRecipe recipe, int parallel, List<Integer> busIndices,
             List<Integer> hatchIndices) {
     }
 
-    /** 控制外壳单元格：位置与方块类型（用于轻量检查模块是否被替换）。 */
+    /** 控制外壳单元格 */
     private record UnitCell(BlockPos pos, Block block) {
     }
 
-    /** 结构允许的最大并行数 = 基础并行 + (片数 - 最小片数) × 每片增量 + 模块加成。 */
+    /** 结构允许的最大并行数 */
     public int maxParallel() {
         int base = Config.assemblyBaseParallel()
                 + Math.max(0, lastSlices - AssemblyLineStructure.MIN_SLICES) * Config.assemblyParallelPerSlice();
         return Math.min(base + moduleParallelBonus(), Config.assemblyMaxParallel());
     }
 
-    /** 模块提供的并行上限加成。 */
+    /** 模块提供的并行上限加成 */
     private int moduleParallelBonus() {
         return modules.count(ModModules.PARALLEL) * Config.assemblyModuleParallelPerUnit();
     }
 
-    /** 模块提供的速度倍率（1.0 为基础速度，受配置上限约束）。 */
+    /** 模块提供的速度倍率 */
     public double getSpeedMultiplier() {
         double multiplier = 1.0 + modules.count(ModModules.SPEED) * Config.assemblyModuleSpeedPerUnit();
-        return Math.min(multiplier, Config.assemblyMaxSpeedMultiplier());
+        return Math.min(multiplier, Config.assemblyMaxSpeedMultiplier()) * speedCardMultiplier();
     }
 
-    /** 指定功能模块的当前等级；未安装返回 0。 */
+    /** 已安装的加速卡数量 */
+    public int getSpeedCardCount() {
+        return upgrades.getInstalledUpgrades(AEItems.SPEED_CARD);
+    }
+
+    /** 加速卡的速度倍率 */
+    public double speedCardMultiplier() {
+        return 1.0 + getSpeedCardCount() * Config.lossySpeedPerCard();
+    }
+
+    /** 加速卡的耗能倍率 */
+    public double lossyEnergyMultiplier() {
+        return Math.pow(Config.lossyEnergyMultiplierPerCard(), getSpeedCardCount());
+    }
+
+    /** 升级槽 */
+    public IUpgradeInventory getUpgrades() {
+        return upgrades;
+    }
+
+    /** 升级变化回调 */
+    private void onUpgradesChanged() {
+        setChanged();
+    }
+
+    /** 指定功能模块的当前等级 */
     public int getModuleLevel(ModuleType type) {
         return modules.level(type);
     }
 
-    /** 按速度模块倍率折算实际耗时。 */
+    /** 按速度模块倍率折算实际耗时 */
     private int scaledDuration(int baseTicks) {
         return Math.max(1, (int) Math.ceil(baseTicks / getSpeedMultiplier()));
     }
@@ -610,6 +643,7 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
+        upgrades.writeToNBT(tag, "upgrades");
         if (currentMatch != null && jobTicksLeft > 0) {
             tag.putString("jobRecipe", currentMatch.recipe().getId().toString());
             tag.putInt("jobParallel", currentMatch.parallel());
@@ -621,6 +655,7 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
+        upgrades.readFromNBT(tag, "upgrades");
         if (!tag.contains("jobRecipe")) {
             return;
         }

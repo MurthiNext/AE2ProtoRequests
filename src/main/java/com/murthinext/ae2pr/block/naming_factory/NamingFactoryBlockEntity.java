@@ -10,6 +10,8 @@ import appeng.api.config.Actionable;
 import appeng.api.config.PowerMultiplier;
 import appeng.api.inventories.InternalInventory;
 import appeng.api.networking.IGrid;
+import appeng.api.upgrades.IUpgradeInventory;
+import appeng.api.upgrades.UpgradeInventories;
 import appeng.blockentity.grid.AENetworkPowerBlockEntity;
 import appeng.core.definitions.AEItems;
 import appeng.items.materials.NamePressItem;
@@ -33,6 +35,7 @@ import net.minecraftforge.items.IItemHandler;
 
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModBlockEntities;
+import com.murthinext.ae2pr.ModItems;
 
 /**
  * 名称压印工厂方块实体：放入 AE2 名称压印模板与待命名物品，一次压印把整组物品改成模板中的名称。
@@ -70,6 +73,14 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
     private static final String TAG_INVENTORY = "inventory";
     private static final String TAG_STATE = "state";
     private static final String TAG_WORK_START = "workStart";
+    private static final String TAG_UPGRADES = "upgrades";
+    private static final String TAG_CHARGE_TICKS = "chargeTicks";
+    private static final String TAG_PRESS_TICKS = "pressTicks";
+    private static final String TAG_RETRACT_TICKS = "retractTicks";
+
+    /** 升级槽：4 个，仅可安装加速卡 */
+    private final IUpgradeInventory upgrades = UpgradeInventories.forMachine(ModItems.NAMING_FACTORY.get(), 4,
+            this::onUpgradesChanged);
 
     private final NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
 
@@ -146,6 +157,10 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
 
     private WorkState state = WorkState.IDLE;
     private long workStart;
+    /** 本次压印各阶段时长 */
+    private int chargeTicks = CHARGE_TICKS;
+    private int pressTicks = PRESS_TICKS;
+    private int retractTicks = RETRACT_TICKS;
 
     public NamingFactoryBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.NAMING_FACTORY.get(), pos, state);
@@ -162,6 +177,43 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
 
     public Container getInventory() {
         return inventory;
+    }
+
+    public IUpgradeInventory getUpgrades() {
+        return upgrades;
+    }
+
+    /** 升级变化回调 */
+    private void onUpgradesChanged() {
+        setChanged();
+        markForUpdate();
+    }
+
+    /** 加速卡档位 */
+    private int speedSteps() {
+        return switch (upgrades.getInstalledUpgrades(AEItems.SPEED_CARD)) {
+            case 1 -> 3;
+            case 2 -> 5;
+            case 3 -> 10;
+            case 4 -> 50;
+            default -> 2;
+        };
+    }
+
+    /** 当前加速卡下的速度倍率 */
+    public double getSpeedMultiplier() {
+        return speedSteps() / 2.0D;
+    }
+
+    /** 开工时折算时长：加速卡只加速蓄力阶段。 */
+    private void updatePhaseDurations() {
+        chargeTicks = scaledDuration(CHARGE_TICKS, getSpeedMultiplier());
+        pressTicks = PRESS_TICKS;
+        retractTicks = RETRACT_TICKS;
+    }
+
+    private static int scaledDuration(int baseTicks, double speed) {
+        return Math.max(1, (int) Math.ceil(baseTicks / speed));
     }
 
     public ItemStack getTemplateStack() {
@@ -211,7 +263,7 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         }
         float elapsed = level.getGameTime() + partialTicks - workStart;
         return switch (state) {
-            case CHARGING -> Mth.clamp(elapsed / CHARGE_TICKS, 0, 1);
+            case CHARGING -> Mth.clamp(elapsed / chargeTicks, 0, 1);
             case PRESSING -> 1;
             case RETRACTING, IDLE -> 0;
         };
@@ -224,8 +276,8 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         }
         float elapsed = level.getGameTime() + partialTicks - workStart;
         return switch (state) {
-            case PRESSING -> TRAVEL * easeOutCubic(Mth.clamp(elapsed / PRESS_TICKS, 0, 1));
-            case RETRACTING -> TRAVEL * (1 - easeInOutCubic(Mth.clamp(elapsed / RETRACT_TICKS, 0, 1)));
+            case PRESSING -> TRAVEL * easeOutCubic(Mth.clamp(elapsed / pressTicks, 0, 1));
+            case RETRACTING -> TRAVEL * (1 - easeInOutCubic(Mth.clamp(elapsed / retractTicks, 0, 1)));
             case CHARGING, IDLE -> 0;
         };
     }
@@ -239,22 +291,23 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         switch (state) {
             case IDLE -> {
                 if (canWork() && consumeEnergy(getInputStack().getCount())) {
+                    updatePhaseDurations();
                     beginState(WorkState.CHARGING);
                 }
             }
             case CHARGING -> {
-                if (elapsed >= CHARGE_TICKS) {
+                if (elapsed >= chargeTicks) {
                     beginState(WorkState.PRESSING);
                 }
             }
             case PRESSING -> {
-                if (elapsed >= PRESS_TICKS) {
+                if (elapsed >= pressTicks) {
                     completeWork();
                     beginState(WorkState.RETRACTING);
                 }
             }
             case RETRACTING -> {
-                if (elapsed >= RETRACT_TICKS) {
+                if (elapsed >= retractTicks) {
                     beginState(WorkState.IDLE);
                 }
             }
@@ -377,6 +430,10 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         tag.put(TAG_INVENTORY, inventoryTag);
         tag.putByte(TAG_STATE, (byte) state.ordinal());
         tag.putLong(TAG_WORK_START, workStart);
+        tag.putInt(TAG_CHARGE_TICKS, chargeTicks);
+        tag.putInt(TAG_PRESS_TICKS, pressTicks);
+        tag.putInt(TAG_RETRACT_TICKS, retractTicks);
+        upgrades.writeToNBT(tag, TAG_UPGRADES);
     }
 
     @Override
@@ -395,14 +452,21 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
                     : WorkState.IDLE;
         }
         workStart = tag.getLong(TAG_WORK_START);
+        chargeTicks = tag.contains(TAG_CHARGE_TICKS) ? tag.getInt(TAG_CHARGE_TICKS) : CHARGE_TICKS;
+        pressTicks = tag.contains(TAG_PRESS_TICKS) ? tag.getInt(TAG_PRESS_TICKS) : PRESS_TICKS;
+        retractTicks = tag.contains(TAG_RETRACT_TICKS) ? tag.getInt(TAG_RETRACT_TICKS) : RETRACT_TICKS;
+        upgrades.readFromNBT(tag, TAG_UPGRADES);
     }
 
-    /** 客户端可见状态：工作状态、阶段起点、槽位内容与自定义名称（渲染器/界面需要）。 */
+    /** 客户端可见状态：工作状态、阶段起点与时长、槽位内容与自定义名称（渲染器/界面需要）。 */
     @Override
     protected void writeToStream(FriendlyByteBuf data) {
         super.writeToStream(data);
         data.writeByte(state.ordinal());
         data.writeVarLong(workStart);
+        data.writeVarInt(chargeTicks);
+        data.writeVarInt(pressTicks);
+        data.writeVarInt(retractTicks);
         for (ItemStack stack : items) {
             data.writeItem(stack);
         }
@@ -415,6 +479,9 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         boolean changed = super.readFromStream(data);
         state = WorkState.values()[data.readByte()];
         workStart = data.readVarLong();
+        chargeTicks = data.readVarInt();
+        pressTicks = data.readVarInt();
+        retractTicks = data.readVarInt();
         for (int slot = 0; slot < SLOT_COUNT; slot++) {
             items.set(slot, data.readItem());
         }

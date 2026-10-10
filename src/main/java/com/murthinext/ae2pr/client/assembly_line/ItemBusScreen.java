@@ -105,7 +105,7 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> {
     /** 存储区悬停：按槽位惯例显示物品 tooltip；工具栏提示由基类统一处理。 */
     @Override
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
-        if (renderAutoTransferTooltip(graphics, mouseX, mouseY)) {
+        if (renderToolbarTooltip(graphics, mouseX, mouseY)) {
             return;
         }
         int slot = hoveredSlot(mouseX, mouseY);

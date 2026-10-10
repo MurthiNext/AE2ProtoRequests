@@ -32,6 +32,10 @@ public final class Config {
     private static final ForgeConfigSpec.DoubleValue NAMING_FACTORY_ENERGY_PER_ITEM;
 
     private static final ForgeConfigSpec.IntValue LAVA_SMELTER_PARALLEL;
+    private static final ForgeConfigSpec.DoubleValue LAVA_SMELTER_ENERGY_PER_PARALLEL;
+
+    private static final ForgeConfigSpec.DoubleValue LOSSY_SPEED_PER_CARD;
+    private static final ForgeConfigSpec.DoubleValue LOSSY_ENERGY_MULTIPLIER_PER_CARD;
 
     static final ForgeConfigSpec SPEC;
 
@@ -109,6 +113,18 @@ public final class Config {
         LAVA_SMELTER_PARALLEL = BUILDER
                 .comment("熔岩冶炼炉的最大并行数（每并行一份消耗 1 点配方耐久）")
                 .defineInRange("parallel", 64, 1, 1_000_000);
+        LAVA_SMELTER_ENERGY_PER_PARALLEL = BUILDER
+                .comment("熔岩冶炼炉每并行一次执行从 ME 网络扣除的能量")
+                .defineInRange("energyPerParallel", 10000.0, 0.0, Double.MAX_VALUE);
+        BUILDER.pop();
+
+        BUILDER.push("upgradeCards");
+        LOSSY_SPEED_PER_CARD = BUILDER
+                .comment("多方块机器每张加速卡提供的速度加成，加法叠加")
+                .defineInRange("lossySpeedPerCard", 0.5, 0.0, 100.0);
+        LOSSY_ENERGY_MULTIPLIER_PER_CARD = BUILDER
+                .comment("多方块机器每张加速卡对单次作业耗能的倍率，逐张相乘")
+                .defineInRange("lossyEnergyMultiplierPerCard", 4.0, 1.0, 1000.0);
         BUILDER.pop();
 
         SPEC = BUILDER.build();
@@ -195,5 +211,17 @@ public final class Config {
 
     public static int lavaSmelterParallel() {
         return LAVA_SMELTER_PARALLEL.get();
+    }
+
+    public static double lavaSmelterEnergyPerParallel() {
+        return LAVA_SMELTER_ENERGY_PER_PARALLEL.get();
+    }
+
+    public static double lossySpeedPerCard() {
+        return LOSSY_SPEED_PER_CARD.get();
+    }
+
+    public static double lossyEnergyMultiplierPerCard() {
+        return LOSSY_ENERGY_MULTIPLIER_PER_CARD.get();
     }
 }

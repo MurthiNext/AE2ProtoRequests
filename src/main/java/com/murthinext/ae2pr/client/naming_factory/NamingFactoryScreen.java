@@ -1,19 +1,22 @@
 package com.murthinext.ae2pr.client.naming_factory;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.ItemLike;
 
+import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryMenu;
+import com.murthinext.ae2pr.client.ModGuide;
+import com.murthinext.ae2pr.client.gui.AbstractMachineScreen;
 
 /**
  * 名称压印工厂界面：三槽位 + 加工进度条 + 名称文字。
  */
-public class NamingFactoryScreen extends AbstractContainerScreen<NamingFactoryMenu> {
+public class NamingFactoryScreen extends AbstractMachineScreen<NamingFactoryMenu> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(ae2pr.MODID,
             "textures/gui/naming_factory.png");
@@ -36,8 +39,16 @@ public class NamingFactoryScreen extends AbstractContainerScreen<NamingFactoryMe
 
     public NamingFactoryScreen(NamingFactoryMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        this.imageWidth = 176;
-        this.imageHeight = 200;
+    }
+
+    @Override
+    protected ResourceLocation guidePage() {
+        return ModGuide.NAMING_FACTORY_PAGE;
+    }
+
+    @Override
+    protected ItemLike upgradeMachine() {
+        return ModBlocks.NAMING_FACTORY.get();
     }
 
     @Override
@@ -50,6 +61,8 @@ public class NamingFactoryScreen extends AbstractContainerScreen<NamingFactoryMe
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        renderToolbar(graphics);
+        renderUpgradeSlots(graphics);
 
         NamingFactoryBlockEntity blockEntity = menu.getBlockEntity();
         float progress = blockEntity != null ? blockEntity.getWorkProgress(partialTick) : 0;
@@ -58,6 +71,15 @@ public class NamingFactoryScreen extends AbstractContainerScreen<NamingFactoryMe
             graphics.fill(leftPos + PROGRESS_X, topPos + PROGRESS_Y,
                     leftPos + PROGRESS_X + fill, topPos + PROGRESS_Y + PROGRESS_HEIGHT, PROGRESS_COLOR);
         }
+    }
+
+    /** 悬停提示 */
+    @Override
+    protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+        if (renderToolbarTooltip(graphics, mouseX, mouseY) || renderUpgradeTooltip(graphics, mouseX, mouseY)) {
+            return;
+        }
+        super.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
@@ -79,13 +101,13 @@ public class NamingFactoryScreen extends AbstractContainerScreen<NamingFactoryMe
         }
     }
 
-    /** 槽位上方居中标签（用于右侧模板槽）。 */
+    /** 槽位上方居中标签 */
     private void drawSlotLabelAbove(GuiGraphics graphics, String key, int slotX, int slotY) {
         Component label = Component.translatable(key);
         graphics.drawString(font, label, slotX + (16 - font.width(label)) / 2, slotY - 10, COLOR_TEXT, false);
     }
 
-    /** 槽位左侧标签（用于中列输入/输出槽）。 */
+    /** 槽位左侧标签 */
     private void drawSlotLabelLeft(GuiGraphics graphics, String key, int slotX, int slotY) {
         Component label = Component.translatable(key);
         graphics.drawString(font, label, slotX - 4 - font.width(label), slotY + 4, COLOR_TEXT, false);

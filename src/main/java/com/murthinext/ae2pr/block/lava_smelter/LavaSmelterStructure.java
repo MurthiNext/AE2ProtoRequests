@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
 import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.block.assembly_line.FluixCrystalEnergyHatchBlock;
 import com.murthinext.ae2pr.block.assembly_line.MachinePartBlock;
 import com.murthinext.ae2pr.block.assembly_line.MachinePartFacade;
 import com.murthinext.ae2pr.multiblock.MultiblockPattern;
@@ -32,7 +33,8 @@ import com.murthinext.ae2pr.multiblock.StructureResult;
  * {@code G}=耐火水晶玻璃 {@code P}=陨钢管道（NBT 中炉膛顶朝下、烟囱朝上，结构只校验方块类型）
  * {@code L}=物流控制机械方块 {@code #}=任意（炉膛内部与烟囱周围留空）。
  * <p>
- * 砖块位可由机器部件替代：输入、输出总线或输入、输出仓（石英 / AEV 系列均可）。
+ * 砖块位可由机器部件替代：输入、输出总线或输入、输出仓（石英 / AEV 系列均可），
+ * 以及福鲁伊克斯水晶能源仓（整结构最多 1 个）。
  * 成型后，结构内仓室切换为锆刚玉砖块外观（style=2，仓口保留），
  * 与周围的砖块使用同一连接纹理族。
  */
@@ -55,7 +57,8 @@ public final class LavaSmelterStructure {
                     .or(StructurePredicate.blocks(ModBlocks.AEV_INPUT_BUS.get()))
                     .or(StructurePredicate.blocks(ModBlocks.AEV_OUTPUT_BUS.get()))
                     .or(StructurePredicate.blocks(ModBlocks.AEV_INPUT_HATCH.get()))
-                    .or(StructurePredicate.blocks(ModBlocks.AEV_OUTPUT_HATCH.get())))
+                    .or(StructurePredicate.blocks(ModBlocks.AEV_OUTPUT_HATCH.get()))
+                    .or(StructurePredicate.blocks(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()).maxCount(1)))
             .where('G', StructurePredicate.blocks(ModBlocks.FIREPROOF_CRYSTAL_GLASS.get()))
             .where('P', StructurePredicate.blocks(ModBlocks.METEOR_STEEL_PIPE_BLOCK.get()))
             .where('L', StructurePredicate.blocks(ModBlocks.LOGISTICS_CONTROL_CASING.get()))
@@ -91,6 +94,14 @@ public final class LavaSmelterStructure {
     private static void applyParts(Level level, List<BlockPos> cells, boolean formed) {
         for (BlockPos pos : cells) {
             BlockState state = level.getBlockState(pos);
+            if (state.is(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get())) {
+                // 能源仓：仅切换成型外观
+                if (state.getValue(FluixCrystalEnergyHatchBlock.FORMED) != formed) {
+                    level.setBlock(pos, state.setValue(FluixCrystalEnergyHatchBlock.FORMED, formed),
+                            Block.UPDATE_ALL);
+                }
+                continue;
+            }
             if (!isPart(state)) {
                 continue;
             }

@@ -7,8 +7,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import appeng.util.ReadableNumberConverter;
-
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
@@ -22,28 +20,21 @@ import snownee.jade.api.ui.BoxStyle;
 import snownee.jade.api.ui.IProgressStyle;
 
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.ModModules;
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineControllerBlockEntity;
 import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
 
 /**
- * Jade 兼容插件：显示水晶装配线的成型状态、当前作业产物与进度。
+ * Jade 兼容插件：显示水晶装配线的网络连接状态与当前作业进度。
  */
 @WailaPlugin(ae2pr.MODID)
 public class AssemblyLineJadePlugin implements IWailaPlugin {
 
     private static final String KEY_FORMED = "formed";
-    private static final String KEY_RUNNING = "running";
-    private static final String KEY_PAUSED = "paused";
+    private static final String KEY_ENERGY_CONNECTED = "energyConnected";
     private static final String KEY_ELAPSED = "elapsed";
     private static final String KEY_DURATION = "duration";
     private static final String KEY_ITEM = "item";
     private static final String KEY_COUNT = "count";
-    private static final String KEY_ENERGY_CONNECTED = "energyConnected";
-    private static final String KEY_POWER = "power";
-    private static final String KEY_CHARGING = "charging";
-    private static final String KEY_PARALLEL = "parallel";
-    private static final String KEY_SPEED = "speed";
 
     @Override
     public void register(IWailaCommonRegistration registration) {
@@ -55,7 +46,7 @@ public class AssemblyLineJadePlugin implements IWailaPlugin {
         registration.registerBlockComponent(ComponentProvider.INSTANCE, CrystalAssemblyLineBlock.class);
     }
 
-    /** 服务端数据：成型状态、当前作业与 ME 能源。 */
+    /** 服务端数据：网络连接状态与当前作业。 */
     private enum ServerData implements IServerDataProvider<BlockAccessor> {
         INSTANCE;
 
@@ -65,8 +56,7 @@ public class AssemblyLineJadePlugin implements IWailaPlugin {
                 return;
             }
             data.putBoolean(KEY_FORMED, controller.isFormed());
-            data.putBoolean(KEY_RUNNING, controller.isRunning());
-            data.putBoolean(KEY_PAUSED, controller.isPaused());
+            data.putBoolean(KEY_ENERGY_CONNECTED, controller.isEnergyConnected());
             data.putInt(KEY_ELAPSED, controller.getJobElapsed());
             data.putInt(KEY_DURATION, controller.getJobDuration());
             ItemStack output = controller.getJobOutput();
@@ -74,11 +64,6 @@ public class AssemblyLineJadePlugin implements IWailaPlugin {
                 data.putString(KEY_ITEM, ForgeRegistries.ITEMS.getKey(output.getItem()).toString());
                 data.putInt(KEY_COUNT, output.getCount());
             }
-            data.putBoolean(KEY_ENERGY_CONNECTED, controller.isEnergyConnected());
-            data.putDouble(KEY_POWER, controller.getNetworkStoredPower());
-            data.putInt(KEY_CHARGING, controller.getModuleLevel(ModModules.CHARGING));
-            data.putInt(KEY_PARALLEL, controller.maxParallel());
-            data.putDouble(KEY_SPEED, controller.getSpeedMultiplier());
         }
 
         @Override
@@ -87,7 +72,7 @@ public class AssemblyLineJadePlugin implements IWailaPlugin {
         }
     }
 
-    /** 客户端展示：状态、产物 x 数量、进度条与 ME 能源。 */
+    /** 客户端展示：网络连接状态与当前作业进度。 */
     private enum ComponentProvider implements IBlockComponentProvider {
         INSTANCE;
 
@@ -97,18 +82,9 @@ public class AssemblyLineJadePlugin implements IWailaPlugin {
             if (!data.contains(KEY_FORMED)) {
                 return;
             }
-            tooltip.add(Component.translatable("jade.ae2pr.crystal_assembly_line.status",
-                    Component.translatable(statusKey(data))));
-
-            int charging = data.getInt(KEY_CHARGING);
-            if (charging > 0) {
-                tooltip.add(Component.translatable("jade.ae2pr.crystal_assembly_line.charging", charging));
-            }
-            tooltip.add(Component.translatable("jade.ae2pr.crystal_assembly_line.parallel", data.getInt(KEY_PARALLEL)));
-            double speed = data.getDouble(KEY_SPEED);
-            if (speed > 1.0D) {
-                tooltip.add(Component.translatable("jade.ae2pr.crystal_assembly_line.speed", Math.round(speed * 100)));
-            }
+            tooltip.add(Component.translatable(data.getBoolean(KEY_ENERGY_CONNECTED)
+                    ? "jade.ae2pr.multiblock.connected"
+                    : "jade.ae2pr.multiblock.disconnected"));
 
             int duration = data.getInt(KEY_DURATION);
             String itemId = data.getString(KEY_ITEM);
@@ -127,29 +103,11 @@ public class AssemblyLineJadePlugin implements IWailaPlugin {
                                 seconds(elapsed), seconds(duration)),
                         style, BoxStyle.DEFAULT, false));
             }
-            if (data.getBoolean(KEY_ENERGY_CONNECTED)) {
-                long power = (long) Math.min(Math.max(data.getDouble(KEY_POWER), 0), Long.MAX_VALUE);
-                tooltip.add(Component.translatable("jade.ae2pr.crystal_assembly_line.energy",
-                        ReadableNumberConverter.format(power, 5) + " AE"));
-            }
         }
 
         @Override
         public ResourceLocation getUid() {
             return new ResourceLocation(ae2pr.MODID, "assembly_line");
-        }
-
-        private static String statusKey(CompoundTag data) {
-            if (!data.getBoolean(KEY_FORMED)) {
-                return "gui.ae2pr.crystal_assembly_line.status.unformed";
-            }
-            if (data.getBoolean(KEY_RUNNING)) {
-                return "gui.ae2pr.crystal_assembly_line.status.running";
-            }
-            if (data.getBoolean(KEY_PAUSED)) {
-                return "gui.ae2pr.crystal_assembly_line.status.paused";
-            }
-            return "gui.ae2pr.crystal_assembly_line.status.formed";
         }
 
         private static String seconds(int ticks) {

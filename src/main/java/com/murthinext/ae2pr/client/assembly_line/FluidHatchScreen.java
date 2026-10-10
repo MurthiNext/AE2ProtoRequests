@@ -104,7 +104,7 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
     /** 罐区悬停：显示所存流体与数量；工具栏提示由基类统一处理。 */
     @Override
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
-        if (renderAutoTransferTooltip(graphics, mouseX, mouseY)) {
+        if (renderToolbarTooltip(graphics, mouseX, mouseY)) {
             return;
         }
         int tank = hoveredTank(mouseX, mouseY);

@@ -75,6 +75,11 @@ public class ae2pr {
             Upgrades.add(AEItems.FUZZY_CARD, thresholdEmitterItem, 1);
             Upgrades.add(AEItems.CRAFTING_CARD, thresholdEmitterItem, 1);
 
+            // 机器升级槽
+            Upgrades.add(AEItems.SPEED_CARD, ModBlocks.NAMING_FACTORY.get(), 4);
+            Upgrades.add(AEItems.SPEED_CARD, ModBlocks.CRYSTAL_ASSEMBLY_LINE.get(), 4);
+            Upgrades.add(AEItems.SPEED_CARD, ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get(), 4);
+
             // ME 红石请求器：绑定方块实体类型并登记代表物品
             var requesterType = ModBlockEntities.REDSTONE_REQUESTER.get();
             ModBlocks.REDSTONE_REQUESTER.get().setBlockEntity(

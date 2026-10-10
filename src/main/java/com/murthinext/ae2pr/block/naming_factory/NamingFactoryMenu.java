@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.block.naming_factory;
 
 import org.jetbrains.annotations.Nullable;
 
+import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -16,15 +17,23 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.items.SlotItemHandler;
 
 /**
- * 名称压印工厂容器菜单：模板 / 输入 / 输出三槽 + 玩家背包。
+ * 名称压印工厂容器菜单。
  */
 public class NamingFactoryMenu extends AbstractContainerMenu {
 
     public static final MenuType<NamingFactoryMenu> TYPE = IForgeMenuType.create(NamingFactoryMenu::create);
 
     private static final int MACHINE_SLOTS = NamingFactoryBlockEntity.SLOT_COUNT;
+    /** 升级槽 */
+    private static final int UPGRADE_SLOTS = 4;
+    private static final int UPGRADE_X = 180;
+    private static final int UPGRADE_Y = 4;
+    private static final int UPGRADE_STEP = 20;
+    /** 玩家背包起始下标 */
+    private static final int PLAYER_SLOT_FIRST = MACHINE_SLOTS + UPGRADE_SLOTS;
     private static final int INV_COLS = 9;
     private static final int SLOT_SIZE = 18;
     private static final int INV_X = 8;
@@ -55,6 +64,12 @@ public class NamingFactoryMenu extends AbstractContainerMenu {
                 return false;
             }
         });
+        if (blockEntity != null) {
+            var upgrades = blockEntity.getUpgrades().toItemHandler();
+            for (int i = 0; i < UPGRADE_SLOTS; i++) {
+                addSlot(new SlotItemHandler(upgrades, i, UPGRADE_X, UPGRADE_Y + i * UPGRADE_STEP));
+            }
+        }
 
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < INV_COLS; col++) {
@@ -95,8 +110,12 @@ public class NamingFactoryMenu extends AbstractContainerMenu {
         }
         ItemStack stack = slot.getItem();
         ItemStack original = stack.copy();
-        if (index < MACHINE_SLOTS) {
-            if (!moveItemStackTo(stack, MACHINE_SLOTS, slots.size(), true)) {
+        if (index < PLAYER_SLOT_FIRST) {
+            if (!moveItemStackTo(stack, PLAYER_SLOT_FIRST, slots.size(), true)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (Upgrades.isUpgradeCardItem(stack)) {
+            if (!moveItemStackTo(stack, MACHINE_SLOTS, PLAYER_SLOT_FIRST, false)) {
                 return ItemStack.EMPTY;
             }
         } else if (AEItems.NAME_PRESS.isSameAs(stack)) {

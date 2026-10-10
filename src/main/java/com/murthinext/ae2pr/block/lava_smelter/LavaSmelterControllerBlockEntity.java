@@ -27,11 +27,17 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import appeng.api.upgrades.IUpgradeInventory;
+import appeng.api.upgrades.UpgradeInventories;
+import appeng.core.definitions.AEItems;
+
 import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.ModItems;
 import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.block.assembly_line.FluixCrystalEnergyHatchBlockEntity;
 import com.murthinext.ae2pr.block.assembly_line.ItemBusBlockEntity;
 import com.murthinext.ae2pr.multiblock.StructureResult;
 import com.murthinext.ae2pr.multiblock.StructureValidator;
@@ -73,11 +79,13 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
     private static final String MIRROR_FRONT_ID = "mirrorFront";
     private static final String JOB_RECIPE_ID = "jobRecipe";
     private static final String JOB_TICKS_ID = "jobTicks";
+    private static final String JOB_TOTAL_TICKS_ID = "jobTotalTicks";
     private static final String JOB_PARALLEL_ID = "jobParallel";
+    private static final String TAG_UPGRADES = "upgrades";
 
     /** 暂停原因（供界面报错） */
     public enum Error {
-        NONE, DURABILITY, OUTPUT
+        NONE, DURABILITY, POWER, OUTPUT
     }
 
     private int tickCounter;
@@ -85,6 +93,8 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
 
     /** 加工剩余 tick（<= 0 表示空闲或暂停） */
     private int jobTicksLeft;
+    /** 当前作业的实际总耗时（tick，含加速卡加成） */
+    private int jobTotalTicks;
     /** 当前作业的并行数 */
     private int jobParallel;
     /** 是否处于暂停态（耐久耗尽/输出不足，黄色暂停贴图） */
@@ -108,8 +118,13 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
     private final List<ItemBusBlockEntity> inputBuses = new ArrayList<>();
     /** 结构内的输出总线 */
     private final List<ItemBusBlockEntity> outputBuses = new ArrayList<>();
+    /** 结构内的能源仓 */
+    private final List<FluixCrystalEnergyHatchBlockEntity> energyHatches = new ArrayList<>();
     /** 结构验证器：模式匹配 + 缓存快速路径 */
     private final StructureValidator structure = new StructureValidator(LavaSmelterStructure.PATTERN);
+    /** 升级槽 */
+    private final IUpgradeInventory upgrades = UpgradeInventories.forMachine(
+            ModItems.HIGH_REACTIVITY_LAVA_SMELTER.get(), 4, this::onUpgradesChanged);
 
     /** 陨石粉槽：容量 64，仅接受陨石粉；对外暴露物品能力 */
     private final ItemStackHandler dustSlot = new ItemStackHandler(1) {
@@ -194,6 +209,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         if (!isFormed()) {
             if (jobTicksLeft > 0 || paused || error != Error.NONE || currentRecipe != null) {
                 jobTicksLeft = 0;
+                jobTotalTicks = 0;
                 jobParallel = 0;
                 currentRecipe = null;
                 clearPause();
@@ -214,7 +230,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         tryStartJob();
     }
 
-    /** 尝试开始一次加工：匹配配方 → 扣耐久 → 输出检查 → 扣料 → 进入运行态。 */
+    /** 尝试开始一次加工：匹配配方 → 扣耐久 → 输出检查 → 扣电 → 扣料 → 进入运行态。 */
     private void tryStartJob() {
         Level level = this.level;
         if (level == null) {
@@ -235,11 +251,19 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
             pause(Error.OUTPUT);
             return;
         }
-        // 扣耐久与扣料
+        // 能量按并行数与加速卡耗能倍率从结构内能源仓所接 ME 网络一次性扣除
+        double cost = recipe.getEnergyPerParallel() * parallel * lossyEnergyMultiplier();
+        if (extractNetworkEnergy(cost, true) < cost) {
+            pause(Error.POWER);
+            return;
+        }
+        // 扣电、扣耐久与扣料
+        extractNetworkEnergy(cost, false);
         durability -= parallel;
         consumeInputs(recipe, parallel);
 
-        jobTicksLeft = Math.max(1, recipe.getDuration());
+        jobTotalTicks = scaledDuration(recipe.getDuration());
+        jobTicksLeft = jobTotalTicks;
         jobParallel = parallel;
         currentRecipe = recipe;
         paused = false;
@@ -259,6 +283,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
             insertOutputs(recipe, parallel);
         }
         jobTicksLeft = 0;
+        jobTotalTicks = 0;
         applyControllerState();
         if (isFormed()) {
             tryStartJob();
@@ -267,6 +292,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
 
     private void pause(Error reason) {
         jobTicksLeft = 0;
+        jobTotalTicks = 0;
         paused = true;
         error = reason;
         applyControllerState();
@@ -346,7 +372,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
      * 每种原料按总数量除以单份需求计算可并行份数。
      */
     private int parallelFor(LavaSmelterRecipe recipe) {
-        int parallel = Math.max(1, Config.lavaSmelterParallel());
+        int parallel = maxParallel();
         parallel = Math.min(parallel, durability);
         for (CountedIngredient ingredient : recipe.getCountedIngredients()) {
             int available = 0;
@@ -432,6 +458,70 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         }
     }
 
+    // ---------------------------------------------------------------- 加速卡与电力
+
+    /** 结构允许的最大并行数 */
+    public int maxParallel() {
+        return Math.max(1, Config.lavaSmelterParallel());
+    }
+
+    /** 已安装的加速卡数量 */
+    public int getSpeedCardCount() {
+        return upgrades.getInstalledUpgrades(AEItems.SPEED_CARD);
+    }
+
+    /** 加速卡的速度倍率 */
+    public double getSpeedMultiplier() {
+        return 1.0 + getSpeedCardCount() * Config.lossySpeedPerCard();
+    }
+
+    /** 加速卡的耗能倍率 */
+    public double lossyEnergyMultiplier() {
+        return Math.pow(Config.lossyEnergyMultiplierPerCard(), getSpeedCardCount());
+    }
+
+    /** 按速度倍率折算实际耗时 */
+    private int scaledDuration(int baseTicks) {
+        return Math.max(1, (int) Math.ceil(baseTicks / getSpeedMultiplier()));
+    }
+
+    /** 升级槽 */
+    public IUpgradeInventory getUpgrades() {
+        return upgrades;
+    }
+
+    /** 升级变化回调 */
+    private void onUpgradesChanged() {
+        setChanged();
+    }
+
+    /** 从结构内能源仓一次性抽取能量 */
+    private double extractNetworkEnergy(double amount, boolean simulate) {
+        double remaining = amount;
+        for (FluixCrystalEnergyHatchBlockEntity hatch : energyHatches) {
+            if (remaining <= 0) {
+                break;
+            }
+            remaining -= hatch.extractAEPower(remaining, simulate);
+        }
+        return amount - remaining;
+    }
+
+    /** 结构内是否有能源仓接入 ME 网络 */
+    public boolean isEnergyConnected() {
+        for (FluixCrystalEnergyHatchBlockEntity hatch : energyHatches) {
+            if (hatch.isGridConnected()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** 结构内能源仓所接 ME 网络的可用能量合计 */
+    public double getNetworkStoredPower() {
+        return FluixCrystalEnergyHatchBlockEntity.totalAvailableAEPower(energyHatches);
+    }
+
     // ---------------------------------------------------------------- 结构检测
 
     /** 立即检测一次结构，并按结果切换主机与结构内部件的状态；结构未变化时走缓存快速路径。 */
@@ -460,10 +550,11 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         syncClient();
     }
 
-    /** 收集结构内的输入/输出总线（仅在结构成型时收集）。 */
+    /** 收集结构内的输入/输出总线与能源仓（仅在结构成型时收集）。 */
     private void refreshParts(Level level, StructureResult result) {
         inputBuses.clear();
         outputBuses.clear();
+        energyHatches.clear();
         if (!result.formed()) {
             return;
         }
@@ -473,12 +564,15 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
                 getBlockState().getValue(HighReactivityLavaSmelterBlock.FACING), Direction.UP,
                 result.mirrorSide(), result.mirrorFront()));
         for (BlockPos pos : cells) {
-            if (level.getBlockEntity(pos) instanceof ItemBusBlockEntity bus) {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof ItemBusBlockEntity bus) {
                 if (bus.isOutputBus()) {
                     outputBuses.add(bus);
                 } else {
                     inputBuses.add(bus);
                 }
+            } else if (blockEntity instanceof FluixCrystalEnergyHatchBlockEntity hatch) {
+                energyHatches.add(hatch);
             }
         }
     }
@@ -573,9 +667,11 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         super.saveAdditional(tag);
         tag.putInt(DURABILITY_ID, durability);
         tag.put(DUST_ID, dustSlot.serializeNBT());
+        upgrades.writeToNBT(tag, TAG_UPGRADES);
         if (currentRecipe != null && jobTicksLeft > 0) {
             tag.putString(JOB_RECIPE_ID, currentRecipe.getId().toString());
             tag.putInt(JOB_TICKS_ID, jobTicksLeft);
+            tag.putInt(JOB_TOTAL_TICKS_ID, jobTotalTicks);
             tag.putInt(JOB_PARALLEL_ID, jobParallel);
         }
     }
@@ -587,6 +683,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         if (tag.contains(DUST_ID)) {
             dustSlot.deserializeNBT(tag.getCompound(DUST_ID));
         }
+        upgrades.readFromNBT(tag, TAG_UPGRADES);
         if (tag.contains(MIRROR_SIDE_ID)) {
             mirrorSide = tag.getBoolean(MIRROR_SIDE_ID);
             mirrorFront = tag.getBoolean(MIRROR_FRONT_ID);
@@ -599,6 +696,9 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         if (recipe.orElse(null) instanceof LavaSmelterRecipe smelterRecipe) {
             // 恢复加工进度
             jobTicksLeft = tag.getInt(JOB_TICKS_ID);
+            jobTotalTicks = tag.contains(JOB_TOTAL_TICKS_ID)
+                    ? tag.getInt(JOB_TOTAL_TICKS_ID)
+                    : Math.max(1, smelterRecipe.getDuration());
             jobParallel = Math.max(1, tag.getInt(JOB_PARALLEL_ID));
             currentRecipe = smelterRecipe;
         }
@@ -674,9 +774,9 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         return result.copyWithCount((int) Math.min(total, Integer.MAX_VALUE));
     }
 
-    /** 当前作业的配方总耗时（tick）；空闲为 0。 */
+    /** 当前作业的实际总耗时（tick，含加速卡加成）；空闲为 0。 */
     public int getJobDuration() {
-        return currentRecipe != null ? Math.max(1, currentRecipe.getDuration()) : 0;
+        return currentRecipe != null && jobTicksLeft > 0 ? jobTotalTicks : 0;
     }
 
     /** 当前作业已进行的时间（tick）；空闲为 0。 */

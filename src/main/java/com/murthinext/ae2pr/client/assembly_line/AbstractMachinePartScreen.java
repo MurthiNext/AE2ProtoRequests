@@ -11,20 +11,26 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
+import com.murthinext.ae2pr.client.ModGuide;
+import com.murthinext.ae2pr.client.gui.GuideButton;
+
 /**
- * 机器部件界面基类：
+ * 机器部件界面基类。
  */
 public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu> extends AbstractContainerScreen<M> {
 
-    /** 左侧工具栏位置（相对 GUI 左上角） */
+    /** 左侧工具栏位置 */
     private static final int TOOLBAR_X = -22;
     private static final int TOOLBAR_Y = 2;
+    private static final int TOOLBAR_ROW_STEP = 20;
 
     private static final int TITLE_X = 7;
     private static final int TITLE_Y = 9;
 
     private static final int COLOR_TITLE = 0x55FFFF;
 
+    @Nullable
+    private GuideButton guideButton;
     @Nullable
     private AutoTransferButton autoTransferButton;
 
@@ -43,7 +49,10 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
     @Override
     protected void init() {
         super.init();
-        autoTransferButton = new AutoTransferButton(leftPos + TOOLBAR_X + 1, topPos + TOOLBAR_Y + 1,
+        guideButton = new GuideButton(leftPos + TOOLBAR_X + 1, topPos + TOOLBAR_Y + 1,
+                () -> ModGuide.openAt(ModGuide.CHAMBERS_PAGE));
+        addRenderableWidget(guideButton);
+        autoTransferButton = new AutoTransferButton(leftPos + TOOLBAR_X + 1, topPos + TOOLBAR_Y + 1 + TOOLBAR_ROW_STEP,
                 isOutput() ? AutoTransferButton.Type.PUSH : AutoTransferButton.Type.PULL,
                 this::autoTransferEnabled,
                 () -> Minecraft.getInstance().gameMode.handleInventoryButtonClick(menu.containerId, 0));
@@ -59,11 +68,14 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
 
     /** 绘制左侧工具栏底板（在 {@link #renderBg} 中调用）。 */
     protected void renderToolbar(GuiGraphics graphics) {
-        AutoTransferButton.renderToolbar(graphics, leftPos + TOOLBAR_X, topPos + TOOLBAR_Y, 1);
+        AutoTransferButton.renderToolbar(graphics, leftPos + TOOLBAR_X, topPos + TOOLBAR_Y, 2);
     }
 
     /** 工具栏按钮的悬停提示；返回 true 表示已处理。 */
-    protected boolean renderAutoTransferTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+    protected boolean renderToolbarTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+        if (guideButton != null && guideButton.renderTooltipIfHovered(graphics, font, mouseX, mouseY)) {
+            return true;
+        }
         if (autoTransferButton == null || !autoTransferButton.isHovered()) {
             return false;
         }

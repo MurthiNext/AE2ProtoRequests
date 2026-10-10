@@ -1,5 +1,6 @@
 package com.murthinext.ae2pr.compat.jei;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,11 +34,12 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
             LavaSmelterRecipe.class);
 
     private static final int WIDTH = 142;
-    private static final int HEIGHT = 88;
+    private static final int HEIGHT = 98;
     private static final int OUTPUT_X = 117;
     private static final int OUTPUT_Y = 12;
     private static final int OUTPUT_GAP = 18;
     private static final int COLOR_TEXT = 0x404040;
+    private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
     private final IDrawable icon;
 
@@ -114,5 +116,7 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
                 1), 4, 67, COLOR_TEXT, false);
         graphics.drawString(font, Component.translatable("jei.ae2pr.lava_smelter.duration",
                 recipe.getDuration()), 4, 77, COLOR_TEXT, false);
+        graphics.drawString(font, Component.translatable("jei.ae2pr.lava_smelter.energy",
+                NUMBER.format(recipe.getEnergyPerParallel())), 4, 87, COLOR_TEXT, false);
     }
 }

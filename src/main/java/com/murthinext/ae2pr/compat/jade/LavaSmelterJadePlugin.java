@@ -24,14 +24,13 @@ import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
 
 /**
- * Jade 兼容插件：显示熔岩冶炼炉的成型状态、当前作业与进度、配方耐久。
+ * Jade 兼容插件：显示熔岩冶炼炉的网络连接状态、当前作业进度与配方耐久。
  */
 @WailaPlugin(ae2pr.MODID)
 public class LavaSmelterJadePlugin implements IWailaPlugin {
 
     private static final String KEY_FORMED = "formed";
-    private static final String KEY_RUNNING = "running";
-    private static final String KEY_PAUSED = "paused";
+    private static final String KEY_ENERGY_CONNECTED = "energyConnected";
     private static final String KEY_DURABILITY = "durability";
     private static final String KEY_ELAPSED = "elapsed";
     private static final String KEY_DURATION = "duration";
@@ -48,7 +47,7 @@ public class LavaSmelterJadePlugin implements IWailaPlugin {
         registration.registerBlockComponent(ComponentProvider.INSTANCE, HighReactivityLavaSmelterBlock.class);
     }
 
-    /** 服务端数据：成型状态、当前作业与配方耐久。 */
+    /** 服务端数据：网络连接状态、当前作业与配方耐久。 */
     private enum ServerData implements IServerDataProvider<BlockAccessor> {
         INSTANCE;
 
@@ -58,8 +57,7 @@ public class LavaSmelterJadePlugin implements IWailaPlugin {
                 return;
             }
             data.putBoolean(KEY_FORMED, controller.isFormed());
-            data.putBoolean(KEY_RUNNING, controller.isRunning());
-            data.putBoolean(KEY_PAUSED, controller.isPaused());
+            data.putBoolean(KEY_ENERGY_CONNECTED, controller.isEnergyConnected());
             data.putInt(KEY_DURABILITY, controller.getDurability());
             data.putInt(KEY_ELAPSED, controller.getJobElapsed());
             data.putInt(KEY_DURATION, controller.getJobDuration());
@@ -76,7 +74,7 @@ public class LavaSmelterJadePlugin implements IWailaPlugin {
         }
     }
 
-    /** 客户端展示：状态、产物 x 数量、进度条与配方耐久。 */
+    /** 客户端展示：网络连接状态、当前作业进度与配方耐久。 */
     private enum ComponentProvider implements IBlockComponentProvider {
         INSTANCE;
 
@@ -86,8 +84,9 @@ public class LavaSmelterJadePlugin implements IWailaPlugin {
             if (!data.contains(KEY_FORMED)) {
                 return;
             }
-            tooltip.add(Component.translatable("jade.ae2pr.lava_smelter.status",
-                    Component.translatable(statusKey(data))));
+            tooltip.add(Component.translatable(data.getBoolean(KEY_ENERGY_CONNECTED)
+                    ? "jade.ae2pr.multiblock.connected"
+                    : "jade.ae2pr.multiblock.disconnected"));
 
             int duration = data.getInt(KEY_DURATION);
             String itemId = data.getString(KEY_ITEM);
@@ -113,19 +112,6 @@ public class LavaSmelterJadePlugin implements IWailaPlugin {
         @Override
         public ResourceLocation getUid() {
             return new ResourceLocation(ae2pr.MODID, "lava_smelter");
-        }
-
-        private static String statusKey(CompoundTag data) {
-            if (!data.getBoolean(KEY_FORMED)) {
-                return "gui.ae2pr.lava_smelter.status.unformed";
-            }
-            if (data.getBoolean(KEY_RUNNING)) {
-                return "gui.ae2pr.lava_smelter.status.running";
-            }
-            if (data.getBoolean(KEY_PAUSED)) {
-                return "gui.ae2pr.lava_smelter.status.paused";
-            }
-            return "gui.ae2pr.lava_smelter.status.formed";
         }
 
         private static String seconds(int ticks) {

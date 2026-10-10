@@ -10,6 +10,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.items.SlotItemHandler;
 
 import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.network.AssemblyLineJobPacket;
@@ -29,9 +30,15 @@ public class AssemblyLineMenu extends AbstractContainerMenu {
     private static final int INV_Y = 122;
     private static final int HOTBAR_Y = 180;
 
+    /** 升级槽 */
+    private static final int UPGRADE_SLOTS = 4;
+    private static final int UPGRADE_X = 180;
+    private static final int UPGRADE_Y = 4;
+    private static final int UPGRADE_STEP = 20;
+
     private final AssemblyLineControllerBlockEntity controller;
     private final Player owner;
-    private final SimpleContainerData data = new SimpleContainerData(9);
+    private final SimpleContainerData data = new SimpleContainerData(8);
     private final boolean clientSide;
     private ItemStack lastJobOutput = ItemStack.EMPTY;
     private boolean jobOutputSynced;
@@ -42,6 +49,12 @@ public class AssemblyLineMenu extends AbstractContainerMenu {
         this.owner = playerInventory.player;
         this.clientSide = playerInventory.player.level().isClientSide;
 
+        if (controller != null) {
+            var upgrades = controller.getUpgrades().toItemHandler();
+            for (int i = 0; i < UPGRADE_SLOTS; i++) {
+                addSlot(new SlotItemHandler(upgrades, i, UPGRADE_X, UPGRADE_Y + i * UPGRADE_STEP));
+            }
+        }
         for (int row = 0; row < INV_ROWS; row++) {
             for (int col = 0; col < INV_COLS; col++) {
                 addSlot(new Slot(playerInventory, col + row * INV_COLS + INV_COLS,
@@ -74,7 +87,6 @@ public class AssemblyLineMenu extends AbstractContainerMenu {
             data.set(5, controller.getJobElapsed());
             data.set(6, controller.getJobDuration());
             data.set(7, controller.maxParallel());
-            data.set(8, (int) Math.round(controller.getSpeedMultiplier() * 100.0));
 
             ItemStack jobOutput = controller.getJobOutput();
             if (owner instanceof ServerPlayer serverPlayer
@@ -136,15 +148,28 @@ public class AssemblyLineMenu extends AbstractContainerMenu {
         return data.get(7);
     }
 
-    /** 当前模块加成下的速度百分比（100 = 基础速度）。 */
-    public int getSpeedPercent() {
-        return data.get(8);
-    }
-
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
-        // 仅玩家背包，无需跨容器搬运
-        return ItemStack.EMPTY;
+        Slot slot = slots.get(index);
+        if (!slot.hasItem()) {
+            return ItemStack.EMPTY;
+        }
+        ItemStack stack = slot.getItem();
+        ItemStack original = stack.copy();
+        if (index < UPGRADE_SLOTS) {
+            if (!moveItemStackTo(stack, UPGRADE_SLOTS, slots.size(), true)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (!moveItemStackTo(stack, 0, UPGRADE_SLOTS, false)) {
+            // 玩家背包 -> 升级槽
+            return ItemStack.EMPTY;
+        }
+        if (stack.isEmpty()) {
+            slot.setByPlayer(ItemStack.EMPTY);
+        } else {
+            slot.setChanged();
+        }
+        return original;
     }
 
     @Override
