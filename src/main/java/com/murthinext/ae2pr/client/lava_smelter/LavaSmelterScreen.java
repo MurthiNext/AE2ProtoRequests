@@ -11,11 +11,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 
 import com.murthinext.ae2pr.ModBlocks;
-import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterMenu;
 import com.murthinext.ae2pr.client.ModGuide;
 import com.murthinext.ae2pr.client.gui.AbstractMachineScreen;
+import com.murthinext.ae2pr.client.gui.MachineGui;
 import com.murthinext.ae2pr.client.gui.MultiblockInfoLayout;
 
 /**
@@ -23,14 +23,15 @@ import com.murthinext.ae2pr.client.gui.MultiblockInfoLayout;
  */
 public class LavaSmelterScreen extends AbstractMachineScreen<LavaSmelterMenu> {
 
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
-            "textures/gui/high_reactivity_lava_smelter.png");
-
     private static final int TITLE_X = MultiblockInfoLayout.TEXT_X;
     private static final int TITLE_Y = 9;
     private static final int COLOR_TITLE = 0xFFC46B;
     private static final int COLOR_FAIL = 0xFF5555;
     private static final int COLOR_DURABILITY = 0xFFC46B;
+
+    /** 陨石粉槽位置（与菜单中的槽位坐标一致） */
+    private static final int DUST_SLOT_X = 151;
+    private static final int DUST_SLOT_Y = 95;
 
     public LavaSmelterScreen(LavaSmelterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -64,9 +65,20 @@ public class LavaSmelterScreen extends AbstractMachineScreen<LavaSmelterMenu> {
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
-        renderToolbar(graphics);
-        renderUpgradeSlots(graphics);
+        super.renderBg(graphics, partialTick, mouseX, mouseY);
+        // 陨石粉槽位于机器区右下角
+        MachineGui.drawSlot(graphics, leftPos + DUST_SLOT_X, topPos + DUST_SLOT_Y);
+    }
+
+    /** 与冶炼炉主题一致的暖色分隔线。 */
+    @Override
+    protected int separatorAccent() {
+        return MachineGui.ACCENT_EMBER;
+    }
+
+    @Override
+    protected int separatorAccentDark() {
+        return MachineGui.ACCENT_EMBER_DARK;
     }
 
     @Override

@@ -11,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 
 import com.murthinext.ae2pr.ModBlocks;
-import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineControllerBlockEntity;
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineMenu;
 import com.murthinext.ae2pr.client.ModGuide;
@@ -22,9 +21,6 @@ import com.murthinext.ae2pr.client.gui.MultiblockInfoLayout;
  * 水晶装配线主机界面；信息区使用多方块机器统一布局。
  */
 public class AssemblyLineScreen extends AbstractMachineScreen<AssemblyLineMenu> {
-
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
-            "textures/gui/crystal_assembly_line.png");
 
     private static final int TITLE_X = MultiblockInfoLayout.TEXT_X;
     private static final int TITLE_Y = 9;
@@ -58,13 +54,6 @@ public class AssemblyLineScreen extends AbstractMachineScreen<AssemblyLineMenu> 
         this.renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTick);
         this.renderTooltip(graphics, mouseX, mouseY);
-    }
-
-    @Override
-    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
-        renderToolbar(graphics);
-        renderUpgradeSlots(graphics);
     }
 
     @Override

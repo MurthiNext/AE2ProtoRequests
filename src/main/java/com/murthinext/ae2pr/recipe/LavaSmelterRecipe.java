@@ -28,21 +28,7 @@ import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModRecipes;
 
 /**
- * 熔岩冶炼炉配方：在炉内以配方耐久为代价熔炼物品，按数量消耗并产出。
- * <p>
- * JSON 格式：
- * <pre>
- * {
- *   "type": "ae2pr:lava_smelter",
- *   "ingredients": [ { "item": "...", "count": 10 }, ... ],
- *   "results": [ { "item": "...", "count": 10 }, ... ],
- *   "duration": 100,
- *   "energy_per_parallel": 10000
- * }
- * </pre>
- * {@code results} 支持一至两个产物；旧版单产物字段 {@code result} 仍可使用。
- * {@code duration} 可省略，默认 {@value #DEFAULT_DURATION} tick。
- * {@code energy_per_parallel} 可省略，使用配置默认值（见 {@link #getEnergyPerParallel()}）。
+ * 熔岩冶炼炉配方。
  */
 public class LavaSmelterRecipe implements Recipe<Container> {
 

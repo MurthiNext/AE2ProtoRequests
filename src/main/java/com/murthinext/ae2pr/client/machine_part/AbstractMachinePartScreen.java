@@ -13,6 +13,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import com.murthinext.ae2pr.client.ModGuide;
 import com.murthinext.ae2pr.client.gui.GuideButton;
+import com.murthinext.ae2pr.client.gui.MachineGui;
 
 /**
  * 机器部件界面基类。
@@ -36,8 +37,8 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
 
     protected AbstractMachinePartScreen(M menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        this.imageWidth = 176;
-        this.imageHeight = 200;
+        this.imageWidth = MachineGui.WIDTH;
+        this.imageHeight = MachineGui.HEIGHT;
     }
 
     /** 输出部件（自动推出）还是输入部件（自动拉取）。 */
@@ -64,6 +65,13 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
         this.renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTick);
         this.renderTooltip(graphics, mouseX, mouseY);
+    }
+
+    /** 绘制面板、分隔线与玩家背包。 */
+    protected void renderPanel(GuiGraphics graphics) {
+        MachineGui.drawPanel(graphics, leftPos, topPos);
+        MachineGui.drawSeparator(graphics, leftPos, topPos, MachineGui.ACCENT_CRYSTAL, MachineGui.ACCENT_CRYSTAL_DARK);
+        MachineGui.drawInventorySlots(graphics, leftPos, topPos);
     }
 
     /** 绘制左侧工具栏底板（在 {@link #renderBg} 中调用）。 */

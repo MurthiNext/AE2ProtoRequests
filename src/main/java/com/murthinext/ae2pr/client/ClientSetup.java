@@ -24,6 +24,7 @@ import com.murthinext.ae2pr.client.emitter.MultiLevelEmitterScreen;
 import com.murthinext.ae2pr.client.emitter.MultiThresholdLevelEmitterScreen;
 import com.murthinext.ae2pr.client.lava_smelter.LavaSmelterRenderer;
 import com.murthinext.ae2pr.client.lava_smelter.LavaSmelterScreen;
+import com.murthinext.ae2pr.client.matter_phase_transformer.MatterPhaseTransformerScreen;
 import com.murthinext.ae2pr.client.naming_factory.NamingFactoryRenderer;
 import com.murthinext.ae2pr.client.naming_factory.NamingFactoryScreen;
 
@@ -46,6 +47,7 @@ public final class ClientSetup {
                 "/screens/multi_threshold_level_emitter.json");
         MenuScreens.register(ModMenus.CRYSTAL_ASSEMBLY_LINE.get(), AssemblyLineScreen::new);
         MenuScreens.register(ModMenus.HIGH_REACTIVITY_LAVA_SMELTER.get(), LavaSmelterScreen::new);
+        MenuScreens.register(ModMenus.MATTER_PHASE_TRANSFORMER.get(), MatterPhaseTransformerScreen::new);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_ITEM_BUS.get(), ItemBusScreen::new);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), FluidHatchScreen::new);
         MenuScreens.register(ModMenus.NAMING_FACTORY.get(), NamingFactoryScreen::new);

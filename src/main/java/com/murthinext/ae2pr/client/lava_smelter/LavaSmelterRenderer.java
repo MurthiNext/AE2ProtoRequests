@@ -22,7 +22,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
-import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterStructure;
+import com.murthinext.ae2pr.multiblock.structure.LavaSmelterStructure;
 
 /**
  * 炉膛假熔岩渲染。

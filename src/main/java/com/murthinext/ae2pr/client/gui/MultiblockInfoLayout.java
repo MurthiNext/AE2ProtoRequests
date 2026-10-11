@@ -6,10 +6,15 @@ import java.util.Locale;
 import javax.annotation.Nullable;
 
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.fluids.FluidStack;
 
 import appeng.util.ReadableNumberConverter;
 
@@ -90,6 +95,34 @@ public final class MultiblockInfoLayout {
         int x = leftPos + JOB_ITEM_X;
         int y = topPos + JOB_ITEM_Y;
         return mouseX >= x - 1 && mouseX < x + 17 && mouseY >= y - 1 && mouseY < y + 17;
+    }
+
+    /** 流体作业区。 */
+    public static void renderFluidJob(GuiGraphics graphics, Font font, int leftPos, int topPos, FluidStack fluid,
+            int elapsed, int duration) {
+        if (fluid.isEmpty() || duration <= 0) {
+            return;
+        }
+        renderFluidIcon(graphics, fluid, JOB_ITEM_X, JOB_ITEM_Y);
+        String amount = NumberFormat.getIntegerInstance().format(fluid.getAmount()) + " mB";
+        Component tail = Component.literal(amount).append(Component.translatable(
+                "gui.ae2pr.multiblock.job.time", seconds(elapsed), seconds(duration)));
+        int tailX = WIDTH - 2 - font.width(tail);
+        renderJobName(graphics, font, leftPos, topPos, fluid.getDisplayName().getString(),
+                tailX - JOB_TAIL_GAP - JOB_TEXT_X);
+        graphics.drawString(font, tail, tailX, JOB_TEXT_Y, COLOR_RUNNING, false);
+    }
+
+    /** 以流体静贴图绘制 16x16 图标。 */
+    private static void renderFluidIcon(GuiGraphics graphics, FluidStack fluid, int x, int y) {
+        IClientFluidTypeExtensions extensions = IClientFluidTypeExtensions.of(fluid.getFluid());
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+                .apply(extensions.getStillTexture(fluid));
+        int color = extensions.getTintColor(fluid);
+        graphics.setColor(((color >> 16) & 0xFF) / 255.0F, ((color >> 8) & 0xFF) / 255.0F,
+                (color & 0xFF) / 255.0F, ((color >>> 24) & 0xFF) / 255.0F);
+        graphics.blit(x, y, 0, 16, 16, sprite);
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     /** 合成产物区 */

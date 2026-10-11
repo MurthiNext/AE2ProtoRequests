@@ -7,21 +7,31 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.ItemLike;
 
 import com.murthinext.ae2pr.ModBlocks;
-import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryMenu;
 import com.murthinext.ae2pr.client.ModGuide;
 import com.murthinext.ae2pr.client.gui.AbstractMachineScreen;
+import com.murthinext.ae2pr.client.gui.MachineGui;
 
 /**
  * 名称压印工厂界面：三槽位 + 加工进度条 + 名称文字。
  */
 public class NamingFactoryScreen extends AbstractMachineScreen<NamingFactoryMenu> {
 
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
-            "textures/gui/naming_factory.png");
-
-    /** 进度条内槽（与生成脚本 NF_PROGRESS 对应） */
+    /** 槽位与箭标位置（与菜单中的槽位坐标一致） */
+    private static final int TEMPLATE_SLOT_X = 120;
+    private static final int TEMPLATE_SLOT_Y = 50;
+    private static final int INPUT_SLOT_X = 80;
+    private static final int INPUT_SLOT_Y = 26;
+    private static final int OUTPUT_SLOT_X = 80;
+    private static final int OUTPUT_SLOT_Y = 74;
+    private static final int PRESS_ARROW_X = 83;
+    private static final int PRESS_ARROW_Y = 52;
+    /** 进度条凹槽与内槽（与外层凹槽居中对齐） */
+    private static final int GROOVE_X = 34;
+    private static final int GROOVE_Y = 94;
+    private static final int GROOVE_WIDTH = 108;
+    private static final int GROOVE_HEIGHT = 6;
     private static final int PROGRESS_X = 35;
     private static final int PROGRESS_Y = 95;
     private static final int PROGRESS_WIDTH = 106;
@@ -60,10 +70,14 @@ public class NamingFactoryScreen extends AbstractMachineScreen<NamingFactoryMenu
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.blit(TEXTURE, leftPos, topPos, 0, 0, imageWidth, imageHeight);
-        renderToolbar(graphics);
-        renderUpgradeSlots(graphics);
-
+        super.renderBg(graphics, partialTick, mouseX, mouseY);
+        // 模板格、待命名物品格与产物格 + 中间的压印箭标
+        MachineGui.drawSlot(graphics, leftPos + TEMPLATE_SLOT_X, topPos + TEMPLATE_SLOT_Y);
+        MachineGui.drawSlot(graphics, leftPos + INPUT_SLOT_X, topPos + INPUT_SLOT_Y);
+        MachineGui.drawSlot(graphics, leftPos + OUTPUT_SLOT_X, topPos + OUTPUT_SLOT_Y);
+        MachineGui.drawArrow(graphics, leftPos + PRESS_ARROW_X, topPos + PRESS_ARROW_Y, true, true);
+        // 加工进度条：凹槽 + 进度填充
+        MachineGui.drawBarGroove(graphics, leftPos + GROOVE_X, topPos + GROOVE_Y, GROOVE_WIDTH, GROOVE_HEIGHT);
         NamingFactoryBlockEntity blockEntity = menu.getBlockEntity();
         float progress = blockEntity != null ? blockEntity.getWorkProgress(partialTick) : 0;
         int fill = Math.round(PROGRESS_WIDTH * progress);

@@ -24,6 +24,8 @@ public final class ModGuide {
             "multiblocks/crystal_assembly_line.md");
     public static final ResourceLocation LAVA_SMELTER_PAGE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "multiblocks/high_reactivity_lava_smelter.md");
+    public static final ResourceLocation MATTER_PHASE_TRANSFORMER_PAGE = ResourceLocation.fromNamespaceAndPath(
+            ae2pr.MODID, "multiblocks/matter_phase_transformer.md");
     public static final ResourceLocation NAMING_FACTORY_PAGE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "machines/naming_factory.md");
     public static final ResourceLocation CHAMBERS_PAGE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,

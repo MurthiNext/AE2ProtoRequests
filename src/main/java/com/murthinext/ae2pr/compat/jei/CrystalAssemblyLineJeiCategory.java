@@ -81,17 +81,12 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
 
     private static final ResourceLocation PIPE_TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/jei/assembly_line_pipes.png");
-    private static final ResourceLocation FLUID_SLOT_TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
-            "textures/gui/jei/fluid_slot.png");
 
     private final IDrawable icon;
-    private final IDrawable fluidSlotBackground;
+    private final IDrawable fluidSlotBackground = new FluidSlotBackground();
 
     public CrystalAssemblyLineJeiCategory(IGuiHelper guiHelper) {
         this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModBlocks.CRYSTAL_ASSEMBLY_LINE.get()));
-        this.fluidSlotBackground = guiHelper.drawableBuilder(FLUID_SLOT_TEXTURE, 0, 0, SLOT, SLOT)
-                .setTextureSize(SLOT, SLOT)
-                .build();
     }
 
     @Override

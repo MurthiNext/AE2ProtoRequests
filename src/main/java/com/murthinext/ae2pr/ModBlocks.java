@@ -20,6 +20,7 @@ import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
 import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
+import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerBlock;
 import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOreBlock;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlock;
@@ -212,6 +213,10 @@ public final class ModBlocks {
     /** 高能核心方块 */
     public static final RegistryObject<Block> HIGH_ENERGY_CORE = BLOCKS.register(
             "high_energy_core", () -> new DisassemblableBlock(casingProperties()));
+
+    /** 物质相变仪主机 */
+    public static final RegistryObject<MatterPhaseTransformerBlock> MATTER_PHASE_TRANSFORMER = BLOCKS.register(
+            "matter_phase_transformer", MatterPhaseTransformerBlock::new);
 
     /** 锆刚玉砖块 */
     public static final RegistryObject<Block> ZIRCONIA_CORUNDUM_BRICKS = BLOCKS.register(

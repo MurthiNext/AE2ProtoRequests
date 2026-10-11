@@ -2,6 +2,7 @@ package com.murthinext.ae2pr;
 
 import com.murthinext.ae2pr.fluid.AlienLavaFluid;
 import com.murthinext.ae2pr.fluid.AlienLavaFluidType;
+import com.murthinext.ae2pr.fluid.LiquidCertusQuartzFluidType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -44,5 +45,24 @@ public final class ModFluids {
                 .levelDecreasePerBlock(2)
                 .tickRate(30)
                 .explosionResistance(100.0F);
+    }
+
+    /** 液态赛特斯石英水晶流体类型 */
+    public static final RegistryObject<FluidType> LIQUID_CERTUS_QUARTZ_TYPE = FLUID_TYPES.register(
+            "liquid_certus_quartz", LiquidCertusQuartzFluidType::new);
+
+    /** 源液态赛特斯石英水晶（无桶、无源方块，只能存在于容器与管道中） */
+    public static final RegistryObject<ForgeFlowingFluid> LIQUID_CERTUS_QUARTZ = FLUIDS.register(
+            "liquid_certus_quartz", () -> new ForgeFlowingFluid.Source(liquidCertusQuartzProperties()));
+
+    /** 流动液态赛特斯石英水晶 */
+    public static final RegistryObject<ForgeFlowingFluid> FLOWING_LIQUID_CERTUS_QUARTZ = FLUIDS.register(
+            "flowing_liquid_certus_quartz", () -> new ForgeFlowingFluid.Flowing(liquidCertusQuartzProperties()));
+
+    /** 液态赛特斯石英水晶的流体属性（带桶，但无源方块） */
+    private static ForgeFlowingFluid.Properties liquidCertusQuartzProperties() {
+        return new ForgeFlowingFluid.Properties(LIQUID_CERTUS_QUARTZ_TYPE, LIQUID_CERTUS_QUARTZ,
+                FLOWING_LIQUID_CERTUS_QUARTZ)
+                .bucket(ModItems.LIQUID_CERTUS_QUARTZ_BUCKET);
     }
 }

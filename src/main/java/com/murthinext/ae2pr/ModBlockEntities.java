@@ -12,6 +12,7 @@ import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
+import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerControllerBlockEntity;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
 
 /**
@@ -57,6 +58,12 @@ public final class ModBlockEntities {
             .register("high_reactivity_lava_smelter", () -> BlockEntityType.Builder.of(
                     LavaSmelterControllerBlockEntity::new,
                     ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()).build(null));
+
+    /** 物质相变仪控制器 */
+    public static final RegistryObject<BlockEntityType<MatterPhaseTransformerControllerBlockEntity>> MATTER_PHASE_TRANSFORMER = BLOCK_ENTITIES
+            .register("matter_phase_transformer", () -> BlockEntityType.Builder.of(
+                    MatterPhaseTransformerControllerBlockEntity::new,
+                    ModBlocks.MATTER_PHASE_TRANSFORMER.get()).build(null));
 
     /** 名称压印工厂 */
     public static final RegistryObject<BlockEntityType<NamingFactoryBlockEntity>> NAMING_FACTORY = BLOCK_ENTITIES

@@ -10,6 +10,7 @@ import net.minecraftforge.registries.RegistryObject;
 import com.murthinext.ae2pr.recipe.AlienLavaRecipe;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
 import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
+import com.murthinext.ae2pr.recipe.MatterPhaseRecipe;
 
 /**
  * 配方注册入口：配方类型与序列化器都通过注册事件注册，避免注册表冻结问题。
@@ -64,4 +65,17 @@ public final class ModRecipes {
     /** 熔岩冶炼炉配方序列化器 */
     public static final RegistryObject<LavaSmelterRecipe.Serializer> LAVA_SMELTER = SERIALIZERS
             .register("lava_smelter", LavaSmelterRecipe.Serializer::new);
+
+    /** 物质相变仪配方类型 */
+    public static final RegistryObject<RecipeType<MatterPhaseRecipe>> MATTER_PHASE_TYPE = RECIPE_TYPES
+            .register("matter_phase", () -> new RecipeType<MatterPhaseRecipe>() {
+                @Override
+                public String toString() {
+                    return ae2pr.MODID + ":matter_phase";
+                }
+            });
+
+    /** 物质相变仪配方序列化器 */
+    public static final RegistryObject<MatterPhaseRecipe.Serializer> MATTER_PHASE = SERIALIZERS
+            .register("matter_phase", MatterPhaseRecipe.Serializer::new);
 }

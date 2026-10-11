@@ -36,6 +36,7 @@ import com.murthinext.ae2pr.multiblock.StructureResult;
 import com.murthinext.ae2pr.multiblock.StructureValidator;
 import com.murthinext.ae2pr.multiblock.module.ModuleSnapshot;
 import com.murthinext.ae2pr.multiblock.module.ModuleType;
+import com.murthinext.ae2pr.multiblock.structure.AssemblyLineStructure;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
 
 /**

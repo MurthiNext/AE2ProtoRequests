@@ -38,6 +38,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.UNCHARGED_SINGULARITY.get());
                         output.accept(ModItems.HIGH_ENERGY_SINGULARITY.get());
                         output.accept(ModItems.ALIEN_LAVA_BUCKET.get());
+                        output.accept(ModItems.LIQUID_CERTUS_QUARTZ_BUCKET.get());
 
                         // 锭 & 宝石
                         output.accept(ModItems.METEOR_STEEL_INGOT.get());
@@ -81,6 +82,7 @@ public final class ModCreativeTabs {
                         // 多方块结构 - 主机
                         output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE.get());
                         output.accept(ModItems.HIGH_REACTIVITY_LAVA_SMELTER.get());
+                        output.accept(ModItems.MATTER_PHASE_TRANSFORMER.get());
 
                         // 多方块结构 - 普通结构方块
                         output.accept(ModItems.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get());

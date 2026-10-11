@@ -11,6 +11,7 @@ import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterMenu;
 import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterMenu;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
 import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
+import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerMenu;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryMenu;
 
 /**
@@ -35,6 +36,9 @@ public final class ModMenus {
 
     public static final RegistryObject<MenuType<LavaSmelterMenu>> HIGH_REACTIVITY_LAVA_SMELTER = MENUS
             .register("high_reactivity_lava_smelter", () -> LavaSmelterMenu.TYPE);
+
+    public static final RegistryObject<MenuType<MatterPhaseTransformerMenu>> MATTER_PHASE_TRANSFORMER = MENUS
+            .register("matter_phase_transformer", () -> MatterPhaseTransformerMenu.TYPE);
 
     public static final RegistryObject<MenuType<ItemBusMenu>> CERTUS_QUARTZ_CRYSTAL_ITEM_BUS = MENUS
             .register("certus_quartz_crystal_item_bus", () -> ItemBusMenu.TYPE);

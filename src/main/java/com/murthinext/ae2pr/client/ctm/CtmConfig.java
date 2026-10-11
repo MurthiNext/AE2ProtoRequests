@@ -124,8 +124,9 @@ public final class CtmConfig {
             return 8;
         }
         if (block == ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get()
-                || block == ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()) {
-            // 熔岩冶炼炉主机同用锆刚玉砖块贴图，与砖块互相连接
+                || block == ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()
+                || block == ModBlocks.MATTER_PHASE_TRANSFORMER.get()) {
+            // 冶炼炉 / 相变仪主机同用锆刚玉砖块贴图，与砖块互相连接
             return 4;
         }
         if (block == ModBlocks.METEOR_STEEL_PIPE_BLOCK.get()) {

@@ -1,5 +1,6 @@
 package com.murthinext.ae2pr;
 
+import com.murthinext.ae2pr.item.NoBlockFluidBucketItem;
 import com.murthinext.ae2pr.item.level_emitter.MultiLevelEmitterPartItem;
 import com.murthinext.ae2pr.item.level_emitter.MultiThresholdLevelEmitterPartItem;
 import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
@@ -201,6 +202,11 @@ public final class ModItems {
             () -> new BucketItem(ModFluids.ALIEN_LAVA,
                     new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
+    /** 液态赛特斯石英水晶桶（无方块态：只能存于容器与管道中） */
+    public static final RegistryObject<BucketItem> LIQUID_CERTUS_QUARTZ_BUCKET = ITEMS.register(
+            "liquid_certus_quartz_bucket", () -> new NoBlockFluidBucketItem(ModFluids.LIQUID_CERTUS_QUARTZ,
+                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+
     /** 名称压印工厂 */
     public static final RegistryObject<BlockItem> NAMING_FACTORY = ITEMS.register("naming_factory",
             () -> new BlockItem(ModBlocks.NAMING_FACTORY.get(), new Item.Properties()));
@@ -283,6 +289,10 @@ public final class ModItems {
     /** 高能核心方块 */
     public static final RegistryObject<BlockItem> HIGH_ENERGY_CORE = ITEMS.register("high_energy_core",
             () -> new BlockItem(ModBlocks.HIGH_ENERGY_CORE.get(), new Item.Properties()));
+
+    /** 物质相变仪主机 */
+    public static final RegistryObject<BlockItem> MATTER_PHASE_TRANSFORMER = ITEMS.register("matter_phase_transformer",
+            () -> new BlockItem(ModBlocks.MATTER_PHASE_TRANSFORMER.get(), new Item.Properties()));
 
     /** 锆刚玉砖块 */
     public static final RegistryObject<BlockItem> ZIRCONIA_CORUNDUM_BRICKS = ITEMS.register("zirconia_corundum_bricks",

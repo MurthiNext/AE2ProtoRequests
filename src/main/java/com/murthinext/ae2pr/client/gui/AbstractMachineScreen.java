@@ -32,16 +32,14 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
     private static final int UPGRADE_PANEL_Y = 2;
     private static final int UPGRADE_SLOTS = 4;
     private static final int UPGRADE_SLOT_STEP = 20;
-    private static final int COLOR_SLOT_BG = 0xFF1B222B;
-    private static final int COLOR_SLOT_LINE = 0xFF39424E;
 
     @Nullable
     private GuideButton guideButton;
 
     protected AbstractMachineScreen(M menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        this.imageWidth = 176;
-        this.imageHeight = 200;
+        this.imageWidth = MachineGui.WIDTH;
+        this.imageHeight = MachineGui.HEIGHT;
     }
 
     /** 指南按钮要打开的页面。 */
@@ -49,6 +47,16 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
 
     /** 升级槽对应的机器物品（用于面板悬停提示）。 */
     protected abstract ItemLike upgradeMachine();
+
+    /** 标题分隔线的机器点缀色。 */
+    protected int separatorAccent() {
+        return MachineGui.ACCENT_CRYSTAL;
+    }
+
+    /** 标题分隔线点缀色的暗色（分隔线下方 1px）。 */
+    protected int separatorAccentDark() {
+        return MachineGui.ACCENT_CRYSTAL_DARK;
+    }
 
     @Override
     protected void init() {
@@ -58,25 +66,29 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
         addRenderableWidget(guideButton);
     }
 
+    @Override
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+        MachineGui.drawPanel(graphics, leftPos, topPos);
+        MachineGui.drawSeparator(graphics, leftPos, topPos, separatorAccent(), separatorAccentDark());
+        MachineGui.drawInventorySlots(graphics, leftPos, topPos);
+        renderToolbar(graphics);
+        renderUpgradeSlots(graphics);
+    }
+
     /** 绘制左侧工具栏底板（在 {@link #renderBg} 中调用）。 */
     protected void renderToolbar(GuiGraphics graphics) {
         AutoTransferButton.renderToolbar(graphics, leftPos + TOOLBAR_X, topPos + TOOLBAR_Y, 1);
     }
 
-    /** 绘制右侧升级槽栏（在 {@link #renderBg} 中调用）。 */
+    /** 绘制右侧升级槽栏（在 {@link #renderBg} 中调用；槽位物品位与菜单中的坐标一致）。 */
     protected void renderUpgradeSlots(GuiGraphics graphics) {
         int x = leftPos + UPGRADE_PANEL_X;
         int y = topPos + UPGRADE_PANEL_Y;
         AutoTransferButton.renderToolbar(graphics, x, y, UPGRADE_SLOTS);
         for (int i = 0; i < UPGRADE_SLOTS; i++) {
-            drawUpgradeSlot(graphics, x + 1, y + 1 + i * UPGRADE_SLOT_STEP);
+            // 面板内缩 1px，槽位组件再按物品位左上角绘制（组件自带 1px 描边）
+            MachineGui.drawSlot(graphics, x + 2, y + 2 + i * UPGRADE_SLOT_STEP);
         }
-    }
-
-    /** 单格升级槽：1px 描边 + 深色底板（与贴图槽位配色一致）。 */
-    private static void drawUpgradeSlot(GuiGraphics graphics, int x, int y) {
-        graphics.fill(x, y, x + 18, y + 18, COLOR_SLOT_LINE);
-        graphics.fill(x + 1, y + 1, x + 17, y + 17, COLOR_SLOT_BG);
     }
 
     /** 工具栏按钮的悬停提示；返回 true 表示已处理。 */

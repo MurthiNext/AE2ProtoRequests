@@ -9,14 +9,13 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
 import com.murthinext.ae2pr.ModNetwork;
-import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
+import com.murthinext.ae2pr.client.gui.MachineGui;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
 
 /**
@@ -24,20 +23,13 @@ import com.murthinext.ae2pr.network.BusSlotClickPacket;
  */
 public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> {
 
-    private static final ResourceLocation TEXTURE_INPUT = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
-            "textures/gui/certus_quartz_crystal_input_bus.png");
-    private static final ResourceLocation TEXTURE_OUTPUT = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
-            "textures/gui/certus_quartz_crystal_output_bus.png");
-    private static final ResourceLocation TEXTURE_AEV_INPUT = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
-            "textures/gui/aev_input_bus.png");
-    private static final ResourceLocation TEXTURE_AEV_OUTPUT = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
-            "textures/gui/aev_output_bus.png");
-
-    /** 存储区物品位（与 GUI 贴图一致）：多槽为一行四格、整体居中 */
+    /** 存储区物品位：多槽为一行四格、整体居中；仓口箭标位于物品格上方 */
     private static final int SLOT_Y = 47;
     private static final int SLOT_X_MULTI = 52;
     private static final int SLOT_X_SINGLE = 80;
     private static final int SLOT_STEP = 18;
+    private static final int ARROW_X = 83;
+    private static final int ARROW_Y = 27;
 
     public ItemBusScreen(ItemBusMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -67,26 +59,21 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> {
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.blit(texture(), leftPos, topPos, 0, 0, imageWidth, imageHeight);
+        renderPanel(graphics);
         renderToolbar(graphics);
         int hovered = hoveredSlot(mouseX, mouseY);
         for (int slot = 0; slot < menu.getSlotCount(); slot++) {
+            MachineGui.drawSlot(graphics, slotX(slot), topPos + SLOT_Y);
             renderStoredItem(graphics, slot);
             if (slot == hovered) {
                 // 与原生槽位一致：白色高亮叠加在物品之上
                 renderSlotHighlight(graphics, slotX(slot), topPos + SLOT_Y, 0, 0x80FFFFFF);
             }
         }
+        MachineGui.drawArrow(graphics, leftPos + ARROW_X, topPos + ARROW_Y, !menu.isOutputBus(), true);
     }
 
-    private ResourceLocation texture() {
-        boolean output = menu.isOutputBus();
-        if (menu.getSlotCount() > 1) {
-            return output ? TEXTURE_AEV_OUTPUT : TEXTURE_AEV_INPUT;
-        }
-        return output ? TEXTURE_OUTPUT : TEXTURE_INPUT;
-    }
-
+    /** 多槽（AEV）时存储区一行四格、整体居中；单槽（石英）居中于面板。 */
     private int slotX(int slot) {
         int x = menu.getSlotCount() > 1 ? SLOT_X_MULTI + slot * SLOT_STEP : SLOT_X_SINGLE;
         return leftPos + x;

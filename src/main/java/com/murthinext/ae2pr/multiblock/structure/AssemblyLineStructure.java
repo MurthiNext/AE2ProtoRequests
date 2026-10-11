@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.block.assembly_line;
+package com.murthinext.ae2pr.multiblock.structure;
 
 import java.util.List;
 
@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ModModules;
+import com.murthinext.ae2pr.block.assembly_line.AssemblyLineUnitBlock;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
@@ -21,26 +22,6 @@ import com.murthinext.ae2pr.multiblock.StructureResult;
 
 /**
  * 水晶装配线结构定义与外观同步。
- * <p>
- * 模式基于通用多方块模块（{@code com.murthinext.ae2pr.multiblock}）声明：
- * <ul>
- * <li><b>片（slice）</b>：沿控制器<b>右侧</b>延伸，首尾片固定，中间 3 片起可重复，总片数上限由配置决定</li>
- * <li><b>行（string）</b>：沿<b>上</b>递增（第 0 行是最底行）</li>
- * <li><b>列（char）</b>：沿控制器<b>背面</b>递增（前→后深度）</li>
- * </ul>
- * 匹配支持左右 / 前后镜像，任一布局成立即成型。
- * <p>
- * 每片横截面（3 深 × 4 高，自下而上、前→后）：
- *
- * <pre>
- * 顶  # Y #
- *     S A G      S=控制器(最前) A=装配线外壳 G=装配线格栅(最后)
- *     R T R      R=夹层玻璃 T=装配线控制外壳
- * 底  F I F      F=水晶机壳 I=输入总线
- * </pre>
- *
- * 机壳位 'F' 可用输入仓或能源仓替代，其中<b>能源仓整结构最多 1 个</b>。
- * 控制外壳位 'T' 可用各类替换模块替代，模块按功能类型受安装上限约束。
  */
 public final class AssemblyLineStructure {
 

@@ -34,6 +34,9 @@ public final class Config {
     private static final ForgeConfigSpec.IntValue LAVA_SMELTER_PARALLEL;
     private static final ForgeConfigSpec.DoubleValue LAVA_SMELTER_ENERGY_PER_PARALLEL;
 
+    private static final ForgeConfigSpec.IntValue MATTER_PHASE_PARALLEL;
+    private static final ForgeConfigSpec.DoubleValue MATTER_PHASE_ENERGY_PER_PARALLEL;
+
     private static final ForgeConfigSpec.DoubleValue LOSSY_SPEED_PER_CARD;
     private static final ForgeConfigSpec.DoubleValue LOSSY_ENERGY_MULTIPLIER_PER_CARD;
 
@@ -116,6 +119,15 @@ public final class Config {
         LAVA_SMELTER_ENERGY_PER_PARALLEL = BUILDER
                 .comment("熔岩冶炼炉每并行一次执行从 ME 网络扣除的能量")
                 .defineInRange("energyPerParallel", 10000.0, 0.0, Double.MAX_VALUE);
+        BUILDER.pop();
+
+        BUILDER.push("matterPhaseTransformer");
+        MATTER_PHASE_PARALLEL = BUILDER
+                .comment("物质相变仪的最大并行数（每并行一份消耗一组输入并按并行数产出流体）")
+                .defineInRange("parallel", 32, 1, 1_000_000);
+        MATTER_PHASE_ENERGY_PER_PARALLEL = BUILDER
+                .comment("物质相变仪每并行一次执行从 ME 网络扣除的能量")
+                .defineInRange("energyPerParallel", 50000.0, 0.0, Double.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("upgradeCards");
@@ -215,6 +227,14 @@ public final class Config {
 
     public static double lavaSmelterEnergyPerParallel() {
         return LAVA_SMELTER_ENERGY_PER_PARALLEL.get();
+    }
+
+    public static int matterPhaseParallel() {
+        return MATTER_PHASE_PARALLEL.get();
+    }
+
+    public static double matterPhaseEnergyPerParallel() {
+        return MATTER_PHASE_ENERGY_PER_PARALLEL.get();
     }
 
     public static double lossySpeedPerCard() {

@@ -112,6 +112,7 @@
   "block.ae2pr.zircon_block": "Block of Zircon",
   "block.ae2pr.dense_sky_stone_block": "Dense Sky Stone Block",
   "block.ae2pr.high_energy_core": "High Energy Core",
+  "block.ae2pr.matter_phase_transformer": "Matter Phase Transformer",
   "item.ae2pr.zircon_brick": "Zircon Brick",
   "block.ae2pr.zirconia_corundum_bricks": "Zirconia Corundum Bricks",
   "block.ae2pr.meteorite_iron_ore": "Meteorite Iron Ore",
@@ -173,5 +174,15 @@
   "jei.ae2pr.lava_smelter.durability": "Durability consumed: %s",
   "jei.ae2pr.lava_smelter.duration": "Processing time: %s ticks",
   "jei.ae2pr.lava_smelter.energy": "Energy per parallel: %s AE",
-  "config.jade.plugin_ae2pr.lava_smelter": "High Reactivity Lava Smelter"
+  "config.jade.plugin_ae2pr.lava_smelter": "High Reactivity Lava Smelter",
+  "fluid_type.ae2pr.liquid_certus_quartz": "Liquid Certus Quartz",
+  "item.ae2pr.liquid_certus_quartz_bucket": "Liquid Certus Quartz Bucket",
+  "gui.ae2pr.matter_phase.error.power": "Insufficient power",
+  "gui.ae2pr.matter_phase.error.output": "Output hatch can't hold the products",
+  "jei.ae2pr.matter_phase.duration": "Processing time: %s ticks",
+  "jei.ae2pr.matter_phase.energy": "Energy per parallel: %s AE",
+  "jei.ae2pr.matter_phase.more_inputs": "%s more inputs not shown",
+  "jade.ae2pr.matter_phase.job": "Transforming: %s x %s mB",
+  "jade.ae2pr.matter_phase.progress": "Progress: %s / %s s",
+  "config.jade.plugin_ae2pr.matter_phase_transformer": "Matter Phase Transformer"
 }

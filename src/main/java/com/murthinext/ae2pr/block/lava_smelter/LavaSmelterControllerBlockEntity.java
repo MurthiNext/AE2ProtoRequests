@@ -41,6 +41,7 @@ import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntit
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
 import com.murthinext.ae2pr.multiblock.StructureResult;
 import com.murthinext.ae2pr.multiblock.StructureValidator;
+import com.murthinext.ae2pr.multiblock.structure.LavaSmelterStructure;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
 
