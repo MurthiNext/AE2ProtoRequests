@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
 import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
@@ -83,7 +84,7 @@ public final class CtmConfig {
      * <li>{@code 1} 机身族</li>
      * <li>{@code 2} 装配线格栅</li>
      * <li>{@code 3} 水晶玻璃</li>
-     * <li>{@code 4} 锆刚玉砖块 / 高反应性熔岩冶炼炉主机 / 冶炼炉成型的机器部件（style=2）</li>
+     * <li>{@code 4} 锆刚玉砖块 / 高反应性熔岩冶炼炉主机 / 冶炼炉成型的机器部件与能源仓（style=2）</li>
      * <li>{@code 5~7} 陨钢管道方块（按轴向分族，同种相连且仅沿自身轴向连接）</li>
      * <li>{@code 8} 耐火水晶玻璃</li>
      * <li>{@code 9} AEV 机械方块 / AEV 机器部件（未成型）</li>
@@ -98,7 +99,8 @@ public final class CtmConfig {
         if (block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get()
                 || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()
                 || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()
-                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()) {
+                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()
+                || block == ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()) {
 
             return partFamily(state, 1);
         }
@@ -111,9 +113,6 @@ public final class CtmConfig {
                 || block == ModBlocks.AEV_OUTPUT_HATCH.get()) {
 
             return partFamily(state, 9);
-        }
-        if (block == ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()) {
-            return 1;
         }
         if (block == ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get()) {
             return 2;
@@ -136,17 +135,21 @@ public final class CtmConfig {
         return 0;
     }
 
-    /** 机器部件的连接族：成型时用外观注册的连接族，否则为所属机壳族。 */
+    /** 机器部件 / 能源仓的连接族：成型时用外观注册的连接族，否则为所属机壳族。 */
     private static int partFamily(BlockState state, int casingFamily) {
         MachinePartFacade facade = facade(state);
         return facade != null ? facade.ctmFamily() : casingFamily;
     }
 
-    /** 成型部件的多方块外观；非机器部件或未成型返回 null。 */
+    /** 成型部件（含能源仓）的多方块外观；未成型返回 null。 */
     @Nullable
     public static MachinePartFacade facade(BlockState state) {
         if (state.getBlock() instanceof MachinePartBlock && state.getValue(MachinePartBlock.FORMED)) {
             return MachinePartFacade.byStyle(state.getValue(MachinePartBlock.STYLE));
+        }
+        if (state.is(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get())
+                && state.getValue(FluixCrystalEnergyHatchBlock.FORMED)) {
+            return MachinePartFacade.byStyle(state.getValue(FluixCrystalEnergyHatchBlock.STYLE));
         }
         return null;
     }
@@ -158,10 +161,16 @@ public final class CtmConfig {
         return facade != null ? CtmSprites.baseSprite(facade.texture()) : null;
     }
 
-    /** 部件未成型时的基础面贴图（成型换装时用于匹配需要替换的四边形）。 */
+    /** 部件的基础面贴图（成型换装时用于匹配需要替换的四边形）。 */
     @Nullable
     public static TextureAtlasSprite partBaseSprite(BlockState state) {
         Block block = state.getBlock();
+        if (block == ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()) {
+            // 能源仓的成型模型以水晶机壳为基础贴图
+            return CtmSprites.baseSprite(state.getValue(FluixCrystalEnergyHatchBlock.FORMED)
+                    ? MachinePartFacade.CRYSTAL.texture()
+                    : CtmSprites.CERTUS_PART_CASING);
+        }
         if (!(block instanceof MachinePartBlock)) {
             return null;
         }

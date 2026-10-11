@@ -115,8 +115,17 @@ public final class AssemblyLineStructure {
                     updated = state.setValue(AssemblyLineUnitBlock.ACTIVE, unitActive);
                 }
             } else if (state.is(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get())) {
-                if (state.getValue(FluixCrystalEnergyHatchBlock.FORMED) != partsFormed) {
-                    updated = state.setValue(FluixCrystalEnergyHatchBlock.FORMED, partsFormed);
+                BlockState candidate = state;
+                if (candidate.getValue(FluixCrystalEnergyHatchBlock.FORMED) != partsFormed) {
+                    candidate = candidate.setValue(FluixCrystalEnergyHatchBlock.FORMED, partsFormed);
+                }
+                // 由装配线成型时外观为水晶机壳
+                int style = partsFormed ? MachinePartFacade.CRYSTAL.style() : MachinePartBlock.DEFAULT_STYLE;
+                if (candidate.getValue(FluixCrystalEnergyHatchBlock.STYLE) != style) {
+                    candidate = candidate.setValue(FluixCrystalEnergyHatchBlock.STYLE, style);
+                }
+                if (candidate != state) {
+                    updated = candidate;
                 }
             } else if (isPart(state)) {
                 BlockState candidate = state;

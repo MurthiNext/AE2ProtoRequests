@@ -95,10 +95,17 @@ public final class LavaSmelterStructure {
         for (BlockPos pos : cells) {
             BlockState state = level.getBlockState(pos);
             if (state.is(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get())) {
-                // 能源仓：仅切换成型外观
+                // 能源仓：切换成型外观为锆刚玉砖块
+                BlockState updated = state;
                 if (state.getValue(FluixCrystalEnergyHatchBlock.FORMED) != formed) {
-                    level.setBlock(pos, state.setValue(FluixCrystalEnergyHatchBlock.FORMED, formed),
-                            Block.UPDATE_ALL);
+                    updated = updated.setValue(FluixCrystalEnergyHatchBlock.FORMED, formed);
+                }
+                int style = formed ? MachinePartFacade.ZIRCONIA.style() : MachinePartBlock.DEFAULT_STYLE;
+                if (updated.getValue(FluixCrystalEnergyHatchBlock.STYLE) != style) {
+                    updated = updated.setValue(FluixCrystalEnergyHatchBlock.STYLE, style);
+                }
+                if (updated != state) {
+                    level.setBlock(pos, updated, Block.UPDATE_ALL);
                 }
                 continue;
             }

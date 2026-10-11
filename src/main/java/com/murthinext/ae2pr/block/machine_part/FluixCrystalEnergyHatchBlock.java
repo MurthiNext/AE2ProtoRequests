@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.MapColor;
 
 import appeng.block.AEBaseEntityBlock;
@@ -25,6 +26,11 @@ public class FluixCrystalEnergyHatchBlock extends AEBaseEntityBlock<FluixCrystal
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty FORMED = BooleanProperty.create("formed");
+    /**
+     * 部件存放的多方块成型外观 id（仅 FORMED=true 时由渲染端解读），与机器部件共用，
+     * 取值见 {@link MachinePartFacade}。
+     */
+    public static final IntegerProperty STYLE = MachinePartBlock.STYLE;
 
     public FluixCrystalEnergyHatchBlock() {
         super(Properties.of()
@@ -34,19 +40,21 @@ public class FluixCrystalEnergyHatchBlock extends AEBaseEntityBlock<FluixCrystal
                 .requiresCorrectToolForDrops());
         registerDefaultState(stateDefinition.any()
                 .setValue(FACING, Direction.NORTH)
-                .setValue(FORMED, false));
+                .setValue(FORMED, false)
+                .setValue(STYLE, MachinePartBlock.DEFAULT_STYLE));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, FORMED);
+        builder.add(FACING, FORMED, STYLE);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return defaultBlockState()
                 .setValue(FACING, context.getNearestLookingDirection().getOpposite())
-                .setValue(FORMED, false);
+                .setValue(FORMED, false)
+                .setValue(STYLE, MachinePartBlock.DEFAULT_STYLE);
     }
 
     @Override

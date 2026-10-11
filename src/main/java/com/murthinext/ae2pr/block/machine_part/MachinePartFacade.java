@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import com.murthinext.ae2pr.ae2pr;
 
 /**
- * 机器部件的多方块成型外观注册表：STYLE 值 → 基础贴图 + 连接族。
+ * 多方块部件（机器部件与福鲁伊克斯水晶能源仓）的成型外观注册表：STYLE 值 → 基础贴图 + 连接族。
  * <p>
  * 结构成型时把部件的 STYLE 设为对应 id；渲染端（见 {@code CtmConfig} 与 {@code CtmBakedModel}）
  * 在成型状态下把基础面贴图换成该外观，并按连接族继续绘制连接纹理。
