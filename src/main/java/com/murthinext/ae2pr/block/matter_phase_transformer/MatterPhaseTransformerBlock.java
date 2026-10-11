@@ -37,9 +37,7 @@ public class MatterPhaseTransformerBlock extends Block implements EntityBlock, W
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty FORMED = BooleanProperty.create("formed");
-    /** 是否正在加工（驱动工作态贴图）；框架已就绪，待加工逻辑接入。 */
     public static final BooleanProperty RUNNING = BooleanProperty.create("running");
-    /** 暂停态（琥珀色暂停贴图）；框架已就绪，待加工逻辑接入。 */
     public static final BooleanProperty PAUSED = BooleanProperty.create("paused");
 
     public MatterPhaseTransformerBlock() {
