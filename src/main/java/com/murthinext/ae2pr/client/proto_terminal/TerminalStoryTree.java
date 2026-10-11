@@ -20,7 +20,8 @@ import net.minecraft.util.Mth;
 /** 从资源包读取剧情块及其连接关系。 */
 record TerminalStoryTree(List<Node> nodes) {
 
-    private static final ResourceLocation RESOURCE = new ResourceLocation(ae2pr.MODID, "story/proto_terminal.json");
+    private static final ResourceLocation RESOURCE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+            "story/proto_terminal.json");
 
     record Node(String id, int x, int y, Component title, Component speaker, Component text,
             List<String> connections, ResourceLocation image, int imageWidth, int imageHeight) {
@@ -44,7 +45,7 @@ record TerminalStoryTree(List<Node> nodes) {
                     }
                 }
                 ResourceLocation image = node.has("image")
-                        ? new ResourceLocation(GsonHelper.getAsString(node, "image")) : null;
+                        ? ResourceLocation.parse(GsonHelper.getAsString(node, "image")) : null;
                 if (image != null && Minecraft.getInstance().getResourceManager().getResource(image).isEmpty()) {
                     ae2pr.LOGGER.warn("源始终端剧情图片不存在：{}", image);
                     image = null;

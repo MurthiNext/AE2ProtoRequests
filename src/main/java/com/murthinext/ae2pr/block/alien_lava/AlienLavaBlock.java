@@ -77,7 +77,7 @@ public class AlienLavaBlock extends LiquidBlock {
 
     @Override
     public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType type) {
-        return !getFluid().is(FluidTags.LAVA);
+        return !getFluid().defaultFluidState().is(FluidTags.LAVA);
     }
 
     @Override

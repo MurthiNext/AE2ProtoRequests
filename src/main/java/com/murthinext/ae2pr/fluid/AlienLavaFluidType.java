@@ -49,12 +49,12 @@ public class AlienLavaFluidType extends FluidType {
         consumer.accept(new IClientFluidTypeExtensions() {
             @Override
             public ResourceLocation getStillTexture() {
-                return new ResourceLocation(ae2pr.MODID, "block/fluid/alien_lava_still");
+                return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "block/fluid/alien_lava_still");
             }
 
             @Override
             public ResourceLocation getFlowingTexture() {
-                return new ResourceLocation(ae2pr.MODID, "block/fluid/alien_lava_flow");
+                return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "block/fluid/alien_lava_flow");
             }
         });
     }

@@ -20,7 +20,7 @@ public record ModuleType(ResourceLocation id, int maxCount) {
 
     /** 以本模组命名空间创建功能类型。 */
     public static ModuleType of(String path, int maxCount) {
-        return new ModuleType(new ResourceLocation(ae2pr.MODID, path), maxCount);
+        return new ModuleType(ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, path), maxCount);
     }
 
     /** 语言键（用于配方要求等展示）。 */

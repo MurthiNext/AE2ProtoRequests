@@ -1,8 +1,6 @@
 package com.murthinext.ae2pr.client;
 
 import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -16,7 +14,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import appeng.init.client.InitScreens;
 
 import com.murthinext.ae2pr.ModBlockEntities;
-import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ModMenus;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.client.ctm.CtmBakedModel;
@@ -70,7 +67,7 @@ public final class ClientSetup {
     private static void logNamingFactorySprites(ModelManager modelManager) {
         var atlas = modelManager.getAtlas(InventoryMenu.BLOCK_ATLAS);
         for (String path : new String[] { "naming_factory", "naming_factory_rod", "naming_factory_glass" }) {
-            var sprite = atlas.getSprite(new ResourceLocation(ae2pr.MODID, "block/" + path));
+            var sprite = atlas.getSprite(ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "block/" + path));
             ae2pr.LOGGER.info("atlas sprite {} -> {}", path, sprite.contents().name());
         }
     }
@@ -92,31 +89,5 @@ public final class ClientSetup {
                 entry.setValue(new CtmBakedModel(entry.getValue()));
             }
         }
-    }
-
-    /** 水晶装配线：透明/发光覆盖层需要 cutout 渲染类型。 */
-    @SubscribeEvent
-    public static void registerRenderLayers(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRYSTAL_GLASS.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.FIREPROOF_CRYSTAL_GLASS.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRYSTAL_ASSEMBLY_LINE.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRYSTAL_ASSEMBLY_LINE_UNIT.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.AEV_INPUT_BUS.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.AEV_INPUT_HATCH.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.AEV_OUTPUT_BUS.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.AEV_OUTPUT_HATCH.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get(), RenderType.cutoutMipped());
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.NAMING_FACTORY.get(), RenderType.cutoutMipped());
-        });
     }
 }

@@ -79,9 +79,9 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
     private static final int COLOR_TEXT = 0x404040;
     private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
-    private static final ResourceLocation PIPE_TEXTURE = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation PIPE_TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/jei/assembly_line_pipes.png");
-    private static final ResourceLocation FLUID_SLOT_TEXTURE = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation FLUID_SLOT_TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/jei/fluid_slot.png");
 
     private final IDrawable icon;

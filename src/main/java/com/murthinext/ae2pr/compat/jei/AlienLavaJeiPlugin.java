@@ -28,7 +28,7 @@ public class AlienLavaJeiPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(ae2pr.MODID, "alien_lava");
+        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "alien_lava");
     }
 
     @Override

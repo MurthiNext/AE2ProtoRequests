@@ -23,7 +23,7 @@ public class LavaSmelterJeiPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(ae2pr.MODID, "lava_smelter");
+        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "lava_smelter");
     }
 
     @Override

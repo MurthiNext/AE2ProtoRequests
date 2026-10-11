@@ -43,7 +43,7 @@ public final class MachinePartFacade {
 
     private static MachinePartFacade register(int style, String texturePath, int ctmFamily) {
         MachinePartFacade facade = new MachinePartFacade(style,
-                new ResourceLocation(ae2pr.MODID, texturePath), ctmFamily);
+                ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, texturePath), ctmFamily);
         BY_STYLE.put(style, facade);
         return facade;
     }

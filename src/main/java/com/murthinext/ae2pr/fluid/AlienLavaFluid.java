@@ -71,7 +71,7 @@ public abstract class AlienLavaFluid extends ForgeFlowingFluid {
     @Override
     public boolean canBeReplacedWith(FluidState state, BlockGetter level, BlockPos pos, Fluid fluid,
             Direction direction) {
-        return state.getHeight(level, pos) >= 0.44444445F && fluid.is(FluidTags.WATER);
+        return state.getHeight(level, pos) >= 0.44444445F && fluid.defaultFluidState().is(FluidTags.WATER);
     }
 
     @Override

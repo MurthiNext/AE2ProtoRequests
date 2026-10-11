@@ -150,7 +150,7 @@ public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
     }
 
     private static ResourceLocation makeId(String path) {
-        return new ResourceLocation(ae2pr.MODID, path);
+        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, path);
     }
 
     @Override

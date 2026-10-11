@@ -70,7 +70,7 @@ public class LavaSmelterJadePlugin implements IWailaPlugin {
 
         @Override
         public ResourceLocation getUid() {
-            return new ResourceLocation(ae2pr.MODID, "lava_smelter_data");
+            return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "lava_smelter_data");
         }
     }
 
@@ -91,7 +91,7 @@ public class LavaSmelterJadePlugin implements IWailaPlugin {
             int duration = data.getInt(KEY_DURATION);
             String itemId = data.getString(KEY_ITEM);
             if (!itemId.isEmpty() && duration > 0) {
-                Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemId));
+                Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(itemId));
                 if (item != null) {
                     ItemStack output = new ItemStack(item, data.getInt(KEY_COUNT));
                     tooltip.add(Component.translatable("jade.ae2pr.lava_smelter.job",
@@ -111,7 +111,7 @@ public class LavaSmelterJadePlugin implements IWailaPlugin {
 
         @Override
         public ResourceLocation getUid() {
-            return new ResourceLocation(ae2pr.MODID, "lava_smelter");
+            return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "lava_smelter");
         }
 
         private static String seconds(int ticks) {

@@ -18,7 +18,7 @@ import com.murthinext.ae2pr.client.gui.AbstractMachineScreen;
  */
 public class NamingFactoryScreen extends AbstractMachineScreen<NamingFactoryMenu> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/naming_factory.png");
 
     /** 进度条内槽（与生成脚本 NF_PROGRESS 对应） */

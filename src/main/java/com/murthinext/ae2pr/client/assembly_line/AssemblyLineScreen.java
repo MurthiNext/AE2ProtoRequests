@@ -23,7 +23,7 @@ import com.murthinext.ae2pr.client.gui.MultiblockInfoLayout;
  */
 public class AssemblyLineScreen extends AbstractMachineScreen<AssemblyLineMenu> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/crystal_assembly_line.png");
 
     private static final int TITLE_X = MultiblockInfoLayout.TEXT_X;

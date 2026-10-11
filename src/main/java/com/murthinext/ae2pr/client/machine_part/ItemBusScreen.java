@@ -24,13 +24,13 @@ import com.murthinext.ae2pr.network.BusSlotClickPacket;
  */
 public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> {
 
-    private static final ResourceLocation TEXTURE_INPUT = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation TEXTURE_INPUT = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/certus_quartz_crystal_input_bus.png");
-    private static final ResourceLocation TEXTURE_OUTPUT = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation TEXTURE_OUTPUT = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/certus_quartz_crystal_output_bus.png");
-    private static final ResourceLocation TEXTURE_AEV_INPUT = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation TEXTURE_AEV_INPUT = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/aev_input_bus.png");
-    private static final ResourceLocation TEXTURE_AEV_OUTPUT = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation TEXTURE_AEV_OUTPUT = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/aev_output_bus.png");
 
     /** 存储区物品位（与 GUI 贴图一致）：多槽为一行四格、整体居中 */

@@ -20,6 +20,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.client.model.data.ModelData;
 
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
@@ -32,10 +33,12 @@ import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
  */
 public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryBlockEntity> {
 
-    public static final ResourceLocation FORGE_MODEL = new ResourceLocation(ae2pr.MODID, "block/naming_factory_forge");
+    public static final ResourceLocation FORGE_MODEL = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+            "block/naming_factory_forge");
 
     /** 活塞连杆专用贴图 */
-    private static final ResourceLocation ROD_TEXTURE = new ResourceLocation(ae2pr.MODID, "block/naming_factory_rod");
+    private static final ResourceLocation ROD_TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+            "block/naming_factory_rod");
 
     /** 连杆截面（像素）：8x8，几乎与 forge（10x10）同宽 */
     private static final float ROD_MIN = 4.0F;
@@ -82,7 +85,7 @@ public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryB
             poseStack.pushPose();
             poseStack.translate(0, -offset / 16.0F, 0);
             blockRenderer.renderModel(poseStack.last(), buffer, blockEntity.getBlockState(), forgeModel,
-                    1.0F, 1.0F, 1.0F, combinedLight, combinedOverlay);
+                    1.0F, 1.0F, 1.0F, combinedLight, combinedOverlay, ModelData.EMPTY, null);
             poseStack.popPose();
         }
         if (offset > 0.01F) {

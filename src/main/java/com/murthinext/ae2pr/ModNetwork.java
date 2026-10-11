@@ -25,7 +25,7 @@ public final class ModNetwork {
     private static final String PROTOCOL_VERSION = "1";
 
     public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
-            .named(new ResourceLocation(ae2pr.MODID, "main"))
+            .named(ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "main"))
             .networkProtocolVersion(() -> PROTOCOL_VERSION)
             .clientAcceptedVersions(PROTOCOL_VERSION::equals)
             .serverAcceptedVersions(PROTOCOL_VERSION::equals)

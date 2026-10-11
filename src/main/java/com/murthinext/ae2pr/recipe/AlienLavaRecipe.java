@@ -140,13 +140,14 @@ public class AlienLavaRecipe implements Recipe<Container> {
                 ingredients.add(new CountedIngredient(Ingredient.fromJson(entry), count));
             }
             TagKey<Fluid> catalyst = TagKey.create(Registries.FLUID,
-                    new ResourceLocation(GsonHelper.getAsString(json, "catalyst", ModTags.ALIEN_LAVA.location().toString())));
+                    ResourceLocation.parse(GsonHelper.getAsString(json, "catalyst",
+                            ModTags.ALIEN_LAVA.location().toString())));
             ItemStack resultItem = json.has("result")
                     ? ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"))
                     : ItemStack.EMPTY;
             Fluid resultFluid = json.has("result_fluid")
                     ? ForgeRegistries.FLUIDS.getValue(
-                            new ResourceLocation(GsonHelper.getAsString(json, "result_fluid")))
+                            ResourceLocation.parse(GsonHelper.getAsString(json, "result_fluid")))
                     : null;
             return new AlienLavaRecipe(id, ingredients, catalyst, resultItem, resultFluid);
         }

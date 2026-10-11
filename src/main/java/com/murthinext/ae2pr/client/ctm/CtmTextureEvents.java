@@ -1,6 +1,6 @@
 package com.murthinext.ae2pr.client.ctm;
 
-import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,7 +21,7 @@ public final class CtmTextureEvents {
 
     @SubscribeEvent
     public static void onAtlasStitched(TextureStitchEvent.Post event) {
-        if (!TextureAtlas.LOCATION_BLOCKS.equals(event.getAtlas().location())) {
+        if (!InventoryMenu.BLOCK_ATLAS.equals(event.getAtlas().location())) {
             return;
         }
         CtmSprites.stitch(event.getAtlas());

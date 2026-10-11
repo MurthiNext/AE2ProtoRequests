@@ -11,9 +11,6 @@ import net.minecraftforge.network.NetworkEvent;
 
 /**
  * 服务端 -> 客户端：重复订单当前轮次通知，用于过滤中间轮的"合成完成"Toast 并替换最终轮提示。
- *
- * @param remainingRounds 包含当前轮在内的剩余轮数；&lt;= 0 表示订单结束（清除）。
- * @param totalRounds     总轮数
  */
 public class RepeatOrderRoundPacket {
     private final AEKey what;

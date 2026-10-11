@@ -71,7 +71,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
     private static final float LAVA_DAMAGE = 4.0F;
 
     /** 陨石粉（AE2 天石粉） */
-    private static final ResourceLocation SKY_DUST_ID = new ResourceLocation("ae2", "sky_dust");
+    private static final ResourceLocation SKY_DUST_ID = ResourceLocation.fromNamespaceAndPath("ae2", "sky_dust");
 
     private static final String DURABILITY_ID = "durability";
     private static final String DUST_ID = "dust";
@@ -692,7 +692,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         if (level == null || level.isClientSide || !tag.contains(JOB_RECIPE_ID)) {
             return;
         }
-        var recipe = level.getRecipeManager().byKey(new ResourceLocation(tag.getString(JOB_RECIPE_ID)));
+        var recipe = level.getRecipeManager().byKey(ResourceLocation.parse(tag.getString(JOB_RECIPE_ID)));
         if (recipe.orElse(null) instanceof LavaSmelterRecipe smelterRecipe) {
             // 恢复加工进度
             jobTicksLeft = tag.getInt(JOB_TICKS_ID);

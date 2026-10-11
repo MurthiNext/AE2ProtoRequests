@@ -23,7 +23,7 @@ public class CrystalAssemblyLineJeiPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return new ResourceLocation(ae2pr.MODID, "crystal_assembly_line");
+        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "crystal_assembly_line");
     }
 
     @Override

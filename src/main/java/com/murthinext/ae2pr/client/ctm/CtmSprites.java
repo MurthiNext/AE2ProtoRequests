@@ -75,7 +75,7 @@ public final class CtmSprites {
             return;
         }
         if (facade.ctmFamily() != 0) {
-            ATLASES.put(base, new ResourceLocation(base.getNamespace(), base.getPath() + "_ctm"));
+            ATLASES.put(base, ResourceLocation.fromNamespaceAndPath(base.getNamespace(), base.getPath() + "_ctm"));
         }
     }
 
@@ -85,7 +85,7 @@ public final class CtmSprites {
     }
 
     private static ResourceLocation id(String path) {
-        return new ResourceLocation(ae2pr.MODID, path);
+        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, path);
     }
 
     /** 图集拼接完成后缓存基础 sprite 与图集 sprite 引用。 */

@@ -31,7 +31,7 @@ public final class RequesterUtils {
     }
 
     public static ResourceLocation getRL(String path) {
-        return new ResourceLocation(ae2pr.MODID, path);
+        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, path);
     }
 
     public static String f(String input, Object... args) {

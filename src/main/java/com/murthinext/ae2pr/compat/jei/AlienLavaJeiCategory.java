@@ -6,14 +6,13 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -50,7 +49,7 @@ public class AlienLavaJeiCategory implements IRecipeCategory<AlienLavaRecipe> {
     private static final int CATALYST_X = 55;
     private static final int OUTPUT_X = 105;
     private static final int COLOR_TEXT = 0x404040;
-    private static final ResourceLocation ARROW = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation ARROW = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/jei/recipe_arrow.png");
 
     private final IDrawable icon;
@@ -153,12 +152,9 @@ public class AlienLavaJeiCategory implements IRecipeCategory<AlienLavaRecipe> {
 
     /** 取标签中可作为源方块的流体用于展示。 */
     private static List<Fluid> sourceFluids(TagKey<Fluid> tag) {
-        return BuiltInRegistries.FLUID.getTag(tag)
-                .map(holders -> holders.stream()
-                        .map(Holder::value)
-                        .filter(fluid -> fluid.isSource(fluid.defaultFluidState()))
-                        .toList())
-                .orElse(List.of());
+        return ForgeRegistries.FLUIDS.tags().getTag(tag).stream()
+                .filter(fluid -> fluid.isSource(fluid.defaultFluidState()))
+                .toList();
     }
 
     private static boolean isAlienLava(TagKey<Fluid> tag) {

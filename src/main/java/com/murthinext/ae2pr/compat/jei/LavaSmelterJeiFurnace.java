@@ -14,7 +14,7 @@ public final class LavaSmelterJeiFurnace {
     public static final int SLOT_COUNT = 6;
 
     /** 炉体与输出管道贴图 */
-    private static final ResourceLocation TEXTURE = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/jei/lava_smelter_furnace.png");
 
     /** 贴图在配方界面中的位置与尺寸 */

@@ -29,9 +29,10 @@ import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterStructure;
  */
 public class LavaSmelterRenderer implements BlockEntityRenderer<LavaSmelterControllerBlockEntity> {
 
-    private static final ResourceLocation ALIEN_LAVA_STILL = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation ALIEN_LAVA_STILL = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "block/fluid/alien_lava_still");
-    private static final ResourceLocation LAVA_STILL = new ResourceLocation("minecraft", "block/lava_still");
+    private static final ResourceLocation LAVA_STILL = ResourceLocation.fromNamespaceAndPath("minecraft",
+            "block/lava_still");
 
     /** 液面高度（方块内） */
     private static final float SURFACE_HEIGHT = 0.875F;

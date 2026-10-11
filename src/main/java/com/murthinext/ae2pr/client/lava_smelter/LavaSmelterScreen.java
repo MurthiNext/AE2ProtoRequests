@@ -23,7 +23,7 @@ import com.murthinext.ae2pr.client.gui.MultiblockInfoLayout;
  */
 public class LavaSmelterScreen extends AbstractMachineScreen<LavaSmelterMenu> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/high_reactivity_lava_smelter.png");
 
     private static final int TITLE_X = MultiblockInfoLayout.TEXT_X;

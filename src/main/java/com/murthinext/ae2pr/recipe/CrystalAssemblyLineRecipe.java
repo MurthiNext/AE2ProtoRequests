@@ -158,7 +158,7 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container> {
             List<FluidStack> fluidInputs = new ArrayList<>();
             for (JsonElement element : GsonHelper.getAsJsonArray(json, "fluid_inputs", new JsonArray())) {
                 JsonObject obj = element.getAsJsonObject();
-                ResourceLocation fluidId = new ResourceLocation(GsonHelper.getAsString(obj, "fluid"));
+                ResourceLocation fluidId = ResourceLocation.parse(GsonHelper.getAsString(obj, "fluid"));
                 Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidId);
                 if (fluid == null || fluid == Fluids.EMPTY) {
                     throw new JsonSyntaxException("未知流体：" + fluidId);
@@ -173,7 +173,7 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container> {
             List<ItemStack> itemOutputs = new ArrayList<>();
             for (JsonElement element : GsonHelper.getAsJsonArray(json, "item_outputs", new JsonArray())) {
                 JsonObject obj = element.getAsJsonObject();
-                ResourceLocation itemId = new ResourceLocation(GsonHelper.getAsString(obj, "item"));
+                ResourceLocation itemId = ResourceLocation.parse(GsonHelper.getAsString(obj, "item"));
                 Item item = ForgeRegistries.ITEMS.getValue(itemId);
                 if (item == null || item == Items.AIR) {
                     throw new JsonSyntaxException("未知物品：" + itemId);
@@ -189,7 +189,7 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container> {
             Set<ResourceLocation> seenModules = new HashSet<>();
             for (JsonElement element : GsonHelper.getAsJsonArray(json, "module_requirements", new JsonArray())) {
                 JsonObject obj = element.getAsJsonObject();
-                ResourceLocation moduleId = new ResourceLocation(GsonHelper.getAsString(obj, "module"));
+                ResourceLocation moduleId = ResourceLocation.parse(GsonHelper.getAsString(obj, "module"));
                 ModuleType type = ModModules.byId(moduleId);
                 if (type == null) {
                     throw new JsonSyntaxException("未知模块：" + moduleId);

@@ -18,13 +18,14 @@ public final class ModTags {
     /**
      * 扳手：用于旋转本模组的机器与部件。
      */
-    public static final TagKey<Item> WRENCHES = ItemTags.create(new ResourceLocation(ae2pr.MODID, "wrenches"));
+    public static final TagKey<Item> WRENCHES = ItemTags.create(
+            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "wrenches"));
 
     /**
      * 石英切割刀：右击本模组机器可为其写入自定义名称。
      */
-    public static final TagKey<Item> KNIVES = ItemTags.create(new ResourceLocation("ae2", "knife"));
+    public static final TagKey<Item> KNIVES = ItemTags.create(ResourceLocation.fromNamespaceAndPath("ae2", "knife"));
 
     public static final TagKey<Fluid> ALIEN_LAVA = TagKey.create(Registries.FLUID,
-            new ResourceLocation(ae2pr.MODID, "alien_lava"));
+            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "alien_lava"));
 }

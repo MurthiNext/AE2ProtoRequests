@@ -25,13 +25,13 @@ public class AutoTransferButton extends AbstractWidget {
     private static final int COLOR_BORDER_HOVER = 0xFF5A7A9A;
     private static final int COLOR_DISABLED_LINE = 0xFFB05555;
 
-    private static final ResourceLocation ICON_PULL_ON = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation ICON_PULL_ON = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/guis/auto_transfer_pull_on.png");
-    private static final ResourceLocation ICON_PULL_OFF = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation ICON_PULL_OFF = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/guis/auto_transfer_pull_off.png");
-    private static final ResourceLocation ICON_PUSH_ON = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation ICON_PUSH_ON = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/guis/auto_transfer_push_on.png");
-    private static final ResourceLocation ICON_PUSH_OFF = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation ICON_PUSH_OFF = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/guis/auto_transfer_push_off.png");
 
     private final Type type;

@@ -1,4 +1,5 @@
 {
+  "render_type": "cutout_mipped",
   "parent": "block/block",
   "textures": {
     "bottom": "ae2pr:block/certus_quartz_crystal/casing",

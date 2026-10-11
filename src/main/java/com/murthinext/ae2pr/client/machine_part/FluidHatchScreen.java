@@ -7,12 +7,12 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -27,13 +27,13 @@ import com.murthinext.ae2pr.network.HatchTankClickPacket;
  */
 public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> {
 
-    private static final ResourceLocation TEXTURE_INPUT = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation TEXTURE_INPUT = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/certus_quartz_crystal_input_hatch.png");
-    private static final ResourceLocation TEXTURE_OUTPUT = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation TEXTURE_OUTPUT = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/certus_quartz_crystal_output_hatch.png");
-    private static final ResourceLocation TEXTURE_AEV_INPUT = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation TEXTURE_AEV_INPUT = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/aev_input_hatch.png");
-    private static final ResourceLocation TEXTURE_AEV_OUTPUT = new ResourceLocation(ae2pr.MODID,
+    private static final ResourceLocation TEXTURE_AEV_OUTPUT = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/aev_output_hatch.png");
 
     /** 流体罐位置（与 GUI 贴图一致）：第 i 罐外框左上角，罐内填充区内缩 2px */
@@ -143,7 +143,7 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
         int x0 = leftPos + TANK_X0 + 2 + tank * TANK_STEP;
         int y0 = topPos + TANK_Y + 2;
         IClientFluidTypeExtensions extensions = IClientFluidTypeExtensions.of(fluid.getFluid());
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
                 .apply(extensions.getStillTexture(fluid));
         int color = extensions.getTintColor(fluid);
         graphics.setColor(((color >> 16) & 0xFF) / 255.0F, ((color >> 8) & 0xFF) / 255.0F,
