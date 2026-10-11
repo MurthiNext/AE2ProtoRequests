@@ -22,8 +22,6 @@
   "gui.ae2pr.proto_terminal.standby.text": "此刻，信道保持静默。\n\n尚无新的叙事记录。\n下一段讯息抵达时，将在这里展开。",
   "gui.ae2pr.proto_terminal.close": "关闭",
   "gui.ae2pr.proto_terminal.back": "返回剧情树",
-  "gui.ae2pr.proto_terminal.tree_hint": "点击剧情块查看记录 · 拖动空白处移动剧情树",
-  "gui.ae2pr.proto_terminal.detail_hint": "滚轮：阅读长文本 · Esc：返回剧情树",
   "item.ae2pr.computation_cell_component_1tops": "1TOPS ME计算组件",
   "item.ae2pr.computation_cell_component_4tops": "4TOPS ME计算组件",
   "item.ae2pr.computation_cell_component_16tops": "16TOPS ME计算组件",

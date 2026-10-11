@@ -12,6 +12,7 @@ final class CrystalNarrativeGraphics {
 
     static final int BACKGROUND = 0xFF030817;
     static final int PANEL = 0xFF070E1D;
+    static final int DETAIL_BACKGROUND = 0xFF02040C;
     static final int BORDER = 0xFF6190B9;
     static final int ACCENT = 0xFF9AC8E8;
     static final int TEXT = 0xFFD2E6FA;
@@ -67,7 +68,7 @@ final class CrystalNarrativeGraphics {
 
     /** 沿水平段和节点平行斜段逐步绘制剧情连线。 */
     static void connection(GuiGraphics graphics, float x1, float y1, float x2, float y2,
-            float nodeSlant, int nodeHeight, float progress, int color) {
+            float nodeSlant, int nodeHeight, float progress, int color, float width) {
         if (progress <= 0) {
             return;
         }
@@ -88,18 +89,22 @@ final class CrystalNarrativeGraphics {
             }
             float fraction = Math.min(1, remaining / lengths[i]);
             line(graphics, xs[i], ys[i], xs[i] + (xs[i + 1] - xs[i]) * fraction,
-                    ys[i] + (ys[i + 1] - ys[i]) * fraction, color);
+                    ys[i] + (ys[i + 1] - ys[i]) * fraction, color, width);
             remaining -= lengths[i];
         }
     }
 
     static void line(GuiGraphics graphics, float x1, float y1, float x2, float y2, int color) {
+        line(graphics, x1, y1, x2, y2, color, 1);
+    }
+
+    static void line(GuiGraphics graphics, float x1, float y1, float x2, float y2, int color, float width) {
         float length = (float) Math.hypot(x2 - x1, y2 - y1);
         if (length <= 0 || color >>> 24 == 0) {
             return;
         }
-        float nx = -(y2 - y1) / length * 0.5F;
-        float ny = (x2 - x1) / length * 0.5F;
+        float nx = -(y2 - y1) / length * width / 2;
+        float ny = (x2 - x1) / length * width / 2;
         quad(graphics, x1 + nx, y1 + ny, x2 + nx, y2 + ny, x2 - nx, y2 - ny, x1 - nx, y1 - ny, color, color);
     }
 

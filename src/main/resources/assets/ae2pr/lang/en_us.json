@@ -22,8 +22,6 @@
   "gui.ae2pr.proto_terminal.standby.text": "For now, the channel is silent.\n\nNo new narrative records are available.\nThe next message will unfold here when it arrives.",
   "gui.ae2pr.proto_terminal.close": "Close",
   "gui.ae2pr.proto_terminal.back": "Story tree",
-  "gui.ae2pr.proto_terminal.tree_hint": "Click a story node to read · Drag empty space to move the tree",
-  "gui.ae2pr.proto_terminal.detail_hint": "Scroll: read long text · Esc: return to the story tree",
   "item.ae2pr.computation_cell_component_1tops": "1TOPS ME Computation Component",
   "item.ae2pr.computation_cell_component_4tops": "4TOPS ME Computation Component",
   "item.ae2pr.computation_cell_component_16tops": "16TOPS ME Computation Component",

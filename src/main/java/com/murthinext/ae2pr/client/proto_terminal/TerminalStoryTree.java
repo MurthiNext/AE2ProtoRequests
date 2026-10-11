@@ -33,11 +33,6 @@ record TerminalStoryTree(List<Node> nodes) {
     record Node(String id, int position, String parent, int x, int y, Component title,
             List<Dialogue> dialogues, ResourceLocation image, int imageWidth, int imageHeight) {
 
-        /** 取首轮对话的说话者，供单页展示。 */
-        Component speaker() {
-            return dialogues.isEmpty() ? Component.empty() : dialogues.get(0).speaker();
-        }
-
         /** 合并全部对话文本，供单页展示。 */
         Component text() {
             MutableComponent merged = Component.empty();

@@ -15,6 +15,7 @@ final class NarrativeButton extends Button {
     private final float slant;
     private final Icon icon;
     private float opacity = 1;
+    private float scale = 1;
 
     NarrativeButton(int x, int y, int width, Component label, OnPress action) {
         this(x, y, width, 22, label, action);
@@ -40,44 +41,55 @@ final class NarrativeButton extends Button {
             return;
         }
         isHovered = isMouseOver(mouseX, mouseY);
-        boolean highlighted = isHoveredOrFocused();
+        boolean highlighted = isHovered || isFocused() && Minecraft.getInstance().getLastInputType().isKeyboard();
         int border = CrystalNarrativeGraphics.alpha(
                 highlighted ? CrystalNarrativeGraphics.ACCENT : CrystalNarrativeGraphics.BORDER, opacity);
         int text = CrystalNarrativeGraphics.alpha(CrystalNarrativeGraphics.TEXT, opacity);
         int fill = CrystalNarrativeGraphics.alpha(highlighted ? 0xFF10233D : CrystalNarrativeGraphics.PANEL, opacity);
-        CrystalNarrativeGraphics.panel(graphics, getX(), getY(), width, height, slant, fill, border);
-        if (icon != null) {
-            float x = getX() + width / 2.0F;
-            float y = getY() + height / 2.0F;
-            graphics.drawManaged(() -> {
-                if (icon == Icon.CLOSE) {
-                    CrystalNarrativeGraphics.line(graphics, x - 4, y - 4, x + 4, y + 4, text);
-                    CrystalNarrativeGraphics.line(graphics, x - 4, y + 4, x + 4, y - 4, text);
-                } else {
-                    CrystalNarrativeGraphics.line(graphics, x - 5, y, x + 5, y, text);
-                    CrystalNarrativeGraphics.line(graphics, x - 5, y, x - 1, y - 4, text);
-                    CrystalNarrativeGraphics.line(graphics, x - 5, y, x - 1, y + 4, text);
-                }
-            });
-            return;
-        }
-        var font = Minecraft.getInstance().font;
-        if (height > 22) {
-            var lines = font.split(getMessage(), width - 30);
-            int count = Math.min(2, lines.size());
-            for (int i = 0; i < count; i++) {
-                var line = lines.get(i);
-                graphics.drawString(font, line, getX() + (width - font.width(line)) / 2,
-                        getY() + (height - count * 12) / 2 + i * 12 + 2, text, false);
+        graphics.pose().pushPose();
+        graphics.pose().translate(getX(), getY(), 0);
+        graphics.pose().scale(scale, scale, 1);
+        try {
+            CrystalNarrativeGraphics.panel(graphics, 0, 0, width, height, slant, fill, border);
+            if (icon != null) {
+                float x = width / 2.0F;
+                float y = height / 2.0F;
+                graphics.drawManaged(() -> {
+                    if (icon == Icon.CLOSE) {
+                        CrystalNarrativeGraphics.line(graphics, x - 4, y - 4, x + 4, y + 4, text);
+                        CrystalNarrativeGraphics.line(graphics, x - 4, y + 4, x + 4, y - 4, text);
+                    } else {
+                        CrystalNarrativeGraphics.line(graphics, x - 5, y, x + 5, y, text);
+                        CrystalNarrativeGraphics.line(graphics, x - 5, y, x - 1, y - 4, text);
+                        CrystalNarrativeGraphics.line(graphics, x - 5, y, x - 1, y + 4, text);
+                    }
+                });
+                return;
             }
-            graphics.fill(getX() + 14, getY() + height - 7, getX() + 24, getY() + height - 6, border);
-        } else {
-            graphics.drawCenteredString(font, getMessage(), getX() + width / 2, getY() + 7, text);
+            var font = Minecraft.getInstance().font;
+            if (height > 22) {
+                var lines = font.split(getMessage(), width - 30);
+                int count = Math.min(2, lines.size());
+                for (int i = 0; i < count; i++) {
+                    var line = lines.get(i);
+                    graphics.drawString(font, line, (width - font.width(line)) / 2,
+                            (height - count * 12) / 2 + i * 12 + 2, text, false);
+                }
+                graphics.fill(14, height - 7, 24, height - 6, border);
+            } else {
+                graphics.drawCenteredString(font, getMessage(), width / 2, 7, text);
+            }
+        } finally {
+            graphics.pose().popPose();
         }
     }
 
     void setOpacity(float opacity) {
         this.opacity = opacity;
+    }
+
+    void setScale(float scale) {
+        this.scale = scale;
     }
 
     @Override
@@ -87,9 +99,10 @@ final class NarrativeButton extends Button {
 
     @Override
     public boolean isMouseOver(double mouseX, double mouseY) {
-        if (!active || !visible || mouseY < getY() || mouseY >= getY() + height) {
+        if (!active || !visible) {
             return false;
         }
-        return CrystalNarrativeGraphics.contains(mouseX, mouseY, getX(), getY(), width, height, slant);
+        return CrystalNarrativeGraphics.contains((mouseX - getX()) / scale, (mouseY - getY()) / scale,
+                0, 0, width, height, slant);
     }
 }

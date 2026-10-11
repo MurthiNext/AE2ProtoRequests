@@ -45,7 +45,7 @@ final class OpeningPixelStream {
     }
 
     void render(GuiGraphics graphics, int x, int y, int width, int height, float slant,
-            float progress, float seconds, int spaceY, int spaceHeight) {
+            float progress, float seconds, TerminalStarfield starfield) {
         if (progress <= 0 || progress >= 1 || width <= slant || height <= 0) {
             return;
         }
@@ -58,8 +58,7 @@ final class OpeningPixelStream {
         outlineOpacity = CrystalNarrativeGraphics.ease(progress) * (1 - blend);
         graphics.drawManaged(() -> {
             for (int row = firstRow; row <= lastRow; row++) {
-                drawRow(graphics, rows[row], row,
-                        CrystalNarrativeGraphics.spaceColor(drawY + row, spaceY, spaceHeight), fillOpacity, false);
+                drawNebulaRow(graphics, row, starfield, seconds);
             }
         });
         renderOutline(graphics);
@@ -72,7 +71,7 @@ final class OpeningPixelStream {
     private void renderOutline(GuiGraphics graphics) {
         graphics.drawManaged(() -> {
             for (int row = firstRow; row <= lastRow; row++) {
-                drawRow(graphics, outlineRows[row], row, CrystalNarrativeGraphics.BORDER, outlineOpacity, true);
+                drawOutlineRow(graphics, row);
             }
         });
     }
@@ -210,18 +209,48 @@ final class OpeningPixelStream {
         lastRow = Math.max(lastRow, bottom - 1);
     }
 
-    private void drawRow(GuiGraphics graphics, BitSet pixels, int row, int color, float opacity, boolean outline) {
+    /** 填充外部碎块与面板边缘的重叠像素。 */
+    private void drawNebulaRow(GuiGraphics graphics, int row, TerminalStarfield starfield, float seconds) {
+        occupied.clear();
+        occupied.or(rows[row]);
+        occupied.or(panelRows[row]);
+        BitSet pixels = occupied;
+        int panelLeft = panelRows[row].nextSetBit(0);
+        int innerLeft = panelLeft + 1;
+        int innerRight = panelLeft < 0 ? 0 : panelRows[row].nextClearBit(panelLeft) - 1;
+        for (int left = pixels.nextSetBit(0); left >= 0;) {
+            if (left >= innerLeft && left < innerRight) {
+                left = pixels.nextSetBit(innerRight);
+                continue;
+            }
+            int alpha = panelRows[row].get(left) ? 255 : Math.round(fillOpacity * (strengths[row][left] & 255));
+            int color = starfield.nebulaColor(drawX + left + 0.5F, drawY + row + 0.5F, seconds);
+            int right = left + 1;
+            while (right < maskWidth && pixels.get(right) && (right < innerLeft || right >= innerRight)
+                    && (panelRows[row].get(right) ? 255
+                            : Math.round(fillOpacity * (strengths[row][right] & 255))) == alpha
+                    && starfield.nebulaColor(drawX + right + 0.5F, drawY + row + 0.5F, seconds) == color) {
+                right++;
+            }
+            graphics.fill(drawX + left, drawY + row, drawX + right, drawY + row + 1,
+                    alpha << 24 | color & 0xFFFFFF);
+            left = pixels.nextSetBit(right);
+        }
+    }
+
+    private void drawOutlineRow(GuiGraphics graphics, int row) {
+        BitSet pixels = outlineRows[row];
         for (int left = pixels.nextSetBit(0); left >= 0;) {
             int end = pixels.nextClearBit(left);
             while (left < end) {
-                int strength = outline && panelRows[row].get(left) ? 255 : strengths[row][left] & 255;
+                int strength = panelRows[row].get(left) ? 255 : strengths[row][left] & 255;
                 int right = left + 1;
                 while (right < end
-                        && (outline && panelRows[row].get(right) ? 255 : strengths[row][right] & 255) == strength) {
+                        && (panelRows[row].get(right) ? 255 : strengths[row][right] & 255) == strength) {
                     right++;
                 }
                 graphics.fill(drawX + left, drawY + row, drawX + right, drawY + row + 1,
-                        CrystalNarrativeGraphics.alpha(color, opacity * strength / 255));
+                        CrystalNarrativeGraphics.alpha(CrystalNarrativeGraphics.BORDER, outlineOpacity * strength / 255));
                 left = right;
             }
             left = pixels.nextSetBit(end);
