@@ -88,6 +88,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.ZIRCONIA_CORUNDUM_BRICKS.get());
                         output.accept(ModItems.CRYSTAL_GLASS.get());
                         output.accept(ModItems.FIREPROOF_CRYSTAL_GLASS.get());
+                        output.accept(ModItems.HIGH_ENERGY_CORE.get());
 
                         // 多方块结构 - 特色结构方块
                         output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_UNIT.get());

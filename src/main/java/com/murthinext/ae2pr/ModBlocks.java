@@ -209,6 +209,10 @@ public final class ModBlocks {
                     .sound(SoundType.STONE)
                     .requiresCorrectToolForDrops()));
 
+    /** 高能核心方块 */
+    public static final RegistryObject<Block> HIGH_ENERGY_CORE = BLOCKS.register(
+            "high_energy_core", () -> new DisassemblableBlock(casingProperties()));
+
     /** 锆刚玉砖块 */
     public static final RegistryObject<Block> ZIRCONIA_CORUNDUM_BRICKS = BLOCKS.register(
             "zirconia_corundum_bricks", () -> new DisassemblableBlock(Block.Properties.of()

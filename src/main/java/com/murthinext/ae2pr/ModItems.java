@@ -280,6 +280,10 @@ public final class ModItems {
     public static final RegistryObject<Item> ZIRCON_BRICK = ITEMS.register("zircon_brick",
             () -> new Item(new Item.Properties()));
 
+    /** 高能核心方块 */
+    public static final RegistryObject<BlockItem> HIGH_ENERGY_CORE = ITEMS.register("high_energy_core",
+            () -> new BlockItem(ModBlocks.HIGH_ENERGY_CORE.get(), new Item.Properties()));
+
     /** 锆刚玉砖块 */
     public static final RegistryObject<BlockItem> ZIRCONIA_CORUNDUM_BRICKS = ITEMS.register("zirconia_corundum_bricks",
             () -> new BlockItem(ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get(), new Item.Properties()));
