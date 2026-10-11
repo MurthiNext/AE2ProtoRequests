@@ -84,7 +84,7 @@ public class RequestSlot extends FakeSlot {
     
     @Override
     public boolean canSetFilterTo(ItemStack stack) {
-        return isLocked ? false : super.canSetFilterTo(stack);
+        return !isLocked && super.canSetFilterTo(stack);
     }
 
     @Override

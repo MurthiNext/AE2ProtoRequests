@@ -88,7 +88,7 @@ public abstract class RequesterTerminalMenuMixin implements IOurRequesterTermina
     @Unique
     private void ae2pr$send(RequesterTerminalMenu menu, RedstoneRequesterBlockEntity be, long id) {
         // 用 ME Requester 的 Requests 结构把本机条目转成其 NBT 格式
-        var mirror = new Requests((RequestHost) null);
+        var mirror = new Requests(null);
         int count = Math.min(mirror.size(), be.getRequests().size());
         for (int i = 0; i < count; i++) {
             var entry = be.getRequests().get(i);

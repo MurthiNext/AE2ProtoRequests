@@ -58,19 +58,16 @@ public final class TagExpression implements Predicate<AEKey> {
         boolean test(AEKey key);
     }
 
-    /** 精确标签匹配。 */
-    private static final class TagNode implements Node {
-        private final TagKey<Item> tag;
-
-        private TagNode(TagKey<Item> tag) {
-            this.tag = tag;
-        }
+    /**
+     * 精确标签匹配。
+     */
+        private record TagNode(TagKey<Item> tag) implements Node {
 
         @Override
-        public boolean test(AEKey key) {
-            return key.isTagged(tag);
+            public boolean test(AEKey key) {
+                return key.isTagged(tag);
+            }
         }
-    }
 
     /** glob 通配匹配：遍历该键类型下所有标签 id，任一命中即可。 */
     private static final class GlobNode implements Node {

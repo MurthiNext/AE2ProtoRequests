@@ -39,13 +39,13 @@ public abstract class CraftingStatusMenuBroadcastMixin {
             return;
         }
 
-        var accessor = (CraftingStatusMenuAccessor) (Object) this;
+        var accessor = (CraftingStatusMenuAccessor) this;
         List<CpuRoundInfo> rounds = new ArrayList<>();
         for (var cpu : accessor.ae2pr$getLastCpuSet()) {
             Integer round = null;
             Integer total = null;
             if (cpu instanceof CraftingCPUCluster cluster) {
-                var context = ((IRepeatOrderHost) (Object) cluster.craftingLogic).ae2pr$getContext();
+                var context = ((IRepeatOrderHost) cluster.craftingLogic).ae2pr$getContext();
                 if (context != null) {
                     round = context.currentRound();
                     total = context.totalRounds;

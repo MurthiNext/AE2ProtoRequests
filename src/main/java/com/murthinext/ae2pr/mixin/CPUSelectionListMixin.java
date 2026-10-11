@@ -43,7 +43,7 @@ public abstract class CPUSelectionListMixin {
         if (tooltip == null) {
             return;
         }
-        var cpu = ((CPUSelectionListAccessor) (Object) this).ae2pr$hitTestCpu(new Point(mouseX, mouseY));
+        var cpu = ((CPUSelectionListAccessor) this).ae2pr$hitTestCpu(new Point(mouseX, mouseY));
         if (cpu == null) {
             return;
         }

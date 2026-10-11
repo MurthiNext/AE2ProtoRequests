@@ -20,6 +20,7 @@ final class OpeningPixelStream {
     private final BitSet exposed = new BitSet();
     private final BitSet occupied = new BitSet();
     private final Random random = new Random();
+    private final long openingSeed = random.nextLong();
     private final int maskWidth;
     private int firstRow;
     private int lastRow;
@@ -52,7 +53,9 @@ final class OpeningPixelStream {
         drawY = y - MARGIN;
         updateShape(width, height, slant, progress, seconds);
         fillOpacity = CrystalNarrativeGraphics.ease(progress / 0.1F);
-        outlineOpacity = CrystalNarrativeGraphics.ease(progress);
+        float blend = Mth.clamp((progress - 0.86F) / 0.14F, 0, 1);
+        blend = blend * blend * (3 - 2 * blend);
+        outlineOpacity = CrystalNarrativeGraphics.ease(progress) * (1 - blend);
         graphics.drawManaged(() -> {
             for (int row = firstRow; row <= lastRow; row++) {
                 drawRow(graphics, rows[row], row,
@@ -60,6 +63,9 @@ final class OpeningPixelStream {
             }
         });
         renderOutline(graphics);
+        int border = CrystalNarrativeGraphics.alpha(CrystalNarrativeGraphics.BORDER,
+                CrystalNarrativeGraphics.ease(progress) * blend);
+        graphics.drawManaged(() -> CrystalNarrativeGraphics.outline(graphics, x, y, width, height, slant, border));
     }
 
     /** 绘制入场像素流与主面板共用的外轮廓。 */
@@ -127,20 +133,24 @@ final class OpeningPixelStream {
         boolean horizontal = edge < 2;
         float length = horizontal ? width - slant : height;
         float remaining = 1 - progress;
-        float settle = CrystalNarrativeGraphics.ease((progress - 0.74F) / 0.2F);
         float direction = edge == 0 || edge == 3 ? 1 : -1;
         float tangentX = horizontal ? direction : -slant / height * direction;
         float tangentY = horizontal ? 0 : direction;
         float normalX = horizontal ? 0 : (edge == 2 ? -1 : 1);
         float normalY = horizontal ? (edge == 0 ? -1 : 1) : 0;
-        random.setSeed(0xAE2C1257L + edge * 739L);
+        random.setSeed(openingSeed + edge * 739L);
+        float speed = 24 + random.nextFloat() * 24;
         for (int step = 0; step < length; step += 4 + random.nextInt(6)) {
             float seed = random.nextFloat();
+            float settleStart = 0.54F + seed * 0.1F;
+            float settleEnd = 0.96F + seed * 0.04F;
+            float settle = Mth.clamp((progress - settleStart) / (settleEnd - settleStart), 0, 1);
+            settle = settle * settle * (3 - 2 * settle);
             float phase = seconds * (8 + seed * 6) + seed * Mth.TWO_PI;
-            float flow = step + direction * seconds * (28 + edge * 5) * remaining
+            float flow = step + direction * seconds * speed * remaining
                     + Mth.sin(phase) * (2 + seed * 3) * remaining;
             float position = flow - (float) Math.floor(flow / length) * length;
-            float inset = Math.min(6, length / 2);
+            float inset = Math.min(6 + 12 * settle, length / 2);
             position = Mth.clamp(position, inset, length - inset);
             float px = horizontal ? position + (edge == 0 ? slant : 0)
                     : slant * (1 - position / height) + (edge == 3 ? width - slant : 0);

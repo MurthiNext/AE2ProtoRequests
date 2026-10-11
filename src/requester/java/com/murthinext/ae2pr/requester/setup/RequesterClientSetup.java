@@ -11,7 +11,7 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.requester.client.RedstoneRequesterScreen;
 
 /**
- * 独立源码集内红石请求器的客户端初始化：注册请求器界面。
+ * 红石请求器的客户端初始化：注册请求器界面。
  */
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class RequesterClientSetup {

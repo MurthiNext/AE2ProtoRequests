@@ -4,15 +4,25 @@ navigation:
   parent: multiblocks/multiblocks_index.md
   icon: ae2pr:certus_quartz_crystal_input_hatch
   position: 30
+item_ids:
+  - ae2pr:fluix_crystal_energy_hatch
+  - ae2pr:certus_quartz_crystal_input_bus
+  - ae2pr:certus_quartz_crystal_input_hatch
+  - ae2pr:certus_quartz_crystal_output_bus
+  - ae2pr:certus_quartz_crystal_output_hatch
+  - ae2pr:aev_input_bus
+  - ae2pr:aev_input_hatch
+  - ae2pr:aev_output_bus
+  - ae2pr:aev_output_hatch
 ---
 
 # 仓室与总线
 
 <Row>
-  <BlockImage id="ae2pr:certus_quartz_crystal_input_bus" scale="2" />
-  <BlockImage id="ae2pr:certus_quartz_crystal_input_hatch" scale="2" />
-  <BlockImage id="ae2pr:certus_quartz_crystal_output_bus" scale="2" />
-  <BlockImage id="ae2pr:certus_quartz_crystal_output_hatch" scale="2" />
+  <BlockImage id="ae2pr:certus_quartz_crystal_input_bus" scale="3" />
+  <BlockImage id="ae2pr:certus_quartz_crystal_input_hatch" scale="3" />
+  <BlockImage id="ae2pr:certus_quartz_crystal_output_bus" scale="3" />
+  <BlockImage id="ae2pr:certus_quartz_crystal_output_hatch" scale="3" />
 </Row>
 
 机器部件（或称仓室）是多方块机器与外界的接口：**总线**搬运物品、**仓**搬运流体、**能源仓**为机器提供电力。
@@ -23,8 +33,8 @@ navigation:
 
 | 部件 | 输入 / 输出总线 | 输入 / 输出仓 |
 | --- | --- | --- |
-| 赛特斯石英水晶系列 | 1 格物品位，单格最高 32K 件 | 4 格物品位，单格最高 2048 件 |
-| §bAEV§r 系列 | 1 个流体罐，单罐 16K 桶 | 2 个流体罐，单罐 1024 桶 |
+| 赛特斯石英水晶系列 | 1 格物品位，单格最高 32K 件 | 1 个流体罐，单罐 16K 桶 |
+| §bAEV§r 系列 | 4 格物品位，单格最高 2048 件 | 2 个流体罐，单罐 1024 桶 |
 
 - **输入部件**（输入总线 / 输入仓）：向机器提供原料。
 - **输出部件**（输出总线 / 输出仓）：只接受机器产出。
@@ -39,7 +49,7 @@ navigation:
 
 ## 能源仓
 
-<ItemImage id="ae2pr:fluix_crystal_energy_hatch" scale="2" />
+<BlockImage id="ae2pr:fluix_crystal_energy_hatch" scale="3" />
 
 福鲁伊克斯水晶能源仓不占用频道、也不缓存能量，AE2 Proto Requests 所有的电力需求都基于 ME 网络。
 

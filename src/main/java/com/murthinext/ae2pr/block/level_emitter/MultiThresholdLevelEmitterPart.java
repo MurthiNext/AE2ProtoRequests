@@ -330,7 +330,7 @@ public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
         }
         // 红石模式：LOW_SIGNAL 时反转输出（默认 HIGH_SIGNAL 不反转）
         boolean invert = getConfigManager().getSetting(Settings.REDSTONE_EMITTER) == RedstoneMode.LOW_SIGNAL;
-        return invert ? !this.latchOn : this.latchOn;
+        return invert != this.latchOn;
     }
 
     @Override

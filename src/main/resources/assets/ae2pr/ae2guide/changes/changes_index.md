@@ -20,7 +20,7 @@ item_ids:
 
 <GameScene zoom="3">
   <ImportStructure src="meteorite_ores.nbt" />
-  <IsometricCamera yaw="90" pitch="30" />
+  <IsometricCamera yaw="100" pitch="30" />
 </GameScene>
 
 这也是你第一块<ItemLink id="ae2pr:zircon" />的来源。

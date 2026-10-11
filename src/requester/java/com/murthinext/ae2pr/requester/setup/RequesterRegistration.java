@@ -19,13 +19,7 @@ import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
 import com.murthinext.ae2pr.requester.RedstoneRequesterMenu;
 
 /**
- * 独立源码集（src/requester）内红石请求器的注册入口。
- * <p>
- * 复用主源码集的 DeferredRegister；FMLConstructModEvent 触发类加载后，
- * 静态字段即把条目挂入注册器，保证发生在 RegisterEvent 之前。
- * <p>
- * 本类为原创注册胶水代码（MIT），与同源码集内的 LGPL-3.0 派生代码分开声明，
- * 见 licenses/ME-Requester-NOTICE.txt。
+ * 红石请求器的注册入口。
  */
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class RequesterRegistration {

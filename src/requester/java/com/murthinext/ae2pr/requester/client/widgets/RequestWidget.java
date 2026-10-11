@@ -99,11 +99,7 @@ public class RequestWidget {
         var status = request.getClientStatus();
         statusDisplay.setStatus(status);
         amountField.adjustToType(request.getKey());
-        if (status.locksRequest()) {
-            amountField.setEditable(false);
-        } else {
-            amountField.setEditable(true);
-        }
+        amountField.setEditable(!status.locksRequest());
         if (amountField.isFocused() || submitButton.isFocused()) return;
         amountField.setLongValue(request.getAmount());
     }

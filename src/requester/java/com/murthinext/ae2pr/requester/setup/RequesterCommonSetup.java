@@ -13,7 +13,7 @@ import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
 import com.murthinext.ae2pr.requester.network.RequesterNetwork;
 
 /**
- * 独立源码集内红石请求器的通用初始化：网络通道、AE2 方块实体绑定与创造模式标签页。
+ * 红石请求器的通用初始化：网络通道、AE2 方块实体绑定与创造模式标签页。
  */
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class RequesterCommonSetup {

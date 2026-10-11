@@ -11,7 +11,7 @@
   "item_inputs": [
     {
       "item": "ae2pr:uncharged_singularity",
-      "count": 1
+      "count": 64
     },
     {
       "item": "ae2:singularity",
@@ -19,6 +19,10 @@
     },
     {
       "item": "ae2:charged_certus_quartz_crystal",
+      "count": 512
+    },
+    {
+      "item": "ae2:fluix_crystal",
       "count": 512
     }
   ],

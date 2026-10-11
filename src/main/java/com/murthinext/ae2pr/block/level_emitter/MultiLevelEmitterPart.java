@@ -280,7 +280,7 @@ public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
         boolean result = matchAll;
         for (AEKey key : list.getItems()) {
             long amount = amountFor(stacks, key);
-            boolean satisfied = lowSignal ? amount < threshold : amount >= threshold;
+            boolean satisfied = lowSignal == (amount < threshold);
             if (matchAll) {
                 if (!satisfied) {
                     return false;
@@ -305,7 +305,7 @@ public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
                 continue;
             }
             long amount = entry.getLongValue();
-            boolean satisfied = lowSignal ? amount < threshold : amount >= threshold;
+            boolean satisfied = lowSignal == (amount < threshold);
             if (matchAll) {
                 if (!satisfied) {
                     return false;

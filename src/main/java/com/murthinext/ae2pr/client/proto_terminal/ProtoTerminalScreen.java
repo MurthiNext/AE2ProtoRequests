@@ -88,7 +88,7 @@ public final class ProtoTerminalScreen extends Screen {
     private ProtoTerminalScreen(TerminalStoryTree story) {
         super(Component.translatable("item.ae2pr.proto_terminal"));
         this.story = story;
-        this.animation = new TerminalAnimation(story.nodes().size());
+        this.animation = new TerminalAnimation();
         for (TerminalStoryTree.Node node : story.nodes()) {
             nodesById.put(node.id(), node);
         }
@@ -157,7 +157,7 @@ public final class ProtoTerminalScreen extends Screen {
             updateVisibility();
             int localMouseX = (int) localX(mouseX);
             int localMouseY = (int) localY(mouseY);
-            if (elapsed >= TerminalAnimation.OPEN_DURATION) {
+            if (elapsed >= TerminalAnimation.CONTENT_START) {
                 renderTree(graphics, localMouseX, localMouseY, partialTick, elapsed);
                 float headerOpacity = animation.headerOpacity(elapsed);
                 if (headerOpacity >= 4.0F / 255) {
@@ -176,8 +176,10 @@ public final class ProtoTerminalScreen extends Screen {
                     backButton.render(graphics, localMouseX, localMouseY, partialTick);
                 }
                 closeButton.render(graphics, localMouseX, localMouseY, partialTick);
-                graphics.drawManaged(() -> CrystalNarrativeGraphics.outline(graphics,
-                        MAIN_X, MAIN_Y, MAIN_WIDTH, MAIN_HEIGHT, MAIN_SLANT, CrystalNarrativeGraphics.BORDER));
+                if (progress >= 1) {
+                    graphics.drawManaged(() -> CrystalNarrativeGraphics.outline(graphics,
+                            MAIN_X, MAIN_Y, MAIN_WIDTH, MAIN_HEIGHT, MAIN_SLANT, CrystalNarrativeGraphics.BORDER));
+                }
             }
         } finally {
             graphics.setColor(1, 1, 1, 1);
@@ -241,12 +243,24 @@ public final class ProtoTerminalScreen extends Screen {
     private void renderTree(GuiGraphics graphics, int mouseX, int mouseY, float partialTick, long elapsed) {
         float connectionProgress = animation.connectionProgress(elapsed);
         double guiScale = minecraft.getWindow().getGuiScale();
+        List<ParallelogramClip.Band> clipBands = treeClipBands;
+        if (elapsed < TerminalAnimation.OPEN_DURATION) {
+            float scale = CrystalNarrativeGraphics.ease(animation.opening(elapsed));
+            int panelWidth = Math.round(MAIN_WIDTH * scale);
+            int panelHeight = Math.round(MAIN_HEIGHT * scale);
+            int x = MAIN_X + (MAIN_WIDTH - panelWidth) / 2;
+            int y = MAIN_Y + (MAIN_HEIGHT - panelHeight) / 2;
+            clipBands = ParallelogramClip.bands((canvasLeft + x * canvasScale) * guiScale,
+                    (canvasTop + y * canvasScale) * guiScale, panelWidth * canvasScale * guiScale,
+                    panelHeight * canvasScale * guiScale,
+                    CrystalNarrativeGraphics.slant(panelHeight) * canvasScale * guiScale);
+        }
         boolean wasScissored = GL11.glIsEnabled(GL11.GL_SCISSOR_TEST);
         int[] previousScissor = new int[4];
         GL11.glGetIntegerv(GL11.GL_SCISSOR_BOX, previousScissor);
         graphics.flush();
         try {
-            for (ParallelogramClip.Band band : treeClipBands) {
+            for (ParallelogramClip.Band band : clipBands) {
                 RenderSystem.enableScissor(band.left(), minecraft.getWindow().getHeight() - band.bottom(),
                         band.right() - band.left(), band.bottom() - band.top());
                 float top = (float) (band.top() / guiScale - canvasTop) / canvasScale;
@@ -446,7 +460,7 @@ public final class ProtoTerminalScreen extends Screen {
     private void updateVisibility() {
         long now = Util.getMillis();
         long elapsed = openingStarted < 0 ? 0 : now - openingStarted;
-        boolean interactive = terminalClosingStarted < 0;
+        boolean interactive = terminalClosingStarted < 0 && elapsed >= TerminalAnimation.OPEN_DURATION;
         boolean showingDetail = selectedNode != null && detailClosingStarted < 0;
         for (int i = 0; i < nodeButtons.size(); i++) {
             NarrativeButton button = nodeButtons.get(i);
@@ -503,7 +517,8 @@ public final class ProtoTerminalScreen extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         double x = localX(mouseX);
         double y = localY(mouseY);
-        if (terminalClosingStarted >= 0) {
+        if (terminalClosingStarted >= 0 || openingStarted < 0
+                || Util.getMillis() - openingStarted < TerminalAnimation.OPEN_DURATION) {
             return true;
         }
         if (closeButton.mouseClicked(x, y, button)) {
@@ -518,10 +533,7 @@ public final class ProtoTerminalScreen extends Screen {
             return true;
         }
         if (!insideTree(x, y)) {
-            if (backButton.mouseClicked(x, y, button)) {
-                return true;
-            }
-            return false;
+            return backButton.mouseClicked(x, y, button);
         }
         if (super.mouseClicked(x, y, button)) {
             if (selectedNode != null) {

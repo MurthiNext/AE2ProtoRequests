@@ -3,9 +3,10 @@ package com.murthinext.ae2pr.client.proto_terminal;
 import net.minecraft.util.Mth;
 
 /** 终端标题、剧情块和连线的入场时序。 */
-record TerminalAnimation(int nodeCount) {
+record TerminalAnimation() {
 
     static final long OPEN_DURATION = 1050;
+    static final long CONTENT_START = OPEN_DURATION * 55 / 100;
     private static final long HEADER_DURATION = 240;
     private static final long NODE_DURATION = 360;
     private static final long NODE_STAGGER = 65;
@@ -20,13 +21,12 @@ record TerminalAnimation(int nodeCount) {
     }
 
     float nodeProgress(long elapsed, int index) {
-        long start = OPEN_DURATION + HEADER_DURATION + Math.min(index, 6) * NODE_STAGGER;
+        long start = CONTENT_START + Math.min(index, 6) * NODE_STAGGER;
         return CrystalNarrativeGraphics.ease((elapsed - start) / (float) NODE_DURATION);
     }
 
     float connectionProgress(long elapsed) {
-        long start = OPEN_DURATION + HEADER_DURATION + NODE_DURATION
-                + Math.min(Math.max(0, nodeCount - 1), 6) * NODE_STAGGER;
+        long start = CONTENT_START + OPEN_DURATION * 3 / 100;
         return Mth.clamp((elapsed - start) / (float) CONNECTION_DURATION, 0, 1);
     }
 

@@ -73,63 +73,57 @@ public final class FluidBlockRendering {
         RenderSystem.applyModelViewMatrix();
     }
 
-    private static final class FakeWorld implements BlockAndTintGetter {
-
-        private final FluidState fluidState;
-
-        private FakeWorld(FluidState fluidState) {
-            this.fluidState = fluidState;
-        }
+    private record FakeWorld(FluidState fluidState) implements BlockAndTintGetter {
 
         @Override
-        public float getShade(Direction direction, boolean shade) {
-            return 1.0f;
-        }
+            public float getShade(Direction direction, boolean shade) {
+                return 1.0f;
+            }
 
-        @Override
-        public LevelLightEngine getLightEngine() {
-            throw new UnsupportedOperationException();
-        }
+            @Override
+            public LevelLightEngine getLightEngine() {
+                throw new UnsupportedOperationException();
+            }
 
-        @Override
-        public int getBrightness(LightLayer layer, BlockPos pos) {
-            return 15;
-        }
+            @Override
+            public int getBrightness(LightLayer layer, BlockPos pos) {
+                return 15;
+            }
 
-        @Override
-        public int getRawBrightness(BlockPos pos, int ambientDarkness) {
-            return 15;
-        }
+            @Override
+            public int getRawBrightness(BlockPos pos, int ambientDarkness) {
+                return 15;
+            }
 
-        @Override
-        public int getBlockTint(BlockPos pos, ColorResolver colorResolver) {
-            var level = Minecraft.getInstance().level;
-            return level == null ? -1 : colorResolver.getColor(level.getBiome(pos).value(), 0, 0);
-        }
+            @Override
+            public int getBlockTint(BlockPos pos, ColorResolver colorResolver) {
+                var level = Minecraft.getInstance().level;
+                return level == null ? -1 : colorResolver.getColor(level.getBiome(pos).value(), 0, 0);
+            }
 
-        @Override
-        public BlockEntity getBlockEntity(BlockPos pos) {
-            return null;
-        }
+            @Override
+            public BlockEntity getBlockEntity(BlockPos pos) {
+                return null;
+            }
 
-        @Override
-        public BlockState getBlockState(BlockPos pos) {
-            return BlockPos.ZERO.equals(pos) ? fluidState.createLegacyBlock() : Blocks.AIR.defaultBlockState();
-        }
+            @Override
+            public BlockState getBlockState(BlockPos pos) {
+                return BlockPos.ZERO.equals(pos) ? fluidState.createLegacyBlock() : Blocks.AIR.defaultBlockState();
+            }
 
-        @Override
-        public FluidState getFluidState(BlockPos pos) {
-            return BlockPos.ZERO.equals(pos) ? fluidState : Fluids.EMPTY.defaultFluidState();
-        }
+            @Override
+            public FluidState getFluidState(BlockPos pos) {
+                return BlockPos.ZERO.equals(pos) ? fluidState : Fluids.EMPTY.defaultFluidState();
+            }
 
-        @Override
-        public int getHeight() {
-            return 0;
-        }
+            @Override
+            public int getHeight() {
+                return 0;
+            }
 
-        @Override
-        public int getMinBuildHeight() {
-            return 0;
+            @Override
+            public int getMinBuildHeight() {
+                return 0;
+            }
         }
-    }
 }
