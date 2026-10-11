@@ -27,8 +27,7 @@ java {
     toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
-// 独立源码集：ME 红石请求器（含 LGPL-3.0 派生代码，见 src/requester 与 licenses/）
-// 目录遵循默认约定：src/requester/java、src/requester/resources
+// ME 红石请求器
 sourceSets {
     requester {
         compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
@@ -79,10 +78,20 @@ mixin {
     config "${mod_id}.requester.mixins.json"
 }
 
+// 将 refmap 声明为编译任务输出并关闭增量编译，避免丢失 refmap。
+tasks.named('compileJava', JavaCompile).configure {
+    options.incremental = false
+    outputs.file(layout.buildDirectory.file("tmp/${name}/${mod_id}.refmap.json"))
+}
+tasks.named('compileRequesterJava', JavaCompile).configure {
+    options.incremental = false
+    outputs.file(layout.buildDirectory.file("tmp/${name}/${mod_id}.requester.refmap.json"))
+}
+
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    // 本地离线依赖（如 JEI / Jade 等编译期依赖；libs/ 已被忽略提交）
+    // 本地离线依赖
     if (file('libs/maven').isDirectory()) {
         maven {
             name = 'LocalLibs'
@@ -135,9 +144,9 @@ dependencies {
     runtimeOnly fg.deobf("maven.modrinth:jade:${jade_version}")
 
     // JEI: optional soft-dependency for recipe display, compile-only.
-    // 离线时从 libs/maven 提供（见 repositories），在线时从 maven 拉取。
     compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge:${jei_version}")
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
     // 独立源码集的 mixin 注解处理器
     requesterAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
@@ -173,6 +182,15 @@ tasks.named('jar', Jar).configure {
     }
     // 独立源码集产物并入主 jar
     from sourceSets.requester.output
+    // 拦截 refmap 缺失
+    doFirst {
+        ['compileJava', 'compileRequesterJava'].each { compileTaskName ->
+            def refmap = compileTaskName == 'compileJava' ? "${mod_id}.refmap.json" : "${mod_id}.requester.refmap.json"
+            if (!layout.buildDirectory.file("tmp/${compileTaskName}/${refmap}").get().asFile.exists()) {
+                throw new GradleException("Mixin refmap 缺失：${refmap}，请执行 gradlew clean 后重新构建。")
+            }
+        }
+    }
     finalizedBy 'reobfJar'
 }
 

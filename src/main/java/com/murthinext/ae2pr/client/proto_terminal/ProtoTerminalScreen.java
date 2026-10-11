@@ -283,13 +283,11 @@ public final class ProtoTerminalScreen extends Screen {
             float connectionProgress, float left, float top, float right, float bottom) {
         graphics.drawManaged(() -> {
             for (TerminalStoryTree.Node node : story.nodes()) {
-                for (String targetId : node.connections()) {
-                    TerminalStoryTree.Node target = nodesById.get(targetId);
-                    if (target != null && target != node && connectionProgress > 0
-                            && Math.max(node.y(), target.y()) + TREE_TOP + NODE_HEIGHT / 2 + panY + 1 >= top
-                            && Math.min(node.y(), target.y()) + TREE_TOP + NODE_HEIGHT / 2 + panY - 1 < bottom) {
-                        renderConnection(graphics, node, target, connectionProgress);
-                    }
+                TerminalStoryTree.Node parent = node.parent() == null ? null : nodesById.get(node.parent());
+                if (parent != null && connectionProgress > 0
+                        && Math.max(parent.y(), node.y()) + TREE_TOP + NODE_HEIGHT / 2 + panY + 1 >= top
+                        && Math.min(parent.y(), node.y()) + TREE_TOP + NODE_HEIGHT / 2 + panY - 1 < bottom) {
+                    renderConnection(graphics, parent, node, connectionProgress);
                 }
             }
         });

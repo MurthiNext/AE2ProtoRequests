@@ -1,0 +1,13 @@
+{
+  "position": 2,
+  "parent": "connection",
+  "x": 306,
+  "y": 154,
+  "title": "Awaiting the next echo",
+  "dialogues": [
+    {
+      "speaker": "TERMINAL / SYSTEM ECHO",
+      "text": "For now, the channel is silent.\n\nNo new narrative records are available.\nThe next message will unfold here when it arrives."
+    }
+  ]
+}

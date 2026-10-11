@@ -1,0 +1,12 @@
+{
+  "position": 0,
+  "x": 30,
+  "y": 94,
+  "title": "Link established",
+  "dialogues": [
+    {
+      "speaker": "TERMINAL / SYSTEM ECHO",
+      "text": "Fractured pixels assemble.\nThe faint light within the deep-blue lattice resolves into an interface.\n\nTerminal connected. The narrative channel is ready."
+    }
+  ]
+}

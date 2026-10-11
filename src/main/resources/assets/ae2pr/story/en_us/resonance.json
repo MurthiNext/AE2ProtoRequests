@@ -1,0 +1,13 @@
+{
+  "position": 1,
+  "parent": "connection",
+  "x": 306,
+  "y": 34,
+  "title": "Light within the crystal",
+  "dialogues": [
+    {
+      "speaker": "TERMINAL / SYSTEM ECHO",
+      "text": "Faint stars emerge within the deep-blue lattice.\n\nEach echo can hold a story of its own.\nExplore the connections, or pause to read the record before you."
+    }
+  ]
+}
