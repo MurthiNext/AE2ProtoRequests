@@ -21,15 +21,11 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 import com.murthinext.ae2pr.ModBlocks;
 
 /**
- * 异星熔岩流体：行为接近岩浆（黏稠、发光、流动慢），但实体伤害与物品销毁由 {@code AlienLavaBlock} 另行处理。
- * <p>
- * 源方块额外携带 {@link #CONVERSIONS}（已完成的世界交互转化次数），达到 {@link #MAX_CONVERSIONS} 后变回普通熔岩。
+ * 异星熔岩流体，行为接近岩浆，伤害与物品销毁由 AlienLavaBlock 处理。
  */
 public abstract class AlienLavaFluid extends ForgeFlowingFluid {
 
-    /** 源方块已完成的转化配方次数，达到上限后恢复为普通熔岩 */
     public static final IntegerProperty CONVERSIONS = IntegerProperty.create("conversions", 0, 32);
-    /** 单个源方块最多可完成的转化次数 */
     public static final int MAX_CONVERSIONS = 32;
 
     protected AlienLavaFluid(Properties properties) {
@@ -84,7 +80,9 @@ public abstract class AlienLavaFluid extends ForgeFlowingFluid {
         return block;
     }
 
-    /** 流动状态：不携带转化次数，仅记录液面高度。 */
+    /**
+     * 流动状态。
+     */
     public static class Flowing extends AlienLavaFluid {
 
         public Flowing(Properties properties) {
@@ -108,7 +106,9 @@ public abstract class AlienLavaFluid extends ForgeFlowingFluid {
         }
     }
 
-    /** 源状态：携带该方块已完成的转化次数。 */
+    /**
+     * 源状态。
+     */
     public static class Source extends AlienLavaFluid {
 
         public Source(Properties properties) {

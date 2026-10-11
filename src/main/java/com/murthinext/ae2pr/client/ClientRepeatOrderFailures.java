@@ -20,7 +20,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
- * 客户端失败标记：记录失败物品并渲染红闪/常亮背景，以及弹出失败 Toast。
+ * 客户端失败标记：红闪背景与失败 Toast。
  */
 @OnlyIn(Dist.CLIENT)
 public final class ClientRepeatOrderFailures {
@@ -54,7 +54,7 @@ public final class ClientRepeatOrderFailures {
     }
 
     /**
-     * 与 AE2 完成提示相同的条件：身上有可用（有电且已链接）的无线终端。
+     * 条件与 AE2 完成提示相同：有电且已链接的无线终端。
      */
     public static boolean hasNotificationEnablingItem(LocalPlayer player) {
         for (var stack : SearchInventoryEvent.getItems(player)) {
@@ -69,7 +69,7 @@ public final class ClientRepeatOrderFailures {
     }
 
     /**
-     * 在终端物品格上渲染失败标记（在物品绘制之前调用）。
+     * 须在物品绘制之前调用。
      */
     public static void renderMark(GuiGraphics guiGraphics, int x, int y, AEKey what) {
         var mark = MARKS.get(what);
@@ -96,7 +96,7 @@ public final class ClientRepeatOrderFailures {
     }
 
     /**
-     * 真正新开终端时调用：已经开始展示过（含中途关闭）的标记清除，从未展示的重置为待闪烁。
+     * 真正新开终端时：已展示的标记清除，未展示的重置为待闪烁。
      */
     public static void onTerminalOpenedFresh() {
         MARKS.values().removeIf(mark -> mark.flashStartMillis() >= 0);

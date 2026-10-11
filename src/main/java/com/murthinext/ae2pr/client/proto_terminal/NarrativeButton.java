@@ -5,7 +5,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
-/** 叙事屏幕的平行四边形按钮。 */
+/**
+ * 叙事屏幕的平行四边形按钮。
+ */
 final class NarrativeButton extends Button {
 
     enum Icon {

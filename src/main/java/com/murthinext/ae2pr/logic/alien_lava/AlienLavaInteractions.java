@@ -25,22 +25,18 @@ import com.murthinext.ae2pr.recipe.AlienLavaRecipe;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 
 /**
- * 异星熔岩世界交互逻辑（服务端）：
- * <ul>
- * <li>物品浸入催化剂源方块一段时间后，一次性并行执行所有可完成的配方份数，按份数消耗附近物品并产出；</li>
- * <li>以异星熔岩为催化剂的配方每完成一份，该源方块的转化次数 +1，达到上限后变回普通熔岩；</li>
- * <li>以普通熔岩为催化剂的配方完成后，源方块转化为异星熔岩。</li>
- * </ul>
+ * 异星熔岩世界交互逻辑（服务端）。
  */
 public final class AlienLavaInteractions {
 
-    /** 浸入流体后首次转化所需的等待时间（tick） */
     private static final int TRANSFORM_DELAY_TICKS = 60;
 
     private AlienLavaInteractions() {
     }
 
-    /** 由 ItemEntity 的 tick 钩子调用（处理异星熔岩中的转化）。 */
+    /**
+     * 物品 tick 钩子：处理异星熔岩中的转化。
+     */
     public static void onItemTick(ItemEntity item) {
         Level level = item.level();
         if (level.isClientSide || item.isRemoved() || item.getItem().isEmpty()
@@ -51,7 +47,7 @@ public final class AlienLavaInteractions {
                 (item.getBoundingBox().minY + item.getBoundingBox().maxY) * 0.5D, item.getZ());
         FluidState fluid = level.getFluidState(pos);
         if (fluid.is(FluidTags.LAVA)) {
-            // 普通岩浆会先销毁物品，改由 hurt 钩子处理“陨石粉充能”配方
+            // 普通岩浆由 hurt 钩子处理转化
             timer.ae2pr$setTransformTicks(0);
             return;
         }
@@ -75,8 +71,7 @@ public final class AlienLavaInteractions {
     }
 
     /**
-     * 由 ItemEntity 的受伤钩子调用：普通岩浆会在数 tick 内销毁物品，
-     * 因此在伤害生效前检查“把岩浆源转化为异星熔岩”的配方是否满足，满足则取消本次伤害。
+     * 物品受伤钩子：取消伤害并尝试转化岩浆源。
      */
     public static boolean tryChargeLava(ItemEntity item) {
         Level level = item.level();
@@ -93,7 +88,6 @@ public final class AlienLavaInteractions {
         return recipe != null && recipe.convertsCatalyst() && apply(level, pos, recipe, item);
     }
 
-    /** 找到以触发物品为首个原料、且催化剂匹配当前流体状态的配方。 */
     private static AlienLavaRecipe findRecipe(Level level, FluidState fluid, ItemStack trigger) {
         for (AlienLavaRecipe recipe : level.getRecipeManager().getAllRecipesFor(ModRecipes.ALIEN_LAVA_TYPE.get())) {
             if (recipe.isCatalyst(fluid) && recipe.canTrigger(trigger)) {
@@ -104,8 +98,7 @@ public final class AlienLavaInteractions {
     }
 
     /**
-     * 校验并消耗附近物品实体中的原料，按可并行份数一次性产出；
-     * 异星熔岩每并行一份扣除一点转化次数，次数用尽或材料不足时按实际份数执行。
+     * 消耗附近物品，按份一次性产出并扣转化次数。
      */
     private static boolean apply(Level level, BlockPos pos, AlienLavaRecipe recipe, ItemEntity source) {
         List<ItemEntity> nearby = level.getEntitiesOfClass(ItemEntity.class, new AABB(pos).inflate(0.0D),
@@ -117,7 +110,7 @@ public final class AlienLavaInteractions {
         BlockState catalystState = level.getBlockState(pos);
         boolean alienLava = catalystState.getBlock() instanceof AlienLavaBlock;
 
-        // 并行上限：流体转化一次只能转化一个源方块；异星熔岩受剩余转化次数限制
+        // 并行上限：转化催化剂限 1；异星熔岩受剩余次数限制
         int maxParallel = Integer.MAX_VALUE;
         if (recipe.convertsCatalyst()) {
             maxParallel = 1;
@@ -139,7 +132,6 @@ public final class AlienLavaInteractions {
             return false;
         }
 
-        // 执行消耗
         for (Map.Entry<ItemEntity, Integer> entry : plan.entrySet()) {
             int consumed = entry.getKey().getItem().getCount() - entry.getValue();
             if (consumed > 0) {
@@ -151,16 +143,14 @@ public final class AlienLavaInteractions {
         }
 
         if (recipe.convertsCatalyst()) {
-            // 催化剂源方块转化为结果流体
             level.setBlockAndUpdate(pos, recipe.getResultFluid().defaultFluidState().createLegacyBlock());
             level.playSound(null, pos, SoundEvents.LAVA_EXTINGUISH, SoundSource.BLOCKS, 0.6F, 1.0F);
         } else {
-            // 生成产物并累计该源方块的转化次数
             spawnResults(level, source, recipe.getResultItem(), parallel);
             if (alienLava) {
                 int conversions = catalystState.getValue(AlienLavaFluid.CONVERSIONS) + parallel;
                 if (conversions >= AlienLavaFluid.MAX_CONVERSIONS) {
-                    // 标记为已用尽，由方块的计划刻在物品离开流体后恢复为普通熔岩
+                    // 标记已用尽，计划刻恢复普通熔岩
                     level.setBlockAndUpdate(pos, catalystState.setValue(AlienLavaFluid.CONVERSIONS,
                             AlienLavaFluid.MAX_CONVERSIONS));
                     level.scheduleTick(pos, catalystState.getBlock(), 20);
@@ -173,8 +163,7 @@ public final class AlienLavaInteractions {
     }
 
     /**
-     * 按现有原料估算可并行的份数：对每种原料先计算它单独允许的份数，
-     * 再从可用数量中预留该原料最终份数所需的数量，保证返回的份数一定可执行。
+     * 按现有原料估算可并行份数，预留保证可执行。
      */
     private static int maxBatches(AlienLavaRecipe recipe, List<ItemEntity> nearby, int cap) {
         Map<ItemEntity, Integer> available = new IdentityHashMap<>();
@@ -210,8 +199,7 @@ public final class AlienLavaInteractions {
     }
 
     /**
-     * 尝试为 {@code parallel} 份配方规划消耗，原料不足返回 {@code null}；
-     * 返回值为各物品实体剩余数量（未做实际扣除）。
+     * 规划各物品实体的消耗，原料不足返回 null。
      */
     @Nullable
     private static Map<ItemEntity, Integer> planConsumption(AlienLavaRecipe recipe, List<ItemEntity> nearby,
@@ -239,7 +227,6 @@ public final class AlienLavaInteractions {
         return remaining;
     }
 
-    /** 在触发物品位置生成并行的产物，超过堆叠上限时拆成多份。 */
     private static void spawnResults(Level level, ItemEntity source, ItemStack result, int parallel) {
         int total = result.getCount() * parallel;
         RandomSource random = level.getRandom();

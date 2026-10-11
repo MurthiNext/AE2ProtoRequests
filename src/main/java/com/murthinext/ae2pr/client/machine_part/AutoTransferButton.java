@@ -45,7 +45,6 @@ public class AutoTransferButton extends AbstractWidget {
         this.onPress = onPress;
     }
 
-    /** 绘制纵向工具栏底板（容纳 buttons 个按钮）。 */
     public static void renderToolbar(GuiGraphics graphics, int x, int y, int buttons) {
         int height = buttons * (SIZE + 2) + 2;
         graphics.fill(x, y, x + SIZE + 2, y + height, COLOR_BACKGROUND);
@@ -70,7 +69,6 @@ public class AutoTransferButton extends AbstractWidget {
         }
     }
 
-    /** 当前类型与启用状态对应的图标贴图。 */
     private ResourceLocation getIcon(boolean enabled) {
         if (type == Type.PULL) {
             return enabled ? ICON_PULL_ON : ICON_PULL_OFF;

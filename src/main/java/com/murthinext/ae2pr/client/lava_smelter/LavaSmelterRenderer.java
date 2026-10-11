@@ -34,9 +34,7 @@ public class LavaSmelterRenderer implements BlockEntityRenderer<LavaSmelterContr
     private static final ResourceLocation LAVA_STILL = ResourceLocation.fromNamespaceAndPath("minecraft",
             "block/lava_still");
 
-    /** 液面高度（方块内） */
     private static final float SURFACE_HEIGHT = 0.875F;
-    /** 与炉壁的防重叠内缩 */
     private static final float INSET = 0.02F;
 
     public LavaSmelterRenderer(BlockEntityRendererProvider.Context context) {
@@ -94,7 +92,9 @@ public class LavaSmelterRenderer implements BlockEntityRenderer<LavaSmelterContr
         return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(location);
     }
 
-    /** 按逆时针（从外侧看）顺序输出一个四边形。 */
+    /**
+     * 按逆时针（从外侧看）顺序输出四边形。
+     */
     private static void quad(VertexConsumer consumer, Matrix4f matrix, TextureAtlasSprite sprite,
             float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz,
             float dx, float dy, float dz, float nx, float ny, float nz) {

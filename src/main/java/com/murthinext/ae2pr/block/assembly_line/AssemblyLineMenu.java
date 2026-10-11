@@ -30,7 +30,6 @@ public class AssemblyLineMenu extends AbstractContainerMenu {
     private static final int INV_Y = 122;
     private static final int HOTBAR_Y = 180;
 
-    /** 升级槽 */
     private static final int UPGRADE_SLOTS = 4;
     private static final int UPGRADE_X = 180;
     private static final int UPGRADE_Y = 4;
@@ -72,7 +71,6 @@ public class AssemblyLineMenu extends AbstractContainerMenu {
                 .getBlockEntity(buffer.readBlockPos()));
     }
 
-    /** 每 tick 把成型/运行/暂停状态、ME 电力情况、暂停原因与作业进度写入同步数据：bit0=已成型，bit1=正在运行，bit2=暂停。 */
     @Override
     public void broadcastChanges() {
         if (!clientSide && controller != null) {
@@ -108,42 +106,34 @@ public class AssemblyLineMenu extends AbstractContainerMenu {
         return (data.get(0) & 2) != 0;
     }
 
-    /** 是否处于暂停态（电力或输出不足）。 */
     public boolean isPaused() {
         return (data.get(0) & 4) != 0;
     }
 
-    /** 暂停原因序号（0 = 无，1 = 电力不足，2 = 输出不足）。 */
     public int getErrorCode() {
         return data.get(4);
     }
 
-    /** 结构内是否有能源仓接入 ME 网络。 */
     public boolean isEnergyConnected() {
         return (data.get(1) & 1) != 0;
     }
 
-    /** 结构内能源仓所接 ME 网络的可用能量合计（AE）。 */
     public long getNetworkStoredPower() {
         return (data.get(2) & 0xFFFFFFFFL) | ((long) data.get(3) << 32);
     }
 
-    /** 当前作业的展示产物（数量已乘并行数）；空闲返回空。 */
     public ItemStack getJobOutput() {
         return controller != null ? controller.getClientJobOutput() : ItemStack.EMPTY;
     }
 
-    /** 当前作业已进行的时间（tick）；空闲为 0。 */
     public int getJobElapsed() {
         return data.get(5);
     }
 
-    /** 当前作业的实际总耗时（tick，含速度模块加成）；空闲为 0。 */
     public int getJobDuration() {
         return data.get(6);
     }
 
-    /** 当前模块加成下的并行上限。 */
     public int getMaxParallel() {
         return data.get(7);
     }

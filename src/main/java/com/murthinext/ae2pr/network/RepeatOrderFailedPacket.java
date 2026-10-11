@@ -12,7 +12,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 /**
- * 服务端 -> 客户端：重复订单失败通知（Toast + 终端物品红标）。
+ * 服务端 -> 客户端：重复订单失败通知。
  */
 public class RepeatOrderFailedPacket {
     private final AEKey what;

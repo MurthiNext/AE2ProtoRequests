@@ -23,7 +23,6 @@ import com.murthinext.ae2pr.network.BusSlotClickPacket;
  */
 public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> {
 
-    /** 存储区物品位：多槽为一行四格、整体居中；仓口箭标位于物品格上方 */
     private static final int SLOT_Y = 47;
     private static final int SLOT_X_MULTI = 52;
     private static final int SLOT_X_SINGLE = 80;
@@ -35,7 +34,9 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> {
         super(menu, playerInventory, title);
     }
 
-    /** 客户端同步入口：把服务端各槽存储内容与自动搬运开关写入本地方块实体（仅由同步包调用）。 */
+    /**
+     * 客户端同步入口，仅由同步包调用。
+     */
     public static void applyStackSync(BlockPos pos, List<ItemStack> stacks, boolean autoTransfer) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level != null && minecraft.level.getBlockEntity(pos) instanceof ItemBusBlockEntity bus) {
@@ -66,14 +67,13 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> {
             MachineGui.drawSlot(graphics, slotX(slot), topPos + SLOT_Y);
             renderStoredItem(graphics, slot);
             if (slot == hovered) {
-                // 与原生槽位一致：白色高亮叠加在物品之上
+                // 高亮叠加在物品之上
                 renderSlotHighlight(graphics, slotX(slot), topPos + SLOT_Y, 0, 0x80FFFFFF);
             }
         }
         MachineGui.drawArrow(graphics, leftPos + ARROW_X, topPos + ARROW_Y, !menu.isOutputBus(), true);
     }
 
-    /** 多槽（AEV）时存储区一行四格、整体居中；单槽（石英）居中于面板。 */
     private int slotX(int slot) {
         int x = menu.getSlotCount() > 1 ? SLOT_X_MULTI + slot * SLOT_STEP : SLOT_X_SINGLE;
         return leftPos + x;
@@ -89,7 +89,6 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> {
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    /** 存储区悬停：按槽位惯例显示物品 tooltip；工具栏提示由基类统一处理。 */
     @Override
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
         if (renderToolbarTooltip(graphics, mouseX, mouseY)) {
@@ -107,7 +106,6 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> {
         super.renderTooltip(graphics, mouseX, mouseY);
     }
 
-    /** 绘制存储物品与数量（数量超宽时缩小，贴物品格右下角）。 */
     private void renderStoredItem(GuiGraphics graphics, int slot) {
         ItemStack stored = menu.getStoredStack(slot);
         if (stored.isEmpty()) {
@@ -125,7 +123,6 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> {
         graphics.pose().popPose();
     }
 
-    /** 返回鼠标所在存储槽序号，不在存储区时返回 -1。 */
     private int hoveredSlot(int mouseX, int mouseY) {
         for (int slot = 0; slot < menu.getSlotCount(); slot++) {
             int x = slotX(slot);

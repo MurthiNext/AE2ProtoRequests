@@ -90,7 +90,7 @@ public class AlienLavaJeiCategory implements IRecipeCategory<AlienLavaRecipe> {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, AlienLavaRecipe recipe, IFocusGroup focuses) {
-        // 原料：单列排布，超过 3 个换到第二列，与 AE2 的物质转化分类一致
+        // 原料：单列排布，超过 3 个换到第二列
         int x = 5;
         int y = 5;
         int index = 0;
@@ -137,7 +137,7 @@ public class AlienLavaJeiCategory implements IRecipeCategory<AlienLavaRecipe> {
         graphics.blit(ARROW, 76, ARROW_Y, 0, 0, ARROW_WIDTH, ARROW_HEIGHT);
         drawCentered(graphics, font, Component.translatable("jei.ae2pr.alien_lava.submerge"),
                 CATALYST_X + SLOT / 2, 11);
-        // 只有以异星熔岩为催化剂的配方才会消耗转化次数
+        // 仅异星熔岩催化剂会消耗转化次数
         if (isAlienLava(recipe.getCatalyst())) {
             drawCentered(graphics, font,
                     Component.translatable("jei.ae2pr.alien_lava.uses", AlienLavaFluid.MAX_CONVERSIONS),
@@ -145,12 +145,10 @@ public class AlienLavaJeiCategory implements IRecipeCategory<AlienLavaRecipe> {
         }
     }
 
-    /** 无阴影居中绘制文本，避免深色文字出现重影。 */
     private static void drawCentered(GuiGraphics graphics, Font font, Component text, int centerX, int y) {
         graphics.drawString(font, text, centerX - font.width(text) / 2, y, COLOR_TEXT, false);
     }
 
-    /** 取标签中可作为源方块的流体用于展示。 */
     private static List<Fluid> sourceFluids(TagKey<Fluid> tag) {
         return ForgeRegistries.FLUIDS.tags().getTag(tag).stream()
                 .filter(fluid -> fluid.isSource(fluid.defaultFluidState()))

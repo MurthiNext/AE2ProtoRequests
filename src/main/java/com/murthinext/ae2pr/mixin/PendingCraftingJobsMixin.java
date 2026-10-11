@@ -14,9 +14,7 @@ import appeng.client.gui.me.common.PendingCraftingJobs;
 import appeng.core.sync.packets.CraftingJobStatusPacket;
 
 /**
- * 客户端：存在重复订单的物品，其每轮完成的 AE2 原生 Toast 一律抑制；
- * 最终轮的完成提示由服务端 {@code RepeatOrderFinishedPacket} 触发（带总轮数）。
- * 若没有重复订单记录，则沿用 AE2 原生提示。
+ * 客户端：抑制重复订单物品的 AE2 原生完成 Toast，无记录时保留原生提示。
  */
 @Mixin(PendingCraftingJobs.class)
 public abstract class PendingCraftingJobsMixin {

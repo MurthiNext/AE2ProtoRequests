@@ -31,15 +31,10 @@ import com.murthinext.ae2pr.fluid.AlienLavaFluid;
 
 /**
  * 异星熔岩方块，丢入的物品不会被岩浆销毁。
- * <p>
- * 由于 Forge 的 {@link LiquidBlock} 在 supplier 构造器中不使用 {@code getFluid()}，
- * 这里覆写所有会读取内部流体字段的方法，避免空指针。
  */
 public class AlienLavaBlock extends LiquidBlock {
 
-    /** 单次浸入造成的伤害，原版岩浆为 4 点 */
     private static final float DAMAGE = 8.0F;
-    /** 点燃时长，与岩浆一致 */
     private static final int FIRE_SECONDS = 15;
 
     public AlienLavaBlock(Supplier<? extends FlowingFluid> fluid, Properties properties) {
@@ -105,7 +100,7 @@ public class AlienLavaBlock extends LiquidBlock {
         if (state.getValue(AlienLavaFluid.CONVERSIONS) < AlienLavaFluid.MAX_CONVERSIONS) {
             return;
         }
-        // 转化次数用尽后，等流体中的物品实体全部离开再恢复为普通熔岩，避免烧毁刚产出的物品
+        // 转化次数用尽后，等流体中的物品实体全部离开再恢复为普通熔岩
         if (!level.getEntitiesOfClass(ItemEntity.class, new AABB(pos)).isEmpty()) {
             level.scheduleTick(pos, this, 20);
             return;

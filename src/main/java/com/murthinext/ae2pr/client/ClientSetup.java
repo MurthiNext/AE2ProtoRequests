@@ -53,7 +53,6 @@ public final class ClientSetup {
         MenuScreens.register(ModMenus.NAMING_FACTORY.get(), NamingFactoryScreen::new);
     }
 
-    /** 名称压印工厂：forge 使用附加模型渲染（连杆手工绘制）。 */
     @SubscribeEvent
     public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
         event.register(NamingFactoryRenderer.FORGE_MODEL);
@@ -65,7 +64,6 @@ public final class ClientSetup {
         logNamingFactorySprites(event.getModelManager());
     }
 
-    /** 诊断：确认名称压印工厂相关贴图确实进入方块图集（缺失时会显示 minecraft:missingno）。 */
     private static void logNamingFactorySprites(ModelManager modelManager) {
         var atlas = modelManager.getAtlas(InventoryMenu.BLOCK_ATLAS);
         for (String path : new String[] { "naming_factory", "naming_factory_rod", "naming_factory_glass" }) {
@@ -81,7 +79,6 @@ public final class ClientSetup {
                 LavaSmelterRenderer::new);
     }
 
-    /** 为 ae2pr 的方块模型套上连接纹理包装（按世界邻居重写 UV）。 */
     @SubscribeEvent
     public static void onModifyBakingResult(ModelEvent.ModifyBakingResult event) {
         for (var entry : event.getModels().entrySet()) {

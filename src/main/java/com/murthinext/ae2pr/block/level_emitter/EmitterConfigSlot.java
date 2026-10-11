@@ -11,11 +11,6 @@ import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 
 /**
  * 发信器的配置槽：与过滤元件共用同一槽位。
- * <ul>
- * <li>空槽 / 普通物品：按原版发信器的方式"标记"配置项（幽灵槽）；</li>
- * <li>手持过滤元件左键：作为真实物品放入（消耗光标中的元件），并清除已有标记；</li>
- * <li>过滤元件不可被标记（右键幽灵放置与 JEI/REI 拖拽均被忽略）。</li>
- * </ul>
  */
 public class EmitterConfigSlot extends FakeSlot {
 
@@ -30,13 +25,11 @@ public class EmitterConfigSlot extends FakeSlot {
         return filterInventory.getStackInSlot(0);
     }
 
-    /** 槽内过滤元件（不存在时返回 null）。 */
     public ItemStack getFilterCellStack() {
         var cell = getFilterCell();
         return cell.isEmpty() ? null : cell;
     }
 
-    /** 清空槽内的过滤元件（用于 shift 取出）。 */
     public void clearFilterCell() {
         filterInventory.setItemDirect(0, ItemStack.EMPTY);
     }
@@ -55,7 +48,7 @@ public class EmitterConfigSlot extends FakeSlot {
     @Override
     public void set(ItemStack stack) {
         if (stack.getItem() instanceof FilterCell) {
-            // 仅客户端用于同步显示；服务端的真实插入由 increase 处理
+            // 仅客户端同步显示，服务端插入走 increase
             if (isClientSide()) {
                 filterInventory.setItemDirect(0, stack.copy());
             }
@@ -124,11 +117,6 @@ public class EmitterConfigSlot extends FakeSlot {
         return !(stack.getItem() instanceof FilterCell) && super.canSetFilterTo(stack);
     }
 
-    /**
-     * Shift 直移兼容：从源槽（玩家背包）取出 1 个过滤元件放入本槽。
-     *
-     * @return 是否成功放入
-     */
     public boolean insertFromShiftClick(Slot source) {
         if (!getFilterCell().isEmpty()) {
             return false;
@@ -137,7 +125,7 @@ public class EmitterConfigSlot extends FakeSlot {
         if (stack.isEmpty() || !(stack.getItem() instanceof FilterCell)) {
             return false;
         }
-        // 同一槽位二选一：插入过滤元件时清除原有标记
+        // 插入过滤元件时清除原有标记
         super.set(ItemStack.EMPTY);
         filterInventory.setItemDirect(0, stack.copyWithCount(1));
         stack.shrink(1);
@@ -154,12 +142,12 @@ public class EmitterConfigSlot extends FakeSlot {
         if (menu == null) {
             return;
         }
-        // 使用菜单真实光标（拖拽路径传入的是数量 1 的副本），保证从光标消耗 1 个
+        // 用菜单真实光标，保证从光标消耗 1 个
         var carried = menu.getCarried();
         if (carried.isEmpty()) {
             carried = hand;
         }
-        // 同一槽位二选一：插入过滤元件时清除原有标记
+        // 插入过滤元件时清除原有标记
         super.set(ItemStack.EMPTY);
         filterInventory.setItemDirect(0, carried.copyWithCount(1));
         carried.shrink(1);

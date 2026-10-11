@@ -27,12 +27,10 @@ public class NamingFactoryMenu extends AbstractContainerMenu {
     public static final MenuType<NamingFactoryMenu> TYPE = IForgeMenuType.create(NamingFactoryMenu::create);
 
     private static final int MACHINE_SLOTS = NamingFactoryBlockEntity.SLOT_COUNT;
-    /** 升级槽 */
     private static final int UPGRADE_SLOTS = 4;
     private static final int UPGRADE_X = 180;
     private static final int UPGRADE_Y = 4;
     private static final int UPGRADE_STEP = 20;
-    /** 玩家背包起始下标 */
     private static final int PLAYER_SLOT_FIRST = MACHINE_SLOTS + UPGRADE_SLOTS;
     private static final int INV_COLS = 9;
     private static final int SLOT_SIZE = 18;

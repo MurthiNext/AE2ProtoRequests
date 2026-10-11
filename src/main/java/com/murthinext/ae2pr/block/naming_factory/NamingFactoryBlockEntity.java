@@ -38,7 +38,7 @@ import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModItems;
 
 /**
- * 名称压印工厂方块实体：放入 AE2 名称压印模板与待命名物品，一次压印把整组物品改成模板中的名称。
+ * 名称压印工厂方块实体。
  */
 public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
 
@@ -47,26 +47,18 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
     public static final int SLOT_OUTPUT = 2;
     public static final int SLOT_COUNT = 3;
 
-    /** 蓄力时长 */
     public static final int CHARGE_TICKS = 40;
-    /** 下压时长 */
     public static final int PRESS_TICKS = 10;
-    /** 回升时长 */
     public static final int RETRACT_TICKS = 20;
 
-    /** 下压行程 */
     public static final float TRAVEL = 6.0F;
 
-    /** 能量结算的容差 */
     private static final double ENERGY_EPSILON = 0.01;
 
     public enum WorkState {
         IDLE,
-        /** 蓄力读条 */
         CHARGING,
-        /** 压印下压 */
         PRESSING,
-        /** 回升冷却 */
         RETRACTING
     }
 
@@ -78,7 +70,6 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
     private static final String TAG_PRESS_TICKS = "pressTicks";
     private static final String TAG_RETRACT_TICKS = "retractTicks";
 
-    /** 升级槽：4 个，仅可安装加速卡 */
     private final IUpgradeInventory upgrades = UpgradeInventories.forMachine(ModItems.NAMING_FACTORY.get(), 4,
             this::onUpgradesChanged);
 
@@ -157,14 +148,13 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
 
     private WorkState state = WorkState.IDLE;
     private long workStart;
-    /** 本次压印各阶段时长 */
     private int chargeTicks = CHARGE_TICKS;
     private int pressTicks = PRESS_TICKS;
     private int retractTicks = RETRACT_TICKS;
 
     public NamingFactoryBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.NAMING_FACTORY.get(), pos, state);
-        // 不耗待机电力；内部缓存 16k AE，允许 ME 网络充电但禁止其他机器抽取
+        // 不耗待机电力；缓存 16k AE 仅允许充电、禁止抽取
         getMainNode().setIdlePowerUsage(0);
         setInternalMaxPower(Config.namingFactoryMaxPower());
         setInternalPublicPowerStorage(true);
@@ -183,13 +173,11 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         return upgrades;
     }
 
-    /** 升级变化回调 */
     private void onUpgradesChanged() {
         setChanged();
         markForUpdate();
     }
 
-    /** 加速卡档位 */
     private int speedSteps() {
         return switch (upgrades.getInstalledUpgrades(AEItems.SPEED_CARD)) {
             case 1 -> 3;
@@ -200,12 +188,13 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         };
     }
 
-    /** 当前加速卡下的速度倍率 */
     public double getSpeedMultiplier() {
         return speedSteps() / 2.0D;
     }
 
-    /** 开工时折算时长：加速卡只加速蓄力阶段。 */
+    /**
+     * 折算各阶段时长：加速卡只加速蓄力阶段。
+     */
     private void updatePhaseDurations() {
         chargeTicks = scaledDuration(CHARGE_TICKS, getSpeedMultiplier());
         pressTicks = PRESS_TICKS;
@@ -228,7 +217,6 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         return inventory.getItem(SLOT_OUTPUT);
     }
 
-    /** 界面标题显示的机器名称：自定义名称为空时回退为方块名。 */
     public Component getDisplayName() {
         Component custom = getCustomName();
         if (custom != null && !custom.getString().isEmpty()) {
@@ -241,7 +229,6 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         return state;
     }
 
-    /** 模板中写入的名称；模板缺失或未写入名称时为 null。 */
     @Nullable
     public String getImprintName() {
         ItemStack template = getTemplateStack();
@@ -256,7 +243,6 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         return name.isEmpty() ? null : name;
     }
 
-    /** 读条进度（0~1）：蓄力阶段 0→1，下压阶段保持满，冷却阶段为空。 */
     public float getWorkProgress(float partialTicks) {
         if (level == null) {
             return 0;
@@ -269,7 +255,6 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         };
     }
 
-    /** forge 当前的下落距离（像素），供客户端渲染使用；蓄力阶段不动。 */
     public float getPressOffset(float partialTicks) {
         if (level == null) {
             return 0;
@@ -282,7 +267,9 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         };
     }
 
-    /** 服务端每 tick：空闲时检查加工条件与能量；蓄力读条满后下压，触底输出产物，回升即冷却。 */
+    /**
+     * 服务端每 tick 推进状态机：蓄力 → 下压输出 → 回升。
+     */
     public void serverTick() {
         if (level == null || level.isClientSide) {
             return;
@@ -314,7 +301,6 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         }
     }
 
-    /** 是否满足开工条件：模板名称可用、有输入、且整组能放进输出槽。 */
     private boolean canWork() {
         String name = getImprintName();
         if (name == null) {
@@ -334,15 +320,14 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
     }
 
     /**
-     * 支付一次压印的能量：优先消耗本机缓存，不足的部分再向 ME 网络抽取；
-     * 总耗能 = 每物品耗能 × 并行数（本次整组输入的物品数）。
+     * 支付压印能量：优先扣本机缓存，不足再抽 ME 网络；耗能按整组输入物品数计。
      */
     private boolean consumeEnergy(int parallel) {
         double cost = Config.namingFactoryEnergyPerItem() * parallel;
         if (cost <= 0) {
             return true;
         }
-        // 先尽量从本机缓存扣，缺口再向 ME 网络抽取；两者都按缺口模拟、一次结算
+        // 两者均先模拟、结算时一次性扣除
         double fromSelf = extractAEPower(cost, Actionable.SIMULATE, PowerMultiplier.CONFIG);
         double fromGrid = 0;
         IGrid grid = null;
@@ -366,7 +351,6 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         return true;
     }
 
-    /** 落地瞬间：把整组输入改名后移入输出槽。 */
     private void completeWork() {
         String name = getImprintName();
         if (name == null) {
@@ -395,7 +379,9 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         return result;
     }
 
-    /** 进入新状态并记录本阶段起点（各阶段时长相对于自身起点计算）。 */
+    /**
+     * 进入新状态并记录起点；各阶段时长相对自身起点计算。
+     */
     private void beginState(WorkState newState) {
         this.state = newState;
         this.workStart = level != null ? level.getGameTime() : 0;
@@ -412,7 +398,9 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         return x < 0.5F ? 4 * x * x * x : 1 - (float) Math.pow(-2 * x + 2, 3) / 2;
     }
 
-    /** 内部库存由本机自行持久化与掉落，不交给 AE 基类的库存系统。 */
+    /**
+     * 本机自行持久化与掉落库存，不使用 AE 基类库存系统。
+     */
     @Override
     public InternalInventory getInternalInventory() {
         return InternalInventory.empty();
@@ -458,7 +446,6 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         upgrades.readFromNBT(tag, TAG_UPGRADES);
     }
 
-    /** 客户端可见状态：工作状态、阶段起点与时长、槽位内容与自定义名称（渲染器/界面需要）。 */
     @Override
     protected void writeToStream(FriendlyByteBuf data) {
         super.writeToStream(data);

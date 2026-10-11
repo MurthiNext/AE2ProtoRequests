@@ -17,11 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 
 /**
- * 下单入口兼容层：打开确认菜单前统一登记重复轮数。
- *
- * <p>AE2 原生路径与 GTLCore 的长数量路径都会经过 {@code MenuOpener.open} 打开确认菜单，
- * 因此不再依赖 {@code CraftAmountMenu.confirm}（该方法会被 GTLCore 的
- * {@code CraftAmountScreenMixin} 截断并改走 {@code gtlcore$confirmLongAmount}）。
+ * 下单入口兼容层：打开确认菜单前统一登记重复轮数（兼容 AE2 与 GTLCore 路径）。
  */
 @Mixin(value = MenuOpener.class, remap = false)
 public abstract class MenuOpenerMixin {
@@ -35,7 +31,7 @@ public abstract class MenuOpenerMixin {
         }
         var playerId = serverPlayer.getUUID();
         ServerRepeatRegistry.clearRestore(playerId);
-        // 仅当从数量选择界面进入确认界面时才登记，避免直接打开确认菜单时误用残留轮数
+        // 仅从数量选择界面进入确认界面时登记，避免误用残留轮数
         if (player.containerMenu instanceof CraftAmountMenu
                 && player.containerMenu instanceof IRepeatRoundsHolder holder) {
             var rounds = Math.max(1, holder.ae2pr$getRepeatRounds());

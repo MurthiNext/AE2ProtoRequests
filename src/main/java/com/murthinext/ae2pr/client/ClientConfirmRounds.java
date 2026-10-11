@@ -4,7 +4,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
- * 客户端：确认界面（CraftConfirmMenu）的重复轮数，按菜单 containerId 匹配，避免时序问题。
+ * 确认界面的重复轮数缓存，按菜单 containerId 匹配。
  */
 @OnlyIn(Dist.CLIENT)
 public final class ClientConfirmRounds {
@@ -19,9 +19,6 @@ public final class ClientConfirmRounds {
         rounds = Math.max(1, value);
     }
 
-    /**
-     * @return 指定菜单的重复轮数；不匹配时返回 1
-     */
     public static int getFor(int menuContainerId) {
         return menuContainerId == containerId ? rounds : 1;
     }

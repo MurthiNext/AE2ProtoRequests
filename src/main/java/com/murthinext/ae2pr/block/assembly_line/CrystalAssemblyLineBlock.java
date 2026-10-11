@@ -42,9 +42,7 @@ public class CrystalAssemblyLineBlock extends Block implements EntityBlock, Wren
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty FORMED = BooleanProperty.create("formed");
-    /** 是否正在运行配方（驱动工作态贴图）；成型但不运行时保持静态贴图。 */
     public static final BooleanProperty RUNNING = BooleanProperty.create("running");
-    /** 电力或输出不足导致的暂停态（黄色暂停贴图，等待重试）。 */
     public static final BooleanProperty PAUSED = BooleanProperty.create("paused");
 
     public CrystalAssemblyLineBlock() {
@@ -99,7 +97,9 @@ public class CrystalAssemblyLineBlock extends Block implements EntityBlock, Wren
         return FACING;
     }
 
-    /** 仅未成型时允许旋转，避免误操作破坏已建成的机器。 */
+    /**
+     * 仅未成型时允许旋转。
+     */
     @Override
     public boolean canRotateWithWrench(BlockState state) {
         return !state.getValue(FORMED);
@@ -119,7 +119,7 @@ public class CrystalAssemblyLineBlock extends Block implements EntityBlock, Wren
         if (player.getItemInHand(hand).is(ModTags.WRENCHES)) {
             return InteractionResult.PASS;
         }
-        // 非扳手：打开主机界面（含玩家背包，ESC/E 关闭）
+        // 非扳手：打开主机界面
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer
                 && level.getBlockEntity(pos) instanceof AssemblyLineControllerBlockEntity controller) {
             NetworkHooks.openScreen(serverPlayer,
@@ -152,7 +152,7 @@ public class CrystalAssemblyLineBlock extends Block implements EntityBlock, Wren
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip,
             TooltipFlag flag) {
-        // 单个组件内的换行不会被工具提示拆行（Forge 仅在自动换行时按行切分），这里按行拆成多个组件
+        // 组件内换行不会被工具提示拆行，这里按行拆成多个组件
         for (String line : Component.translatable("tooltip.ae2pr.crystal_assembly_line.desc").getString().split("\n")) {
             tooltip.add(Component.literal(line));
         }

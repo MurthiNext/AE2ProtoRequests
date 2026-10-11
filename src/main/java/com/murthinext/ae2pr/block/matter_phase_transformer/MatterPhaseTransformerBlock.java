@@ -99,7 +99,7 @@ public class MatterPhaseTransformerBlock extends Block implements EntityBlock, W
         if (player.getItemInHand(hand).is(ModTags.WRENCHES)) {
             return InteractionResult.PASS;
         }
-        // 非扳手：打开主机界面（含玩家背包，ESC/E 关闭）
+        // 非扳手：打开主机界面
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer
                 && level.getBlockEntity(pos) instanceof MatterPhaseTransformerControllerBlockEntity controller) {
             NetworkHooks.openScreen(serverPlayer,
@@ -111,7 +111,9 @@ public class MatterPhaseTransformerBlock extends Block implements EntityBlock, W
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /** 仅未成型时允许旋转，避免误操作破坏已建成的机器。 */
+    /**
+     * 仅未成型时允许旋转。
+     */
     @Override
     public boolean canRotateWithWrench(BlockState state) {
         return !state.getValue(FORMED);

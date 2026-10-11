@@ -10,7 +10,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 /**
- * 服务端 -> 客户端：熔岩冶炼炉主机当前作业产物同步。
+ * 服务端 -> 客户端：同步熔岩冶炼炉作业产物。
  */
 public class LavaSmelterJobPacket {
 

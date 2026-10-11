@@ -26,10 +26,6 @@ public class FluixCrystalEnergyHatchBlock extends AEBaseEntityBlock<FluixCrystal
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty FORMED = BooleanProperty.create("formed");
-    /**
-     * 部件存放的多方块成型外观 id（仅 FORMED=true 时由渲染端解读），与机器部件共用，
-     * 取值见 {@link MachinePartFacade}。
-     */
     public static final IntegerProperty STYLE = MachinePartBlock.STYLE;
 
     public FluixCrystalEnergyHatchBlock() {
@@ -62,13 +58,14 @@ public class FluixCrystalEnergyHatchBlock extends AEBaseEntityBlock<FluixCrystal
         return FACING;
     }
 
-    /** 仅未成型时允许旋转，避免误操作破坏已建成的机器。 */
+    /**
+     * 仅未成型时允许旋转。
+     */
     @Override
     public boolean canRotateWithWrench(BlockState state) {
         return !state.getValue(FORMED);
     }
 
-    /** 朝向变化后刷新 ME 连接面。 */
     @Override
     public void onWrenchRotated(Level level, BlockPos pos, BlockState state) {
         if (level.getBlockEntity(pos) instanceof FluixCrystalEnergyHatchBlockEntity hatch) {

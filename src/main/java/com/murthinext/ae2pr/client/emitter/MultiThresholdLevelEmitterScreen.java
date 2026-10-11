@@ -25,7 +25,7 @@ import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterMenu;
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 
 /**
- * ME 通式阈值发信器界面：左侧工具栏 + 上限/下限两个阈值输入框（占位布局，复用原版发信器背景）。
+ * ME 通式阈值发信器界面。
  */
 public class MultiThresholdLevelEmitterScreen extends UpgradeableScreen<MultiThresholdLevelEmitterMenu> {
 
@@ -116,7 +116,7 @@ public class MultiThresholdLevelEmitterScreen extends UpgradeableScreen<MultiThr
         if (!this.children().contains(lowerField)) {
             this.addRenderableWidget(lowerField);
         }
-        // AETextField 构造时会内部加 2px 内边距，setX/setY 直接覆盖内部坐标，故此处 +2 使文本对齐标签
+        // AETextField 内部有 2px 内边距，+2 使文本对齐标签
         upperField.setX(leftPos + 10);
         upperField.setY(topPos + 40);
         lowerField.setX(leftPos + 10);
@@ -136,16 +136,13 @@ public class MultiThresholdLevelEmitterScreen extends UpgradeableScreen<MultiThr
         this.combineMode.setMode(menu.combineMode);
     }
 
-    /** 复用 AE2 界面自带的帮助按钮，改为打开本模组指南。 */
     @Override
     protected void openHelp() {
         ModGuide.openAt(ModGuide.INDEX_PAGE);
     }
 
     /**
-     * 配置槽内的过滤元件支持 shift 快速取出到玩家背包。
-     * <p>
-     * AE2 会把 FakeSlot 的 shift 点击当作普通点击处理，这里提前拦截并改发 QUICK_MOVE。
+     * 配置槽内过滤元件的 shift 点击改发 QUICK_MOVE。
      */
     @Override
     protected void slotClicked(Slot slot, int slotIdx, int mouseButton, ClickType clickType) {
@@ -159,7 +156,9 @@ public class MultiThresholdLevelEmitterScreen extends UpgradeableScreen<MultiThr
         super.slotClicked(slot, slotIdx, mouseButton, clickType);
     }
 
-    /** 返回非空即可让 AE2 的帮助按钮显示（实际点击由 {@link #openHelp()} 处理）。 */
+    /**
+     * 返回非空即可让 AE2 帮助按钮显示。
+     */
     @Override
     protected PageAnchor getHelpTopic() {
         return new PageAnchor(ModGuide.INDEX_PAGE, null);

@@ -42,7 +42,9 @@ import com.murthinext.ae2pr.multiblock.module.ModuleType;
  */
 public class CrystalAssemblyLineRecipe implements Recipe<Container> {
 
-    /** 物品输入：匹配器 + 单次执行的消耗数量 */
+    /**
+     * 物品输入：匹配器与单次消耗数量。
+     */
     public record ItemInput(Ingredient ingredient, int count) {
 
         public boolean test(ItemStack stack) {
@@ -56,7 +58,6 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container> {
     private final List<ItemStack> itemOutputs;
     private final List<ModuleRequirement> moduleRequirements;
     private final int duration;
-    /** 每并行耗电覆盖值（AE）；null 表示使用配置默认值 */
     @Nullable
     private final Double energyPerParallel;
 
@@ -72,37 +73,31 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container> {
         this.energyPerParallel = energyPerParallel;
     }
 
-    /** 物品输入 */
     public List<ItemInput> getItemInputs() {
         return itemInputs;
     }
 
-    /** 流体输入 */
     public List<FluidStack> getFluidInputs() {
         return fluidInputs;
     }
 
-    /** 物品产物 */
     public List<ItemStack> getItemOutputs() {
         return itemOutputs;
     }
 
-    /** 配方对模块的要求（全部满足才可执行） */
     public List<ModuleRequirement> getModuleRequirements() {
         return moduleRequirements;
     }
 
-    /** 加工耗时（tick） */
     public int getDuration() {
         return duration;
     }
 
-    /** 每并行一次执行消耗的能量（AE）；未在配方中设置时使用配置默认值。 */
     public double getEnergyPerParallel() {
         return energyPerParallel != null ? energyPerParallel : Config.assemblyEnergyPerParallel();
     }
 
-    // ---------------------------------------------------------------- Recipe 接口（本模组自行匹配，不走原版容器流程）
+    // Recipe 接口
 
     @Override
     public boolean matches(Container container, Level level) {
@@ -139,7 +134,9 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container> {
         return ModRecipes.CRYSTAL_ASSEMBLY_LINE_TYPE.get();
     }
 
-    /** JSON 与网络序列化。 */
+    /**
+     * JSON 与网络序列化。
+     */
     public static class Serializer implements RecipeSerializer<CrystalAssemblyLineRecipe> {
 
         @Override

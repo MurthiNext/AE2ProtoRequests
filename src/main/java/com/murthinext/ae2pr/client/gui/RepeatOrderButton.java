@@ -10,7 +10,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
 /**
- * 工具栏"重复下单"按钮：自绘循环箭头图标。
+ * 工具栏"重复下单"按钮。
  */
 public class RepeatOrderButton extends IconButton {
 
@@ -23,7 +23,7 @@ public class RepeatOrderButton extends IconButton {
 
     @Override
     protected Icon getIcon() {
-        // 图标由 renderWidget 自绘；此返回值仅用于满足基类契约
+        // 图标由 renderWidget 自绘，返回值仅满足基类契约
         return Icon.HELP;
     }
 
@@ -36,7 +36,7 @@ public class RepeatOrderButton extends IconButton {
         RenderSystem.enableBlend();
 
         Icon.TOOLBAR_BUTTON_BACKGROUND.getBlitter().dest(getX(), getY()).blit(guiGraphics);
-        // 自有贴图没有 src 矩形，必须显式给出目标尺寸，否则为零面积四边形（不可见）
+        // 自有贴图无 src 矩形，必须显式给出目标尺寸
         ICON.copy()
                 .dest(getX(), getY(), getWidth(), getHeight())
                 .blit(guiGraphics);

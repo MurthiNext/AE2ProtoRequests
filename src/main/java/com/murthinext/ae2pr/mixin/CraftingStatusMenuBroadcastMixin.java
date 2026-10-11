@@ -22,8 +22,7 @@ import appeng.menu.me.crafting.CraftingStatusMenu;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * 合成状态菜单：CPU 列表刷新时，把重复订单轮次同步给正在查看该菜单的玩家。
- * 仅在内容变化时发送；首次广播必发。
+ * 合成状态菜单：列表刷新时把重复订单轮次同步给查看该菜单的玩家。
  */
 @Mixin(CraftingStatusMenu.class)
 public abstract class CraftingStatusMenuBroadcastMixin {
@@ -51,7 +50,7 @@ public abstract class CraftingStatusMenuBroadcastMixin {
                     total = context.totalRounds;
                 }
             } else {
-                // 通用（VCPU）重复订单：按 CPU 实例查询轮次
+                // 通用（VCPU）订单按 CPU 实例查询轮次
                 var info = GenericRepeatOrders.getRoundInfo(cpu);
                 if (info != null) {
                     round = info.round();

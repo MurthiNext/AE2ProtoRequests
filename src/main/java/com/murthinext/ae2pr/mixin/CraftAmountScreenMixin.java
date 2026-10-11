@@ -22,9 +22,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
 /**
- * 数量选择界面：左侧工具栏添加"重复下单"按钮与轮数输入框。
- * 输入框不是 AE2 WidgetContainer 的成员，因此在每帧 {@code updateBeforeRender} 时补挂到屏幕控件列表，
- * 以兼容窗口缩放导致的控件重建。
+ * 数量选择界面：添加重复下单按钮与轮数输入框。
  */
 @Mixin(value = CraftAmountScreen.class, remap = false)
 public abstract class CraftAmountScreenMixin extends AEBaseScreen<CraftAmountMenu> {
@@ -88,7 +86,7 @@ public abstract class CraftAmountScreenMixin extends AEBaseScreen<CraftAmountMen
     }
 
     /**
-     * 接受服务端同步的轮数（例如从确认界面返回时恢复），输入框聚焦时不覆盖玩家输入。
+     * 接受服务端同步的轮数，输入框聚焦时不覆盖玩家输入。
      */
     @Unique
     private void ae2pr$adoptRemoteRounds() {

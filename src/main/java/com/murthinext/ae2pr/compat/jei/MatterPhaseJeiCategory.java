@@ -27,7 +27,7 @@ import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.MatterPhaseRecipe;
 
 /**
- * 物质相变仪配方的 JEI 分类：左侧物品输入，相变室居中，右侧流体会产出至输出仓。
+ * 物质相变仪配方的 JEI 分类。
  */
 public class MatterPhaseJeiCategory implements IRecipeCategory<MatterPhaseRecipe> {
 
@@ -41,15 +41,12 @@ public class MatterPhaseJeiCategory implements IRecipeCategory<MatterPhaseRecipe
     private static final int INPUT_COUNT = INPUT_COLS * INPUT_ROWS;
     private static final int INPUT_X = PADDING;
     private static final int INPUT_Y = PADDING + 6;
-    /** 相变室（主机核心）尺寸与位置 */
     private static final int CHAMBER_X = INPUT_X + INPUT_COLS * SLOT + 4;
     private static final int CHAMBER_Y = INPUT_Y;
     private static final int CHAMBER_W = 24;
     private static final int CHAMBER_H = INPUT_ROWS * SLOT;
-    /** 输出流体槽 */
     private static final int OUTPUT_X = CHAMBER_X + CHAMBER_W + 6;
     private static final int OUTPUT_Y = INPUT_Y + (INPUT_ROWS * SLOT - SLOT) / 2;
-    /** 信息行 */
     private static final int INFO_Y = INPUT_Y + INPUT_ROWS * SLOT + 4;
     private static final int INFO_STEP = 10;
     private static final int WIDTH = OUTPUT_X + SLOT + PADDING;
@@ -102,7 +99,7 @@ public class MatterPhaseJeiCategory implements IRecipeCategory<MatterPhaseRecipe
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, MatterPhaseRecipe recipe, IFocusGroup focuses) {
-        // 物品输入：两列三行的固定槽位，消耗数量写入 ItemStack
+        // 物品输入：固定槽位，消耗数量写入 ItemStack
         List<CountedIngredient> ingredients = recipe.getCountedIngredients();
         for (int index = 0; index < INPUT_COUNT; index++) {
             IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT,
@@ -143,14 +140,13 @@ public class MatterPhaseJeiCategory implements IRecipeCategory<MatterPhaseRecipe
         }
     }
 
-    /** 相变室：深色腔体 + 中央高能核心，两侧箭头指向输出。 */
     private static void drawChamber(GuiGraphics graphics) {
         graphics.fill(CHAMBER_X, CHAMBER_Y, CHAMBER_X + CHAMBER_W, CHAMBER_Y + CHAMBER_H, COLOR_PANEL_LINE);
         graphics.fill(CHAMBER_X + 1, CHAMBER_Y + 1, CHAMBER_X + CHAMBER_W - 1, CHAMBER_Y + CHAMBER_H - 1,
                 COLOR_PANEL);
         int centerX = CHAMBER_X + CHAMBER_W / 2;
         int centerY = CHAMBER_Y + CHAMBER_H / 2;
-        // 核心：中心亮青 + 外圈青（像素方阵）
+        // 核心：中心亮青、外圈青
         graphics.fill(centerX - 4, centerY - 4, centerX + 4, centerY + 4, COLOR_CORE);
         graphics.fill(centerX - 2, centerY - 2, centerX + 2, centerY + 2, COLOR_CORE_GLOW);
     }

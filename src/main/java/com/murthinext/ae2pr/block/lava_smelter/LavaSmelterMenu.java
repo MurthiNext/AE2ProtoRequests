@@ -34,26 +34,20 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
     private static final int INV_Y = 122;
     private static final int HOTBAR_Y = 180;
 
-    /** 陨石粉槽（机器区右下角） */
     private static final int DUST_SLOT_X = 151;
     private static final int DUST_SLOT_Y = 95;
 
-    /** 陨石粉槽下标 */
     private static final int DUST_SLOT_INDEX = 0;
-    /** 升级槽 */
     private static final int UPGRADE_SLOTS = 4;
     private static final int UPGRADE_X = 180;
     private static final int UPGRADE_Y = 4;
     private static final int UPGRADE_STEP = 20;
-    /** 玩家背包起始下标 */
     private static final int PLAYER_SLOT_FIRST = DUST_SLOT_INDEX + 1 + UPGRADE_SLOTS;
 
-    /** 同步数据位：bit0=已成型，bit1=正在运行，bit2=暂停 */
     private static final int FLAG_FORMED = 1;
     private static final int FLAG_RUNNING = 2;
     private static final int FLAG_PAUSED = 4;
 
-    /** 同步数据下标 */
     private static final int DATA_FLAGS = 0;
     private static final int DATA_DURABILITY = 1;
     private static final int DATA_ERROR = 2;
@@ -101,7 +95,6 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
                 .getBlockEntity(buffer.readBlockPos()));
     }
 
-    /** 每 tick 把状态、配方耐久与作业进度写入同步数据，并在作业产物变化时推送同步包。 */
     @Override
     public void broadcastChanges() {
         if (!clientSide && controller != null) {
@@ -144,47 +137,38 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
         return (data.get(DATA_FLAGS) & FLAG_PAUSED) != 0;
     }
 
-    /** 剩余配方耐久。 */
     public int getDurability() {
         return data.get(DATA_DURABILITY);
     }
 
-    /** 配方耐久上限。 */
     public int getMaxDurability() {
         return LavaSmelterControllerBlockEntity.MAX_DURABILITY;
     }
 
-    /** 暂停原因序号（0 = 无，1 = 耐久耗尽，2 = 电力不足，3 = 输出不足）。 */
     public int getErrorCode() {
         return data.get(DATA_ERROR);
     }
 
-    /** 当前作业已进行的时间（tick）；空闲为 0。 */
     public int getJobElapsed() {
         return data.get(DATA_ELAPSED);
     }
 
-    /** 当前作业的实际总耗时（tick，含加速卡加成）；空闲为 0。 */
     public int getJobDuration() {
         return data.get(DATA_DURATION);
     }
 
-    /** 当前作业的展示产物；空闲返回空。 */
     public ItemStack getJobOutput() {
         return controller != null ? controller.getClientJobOutput() : ItemStack.EMPTY;
     }
 
-    /** 结构内是否有能源仓接入 ME 网络。 */
     public boolean isEnergyConnected() {
         return (data.get(DATA_ENERGY_CONNECTED) & 1) != 0;
     }
 
-    /** 结构内能源仓所接 ME 网络的可用能量合计（AE）。 */
     public long getNetworkStoredPower() {
         return (data.get(DATA_POWER_LO) & 0xFFFFFFFFL) | ((long) data.get(DATA_POWER_HI) << 32);
     }
 
-    /** 结构允许的最大并行数（即最多同时执行的配方数）。 */
     public int getMaxParallel() {
         return data.get(DATA_PARALLEL);
     }

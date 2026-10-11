@@ -7,31 +7,19 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 
 /**
- * 连接纹理的面重写：按世界邻居掩码选择图集中的图块并重写 UV。
- * <p>
- * 图集为 8×8 共 64 格，使用前 47 格（47-tile CTM）：图块由「4 条边的连接掩码 +
- * 4 个角的对角连接掩码」唯一确定，角掩码仅当该角的两条邻边都连接时有效 ——
- * 用于区分角区画凹内角弯（L 形转角）还是留空（2×2 内部）。
+ * 连接纹理的面重写：按邻居掩码选图块并重写 UV。
  */
 public final class CtmMeshBuilder {
 
-    /** DefaultVertexFormat.BLOCK 的顶点步长（int 数） */
     private static final int STRIDE = 8;
-    /** UV0 在顶点数据中的 int 偏移 */
     private static final int UV_OFFSET = 4;
-    /** 图集为 8×8 格 */
     private static final float GRID = 8.0F;
     private static final float EPS = 1.0E-4F;
 
-    /**
-     * 各边掩码下的有效角位（bit0=西北 / bit1=东北 / bit2=西南 / bit3=东南）。
-     * 角仅在两条邻边都连接时有效；下标 = 边掩码（bit0=min-U、bit1=max-U、bit2=min-V、bit3=max-V）。
-     */
     private static final int[] VALID_CORNERS = {
             0, 0, 0, 0, 0, 1, 2, 3, 0, 4, 8, 12, 0, 5, 10, 15
     };
 
-    /** 各边掩码的图块起始序号（图块序号 = 起始序号 + 角状态变体），与纹理生成脚本保持一致。 */
     private static final int[] TILE_OFFSET = {
             0, 1, 2, 3, 4, 5, 7, 9, 13, 14, 16, 18, 22, 23, 27, 31
     };
@@ -39,7 +27,9 @@ public final class CtmMeshBuilder {
     private CtmMeshBuilder() {
     }
 
-    /** 把四边形的 UV 重写到 CTM 图集中对应的图块。 */
+    /**
+     * 把四边形 UV 重写到 CTM 图集中对应图块。
+     */
     public static BakedQuad rewrite(BakedQuad quad, TextureAtlasSprite base, TextureAtlasSprite atlas, int worldMask) {
         int[] src = quad.getVertices();
         int[] out = src.clone();
@@ -68,7 +58,9 @@ public final class CtmMeshBuilder {
         return new BakedQuad(out, quad.getTintIndex(), quad.getDirection(), atlas, quad.isShade());
     }
 
-    /** 仅替换四边形引用的贴图并重映射 UV（保持贴图内相对位置）：用于多方块成型换装。 */
+    /**
+     * 替换贴图并按贴图内相对位置重映射 UV。
+     */
     public static BakedQuad retarget(BakedQuad quad, TextureAtlasSprite from, TextureAtlasSprite to) {
         int[] src = quad.getVertices();
         int[] out = src.clone();
@@ -89,12 +81,7 @@ public final class CtmMeshBuilder {
     }
 
     /**
-     * 计算该面的 47-tile 图块序号。
-     * <p>
-     * 边掩码：bit0 = min-U 边、bit1 = max-U 边、bit2 = min-V 边（纹理顶行）、bit3 = max-V 边（纹理底行）；
-     * 角掩码：bit0 = 西北（min-U∩min-V）、bit1 = 东北、bit2 = 西南、bit3 = 东南，
-     * 仅当角的两条邻边都连接且棱（对角）邻居也连接时置位 —— 置位角区留空（2×2 内部），
-     * 未置位则由图块在角区画凹内角弯，接续邻块延伸来的框线。
+     * 计算该面的 47-tile 图块序号，角掩码需两条邻边均已连接。
      */
     private static int tileIndex(int[] vertices, int worldMask) {
         Direction uAxis = axisFromUvs(vertices, true);
@@ -135,7 +122,7 @@ public final class CtmMeshBuilder {
             }
         }
 
-        // 图块序号 = 边掩码起始序号 + 角状态变体（有效角位压缩为连续序号）
+        // 图块序号 = 起始序号 + 角状态变体
         int valid = VALID_CORNERS[edgeMask];
         int variant = 0;
         int shift = 0;
@@ -150,7 +137,6 @@ public final class CtmMeshBuilder {
         return TILE_OFFSET[edgeMask] + variant;
     }
 
-    /** 由 UV 最小 / 最大两组顶点的平均位置推导该 UV 轴对应的世界方向。 */
     @Nullable
     private static Direction axisFromUvs(int[] vertices, boolean forU) {
         int component = forU ? 0 : 1;

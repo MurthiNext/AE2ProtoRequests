@@ -46,32 +46,17 @@ import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
 
 /**
- * 高反应性熔岩冶炼炉主机方块实体：结构检测 + 异星熔岩配方执行。
- * <p>
- * 结构检测由 {@link StructureValidator} 完成：结构未变化时走缓存快速路径。
- * <p>
- * 执行流程：匹配配方、校验输出空间与配方耐久、扣除原料与耐久后加工 {@code duration} tick、产物输出。
- * <p>
- * 配方耐久存储在主机内（上限 {@value #MAX_DURABILITY}，每个陨石粉补充 {@value #DURABILITY_PER_DUST}），
- * 每份配方消耗 1 点；耐久 &gt; 0 时炉膛空腔渲染假异星熔岩并对腔内玩家造成 4 倍熔岩伤害，
- * 耐久为 0 时渲染普通熔岩、伤害为 2 倍。
+ * 高反应性熔岩冶炼炉主机方块实体。
  */
 public class LavaSmelterControllerBlockEntity extends BlockEntity {
 
-    /** 结构检测周期（tick） */
     private static final int CHECK_INTERVAL = 20;
-    /** 暂停后的重试间隔（tick） */
     private static final int RETRY_INTERVAL = 20;
-    /** 配方耐久上限 */
     public static final int MAX_DURABILITY = 128;
-    /** 每个陨石粉提供的耐久 */
     public static final int DURABILITY_PER_DUST = 32;
-    /** 陨石粉槽容量 */
     public static final int DUST_SLOT_CAPACITY = 64;
-    /** 原版熔岩单次伤害 */
     private static final float LAVA_DAMAGE = 4.0F;
 
-    /** 陨石粉（AE2 天石粉） */
     private static final ResourceLocation SKY_DUST_ID = ResourceLocation.fromNamespaceAndPath("ae2", "sky_dust");
 
     private static final String DURABILITY_ID = "durability";
@@ -84,7 +69,9 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
     private static final String JOB_PARALLEL_ID = "jobParallel";
     private static final String TAG_UPGRADES = "upgrades";
 
-    /** 暂停原因（供界面报错） */
+    /**
+     * 暂停原因。
+     */
     public enum Error {
         NONE, DURABILITY, POWER, OUTPUT
     }
@@ -92,42 +79,28 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
     private int tickCounter;
     private int retryCounter;
 
-    /** 加工剩余 tick（<= 0 表示空闲或暂停） */
     private int jobTicksLeft;
-    /** 当前作业的实际总耗时（tick，含加速卡加成） */
     private int jobTotalTicks;
-    /** 当前作业的并行数 */
     private int jobParallel;
-    /** 是否处于暂停态（耐久耗尽/输出不足，黄色暂停贴图） */
     private boolean paused;
     private Error error = Error.NONE;
-    /** 当前作业（加工中保留，用于结算产物） */
     @Nullable
     private LavaSmelterRecipe currentRecipe;
 
-    /** 配方耐久：每份配方消耗 1 点，陨石粉补充 */
     private int durability;
 
-    /** 最近一次成型的镜像（供假熔岩渲染与伤害判定） */
     private boolean mirrorSide;
     private boolean mirrorFront;
 
-    /** 客户端展示用：当前作业产物（仅由同步包写入） */
     private ItemStack clientJobOutput = ItemStack.EMPTY;
 
-    /** 结构内的输入总线（按 片 → 行 → 列 排序） */
     private final List<ItemBusBlockEntity> inputBuses = new ArrayList<>();
-    /** 结构内的输出总线 */
     private final List<ItemBusBlockEntity> outputBuses = new ArrayList<>();
-    /** 结构内的能源仓 */
     private final List<FluixCrystalEnergyHatchBlockEntity> energyHatches = new ArrayList<>();
-    /** 结构验证器：模式匹配 + 缓存快速路径 */
     private final StructureValidator structure = new StructureValidator(LavaSmelterStructure.PATTERN);
-    /** 升级槽 */
     private final IUpgradeInventory upgrades = UpgradeInventories.forMachine(
             ModItems.HIGH_REACTIVITY_LAVA_SMELTER.get(), 4, this::onUpgradesChanged);
 
-    /** 陨石粉槽：容量 64，仅接受陨石粉；对外暴露物品能力 */
     private final ItemStackHandler dustSlot = new ItemStackHandler(1) {
         @Override
         public int getSlotLimit(int slot) {
@@ -150,7 +123,9 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         super(ModBlockEntities.HIGH_REACTIVITY_LAVA_SMELTER.get(), pos, state);
     }
 
-    /** 服务端 tick：结构检测、陨石粉补充、空腔伤害与加工作业。 */
+    /**
+     * 服务端 tick：结构检测、陨石粉补充、空腔伤害与加工作业。
+     */
     public void serverTick() {
         if (level == null || level.isClientSide) {
             return;
@@ -164,9 +139,11 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         tickJob();
     }
 
-    // ---------------------------------------------------------------- 配方耐久
+    // 配方耐久
 
-    /** 自动把槽内陨石粉转化为耐久：仅当 32 点耐久能完整存入时才消耗。 */
+    /**
+     * 陨石粉转耐久：仅当一批耐久能完整存入时才消耗。
+     */
     private void absorbDust() {
         if (durability > MAX_DURABILITY - DURABILITY_PER_DUST) {
             return;
@@ -188,7 +165,9 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         return item != null && stack.is(item);
     }
 
-    /** 炉膛空腔伤害：耐久 &gt; 0 时为熔岩 4 倍，否则 2 倍。 */
+    /**
+     * 炉膛空腔伤害：耐久 > 0 时为熔岩 4 倍，否则 2 倍。
+     */
     private void tickCavityDamage() {
         Level level = this.level;
         if (level == null || !isFormed()) {
@@ -204,7 +183,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         }
     }
 
-    // ---------------------------------------------------------------- 加工作业
+    // 加工作业
 
     private void tickJob() {
         if (!isFormed()) {
@@ -231,7 +210,6 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         tryStartJob();
     }
 
-    /** 尝试开始一次加工：匹配配方 → 扣耐久 → 输出检查 → 扣电 → 扣料 → 进入运行态。 */
     private void tryStartJob() {
         Level level = this.level;
         if (level == null) {
@@ -246,13 +224,12 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
             pause(Error.DURABILITY);
             return;
         }
-        // 实际并行数 = 输入份数、配方耐久与输出容量中的较小值
         int parallel = parallelFor(recipe);
         if (parallel <= 0) {
             pause(Error.OUTPUT);
             return;
         }
-        // 能量按并行数与加速卡耗能倍率从结构内能源仓所接 ME 网络一次性扣除
+        // 能量按并行数与耗能倍率从能源仓网络一次性扣除
         double cost = recipe.getEnergyPerParallel() * parallel * lossyEnergyMultiplier();
         if (extractNetworkEnergy(cost, true) < cost) {
             pause(Error.POWER);
@@ -274,7 +251,6 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         applyControllerState();
     }
 
-    /** 加工完成：产物写入输出总线，并立即触发下一次配方检查以消除连续加工之间的空档。 */
     private void finishJob() {
         LavaSmelterRecipe recipe = currentRecipe;
         int parallel = jobParallel;
@@ -307,9 +283,8 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         }
     }
 
-    // ---------------------------------------------------------------- 配方匹配
+    // 配方匹配
 
-    /** 找到首个输入总线可满足、且耐久/输出允许尝试的配方。 */
     @Nullable
     private LavaSmelterRecipe findMatch() {
         Level level = this.level;
@@ -324,7 +299,6 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         return null;
     }
 
-    /** 输入总线内是否有满足配方的原料（统计所有槽位，只校验种类与总数量）。 */
     private boolean hasIngredients(LavaSmelterRecipe recipe) {
         for (CountedIngredient ingredient : recipe.getCountedIngredients()) {
             int available = 0;
@@ -348,7 +322,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
             int remaining = ingredient.count() * parallel;
             for (ItemBusBlockEntity bus : inputBuses) {
                 for (int slot = 0; slot < bus.getSlotCount() && remaining > 0; slot++) {
-                    // 单次抽取最多只能取走物品的堆叠上限（64），按需求量分批抽取
+                    // 单次抽取上限为物品堆叠上限，按需求量分批抽取
                     while (remaining > 0) {
                         ItemStack current = bus.getStorage().getStackInSlot(slot);
                         if (current.isEmpty() || !ingredient.ingredient().test(current)) {
@@ -369,8 +343,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
     }
 
     /**
-     * 实际并行数：输入份数、配方耐久与输出容量的较小值，上限为配置的最大并行数；
-     * 每种原料按总数量除以单份需求计算可并行份数。
+     * 输入份数、配方耐久与输出容量中的较小值。
      */
     private int parallelFor(LavaSmelterRecipe recipe) {
         int parallel = maxParallel();
@@ -390,7 +363,6 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         return outputParallel(recipe, parallel);
     }
 
-    /** 在输入与耐久允许的并行范围内，二分求出全部产物都能放下的最大并行数。 */
     private int outputParallel(LavaSmelterRecipe recipe, int maximum) {
         int low = 0;
         int high = maximum;
@@ -405,7 +377,6 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         return low;
     }
 
-    /** 模拟多个产物依次进入输出总线（逐槽位），防止不同产物重复占用同一空槽。 */
     private boolean canFitOutputs(LavaSmelterRecipe recipe, int parallel) {
         List<ItemBusBlockEntity> owners = new ArrayList<>();
         List<ItemStack> simulated = new ArrayList<>();
@@ -452,51 +423,43 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
                 remaining = ItemHandlerHelper.insertItemStacked(bus.getStorage(), remaining, false);
             }
             if (!remaining.isEmpty()) {
-                // 启动前已检查；兜底掉落到主机处，避免产物丢失
+                // 启动前已检查，兜底掉落避免产物丢失
                 ae2pr.LOGGER.warn("熔岩冶炼炉产物无法放入输出总线，已掉落 {}", remaining);
                 Block.popResource(level, worldPosition, remaining);
             }
         }
     }
 
-    // ---------------------------------------------------------------- 加速卡与电力
+    // 加速卡与电力
 
-    /** 结构允许的最大并行数 */
     public int maxParallel() {
         return Math.max(1, Config.lavaSmelterParallel());
     }
 
-    /** 已安装的加速卡数量 */
     public int getSpeedCardCount() {
         return upgrades.getInstalledUpgrades(AEItems.SPEED_CARD);
     }
 
-    /** 加速卡的速度倍率 */
     public double getSpeedMultiplier() {
         return 1.0 + getSpeedCardCount() * Config.lossySpeedPerCard();
     }
 
-    /** 加速卡的耗能倍率 */
     public double lossyEnergyMultiplier() {
         return Math.pow(Config.lossyEnergyMultiplierPerCard(), getSpeedCardCount());
     }
 
-    /** 按速度倍率折算实际耗时 */
     private int scaledDuration(int baseTicks) {
         return Math.max(1, (int) Math.ceil(baseTicks / getSpeedMultiplier()));
     }
 
-    /** 升级槽 */
     public IUpgradeInventory getUpgrades() {
         return upgrades;
     }
 
-    /** 升级变化回调 */
     private void onUpgradesChanged() {
         setChanged();
     }
 
-    /** 从结构内能源仓一次性抽取能量 */
     private double extractNetworkEnergy(double amount, boolean simulate) {
         double remaining = amount;
         for (FluixCrystalEnergyHatchBlockEntity hatch : energyHatches) {
@@ -508,7 +471,6 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         return amount - remaining;
     }
 
-    /** 结构内是否有能源仓接入 ME 网络 */
     public boolean isEnergyConnected() {
         for (FluixCrystalEnergyHatchBlockEntity hatch : energyHatches) {
             if (hatch.isGridConnected()) {
@@ -518,14 +480,12 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         return false;
     }
 
-    /** 结构内能源仓所接 ME 网络的可用能量合计 */
     public double getNetworkStoredPower() {
         return FluixCrystalEnergyHatchBlockEntity.totalAvailableAEPower(energyHatches);
     }
 
-    // ---------------------------------------------------------------- 结构检测
+    // 结构检测
 
-    /** 立即检测一次结构，并按结果切换主机与结构内部件的状态；结构未变化时走缓存快速路径。 */
     public void validateStructure() {
         Level level = this.level;
         if (level == null || level.isClientSide) {
@@ -551,7 +511,6 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         syncClient();
     }
 
-    /** 收集结构内的输入/输出总线与能源仓（仅在结构成型时收集）。 */
     private void refreshParts(Level level, StructureResult result) {
         inputBuses.clear();
         outputBuses.clear();
@@ -559,7 +518,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         if (!result.formed()) {
             return;
         }
-        // 显式按 片 → 行 → 列 排序，保证部件顺序稳定
+        // 按 片 → 行 → 列 排序，保证部件顺序稳定
         List<BlockPos> cells = new ArrayList<>(result.cells());
         cells.sort(LavaSmelterStructure.PATTERN.posComparator(
                 getBlockState().getValue(HighReactivityLavaSmelterBlock.FACING), Direction.UP,
@@ -578,12 +537,10 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         }
     }
 
-    /** 按当前方块状态读取成型标记并刷新控制器状态。 */
     private void applyControllerState() {
         applyControllerState(getBlockState().getValue(HighReactivityLavaSmelterBlock.FORMED));
     }
 
-    /** 同步控制器的成型标记与运行/暂停贴图。 */
     private void applyControllerState(boolean formed) {
         Level level = this.level;
         if (level == null || level.isClientSide) {
@@ -607,7 +564,6 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         }
     }
 
-    /** 控制器被移除 / 破坏时调用：复位结构中的部件外观并清空结构缓存。 */
     public void onControllerRemoved() {
         Level level = this.level;
         if (level == null || level.isClientSide) {
@@ -619,7 +575,6 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
                 getBlockState().getValue(HighReactivityLavaSmelterBlock.FACING), StructureResult.EMPTY);
     }
 
-    /** 破坏时把粉槽内容散落到地面。 */
     private void dropDust(Level level) {
         ItemStack stack = dustSlot.getStackInSlot(0);
         if (!stack.isEmpty()) {
@@ -628,9 +583,8 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         }
     }
 
-    // ---------------------------------------------------------------- 客户端同步
+    // 客户端同步
 
-    /** 把耐久与镜像状态同步到客户端（假熔岩渲染用）。 */
     private void syncClient() {
         Level level = this.level;
         if (level != null && !level.isClientSide) {
@@ -640,7 +594,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
 
     @Override
     public CompoundTag getUpdateTag() {
-        // 默认实现返回空 tag，这里带上完整存档数据（耐久等）与镜像状态
+        // 默认返回空 tag，这里附带完整存档数据与镜像状态
         CompoundTag tag = saveWithoutMetadata();
         tag.putBoolean(MIRROR_SIDE_ID, mirrorSide);
         tag.putBoolean(MIRROR_FRONT_ID, mirrorFront);
@@ -661,7 +615,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         }
     }
 
-    // ---------------------------------------------------------------- 持久化（耐久 / 陨石粉 / 加工中的作业）
+    // 持久化
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
@@ -705,7 +659,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         }
     }
 
-    // ---------------------------------------------------------------- 能力
+    // 能力
 
     public ItemStackHandler getDustSlot() {
         return dustSlot;
@@ -725,44 +679,36 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         dustCapability.invalidate();
     }
 
-    // ---------------------------------------------------------------- 状态查询
+    // 状态查询
 
-    /** 是否正在加工。 */
     public boolean isRunning() {
         return jobTicksLeft > 0 && isFormed();
     }
 
-    /** 是否因耐久/输出不足暂停。 */
     public boolean isPaused() {
         return paused && isFormed();
     }
 
-    /** 暂停原因（NONE 表示未暂停）。 */
     public Error getError() {
         return error;
     }
 
-    /** 是否已成型。 */
     public boolean isFormed() {
         return getBlockState().getValue(HighReactivityLavaSmelterBlock.FORMED);
     }
 
-    /** 剩余配方耐久。 */
     public int getDurability() {
         return durability;
     }
 
-    /** 最近一次成型的左右镜像（假熔岩渲染用）。 */
     public boolean isMirrorSide() {
         return mirrorSide;
     }
 
-    /** 最近一次成型的前后镜像（假熔岩渲染用）。 */
     public boolean isMirrorFront() {
         return mirrorFront;
     }
 
-    /** 当前作业的展示产物（数量已乘并行数）；空闲返回空。 */
     public ItemStack getJobOutput() {
         if (currentRecipe == null || jobTicksLeft <= 0) {
             return ItemStack.EMPTY;
@@ -775,22 +721,18 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         return result.copyWithCount((int) Math.min(total, Integer.MAX_VALUE));
     }
 
-    /** 当前作业的实际总耗时（tick，含加速卡加成）；空闲为 0。 */
     public int getJobDuration() {
         return currentRecipe != null && jobTicksLeft > 0 ? jobTotalTicks : 0;
     }
 
-    /** 当前作业已进行的时间（tick）；空闲为 0。 */
     public int getJobElapsed() {
         return currentRecipe != null && jobTicksLeft > 0 ? getJobDuration() - jobTicksLeft : 0;
     }
 
-    /** 客户端展示的当前作业产物（仅由同步包写入）。 */
     public ItemStack getClientJobOutput() {
         return clientJobOutput;
     }
 
-    /** 客户端同步入口：覆盖本地作业产物（仅由同步包调用）。 */
     public void applyClientJobOutput(ItemStack stack) {
         this.clientJobOutput = stack;
     }
@@ -799,7 +741,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
     public void onLoad() {
         super.onLoad();
         if (level != null && !level.isClientSide) {
-            // 结构状态在加载后重新检测（不持久化），交给首次 tick 完成，避免加载期修改世界
+            // 结构状态在加载后重新检测
             tickCounter = CHECK_INTERVAL - 1;
         }
     }

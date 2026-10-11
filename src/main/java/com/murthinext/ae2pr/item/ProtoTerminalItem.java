@@ -12,7 +12,9 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
-/** 源始终端的手持交互入口。 */
+/**
+ * 源始终端的手持交互入口。
+ */
 public class ProtoTerminalItem extends Item {
 
     public ProtoTerminalItem(Properties properties) {

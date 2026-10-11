@@ -22,7 +22,6 @@ import com.murthinext.ae2pr.multiblock.StructureResult;
  */
 public final class MatterPhaseTransformerStructure {
 
-    /** 结构模式：主机位于第 0 行、第 2 列。 */
     public static final MultiblockPattern PATTERN = MultiblockPattern
             .builder(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.RIGHT)
             .origin(0, 2)
@@ -65,7 +64,7 @@ public final class MatterPhaseTransformerStructure {
                     result.mirrorFront(), result.slices()), true);
             return;
         }
-        // 未成型：不确定此前是哪种镜像布局，逐一复位全部组合
+        // 未成型：逐一复位全部镜像组合
         for (boolean[] mirror : MultiblockPattern.MIRRORS) {
             applyParts(level, PATTERN.cells(controllerPos, facing, Direction.UP, mirror[0], mirror[1],
                     PATTERN.minSlices()), false);
@@ -97,7 +96,7 @@ public final class MatterPhaseTransformerStructure {
             if (updated.getValue(MachinePartBlock.FORMED) != formed) {
                 updated = updated.setValue(MachinePartBlock.FORMED, formed);
             }
-            // 相变仪成型外观：锆刚玉砖块；未成型时回默认值
+            // 相变仪成型外观：锆刚玉砖块
             int style = formed ? MachinePartFacade.ZIRCONIA.style() : MachinePartBlock.DEFAULT_STYLE;
             if (updated.getValue(MachinePartBlock.STYLE) != style) {
                 updated = updated.setValue(MachinePartBlock.STYLE, style);
@@ -108,7 +107,6 @@ public final class MatterPhaseTransformerStructure {
         }
     }
 
-    /** 可占据砖块位的机器部件（石英 / AEV 的输入、输出总线与输入、输出仓）。 */
     private static boolean isPart(BlockState state) {
         Block block = state.getBlock();
         return block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get()

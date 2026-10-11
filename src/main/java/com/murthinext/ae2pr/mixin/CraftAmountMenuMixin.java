@@ -19,8 +19,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 
 /**
- * 数量选择菜单：注册轮数同步 client action，并回填"返回确认界面"时保留的轮数。
- * 轮数登记已移至 {@code MenuOpenerMixin}，以兼容 GTLCore 改写后的下单路径。
+ * 数量选择菜单：轮数同步与回填，登记移至 {@code MenuOpenerMixin} 以兼容 GTLCore。
  */
 @Mixin(value = CraftAmountMenu.class, remap = false)
 public abstract class CraftAmountMenuMixin extends AEBaseMenu implements IRepeatRoundsHolder {
@@ -39,7 +38,7 @@ public abstract class CraftAmountMenuMixin extends AEBaseMenu implements IRepeat
         this.registerClientAction(RepeatOrderConstants.ACTION_SET_REPEAT_ROUNDS, Integer.class,
                 this::ae2pr$setRepeatRounds);
 
-        // 从确认界面返回时恢复轮数：由确认菜单关闭时写入短时效恢复队列
+        // 从确认界面返回时恢复轮数（确认菜单关闭时写入恢复队列）
         if (getPlayer() instanceof ServerPlayer serverPlayer) {
             var restored = ServerRepeatRegistry.consumeRestore(serverPlayer.getUUID());
             if (restored != null && restored > 1) {

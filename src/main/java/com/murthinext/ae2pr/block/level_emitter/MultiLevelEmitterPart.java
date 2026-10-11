@@ -51,15 +51,7 @@ import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 import com.murthinext.ae2pr.item.filter_cell.FilterCellItem;
 
 /**
- * ME 通式标准发信器：在 AE2 标准发信器基础上增加一个过滤元件专用槽。
- * <p>
- * 未插入过滤元件时行为与标准发信器一致（单个配置项 + 阈值）。
- * 插入过滤元件后，以其配置的所有键为触发项，逐项与阈值比较，并按 AND/OR 组合：
- * <ul>
- * <li>HIGH_SIGNAL（高电平）：物品数量 &gt;= 阈值视为满足；</li>
- * <li>LOW_SIGNAL（低电平）：物品数量 &lt; 阈值视为满足；</li>
- * <li>AND：全部触发项满足才输出；OR：任一触发项满足即输出。</li>
- * </ul>
+ * ME 通式标准发信器：支持过滤元件配置多触发项。
  */
 public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
         implements IConfigInvHost, ICraftingProvider, InternalInventoryHost {
@@ -83,7 +75,6 @@ public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
     public static final PartModel MODEL_ON_ON = new PartModel(MODEL_BASE_ON, MODEL_STATUS_ON);
     public static final PartModel MODEL_ON_HAS_CHANNEL = new PartModel(MODEL_BASE_ON, MODEL_STATUS_HAS_CHANNEL);
 
-    /** 多触发项组合模式（仅在使用过滤元件时生效）。 */
     public static final Setting<CombineMode> COMBINE_MODE = new Setting<>("combine_mode", CombineMode.class);
 
     private static final int FILTER_SLOT = 0;
@@ -94,7 +85,6 @@ public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
     private IStackWatcher storageWatcher;
     private IStackWatcher craftingWatcher;
     private long lastUpdateTick = -1;
-    /** 使用过滤元件时缓存的逐项组合结果。 */
     private boolean filteredOn;
 
     private final IStorageWatcherNode stackWatcherNode = new IStorageWatcherNode() {
@@ -107,7 +97,7 @@ public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
         @Override
         public void onStackChange(AEKey what, long amount) {
             if (usesFilterCell()) {
-                // 过滤元件模式下多个键都可能变化，统一节流重算
+                // 过滤元件模式下统一节流重算
                 throttleUpdate();
             } else if (what.equals(getConfiguredKey()) && !isUpgradedWith(AEItems.FUZZY_CARD)) {
                 lastReportedValue = amount;
@@ -175,9 +165,6 @@ public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
         return stack == null || stack.isEmpty() ? null : stack;
     }
 
-    /**
-     * 过滤元件构建出的过滤表；未插入过滤元件或未配置任何过滤项时返回 null。
-     */
     @Nullable
     private IPartitionList getFilterList() {
         var stack = getFilterCellStack();
@@ -188,9 +175,6 @@ public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
         return list.isEmpty() ? null : list;
     }
 
-    /**
-     * 高级过滤元件构建出的标签匹配谓词；未插入或未配置任何表达式时返回 null。
-     */
     @Nullable
     private Predicate<AEKey> getAdvancedFilter() {
         var stack = getFilterCellStack();
@@ -247,7 +231,6 @@ public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
         this.updateState();
     }
 
-    /** 未使用过滤元件时的原始发信器取值逻辑（与 AE2 标准发信器一致）。 */
     private void updateSingleKeyValue(IGrid grid) {
         var stacks = grid.getStorageService().getCachedInventory();
         var myStack = getConfiguredKey();
@@ -270,7 +253,9 @@ public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
         }
     }
 
-    /** 逐项判定并按 AND/OR 组合。 */
+    /**
+     * 逐项判定并按 AND/OR 组合。
+     */
     private boolean computeFilteredOn(IGrid grid, IPartitionList list) {
         var stacks = grid.getStorageService().getCachedInventory();
         boolean lowSignal = getConfigManager().getSetting(Settings.REDSTONE_EMITTER) == RedstoneMode.LOW_SIGNAL;
@@ -292,7 +277,9 @@ public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
         return result;
     }
 
-    /** 高级过滤元件：遍历网络中通过标签表达式的物品种类，逐项判定并按 AND/OR 组合。 */
+    /**
+     * 高级过滤元件：按标签表达式筛选后逐项判定。
+     */
     private boolean computeAdvancedOn(IGrid grid, Predicate<AEKey> filter) {
         var stacks = grid.getStorageService().getCachedInventory();
         boolean lowSignal = getConfigManager().getSetting(Settings.REDSTONE_EMITTER) == RedstoneMode.LOW_SIGNAL;
@@ -549,7 +536,9 @@ public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
         configureWatchers();
     }
 
-    /** 过滤槽仅接受过滤元件。 */
+    /**
+     * 过滤槽仅接受过滤元件。
+     */
     private static class FilterCellItemFilter implements IAEItemFilter {
         @Override
         public boolean allowInsert(InternalInventory inv, int slot, ItemStack stack) {

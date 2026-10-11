@@ -13,9 +13,7 @@ import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.network.NamingFactoryRenamePacket;
 
 /**
- * 名称压印工厂重命名界面：手持石英切割刀右击机器时打开。
- * <p>
- * 回车确认提交（留空则清除名称），ESC 取消。
+ * 名称压印工厂重命名界面，回车提交（留空清除名称），ESC 取消。
  */
 public class NamingFactoryRenameScreen extends Screen {
 
@@ -35,7 +33,6 @@ public class NamingFactoryRenameScreen extends Screen {
         this.initialName = initialName;
     }
 
-    /** 客户端：打开重命名界面。 */
     public static void open(BlockPos pos, String initialName) {
         Minecraft.getInstance().setScreen(new NamingFactoryRenameScreen(pos, initialName));
     }

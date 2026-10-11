@@ -26,7 +26,7 @@ import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
 
 /**
- * 熔岩冶炼炉配方的 JEI 分类：炉体内显示原料，箭头指向产物。
+ * 熔岩冶炼炉配方的 JEI 分类。
  */
 public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe> {
 
@@ -95,7 +95,7 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
             }
         }
 
-        // 主产物与副产物槽固定显示，并与两行输入槽对齐
+        // 主/副产物槽固定显示并对齐输入槽
         List<ItemStack> results = recipe.getResults();
         for (int index = 0; index < LavaSmelterRecipe.MAX_RESULTS; index++) {
             IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT,

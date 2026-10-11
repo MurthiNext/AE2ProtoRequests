@@ -24,7 +24,7 @@ import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransforme
 import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerControllerBlockEntity;
 
 /**
- * Jade 兼容插件：显示物质相变仪的网络连接状态与当前相变作业（产物流体与进度）。
+ * 显示物质相变仪连接状态与作业的 Jade 插件。
  */
 @WailaPlugin(ae2pr.MODID)
 public class MatterPhaseTransformerJadePlugin implements IWailaPlugin {
@@ -46,7 +46,9 @@ public class MatterPhaseTransformerJadePlugin implements IWailaPlugin {
         registration.registerBlockComponent(ComponentProvider.INSTANCE, MatterPhaseTransformerBlock.class);
     }
 
-    /** 服务端数据：网络连接状态与当前相变作业。 */
+    /**
+     * 服务端数据提供器。
+     */
     private enum ServerData implements IServerDataProvider<BlockAccessor> {
         INSTANCE;
 
@@ -72,7 +74,9 @@ public class MatterPhaseTransformerJadePlugin implements IWailaPlugin {
         }
     }
 
-    /** 客户端展示：网络连接状态与当前相变作业进度。 */
+    /**
+     * 客户端提示提供器。
+     */
     private enum ComponentProvider implements IBlockComponentProvider {
         INSTANCE;
 

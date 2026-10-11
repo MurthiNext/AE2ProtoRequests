@@ -36,7 +36,7 @@ import com.murthinext.ae2pr.client.naming_factory.NamingFactoryRenameScreen;
 import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
 /**
- * 名称压印工厂方块：使用 AE2 名称压印模板批量命名物品。
+ * 名称压印工厂方块。
  */
 public class NamingFactoryBlock extends AEBaseEntityBlock<NamingFactoryBlockEntity> implements Wrenchable {
 
@@ -91,7 +91,7 @@ public class NamingFactoryBlock extends AEBaseEntityBlock<NamingFactoryBlockEnti
         }
         if (stack.is(ModTags.KNIVES)) {
             if (player.isShiftKeyDown()) {
-                // 潜行时交给切割刀自身的界面（制作名称压印模板）
+                // 潜行时交给切割刀自身界面处理
                 return InteractionResult.PASS;
             }
             if (level.isClientSide) {
@@ -110,7 +110,6 @@ public class NamingFactoryBlock extends AEBaseEntityBlock<NamingFactoryBlockEnti
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /** 客户端：打开重命名界面，并带入机器当前的自定义名称。 */
     private static void openRenameScreen(Level level, BlockPos pos) {
         String currentName = level.getBlockEntity(pos) instanceof NamingFactoryBlockEntity factory
                 && factory.getCustomName() != null ? factory.getCustomName().getString() : "";

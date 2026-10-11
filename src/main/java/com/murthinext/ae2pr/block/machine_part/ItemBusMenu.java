@@ -22,10 +22,7 @@ import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.network.MachinePartStackPacket;
 
 /**
- * 机器部件物品总线的容器菜单。
- * <p>
- * 存储量超过原版槽位同步上限（数量按 byte 传输），因此不占槽位：
- * 展示由 {@link MachinePartStackPacket} 同步，操作由点击包驱动（见 {@link #handleStorageClick}）。
+ * 机器部件物品总线的容器菜单：存储不占槽位，经同步包展示。
  */
 public class ItemBusMenu extends AbstractContainerMenu {
 
@@ -78,22 +75,24 @@ public class ItemBusMenu extends AbstractContainerMenu {
         return pos;
     }
 
-    /** 是否是输出总线（决定客户端界面贴图）。 */
     public boolean isOutputBus() {
         return blockEntity != null && blockEntity.isOutputBus();
     }
 
-    /** 物品槽数量。 */
     public int getSlotCount() {
         return blockEntity != null ? blockEntity.getSlotCount() : 1;
     }
 
-    /** 指定槽位的机器存储内容（数量即储量；客户端为同步数据）。 */
+    /**
+     * 数量即储量，客户端为同步数据。
+     */
     public ItemStack getStoredStack(int slot) {
         return blockEntity != null ? blockEntity.getStorage().getStackInSlot(slot) : ItemStack.EMPTY;
     }
 
-    /** 服务端每 tick：存储内容或自动搬运开关变化时向打开界面的玩家发送同步包；首次广播强制同步一次。 */
+    /**
+     * 存储/开关变化或首次广播时向打开界面的玩家同步。
+     */
     @Override
     public void broadcastChanges() {
         if (blockEntity != null && owner instanceof ServerPlayer serverPlayer) {
@@ -112,7 +111,9 @@ public class ItemBusMenu extends AbstractContainerMenu {
         super.broadcastChanges();
     }
 
-    /** 工具栏按钮点击：id 0 = 切换自动搬运。 */
+    /**
+     * 工具栏按钮 id 0 = 切换自动搬运。
+     */
     @Override
     public boolean clickMenuButton(Player player, int id) {
         if (id == 0 && serverSide && blockEntity != null) {
@@ -135,17 +136,14 @@ public class ItemBusMenu extends AbstractContainerMenu {
     }
 
     /**
-     * 存储区点击（由客户端点击包调用）：
-     *
-     * @param slot   槽位序号
-     * @param button 0 = 左键，1 = 右键
+     * 由客户端点击包调用，按钮 0 左键、1 右键。
      */
     public void handleStorageClick(int slot, int button, boolean shift) {
         if (!serverSide || blockEntity == null || slot < 0 || slot >= blockEntity.getSlotCount()) {
             return;
         }
         if (shift) {
-            // 单次抽取最多只能取走物品的堆叠上限（64），循环取到背包放不下或该槽清空
+            // 单次抽取上限 64，循环取到背包放不下或清空
             while (true) {
                 ItemStack taken = blockEntity.getStorage().extractItem(slot, Integer.MAX_VALUE, false);
                 if (taken.isEmpty()) {
@@ -174,7 +172,6 @@ public class ItemBusMenu extends AbstractContainerMenu {
         broadcastChanges();
     }
 
-    /** Shift 点击玩家背包：把该格存入总线（仅同种物品可叠加；输出总线不接收玩家存入）。 */
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         Slot slot = slots.get(index);

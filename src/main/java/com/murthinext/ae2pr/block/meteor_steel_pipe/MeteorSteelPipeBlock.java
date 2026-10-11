@@ -13,12 +13,10 @@ import net.minecraft.world.level.material.MapColor;
 import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
 /**
- * 陨钢管道方块：两端为方形开口，四个侧面使用连接纹理，
- * 轴向相连的管道侧面包边在相接处连续，转角/T 字因轴向不同不连接。
+ * 陨钢管道方块：两端开口，轴向相连时纹理连续。
  */
 public class MeteorSteelPipeBlock extends Block implements Wrenchable {
 
-    /** 管道朝向（两端开口所在轴） */
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public MeteorSteelPipeBlock() {

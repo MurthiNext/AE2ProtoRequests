@@ -11,8 +11,6 @@ import com.murthinext.ae2pr.ae2pr;
 
 /**
  * 本模组的 GuideME 指南（仅客户端）。
- * <p>
- * 页面资源位于 {@code assets/ae2pr/ae2guide/}，页面 id 形如 {@code ae2pr:index.md}。
  */
 public final class ModGuide {
 
@@ -36,7 +34,9 @@ public final class ModGuide {
     private ModGuide() {
     }
 
-    /** 在模组构造阶段（客户端）调用，构建并注册指南。 */
+    /**
+     * 在模组构造阶段（客户端）调用。
+     */
     public static void init() {
         if (guide == null) {
             guide = Guide.builder(GUIDE_ID)
@@ -46,7 +46,6 @@ public final class ModGuide {
         }
     }
 
-    /** 打开指南并跳转到指定页面（可选锚点）。 */
     public static void open(PageAnchor anchor) {
         var player = Minecraft.getInstance().player;
         if (player != null) {

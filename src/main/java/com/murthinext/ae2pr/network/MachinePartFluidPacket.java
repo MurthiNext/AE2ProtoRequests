@@ -12,7 +12,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 /**
- * 服务端 -> 客户端：机器部件流体仓的罐内流体与自动搬运开关同步（仅发给打开对应界面的玩家）。
+ * 服务端 -> 客户端：同步流体仓流体与搬运开关。
  */
 public class MachinePartFluidPacket {
 

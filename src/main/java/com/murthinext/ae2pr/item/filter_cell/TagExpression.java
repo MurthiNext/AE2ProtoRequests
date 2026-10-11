@@ -17,14 +17,8 @@ import appeng.api.stacks.AEKey;
 import appeng.api.stacks.AEKeyType;
 
 /**
- * 标签匹配表达式：以物品标签 id 为操作数，支持布尔运算与通配。
- * <ul>
- * <li>{@code &}：与；{@code |}：或；{@code ^}：异或；{@code !}：前缀取反；{@code ()}：分组；</li>
- * <li>{@code *}：标签 id 内的 glob 通配符，如 {@code minecraft:*}、{@code forge:ingots/*}。</li>
- * </ul>
- * 优先级：{@code !} &gt; {@code &} &gt; {@code ^} &gt; {@code |}。空白字符会被忽略，标签 id 不区分大小写。
- * <p>
- * 解析失败时 {@link #parse(String)} 返回 null，由调用方决定回退策略。
+ * 标签匹配表达式：以物品标签 id 为操作数，支持布尔运算与 glob 通配。
+ * {@code &} 与、{@code |} 或、{@code ^} 异或、{@code !} 取反、{@code ()} 分组、{@code *} 通配；优先级 {@code ! > & > ^ > |}。
  */
 public final class TagExpression implements Predicate<AEKey> {
 
@@ -39,7 +33,9 @@ public final class TagExpression implements Predicate<AEKey> {
         return key != null && root.test(key);
     }
 
-    /** 解析表达式；存在语法错误时返回 null。 */
+    /**
+     * 解析失败时返回 null。
+     */
     @Nullable
     public static TagExpression parse(String text) {
         if (text == null || text.isBlank()) {
@@ -69,7 +65,9 @@ public final class TagExpression implements Predicate<AEKey> {
             }
         }
 
-    /** glob 通配匹配：遍历该键类型下所有标签 id，任一命中即可。 */
+    /**
+     * glob 通配匹配。
+     */
     private static final class GlobNode implements Node {
         private final String pattern;
         private final Map<AEKeyType, List<TagKey<?>>> tagCache = new ConcurrentHashMap<>();
@@ -95,7 +93,9 @@ public final class TagExpression implements Predicate<AEKey> {
                     .toList();
         }
 
-        /** 经典通配匹配：{@code *} 匹配任意长度（含空）的字符序列。 */
+        /**
+         * 经典通配匹配：{@code *} 匹配任意长度（含空）的字符序列。
+         */
         private static boolean matches(String glob, String text) {
             int g = 0;
             int t = 0;
@@ -154,8 +154,7 @@ public final class TagExpression implements Predicate<AEKey> {
     }
 
     /**
-     * 递归下降解析器：
-     * or := xor ('|' xor)*；xor := and ('^' and)*；and := unary ('&' unary)*；
+     * 递归下降解析器：or := xor ('|' xor)*；xor := and ('^' and)*；and := unary ('&' unary)*；
      * unary := '!' unary | factor；factor := '(' or ')' | tag。
      */
     private static final class Parser {

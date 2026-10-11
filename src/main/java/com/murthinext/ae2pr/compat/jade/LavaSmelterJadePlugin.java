@@ -24,7 +24,7 @@ import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
 
 /**
- * Jade 兼容插件：显示熔岩冶炼炉的网络连接状态、当前作业进度与配方耐久。
+ * 显示熔岩冶炼炉连接状态与作业的 Jade 插件。
  */
 @WailaPlugin(ae2pr.MODID)
 public class LavaSmelterJadePlugin implements IWailaPlugin {
@@ -47,7 +47,9 @@ public class LavaSmelterJadePlugin implements IWailaPlugin {
         registration.registerBlockComponent(ComponentProvider.INSTANCE, HighReactivityLavaSmelterBlock.class);
     }
 
-    /** 服务端数据：网络连接状态、当前作业与配方耐久。 */
+    /**
+     * 服务端数据提供器。
+     */
     private enum ServerData implements IServerDataProvider<BlockAccessor> {
         INSTANCE;
 
@@ -74,7 +76,9 @@ public class LavaSmelterJadePlugin implements IWailaPlugin {
         }
     }
 
-    /** 客户端展示：网络连接状态、当前作业进度与配方耐久。 */
+    /**
+     * 客户端提示提供器。
+     */
     private enum ComponentProvider implements IBlockComponentProvider {
         INSTANCE;
 

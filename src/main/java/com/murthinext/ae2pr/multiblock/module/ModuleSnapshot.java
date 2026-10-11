@@ -7,9 +7,7 @@ import java.util.Map;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * 结构成型时收集的模块快照：提供按功能的数量、等级查询，以及配方要求校验。
- * <p>
- * 快照只描述结构内实际安装了什么，具体的并行、速度等增益由使用方按功能类型换算。
+ * 结构成型时收集的模块快照：提供数量、等级查询与要求校验。
  */
 public final class ModuleSnapshot {
 
@@ -32,22 +30,18 @@ public final class ModuleSnapshot {
         return modules.isEmpty() ? EMPTY : new ModuleSnapshot(List.copyOf(modules));
     }
 
-    /** 结构内的全部模块。 */
     public List<ModuleInstance> modules() {
         return modules;
     }
 
-    /** 指定功能已安装的数量。 */
     public int count(ModuleType type) {
         return counts.getOrDefault(type, 0);
     }
 
-    /** 指定功能的最高等级；未安装返回 0。 */
     public int level(ModuleType type) {
         return levels.getOrDefault(type, 0);
     }
 
-    /** 是否满足全部模块要求（未声明要求视为满足）。 */
     public boolean satisfies(List<ModuleRequirement> requirements) {
         for (ModuleRequirement requirement : requirements) {
             if (level(requirement.type()) < requirement.minLevel()) {
@@ -57,7 +51,6 @@ public final class ModuleSnapshot {
         return true;
     }
 
-    /** 首个超出安装上限的模块；全部合法时返回 null。 */
     @Nullable
     public static ModuleInstance firstConflict(List<ModuleInstance> modules) {
         Map<ModuleType, Integer> seen = new HashMap<>();

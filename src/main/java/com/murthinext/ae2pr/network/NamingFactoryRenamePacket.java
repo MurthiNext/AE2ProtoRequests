@@ -15,9 +15,7 @@ import com.murthinext.ae2pr.ModTags;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
 
 /**
- * 客户端 -> 服务端：为名称压印工厂写入自定义名称（空串表示清除）。
- * <p>
- * 服务端校验玩家距离与手持的切割刀标签，避免伪造包修改远处机器。
+ * 客户端 -> 服务端：写入名称压印工厂的自定义名称。
  */
 public record NamingFactoryRenamePacket(BlockPos pos, String name) {
 

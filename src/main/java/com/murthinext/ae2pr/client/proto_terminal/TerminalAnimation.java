@@ -2,7 +2,9 @@ package com.murthinext.ae2pr.client.proto_terminal;
 
 import net.minecraft.util.Mth;
 
-/** 终端标题、剧情块和连线的入场时序。 */
+/**
+ * 终端标题、剧情块与连线的入场时序。
+ */
 record TerminalAnimation() {
 
     static final long OPEN_DURATION = 1050;

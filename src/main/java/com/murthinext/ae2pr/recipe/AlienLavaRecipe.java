@@ -30,7 +30,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.ModTags;
 
-/** 异星熔岩世界交互配方：物品实体浸入指定流体后，按数量消耗并产出。 */
+/**
+ * 异星熔岩世界交互配方：物品实体浸入流体后消耗并产出。
+ */
 public class AlienLavaRecipe implements Recipe<Container> {
 
     private final ResourceLocation id;
@@ -49,12 +51,13 @@ public class AlienLavaRecipe implements Recipe<Container> {
         this.resultFluid = resultFluid;
     }
 
-    /** 该流体状态是否可作为本配方的催化剂。 */
     public boolean isCatalyst(FluidState state) {
         return state.is(catalyst);
     }
 
-    /** 触发物品是否匹配首个原料（性能快速短路，仿照 AE2 的转化逻辑）。 */
+    /**
+     * 触发物品是否匹配首个原料。
+     */
     public boolean canTrigger(ItemStack stack) {
         return !ingredients.isEmpty() && ingredients.get(0).ingredient().test(stack);
     }
@@ -76,7 +79,9 @@ public class AlienLavaRecipe implements Recipe<Container> {
         return resultFluid;
     }
 
-    /** 是否把催化剂源方块转化为结果流体，而不是生成物品。 */
+    /**
+     * 是否将催化剂源方块转化为结果流体而非产出物品。
+     */
     public boolean convertsCatalyst() {
         return resultFluid != null;
     }
@@ -128,7 +133,9 @@ public class AlienLavaRecipe implements Recipe<Container> {
         return true;
     }
 
-    /** JSON 与网络序列化。 */
+    /**
+     * JSON 与网络序列化。
+     */
     public static class Serializer implements RecipeSerializer<AlienLavaRecipe> {
 
         @Override

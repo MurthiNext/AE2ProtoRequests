@@ -132,7 +132,7 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
             }
             CrystalAssemblyLineRecipe.ItemInput input = itemInputs.get(i);
             final int inputIndex = i;
-            // 消耗数量直接写入 ItemStack
+            // 消耗数量写入 ItemStack
             List<ItemStack> stacks = new ArrayList<>(input.ingredient().getItems().length);
             for (ItemStack stack : input.ingredient().getItems()) {
                 stacks.add(stack.copyWithCount(input.count()));
@@ -142,7 +142,7 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
                     (view, tooltip) -> tooltip.add(orderTooltip(inputIndex, Config.assemblyItemsOrdered())));
         }
 
-        // 流体输入：单列，使用 GT 风格深色槽位背景
+        // 流体输入：单列，深色槽位背景
         List<FluidStack> fluidInputs = recipe.getFluidInputs();
         for (int i = 0; i < FLUID_SLOT_COUNT; i++) {
             IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT,
@@ -167,7 +167,7 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
             outputSlot.addItemStack(outputs.get(0));
         }
 
-        // 模块要求：产物下方一列，无槽位背景，满足要求的模块物品轮换展示
+        // 模块要求：满足要求的模块物品轮换展示
         List<ModuleRequirement> requirements = recipe.getModuleRequirements();
         for (int i = 0; i < requirements.size() && i < MODULE_SLOT_COUNT; i++) {
             ModuleRequirement requirement = requirements.get(i);
@@ -182,7 +182,9 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
         }
     }
 
-    /** 满足要求的功能模块物品：等级升序排列，JEI 会以此顺序在同一槽位轮换显示。 */
+    /**
+     * 满足要求的模块物品，按等级升序排列。
+     */
     private static List<ItemStack> moduleCandidates(ModuleRequirement requirement) {
         List<Block> blocks = new ArrayList<>();
         for (Block block : ForgeRegistries.BLOCKS.getValues()) {
@@ -222,14 +224,12 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
         }
     }
 
-    /** 模块要求提示：如“需要1级充能”。 */
     private static Component requirementHint(ModuleRequirement requirement) {
         return Component.translatable("jei.ae2pr.crystal_assembly_line.module_requirement.hint",
                 requirement.minLevel(), Component.translatable(requirement.type().translationKey()))
                 .withStyle(ChatFormatting.GRAY);
     }
 
-    /** 管道进度 */
     private static void drawPipeProgress(GuiGraphics graphics) {
         float progress = (Util.getMillis() % PIPE_CYCLE_MS) / (float) PIPE_CYCLE_MS;
         graphics.blit(PIPE_TEXTURE, PIPE_X, PIPE_Y, 0.0F, 0.0F, PIPE_WIDTH, PIPE_HEIGHT,
@@ -241,7 +241,6 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
         }
     }
 
-    /** 有序时标注该输入的序号。 */
     private static Component orderTooltip(int index, boolean ordered) {
         if (!ordered) {
             return Component.translatable("jei.ae2pr.crystal_assembly_line.slot.unordered")

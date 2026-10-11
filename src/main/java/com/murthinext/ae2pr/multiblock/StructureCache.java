@@ -10,10 +10,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 /**
- * 结构缓存：记录成型时各单元格的方块类型与方块实体，用于快速校验结构是否仍然有效。
- * <p>
- * 只比较方块类型与方块实体引用，不比较方块状态：成型 / 运行时会自行切换外观状态
- * （控制器 FORMED/RUNNING/PAUSED、部件 FORMED、控制外壳 ACTIVE），这些不应导致缓存失效。
+ * 结构缓存：只比较方块类型与方块实体引用，不比较方块状态。
  */
 public final class StructureCache {
 
@@ -29,7 +26,6 @@ public final class StructureCache {
         return blocks.isEmpty();
     }
 
-    /** 以当前世界状态重建缓存。 */
     public void capture(Level level, List<BlockPos> cells) {
         clear();
         for (BlockPos pos : cells) {
@@ -41,7 +37,6 @@ public final class StructureCache {
         }
     }
 
-    /** 缓存中的方块与方块实体是否全部未变化。 */
     public boolean verify(Level level) {
         for (Map.Entry<BlockPos, Block> entry : blocks.entrySet()) {
             if (level.getBlockState(entry.getKey()).getBlock() != entry.getValue()) {

@@ -18,7 +18,7 @@ import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.data.ModelData;
 
 /**
- * 连接纹理的模型包装：把方块位置注入 {@link ModelData}，并在取四边形时按世界邻居重写 UV。
+ * 连接纹理的模型包装：注入方块位置并按邻居重写 UV。
  */
 public class CtmBakedModel extends BakedModelWrapper<BakedModel> {
 
@@ -45,7 +45,7 @@ public class CtmBakedModel extends BakedModelWrapper<BakedModel> {
             return quads;
         }
 
-        // 多方块成型换装：把部件自身的基础面贴图换成结构外观贴图（UV 不变，连接纹理由下方重写）
+        // 多方块成型换装：替换基础面贴图为结构外观贴图
         TextureAtlasSprite facade = CtmConfig.facadeSprite(state);
         if (facade != null) {
             TextureAtlasSprite base = CtmConfig.partBaseSprite(state);
@@ -80,7 +80,6 @@ public class CtmBakedModel extends BakedModelWrapper<BakedModel> {
         return result != null ? result : quads;
     }
 
-    /** 把基础面的四边形换成结构外观贴图（UV 随之重映射）；其余四边形原样保留。 */
     private static List<BakedQuad> retargetFacade(List<BakedQuad> quads, TextureAtlasSprite base,
             TextureAtlasSprite facade) {
         List<BakedQuad> result = new ArrayList<>(quads.size());

@@ -31,7 +31,6 @@ public class NoBlockFluidBucketItem extends BucketItem {
         BlockHitResult hit = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
         if (hit.getType() == HitResult.Type.BLOCK
                 && FluidUtil.interactWithFluidHandler(player, hand, level, hit.getBlockPos(), hit.getDirection())) {
-            // 已与流体容器完成一次搬运
             return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
         }
         return super.use(level, player, hand);

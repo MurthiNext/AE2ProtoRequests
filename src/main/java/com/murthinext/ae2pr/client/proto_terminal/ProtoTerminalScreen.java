@@ -17,7 +17,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 
-/** 源始终端的平行四边形剧情树及图文展示层。 */
+/**
+ * 源始终端的剧情树与图文展示界面。
+ */
 public final class ProtoTerminalScreen extends Screen {
 
     private static final int CANVAS_WIDTH = 548;
@@ -43,7 +45,7 @@ public final class ProtoTerminalScreen extends Screen {
     private static final int DETAIL_HEIGHT = 242;
     private static final float DETAIL_SLANT = CrystalNarrativeGraphics.slant(DETAIL_HEIGHT);
     private static final int BACK_X = DETAIL_X + DETAIL_WIDTH - CONTROL_SIZE;
-    // 详情页标题紧贴分隔线上方，分隔线与返回按钮底边齐平并缩短为短横线
+    // 详情页标题紧贴分隔线上方，分隔线缩短对齐返回按钮底边
     private static final int DETAIL_TITLE_Y = 75;
     private static final int DETAIL_RULE_Y = DETAIL_Y + CONTROL_SIZE - 1;
     private static final int DETAIL_RULE_WIDTH = 102;
@@ -55,7 +57,7 @@ public final class ProtoTerminalScreen extends Screen {
     private static final long DETAIL_ENTER_DURATION = 330;
     private static final long DETAIL_EXIT_DURATION = 240;
     private static final long TERMINAL_EXIT_DURATION = 260;
-    // Ctrl 滚轮缩放剧情内容与星空的范围与步进
+    // Ctrl 滚轮缩放的范围与步进
     private static final float ZOOM_STEP = 0.2F;
     private static final float MIN_ZOOM = 0.5F;
     private static final float MAX_ZOOM = 3F;
@@ -140,13 +142,14 @@ public final class ProtoTerminalScreen extends Screen {
         updateVisibility();
     }
 
-    /** 当前是否已过入场动画且可以交互。 */
     private boolean isInteractive() {
         return terminalClosingStarted < 0 && openingStarted >= 0
                 && Util.getMillis() - openingStarted >= TerminalAnimation.OPEN_DURATION;
     }
 
-    /** 以鼠标位置为锚点缩放面板内的剧情树与星空。 */
+    /**
+     * 以鼠标位置为锚点缩放剧情树与星空。
+     */
     private void zoomContent(double mouseX, double mouseY, double amount) {
         float target = Mth.clamp(contentZoom + (float) amount * ZOOM_STEP, MIN_ZOOM, MAX_ZOOM);
         if (target == contentZoom) {
@@ -163,7 +166,6 @@ public final class ProtoTerminalScreen extends Screen {
         updateNodePositions(Util.getMillis() - openingStarted);
     }
 
-    /** 重算剧情树的平行四边形裁剪带。 */
     private void updateTreeClipBands() {
         double guiScale = minecraft.getWindow().getGuiScale();
         treeClipBands = ParallelogramClip.bands((canvasLeft + MAIN_X * canvasScale) * guiScale,

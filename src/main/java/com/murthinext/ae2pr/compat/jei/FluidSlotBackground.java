@@ -5,11 +5,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import mezz.jei.api.gui.drawable.IDrawable;
 
 /**
- * 代码绘制的 JEI 流体槽背景（18x18：1px 描边 + 深色内底），与机器界面槽位同款配色。
+ * 代码绘制的 JEI 流体槽背景。
  */
 public final class FluidSlotBackground implements IDrawable {
 
-    /** 槽位尺寸（含 1px 描边） */
     public static final int SIZE = 18;
 
     private static final int COLOR_LINE = 0xFF39424E;

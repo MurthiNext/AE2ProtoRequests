@@ -8,7 +8,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 /**
- * 服务端 -> 客户端：确认界面所属菜单的重复轮数（用于标题显示）。
+ * 服务端 -> 客户端：同步确认界面重复轮数。
  */
 public class RepeatOrderConfirmRoundsPacket {
     private final int containerId;

@@ -26,33 +26,24 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
 
 /**
- * 名称压印工厂渲染器：绘制下压的 forge、随行程平移材质的活塞连杆以及平台上的待压物品。
- * <p>
- * 静态外壳由方块模型绘制；forge 使用 {@code RegisterAdditional} 注册的独立模型，连杆按当前行程手工绘制四边形，
- * 其 UV 以底端为材质原点随行程平移，因此不会被纵向拉伸。
+ * 名称压印工厂渲染器，绘制 forge、活塞连杆与平台物品。
  */
 public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryBlockEntity> {
 
     public static final ResourceLocation FORGE_MODEL = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "block/naming_factory_forge");
 
-    /** 活塞连杆专用贴图 */
     private static final ResourceLocation ROD_TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "block/naming_factory_rod");
 
-    /** 连杆截面（像素）：8x8，几乎与 forge（10x10）同宽 */
     private static final float ROD_MIN = 4.0F;
     private static final float ROD_MAX = 12.0F;
-    /** 连杆固定端：顶框底面 */
     private static final float ROD_ANCHOR = 14.0F;
-    /** 连杆截面宽度对应的 UV 宽度（1 材质像素 = 1 模型像素） */
     private static final float ROD_U = ROD_MAX - ROD_MIN;
 
-    /** 原版各朝向的漫反射系数：南北 / 东西 */
     private static final float SHADE_NS = 0.8F;
     private static final float SHADE_EW = 0.6F;
 
-    /** 平台顶面高度（像素），物品摆放面 */
     private static final float PLATFORM_TOP = 6.0F;
 
     private static BakedModel forgeModel;
@@ -66,7 +57,9 @@ public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryB
         this.atlas = minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS);
     }
 
-    /** 由客户端初始化在模型烘焙完成时注入附加模型。 */
+    /**
+     * 模型烘焙完成后注入附加模型。
+     */
     public static void acceptModels(Map<ResourceLocation, BakedModel> models) {
         forgeModel = models.get(FORGE_MODEL);
     }
@@ -96,7 +89,7 @@ public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryB
     }
 
     /**
-     * 绘制活塞连杆：顶端固定在顶框底面，底端随 forge 下移；材质 V 以底端为原点，图案随行程平移而不拉伸。
+     * 绘制活塞连杆，材质以底端为原点随行程平移。
      */
     private void renderRod(PoseStack poseStack, VertexConsumer buffer, TextureAtlasSprite sprite, float offset,
             int light, int overlay) {
@@ -141,7 +134,6 @@ public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryB
         buffer.endVertex();
     }
 
-    /** 在平台顶面平放渲染当前输入的整组物品（压印器的待压物料效果）。 */
     private void renderPlatformItem(NamingFactoryBlockEntity blockEntity, PoseStack poseStack,
             MultiBufferSource buffers, int combinedLight, int combinedOverlay) {
         ItemStack stack = blockEntity.getInputStack();

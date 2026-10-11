@@ -23,28 +23,21 @@ import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModBlocks;
 
 /**
- * 机器部件流体仓方块实体。
- * <p>
- * 输出仓只接收机器内部产出，禁止玩家/外部注入。
+ * 机器部件流体仓方块实体，输出仓禁止外部注入。
  */
 public class FluidHatchBlockEntity extends BlockEntity {
 
-    /** 石英仓单槽容量：16K 桶 */
     public static final int CAPACITY = 16 * 1024 * 1000;
-    /** AEV 仓单槽容量：1024 桶 */
     public static final int AEV_CAPACITY = 1024 * 1000;
 
     private static final String TANKS_ID = "tanks";
-    /** 旧版单罐存档键 */
     private static final String TANK_ID = "tank";
     private static final String AUTO_TRANSFER_ID = "autoTransfer";
 
-    /** 自动搬运开关：输入仓拉取、输出仓推出，仅作用于朝向面，默认启用。 */
     private boolean autoTransfer = true;
 
     private final FluidTank[] tanks;
 
-    /** 统一的多罐视图：输入仓可注入，输出仓只出不进。 */
     private final IFluidHandler tanksView;
     private final LazyOptional<IFluidHandler> tankCapability;
 
@@ -64,7 +57,9 @@ public class FluidHatchBlockEntity extends BlockEntity {
         this.tankCapability = LazyOptional.of(() -> tanksView);
     }
 
-    /** 多罐视图：按槽顺序注入/抽出，行为与单罐一致。 */
+    /**
+     * 多罐视图：按槽顺序注入/抽出。
+     */
     private final class TanksView implements IFluidHandler {
 
         private final boolean allowFill;
@@ -146,27 +141,25 @@ public class FluidHatchBlockEntity extends BlockEntity {
         }
     }
 
-    /** 流体槽数量（石英 1、AEV 2）。 */
     public int getTankCount() {
         return tanks.length;
     }
 
-    /** 按槽读取罐体（机器内部读写不受对外视图限制）。 */
+    /**
+     * 机器内部读写不受对外视图限制。
+     */
     public FluidTank getTank(int tank) {
         return tanks[tank];
     }
 
-    /** 首个罐体（单槽部件的兼容入口）。 */
     public FluidTank getTank() {
         return tanks[0];
     }
 
-    /** 单槽容量（mB）。 */
     public int getCapacityPerTank() {
         return tanks[0].getTankCapacity(0);
     }
 
-    /** 当前罐内流体的只读快照，用于界面同步。 */
     public List<FluidStack> getFluidSnapshots() {
         List<FluidStack> fluids = new ArrayList<>(tanks.length);
         for (FluidTank tank : tanks) {
@@ -175,18 +168,15 @@ public class FluidHatchBlockEntity extends BlockEntity {
         return fluids;
     }
 
-    /** 是否为输出仓。 */
     public boolean isOutputHatch() {
         return isOutputHatch(getBlockState());
     }
 
-    /** 静态判定：是否为输出仓方块（含 AEV）。 */
     public static boolean isOutputHatch(BlockState state) {
         return state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get())
                 || state.is(ModBlocks.AEV_OUTPUT_HATCH.get());
     }
 
-    /** 是否允许玩家存入（输出仓仅接受机器内部产出）。 */
     public boolean acceptsPlayerInsert() {
         return !isOutputHatch();
     }
@@ -214,7 +204,9 @@ public class FluidHatchBlockEntity extends BlockEntity {
         setChanged();
     }
 
-    /** 服务端 tick：与朝向面的外部流体容器搬运流体（输入拉取 / 输出推出），直到装满或清空。 */
+    /**
+     * 与朝向面的外部流体容器搬运流体。
+     */
     public void serverTick() {
         if (!autoTransfer || level == null || level.isClientSide) {
             return;
@@ -236,7 +228,6 @@ public class FluidHatchBlockEntity extends BlockEntity {
         }
     }
 
-    /** 从外部流体容器拉取流体，直到罐满或外部无可取之物。 */
     private void pullFluid(IFluidHandler source) {
         FluidStack drained = source.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
         if (drained.isEmpty()) {
@@ -250,7 +241,6 @@ public class FluidHatchBlockEntity extends BlockEntity {
         tanksView.fill(moved, IFluidHandler.FluidAction.EXECUTE);
     }
 
-    /** 向外部流体容器推出流体，直到罐空或外部容器存满。 */
     private void pushFluid(IFluidHandler target) {
         for (FluidTank tank : tanks) {
             FluidStack stored = tank.getFluid();
@@ -266,7 +256,9 @@ public class FluidHatchBlockEntity extends BlockEntity {
         }
     }
 
-    /** 客户端展示同步：直接覆盖本地指定罐内容（仅由同步包调用）。 */
+    /**
+     * 仅由同步包调用，直接覆盖本地罐内容。
+     */
     public void applyClientFluid(int tank, FluidStack fluid) {
         tanks[tank].setFluid(fluid.copy());
     }

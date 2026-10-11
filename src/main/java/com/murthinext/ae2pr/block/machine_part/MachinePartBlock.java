@@ -49,12 +49,7 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty FORMED = BooleanProperty.create("formed");
-    /**
-     * 部件存放的多方块外观 id（仅 FORMED=true 时由渲染端解读），见 {@link MachinePartFacade}；
-     * 未成型时为 {@link #DEFAULT_STYLE}。
-     */
     public static final IntegerProperty STYLE = IntegerProperty.create("style", 1, MachinePartFacade.MAX_STYLE);
-    /** STYLE 默认值（未成型 / 未登记外观） */
     public static final int DEFAULT_STYLE = 1;
 
     public MachinePartBlock() {
@@ -88,12 +83,10 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
         return isFluidPart(state) ? new FluidHatchBlockEntity(pos, state) : new ItemBusBlockEntity(pos, state);
     }
 
-    /** 是否为流体部件（输入仓 / 输出仓）。 */
     public static boolean isFluidPart(BlockState state) {
         return isFluidPart(state.getBlock());
     }
 
-    /** 静态判定：该方块是否为流体部件。 */
     public static boolean isFluidPart(Block block) {
         return block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()
                 || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()
@@ -101,7 +94,6 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
                 || block == ModBlocks.AEV_OUTPUT_HATCH.get();
     }
 
-    /** 静态判定：该方块是否为 AEV 部件。 */
     public static boolean isAevPart(Block block) {
         return block == ModBlocks.AEV_INPUT_BUS.get()
                 || block == ModBlocks.AEV_OUTPUT_BUS.get()
@@ -109,22 +101,18 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
                 || block == ModBlocks.AEV_OUTPUT_HATCH.get();
     }
 
-    /** 流体槽数：AEV 仓 2 槽，石英仓 1 槽。 */
     public static int fluidTankCount(BlockState state) {
         return isAevPart(state.getBlock()) ? 2 : 1;
     }
 
-    /** 单槽流体容量（mB）：AEV 仓 1024 桶，石英仓 16K 桶。 */
     public static int fluidCapacity(BlockState state) {
         return isAevPart(state.getBlock()) ? FluidHatchBlockEntity.AEV_CAPACITY : FluidHatchBlockEntity.CAPACITY;
     }
 
-    /** 物品槽数：AEV 总线 4 槽，石英总线 1 槽。 */
     public static int itemSlotCount(BlockState state) {
         return isAevPart(state.getBlock()) ? 4 : 1;
     }
 
-    /** 单槽物品上限：AEV 总线 2048 件，石英总线 32K 件。 */
     public static int itemCapacity(BlockState state) {
         return isAevPart(state.getBlock()) ? ItemBusBlockEntity.AEV_CAPACITY : ItemBusBlockEntity.CAPACITY;
     }
@@ -163,7 +151,6 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
 
-    /** 非扳手右键打开部件界面：总线为物品存储，仓为流体存储。 */
     private static void openMenu(ServerPlayer player, Level level, BlockPos pos, BlockState state) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         MenuProvider provider = null;
@@ -181,7 +168,7 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        // 破坏时把机器存储掉落出来（成型状态切换不触发）；大堆叠按 64 一组散落，罐内流体不回收
+        // 破坏时掉落物品存储（成型切换不触发），流体不回收
         if (!state.is(newState.getBlock()) && !level.isClientSide) {
             if (level.getBlockEntity(pos) instanceof ItemBusBlockEntity bus) {
                 dropContents(level, pos, bus.getStorage());
@@ -190,7 +177,6 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
         super.onRemove(state, level, pos, newState, isMoving);
     }
 
-    /** 把物品处理器内容按 64 一组散落到地面。 */
     private static void dropContents(Level level, BlockPos pos, IItemHandler handler) {
         for (int slot = 0; slot < handler.getSlots(); slot++) {
             ItemStack stack = handler.getStackInSlot(slot);
@@ -200,7 +186,6 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
         }
     }
 
-    /** 物品 Tooltip：显示该部件的单槽堆叠上限与类型数量。 */
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
         Block block = Block.byItem(stack.getItem());

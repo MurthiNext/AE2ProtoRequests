@@ -41,19 +41,18 @@ public class ae2pr {
         ModRecipes.SERIALIZERS.register(modEventBus);
         ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-        // 部件模型必须在预初始化阶段注册（AE2 在模型加载时会冻结注册表，资源重载时不能再注册）
+        // 部件模型必须在预初始化阶段注册
         PartModels.registerModels(PartModelsHelper.createModels(MultiLevelEmitterPart.class));
         PartModels.registerModels(PartModelsHelper.createModels(MultiThresholdLevelEmitterPart.class));
         ModNetwork.register();
-        // 通用（VCPU）重复订单：由服务端 tick 驱动，状态包钩子负责轮次推进
+        // 通用重复订单：由服务端 tick 驱动
         MinecraftForge.EVENT_BUS.addListener(GenericRepeatOrders::onServerTick);
         MinecraftForge.EVENT_BUS.addListener(GenericRepeatOrders::onServerStopped);
-        // 扳手交互：右键旋转有朝向的方块，Shift+右键拆除机械方块
+        // 扳手交互：右键旋转，Shift+右键拆除
         MinecraftForge.EVENT_BUS.addListener(WrenchInteractions::onRightClickBlock);
-        // 陨石矿石：铁镐以上挖掘时速度与天空石一致
+        // 陨石矿石：铁镐以上挖掘速度同天空石
         MinecraftForge.EVENT_BUS.addListener(MeteoriteOres::onBreakSpeed);
 
-        // 客户端：构建并注册 GuideME 指南
         if (FMLEnvironment.dist == Dist.CLIENT) {
             com.murthinext.ae2pr.client.ModGuide.init();
         }
@@ -62,13 +61,12 @@ public class ae2pr {
     private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("AE2 Proto Requests initialized");
         event.enqueueWork(() -> {
-            // 过滤元件的可用升级：仅模糊卡（1 张），与元件工作台的模糊模式开关联动
+            // 过滤元件可用升级：仅模糊卡
             Upgrades.add(AEItems.FUZZY_CARD, ModItems.FILTER_CELL.get(), 1);
-            // 通式标准发信器的可用升级：模糊卡 + 合成卡（过滤元件走专用槽，不作为升级卡）
+            // 通式标准发信器可用升级：模糊卡 + 合成卡
             var emitterItem = ModItems.MULTI_LEVEL_EMITTER.get();
             Upgrades.add(AEItems.FUZZY_CARD, emitterItem, 1);
             Upgrades.add(AEItems.CRAFTING_CARD, emitterItem, 1);
-            // 通式阈值发信器同上
             var thresholdEmitterItem = ModItems.MULTI_THRESHOLD_LEVEL_EMITTER.get();
             Upgrades.add(AEItems.FUZZY_CARD, thresholdEmitterItem, 1);
             Upgrades.add(AEItems.CRAFTING_CARD, thresholdEmitterItem, 1);
@@ -79,7 +77,7 @@ public class ae2pr {
             Upgrades.add(AEItems.SPEED_CARD, ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get(), 4);
             Upgrades.add(AEItems.SPEED_CARD, ModBlocks.MATTER_PHASE_TRANSFORMER.get(), 4);
 
-            // 福鲁伊克斯水晶能源仓：绑定方块实体类型并登记代表物品
+            // 绑定方块实体类型并登记代表物品
             var energyHatchType = ModBlockEntities.FLUIX_CRYSTAL_ENERGY_HATCH.get();
             ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get().setBlockEntity(
                     com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntity.class,
@@ -87,7 +85,7 @@ public class ae2pr {
             appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(energyHatchType,
                     ModItems.FLUIX_CRYSTAL_ENERGY_HATCH.get());
 
-            // 名称压印工厂：绑定方块实体类型并登记代表物品
+            // 绑定方块实体类型并登记代表物品
             var namingFactoryType = ModBlockEntities.NAMING_FACTORY.get();
             ModBlocks.NAMING_FACTORY.get().setBlockEntity(
                     com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity.class,

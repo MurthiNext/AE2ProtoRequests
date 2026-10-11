@@ -13,10 +13,7 @@ import appeng.api.stacks.AEKey;
 import appeng.core.sync.packets.CraftingJobStatusPacket;
 
 /**
- * 在"发送用"状态包构造时捕获参数，供通用（VCPU）重复订单识别轮次状态。
- *
- * <p>该构造器只把数据写入缓冲区、不写入实例字段（字段仅在客户端反序列化时赋值），
- * 因此不能通过字段访问器读取，只能在构造时捕获。
+ * 构造时捕获发送用状态包参数（构造器不写实例字段），供通用订单识别轮次。
  */
 @Mixin(value = CraftingJobStatusPacket.class, remap = false)
 public abstract class CraftingJobStatusPacketMixin {

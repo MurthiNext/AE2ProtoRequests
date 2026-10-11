@@ -33,10 +33,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 
 /**
- * 确认菜单：构造时同步轮数给客户端，开始合成时消费登记表中的轮数并绑定到线程本地。
- *
- * <p>若本次提交没有落到 {@code CraftingCpuLogic}（例如 GTLCore 超限演算阵列等 VCPU 型 CPU），
- * 线程本地绑定不会被消费，此时改为登记通用重复订单，由 {@link GenericRepeatOrders} 驱动后续轮次。
+ * 确认菜单：同步重复轮数，未命中普通 CPU 时兜底登记通用订单。
  */
 @Mixin(CraftConfirmMenu.class)
 public abstract class CraftConfirmMenuMixin {
@@ -55,14 +52,12 @@ public abstract class CraftConfirmMenuMixin {
     @Shadow(remap = false)
     protected abstract IActionSource getActionSrc();
 
-    /** 本次提交前处于忙碌的 CPU 快照，用于识别提交后新进入忙碌的 CPU */
     @Unique
     @Nullable
     private Set<ICraftingCPU> ae2pr$busyBefore;
 
     /**
-     * 打开确认界面时把登记表中的轮数同步给客户端（标题显示）。
-     * 由 {@code MenuOpenerMixin} 在打开前完成登记，因此这里直接 peek。
+     * 打开确认界面时同步轮数给客户端（登记由 MenuOpenerMixin 完成）。
      */
     @Inject(method = "<init>", at = @At("TAIL"))
     private void ae2pr$syncConfirmRounds(int id, Inventory playerInventory, ISubMenuHost host, CallbackInfo ci) {
@@ -113,9 +108,6 @@ public abstract class CraftConfirmMenuMixin {
         }
     }
 
-    /**
-     * 提交未命中普通 CPU 时登记通用（VCPU）重复订单。
-     */
     @Unique
     private void ae2pr$registerGenericOrder(int rounds, Set<ICraftingCPU> busyBefore) {
         var menu = (CraftConfirmMenu) (Object) this;
@@ -154,7 +146,7 @@ public abstract class CraftConfirmMenuMixin {
         order.pendingFinalAmount = order.amountPerRound;
         order.lastFinalAmount = order.amountPerRound;
         order.totalRounds = rounds;
-        // 提交目标保持玩家选择/自动选择语义；展示目标取实际开始执行的 CPU
+        // 提交目标保留玩家选择/自动选择；展示目标取实际开始执行的 CPU
         order.cpu = this.selectedCpu;
         order.displayCpu = newlyBusy != null ? newlyBusy : target;
         GenericRepeatOrders.register(order);
@@ -185,9 +177,7 @@ public abstract class CraftConfirmMenuMixin {
 
     // removed(Player) 是原版菜单方法重写，必须保留重映射
     /**
-     * 离开确认界面（取消/返回/开始合成后）时把残留轮数转入恢复队列。
-     * 返回数量界面时由 {@code CraftAmountMenu} 构造阶段回填显示；
-     * GTLCore 会取消 {@code goBack} 主体，因此不能依赖其 RETURN。
+     * 离开确认界面时转入恢复队列；GTLCore 会取消 {@code goBack} 主体，不能依赖其 RETURN。
      */
     @Inject(method = "removed", at = @At("HEAD"))
     private void ae2pr$pushRestoreRepeatRounds(Player player, CallbackInfo ci) {

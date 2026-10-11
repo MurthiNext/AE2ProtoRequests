@@ -23,7 +23,6 @@ import com.murthinext.ae2pr.network.HatchTankClickPacket;
  */
 public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> {
 
-    /** 流体罐位置：第 i 罐外框左上角，罐内填充区内缩 2px */
     private static final int TANK_X0 = 20;
     private static final int TANK_Y = 34;
     private static final int TANK_STEP = MachineGui.TANK_STEP;
@@ -34,7 +33,9 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
         super(menu, playerInventory, title);
     }
 
-    /** 客户端同步入口：把服务端各罐流体与自动搬运开关写入本地方块实体（仅由同步包调用）。 */
+    /**
+     * 客户端同步入口，仅由同步包调用。
+     */
     public static void applyFluidSync(BlockPos pos, List<FluidStack> fluids, boolean autoTransfer) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level != null && minecraft.level.getBlockEntity(pos) instanceof FluidHatchBlockEntity hatch) {
@@ -68,7 +69,9 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
         }
     }
 
-    /** 流体槽点击：左键取出、右键存入（由服务端菜单校验执行）。 */
+    /**
+     * 左键取出、右键存入，由服务端菜单校验。
+     */
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         int tank = hoveredTank((int) mouseX, (int) mouseY);
@@ -79,7 +82,6 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    /** 罐区悬停：显示所存流体与数量；工具栏提示由基类统一处理。 */
     @Override
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
         if (renderToolbarTooltip(graphics, mouseX, mouseY)) {
@@ -98,7 +100,6 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
         super.renderTooltip(graphics, mouseX, mouseY);
     }
 
-    /** 返回鼠标所在罐的序号，不在罐区时返回 -1。 */
     private int hoveredTank(int mouseX, int mouseY) {
         for (int tank = 0; tank < menu.getTankCount(); tank++) {
             int x = leftPos + TANK_X0 + tank * TANK_STEP;
@@ -111,7 +112,6 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
         return -1;
     }
 
-    /** 按储量占比从底部向上平铺流体贴图（公共组件：{@link MachineGui#drawFluid}）。 */
     private void renderFluid(GuiGraphics graphics, int tank) {
         MachineGui.drawFluid(graphics, clientFluid(tank),
                 leftPos + TANK_X0 + 2 + tank * TANK_STEP, topPos + TANK_Y + 2,

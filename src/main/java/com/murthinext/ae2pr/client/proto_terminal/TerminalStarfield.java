@@ -7,7 +7,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
 
-/** 分层深空星云与连续坐标中的随机闪烁星光。 */
+/**
+ * 分层深空星云与随机闪烁星光。
+ */
 final class TerminalStarfield {
 
     private static final int SEED = 0xAE2C1257;
@@ -36,7 +38,9 @@ final class TerminalStarfield {
         centerY = y + halfHeight;
     }
 
-    /** 星云与各距离星层的鼠标锚点变换。 */
+    /**
+     * 星云与星层的鼠标锚点变换。
+     */
     private static final class Layer {
         private final float depth;
         private final int spacing;
@@ -96,7 +100,9 @@ final class TerminalStarfield {
         vertex(vertices, matrix, x, y, nebulaColor(x, y, seconds), 255);
     }
 
-    /** 采样当前缩放、漂移与暗角下的星云底色。 */
+    /**
+     * 采样缩放、漂移与暗角下的星云底色。
+     */
     int nebulaColor(float x, float y, float seconds) {
         float worldX = (x - nebula.offsetX) / nebula.scale + seconds * 0.65F + 512;
         float worldY = (y - nebula.offsetY) / nebula.scale - seconds * 0.3F + 768;
@@ -179,7 +185,9 @@ final class TerminalStarfield {
         });
     }
 
-    /** 每颗星的平缓起伏与逐周期变化的短暂闪光。 */
+    /**
+     * 每颗星的起伏与周期性闪光。
+     */
     private static float starlight(int seed, float seconds) {
         float time = seconds / (3 + random(seed, 6) * 7) + random(seed, 7) * 80;
         int cycle = Mth.floor(time);
@@ -220,7 +228,6 @@ final class TerminalStarfield {
         vertices.vertex(matrix, x, y, 0).color(color >> 16 & 255, color >> 8 & 255, color & 255, alpha).endVertex();
     }
 
-    /** 预生成可平铺的域扭曲星云色场。 */
     private static int[] createNebula() {
         int[] colors = new int[FIELD_SIZE * FIELD_SIZE];
         for (int y = 0; y < FIELD_SIZE; y++) {

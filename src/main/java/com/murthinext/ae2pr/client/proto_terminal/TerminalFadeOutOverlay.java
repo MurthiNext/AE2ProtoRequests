@@ -9,7 +9,9 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-/** 关闭屏幕后播放不接收输入的终端淡出画面。 */
+/**
+ * 关闭屏幕后播放的终端淡出画面。
+ */
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class TerminalFadeOutOverlay {
 

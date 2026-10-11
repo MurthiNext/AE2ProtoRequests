@@ -51,11 +51,7 @@ import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 import com.murthinext.ae2pr.item.filter_cell.FilterCellItem;
 
 /**
- * ME 通式阈值发信器：类似 ExtendedAE 的阈值发信器，是一个"复位-置位"锁存器。
- * <p>
- * 当监控数量达到<b>上限</b>时开启红石信号，低于<b>下限</b>时关闭；介于两者之间保持原状态。
- * <p>
- * 与通式标准发信器相同，配置槽可与过滤元件共用：插入过滤元件后以其配置的键为触发项。
+ * ME 通式阈值发信器：达到上限开启、低于下限关闭。
  */
 public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
         implements IConfigInvHost, ICraftingProvider, InternalInventoryHost {
@@ -79,7 +75,6 @@ public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
     public static final PartModel MODEL_ON_ON = new PartModel(MODEL_BASE_ON, MODEL_STATUS_ON);
     public static final PartModel MODEL_ON_HAS_CHANNEL = new PartModel(MODEL_BASE_ON, MODEL_STATUS_HAS_CHANNEL);
 
-    /** 多触发项组合模式（仅在使用过滤元件时生效）。 */
     public static final Setting<CombineMode> COMBINE_MODE = new Setting<>("combine_mode", CombineMode.class);
 
     private static final int FILTER_SLOT = 0;
@@ -90,11 +85,8 @@ public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
     private IStackWatcher storageWatcher;
     private IStackWatcher craftingWatcher;
     private long lastUpdateTick = -1;
-    /** 当前监控到的数量（单配置项为数量/总和；过滤元件为逐项组合后的值）。 */
     private long currentValue;
-    /** 下限阈值；上限使用 {@link #getReportingValue()}。 */
     private long lowerThreshold;
-    /** 锁存器内部状态（不受红石模式反转影响，用于在上下限之间保持）。 */
     private boolean latchOn;
 
     private final IStorageWatcherNode stackWatcherNode = new IStorageWatcherNode() {
@@ -184,9 +176,6 @@ public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
         return list.isEmpty() ? null : list;
     }
 
-    /**
-     * 高级过滤元件构建出的标签匹配谓词；未插入或未配置任何表达式时返回 null。
-     */
     @Nullable
     private Predicate<AEKey> getAdvancedFilter() {
         var stack = getFilterCellStack();
@@ -242,7 +231,6 @@ public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
         this.updateState();
     }
 
-    /** 未使用过滤元件时的取值逻辑（与标准发信器一致）。 */
     private long computeSingleValue(IGrid grid) {
         var stacks = grid.getStorageService().getCachedInventory();
         var myStack = getConfiguredKey();
@@ -265,7 +253,9 @@ public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
         }
     }
 
-    /** 逐项取值并按 AND/OR 组合：AND 取最小值、OR 取最大值。 */
+    /**
+     * 逐项取值：AND 取最小值、OR 取最大值。
+     */
     private long computeCombinedValue(IGrid grid, IPartitionList list) {
         var stacks = grid.getStorageService().getCachedInventory();
         boolean matchAll = getConfigManager().getSetting(COMBINE_MODE) == CombineMode.AND;
@@ -286,7 +276,9 @@ public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
         return result;
     }
 
-    /** 高级过滤元件：遍历网络中通过标签表达式的物品种类，按 AND/OR 取最小值/最大值。 */
+    /**
+     * 高级过滤元件：按标签表达式筛选并组合。
+     */
     private long computeAdvancedValue(IGrid grid, Predicate<AEKey> filter) {
         var stacks = grid.getStorageService().getCachedInventory();
         boolean matchAll = getConfigManager().getSetting(COMBINE_MODE) == CombineMode.AND;
@@ -322,13 +314,13 @@ public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
             return getDirectOutput();
         }
 
-        // 复位-置位锁存：达到上限置位，低于下限复位，介于两者之间保持内部状态
+        // 复位-置位锁存：达到上限置位，低于下限复位
         if (this.currentValue >= getReportingValue()) {
             this.latchOn = true;
         } else if (this.currentValue < this.lowerThreshold) {
             this.latchOn = false;
         }
-        // 红石模式：LOW_SIGNAL 时反转输出（默认 HIGH_SIGNAL 不反转）
+        // 红石模式：LOW_SIGNAL 时反转输出
         boolean invert = getConfigManager().getSetting(Settings.REDSTONE_EMITTER) == RedstoneMode.LOW_SIGNAL;
         return invert != this.latchOn;
     }
@@ -561,7 +553,9 @@ public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
         configureWatchers();
     }
 
-    /** 过滤槽仅接受过滤元件。 */
+    /**
+     * 过滤槽仅接受过滤元件。
+     */
     private static class FilterCellItemFilter implements IAEItemFilter {
         @Override
         public boolean allowInsert(InternalInventory inv, int slot, ItemStack stack) {

@@ -25,7 +25,9 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 
-/** 在 JEI 界面中以正交视角绘制流体方块。 */
+/**
+ * 在 JEI 界面中以正交视角绘制流体方块。
+ */
 public final class FluidBlockRendering {
 
     private FluidBlockRendering() {

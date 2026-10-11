@@ -7,7 +7,9 @@ import java.util.Random;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 
-/** 入场数据块的流动轨迹与合并外轮廓。 */
+/**
+ * 入场数据块的流动轨迹与合并外轮廓。
+ */
 final class OpeningPixelStream {
 
     private static final int MARGIN = 80;
@@ -67,7 +69,6 @@ final class OpeningPixelStream {
         graphics.drawManaged(() -> CrystalNarrativeGraphics.outline(graphics, x, y, width, height, slant, border));
     }
 
-    /** 绘制入场像素流与主面板共用的外轮廓。 */
     private void renderOutline(GuiGraphics graphics) {
         graphics.drawManaged(() -> {
             for (int row = firstRow; row <= lastRow; row++) {
@@ -127,7 +128,9 @@ final class OpeningPixelStream {
         }
     }
 
-    /** 不规则贴边碎块逐渐收拢，少量脱离方块在近处淡出。 */
+    /**
+     * 贴边碎块逐渐收拢，少量脱离方块淡出。
+     */
     private void addEdge(int width, int height, float slant, int edge, float progress, float seconds) {
         boolean horizontal = edge < 2;
         float length = horizontal ? width - slant : height;
@@ -209,7 +212,6 @@ final class OpeningPixelStream {
         lastRow = Math.max(lastRow, bottom - 1);
     }
 
-    /** 填充外部碎块与面板边缘的重叠像素。 */
     private void drawNebulaRow(GuiGraphics graphics, int row, TerminalStarfield starfield, float seconds) {
         occupied.clear();
         occupied.or(rows[row]);

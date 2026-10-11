@@ -10,7 +10,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 /**
- * 服务端 -> 客户端：水晶装配线主机当前作业产物同步（含并行总数）。
+ * 服务端 -> 客户端：同步装配线作业产物。
  */
 public class AssemblyLineJobPacket {
 

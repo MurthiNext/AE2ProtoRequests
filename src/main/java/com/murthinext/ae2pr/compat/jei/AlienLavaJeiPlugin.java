@@ -21,7 +21,7 @@ import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.ae2pr;
 
 /**
- * JEI 插件：注册异星熔岩世界交互配方分类、催化剂与流体条目。
+ * 注册异星熔岩配方分类与催化剂的 JEI 插件。
  */
 @JeiPlugin
 public class AlienLavaJeiPlugin implements IModPlugin {

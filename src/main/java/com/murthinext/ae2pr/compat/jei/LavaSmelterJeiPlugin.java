@@ -16,7 +16,7 @@ import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.ae2pr;
 
 /**
- * JEI 插件：注册熔岩冶炼炉配方分类与主机催化方块。
+ * 注册熔岩冶炼炉配方分类与催化剂的 JEI 插件。
  */
 @JeiPlugin
 public class LavaSmelterJeiPlugin implements IModPlugin {

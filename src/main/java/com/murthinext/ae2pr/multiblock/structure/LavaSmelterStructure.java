@@ -24,7 +24,6 @@ import com.murthinext.ae2pr.multiblock.StructureResult;
  */
 public final class LavaSmelterStructure {
 
-    /** 结构模式：主机位于第 0 行、第 0 列。 */
     public static final MultiblockPattern PATTERN = MultiblockPattern
             .builder(RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.BACK)
             .origin(0, 0)
@@ -49,18 +48,13 @@ public final class LavaSmelterStructure {
             .where('#', StructurePredicate.any())
             .build();
 
-    /** 炉膛内部空腔的尺寸（2×2×2） */
     public static final int CAVITY_SIZE = 2;
 
     private LavaSmelterStructure() {
     }
 
     /**
-     * 同步结构内输入/输出总线的外观：
-     * <ul>
-     * <li>成型：切换为锆刚玉砖块外壳（style=2），仓口保留</li>
-     * <li>失活：逐一复位全部镜像布局的可能位置（含结构损坏或控制器被拆后的残留状态）</li>
-     * </ul>
+     * 同步结构内输入/输出总线的外观。
      */
     public static void updateFormed(Level level, BlockPos controllerPos, Direction facing, StructureResult result) {
         if (result.formed()) {
@@ -68,7 +62,7 @@ public final class LavaSmelterStructure {
                     result.mirrorFront(), result.slices()), true);
             return;
         }
-        // 未成型：不确定此前是哪种镜像布局，逐一复位全部组合
+        // 未成型：逐一复位全部镜像组合
         for (boolean[] mirror : MultiblockPattern.MIRRORS) {
             applyParts(level, PATTERN.cells(controllerPos, facing, Direction.UP, mirror[0], mirror[1],
                     PATTERN.minSlices()), false);
@@ -100,7 +94,7 @@ public final class LavaSmelterStructure {
             if (updated.getValue(MachinePartBlock.FORMED) != formed) {
                 updated = updated.setValue(MachinePartBlock.FORMED, formed);
             }
-            // 冶炼炉成型外观：锆刚玉砖块；未成型时回默认值
+            // 冶炼炉成型外观：锆刚玉砖块
             int style = formed ? MachinePartFacade.ZIRCONIA.style() : MachinePartBlock.DEFAULT_STYLE;
             if (updated.getValue(MachinePartBlock.STYLE) != style) {
                 updated = updated.setValue(MachinePartBlock.STYLE, style);
@@ -111,7 +105,6 @@ public final class LavaSmelterStructure {
         }
     }
 
-    /** 可占据砖块位的机器部件（石英 / AEV 的输入、输出总线与输入、输出仓）。 */
     private static boolean isPart(BlockState state) {
         Block block = state.getBlock();
         return block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get()
@@ -124,7 +117,9 @@ public final class LavaSmelterStructure {
                 || block == ModBlocks.AEV_OUTPUT_HATCH.get();
     }
 
-    /** 炉膛底面 2×2 池面（空腔最底层）的世界坐标：用于假熔岩渲染与伤害判定。 */
+    /**
+     * 炉膛底面 2×2 池面的世界坐标，用于假熔岩渲染与伤害判定。
+     */
     public static List<BlockPos> poolCells(BlockPos controllerPos, Direction facing, boolean mirrorSide,
             boolean mirrorFront) {
         Direction sliceFacing = RelativeDirection.RIGHT.getFacing(facing, Direction.UP, mirrorSide, mirrorFront);
@@ -139,7 +134,9 @@ public final class LavaSmelterStructure {
         return cells;
     }
 
-    /** 炉膛空腔（底面 2×2、高 2）的世界包围盒：用于空腔内的熔岩伤害判定。 */
+    /**
+     * 炉膛空腔（底面 2×2、高 2）的世界包围盒，用于熔岩伤害判定。
+     */
     public static AABB cavityAabb(BlockPos controllerPos, Direction facing, boolean mirrorSide,
             boolean mirrorFront) {
         List<BlockPos> cells = poolCells(controllerPos, facing, mirrorSide, mirrorFront);

@@ -24,7 +24,7 @@ import com.murthinext.ae2pr.block.assembly_line.AssemblyLineControllerBlockEntit
 import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
 
 /**
- * Jade 兼容插件：显示水晶装配线的网络连接状态与当前作业进度。
+ * 显示水晶装配线连接状态与作业的 Jade 插件。
  */
 @WailaPlugin(ae2pr.MODID)
 public class AssemblyLineJadePlugin implements IWailaPlugin {
@@ -46,7 +46,9 @@ public class AssemblyLineJadePlugin implements IWailaPlugin {
         registration.registerBlockComponent(ComponentProvider.INSTANCE, CrystalAssemblyLineBlock.class);
     }
 
-    /** 服务端数据：网络连接状态与当前作业。 */
+    /**
+     * 服务端数据提供器。
+     */
     private enum ServerData implements IServerDataProvider<BlockAccessor> {
         INSTANCE;
 
@@ -72,7 +74,9 @@ public class AssemblyLineJadePlugin implements IWailaPlugin {
         }
     }
 
-    /** 客户端展示：网络连接状态与当前作业进度。 */
+    /**
+     * 客户端提示提供器。
+     */
     private enum ComponentProvider implements IBlockComponentProvider {
         INSTANCE;
 

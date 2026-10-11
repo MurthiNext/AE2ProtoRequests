@@ -20,7 +20,6 @@ import com.murthinext.ae2pr.client.gui.MachineGui;
  */
 public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu> extends AbstractContainerScreen<M> {
 
-    /** 左侧工具栏位置 */
     private static final int TOOLBAR_X = -22;
     private static final int TOOLBAR_Y = 2;
     private static final int TOOLBAR_ROW_STEP = 20;
@@ -41,10 +40,8 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
         this.imageHeight = MachineGui.HEIGHT;
     }
 
-    /** 输出部件（自动推出）还是输入部件（自动拉取）。 */
     protected abstract boolean isOutput();
 
-    /** 自动搬运开关当前状态（客户端为同步数据）。 */
     protected abstract boolean autoTransferEnabled();
 
     @Override
@@ -67,19 +64,16 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
         this.renderTooltip(graphics, mouseX, mouseY);
     }
 
-    /** 绘制面板、分隔线与玩家背包。 */
     protected void renderPanel(GuiGraphics graphics) {
         MachineGui.drawPanel(graphics, leftPos, topPos);
         MachineGui.drawSeparator(graphics, leftPos, topPos, MachineGui.ACCENT_CRYSTAL, MachineGui.ACCENT_CRYSTAL_DARK);
         MachineGui.drawInventorySlots(graphics, leftPos, topPos);
     }
 
-    /** 绘制左侧工具栏底板（在 {@link #renderBg} 中调用）。 */
     protected void renderToolbar(GuiGraphics graphics) {
         AutoTransferButton.renderToolbar(graphics, leftPos + TOOLBAR_X, topPos + TOOLBAR_Y, 2);
     }
 
-    /** 工具栏按钮的悬停提示；返回 true 表示已处理。 */
     protected boolean renderToolbarTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
         if (guideButton != null && guideButton.renderTooltipIfHovered(graphics, font, mouseX, mouseY)) {
             return true;

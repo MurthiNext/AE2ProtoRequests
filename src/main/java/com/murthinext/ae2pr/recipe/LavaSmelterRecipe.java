@@ -32,16 +32,13 @@ import com.murthinext.ae2pr.ModRecipes;
  */
 public class LavaSmelterRecipe implements Recipe<Container> {
 
-    /** 缺省加工时长（tick） */
     public static final int DEFAULT_DURATION = 100;
-    /** 单份配方的最大产物种类数 */
     public static final int MAX_RESULTS = 2;
 
     private final ResourceLocation id;
     private final List<CountedIngredient> ingredients;
     private final List<ItemStack> results;
     private final int duration;
-    /** 每并行耗电覆盖值（AE）；null 表示使用配置默认值 */
     @Nullable
     private final Double energyPerParallel;
 
@@ -58,22 +55,18 @@ public class LavaSmelterRecipe implements Recipe<Container> {
         return ingredients;
     }
 
-    /** 配方主产物。 */
     public ItemStack getResultItem() {
         return results.isEmpty() ? ItemStack.EMPTY : results.get(0);
     }
 
-    /** 配方的全部产物。 */
     public List<ItemStack> getResults() {
         return results;
     }
 
-    /** 加工时长（tick）。 */
     public int getDuration() {
         return duration;
     }
 
-    /** 每并行一次执行消耗的能量。 */
     public double getEnergyPerParallel() {
         return energyPerParallel != null ? energyPerParallel : Config.lavaSmelterEnergyPerParallel();
     }
@@ -125,7 +118,9 @@ public class LavaSmelterRecipe implements Recipe<Container> {
         return true;
     }
 
-    /** JSON 与网络序列化。 */
+    /**
+     * JSON 与网络序列化。
+     */
     public static class Serializer implements RecipeSerializer<LavaSmelterRecipe> {
 
         @Override

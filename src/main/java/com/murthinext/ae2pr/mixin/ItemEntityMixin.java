@@ -15,8 +15,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.item.ItemEntity;
 
 /**
- * 为物品实体挂载异星熔岩转化计时器，并在 tick 结束时驱动世界交互逻辑；
- * 同时在岩浆伤害生效前处理“陨石粉充能岩浆”的转化。
+ * 物品实体：挂载异星熔岩转化计时器，并处理岩浆伤害前的充能转化。
  */
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityMixin implements AlienLavaTransformTimer {

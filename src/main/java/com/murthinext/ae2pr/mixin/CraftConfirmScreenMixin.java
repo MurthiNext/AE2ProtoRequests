@@ -18,8 +18,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
 /**
- * 确认界面：在标题追加重复信息（如"合成计划：XXX 字节 - 重复3轮"）。
- * 在 updateBeforeRender 末尾重设标题，覆盖 AE2 每帧写入的原始标题。
+ * 确认界面：在标题追加重复轮数信息（每帧重设以覆盖 AE2 原始标题）。
  */
 @Mixin(value = CraftConfirmScreen.class, remap = false)
 public abstract class CraftConfirmScreenMixin extends AEBaseScreen<CraftConfirmMenu> {

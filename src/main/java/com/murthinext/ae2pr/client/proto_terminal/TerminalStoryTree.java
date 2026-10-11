@@ -22,18 +22,24 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
 
-/** 按语言从资源包读取剧情块，并以父节点推导剧情树连接。 */
+/**
+ * 按语言读取剧情块并推导剧情树连接。
+ */
 record TerminalStoryTree(List<Node> nodes) {
 
     private static final String STORY_ROOT = "story/";
     private static final String FALLBACK_LANGUAGE = "en_us";
     private static final int MAX_NODES = 128;
 
-    /** 单个剧情块；dialogues 承载块内可扩展的多轮对话。 */
+    /**
+     * 单个剧情块。
+     */
     record Node(String id, int position, String parent, int x, int y, Component title,
             List<Dialogue> dialogues, ResourceLocation image, int imageWidth, int imageHeight) {
 
-        /** 合并全部对话文本，供单页展示。 */
+        /**
+         * 合并全部对话文本。
+         */
         Component text() {
             MutableComponent merged = Component.empty();
             for (int i = 0; i < dialogues.size(); i++) {
@@ -46,7 +52,9 @@ record TerminalStoryTree(List<Node> nodes) {
         }
     }
 
-    /** 一轮对话。 */
+    /**
+     * 一轮对话。
+     */
     record Dialogue(Component speaker, Component text) {
     }
 
@@ -75,7 +83,6 @@ record TerminalStoryTree(List<Node> nodes) {
         return new TerminalStoryTree(List.copyOf(nodes));
     }
 
-    /** 读取指定语言目录下的全部剧情块。 */
     private static List<Node> read(Minecraft minecraft, String language) {
         ResourceManager resourceManager = minecraft.getResourceManager();
         List<Node> nodes = new ArrayList<>();

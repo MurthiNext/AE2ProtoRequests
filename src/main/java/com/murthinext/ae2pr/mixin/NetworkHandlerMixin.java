@@ -13,11 +13,7 @@ import appeng.core.sync.packets.CraftingJobStatusPacket;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * 观察发往玩家的合成任务状态包，用于通用（VCPU）重复订单的轮次推进。
- *
- * <p>AE2 与 GTLCore 的合成逻辑都会通过该包上报 STARTED/FINISHED/CANCELLED，
- * 因此无需依赖具体 CPU 实现即可判断轮次是否结束。钩子必须完全防御式：
- * 任何异常都不能影响正常下单流程。
+ * 观察发往玩家的合成状态包，推进通用（VCPU）重复订单轮次（钩子需完全防御式）。
  */
 @Mixin(value = NetworkHandler.class, remap = false)
 public abstract class NetworkHandlerMixin {

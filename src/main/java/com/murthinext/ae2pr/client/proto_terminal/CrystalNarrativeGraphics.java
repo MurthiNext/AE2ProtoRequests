@@ -7,7 +7,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
 
-/** 水晶叙事界面的连续矢量面板与描边。 */
+/**
+ * 水晶叙事界面的矢量面板与描边。
+ */
 final class CrystalNarrativeGraphics {
 
     static final int BACKGROUND = 0xFF030817;
@@ -37,7 +39,6 @@ final class CrystalNarrativeGraphics {
         });
     }
 
-    /** 固定星云渐变底面。 */
     static void cosmicPanel(GuiGraphics graphics, int x, int y, int width, int height, float slant,
             float progress, int spaceY, int spaceHeight) {
         if (width <= slant || height <= 0 || progress <= 0) {
@@ -66,7 +67,9 @@ final class CrystalNarrativeGraphics {
                 | (7 + Math.round(glow * 7)) << 8 | (19 + Math.round(glow * 13));
     }
 
-    /** 沿水平段和节点平行斜段逐步绘制剧情连线。 */
+    /**
+     * 沿水平段与斜段逐步绘制剧情连线。
+     */
     static void connection(GuiGraphics graphics, float x1, float y1, float x2, float y2,
             float nodeSlant, int nodeHeight, float progress, int color, float width) {
         if (progress <= 0) {

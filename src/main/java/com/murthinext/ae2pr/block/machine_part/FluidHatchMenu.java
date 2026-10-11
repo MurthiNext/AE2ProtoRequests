@@ -80,22 +80,21 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         return pos;
     }
 
-    /** 是否是输出仓（决定客户端界面贴图与自动搬运方向）。 */
     public boolean isOutputHatch() {
         return blockEntity != null && blockEntity.isOutputHatch();
     }
 
-    /** 流体槽数量。 */
     public int getTankCount() {
         return blockEntity != null ? blockEntity.getTankCount() : 1;
     }
 
-    /** 单槽容量（mB），供界面按占比绘制流体。 */
     public int getCapacityPerTank() {
         return blockEntity != null ? blockEntity.getCapacityPerTank() : FluidHatchBlockEntity.CAPACITY;
     }
 
-    /** 服务端每 tick：罐内流体或自动搬运开关变化时向打开界面的玩家发送同步包；首次广播强制同步一次。 */
+    /**
+     * 流体/开关变化或首次广播时向打开界面的玩家同步。
+     */
     @Override
     public void broadcastChanges() {
         if (blockEntity != null && owner instanceof ServerPlayer serverPlayer) {
@@ -114,7 +113,9 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         super.broadcastChanges();
     }
 
-    /** 工具栏按钮点击：id 0 = 切换自动搬运。 */
+    /**
+     * 工具栏按钮 id 0 = 切换自动搬运。
+     */
     @Override
     public boolean clickMenuButton(Player player, int id) {
         if (id == 0 && serverSide && blockEntity != null) {
@@ -144,10 +145,7 @@ public class FluidHatchMenu extends AbstractContainerMenu {
     }
 
     /**
-     * 流体槽点击（由客户端点击包调用）：
-     *
-     * @param tank   罐序号（石英仓只有一个）
-     * @param button 0 = 左键（从罐内取出），1 = 右键（存入罐内）
+     * 由客户端点击包调用，按钮 0 取出、1 存入。
      */
     public void handleTankClick(int tank, int button) {
         if (!serverSide || blockEntity == null || tank < 0 || tank >= blockEntity.getTankCount()) {
@@ -168,7 +166,6 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         broadcastChanges();
     }
 
-    /** 右键：用光标上的流体容器向罐内存入流体。 */
     private void storeFluid(ItemStack carried, int tank) {
         ItemStack single = carried.copyWithCount(1);
         IFluidHandlerItem handler = single.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
@@ -188,7 +185,6 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         replaceCarried(carried, handler.getContainer());
     }
 
-    /** 左键：把罐内流体装入光标上的流体容器。 */
     private void takeFluid(ItemStack carried, int tank) {
         ItemStack single = carried.copyWithCount(1);
         IFluidHandlerItem handler = single.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
@@ -208,7 +204,6 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         replaceCarried(carried, handler.getContainer());
     }
 
-    /** 用转移后的容器替换光标物品；整堆时把结果塞进玩家背包，放不下则丢到脚边。 */
     private void replaceCarried(ItemStack carried, ItemStack result) {
         if (carried.getCount() <= 1) {
             setCarried(result);
@@ -223,7 +218,6 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         }
     }
 
-    /** 界面无机器槽位，Shift 点击不参与搬运。 */
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         return ItemStack.EMPTY;

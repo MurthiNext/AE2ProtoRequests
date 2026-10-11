@@ -27,7 +27,6 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 @Mixin(value = MeteoritePlacer.class, remap = false)
 public abstract class MeteoritePlacerMixin {
 
-    /** 矿石占陨石方块的比例，对应矿石:天空石 = 1:3 */
     @Unique
     private static final float ORE_FRACTION = 0.1F;
 
@@ -102,7 +101,7 @@ public abstract class MeteoritePlacerMixin {
                 ae2pr$pendingOres.put(cursor.immutable(), ore);
                 placed++;
             }
-            // 只朝方块扫描顺序的前方延伸，保证矿脉在本次区块生成内放置完整
+            // 只朝扫描顺序前方延伸，保证矿脉在本次区块生成内放完
             if (random.nextFloat() < 0.75F) {
                 cursor.move(0, 1, 0);
             } else if (random.nextBoolean()) {
@@ -125,7 +124,7 @@ public abstract class MeteoritePlacerMixin {
         if (pos.getX() < minX || pos.getX() > maxX || pos.getZ() < minZ || pos.getZ() > maxZ) {
             return false;
         }
-        // 与原版一致，Y 循环上界为开区间且不按包围盒裁剪
+        // 与原版一致，Y 上界为开区间且不按包围盒裁剪
         if (pos.getY() < y - bound || pos.getY() >= y + bound) {
             return false;
         }

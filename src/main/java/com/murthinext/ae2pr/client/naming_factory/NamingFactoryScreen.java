@@ -14,11 +14,10 @@ import com.murthinext.ae2pr.client.gui.AbstractMachineScreen;
 import com.murthinext.ae2pr.client.gui.MachineGui;
 
 /**
- * 名称压印工厂界面：三槽位 + 加工进度条 + 名称文字。
+ * 名称压印工厂界面。
  */
 public class NamingFactoryScreen extends AbstractMachineScreen<NamingFactoryMenu> {
 
-    /** 槽位与箭标位置（与菜单中的槽位坐标一致） */
     private static final int TEMPLATE_SLOT_X = 120;
     private static final int TEMPLATE_SLOT_Y = 50;
     private static final int INPUT_SLOT_X = 80;
@@ -27,7 +26,6 @@ public class NamingFactoryScreen extends AbstractMachineScreen<NamingFactoryMenu
     private static final int OUTPUT_SLOT_Y = 74;
     private static final int PRESS_ARROW_X = 83;
     private static final int PRESS_ARROW_Y = 52;
-    /** 进度条凹槽与内槽（与外层凹槽居中对齐） */
     private static final int GROOVE_X = 34;
     private static final int GROOVE_Y = 94;
     private static final int GROOVE_WIDTH = 108;
@@ -71,12 +69,10 @@ public class NamingFactoryScreen extends AbstractMachineScreen<NamingFactoryMenu
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         super.renderBg(graphics, partialTick, mouseX, mouseY);
-        // 模板格、待命名物品格与产物格 + 中间的压印箭标
         MachineGui.drawSlot(graphics, leftPos + TEMPLATE_SLOT_X, topPos + TEMPLATE_SLOT_Y);
         MachineGui.drawSlot(graphics, leftPos + INPUT_SLOT_X, topPos + INPUT_SLOT_Y);
         MachineGui.drawSlot(graphics, leftPos + OUTPUT_SLOT_X, topPos + OUTPUT_SLOT_Y);
         MachineGui.drawArrow(graphics, leftPos + PRESS_ARROW_X, topPos + PRESS_ARROW_Y, true, true);
-        // 加工进度条：凹槽 + 进度填充
         MachineGui.drawBarGroove(graphics, leftPos + GROOVE_X, topPos + GROOVE_Y, GROOVE_WIDTH, GROOVE_HEIGHT);
         NamingFactoryBlockEntity blockEntity = menu.getBlockEntity();
         float progress = blockEntity != null ? blockEntity.getWorkProgress(partialTick) : 0;
@@ -87,7 +83,6 @@ public class NamingFactoryScreen extends AbstractMachineScreen<NamingFactoryMenu
         }
     }
 
-    /** 悬停提示 */
     @Override
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
         if (renderToolbarTooltip(graphics, mouseX, mouseY) || renderUpgradeTooltip(graphics, mouseX, mouseY)) {
@@ -115,13 +110,11 @@ public class NamingFactoryScreen extends AbstractMachineScreen<NamingFactoryMenu
         }
     }
 
-    /** 槽位上方居中标签 */
     private void drawSlotLabelAbove(GuiGraphics graphics, String key, int slotX, int slotY) {
         Component label = Component.translatable(key);
         graphics.drawString(font, label, slotX + (16 - font.width(label)) / 2, slotY - 10, COLOR_TEXT, false);
     }
 
-    /** 槽位左侧标签 */
     private void drawSlotLabelLeft(GuiGraphics graphics, String key, int slotX, int slotY) {
         Component label = Component.translatable(key);
         graphics.drawString(font, label, slotX - 4 - font.width(label), slotY + 4, COLOR_TEXT, false);

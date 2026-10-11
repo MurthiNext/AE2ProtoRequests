@@ -12,7 +12,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
- * 客户端缓存：CPU 序号 -> 重复订单轮次信息。由 {@link com.murthinext.ae2pr.network.RepeatOrderStatusPacket} 更新。
+ * 客户端缓存：CPU 序号到重复订单轮次信息的映射。
  */
 @OnlyIn(Dist.CLIENT)
 public final class ClientRepeatOrderState {

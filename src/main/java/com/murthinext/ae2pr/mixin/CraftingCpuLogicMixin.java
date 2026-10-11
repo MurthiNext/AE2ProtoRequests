@@ -36,10 +36,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * 重复订单核心状态机。
- *
- * 轮次流转：提交成功绑定上下文 -> 本轮 finishJob(true) 推进轮次 -> 下一 tick 异步重算 -> 提交下一轮；
- * 失败按间隔重试，重试耗尽后清理（M2 阶段补充失败通知）。
+ * 重复订单核心状态机：轮次推进、异步重算与失败重试。
  */
 @Mixin(value = CraftingCpuLogic.class, remap = false)
 public abstract class CraftingCpuLogicMixin implements IRepeatOrderHost {
@@ -67,9 +64,6 @@ public abstract class CraftingCpuLogicMixin implements IRepeatOrderHost {
         this.ae2pr$context = context;
     }
 
-    /**
-     * 提交成功且本次下单携带重复轮数时，绑定订单上下文。
-     */
     @Inject(method = "trySubmitJob", at = @At("RETURN"))
     private void ae2pr$bindRepeatOrder(IGrid grid, ICraftingPlan plan, IActionSource src,
             ICraftingRequester requester, CallbackInfoReturnable<ICraftingSubmitResult> cir) {
@@ -96,7 +90,7 @@ public abstract class CraftingCpuLogicMixin implements IRepeatOrderHost {
     }
 
     /**
-     * 任务结束：仅处理属于本订单的任务；成功则推进轮次，取消则清空。
+     * 任务结束：仅处理本订单的任务；成功推进轮次，取消清空。
      */
     @Inject(method = "finishJob", at = @At("HEAD"))
     private void ae2pr$onFinishJob(boolean success, CallbackInfo ci) {
@@ -115,16 +109,13 @@ public abstract class CraftingCpuLogicMixin implements IRepeatOrderHost {
         context.completedRounds++;
         context.retryCount = 0;
         if (context.completedRounds >= context.totalRounds) {
-            // 延迟到下一 tick 发送完成通知：确保 AE2 的 FINISHED 包先到并被客户端静默，避免双弹
+            // 延迟到下一 tick 通知：确保 AE2 的 FINISHED 包先到并被客户端静默
             context.state = RepeatOrderState.DONE;
         } else {
             context.state = RepeatOrderState.PENDING_NEXT;
         }
     }
 
-    /**
-     * 每 tick 驱动状态机：重算 -> 提交 -> 重试。
-     */
     @Inject(method = "tickCraftingLogic", at = @At("HEAD"))
     private void ae2pr$tickRepeatOrder(IEnergyService energyService, CraftingService craftingService,
             CallbackInfo ci) {
@@ -133,7 +124,7 @@ public abstract class CraftingCpuLogicMixin implements IRepeatOrderHost {
             return;
         }
 
-        // 全部轮次完成：延迟一 tick 发送完成通知并清理
+        // 全部轮次完成：延迟一 tick 通知并清理
         if (context.state == RepeatOrderState.DONE) {
             this.ae2pr$sendFinishedNotify(context);
             this.ae2pr$context = null;
@@ -173,15 +164,12 @@ public abstract class CraftingCpuLogicMixin implements IRepeatOrderHost {
         }
     }
 
-    /**
-     * 玩家/外部取消任务：清空重复订单。
-     */
     @Inject(method = "cancel", at = @At("HEAD"))
     private void ae2pr$onCancel(CallbackInfo ci) {
         var context = this.ae2pr$context;
         if (context != null) {
             if (context.state == RepeatOrderState.DONE) {
-                return; // 已完成，等待下一 tick 发送完成通知
+                return; // 已完成，等待下一 tick 通知
             }
             this.ae2pr$sendRoundNotify(context, 0);
             context.recalc = null;
@@ -191,7 +179,7 @@ public abstract class CraftingCpuLogicMixin implements IRepeatOrderHost {
     }
 
     /**
-     * 持久化重复订单：计划不可直接序列化，恢复后重新模拟。
+     * 持久化订单；计划不可直接序列化，恢复后重新模拟。
      */
     @Inject(method = "writeToNBT", at = @At("TAIL"))
     private void ae2pr$writeRepeatOrder(CompoundTag data, CallbackInfo ci) {
@@ -234,7 +222,7 @@ public abstract class CraftingCpuLogicMixin implements IRepeatOrderHost {
         context.ownerPlayerId = tag.contains("owner") ? tag.getInt("owner") : null;
         context.source = null; // 恢复后改用 CPU 自身的 action source
         if (this.job != null) {
-            // 存档时该轮仍在执行，AE2 已恢复任务，直接绑定以便正常推进轮次
+            // 存档时该轮仍在执行，AE2 已恢复任务，直接绑定以推进轮次
             context.currentJob = this.job;
             context.state = RepeatOrderState.RUNNING;
         } else {
@@ -329,16 +317,13 @@ public abstract class CraftingCpuLogicMixin implements IRepeatOrderHost {
         context.state = RepeatOrderState.RETRY_WAIT;
     }
 
-    /**
-     * 恢复订单（存档重载）或来源已失效时，退回使用 CPU 自身的 action source。
-     */
     @Unique
     private IActionSource ae2pr$contextSource(RepeatOrderContext context) {
         return context.source != null ? context.source : this.cluster.getSrc();
     }
 
     /**
-     * 通知所有者某轮开始（remainingRounds 含当前轮）；remainingRounds &lt;= 1 表示清除中间轮标记。
+     * 通知所有者轮次开始（remainingRounds 含当前轮）；&lt;= 1 表示清除中间轮标记。
      */
     @Unique
     private void ae2pr$sendRoundNotify(RepeatOrderContext context, int remainingRounds) {
@@ -346,18 +331,12 @@ public abstract class CraftingCpuLogicMixin implements IRepeatOrderHost {
                 context.totalRounds, remainingRounds);
     }
 
-    /**
-     * 通知所有者全部轮次已完成（客户端据此弹出带总轮数的完成提示）。
-     */
     @Unique
     private void ae2pr$sendFinishedNotify(RepeatOrderContext context) {
         RepeatOrderNotifier.sendFinished(context.ownerPlayerId, this.cluster.getLevel(), context.what,
                 context.amountPerRound, context.totalRounds);
     }
 
-    /**
-     * 向订单所有者发送失败通知（玩家不在线则丢弃）。
-     */
     @Unique
     private void ae2pr$notifyFailure(RepeatOrderContext context, FailureReason reason) {
         RepeatOrderNotifier.sendFailure(context.ownerPlayerId, this.cluster.getLevel(), context.what,

@@ -13,21 +13,19 @@ import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
 import com.murthinext.ae2pr.recipe.MatterPhaseRecipe;
 
 /**
- * 配方注册入口：配方类型与序列化器都通过注册事件注册，避免注册表冻结问题。
+ * 配方注册入口。
  */
 public final class ModRecipes {
 
     private ModRecipes() {
     }
 
-    /** 配方类型 */
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(
             Registries.RECIPE_TYPE, ae2pr.MODID);
 
     public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS = DeferredRegister.create(
             ForgeRegistries.RECIPE_SERIALIZERS, ae2pr.MODID);
 
-    /** 水晶装配线配方类型 */
     public static final RegistryObject<RecipeType<CrystalAssemblyLineRecipe>> CRYSTAL_ASSEMBLY_LINE_TYPE = RECIPE_TYPES
             .register("crystal_assembly_line", () -> new RecipeType<CrystalAssemblyLineRecipe>() {
                 @Override
@@ -36,11 +34,9 @@ public final class ModRecipes {
                 }
             });
 
-    /** 水晶装配线配方序列化器 */
     public static final RegistryObject<CrystalAssemblyLineRecipe.Serializer> CRYSTAL_ASSEMBLY_LINE = SERIALIZERS
             .register("crystal_assembly_line", CrystalAssemblyLineRecipe.Serializer::new);
 
-    /** 异星熔岩世界交互配方类型 */
     public static final RegistryObject<RecipeType<AlienLavaRecipe>> ALIEN_LAVA_TYPE = RECIPE_TYPES
             .register("alien_lava", () -> new RecipeType<AlienLavaRecipe>() {
                 @Override
@@ -49,11 +45,9 @@ public final class ModRecipes {
                 }
             });
 
-    /** 异星熔岩世界交互配方序列化器 */
     public static final RegistryObject<AlienLavaRecipe.Serializer> ALIEN_LAVA = SERIALIZERS
             .register("alien_lava", AlienLavaRecipe.Serializer::new);
 
-    /** 熔岩冶炼炉配方类型 */
     public static final RegistryObject<RecipeType<LavaSmelterRecipe>> LAVA_SMELTER_TYPE = RECIPE_TYPES
             .register("lava_smelter", () -> new RecipeType<LavaSmelterRecipe>() {
                 @Override
@@ -62,11 +56,9 @@ public final class ModRecipes {
                 }
             });
 
-    /** 熔岩冶炼炉配方序列化器 */
     public static final RegistryObject<LavaSmelterRecipe.Serializer> LAVA_SMELTER = SERIALIZERS
             .register("lava_smelter", LavaSmelterRecipe.Serializer::new);
 
-    /** 物质相变仪配方类型 */
     public static final RegistryObject<RecipeType<MatterPhaseRecipe>> MATTER_PHASE_TYPE = RECIPE_TYPES
             .register("matter_phase", () -> new RecipeType<MatterPhaseRecipe>() {
                 @Override
@@ -75,7 +67,6 @@ public final class ModRecipes {
                 }
             });
 
-    /** 物质相变仪配方序列化器 */
     public static final RegistryObject<MatterPhaseRecipe.Serializer> MATTER_PHASE = SERIALIZERS
             .register("matter_phase", MatterPhaseRecipe.Serializer::new);
 }

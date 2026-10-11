@@ -12,9 +12,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 /**
- * 服务端 -> 客户端：机器部件总线存储（类型 + 数量）与自动搬运开关同步。
- * <p>
- * 原版 {@code writeItem} 的数量按 byte 传输（最大 127），因此物品只传 1 件，数量单独用 VarInt 传输。
+ * 服务端 -> 客户端：同步总线存储与搬运开关。
  */
 public class MachinePartStackPacket {
 

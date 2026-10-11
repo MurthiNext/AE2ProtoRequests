@@ -34,14 +34,12 @@ import com.murthinext.ae2pr.ModRecipes;
  */
 public class MatterPhaseRecipe implements Recipe<Container> {
 
-    /** 缺省加工时长（tick） */
     public static final int DEFAULT_DURATION = 200;
 
     private final ResourceLocation id;
     private final List<CountedIngredient> ingredients;
     private final FluidStack fluidOutput;
     private final int duration;
-    /** 每并行耗电覆盖值（AE）；null 表示使用配置默认值 */
     @Nullable
     private final Double energyPerParallel;
 
@@ -58,17 +56,14 @@ public class MatterPhaseRecipe implements Recipe<Container> {
         return ingredients;
     }
 
-    /** 每并行一次相变产出的流体。 */
     public FluidStack getFluidOutput() {
         return fluidOutput.copy();
     }
 
-    /** 加工时长（tick）。 */
     public int getDuration() {
         return duration;
     }
 
-    /** 每并行一次执行消耗的能量。 */
     public double getEnergyPerParallel() {
         return energyPerParallel != null ? energyPerParallel : Config.matterPhaseEnergyPerParallel();
     }
@@ -120,7 +115,9 @@ public class MatterPhaseRecipe implements Recipe<Container> {
         return true;
     }
 
-    /** JSON 与网络序列化。 */
+    /**
+     * JSON 与网络序列化。
+     */
     public static class Serializer implements RecipeSerializer<MatterPhaseRecipe> {
 
         @Override

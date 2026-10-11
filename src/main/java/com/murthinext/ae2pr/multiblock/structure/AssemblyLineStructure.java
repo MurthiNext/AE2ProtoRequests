@@ -25,7 +25,6 @@ import com.murthinext.ae2pr.multiblock.StructureResult;
  */
 public final class AssemblyLineStructure {
 
-    /** 结构模式：控制器位于第 2 行、第 0 列。 */
     public static final MultiblockPattern PATTERN = MultiblockPattern
             .builder(RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.BACK)
             .origin(2, 0)
@@ -33,7 +32,7 @@ public final class AssemblyLineStructure {
             .sliceRepeatable(3, Integer.MAX_VALUE, "FIF", "RTR", "DAG", "#Y#")
             .slice("FOF", "RTR", "DAG", "#Y#")
             .where('S', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE.get()))
-            // 机壳位允许输入仓替代；能源仓同样可替代机壳，但整结构最多 1 个
+            // 机壳位允许输入仓 / 能源仓替代，能源仓最多 1 个
             .where('F', StructurePredicate.blocks(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get())
                     .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()))
                     .or(StructurePredicate.blocks(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()).maxCount(1)))
@@ -44,29 +43,23 @@ public final class AssemblyLineStructure {
             .where('G', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get()))
             .where('D', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get()))
             .where('R', StructurePredicate.blocks(ModBlocks.CRYSTAL_GLASS.get()))
-            // 控制外壳位：普通控制外壳或允许的替换模块（充能 / 并行 / 速度）
+            // 控制外壳位：外壳或允许的替换模块
             .where('T', StructurePredicate.moduleSlot(ModBlocks.CRYSTAL_ASSEMBLY_LINE_UNIT.get(),
                     ModModules.CHARGING, ModModules.PARALLEL, ModModules.SPEED))
             .where('#', StructurePredicate.any())
             .build();
 
-    /** 整体最小片数（首尾固定 + 最少中间片） */
     public static final int MIN_SLICES = PATTERN.minSlices();
 
     private AssemblyLineStructure() {
     }
 
-    /** 当前配置允许的最大片数（下限为最小片数）。 */
     public static int maxSlices() {
         return Math.max(MIN_SLICES, Config.assemblyLineMaxSlices());
     }
 
     /**
-     * 同步结构内“状态型”方块的外观：
-     * <ul>
-     * <li>成型：按匹配到的镜像方向，部件（总线/仓）切换为成型贴图；控制外壳仅在运行配方时才点亮工作态</li>
-     * <li>失活：逐一复位全部镜像布局的可能位置（含结构损坏或控制器被拆后的残留状态）</li>
-     * </ul>
+     * 同步结构内“状态型”方块的外观。
      */
     public static void updateFormed(Level level, BlockPos controllerPos, Direction facing, StructureResult result,
             boolean running) {
@@ -75,17 +68,13 @@ public final class AssemblyLineStructure {
                     result.mirrorFront(), result.slices()), true, running);
             return;
         }
-        // 未成型：不确定此前是哪种镜像布局，逐一复位全部组合
+        // 未成型：逐一复位全部镜像组合
         for (boolean[] mirror : MultiblockPattern.MIRRORS) {
             applyState(level, PATTERN.cells(controllerPos, facing, Direction.UP, mirror[0], mirror[1], maxSlices()),
                     false, false);
         }
     }
 
-    /**
-     * @param partsFormed 部件（总线/仓）是否切换成型贴图
-     * @param unitActive  控制外壳是否点亮工作态贴图（仅运行配方时为 true）
-     */
     private static void applyState(Level level, List<BlockPos> cells, boolean partsFormed, boolean unitActive) {
         for (BlockPos pos : cells) {
             BlockState state = level.getBlockState(pos);

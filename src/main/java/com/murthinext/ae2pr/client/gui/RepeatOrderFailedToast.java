@@ -16,7 +16,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
 /**
- * 重复订单失败 Toast（样式对齐 AE2 的 {@code FinishedJobToast}，标题为红色）。
+ * 重复订单失败的 Toast。
  */
 public class RepeatOrderFailedToast implements Toast {
     private static final long TIME_VISIBLE = 2500;

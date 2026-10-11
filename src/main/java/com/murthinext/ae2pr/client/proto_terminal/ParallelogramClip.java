@@ -3,7 +3,9 @@ package com.murthinext.ae2pr.client.proto_terminal;
 import java.util.ArrayList;
 import java.util.List;
 
-/** 按帧缓冲像素生成完整平行四边形的裁剪带。 */
+/**
+ * 按帧缓冲像素生成平行四边形裁剪带。
+ */
 final class ParallelogramClip {
 
     record Band(int left, int top, int right, int bottom) {

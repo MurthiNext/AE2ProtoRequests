@@ -22,11 +22,10 @@ import appeng.blockentity.AEBaseBlockEntity;
 import com.murthinext.ae2pr.ModTags;
 
 /**
- * 扳手交互统一入口：右键旋转有朝向的方块，Shift+右键拆除机械方块。
+ * 扳手交互统一入口：右键旋转，Shift+右键拆除。
  */
 public final class WrenchInteractions {
 
-    /** 旋转顺序 */
     private static final Direction[] ROTATION_ORDER = { Direction.DOWN, Direction.UP, Direction.NORTH,
             Direction.SOUTH, Direction.WEST, Direction.EAST };
 
@@ -34,7 +33,7 @@ public final class WrenchInteractions {
     }
 
     /**
-     * 扳手右键总路由：潜行拆除，否则旋转；仅接管 {@link Wrenchable} 方块的对应能力。
+     * 扳手右键路由：潜行拆除，否则旋转（仅限 Wrenchable）。
      */
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         if (event.getUseBlock() == Event.Result.DENY
@@ -56,7 +55,7 @@ public final class WrenchInteractions {
         }
         DirectionProperty facing = wrenchable.wrenchFacing();
         if (facing == null) {
-            // 无朝向：扳手与其他物品一样交给方块自身处理（如打开界面）
+            // 无朝向：交给方块自身处理
             return;
         }
         event.setCanceled(true);
@@ -65,7 +64,9 @@ public final class WrenchInteractions {
                 : InteractionResult.PASS);
     }
 
-    /** 旋转朝向：水平朝向顺时针，其余按固定顺序循环。 */
+    /**
+     * 旋转朝向：水平顺时针，其余按固定顺序循环。
+     */
     private static InteractionResult rotate(Level level, BlockPos pos, BlockState state, Wrenchable wrenchable,
             DirectionProperty facing) {
         if (level.isClientSide) {
@@ -78,13 +79,15 @@ public final class WrenchInteractions {
         return InteractionResult.SUCCESS;
     }
 
-    /** 拆除：方块本体回收到玩家背包，内部物品由 {@code onRemove} 照常掉落。 */
+    /**
+     * 拆除：本体回收到背包，内部物品照常掉落。
+     */
     private static InteractionResult disassemble(Player player, Level level, BlockPos pos, BlockHitResult hit,
             ItemStack wrench) {
         if (level.isClientSide) {
             return InteractionResult.sidedSuccess(true);
         }
-        // AE2 机器沿用 AE2 的拆除流程：导出方块设置、把本体与内部内容放入玩家背包
+        // AE2 机器沿用 AE2 拆除流程
         if (level.getBlockEntity(pos) instanceof AEBaseBlockEntity aeBlockEntity) {
             return aeBlockEntity.disassembleWithWrench(player, level, hit, wrench);
         }

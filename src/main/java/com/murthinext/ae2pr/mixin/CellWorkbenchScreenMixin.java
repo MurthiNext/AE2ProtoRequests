@@ -23,14 +23,11 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * 元件工作台界面：当放入高级过滤元件时，用上（白名单）下（黑名单）两个文本输入框替换 63 格物品配置区。
- * <p>
- * 表达式随输入同步到服务端（client action），服务端写入元件 NBT；界面每帧读取 NBT 回填（聚焦时不覆盖输入）。
+ * 元件工作台界面：高级过滤元件用白/黑名单输入框替换 63 格配置区。
  */
 @Mixin(value = CellWorkbenchScreen.class, remap = false)
 public abstract class CellWorkbenchScreenMixin extends UpgradeableScreen<CellWorkbenchMenu> {
 
-    /** 文本输入框的视觉宽度上限受 AETextField 背景贴图（128px）限制。 */
     private static final int ae2pr$FIELD_WIDTH = 128;
     private static final int ae2pr$FIELD_X = 10;
     private static final int ae2pr$WHITELIST_Y = 44;
@@ -84,7 +81,7 @@ public abstract class CellWorkbenchScreenMixin extends UpgradeableScreen<CellWor
             return;
         }
 
-        // 窗口缩放会重建控件列表，这里按需补挂
+        // 窗口缩放会重建控件列表，按需补挂
         if (!this.children().contains(white)) {
             this.addRenderableWidget(white);
         }
@@ -117,7 +114,9 @@ public abstract class CellWorkbenchScreenMixin extends UpgradeableScreen<CellWor
         black.setTextColor(AdvancedFilterCellItem.isValid(black.getValue()) ? normalColor : errorColor);
     }
 
-    /** 仅当元件 NBT 相对上次观测发生变化时才回填输入框，避免服务端回显滞后导致覆盖玩家输入。 */
+    /**
+     * 仅当元件 NBT 相对上次观测发生变化时才回填，避免服务端回显滞后覆盖玩家输入。
+     */
     @Unique
     private void ae2pr$adopt(ItemStack cell, AETextField white, AETextField black) {
         var whiteValue = AdvancedFilterCellItem.getWhitelist(cell);

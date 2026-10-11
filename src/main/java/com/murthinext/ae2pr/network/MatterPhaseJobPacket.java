@@ -11,7 +11,7 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 /**
- * 服务端 -> 客户端：物质相变仪主机当前作业产物（流体）同步。
+ * 服务端 -> 客户端：同步物质相变仪产物（流体）。
  */
 public class MatterPhaseJobPacket {
 

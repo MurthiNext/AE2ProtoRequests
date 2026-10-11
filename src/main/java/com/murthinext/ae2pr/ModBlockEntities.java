@@ -26,13 +26,11 @@ public final class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(
             ForgeRegistries.BLOCK_ENTITY_TYPES, ae2pr.MODID);
 
-    /** 水晶装配线控制器 */
     public static final RegistryObject<BlockEntityType<AssemblyLineControllerBlockEntity>> CRYSTAL_ASSEMBLY_LINE = BLOCK_ENTITIES
             .register("crystal_assembly_line", () -> BlockEntityType.Builder.of(
                     AssemblyLineControllerBlockEntity::new,
                     ModBlocks.CRYSTAL_ASSEMBLY_LINE.get()).build(null));
 
-    /** 赛特斯石英水晶 / AEV 机器部件（输入总线 / 输入仓 / 输出总线 / 输出仓） */
     public static final RegistryObject<BlockEntityType<BlockEntity>> CERTUS_QUARTZ_CRYSTAL_MACHINE_PART = BLOCK_ENTITIES
             .register("certus_quartz_crystal_machine_part", () -> BlockEntityType.Builder.of(
                     (pos, state) -> MachinePartBlock.isFluidPart(state)
@@ -47,25 +45,21 @@ public final class ModBlockEntities {
                     ModBlocks.AEV_OUTPUT_BUS.get(),
                     ModBlocks.AEV_OUTPUT_HATCH.get()).build(null));
 
-    /** 福鲁伊克斯水晶能源仓 */
     public static final RegistryObject<BlockEntityType<FluixCrystalEnergyHatchBlockEntity>> FLUIX_CRYSTAL_ENERGY_HATCH = BLOCK_ENTITIES
             .register("fluix_crystal_energy_hatch", () -> BlockEntityType.Builder.of(
                     FluixCrystalEnergyHatchBlockEntity::new,
                     ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()).build(null));
 
-    /** 高反应性熔岩冶炼炉控制器 */
     public static final RegistryObject<BlockEntityType<LavaSmelterControllerBlockEntity>> HIGH_REACTIVITY_LAVA_SMELTER = BLOCK_ENTITIES
             .register("high_reactivity_lava_smelter", () -> BlockEntityType.Builder.of(
                     LavaSmelterControllerBlockEntity::new,
                     ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()).build(null));
 
-    /** 物质相变仪控制器 */
     public static final RegistryObject<BlockEntityType<MatterPhaseTransformerControllerBlockEntity>> MATTER_PHASE_TRANSFORMER = BLOCK_ENTITIES
             .register("matter_phase_transformer", () -> BlockEntityType.Builder.of(
                     MatterPhaseTransformerControllerBlockEntity::new,
                     ModBlocks.MATTER_PHASE_TRANSFORMER.get()).build(null));
 
-    /** 名称压印工厂 */
     public static final RegistryObject<BlockEntityType<NamingFactoryBlockEntity>> NAMING_FACTORY = BLOCK_ENTITIES
             .register("naming_factory", () -> BlockEntityType.Builder.of(
                     NamingFactoryBlockEntity::new,

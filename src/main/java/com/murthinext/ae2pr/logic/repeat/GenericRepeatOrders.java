@@ -26,22 +26,11 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 
 /**
- * 通用重复订单管理器：接管不属于 {@code CraftingCpuLogic} 的 CPU（GTLCore 超限演算阵列、AAE 量子计算机等 VCPU 型 CPU）。
- *
- * <p>轮次生命周期通过 AE2 标准的 {@link CraftingJobStatusPacket} 识别：
- * STARTED 记录任务 ID，FINISHED/CANCELLED 推进或终止订单；下一轮通过
- * {@code ICraftingService.submitJob} 重新提交，因此不依赖具体 CPU 的内部实现。
+ * 通用重复订单管理器，接管 VCPU 型 CPU。
  */
 public final class GenericRepeatOrders {
     private static final List<GenericRepeatOrder> ORDERS = new ArrayList<>();
-    /** 状态界面展示用：实际执行任务的 CPU -> 订单 */
     private static final Map<ICraftingCPU, GenericRepeatOrder> BY_CPU = new IdentityHashMap<>();
-    /**
-     * 发送用状态包构造时的参数暂存。
-     *
-     * <p>{@code CraftingJobStatusPacket} 的发送构造器只写入缓冲区、不写字段，字段仅在客户端
-     * 反序列化时赋值，因此不能通过字段访问器读取；改为构造时暂存、发送时取出。
-     */
     private static final ThreadLocal<PendingStatus> PENDING_STATUS = new ThreadLocal<>();
 
     private static boolean observerFailureLogged;
@@ -49,7 +38,9 @@ public final class GenericRepeatOrders {
     private GenericRepeatOrders() {
     }
 
-    /** 状态包构造时暂存参数（由 {@code CraftingJobStatusPacketMixin} 调用） */
+    /**
+     * 状态包构造时暂存参数（Mixin 调用）。
+     */
     public static void observeConstruction(UUID jobId, AEKey what, long requestedAmount,
             CraftingJobStatusPacket.Status status) {
         PENDING_STATUS.set(new PendingStatus(jobId, what, requestedAmount, status));
@@ -63,7 +54,7 @@ public final class GenericRepeatOrders {
     }
 
     /**
-     * 状态包观察失败的兜底日志（只记录一次，避免刷屏）；绝不能影响正常下单流程。
+     * 状态包观察失败的兜底日志（只记录一次）。
      */
     public static void logObserverFailure(Throwable t) {
         if (!observerFailureLogged) {
@@ -167,7 +158,7 @@ public final class GenericRepeatOrders {
         }
 
         if (order.state == RepeatOrderState.DONE) {
-            // 延迟到本 tick 末尾发送，确保 AE2 原生完成包先到并被客户端静默
+            // 延迟到 tick 末尾发送，原生完成包先到
             RepeatOrderNotifier.sendFinished(order.ownerPlayerId, order.level, order.what, order.amountPerRound,
                     order.totalRounds);
             return false;
@@ -247,7 +238,7 @@ public final class GenericRepeatOrders {
         try {
             result = service.submitJob(plan, null, order.cpu, true, order.source);
             if (result == null || !result.successful()) {
-                // 部分 VCPU 不接受直接提交（如 GTLCore 的 vcpu 目标），退回自动选择
+                // 部分 VCPU 不接受直接提交，退回自动选择
                 result = service.submitJob(plan, null, null, true, order.source);
             }
         } catch (Throwable t) {
@@ -319,8 +310,7 @@ public final class GenericRepeatOrders {
     }
 
     /**
-     * 提交成功后刷新展示用 CPU：优先取"新进入忙碌"的 CPU（VCPU 场景下是实际执行任务的 vcpu）。
-     * 提交目标保持不变（保持玩家原先选择的 CPU/自动选择语义）。
+     * 刷新展示用 CPU，取新进入忙碌者；提交目标不变。
      */
     private static void updateDisplayCpu(GenericRepeatOrder order, Set<ICraftingCPU> busyBefore) {
         ICraftingCPU newlyBusy = null;

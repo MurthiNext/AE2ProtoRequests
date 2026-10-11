@@ -15,9 +15,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 
 /**
- * 元件工作台菜单：为高级过滤元件注册"白名单/黑名单表达式"同步用的 client action。
- * <p>
- * 表达式直接写入工作台中元件物品的 NBT，由 {@link CellWorkbenchScreenMixin} 读取与展示。
+ * 元件工作台菜单：注册白/黑名单表达式同步用的 client action。
  */
 @Mixin(value = CellWorkbenchMenu.class, remap = false)
 public abstract class CellWorkbenchMenuMixin extends UpgradeableMenu<CellWorkbenchBlockEntity> {

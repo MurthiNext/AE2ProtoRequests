@@ -24,7 +24,7 @@ import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterMenu;
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 
 /**
- * ME 通式标准发信器界面；相比原版发信器增加了过滤槽与 AND/OR 切换按钮。
+ * ME 通式标准发信器界面。
  */
 public class MultiLevelEmitterScreen extends UpgradeableScreen<MultiLevelEmitterMenu> {
 
@@ -82,9 +82,7 @@ public class MultiLevelEmitterScreen extends UpgradeableScreen<MultiLevelEmitter
     }
 
     /**
-     * 配置槽内的过滤元件支持 shift 快速取出到玩家背包。
-     * <p>
-     * AE2 会把 FakeSlot 的 shift 点击当作普通点击处理，这里提前拦截并改发 QUICK_MOVE。
+     * 配置槽内过滤元件的 shift 点击改发 QUICK_MOVE。
      */
     @Override
     protected void slotClicked(Slot slot, int slotIdx, int mouseButton, ClickType clickType) {
@@ -98,13 +96,14 @@ public class MultiLevelEmitterScreen extends UpgradeableScreen<MultiLevelEmitter
         super.slotClicked(slot, slotIdx, mouseButton, clickType);
     }
 
-    /** 复用 AE2 界面自带的帮助按钮，改为打开本模组指南。 */
     @Override
     protected void openHelp() {
         ModGuide.openAt(ModGuide.EMITTER_PAGE);
     }
 
-    /** 返回非空即可让 AE2 的帮助按钮显示（实际点击由 {@link #openHelp()} 处理）。 */
+    /**
+     * 返回非空即可让 AE2 帮助按钮显示。
+     */
     @Override
     protected PageAnchor getHelpTopic() {
         return new PageAnchor(ModGuide.EMITTER_PAGE, null);
