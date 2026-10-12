@@ -39,6 +39,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.HIGH_ENERGY_SINGULARITY.get());
                         output.accept(ModItems.ALIEN_LAVA_BUCKET.get());
                         output.accept(ModItems.LIQUID_CERTUS_QUARTZ_BUCKET.get());
+                        output.accept(ModItems.LIQUID_FLUIX_CRYSTAL_BUCKET.get());
 
                         // 锭 & 宝石
                         output.accept(ModItems.METEOR_STEEL_INGOT.get());

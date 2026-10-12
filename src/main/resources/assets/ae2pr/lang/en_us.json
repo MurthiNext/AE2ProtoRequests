@@ -177,6 +177,8 @@
   "config.jade.plugin_ae2pr.lava_smelter": "High Reactivity Lava Smelter",
   "fluid_type.ae2pr.liquid_certus_quartz": "Liquid Certus Quartz",
   "item.ae2pr.liquid_certus_quartz_bucket": "Liquid Certus Quartz Bucket",
+  "fluid_type.ae2pr.liquid_fluix_crystal": "Liquid Fluix Crystal",
+  "item.ae2pr.liquid_fluix_crystal_bucket": "Liquid Fluix Crystal Bucket",
   "gui.ae2pr.matter_phase.error.power": "Insufficient power",
   "gui.ae2pr.matter_phase.error.output": "Output hatch can't hold the products",
   "jei.ae2pr.matter_phase.duration": "Processing time: %s ticks",

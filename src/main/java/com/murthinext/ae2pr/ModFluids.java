@@ -3,6 +3,7 @@ package com.murthinext.ae2pr;
 import com.murthinext.ae2pr.fluid.AlienLavaFluid;
 import com.murthinext.ae2pr.fluid.AlienLavaFluidType;
 import com.murthinext.ae2pr.fluid.LiquidCertusQuartzFluidType;
+import com.murthinext.ae2pr.fluid.LiquidFluixCrystalFluidType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -56,5 +57,20 @@ public final class ModFluids {
         return new ForgeFlowingFluid.Properties(LIQUID_CERTUS_QUARTZ_TYPE, LIQUID_CERTUS_QUARTZ,
                 FLOWING_LIQUID_CERTUS_QUARTZ)
                 .bucket(ModItems.LIQUID_CERTUS_QUARTZ_BUCKET);
+    }
+
+    public static final RegistryObject<FluidType> LIQUID_FLUIX_CRYSTAL_TYPE = FLUID_TYPES.register(
+            "liquid_fluix_crystal", LiquidFluixCrystalFluidType::new);
+
+    public static final RegistryObject<ForgeFlowingFluid> LIQUID_FLUIX_CRYSTAL = FLUIDS.register(
+            "liquid_fluix_crystal", () -> new ForgeFlowingFluid.Source(liquidFluixCrystalProperties()));
+
+    public static final RegistryObject<ForgeFlowingFluid> FLOWING_LIQUID_FLUIX_CRYSTAL = FLUIDS.register(
+            "flowing_liquid_fluix_crystal", () -> new ForgeFlowingFluid.Flowing(liquidFluixCrystalProperties()));
+
+    private static ForgeFlowingFluid.Properties liquidFluixCrystalProperties() {
+        return new ForgeFlowingFluid.Properties(LIQUID_FLUIX_CRYSTAL_TYPE, LIQUID_FLUIX_CRYSTAL,
+                FLOWING_LIQUID_FLUIX_CRYSTAL)
+                .bucket(ModItems.LIQUID_FLUIX_CRYSTAL_BUCKET);
     }
 }

@@ -165,6 +165,10 @@ public final class ModItems {
             "liquid_certus_quartz_bucket", () -> new NoBlockFluidBucketItem(ModFluids.LIQUID_CERTUS_QUARTZ,
                     new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
+    public static final RegistryObject<BucketItem> LIQUID_FLUIX_CRYSTAL_BUCKET = ITEMS.register(
+            "liquid_fluix_crystal_bucket", () -> new NoBlockFluidBucketItem(ModFluids.LIQUID_FLUIX_CRYSTAL,
+                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+
     public static final RegistryObject<BlockItem> NAMING_FACTORY = ITEMS.register("naming_factory",
             () -> new BlockItem(ModBlocks.NAMING_FACTORY.get(), new Item.Properties()));
 

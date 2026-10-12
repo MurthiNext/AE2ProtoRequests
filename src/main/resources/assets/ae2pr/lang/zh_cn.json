@@ -177,6 +177,8 @@
   "config.jade.plugin_ae2pr.lava_smelter": "高反应性熔岩冶炼炉",
   "fluid_type.ae2pr.liquid_certus_quartz": "液态赛特斯石英水晶",
   "item.ae2pr.liquid_certus_quartz_bucket": "液态赛特斯石英水晶桶",
+  "fluid_type.ae2pr.liquid_fluix_crystal": "液态福鲁伊克斯水晶",
+  "item.ae2pr.liquid_fluix_crystal_bucket": "液态福鲁伊克斯水晶桶",
   "gui.ae2pr.matter_phase.error.power": "电力不足",
   "gui.ae2pr.matter_phase.error.output": "输出仓无法容纳产物",
   "jei.ae2pr.matter_phase.duration": "加工时长：%s ticks",
