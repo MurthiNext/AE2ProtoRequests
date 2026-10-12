@@ -12,9 +12,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
+import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerBlock;
 import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
 
 /**
@@ -100,10 +102,12 @@ public final class CtmConfig {
         if (block == ModBlocks.FIREPROOF_CRYSTAL_GLASS.get()) {
             return 8;
         }
-        if (block == ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get()
-                || block == ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()
+        if (block == ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()
                 || block == ModBlocks.MATTER_PHASE_TRANSFORMER.get()) {
-            // 主机与锆刚玉砖块共用贴图，互相连接
+            MachinePartFacade facade = facade(state);
+            return facade != null ? facade.ctmFamily() : 0;
+        }
+        if (block == ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get()) {
             return 4;
         }
         if (block == ModBlocks.METEOR_STEEL_PIPE_BLOCK.get()) {
@@ -120,6 +124,13 @@ public final class CtmConfig {
 
     @Nullable
     public static MachinePartFacade facade(BlockState state) {
+        if (state.is(ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get())
+                && state.getValue(HighReactivityLavaSmelterBlock.FORMED)) {
+            return MachinePartFacade.ZIRCONIA;
+        }
+        if (state.is(ModBlocks.MATTER_PHASE_TRANSFORMER.get()) && state.getValue(MatterPhaseTransformerBlock.FORMED)) {
+            return MachinePartFacade.ZIRCONIA;
+        }
         if (state.getBlock() instanceof MachinePartBlock && state.getValue(MachinePartBlock.FORMED)) {
             return MachinePartFacade.byStyle(state.getValue(MachinePartBlock.STYLE));
         }
@@ -137,8 +148,14 @@ public final class CtmConfig {
     }
 
     @Nullable
-    public static TextureAtlasSprite partBaseSprite(BlockState state) {
+    public static TextureAtlasSprite facadeBaseSprite(BlockState state) {
         Block block = state.getBlock();
+        if (block == ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()) {
+            return CtmSprites.baseSprite(CtmSprites.LAVA_SMELTER_CONTROLLER_CASING);
+        }
+        if (block == ModBlocks.MATTER_PHASE_TRANSFORMER.get()) {
+            return CtmSprites.baseSprite(CtmSprites.MATTER_PHASE_CONTROLLER_CASING);
+        }
         if (block == ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()) {
             // 能源仓的成型模型以水晶机壳为基础贴图
             return CtmSprites.baseSprite(state.getValue(FluixCrystalEnergyHatchBlock.FORMED)

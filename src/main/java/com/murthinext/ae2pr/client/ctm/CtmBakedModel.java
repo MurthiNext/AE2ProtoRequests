@@ -48,7 +48,7 @@ public class CtmBakedModel extends BakedModelWrapper<BakedModel> {
         // 多方块成型换装：替换基础面贴图为结构外观贴图
         TextureAtlasSprite facade = CtmConfig.facadeSprite(state);
         if (facade != null) {
-            TextureAtlasSprite base = CtmConfig.partBaseSprite(state);
+            TextureAtlasSprite base = CtmConfig.facadeBaseSprite(state);
             if (base != null && base != facade) {
                 quads = retargetFacade(quads, base, facade);
             }
