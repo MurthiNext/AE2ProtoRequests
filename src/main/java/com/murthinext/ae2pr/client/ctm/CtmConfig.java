@@ -94,9 +94,6 @@ public final class CtmConfig {
 
             return partFamily(state, 9);
         }
-        if (block == ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get()) {
-            return 2;
-        }
         if (block == ModBlocks.CRYSTAL_GLASS.get()) {
             return 3;
         }

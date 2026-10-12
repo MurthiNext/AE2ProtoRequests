@@ -1,0 +1,38 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "ae2cs"
+        }
+      ],
+      "recipe": {
+        "type": "ae2pr:crystal_assembly_line",
+        "duration": 50,
+        "energy_per_parallel": 16000,
+        "item_inputs": [
+          {
+            "tag": "forge:storage_blocks/pure_crystal/meteor_crystal_block",
+            "count": 1
+          },
+          {
+            "item": "ae2:speed_card",
+            "count": 8
+          },
+          {
+            "item": "ae2cs:resonating_processor",
+            "count": 2
+          }
+        ],
+        "item_outputs": [
+          {
+            "item": "ae2cs:overload_card",
+            "count": 1
+          }
+        ]
+      }
+    }
+  ]
+}

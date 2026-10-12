@@ -1,0 +1,21 @@
+{
+  "type": "ae2pr:crystal_assembly_line",
+  "duration": 60,
+  "energy_per_parallel": 50000,
+  "item_inputs": [
+    {
+      "item": "ae2pr:aev_machine_casing",
+      "count": 1
+    },
+    {
+      "item": "ae2pr:high_energy_singularity",
+      "count": 1
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:high_energy_core",
+      "count": 1
+    }
+  ]
+}

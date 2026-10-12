@@ -1,0 +1,38 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "advanced_ae"
+        }
+      ],
+      "recipe": {
+        "type": "ae2pr:crystal_assembly_line",
+        "duration": 50,
+        "energy_per_parallel": 51200,
+        "item_inputs": [
+          {
+            "tag": "forge:plates/silicon",
+            "count": 32
+          },
+          {
+            "item": "minecraft:redstone",
+            "count": 32
+          },
+          {
+            "item": "advanced_ae:printed_quantum_processor",
+            "count": 32
+          }
+        ],
+        "item_outputs": [
+          {
+            "item": "advanced_ae:quantum_processor",
+            "count": 32
+          }
+        ]
+      }
+    }
+  ]
+}

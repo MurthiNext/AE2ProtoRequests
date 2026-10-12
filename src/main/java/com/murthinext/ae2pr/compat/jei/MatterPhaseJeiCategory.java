@@ -61,10 +61,11 @@ public class MatterPhaseJeiCategory implements IRecipeCategory<MatterPhaseRecipe
     private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
     private final IDrawable icon;
-    private final IDrawable fluidSlot = new FluidSlotBackground();
+    private final IDrawable fluidSlot;
 
     public MatterPhaseJeiCategory(IGuiHelper guiHelper) {
         this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModBlocks.MATTER_PHASE_TRANSFORMER.get()));
+        this.fluidSlot = FluidSlotBackground.create(guiHelper);
     }
 
     @Override

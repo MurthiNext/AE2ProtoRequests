@@ -1,17 +1,17 @@
 {
   "type": "ae2pr:crystal_assembly_line",
-  "duration": 40,
+  "duration": 50,
   "item_inputs": [
     {
-      "item": "ae2:printed_calculation_processor",
-      "count": 32
-    },
-    {
-      "item": "ae2:printed_silicon",
+      "tag": "forge:plates/silicon",
       "count": 32
     },
     {
       "item": "minecraft:redstone",
+      "count": 32
+    },
+    {
+      "item": "ae2:printed_calculation_processor",
       "count": 32
     }
   ],

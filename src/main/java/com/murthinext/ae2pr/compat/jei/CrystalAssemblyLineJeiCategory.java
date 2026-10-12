@@ -83,10 +83,11 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
             "textures/gui/jei/assembly_line_pipes.png");
 
     private final IDrawable icon;
-    private final IDrawable fluidSlotBackground = new FluidSlotBackground();
+    private final IDrawable fluidSlotBackground;
 
     public CrystalAssemblyLineJeiCategory(IGuiHelper guiHelper) {
         this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModBlocks.CRYSTAL_ASSEMBLY_LINE.get()));
+        this.fluidSlotBackground = FluidSlotBackground.create(guiHelper);
     }
 
     @Override

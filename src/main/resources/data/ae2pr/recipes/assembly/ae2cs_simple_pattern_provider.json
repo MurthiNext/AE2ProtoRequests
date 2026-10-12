@@ -1,0 +1,38 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "ae2cs"
+        }
+      ],
+      "recipe": {
+        "type": "ae2pr:crystal_assembly_line",
+        "duration": 20,
+        "energy_per_parallel": 4000,
+        "item_inputs": [
+          {
+            "item": "minecraft:crafting_table",
+            "count": 1
+          },
+          {
+            "tag": "forge:gears/wood",
+            "count": 2
+          },
+          {
+            "item": "ae2cs:simple_processor",
+            "count": 1
+          }
+        ],
+        "item_outputs": [
+          {
+            "item": "ae2cs:simple_pattern_provider",
+            "count": 1
+          }
+        ]
+      }
+    }
+  ]
+}

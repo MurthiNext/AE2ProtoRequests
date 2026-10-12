@@ -1,6 +1,6 @@
 {
   "type": "ae2pr:crystal_assembly_line",
-  "duration": 60,
+  "duration": 100,
   "item_inputs": [
     {
       "item": "ae2pr:crystal_assembly_line_unit",
