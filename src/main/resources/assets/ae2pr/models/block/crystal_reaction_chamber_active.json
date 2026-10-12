@@ -1,0 +1,7 @@
+{
+  "parent": "ae2pr:block/crystal_reaction_chamber",
+  "textures": {
+    "overlay_front": "ae2pr:block/crystal_reaction_chamber/front_active",
+    "overlay_front_emissive": "ae2pr:block/crystal_reaction_chamber/front_active_emissive"
+  }
+}

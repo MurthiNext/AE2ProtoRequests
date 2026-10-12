@@ -2,6 +2,7 @@ package com.murthinext.ae2pr;
 
 import com.murthinext.ae2pr.network.AssemblyLineJobPacket;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
+import com.murthinext.ae2pr.network.CrystalReactionChamberJobPacket;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 import com.murthinext.ae2pr.network.LavaSmelterJobPacket;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
@@ -111,6 +112,12 @@ public final class ModNetwork {
                 MatterPhaseJobPacket::handle);
 
         CHANNEL.registerMessage(nextMessageId++,
+                CrystalReactionChamberJobPacket.class,
+                CrystalReactionChamberJobPacket::encode,
+                CrystalReactionChamberJobPacket::decode,
+                CrystalReactionChamberJobPacket::handle);
+
+        CHANNEL.registerMessage(nextMessageId++,
                 NamingFactoryRenamePacket.class,
                 NamingFactoryRenamePacket::encode,
                 NamingFactoryRenamePacket::decode,
@@ -154,6 +161,10 @@ public final class ModNetwork {
     }
 
     public static void sendToPlayer(ServerPlayer player, MatterPhaseJobPacket packet) {
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
+    }
+
+    public static void sendToPlayer(ServerPlayer player, CrystalReactionChamberJobPacket packet) {
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
     }
 

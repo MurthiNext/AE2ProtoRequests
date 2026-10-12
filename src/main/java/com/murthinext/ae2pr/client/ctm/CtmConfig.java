@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberBlock;
 import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
@@ -103,7 +104,8 @@ public final class CtmConfig {
             return 8;
         }
         if (block == ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()
-                || block == ModBlocks.MATTER_PHASE_TRANSFORMER.get()) {
+                || block == ModBlocks.MATTER_PHASE_TRANSFORMER.get()
+                || block == ModBlocks.CRYSTAL_REACTION_CHAMBER.get()) {
             MachinePartFacade facade = facade(state);
             return facade != null ? facade.ctmFamily() : 0;
         }
@@ -131,6 +133,10 @@ public final class CtmConfig {
         if (state.is(ModBlocks.MATTER_PHASE_TRANSFORMER.get()) && state.getValue(MatterPhaseTransformerBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIA;
         }
+        if (state.is(ModBlocks.CRYSTAL_REACTION_CHAMBER.get())
+                && state.getValue(CrystalReactionChamberBlock.FORMED)) {
+            return MachinePartFacade.CRYSTAL;
+        }
         if (state.getBlock() instanceof MachinePartBlock && state.getValue(MachinePartBlock.FORMED)) {
             return MachinePartFacade.byStyle(state.getValue(MachinePartBlock.STYLE));
         }
@@ -155,6 +161,9 @@ public final class CtmConfig {
         }
         if (block == ModBlocks.MATTER_PHASE_TRANSFORMER.get()) {
             return CtmSprites.baseSprite(CtmSprites.MATTER_PHASE_CONTROLLER_CASING);
+        }
+        if (block == ModBlocks.CRYSTAL_REACTION_CHAMBER.get()) {
+            return CtmSprites.baseSprite(CtmSprites.CRYSTAL_REACTION_CONTROLLER_CASING);
         }
         if (block == ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()) {
             // 能源仓的成型模型以水晶机壳为基础贴图

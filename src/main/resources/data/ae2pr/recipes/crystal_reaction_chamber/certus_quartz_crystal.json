@@ -1,0 +1,22 @@
+{
+  "type": "ae2pr:crystal_reaction_chamber",
+  "duration": 200,
+  "item_inputs": [
+    {
+      "item": "ae2:certus_quartz_dust",
+      "count": 1
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:liquid_certus_quartz",
+      "amount": 144
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2:certus_quartz_crystal",
+      "count": 1
+    }
+  ]
+}

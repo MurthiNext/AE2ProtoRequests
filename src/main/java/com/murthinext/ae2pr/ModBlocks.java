@@ -17,6 +17,7 @@ import com.murthinext.ae2pr.block.alien_lava.AlienLavaBlock;
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineModuleBlock;
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineUnitBlock;
 import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
+import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberBlock;
 import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
@@ -179,6 +180,9 @@ public final class ModBlocks {
 
     public static final RegistryObject<MatterPhaseTransformerBlock> MATTER_PHASE_TRANSFORMER = BLOCKS.register(
             "matter_phase_transformer", MatterPhaseTransformerBlock::new);
+
+    public static final RegistryObject<CrystalReactionChamberBlock> CRYSTAL_REACTION_CHAMBER = BLOCKS.register(
+            "crystal_reaction_chamber", CrystalReactionChamberBlock::new);
 
     public static final RegistryObject<Block> ZIRCONIA_CORUNDUM_BRICKS = BLOCKS.register(
             "zirconia_corundum_bricks", () -> new DisassemblableBlock(Block.Properties.of()

@@ -7,6 +7,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineControllerBlockEntity;
+import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberControllerBlockEntity;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntity;
@@ -59,6 +60,11 @@ public final class ModBlockEntities {
             .register("matter_phase_transformer", () -> BlockEntityType.Builder.of(
                     MatterPhaseTransformerControllerBlockEntity::new,
                     ModBlocks.MATTER_PHASE_TRANSFORMER.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<CrystalReactionChamberControllerBlockEntity>> CRYSTAL_REACTION_CHAMBER = BLOCK_ENTITIES
+            .register("crystal_reaction_chamber", () -> BlockEntityType.Builder.of(
+                    CrystalReactionChamberControllerBlockEntity::new,
+                    ModBlocks.CRYSTAL_REACTION_CHAMBER.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<NamingFactoryBlockEntity>> NAMING_FACTORY = BLOCK_ENTITIES
             .register("naming_factory", () -> BlockEntityType.Builder.of(

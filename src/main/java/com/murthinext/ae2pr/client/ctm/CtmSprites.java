@@ -26,6 +26,7 @@ public final class CtmSprites {
     public static final ResourceLocation AEV_PART_CASING = id("block/aev/aev_machine_casing");
     public static final ResourceLocation LAVA_SMELTER_CONTROLLER_CASING = id("block/lava_smelter/controller_casing");
     public static final ResourceLocation MATTER_PHASE_CONTROLLER_CASING = id("block/matter_phase_transformer/controller_casing");
+    public static final ResourceLocation CRYSTAL_REACTION_CONTROLLER_CASING = id("block/crystal_reaction_chamber/controller_casing");
 
     private static final Map<ResourceLocation, ResourceLocation> ATLASES = new HashMap<>();
 
@@ -46,6 +47,7 @@ public final class CtmSprites {
         register("block/meteor_steel_pipe_block/side");
         REGISTERED.add(LAVA_SMELTER_CONTROLLER_CASING);
         REGISTERED.add(MATTER_PHASE_CONTROLLER_CASING);
+        REGISTERED.add(CRYSTAL_REACTION_CONTROLLER_CASING);
         // 成型外观贴图随注册表自动登记
         for (MachinePartFacade facade : MachinePartFacade.all()) {
             registerFacade(facade);

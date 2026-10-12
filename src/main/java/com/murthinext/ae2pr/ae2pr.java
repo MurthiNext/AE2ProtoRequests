@@ -76,6 +76,7 @@ public class ae2pr {
             Upgrades.add(AEItems.SPEED_CARD, ModBlocks.CRYSTAL_ASSEMBLY_LINE.get(), 4);
             Upgrades.add(AEItems.SPEED_CARD, ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get(), 4);
             Upgrades.add(AEItems.SPEED_CARD, ModBlocks.MATTER_PHASE_TRANSFORMER.get(), 4);
+            Upgrades.add(AEItems.SPEED_CARD, ModBlocks.CRYSTAL_REACTION_CHAMBER.get(), 4);
 
             // 绑定方块实体类型并登记代表物品
             var energyHatchType = ModBlockEntities.FLUIX_CRYSTAL_ENERGY_HATCH.get();

@@ -113,6 +113,7 @@
   "block.ae2pr.dense_sky_stone_block": "致密陨石块",
   "block.ae2pr.high_energy_core": "高能核心",
   "block.ae2pr.matter_phase_transformer": "物质相变仪",
+  "block.ae2pr.crystal_reaction_chamber": "水晶反应仓",
   "item.ae2pr.zircon_brick": "锆英石砖",
   "block.ae2pr.zirconia_corundum_bricks": "锆刚玉砖块",
   "block.ae2pr.meteorite_iron_ore": "陨石铁矿石",
@@ -186,5 +187,14 @@
   "jei.ae2pr.matter_phase.more_inputs": "另有 %s 种输入未显示",
   "jade.ae2pr.matter_phase.job": "正在相变：%s x %s mB",
   "jade.ae2pr.matter_phase.progress": "进度：%s / %s s",
-  "config.jade.plugin_ae2pr.matter_phase_transformer": "物质相变仪"
+  "config.jade.plugin_ae2pr.matter_phase_transformer": "物质相变仪",
+  "gui.ae2pr.crystal_reaction_chamber.error.power": "电力不足",
+  "gui.ae2pr.crystal_reaction_chamber.error.output": "输出总线与输出仓无法容纳产物",
+  "jei.ae2pr.crystal_reaction_chamber.duration": "加工时长：%s ticks",
+  "jei.ae2pr.crystal_reaction_chamber.energy": "每并行耗电：%s AE",
+  "jei.ae2pr.crystal_reaction_chamber.more_io": "另有 %s 个输入与 %s 个产物未显示",
+  "jade.ae2pr.crystal_reaction_chamber.job": "正在反应：%s x %s",
+  "jade.ae2pr.crystal_reaction_chamber.job_fluid": "正在反应：%s x %s mB",
+  "jade.ae2pr.crystal_reaction_chamber.progress": "进度：%s / %s s",
+  "config.jade.plugin_ae2pr.crystal_reaction_chamber": "水晶反应仓"
 }

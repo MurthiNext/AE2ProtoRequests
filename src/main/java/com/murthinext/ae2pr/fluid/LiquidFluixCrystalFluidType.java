@@ -12,7 +12,7 @@ import net.minecraftforge.fluids.FluidType;
 import com.murthinext.ae2pr.ae2pr;
 
 /**
- * 液态福鲁伊克斯水晶流体类型：常温液态晶体，仅存在于容器与管道中（无源方块）。
+ * 液态福鲁伊克斯水晶流体。
  */
 public class LiquidFluixCrystalFluidType extends FluidType {
 

@@ -113,6 +113,7 @@
   "block.ae2pr.dense_sky_stone_block": "Dense Sky Stone Block",
   "block.ae2pr.high_energy_core": "High Energy Core",
   "block.ae2pr.matter_phase_transformer": "Matter Phase Transformer",
+  "block.ae2pr.crystal_reaction_chamber": "Crystal Reaction Chamber",
   "item.ae2pr.zircon_brick": "Zircon Brick",
   "block.ae2pr.zirconia_corundum_bricks": "Zirconia Corundum Bricks",
   "block.ae2pr.meteorite_iron_ore": "Meteorite Iron Ore",
@@ -186,5 +187,14 @@
   "jei.ae2pr.matter_phase.more_inputs": "%s more inputs not shown",
   "jade.ae2pr.matter_phase.job": "Transforming: %s x %s mB",
   "jade.ae2pr.matter_phase.progress": "Progress: %s / %s s",
-  "config.jade.plugin_ae2pr.matter_phase_transformer": "Matter Phase Transformer"
+  "config.jade.plugin_ae2pr.matter_phase_transformer": "Matter Phase Transformer",
+  "gui.ae2pr.crystal_reaction_chamber.error.power": "Insufficient power",
+  "gui.ae2pr.crystal_reaction_chamber.error.output": "Output bus or hatch can't hold the products",
+  "jei.ae2pr.crystal_reaction_chamber.duration": "Processing time: %s ticks",
+  "jei.ae2pr.crystal_reaction_chamber.energy": "Energy per parallel: %s AE",
+  "jei.ae2pr.crystal_reaction_chamber.more_io": "%s more inputs and %s more outputs not shown",
+  "jade.ae2pr.crystal_reaction_chamber.job": "Reacting: %s x %s",
+  "jade.ae2pr.crystal_reaction_chamber.job_fluid": "Reacting: %s x %s mB",
+  "jade.ae2pr.crystal_reaction_chamber.progress": "Progress: %s / %s s",
+  "config.jade.plugin_ae2pr.crystal_reaction_chamber": "Crystal Reaction Chamber"
 }

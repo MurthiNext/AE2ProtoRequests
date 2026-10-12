@@ -27,3 +27,5 @@ navigation:
 [高反应性熔岩冶炼炉](high_reactivity_lava_smelter.md)，传统而先进的炼钢机器！
 
 [物质相变仪](matter_phase_transformer.md)，以高能粒子束流改变物质形态。
+
+[水晶反应仓](crystal_reaction_chamber.md)，E=mc²的真实实现。

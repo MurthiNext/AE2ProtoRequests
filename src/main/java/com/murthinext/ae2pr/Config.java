@@ -37,6 +37,9 @@ public final class Config {
     private static final ForgeConfigSpec.IntValue MATTER_PHASE_PARALLEL;
     private static final ForgeConfigSpec.DoubleValue MATTER_PHASE_ENERGY_PER_PARALLEL;
 
+    private static final ForgeConfigSpec.IntValue CRYSTAL_REACTION_PARALLEL;
+    private static final ForgeConfigSpec.DoubleValue CRYSTAL_REACTION_ENERGY_PER_PARALLEL;
+
     private static final ForgeConfigSpec.DoubleValue LOSSY_SPEED_PER_CARD;
     private static final ForgeConfigSpec.DoubleValue LOSSY_ENERGY_MULTIPLIER_PER_CARD;
 
@@ -128,6 +131,15 @@ public final class Config {
         MATTER_PHASE_ENERGY_PER_PARALLEL = BUILDER
                 .comment("物质相变仪每并行一次执行从 ME 网络扣除的能量")
                 .defineInRange("energyPerParallel", 50000.0, 0.0, Double.MAX_VALUE);
+        BUILDER.pop();
+
+        BUILDER.push("crystalReactionChamber");
+        CRYSTAL_REACTION_PARALLEL = BUILDER
+                .comment("水晶反应仓的最大并行数（输入与产物容量不足时自动降低）")
+                .defineInRange("parallel", 32, 1, 1_000_000);
+        CRYSTAL_REACTION_ENERGY_PER_PARALLEL = BUILDER
+                .comment("水晶反应仓每并行一次执行从 ME 网络扣除的能量")
+                .defineInRange("energyPerParallel", 20000.0, 0.0, Double.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("upgradeCards");
@@ -235,6 +247,14 @@ public final class Config {
 
     public static double matterPhaseEnergyPerParallel() {
         return MATTER_PHASE_ENERGY_PER_PARALLEL.get();
+    }
+
+    public static int crystalReactionParallel() {
+        return CRYSTAL_REACTION_PARALLEL.get();
+    }
+
+    public static double crystalReactionEnergyPerParallel() {
+        return CRYSTAL_REACTION_ENERGY_PER_PARALLEL.get();
     }
 
     public static double lossySpeedPerCard() {

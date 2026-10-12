@@ -9,6 +9,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import com.murthinext.ae2pr.recipe.AlienLavaRecipe;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
+import com.murthinext.ae2pr.recipe.CrystalReactionChamberRecipe;
 import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
 import com.murthinext.ae2pr.recipe.MatterPhaseRecipe;
 
@@ -69,4 +70,15 @@ public final class ModRecipes {
 
     public static final RegistryObject<MatterPhaseRecipe.Serializer> MATTER_PHASE = SERIALIZERS
             .register("matter_phase", MatterPhaseRecipe.Serializer::new);
+
+    public static final RegistryObject<RecipeType<CrystalReactionChamberRecipe>> CRYSTAL_REACTION_CHAMBER_TYPE = RECIPE_TYPES
+            .register("crystal_reaction_chamber", () -> new RecipeType<CrystalReactionChamberRecipe>() {
+                @Override
+                public String toString() {
+                    return ae2pr.MODID + ":crystal_reaction_chamber";
+                }
+            });
+
+    public static final RegistryObject<CrystalReactionChamberRecipe.Serializer> CRYSTAL_REACTION_CHAMBER = SERIALIZERS
+            .register("crystal_reaction_chamber", CrystalReactionChamberRecipe.Serializer::new);
 }

@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -15,7 +16,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 
 /**
  * 无方块态流体的桶。
@@ -24,6 +27,11 @@ public class NoBlockFluidBucketItem extends BucketItem {
 
     public NoBlockFluidBucketItem(Supplier<? extends Fluid> fluid, Properties properties) {
         super(fluid, properties);
+    }
+
+    @Override
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+        return new FluidBucketWrapper(stack);
     }
 
     @Override
