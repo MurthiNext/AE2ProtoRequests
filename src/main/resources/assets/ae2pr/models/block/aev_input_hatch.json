@@ -1,0 +1,6 @@
+{
+  "parent": "ae2pr:block/machine_part/input_hatch",
+  "textures": {
+    "all": "ae2pr:block/aev/aev_machine_casing"
+  }
+}

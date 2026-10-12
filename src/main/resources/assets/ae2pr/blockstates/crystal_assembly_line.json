@@ -1,52 +1,76 @@
 {
   "variants": {
     "facing=north,running=false,paused=false": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_north"
+      "model": "ae2pr:block/crystal_assembly_line"
     },
     "facing=north,running=false,paused=true": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_north_paused"
+      "model": "ae2pr:block/crystal_assembly_line_paused"
     },
     "facing=north,running=true,paused=false": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_north_active"
+      "model": "ae2pr:block/crystal_assembly_line_active"
     },
     "facing=north,running=true,paused=true": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_north_active"
+      "model": "ae2pr:block/crystal_assembly_line_active"
     },
     "facing=south,running=false,paused=false": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_south"
+      "model": "ae2pr:block/crystal_assembly_line",
+      "y": 180,
+      "uvlock": true
     },
     "facing=south,running=false,paused=true": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_south_paused"
+      "model": "ae2pr:block/crystal_assembly_line_paused",
+      "y": 180,
+      "uvlock": true
     },
     "facing=south,running=true,paused=false": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_south_active"
+      "model": "ae2pr:block/crystal_assembly_line_active",
+      "y": 180,
+      "uvlock": true
     },
     "facing=south,running=true,paused=true": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_south_active"
+      "model": "ae2pr:block/crystal_assembly_line_active",
+      "y": 180,
+      "uvlock": true
     },
     "facing=east,running=false,paused=false": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_east"
+      "model": "ae2pr:block/crystal_assembly_line",
+      "y": 90,
+      "uvlock": true
     },
     "facing=east,running=false,paused=true": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_east_paused"
+      "model": "ae2pr:block/crystal_assembly_line_paused",
+      "y": 90,
+      "uvlock": true
     },
     "facing=east,running=true,paused=false": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_east_active"
+      "model": "ae2pr:block/crystal_assembly_line_active",
+      "y": 90,
+      "uvlock": true
     },
     "facing=east,running=true,paused=true": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_east_active"
+      "model": "ae2pr:block/crystal_assembly_line_active",
+      "y": 90,
+      "uvlock": true
     },
     "facing=west,running=false,paused=false": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_west"
+      "model": "ae2pr:block/crystal_assembly_line",
+      "y": 270,
+      "uvlock": true
     },
     "facing=west,running=false,paused=true": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_west_paused"
+      "model": "ae2pr:block/crystal_assembly_line_paused",
+      "y": 270,
+      "uvlock": true
     },
     "facing=west,running=true,paused=false": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_west_active"
+      "model": "ae2pr:block/crystal_assembly_line_active",
+      "y": 270,
+      "uvlock": true
     },
     "facing=west,running=true,paused=true": {
-      "model": "ae2pr:block/crystal_assembly_line_facing_west_active"
+      "model": "ae2pr:block/crystal_assembly_line_active",
+      "y": 270,
+      "uvlock": true
     }
   }
 }

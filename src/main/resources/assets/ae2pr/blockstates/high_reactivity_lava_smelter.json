@@ -1,52 +1,76 @@
 {
   "variants": {
     "facing=north,running=false,paused=false": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_north"
+      "model": "ae2pr:block/high_reactivity_lava_smelter"
     },
     "facing=north,running=false,paused=true": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_north_paused"
+      "model": "ae2pr:block/high_reactivity_lava_smelter_paused"
     },
     "facing=north,running=true,paused=false": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_north_active"
+      "model": "ae2pr:block/high_reactivity_lava_smelter_active"
     },
     "facing=north,running=true,paused=true": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_north_active"
+      "model": "ae2pr:block/high_reactivity_lava_smelter_active"
     },
     "facing=south,running=false,paused=false": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_south"
+      "model": "ae2pr:block/high_reactivity_lava_smelter",
+      "y": 180,
+      "uvlock": true
     },
     "facing=south,running=false,paused=true": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_south_paused"
+      "model": "ae2pr:block/high_reactivity_lava_smelter_paused",
+      "y": 180,
+      "uvlock": true
     },
     "facing=south,running=true,paused=false": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_south_active"
+      "model": "ae2pr:block/high_reactivity_lava_smelter_active",
+      "y": 180,
+      "uvlock": true
     },
     "facing=south,running=true,paused=true": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_south_active"
-    },
-    "facing=west,running=false,paused=false": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_west"
-    },
-    "facing=west,running=false,paused=true": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_west_paused"
-    },
-    "facing=west,running=true,paused=false": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_west_active"
-    },
-    "facing=west,running=true,paused=true": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_west_active"
+      "model": "ae2pr:block/high_reactivity_lava_smelter_active",
+      "y": 180,
+      "uvlock": true
     },
     "facing=east,running=false,paused=false": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_east"
+      "model": "ae2pr:block/high_reactivity_lava_smelter",
+      "y": 90,
+      "uvlock": true
     },
     "facing=east,running=false,paused=true": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_east_paused"
+      "model": "ae2pr:block/high_reactivity_lava_smelter_paused",
+      "y": 90,
+      "uvlock": true
     },
     "facing=east,running=true,paused=false": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_east_active"
+      "model": "ae2pr:block/high_reactivity_lava_smelter_active",
+      "y": 90,
+      "uvlock": true
     },
     "facing=east,running=true,paused=true": {
-      "model": "ae2pr:block/high_reactivity_lava_smelter_facing_east_active"
+      "model": "ae2pr:block/high_reactivity_lava_smelter_active",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=west,running=false,paused=false": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,running=false,paused=true": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_paused",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,running=true,paused=false": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_active",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,running=true,paused=true": {
+      "model": "ae2pr:block/high_reactivity_lava_smelter_active",
+      "y": 270,
+      "uvlock": true
     }
   }
 }

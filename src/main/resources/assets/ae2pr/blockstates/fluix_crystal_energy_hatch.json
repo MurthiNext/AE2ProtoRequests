@@ -1,40 +1,60 @@
 {
   "variants": {
-    "facing=down,formed=false": {
-      "model": "ae2pr:block/fluix_crystal_energy_hatch_facing_down"
-    },
-    "facing=down,formed=true": {
-      "model": "ae2pr:block/fluix_crystal_energy_hatch_facing_down_formed"
-    },
-    "facing=up,formed=false": {
-      "model": "ae2pr:block/fluix_crystal_energy_hatch_facing_up"
-    },
-    "facing=up,formed=true": {
-      "model": "ae2pr:block/fluix_crystal_energy_hatch_facing_up_formed"
-    },
     "facing=north,formed=false": {
-      "model": "ae2pr:block/fluix_crystal_energy_hatch_facing_north"
+      "model": "ae2pr:block/fluix_crystal_energy_hatch"
     },
     "facing=north,formed=true": {
-      "model": "ae2pr:block/fluix_crystal_energy_hatch_facing_north_formed"
+      "model": "ae2pr:block/fluix_crystal_energy_hatch_formed"
     },
     "facing=south,formed=false": {
-      "model": "ae2pr:block/fluix_crystal_energy_hatch_facing_south"
+      "model": "ae2pr:block/fluix_crystal_energy_hatch",
+      "y": 180,
+      "uvlock": true
     },
     "facing=south,formed=true": {
-      "model": "ae2pr:block/fluix_crystal_energy_hatch_facing_south_formed"
-    },
-    "facing=west,formed=false": {
-      "model": "ae2pr:block/fluix_crystal_energy_hatch_facing_west"
-    },
-    "facing=west,formed=true": {
-      "model": "ae2pr:block/fluix_crystal_energy_hatch_facing_west_formed"
+      "model": "ae2pr:block/fluix_crystal_energy_hatch_formed",
+      "y": 180,
+      "uvlock": true
     },
     "facing=east,formed=false": {
-      "model": "ae2pr:block/fluix_crystal_energy_hatch_facing_east"
+      "model": "ae2pr:block/fluix_crystal_energy_hatch",
+      "y": 90,
+      "uvlock": true
     },
     "facing=east,formed=true": {
-      "model": "ae2pr:block/fluix_crystal_energy_hatch_facing_east_formed"
+      "model": "ae2pr:block/fluix_crystal_energy_hatch_formed",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=west,formed=false": {
+      "model": "ae2pr:block/fluix_crystal_energy_hatch",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,formed=true": {
+      "model": "ae2pr:block/fluix_crystal_energy_hatch_formed",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=up,formed=false": {
+      "model": "ae2pr:block/fluix_crystal_energy_hatch",
+      "x": 270,
+      "uvlock": true
+    },
+    "facing=up,formed=true": {
+      "model": "ae2pr:block/fluix_crystal_energy_hatch_formed",
+      "x": 270,
+      "uvlock": true
+    },
+    "facing=down,formed=false": {
+      "model": "ae2pr:block/fluix_crystal_energy_hatch",
+      "x": 90,
+      "uvlock": true
+    },
+    "facing=down,formed=true": {
+      "model": "ae2pr:block/fluix_crystal_energy_hatch_formed",
+      "x": 90,
+      "uvlock": true
     }
   }
 }

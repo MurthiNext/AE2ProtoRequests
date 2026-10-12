@@ -1,22 +1,32 @@
 {
   "variants": {
-    "facing=down": {
-      "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_down"
-    },
-    "facing=up": {
-      "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_up"
-    },
     "facing=north": {
-      "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_north"
+      "model": "ae2pr:block/certus_quartz_crystal_input_bus"
     },
     "facing=south": {
-      "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_south"
-    },
-    "facing=west": {
-      "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_west"
+      "model": "ae2pr:block/certus_quartz_crystal_input_bus",
+      "y": 180,
+      "uvlock": true
     },
     "facing=east": {
-      "model": "ae2pr:block/certus_quartz_crystal_input_bus_facing_east"
+      "model": "ae2pr:block/certus_quartz_crystal_input_bus",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=west": {
+      "model": "ae2pr:block/certus_quartz_crystal_input_bus",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=up": {
+      "model": "ae2pr:block/certus_quartz_crystal_input_bus",
+      "x": 270,
+      "uvlock": true
+    },
+    "facing=down": {
+      "model": "ae2pr:block/certus_quartz_crystal_input_bus",
+      "x": 90,
+      "uvlock": true
     }
   }
 }

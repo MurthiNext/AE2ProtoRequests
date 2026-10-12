@@ -1,0 +1,7 @@
+{
+  "parent": "ae2pr:block/high_reactivity_lava_smelter",
+  "textures": {
+    "overlay_front": "ae2pr:block/lava_smelter/front_paused",
+    "overlay_front_emissive": "ae2pr:block/lava_smelter/front_paused_emissive"
+  }
+}

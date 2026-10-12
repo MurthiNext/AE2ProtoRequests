@@ -1,40 +1,76 @@
 {
   "variants": {
     "facing=north,running=false,paused=false": {
-      "model": "ae2pr:block/matter_phase_transformer_facing_north"
-    },
-    "facing=north,running=true,paused=false": {
-      "model": "ae2pr:block/matter_phase_transformer_facing_north_active"
+      "model": "ae2pr:block/matter_phase_transformer"
     },
     "facing=north,running=false,paused=true": {
-      "model": "ae2pr:block/matter_phase_transformer_facing_north_paused"
+      "model": "ae2pr:block/matter_phase_transformer_paused"
+    },
+    "facing=north,running=true,paused=false": {
+      "model": "ae2pr:block/matter_phase_transformer_active"
+    },
+    "facing=north,running=true,paused=true": {
+      "model": "ae2pr:block/matter_phase_transformer_active"
     },
     "facing=south,running=false,paused=false": {
-      "model": "ae2pr:block/matter_phase_transformer_facing_south"
-    },
-    "facing=south,running=true,paused=false": {
-      "model": "ae2pr:block/matter_phase_transformer_facing_south_active"
+      "model": "ae2pr:block/matter_phase_transformer",
+      "y": 180,
+      "uvlock": true
     },
     "facing=south,running=false,paused=true": {
-      "model": "ae2pr:block/matter_phase_transformer_facing_south_paused"
+      "model": "ae2pr:block/matter_phase_transformer_paused",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,running=true,paused=false": {
+      "model": "ae2pr:block/matter_phase_transformer_active",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south,running=true,paused=true": {
+      "model": "ae2pr:block/matter_phase_transformer_active",
+      "y": 180,
+      "uvlock": true
     },
     "facing=east,running=false,paused=false": {
-      "model": "ae2pr:block/matter_phase_transformer_facing_east"
-    },
-    "facing=east,running=true,paused=false": {
-      "model": "ae2pr:block/matter_phase_transformer_facing_east_active"
+      "model": "ae2pr:block/matter_phase_transformer",
+      "y": 90,
+      "uvlock": true
     },
     "facing=east,running=false,paused=true": {
-      "model": "ae2pr:block/matter_phase_transformer_facing_east_paused"
+      "model": "ae2pr:block/matter_phase_transformer_paused",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,running=true,paused=false": {
+      "model": "ae2pr:block/matter_phase_transformer_active",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east,running=true,paused=true": {
+      "model": "ae2pr:block/matter_phase_transformer_active",
+      "y": 90,
+      "uvlock": true
     },
     "facing=west,running=false,paused=false": {
-      "model": "ae2pr:block/matter_phase_transformer_facing_west"
-    },
-    "facing=west,running=true,paused=false": {
-      "model": "ae2pr:block/matter_phase_transformer_facing_west_active"
+      "model": "ae2pr:block/matter_phase_transformer",
+      "y": 270,
+      "uvlock": true
     },
     "facing=west,running=false,paused=true": {
-      "model": "ae2pr:block/matter_phase_transformer_facing_west_paused"
+      "model": "ae2pr:block/matter_phase_transformer_paused",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,running=true,paused=false": {
+      "model": "ae2pr:block/matter_phase_transformer_active",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=west,running=true,paused=true": {
+      "model": "ae2pr:block/matter_phase_transformer_active",
+      "y": 270,
+      "uvlock": true
     }
   }
 }

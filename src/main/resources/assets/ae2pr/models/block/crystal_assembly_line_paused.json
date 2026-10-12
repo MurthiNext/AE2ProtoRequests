@@ -1,0 +1,7 @@
+{
+  "parent": "ae2pr:block/crystal_assembly_line",
+  "textures": {
+    "overlay_front": "ae2pr:block/assembly_line/front_paused",
+    "overlay_front_emissive": "ae2pr:block/assembly_line/front_paused_emissive"
+  }
+}
