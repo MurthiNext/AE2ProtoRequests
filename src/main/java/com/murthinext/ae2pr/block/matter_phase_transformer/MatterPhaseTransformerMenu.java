@@ -18,7 +18,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import appeng.api.upgrades.Upgrades;
 
 import com.murthinext.ae2pr.ModNetwork;
-import com.murthinext.ae2pr.network.MatterPhaseJobPacket;
+import com.murthinext.ae2pr.network.MatterPhaseTransformerJobPacket;
 
 /**
  * 物质相变仪主机的容器菜单。
@@ -114,7 +114,7 @@ public class MatterPhaseTransformerMenu extends AbstractContainerMenu {
                 jobFluidSynced = true;
                 lastJobFluid = jobFluid.copy();
                 ModNetwork.sendToPlayer(serverPlayer,
-                        new MatterPhaseJobPacket(controller.getBlockPos(), lastJobFluid));
+                        new MatterPhaseTransformerJobPacket(controller.getBlockPos(), lastJobFluid));
             }
         }
         super.broadcastChanges();

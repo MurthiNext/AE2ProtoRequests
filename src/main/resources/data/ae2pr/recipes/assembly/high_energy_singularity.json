@@ -1,7 +1,7 @@
 {
   "type": "ae2pr:crystal_assembly_line",
   "duration": 600,
-  "energy_per_parallel": 500000,
+  "energy": 500000,
   "module_requirements": [
     {
       "module": "ae2pr:charging",

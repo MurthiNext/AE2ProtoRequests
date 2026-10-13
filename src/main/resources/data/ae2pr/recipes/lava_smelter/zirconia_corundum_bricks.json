@@ -1,6 +1,6 @@
 {
   "type": "ae2pr:lava_smelter",
-  "ingredients": [
+  "item_inputs": [
     {
       "item": "ae2pr:meteor_steel_ingot",
       "count": 2
@@ -14,8 +14,10 @@
       "count": 16
     }
   ],
-  "result": {
-    "item": "ae2pr:zirconia_corundum_bricks",
-    "count": 1
-  }
+  "item_outputs": [
+    {
+      "item": "ae2pr:zirconia_corundum_bricks",
+      "count": 1
+    }
+  ]
 }

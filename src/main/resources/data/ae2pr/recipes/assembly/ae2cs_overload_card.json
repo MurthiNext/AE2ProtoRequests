@@ -11,7 +11,7 @@
       "recipe": {
         "type": "ae2pr:crystal_assembly_line",
         "duration": 50,
-        "energy_per_parallel": 16000,
+        "energy": 16000,
         "item_inputs": [
           {
             "tag": "forge:storage_blocks/pure_crystal/meteor_crystal_block",

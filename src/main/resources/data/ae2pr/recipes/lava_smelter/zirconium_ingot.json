@@ -1,6 +1,6 @@
 {
   "type": "ae2pr:lava_smelter",
-  "ingredients": [
+  "item_inputs": [
     {
       "tag": "forge:gems/zircon",
       "count": 16
@@ -10,7 +10,7 @@
       "count": 7
     }
   ],
-  "results": [
+  "item_outputs": [
     {
       "item": "ae2pr:zirconium_ingot",
       "count": 12

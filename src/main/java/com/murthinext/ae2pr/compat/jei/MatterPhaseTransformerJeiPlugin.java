@@ -19,17 +19,17 @@ import com.murthinext.ae2pr.ae2pr;
  * 注册物质相变配方分类与催化剂的 JEI 插件。
  */
 @JeiPlugin
-public class MatterPhaseJeiPlugin implements IModPlugin {
+public class MatterPhaseTransformerJeiPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "matter_phase");
+        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "matter_phase_transformer");
     }
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(
-                new MatterPhaseJeiCategory(registration.getJeiHelpers().getGuiHelper()));
+                new MatterPhaseTransformerJeiCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -38,13 +38,13 @@ public class MatterPhaseJeiPlugin implements IModPlugin {
         if (level == null) {
             return;
         }
-        registration.addRecipes(MatterPhaseJeiCategory.RECIPE_TYPE,
-                List.copyOf(level.getRecipeManager().getAllRecipesFor(ModRecipes.MATTER_PHASE_TYPE.get())));
+        registration.addRecipes(MatterPhaseTransformerJeiCategory.RECIPE_TYPE,
+                List.copyOf(level.getRecipeManager().getAllRecipesFor(ModRecipes.MATTER_PHASE_TRANSFORMER_TYPE.get())));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalysts(MatterPhaseJeiCategory.RECIPE_TYPE,
+        registration.addRecipeCatalysts(MatterPhaseTransformerJeiCategory.RECIPE_TYPE,
                 ModItems.MATTER_PHASE_TRANSFORMER.get());
     }
 }

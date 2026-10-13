@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
@@ -25,6 +27,7 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import com.murthinext.ae2pr.ModRecipes;
@@ -141,7 +144,7 @@ public class AlienLavaRecipe implements Recipe<Container> {
         @Override
         public AlienLavaRecipe fromJson(ResourceLocation id, JsonObject json) {
             List<CountedIngredient> ingredients = new ArrayList<>();
-            for (JsonElement element : GsonHelper.getAsJsonArray(json, "ingredients")) {
+            for (JsonElement element : GsonHelper.getAsJsonArray(json, "item_inputs")) {
                 JsonObject entry = element.getAsJsonObject();
                 int count = GsonHelper.getAsInt(entry, "count", 1);
                 ingredients.add(new CountedIngredient(Ingredient.fromJson(entry), count));
@@ -149,13 +152,27 @@ public class AlienLavaRecipe implements Recipe<Container> {
             TagKey<Fluid> catalyst = TagKey.create(Registries.FLUID,
                     ResourceLocation.parse(GsonHelper.getAsString(json, "catalyst",
                             ModTags.ALIEN_LAVA.location().toString())));
-            ItemStack resultItem = json.has("result")
-                    ? ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"))
-                    : ItemStack.EMPTY;
-            Fluid resultFluid = json.has("result_fluid")
-                    ? ForgeRegistries.FLUIDS.getValue(
-                            ResourceLocation.parse(GsonHelper.getAsString(json, "result_fluid")))
-                    : null;
+            JsonArray itemOutputs = GsonHelper.getAsJsonArray(json, "item_outputs", new JsonArray());
+            if (itemOutputs.size() > 1) {
+                throw new JsonSyntaxException("item_outputs 最多只能有一个产物");
+            }
+            ItemStack resultItem = itemOutputs.isEmpty()
+                    ? ItemStack.EMPTY
+                    : ShapedRecipe.itemStackFromJson(itemOutputs.get(0).getAsJsonObject());
+            JsonArray fluidOutputs = GsonHelper.getAsJsonArray(json, "fluid_outputs", new JsonArray());
+            if (fluidOutputs.size() > 1) {
+                throw new JsonSyntaxException("fluid_outputs 最多只能有一个产物");
+            }
+            Fluid resultFluid = null;
+            if (!fluidOutputs.isEmpty()) {
+                JsonObject output = fluidOutputs.get(0).getAsJsonObject();
+                ResourceLocation fluidId = ResourceLocation.parse(GsonHelper.getAsString(output, "fluid"));
+                resultFluid = ForgeRegistries.FLUIDS.getValue(fluidId);
+                int amount = GsonHelper.getAsInt(output, "amount");
+                if (resultFluid == null || amount != FluidType.BUCKET_VOLUME) {
+                    throw new JsonSyntaxException("fluid_outputs 仅支持有效流体且 amount 必须为 1000");
+                }
+            }
             return new AlienLavaRecipe(id, ingredients, catalyst, resultItem, resultFluid);
         }
 

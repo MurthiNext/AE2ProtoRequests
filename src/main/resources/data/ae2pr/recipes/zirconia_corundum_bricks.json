@@ -1,7 +1,7 @@
 {
   "type": "ae2pr:alien_lava",
   "catalyst": "ae2pr:alien_lava",
-  "ingredients": [
+  "item_inputs": [
     {
       "item": "ae2pr:meteor_steel_ingot",
       "count": 6
@@ -15,8 +15,10 @@
       "count": 12
     }
   ],
-  "result": {
-    "item": "ae2pr:zirconia_corundum_bricks",
-    "count": 1
-  }
+  "item_outputs": [
+    {
+      "item": "ae2pr:zirconia_corundum_bricks",
+      "count": 1
+    }
+  ]
 }

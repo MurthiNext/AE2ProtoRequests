@@ -38,7 +38,7 @@ import com.murthinext.ae2pr.multiblock.StructureResult;
 import com.murthinext.ae2pr.multiblock.StructureValidator;
 import com.murthinext.ae2pr.multiblock.structure.MatterPhaseTransformerStructure;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
-import com.murthinext.ae2pr.recipe.MatterPhaseRecipe;
+import com.murthinext.ae2pr.recipe.MatterPhaseTransformerRecipe;
 
 /**
  * 物质相变仪主机方块实体。
@@ -73,7 +73,7 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
     private boolean paused;
     private Error error = Error.NONE;
     @Nullable
-    private MatterPhaseRecipe currentRecipe;
+    private MatterPhaseTransformerRecipe currentRecipe;
 
     private FluidStack clientJobFluid = FluidStack.EMPTY;
 
@@ -162,7 +162,7 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
         if (level == null) {
             return;
         }
-        MatterPhaseRecipe recipe = findMatch();
+        MatterPhaseTransformerRecipe recipe = findMatch();
         if (recipe == null) {
             clearPause();
             return;
@@ -193,7 +193,7 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
     }
 
     private void finishJob() {
-        MatterPhaseRecipe recipe = currentRecipe;
+        MatterPhaseTransformerRecipe recipe = currentRecipe;
         int parallel = jobParallel;
         currentRecipe = null;
         jobParallel = 0;
@@ -227,12 +227,12 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
     // 配方匹配
 
     @Nullable
-    private MatterPhaseRecipe findMatch() {
+    private MatterPhaseTransformerRecipe findMatch() {
         Level level = this.level;
         if (level == null) {
             return null;
         }
-        for (MatterPhaseRecipe recipe : level.getRecipeManager().getAllRecipesFor(ModRecipes.MATTER_PHASE_TYPE.get())) {
+        for (MatterPhaseTransformerRecipe recipe : level.getRecipeManager().getAllRecipesFor(ModRecipes.MATTER_PHASE_TRANSFORMER_TYPE.get())) {
             if (hasIngredients(recipe)) {
                 return recipe;
             }
@@ -240,7 +240,7 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
         return null;
     }
 
-    private boolean hasIngredients(MatterPhaseRecipe recipe) {
+    private boolean hasIngredients(MatterPhaseTransformerRecipe recipe) {
         for (CountedIngredient ingredient : recipe.getCountedIngredients()) {
             if (available(ingredient) < ingredient.count()) {
                 return false;
@@ -262,7 +262,7 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
         return total;
     }
 
-    private void consumeInputs(MatterPhaseRecipe recipe, int parallel) {
+    private void consumeInputs(MatterPhaseTransformerRecipe recipe, int parallel) {
         for (CountedIngredient ingredient : recipe.getCountedIngredients()) {
             int remaining = ingredient.count() * parallel;
             for (ItemBusBlockEntity bus : inputBuses) {
@@ -290,7 +290,7 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
     /**
      * 输入份数与输出仓容量中的较小值。
      */
-    private int parallelFor(MatterPhaseRecipe recipe) {
+    private int parallelFor(MatterPhaseTransformerRecipe recipe) {
         int parallel = maxParallel();
         for (CountedIngredient ingredient : recipe.getCountedIngredients()) {
             parallel = Math.min(parallel, available(ingredient) / ingredient.count());
@@ -298,7 +298,7 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
         return outputParallel(recipe, parallel);
     }
 
-    private int outputParallel(MatterPhaseRecipe recipe, int maximum) {
+    private int outputParallel(MatterPhaseTransformerRecipe recipe, int maximum) {
         int low = 0;
         int high = maximum;
         while (low < high) {
@@ -312,7 +312,7 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
         return low;
     }
 
-    private boolean canFitFluid(MatterPhaseRecipe recipe, int parallel) {
+    private boolean canFitFluid(MatterPhaseTransformerRecipe recipe, int parallel) {
         FluidStack output = recipe.getFluidOutput();
         long remaining = (long) output.getAmount() * parallel;
         for (FluidHatchBlockEntity hatch : outputHatches) {
@@ -329,7 +329,7 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
         return remaining <= 0;
     }
 
-    private void insertFluid(MatterPhaseRecipe recipe, int parallel) {
+    private void insertFluid(MatterPhaseTransformerRecipe recipe, int parallel) {
         FluidStack remaining = recipe.getFluidOutput();
         long total = (long) remaining.getAmount() * parallel;
         remaining.setAmount((int) Math.min(total, Integer.MAX_VALUE));
@@ -350,7 +350,7 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
     // 加速卡与电力
 
     public int maxParallel() {
-        return Math.max(1, Config.matterPhaseParallel());
+        return Math.max(1, Config.matterPhaseTransformerParallel());
     }
 
     public int getSpeedCardCount() {
@@ -562,14 +562,14 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
             return;
         }
         var recipe = level.getRecipeManager().byKey(ResourceLocation.parse(tag.getString(JOB_RECIPE_ID)));
-        if (recipe.orElse(null) instanceof MatterPhaseRecipe matterPhaseRecipe) {
+        if (recipe.orElse(null) instanceof MatterPhaseTransformerRecipe matterPhaseTransformerRecipe) {
             // 恢复加工进度
             jobTicksLeft = tag.getInt(JOB_TICKS_ID);
             jobTotalTicks = tag.contains(JOB_TOTAL_TICKS_ID)
                     ? tag.getInt(JOB_TOTAL_TICKS_ID)
-                    : Math.max(1, matterPhaseRecipe.getDuration());
+                    : Math.max(1, matterPhaseTransformerRecipe.getDuration());
             jobParallel = Math.max(1, tag.getInt(JOB_PARALLEL_ID));
-            currentRecipe = matterPhaseRecipe;
+            currentRecipe = matterPhaseTransformerRecipe;
         }
     }
 

@@ -13,7 +13,7 @@ public final class ModSounds {
 
     public static final RegistryObject<SoundEvent> ASSEMBLY_LINE = register("assembly_line_processing");
     public static final RegistryObject<SoundEvent> LAVA_SMELTER = register("lava_smelter_processing");
-    public static final RegistryObject<SoundEvent> MATTER_PHASE = register("matter_phase_processing");
+    public static final RegistryObject<SoundEvent> MATTER_PHASE_TRANSFORMER = register("matter_phase_transformer_processing");
     public static final RegistryObject<SoundEvent> CRYSTAL_REACTION = register("crystal_reaction_processing");
 
     private ModSounds() {

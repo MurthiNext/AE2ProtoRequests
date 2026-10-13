@@ -1,11 +1,17 @@
 {
   "type": "ae2pr:alien_lava",
   "catalyst": "minecraft:lava",
-  "ingredients": [
+  "item_inputs": [
     {
       "item": "ae2:sky_dust",
       "count": 32
     }
   ],
-  "result_fluid": "ae2pr:alien_lava"
+  "item_outputs": [],
+  "fluid_outputs": [
+    {
+      "amount": 1000,
+      "fluid": "ae2pr:alien_lava"
+    }
+  ]
 }

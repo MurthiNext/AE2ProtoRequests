@@ -1,0 +1,15 @@
+{
+  "type": "ae2pr:matter_phase_transformer",
+  "item_inputs": [
+    {
+      "item": "ae2:fluix_crystal",
+      "count": 1
+    }
+  ],
+  "fluid_outputs": [
+    {
+      "fluid": "ae2pr:liquid_fluix_crystal",
+      "amount": 144
+    }
+  ]
+}

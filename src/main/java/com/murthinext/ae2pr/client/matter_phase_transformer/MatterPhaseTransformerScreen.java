@@ -102,8 +102,8 @@ public class MatterPhaseTransformerScreen extends AbstractMachineScreen<MatterPh
 
     private Component errorText() {
         return switch (menu.getErrorCode()) {
-            case 1 -> Component.translatable("gui.ae2pr.matter_phase.error.power");
-            case 2 -> Component.translatable("gui.ae2pr.matter_phase.error.output");
+            case 1 -> Component.translatable("gui.ae2pr.matter_phase_transformer.error.power");
+            case 2 -> Component.translatable("gui.ae2pr.matter_phase_transformer.error.output");
             default -> null;
         };
     }

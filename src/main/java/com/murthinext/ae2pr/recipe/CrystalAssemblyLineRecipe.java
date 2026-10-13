@@ -212,10 +212,10 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container> {
                 throw new JsonSyntaxException("duration 必须 >= 1");
             }
             Double energyPerParallel = null;
-            if (json.has("energy_per_parallel")) {
-                energyPerParallel = GsonHelper.getAsDouble(json, "energy_per_parallel");
+            if (json.has("energy")) {
+                energyPerParallel = GsonHelper.getAsDouble(json, "energy");
                 if (energyPerParallel < 0) {
-                    throw new JsonSyntaxException("energy_per_parallel 必须 >= 0");
+                    throw new JsonSyntaxException("energy 必须 >= 0");
                 }
             }
             return new CrystalAssemblyLineRecipe(id, itemInputs, fluidInputs, itemOutputs, moduleRequirements, duration,

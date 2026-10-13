@@ -7,7 +7,7 @@ import com.murthinext.ae2pr.network.HatchTankClickPacket;
 import com.murthinext.ae2pr.network.LavaSmelterJobPacket;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 import com.murthinext.ae2pr.network.MachinePartStackPacket;
-import com.murthinext.ae2pr.network.MatterPhaseJobPacket;
+import com.murthinext.ae2pr.network.MatterPhaseTransformerJobPacket;
 import com.murthinext.ae2pr.network.NamingFactoryRenamePacket;
 import com.murthinext.ae2pr.network.RepeatOrderConfirmRoundsPacket;
 import com.murthinext.ae2pr.network.RepeatOrderFailedPacket;
@@ -106,10 +106,10 @@ public final class ModNetwork {
                 LavaSmelterJobPacket::handle);
 
         CHANNEL.registerMessage(nextMessageId++,
-                MatterPhaseJobPacket.class,
-                MatterPhaseJobPacket::encode,
-                MatterPhaseJobPacket::decode,
-                MatterPhaseJobPacket::handle);
+                MatterPhaseTransformerJobPacket.class,
+                MatterPhaseTransformerJobPacket::encode,
+                MatterPhaseTransformerJobPacket::decode,
+                MatterPhaseTransformerJobPacket::handle);
 
         CHANNEL.registerMessage(nextMessageId++,
                 CrystalReactionChamberJobPacket.class,
@@ -160,7 +160,7 @@ public final class ModNetwork {
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
     }
 
-    public static void sendToPlayer(ServerPlayer player, MatterPhaseJobPacket packet) {
+    public static void sendToPlayer(ServerPlayer player, MatterPhaseTransformerJobPacket packet) {
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
     }
 

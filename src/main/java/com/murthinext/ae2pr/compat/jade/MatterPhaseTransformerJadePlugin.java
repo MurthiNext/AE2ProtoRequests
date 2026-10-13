@@ -96,14 +96,14 @@ public class MatterPhaseTransformerJadePlugin implements IWailaPlugin {
                 Fluid fluid = ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse(fluidId));
                 if (fluid != null) {
                     FluidStack output = new FluidStack(fluid, data.getInt(KEY_AMOUNT));
-                    tooltip.add(Component.translatable("jade.ae2pr.matter_phase.job",
+                    tooltip.add(Component.translatable("jade.ae2pr.matter_phase_transformer.job",
                             output.getDisplayName(), data.getInt(KEY_AMOUNT)));
                 }
                 int elapsed = data.getInt(KEY_ELAPSED);
                 float progress = Math.min(1.0F, (float) elapsed / duration);
                 IProgressStyle style = tooltip.getElementHelper().progressStyle().color(0xFF62D0DA, 0xFF1B222B);
                 tooltip.add(tooltip.getElementHelper().progress(progress,
-                        Component.translatable("jade.ae2pr.matter_phase.progress",
+                        Component.translatable("jade.ae2pr.matter_phase_transformer.progress",
                                 seconds(elapsed), seconds(duration)),
                         style, BoxStyle.DEFAULT, false));
             }

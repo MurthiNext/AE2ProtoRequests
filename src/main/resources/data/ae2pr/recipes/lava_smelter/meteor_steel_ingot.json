@@ -1,6 +1,6 @@
 {
   "type": "ae2pr:lava_smelter",
-  "ingredients": [
+  "item_inputs": [
     {
       "item": "minecraft:iron_ingot",
       "count": 10
@@ -10,8 +10,10 @@
       "count": 4
     }
   ],
-  "result": {
-    "item": "ae2pr:meteor_steel_ingot",
-    "count": 10
-  }
+  "item_outputs": [
+    {
+      "item": "ae2pr:meteor_steel_ingot",
+      "count": 10
+    }
+  ]
 }

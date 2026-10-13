@@ -11,7 +11,7 @@ import com.murthinext.ae2pr.recipe.AlienLavaRecipe;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
 import com.murthinext.ae2pr.recipe.CrystalReactionChamberRecipe;
 import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
-import com.murthinext.ae2pr.recipe.MatterPhaseRecipe;
+import com.murthinext.ae2pr.recipe.MatterPhaseTransformerRecipe;
 
 /**
  * 配方注册入口。
@@ -60,16 +60,16 @@ public final class ModRecipes {
     public static final RegistryObject<LavaSmelterRecipe.Serializer> LAVA_SMELTER = SERIALIZERS
             .register("lava_smelter", LavaSmelterRecipe.Serializer::new);
 
-    public static final RegistryObject<RecipeType<MatterPhaseRecipe>> MATTER_PHASE_TYPE = RECIPE_TYPES
-            .register("matter_phase", () -> new RecipeType<MatterPhaseRecipe>() {
+    public static final RegistryObject<RecipeType<MatterPhaseTransformerRecipe>> MATTER_PHASE_TRANSFORMER_TYPE = RECIPE_TYPES
+            .register("matter_phase_transformer", () -> new RecipeType<MatterPhaseTransformerRecipe>() {
                 @Override
                 public String toString() {
-                    return ae2pr.MODID + ":matter_phase";
+                    return ae2pr.MODID + ":matter_phase_transformer";
                 }
             });
 
-    public static final RegistryObject<MatterPhaseRecipe.Serializer> MATTER_PHASE = SERIALIZERS
-            .register("matter_phase", MatterPhaseRecipe.Serializer::new);
+    public static final RegistryObject<MatterPhaseTransformerRecipe.Serializer> MATTER_PHASE_TRANSFORMER = SERIALIZERS
+            .register("matter_phase_transformer", MatterPhaseTransformerRecipe.Serializer::new);
 
     public static final RegistryObject<RecipeType<CrystalReactionChamberRecipe>> CRYSTAL_REACTION_CHAMBER_TYPE = RECIPE_TYPES
             .register("crystal_reaction_chamber", () -> new RecipeType<CrystalReactionChamberRecipe>() {

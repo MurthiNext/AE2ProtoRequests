@@ -160,7 +160,7 @@ public final class CtmConfig {
             return CtmSprites.baseSprite(CtmSprites.LAVA_SMELTER_CONTROLLER_CASING);
         }
         if (block == ModBlocks.MATTER_PHASE_TRANSFORMER.get()) {
-            return CtmSprites.baseSprite(CtmSprites.MATTER_PHASE_CONTROLLER_CASING);
+            return CtmSprites.baseSprite(CtmSprites.MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING);
         }
         if (block == ModBlocks.CRYSTAL_REACTION_CHAMBER.get()) {
             return CtmSprites.baseSprite(CtmSprites.CRYSTAL_REACTION_CONTROLLER_CASING);

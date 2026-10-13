@@ -1,0 +1,38 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "neoecoae"
+        }
+      ],
+      "recipe": {
+        "type": "ae2pr:matter_phase_transformer",
+        "duration": 100,
+        "item_inputs": [
+          {
+            "tag": "forge:gems/energized_crystal",
+            "count": 12
+          },
+          {
+            "item": "ae2:sky_dust",
+            "count": 12
+          },
+          {
+            "item": "minecraft:ice",
+            "count": 12
+          }
+        ],
+        "fluid_outputs": [
+          {
+            "fluid": "neoecoae:cryotheum_solution",
+            "amount": 1000
+          }
+        ],
+        "energy": 6000
+      }
+    }
+  ]
+}

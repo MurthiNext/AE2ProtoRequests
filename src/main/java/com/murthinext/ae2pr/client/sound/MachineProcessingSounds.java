@@ -41,7 +41,7 @@ public final class MachineProcessingSounds {
                 CrystalAssemblyLineBlock.RUNNING, 1.0F, 1.0F, 0),
         LAVA_SMELTER(() -> SoundEvents.LAVA_AMBIENT, HighReactivityLavaSmelterBlock.FORMED,
                 HighReactivityLavaSmelterBlock.RUNNING, 0.4F, 0.8F, 0),
-        MATTER_PHASE(ModSounds.MATTER_PHASE, MatterPhaseTransformerBlock.FORMED,
+        MATTER_PHASE_TRANSFORMER(ModSounds.MATTER_PHASE_TRANSFORMER, MatterPhaseTransformerBlock.FORMED,
                 MatterPhaseTransformerBlock.RUNNING, 0.65F, 1.0F, 0),
         CRYSTAL_REACTION(ModSounds.CRYSTAL_REACTION, CrystalReactionChamberBlock.FORMED,
                 CrystalReactionChamberBlock.RUNNING, 0.7F, 1.0F, 0);

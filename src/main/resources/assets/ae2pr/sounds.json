@@ -14,8 +14,8 @@
       }
     ]
   },
-  "matter_phase_processing": {
-    "subtitle": "subtitle.ae2pr.matter_phase_processing",
+  "matter_phase_transformer_processing": {
+    "subtitle": "subtitle.ae2pr.matter_phase_transformer_processing",
     "sounds": [
       "ae2pr:machine/matter_phase_transformer"
     ]

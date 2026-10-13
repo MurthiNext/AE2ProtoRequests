@@ -1,0 +1,15 @@
+{
+  "type": "ae2pr:matter_phase_transformer",
+  "item_inputs": [
+    {
+      "item": "ae2:certus_quartz_crystal",
+      "count": 1
+    }
+  ],
+  "fluid_outputs": [
+    {
+      "fluid": "ae2pr:liquid_certus_quartz",
+      "amount": 144
+    }
+  ]
+}

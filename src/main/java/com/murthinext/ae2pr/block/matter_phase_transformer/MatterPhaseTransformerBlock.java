@@ -82,7 +82,7 @@ public class MatterPhaseTransformerBlock extends Block implements EntityBlock, W
             if (blockEntity instanceof MatterPhaseTransformerControllerBlockEntity controller) {
                 if (tickLevel.isClientSide) {
                     controller.clientTick();
-                    MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.MATTER_PHASE);
+                    MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.MATTER_PHASE_TRANSFORMER);
                 } else {
                     controller.serverTick();
                 }

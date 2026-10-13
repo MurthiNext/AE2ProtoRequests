@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -32,7 +33,7 @@ import com.murthinext.ae2pr.ModRecipes;
 /**
  * 物质相变仪配方。
  */
-public class MatterPhaseRecipe implements Recipe<Container> {
+public class MatterPhaseTransformerRecipe implements Recipe<Container> {
 
     public static final int DEFAULT_DURATION = 200;
 
@@ -43,7 +44,7 @@ public class MatterPhaseRecipe implements Recipe<Container> {
     @Nullable
     private final Double energyPerParallel;
 
-    public MatterPhaseRecipe(ResourceLocation id, List<CountedIngredient> ingredients, FluidStack fluidOutput,
+    public MatterPhaseTransformerRecipe(ResourceLocation id, List<CountedIngredient> ingredients, FluidStack fluidOutput,
             int duration, @Nullable Double energyPerParallel) {
         this.id = id;
         this.ingredients = List.copyOf(ingredients);
@@ -65,7 +66,7 @@ public class MatterPhaseRecipe implements Recipe<Container> {
     }
 
     public double getEnergyPerParallel() {
-        return energyPerParallel != null ? energyPerParallel : Config.matterPhaseEnergyPerParallel();
+        return energyPerParallel != null ? energyPerParallel : Config.matterPhaseTransformerEnergyPerParallel();
     }
 
     @Override
@@ -102,12 +103,12 @@ public class MatterPhaseRecipe implements Recipe<Container> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.MATTER_PHASE.get();
+        return ModRecipes.MATTER_PHASE_TRANSFORMER.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return ModRecipes.MATTER_PHASE_TYPE.get();
+        return ModRecipes.MATTER_PHASE_TRANSFORMER_TYPE.get();
     }
 
     @Override
@@ -118,12 +119,12 @@ public class MatterPhaseRecipe implements Recipe<Container> {
     /**
      * JSON 与网络序列化。
      */
-    public static class Serializer implements RecipeSerializer<MatterPhaseRecipe> {
+    public static class Serializer implements RecipeSerializer<MatterPhaseTransformerRecipe> {
 
         @Override
-        public MatterPhaseRecipe fromJson(ResourceLocation id, JsonObject json) {
+        public MatterPhaseTransformerRecipe fromJson(ResourceLocation id, JsonObject json) {
             List<CountedIngredient> ingredients = new ArrayList<>();
-            for (JsonElement element : GsonHelper.getAsJsonArray(json, "ingredients")) {
+            for (JsonElement element : GsonHelper.getAsJsonArray(json, "item_inputs")) {
                 JsonObject entry = element.getAsJsonObject();
                 int count = GsonHelper.getAsInt(entry, "count", 1);
                 if (count < 1) {
@@ -135,7 +136,11 @@ public class MatterPhaseRecipe implements Recipe<Container> {
                 throw new JsonSyntaxException("配方至少需要一个输入");
             }
 
-            JsonObject output = GsonHelper.getAsJsonObject(json, "fluid_output");
+            JsonArray outputs = GsonHelper.getAsJsonArray(json, "fluid_outputs");
+            if (outputs.size() != 1) {
+                throw new JsonSyntaxException("配方必须恰有一个流体输出");
+            }
+            JsonObject output = outputs.get(0).getAsJsonObject();
             Fluid fluid = ForgeRegistries.FLUIDS.getValue(
                     ResourceLocation.parse(GsonHelper.getAsString(output, "fluid")));
             if (fluid == null) {
@@ -151,17 +156,17 @@ public class MatterPhaseRecipe implements Recipe<Container> {
                 throw new JsonSyntaxException("duration 必须 >= 1");
             }
             Double energyPerParallel = null;
-            if (json.has("energy_per_parallel")) {
-                energyPerParallel = GsonHelper.getAsDouble(json, "energy_per_parallel");
+            if (json.has("energy")) {
+                energyPerParallel = GsonHelper.getAsDouble(json, "energy");
                 if (energyPerParallel < 0) {
-                    throw new JsonSyntaxException("energy_per_parallel 必须 >= 0");
+                    throw new JsonSyntaxException("energy 必须 >= 0");
                 }
             }
-            return new MatterPhaseRecipe(id, ingredients, new FluidStack(fluid, amount), duration, energyPerParallel);
+            return new MatterPhaseTransformerRecipe(id, ingredients, new FluidStack(fluid, amount), duration, energyPerParallel);
         }
 
         @Override
-        public MatterPhaseRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
+        public MatterPhaseTransformerRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
             int size = buffer.readVarInt();
             List<CountedIngredient> ingredients = new ArrayList<>(size);
             for (int i = 0; i < size; i++) {
@@ -172,11 +177,11 @@ public class MatterPhaseRecipe implements Recipe<Container> {
             FluidStack fluidOutput = fluidTag == null ? FluidStack.EMPTY : FluidStack.loadFluidStackFromNBT(fluidTag);
             int duration = buffer.readVarInt();
             Double energyPerParallel = buffer.readBoolean() ? buffer.readDouble() : null;
-            return new MatterPhaseRecipe(id, ingredients, fluidOutput, duration, energyPerParallel);
+            return new MatterPhaseTransformerRecipe(id, ingredients, fluidOutput, duration, energyPerParallel);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, MatterPhaseRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, MatterPhaseTransformerRecipe recipe) {
             buffer.writeVarInt(recipe.ingredients.size());
             for (CountedIngredient entry : recipe.ingredients) {
                 buffer.writeVarInt(entry.count());

@@ -126,11 +126,11 @@ public class LavaSmelterRecipe implements Recipe<Container> {
         @Override
         public LavaSmelterRecipe fromJson(ResourceLocation id, JsonObject json) {
             List<CountedIngredient> ingredients = new ArrayList<>();
-            for (JsonElement element : GsonHelper.getAsJsonArray(json, "ingredients")) {
+            for (JsonElement element : GsonHelper.getAsJsonArray(json, "item_inputs")) {
                 JsonObject entry = element.getAsJsonObject();
                 int count = GsonHelper.getAsInt(entry, "count", 1);
                 if (count < 1) {
-                    throw new JsonSyntaxException("ingredients 的 count 必须 >= 1");
+                    throw new JsonSyntaxException("item_inputs 的 count 必须 >= 1");
                 }
                 ingredients.add(new CountedIngredient(Ingredient.fromJson(entry), count));
             }
@@ -139,13 +139,11 @@ public class LavaSmelterRecipe implements Recipe<Container> {
             }
 
             List<ItemStack> results = new ArrayList<>();
-            if (json.has("results")) {
-                JsonArray resultArray = GsonHelper.getAsJsonArray(json, "results");
+            if (json.has("item_outputs")) {
+                JsonArray resultArray = GsonHelper.getAsJsonArray(json, "item_outputs");
                 for (JsonElement element : resultArray) {
                     results.add(ShapedRecipe.itemStackFromJson(element.getAsJsonObject()));
                 }
-            } else if (json.has("result")) {
-                results.add(ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result")));
             }
             if (results.isEmpty() || results.size() > MAX_RESULTS) {
                 throw new JsonSyntaxException("配方产物数量必须为 1 至 " + MAX_RESULTS);
@@ -155,10 +153,10 @@ public class LavaSmelterRecipe implements Recipe<Container> {
                 throw new JsonSyntaxException("duration 必须 >= 1");
             }
             Double energyPerParallel = null;
-            if (json.has("energy_per_parallel")) {
-                energyPerParallel = GsonHelper.getAsDouble(json, "energy_per_parallel");
+            if (json.has("energy")) {
+                energyPerParallel = GsonHelper.getAsDouble(json, "energy");
                 if (energyPerParallel < 0) {
-                    throw new JsonSyntaxException("energy_per_parallel 必须 >= 0");
+                    throw new JsonSyntaxException("energy 必须 >= 0");
                 }
             }
             return new LavaSmelterRecipe(id, ingredients, results, duration, energyPerParallel);
