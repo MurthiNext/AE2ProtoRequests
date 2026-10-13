@@ -75,16 +75,20 @@ public final class AssemblyLineStructure {
         }
     }
 
+    public static void updateUnitActive(Level level, BlockPos pos, boolean active) {
+        BlockState state = level.getBlockState(pos);
+        if (state.getBlock() instanceof AssemblyLineUnitBlock
+                && state.getValue(AssemblyLineUnitBlock.ACTIVE) != active) {
+            level.setBlock(pos, state.setValue(AssemblyLineUnitBlock.ACTIVE, active), Block.UPDATE_ALL);
+        }
+    }
+
     private static void applyState(Level level, List<BlockPos> cells, boolean partsFormed, boolean unitActive) {
         for (BlockPos pos : cells) {
+            updateUnitActive(level, pos, unitActive);
             BlockState state = level.getBlockState(pos);
             BlockState updated = null;
-            if (state.getBlock() instanceof AssemblyLineUnitBlock) {
-                // 普通控制外壳与替换模块共用工作态贴图
-                if (state.getValue(AssemblyLineUnitBlock.ACTIVE) != unitActive) {
-                    updated = state.setValue(AssemblyLineUnitBlock.ACTIVE, unitActive);
-                }
-            } else if (state.is(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get())) {
+            if (state.is(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get())) {
                 BlockState candidate = state;
                 if (candidate.getValue(FluixCrystalEnergyHatchBlock.FORMED) != partsFormed) {
                     candidate = candidate.setValue(FluixCrystalEnergyHatchBlock.FORMED, partsFormed);

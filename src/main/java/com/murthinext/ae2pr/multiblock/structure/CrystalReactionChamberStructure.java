@@ -54,6 +54,13 @@ public final class CrystalReactionChamberStructure {
     private CrystalReactionChamberStructure() {
     }
 
+    public static BlockPos buddingQuartzPos(BlockPos controllerPos, Direction facing, boolean mirrorSide,
+            boolean mirrorFront) {
+        Direction back = RelativeDirection.BACK.getFacing(facing, Direction.UP, mirrorSide, mirrorFront);
+        Direction right = RelativeDirection.RIGHT.getFacing(facing, Direction.UP, mirrorSide, mirrorFront);
+        return controllerPos.relative(back, 2).relative(right, 2).above();
+    }
+
     /**
      * 同步结构内输入/输出总线与能源仓的外观。
      */

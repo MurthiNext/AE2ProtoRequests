@@ -13,6 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import com.murthinext.ae2pr.block.DisassemblableBlock;
 import com.murthinext.ae2pr.block.DisassemblableGlassBlock;
+import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
 import com.murthinext.ae2pr.block.alien_lava.AlienLavaBlock;
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineModuleBlock;
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineUnitBlock;
@@ -176,7 +177,7 @@ public final class ModBlocks {
                     .requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block> HIGH_ENERGY_CORE = BLOCKS.register(
-            "high_energy_core", () -> new DisassemblableBlock(casingProperties()));
+            "high_energy_core", () -> new HighEnergyCoreBlock(casingProperties()));
 
     public static final RegistryObject<MatterPhaseTransformerBlock> MATTER_PHASE_TRANSFORMER = BLOCKS.register(
             "matter_phase_transformer", MatterPhaseTransformerBlock::new);

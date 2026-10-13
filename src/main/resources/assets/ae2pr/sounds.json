@@ -1,0 +1,29 @@
+{
+  "assembly_line_processing": {
+    "subtitle": "subtitle.ae2pr.assembly_line_processing",
+    "sounds": [
+      "ae2pr:machine/crystal_assembly_line"
+    ]
+  },
+  "lava_smelter_processing": {
+    "subtitle": "subtitle.ae2pr.lava_smelter_processing",
+    "sounds": [
+      {
+        "name": "minecraft:block.lava.pop",
+        "type": "event"
+      }
+    ]
+  },
+  "matter_phase_processing": {
+    "subtitle": "subtitle.ae2pr.matter_phase_processing",
+    "sounds": [
+      "ae2pr:machine/matter_phase_transformer"
+    ]
+  },
+  "crystal_reaction_processing": {
+    "subtitle": "subtitle.ae2pr.crystal_reaction_processing",
+    "sounds": [
+      "ae2pr:machine/crystal_reaction_chamber"
+    ]
+  }
+}

@@ -55,6 +55,11 @@ public final class MatterPhaseTransformerStructure {
     private MatterPhaseTransformerStructure() {
     }
 
+    public static BlockPos corePos(BlockPos controllerPos, Direction facing, boolean mirrorFront) {
+        Direction back = RelativeDirection.BACK.getFacing(facing, Direction.UP, false, mirrorFront);
+        return controllerPos.relative(back, 2).above(5);
+    }
+
     /**
      * 同步结构内输入/输出总线与能源仓的外观。
      */

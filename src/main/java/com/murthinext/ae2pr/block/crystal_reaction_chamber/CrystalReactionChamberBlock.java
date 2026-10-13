@@ -28,6 +28,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 
 import com.murthinext.ae2pr.ModTags;
+import com.murthinext.ae2pr.client.sound.MachineProcessingSounds;
 import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
 /**
@@ -78,7 +79,8 @@ public class CrystalReactionChamberBlock extends Block implements EntityBlock, W
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
             BlockEntityType<T> type) {
         if (level.isClientSide) {
-            return null;
+            return (tickLevel, pos, tickState, blockEntity) -> MachineProcessingSounds.tick(
+                    blockEntity, MachineProcessingSounds.Type.CRYSTAL_REACTION);
         }
         return (tickLevel, pos, tickState, blockEntity) -> {
             if (blockEntity instanceof CrystalReactionChamberControllerBlockEntity controller) {

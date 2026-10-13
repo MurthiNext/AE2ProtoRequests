@@ -1,6 +1,9 @@
 {
   "variants": {
-    "": {
+    "lit=false": {
+      "model": "ae2pr:block/high_energy_core"
+    },
+    "lit=true": {
       "model": "ae2pr:block/high_energy_core"
     }
   }

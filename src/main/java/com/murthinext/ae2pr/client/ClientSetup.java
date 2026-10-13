@@ -18,6 +18,7 @@ import com.murthinext.ae2pr.ModMenus;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.client.ctm.CtmBakedModel;
 import com.murthinext.ae2pr.client.assembly_line.AssemblyLineScreen;
+import com.murthinext.ae2pr.client.crystal_reaction_chamber.CrystalReactionChamberRenderer;
 import com.murthinext.ae2pr.client.crystal_reaction_chamber.CrystalReactionChamberScreen;
 import com.murthinext.ae2pr.client.machine_part.FluidHatchScreen;
 import com.murthinext.ae2pr.client.machine_part.ItemBusScreen;
@@ -25,6 +26,7 @@ import com.murthinext.ae2pr.client.emitter.MultiLevelEmitterScreen;
 import com.murthinext.ae2pr.client.emitter.MultiThresholdLevelEmitterScreen;
 import com.murthinext.ae2pr.client.lava_smelter.LavaSmelterRenderer;
 import com.murthinext.ae2pr.client.lava_smelter.LavaSmelterScreen;
+import com.murthinext.ae2pr.client.matter_phase_transformer.MatterPhaseTransformerRenderer;
 import com.murthinext.ae2pr.client.matter_phase_transformer.MatterPhaseTransformerScreen;
 import com.murthinext.ae2pr.client.naming_factory.NamingFactoryRenderer;
 import com.murthinext.ae2pr.client.naming_factory.NamingFactoryScreen;
@@ -79,6 +81,10 @@ public final class ClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.NAMING_FACTORY.get(), NamingFactoryRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.HIGH_REACTIVITY_LAVA_SMELTER.get(),
                 LavaSmelterRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.MATTER_PHASE_TRANSFORMER.get(),
+                MatterPhaseTransformerRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_REACTION_CHAMBER.get(),
+                CrystalReactionChamberRenderer::new);
     }
 
     @SubscribeEvent

@@ -33,6 +33,7 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraftforge.network.NetworkHooks;
 
 import com.murthinext.ae2pr.ModTags;
+import com.murthinext.ae2pr.client.sound.MachineProcessingSounds;
 import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
 /**
@@ -83,7 +84,8 @@ public class CrystalAssemblyLineBlock extends Block implements EntityBlock, Wren
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
             BlockEntityType<T> type) {
         if (level.isClientSide) {
-            return null;
+            return (tickLevel, pos, tickState, blockEntity) -> MachineProcessingSounds.tick(
+                    blockEntity, MachineProcessingSounds.Type.ASSEMBLY_LINE);
         }
         return (tickLevel, pos, tickState, blockEntity) -> {
             if (blockEntity instanceof AssemblyLineControllerBlockEntity controller) {

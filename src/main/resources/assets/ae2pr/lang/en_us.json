@@ -1,4 +1,8 @@
 {
+  "subtitle.ae2pr.assembly_line_processing": "Crystal Assembly Line assembles",
+  "subtitle.ae2pr.lava_smelter_processing": "Lava Smelter bubbles",
+  "subtitle.ae2pr.matter_phase_processing": "Matter Phase Transformer hums",
+  "subtitle.ae2pr.crystal_reaction_processing": "Crystal Reaction Chamber rumbles",
   "gui.ae2pr.repeat_order.button": "Repeat Order",
   "gui.ae2pr.repeat_order.button.enabled": "Repeat Order: %s Rounds",
   "gui.ae2pr.repeat_order.tooltip.round": "Crafting round %s/%s",

@@ -39,6 +39,7 @@ public class ae2pr {
         ModFluids.FLUIDS.register(modEventBus);
         ModRecipes.RECIPE_TYPES.register(modEventBus);
         ModRecipes.SERIALIZERS.register(modEventBus);
+        ModSounds.SOUNDS.register(modEventBus);
         ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         // 部件模型必须在预初始化阶段注册

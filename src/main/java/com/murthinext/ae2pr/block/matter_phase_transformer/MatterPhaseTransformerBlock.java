@@ -28,6 +28,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 
 import com.murthinext.ae2pr.ModTags;
+import com.murthinext.ae2pr.client.sound.MachineProcessingSounds;
 import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
 /**
@@ -77,12 +78,14 @@ public class MatterPhaseTransformerBlock extends Block implements EntityBlock, W
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
             BlockEntityType<T> type) {
-        if (level.isClientSide) {
-            return null;
-        }
         return (tickLevel, pos, tickState, blockEntity) -> {
             if (blockEntity instanceof MatterPhaseTransformerControllerBlockEntity controller) {
-                controller.serverTick();
+                if (tickLevel.isClientSide) {
+                    controller.clientTick();
+                    MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.MATTER_PHASE);
+                } else {
+                    controller.serverTick();
+                }
             }
         };
     }

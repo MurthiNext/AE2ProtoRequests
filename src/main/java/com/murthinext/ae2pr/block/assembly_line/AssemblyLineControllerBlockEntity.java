@@ -581,6 +581,10 @@ public class AssemblyLineControllerBlockEntity extends BlockEntity {
         if (updated != state) {
             level.setBlock(worldPosition, updated, Block.UPDATE_ALL);
         }
+        // 控制外壳与替换模块的工作外观由作业状态驱动
+        for (UnitCell cell : unitCells) {
+            AssemblyLineStructure.updateUnitActive(level, cell.pos(), showRunning);
+        }
     }
 
     public void onControllerRemoved() {

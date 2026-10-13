@@ -8,11 +8,14 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -27,6 +30,7 @@ import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ModItems;
 import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
@@ -49,6 +53,7 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
     private static final String JOB_TOTAL_TICKS_ID = "jobTotalTicks";
     private static final String JOB_PARALLEL_ID = "jobParallel";
     private static final String TAG_UPGRADES = "upgrades";
+    private static final String MIRROR_FRONT_ID = "mirrorFront";
 
     /**
      * 暂停原因。
@@ -59,6 +64,8 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
 
     private int tickCounter;
     private int retryCounter;
+    private boolean mirrorFront;
+    private final MatterPhaseTransformerAnimation animation = new MatterPhaseTransformerAnimation();
 
     private int jobTicksLeft;
     private int jobTotalTicks;
@@ -79,6 +86,34 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
 
     public MatterPhaseTransformerControllerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.MATTER_PHASE_TRANSFORMER.get(), pos, state);
+    }
+
+    public void clientTick() {
+        animation.tick(isFormed(), isRunning());
+    }
+
+    public double getParticleTime(float partialTick) {
+        return animation.getParticleTime(partialTick);
+    }
+
+    public float getEffectActivity(float partialTick) {
+        return animation.getActivity(partialTick);
+    }
+
+    public float getBeamStrength(float partialTick) {
+        return animation.getBeamStrength(partialTick);
+    }
+
+    public BlockPos getCorePos() {
+        return MatterPhaseTransformerStructure.corePos(worldPosition,
+                getBlockState().getValue(MatterPhaseTransformerBlock.FACING), mirrorFront);
+    }
+
+    @Override
+    public AABB getRenderBoundingBox() {
+        BlockPos core = getCorePos();
+        return new AABB(core.getX(), core.getY() - 3, core.getZ(),
+                core.getX() + 1, core.getY() + 4, core.getZ() + 1);
     }
 
     /**
@@ -167,10 +202,10 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
         }
         jobTicksLeft = 0;
         jobTotalTicks = 0;
-        applyControllerState();
         if (isFormed()) {
             tryStartJob();
         }
+        applyControllerState();
     }
 
     private void pause(Error reason) {
@@ -384,9 +419,17 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
             // 缓存命中：结构未变化，无需刷新外观与部件引用
             return;
         }
+        if (result.formed()) {
+            if (mirrorFront != result.mirrorFront()) {
+                updateCoreLight(false);
+            }
+            mirrorFront = result.mirrorFront();
+        }
         MatterPhaseTransformerStructure.updateFormed(level, worldPosition, facing, result);
         refreshParts(level, result);
-        applyControllerState(result.formed());    }
+        applyControllerState(result.formed());
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+    }
 
     private void refreshParts(Level level, StructureResult result) {
         inputBuses.clear();
@@ -441,6 +484,19 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
         if (updated != state) {
             level.setBlock(worldPosition, updated, Block.UPDATE_ALL);
         }
+        updateCoreLight(showRunning);
+    }
+
+    private void updateCoreLight(boolean lit) {
+        Level level = this.level;
+        if (level == null || level.isClientSide) {
+            return;
+        }
+        BlockPos core = getCorePos();
+        BlockState state = level.getBlockState(core);
+        if (state.is(ModBlocks.HIGH_ENERGY_CORE.get()) && state.getValue(HighEnergyCoreBlock.LIT) != lit) {
+            level.setBlock(core, state.setValue(HighEnergyCoreBlock.LIT, lit), Block.UPDATE_ALL);
+        }
     }
 
     public void onControllerRemoved() {
@@ -449,6 +505,7 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
             return;
         }
         structure.invalidate();
+        updateCoreLight(false);
         MatterPhaseTransformerStructure.updateFormed(level, worldPosition,
                 getBlockState().getValue(MatterPhaseTransformerBlock.FACING), StructureResult.EMPTY);
     }
@@ -462,11 +519,30 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
         }
     }
 
+    @Override
+    public CompoundTag getUpdateTag() {
+        return saveWithoutMetadata();
+    }
+
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public void onDataPacket(Connection connection, ClientboundBlockEntityDataPacket packet) {
+        CompoundTag tag = packet.getTag();
+        if (tag != null) {
+            load(tag);
+        }
+    }
+
     // 持久化
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
+        tag.putBoolean(MIRROR_FRONT_ID, mirrorFront);
         upgrades.writeToNBT(tag, TAG_UPGRADES);
         if (currentRecipe != null && jobTicksLeft > 0) {
             tag.putString(JOB_RECIPE_ID, currentRecipe.getId().toString());
@@ -479,6 +555,7 @@ public class MatterPhaseTransformerControllerBlockEntity extends BlockEntity {
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
+        mirrorFront = tag.getBoolean(MIRROR_FRONT_ID);
         upgrades.readFromNBT(tag, TAG_UPGRADES);
         Level level = this.level;
         if (level == null || level.isClientSide || !tag.contains(JOB_RECIPE_ID)) {

@@ -8,12 +8,15 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -29,6 +32,7 @@ import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ModItems;
 import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
@@ -50,6 +54,8 @@ public class CrystalReactionChamberControllerBlockEntity extends BlockEntity {
     private static final String JOB_TOTAL_TICKS_ID = "jobTotalTicks";
     private static final String JOB_PARALLEL_ID = "jobParallel";
     private static final String TAG_UPGRADES = "upgrades";
+    private static final String MIRROR_SIDE_ID = "mirrorSide";
+    private static final String MIRROR_FRONT_ID = "mirrorFront";
 
     /**
      * 暂停原因。
@@ -60,6 +66,8 @@ public class CrystalReactionChamberControllerBlockEntity extends BlockEntity {
 
     private int tickCounter;
     private int retryCounter;
+    private boolean mirrorSide;
+    private boolean mirrorFront;
 
     private int jobTicksLeft;
     private int jobTotalTicks;
@@ -83,6 +91,20 @@ public class CrystalReactionChamberControllerBlockEntity extends BlockEntity {
 
     public CrystalReactionChamberControllerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CRYSTAL_REACTION_CHAMBER.get(), pos, state);
+    }
+
+    public BlockPos getBuddingQuartzPos() {
+        return CrystalReactionChamberStructure.buddingQuartzPos(worldPosition,
+                getBlockState().getValue(CrystalReactionChamberBlock.FACING), mirrorSide, mirrorFront);
+    }
+
+    public BlockPos getCorePos() {
+        return getBuddingQuartzPos().above(2);
+    }
+
+    @Override
+    public AABB getRenderBoundingBox() {
+        return new AABB(getBuddingQuartzPos()).inflate(2.0);
     }
 
     /**
@@ -520,9 +542,17 @@ public class CrystalReactionChamberControllerBlockEntity extends BlockEntity {
             // 缓存命中：结构未变化，无需刷新外观与部件引用
             return;
         }
+        if (result.formed()) {
+            if (mirrorSide != result.mirrorSide() || mirrorFront != result.mirrorFront()) {
+                updateCoreLight(false);
+            }
+            mirrorSide = result.mirrorSide();
+            mirrorFront = result.mirrorFront();
+        }
         CrystalReactionChamberStructure.updateFormed(level, worldPosition, facing, result);
         refreshParts(level, result);
         applyControllerState(result.formed());
+        level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
     }
 
     private void refreshParts(Level level, StructureResult result) {
@@ -584,6 +614,19 @@ public class CrystalReactionChamberControllerBlockEntity extends BlockEntity {
         if (updated != state) {
             level.setBlock(worldPosition, updated, Block.UPDATE_ALL);
         }
+        updateCoreLight(showRunning);
+    }
+
+    private void updateCoreLight(boolean lit) {
+        Level level = this.level;
+        if (level == null || level.isClientSide) {
+            return;
+        }
+        BlockPos core = getCorePos();
+        BlockState state = level.getBlockState(core);
+        if (state.is(ModBlocks.HIGH_ENERGY_CORE.get()) && state.getValue(HighEnergyCoreBlock.LIT) != lit) {
+            level.setBlock(core, state.setValue(HighEnergyCoreBlock.LIT, lit), Block.UPDATE_ALL);
+        }
     }
 
     public void onControllerRemoved() {
@@ -592,6 +635,7 @@ public class CrystalReactionChamberControllerBlockEntity extends BlockEntity {
             return;
         }
         structure.invalidate();
+        updateCoreLight(false);
         CrystalReactionChamberStructure.updateFormed(level, worldPosition,
                 getBlockState().getValue(CrystalReactionChamberBlock.FACING), StructureResult.EMPTY);
     }
@@ -608,8 +652,28 @@ public class CrystalReactionChamberControllerBlockEntity extends BlockEntity {
     // 持久化
 
     @Override
+    public CompoundTag getUpdateTag() {
+        return saveWithoutMetadata();
+    }
+
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public void onDataPacket(Connection connection, ClientboundBlockEntityDataPacket packet) {
+        CompoundTag tag = packet.getTag();
+        if (tag != null) {
+            load(tag);
+        }
+    }
+
+    @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
+        tag.putBoolean(MIRROR_SIDE_ID, mirrorSide);
+        tag.putBoolean(MIRROR_FRONT_ID, mirrorFront);
         upgrades.writeToNBT(tag, TAG_UPGRADES);
         if (currentRecipe != null && jobTicksLeft > 0) {
             tag.putString(JOB_RECIPE_ID, currentRecipe.getId().toString());
@@ -622,6 +686,8 @@ public class CrystalReactionChamberControllerBlockEntity extends BlockEntity {
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
+        mirrorSide = tag.getBoolean(MIRROR_SIDE_ID);
+        mirrorFront = tag.getBoolean(MIRROR_FRONT_ID);
         upgrades.readFromNBT(tag, TAG_UPGRADES);
         Level level = this.level;
         if (level == null || level.isClientSide || !tag.contains(JOB_RECIPE_ID)) {
@@ -646,7 +712,7 @@ public class CrystalReactionChamberControllerBlockEntity extends BlockEntity {
     }
 
     public boolean isRunning() {
-        return isFormed() && jobTicksLeft > 0;
+        return isFormed() && getBlockState().getValue(CrystalReactionChamberBlock.RUNNING);
     }
 
     public boolean isPaused() {

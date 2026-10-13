@@ -1,4 +1,8 @@
 {
+  "subtitle.ae2pr.assembly_line_processing": "水晶装配线：加工",
+  "subtitle.ae2pr.lava_smelter_processing": "熔岩冶炼炉：迸溅",
+  "subtitle.ae2pr.matter_phase_processing": "物质相变仪：轰鸣",
+  "subtitle.ae2pr.crystal_reaction_processing": "水晶反应仓：轰鸣",
   "gui.ae2pr.repeat_order.button": "重复下单",
   "gui.ae2pr.repeat_order.button.enabled": "重复下单：%s 次",
   "gui.ae2pr.repeat_order.tooltip.round": "正在合成第 %s/%s 轮",
