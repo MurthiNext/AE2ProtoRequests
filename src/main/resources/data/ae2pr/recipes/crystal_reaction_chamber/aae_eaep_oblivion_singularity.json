@@ -1,0 +1,48 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "extendedae_plus"
+        },
+        {
+          "type": "forge:mod_loaded",
+          "modid": "advanced_ae"
+        }
+      ],
+      "recipe": {
+        "type": "ae2pr:crystal_reaction_chamber",
+        "duration": 100,
+        "energy": 100000,
+        "item_inputs": [
+          {
+            "item": "ae2:singularity",
+            "count": 2
+          },
+          {
+            "tag": "forge:nether_stars",
+            "count": 1
+          },
+          {
+            "item": "advanced_ae:quantum_alloy_plate",
+            "count": 4
+          }
+        ],
+        "fluid_inputs": [
+          {
+            "fluid": "advanced_ae:quantum_infusion_source",
+            "amount": 2000
+          }
+        ],
+        "item_outputs": [
+          {
+            "item": "extendedae_plus:oblivion_singularity",
+            "count": 1
+          }
+        ]
+      }
+    }
+  ]
+}

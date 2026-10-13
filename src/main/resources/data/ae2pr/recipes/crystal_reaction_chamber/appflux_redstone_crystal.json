@@ -1,0 +1,44 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "appflux"
+        }
+      ],
+      "recipe": {
+        "type": "ae2pr:crystal_reaction_chamber",
+        "duration": 100,
+        "energy": 10000,
+        "item_inputs": [
+          {
+            "tag": "forge:storage_blocks/redstone",
+            "count": 16
+          },
+          {
+            "tag": "ae2:all_fluix",
+            "count": 16
+          },
+          {
+            "tag": "forge:dusts/glowstone",
+            "count": 16
+          }
+        ],
+        "fluid_inputs": [
+          {
+            "fluid": "minecraft:water",
+            "amount": 500
+          }
+        ],
+        "item_outputs": [
+          {
+            "item": "appflux:redstone_crystal",
+            "count": 16
+          }
+        ]
+      }
+    }
+  ]
+}

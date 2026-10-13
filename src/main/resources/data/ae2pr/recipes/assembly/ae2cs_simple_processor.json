@@ -18,7 +18,7 @@
             "count": 32
           },
           {
-            "item": "minecraft:redstone",
+            "tag": "forge:dusts/redstone",
             "count": 32
           },
           {

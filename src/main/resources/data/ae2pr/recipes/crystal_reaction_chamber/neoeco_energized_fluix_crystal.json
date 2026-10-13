@@ -1,0 +1,40 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "neoecoae"
+        }
+      ],
+      "recipe": {
+        "type": "ae2pr:crystal_reaction_chamber",
+        "duration": 100,
+        "energy": 250000,
+        "item_inputs": [
+          {
+            "tag": "forge:dusts/energized_crystal",
+            "count": 64
+          },
+          {
+            "tag": "ae2:all_fluix",
+            "count": 64
+          }
+        ],
+        "fluid_inputs": [
+          {
+            "fluid": "minecraft:water",
+            "amount": 500
+          }
+        ],
+        "item_outputs": [
+          {
+            "item": "neoecoae:energized_fluix_crystal",
+            "count": 64
+          }
+        ]
+      }
+    }
+  ]
+}

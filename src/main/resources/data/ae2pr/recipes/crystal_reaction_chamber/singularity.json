@@ -1,0 +1,23 @@
+{
+  "type": "ae2pr:crystal_reaction_chamber",
+  "duration": 100,
+  "energy": 500000,
+  "item_inputs": [
+    {
+      "item": "ae2:matter_ball",
+      "count": 64
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "minecraft:lava",
+      "amount": 100
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2:singularity",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "type": "ae2pr:crystal_reaction_chamber",
+  "duration": 100,
+  "energy": 700000,
+  "item_inputs": [
+    {
+      "item": "ae2:certus_quartz_crystal",
+      "count": 64
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 1000
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2:charged_certus_quartz_crystal",
+      "count": 64
+    }
+  ]
+}

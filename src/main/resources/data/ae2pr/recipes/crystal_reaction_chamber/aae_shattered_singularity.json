@@ -1,0 +1,44 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "advanced_ae"
+        }
+      ],
+      "recipe": {
+        "type": "ae2pr:crystal_reaction_chamber",
+        "duration": 100,
+        "energy": 100000,
+        "item_inputs": [
+          {
+            "item": "ae2:singularity",
+            "count": 1
+          },
+          {
+            "tag": "forge:dusts/ender_pearl",
+            "count": 2
+          },
+          {
+            "item": "ae2:sky_dust",
+            "count": 2
+          }
+        ],
+        "fluid_inputs": [
+          {
+            "fluid": "minecraft:lava",
+            "amount": 100
+          }
+        ],
+        "item_outputs": [
+          {
+            "item": "advanced_ae:shattered_singularity",
+            "count": 2
+          }
+        ]
+      }
+    }
+  ]
+}
