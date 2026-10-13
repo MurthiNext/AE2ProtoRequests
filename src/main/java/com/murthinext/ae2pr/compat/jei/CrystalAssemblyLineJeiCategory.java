@@ -17,6 +17,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -139,6 +141,7 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
                 stacks.add(stack.copyWithCount(input.count()));
             }
             slot.addItemStacks(stacks);
+            slot.setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
             slot.addRichTooltipCallback(
                     (view, tooltip) -> tooltip.add(orderTooltip(inputIndex, Config.assemblyItemsOrdered())));
         }
@@ -154,8 +157,8 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
             }
             FluidStack fluid = fluidInputs.get(i);
             final int fluidIndex = i;
-            slot.addFluidStack(fluid.getFluid(), fluid.getAmount())
-                    .setFluidRenderer(fluid.getAmount(), true, 16, 16);
+            slot.addFluidStack(fluid.getFluid(), fluid.getAmount());
+            slot.setCustomRenderer(ForgeTypes.FLUID_STACK, FluidStackAmountRenderer.INSTANCE);
             slot.addRichTooltipCallback(
                     (view, tooltip) -> tooltip.add(orderTooltip(fluidIndex, Config.assemblyFluidsOrdered())));
         }
@@ -164,6 +167,7 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
         List<ItemStack> outputs = recipe.getItemOutputs();
         IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_X, OUTPUT_Y);
         outputSlot.setStandardSlotBackground();
+        outputSlot.setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
         if (!outputs.isEmpty()) {
             outputSlot.addItemStack(outputs.get(0));
         }

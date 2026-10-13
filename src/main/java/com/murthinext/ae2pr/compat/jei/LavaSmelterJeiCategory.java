@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -92,6 +93,7 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
                     stacks.add(stack.copyWithCount(ingredient.count()));
                 }
                 slot.addItemStacks(stacks);
+                slot.setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
             }
         }
 
@@ -103,6 +105,7 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
             outputSlot.setStandardSlotBackground();
             if (index < results.size()) {
                 outputSlot.addItemStack(results.get(index));
+                outputSlot.setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
             }
         }
     }

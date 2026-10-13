@@ -14,6 +14,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -102,6 +103,7 @@ public class AlienLavaJeiCategory implements IRecipeCategory<AlienLavaRecipe> {
                 stacks.add(stack.copyWithCount(ingredient.count()));
             }
             slot.addItemStacks(stacks);
+            slot.setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
             index++;
             y += SLOT;
             if (y >= 54 && index < recipe.getCountedIngredients().size()) {
@@ -122,10 +124,11 @@ public class AlienLavaJeiCategory implements IRecipeCategory<AlienLavaRecipe> {
         IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_X + 1, ARROW_Y + 1);
         outputSlot.setStandardSlotBackground();
         if (recipe.convertsCatalyst() && recipe.getResultFluid() != null) {
-            outputSlot.addFluidStack(recipe.getResultFluid(), FluidType.BUCKET_VOLUME)
-                    .setFluidRenderer(FluidType.BUCKET_VOLUME, false, 16, 16);
+            outputSlot.addFluidStack(recipe.getResultFluid(), FluidType.BUCKET_VOLUME);
+            outputSlot.setCustomRenderer(ForgeTypes.FLUID_STACK, FluidStackAmountRenderer.INSTANCE);
         } else {
             outputSlot.addItemStack(recipe.getResultItem());
+            outputSlot.setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
         }
     }
 

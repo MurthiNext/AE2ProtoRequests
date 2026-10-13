@@ -11,6 +11,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -43,31 +45,32 @@ public class CrystalReactionChamberJeiCategory implements IRecipeCategory<Crysta
     private static final int ITEMS_X = PADDING;
     private static final int CONTENT_Y = PADDING + 6;
     private static final int FLUIDS_X = ITEMS_X + ITEM_COLS * SLOT + 4;
-    private static final int CHAMBER_X = FLUIDS_X + SLOT + 4;
-    private static final int CHAMBER_W = 24;
-    private static final int CHAMBER_H = ITEM_ROWS * SLOT;
-    private static final int OUTPUT_X = CHAMBER_X + CHAMBER_W + 6;
+    private static final int PROCESS_X = FLUIDS_X + SLOT + 4;
+    private static final int PROCESS_W = 44;
+    private static final int PROCESS_H = ITEM_ROWS * SLOT;
+    private static final int OUTPUT_X = PROCESS_X + PROCESS_W + 4;
+    private static final int OUTPUT_Y = CONTENT_Y + SLOT;
     private static final int OUTPUT_FLUIDS_X = OUTPUT_X + SLOT + 4;
 
-    private static final int INFO_Y = CONTENT_Y + CHAMBER_H + 4;
+    private static final int INFO_Y = CONTENT_Y + PROCESS_H + 4;
     private static final int INFO_STEP = 10;
     private static final int WIDTH = OUTPUT_FLUIDS_X + SLOT + PADDING;
     private static final int HEIGHT = INFO_Y + 3 * INFO_STEP + 2;
 
-    private static final int COLOR_PANEL = 0xFF1B222B;
-    private static final int COLOR_PANEL_LINE = 0xFF39424E;
-    private static final int COLOR_CORE = 0xFF55A3A8;
-    private static final int COLOR_CORE_GLOW = 0xFF96E0DD;
+    private static final ResourceLocation PROCESS_TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+            "textures/gui/jei/crystal_reaction_chamber_process.png");
     private static final int COLOR_TEXT = 0x404040;
     private static final int COLOR_HINT = 0x808080;
     private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
     private final IDrawable icon;
     private final IDrawable fluidSlot;
+    private final IDrawable process;
 
     public CrystalReactionChamberJeiCategory(IGuiHelper guiHelper) {
         this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModBlocks.CRYSTAL_REACTION_CHAMBER.get()));
         this.fluidSlot = FluidSlotBackground.create(guiHelper);
+        this.process = new AnimatedTextureDrawable(PROCESS_TEXTURE, PROCESS_W, PROCESS_H, 40, 50);
     }
 
     @Override
@@ -117,6 +120,7 @@ public class CrystalReactionChamberJeiCategory implements IRecipeCategory<Crysta
                 stacks.add(stack.copyWithCount(input.count()));
             }
             slot.addItemStacks(stacks);
+            slot.setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
         }
 
         // 流体输入：单列，深色槽位背景
@@ -128,19 +132,20 @@ public class CrystalReactionChamberJeiCategory implements IRecipeCategory<Crysta
                 continue;
             }
             FluidStack fluid = fluidInputs.get(index);
-            slot.addFluidStack(fluid.getFluid(), fluid.getAmount())
-                    .setFluidRenderer(fluid.getAmount(), true, 16, 16);
+            slot.addFluidStack(fluid.getFluid(), fluid.getAmount());
+            slot.setCustomRenderer(ForgeTypes.FLUID_STACK, FluidStackAmountRenderer.INSTANCE);
         }
 
-        // 物品产物：相变室右侧
+        // 物品产物：箭头右侧居中
         List<ItemStack> itemOutputs = recipe.getItemOutputs();
-        IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_X, CONTENT_Y);
+        IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_X, OUTPUT_Y);
         outputSlot.setStandardSlotBackground();
+        outputSlot.setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
         if (!itemOutputs.isEmpty()) {
             outputSlot.addItemStack(itemOutputs.get(0));
         }
 
-        // 流体产物：物品产物下方一列
+        // 流体产物：物品产物右侧一列
         List<FluidStack> fluidOutputs = recipe.getFluidOutputs();
         for (int index = 0; index < FLUID_SLOT_COUNT; index++) {
             IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_FLUIDS_X,
@@ -150,8 +155,8 @@ public class CrystalReactionChamberJeiCategory implements IRecipeCategory<Crysta
                 continue;
             }
             FluidStack fluid = fluidOutputs.get(index);
-            slot.addFluidStack(fluid.getFluid(), fluid.getAmount())
-                    .setFluidRenderer(fluid.getAmount(), true, 16, 16);
+            slot.addFluidStack(fluid.getFluid(), fluid.getAmount());
+            slot.setCustomRenderer(ForgeTypes.FLUID_STACK, FluidStackAmountRenderer.INSTANCE);
         }
     }
 
@@ -159,7 +164,7 @@ public class CrystalReactionChamberJeiCategory implements IRecipeCategory<Crysta
     public void draw(CrystalReactionChamberRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics graphics,
             double mouseX, double mouseY) {
         var font = Minecraft.getInstance().font;
-        drawChamber(graphics);
+        process.draw(graphics, PROCESS_X, CONTENT_Y);
         graphics.drawString(font, Component.translatable("jei.ae2pr.crystal_reaction_chamber.duration",
                 recipe.getDuration()), PADDING, INFO_Y, COLOR_TEXT, false);
         graphics.drawString(font, Component.translatable("jei.ae2pr.crystal_reaction_chamber.energy",
@@ -171,16 +176,5 @@ public class CrystalReactionChamberJeiCategory implements IRecipeCategory<Crysta
                     Math.max(0, hiddenInputs), Math.max(0, hiddenOutputs)), PADDING, INFO_Y + 2 * INFO_STEP,
                     COLOR_HINT, false);
         }
-    }
-
-    private static void drawChamber(GuiGraphics graphics) {
-        graphics.fill(CHAMBER_X, CONTENT_Y, CHAMBER_X + CHAMBER_W, CONTENT_Y + CHAMBER_H, COLOR_PANEL_LINE);
-        graphics.fill(CHAMBER_X + 1, CONTENT_Y + 1, CHAMBER_X + CHAMBER_W - 1, CONTENT_Y + CHAMBER_H - 1,
-                COLOR_PANEL);
-        int centerX = CHAMBER_X + CHAMBER_W / 2;
-        int centerY = CONTENT_Y + CHAMBER_H / 2;
-        // 反应仓：中心亮青、外圈青
-        graphics.fill(centerX - 5, centerY - 5, centerX + 5, centerY + 5, COLOR_CORE);
-        graphics.fill(centerX - 3, centerY - 3, centerX + 3, centerY + 3, COLOR_CORE_GLOW);
     }
 }

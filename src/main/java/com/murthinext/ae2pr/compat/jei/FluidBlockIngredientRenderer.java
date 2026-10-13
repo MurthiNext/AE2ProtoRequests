@@ -21,7 +21,8 @@ public class FluidBlockIngredientRenderer implements IIngredientRenderer<FluidSt
 
     @Override
     public List<Component> getTooltip(FluidStack fluidStack, TooltipFlag tooltipFlag) {
-        return List.of(fluidStack.getDisplayName(), Component.literal(fluidStack.getAmount() + " mB"));
+        return List.of(fluidStack.getDisplayName(),
+                Component.translatable("jei.tooltip.liquid.amount", JeiAmountFormat.exact(fluidStack.getAmount())));
     }
 
     @Override

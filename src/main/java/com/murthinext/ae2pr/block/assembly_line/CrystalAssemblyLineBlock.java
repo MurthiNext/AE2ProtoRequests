@@ -154,9 +154,6 @@ public class CrystalAssemblyLineBlock extends Block implements EntityBlock, Wren
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip,
             TooltipFlag flag) {
-        // 组件内换行不会被工具提示拆行，这里按行拆成多个组件
-        for (String line : Component.translatable("tooltip.ae2pr.crystal_assembly_line.desc").getString().split("\n")) {
-            tooltip.add(Component.literal(line));
-        }
+        tooltip.add(Component.translatable("tooltip.ae2pr.crystal_assembly_line.desc"));
     }
 }

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PCP",
+    "CHC",
+    "PCP"
+  ],
+  "key": {
+    "C": {
+      "item": "ae2pr:single_plate_press"
+    },
+    "P": {
+      "item": "ae2:inscriber"
+    },
+    "H": {
+      "item": "ae2pr:computation_cell_component_64tops"
+    }
+  },
+  "result": {
+    "item": "ae2pr:naming_factory",
+    "count": 1
+  }
+}
