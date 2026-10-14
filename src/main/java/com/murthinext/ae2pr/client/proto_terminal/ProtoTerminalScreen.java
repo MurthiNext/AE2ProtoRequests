@@ -57,10 +57,12 @@ public final class ProtoTerminalScreen extends Screen {
     private static final long DETAIL_ENTER_DURATION = 330;
     private static final long DETAIL_EXIT_DURATION = 240;
     private static final long TERMINAL_EXIT_DURATION = 260;
-    // Ctrl 滚轮缩放的范围与步进
+    // Ctrl 滚轮缩放的范围、步进与缓动时长
     private static final float ZOOM_STEP = 0.2F;
-    private static final float MIN_ZOOM = 0.5F;
+    private static final float DEFAULT_ZOOM = 0.7F;
+    private static final float MIN_ZOOM = 0.25F;
     private static final float MAX_ZOOM = 3F;
+    private static final long ZOOM_DURATION = 200;
 
     private final TerminalStoryTree story;
     private final TerminalAnimation animation;
@@ -87,7 +89,12 @@ public final class ProtoTerminalScreen extends Screen {
     private float panX;
     private float panY;
     private boolean panning;
-    private float contentZoom = 1;
+    private float contentZoom = DEFAULT_ZOOM;
+    private float zoomFrom = DEFAULT_ZOOM;
+    private float zoomTarget = DEFAULT_ZOOM;
+    private float zoomAnchorX;
+    private float zoomAnchorY;
+    private long zoomStarted;
     private float canvasScale;
     private float canvasLeft;
     private float canvasTop;
@@ -110,6 +117,8 @@ public final class ProtoTerminalScreen extends Screen {
                     random.nextFloat() * 6.28F,
                     0.3F + random.nextFloat() * 0.6F, i % 11 == 0));
         }
+        // 星空与初始缩放保持一致，后续缩放按同一基准换算
+        starfield.zoom(DEFAULT_ZOOM, MAIN_X + MAIN_WIDTH / 2.0F, MAIN_Y + MAIN_HEIGHT / 2.0F);
     }
 
     public static void open() {
@@ -148,22 +157,33 @@ public final class ProtoTerminalScreen extends Screen {
     }
 
     /**
-     * 以鼠标位置为锚点缩放剧情树与星空。
+     * 平滑缩放。
      */
     private void zoomContent(double mouseX, double mouseY, double amount) {
-        float target = Mth.clamp(contentZoom + (float) amount * ZOOM_STEP, MIN_ZOOM, MAX_ZOOM);
-        if (target == contentZoom) {
+        float target = Mth.clamp(zoomTarget + (float) amount * ZOOM_STEP, MIN_ZOOM, MAX_ZOOM);
+        if (target == zoomTarget) {
             return;
         }
-        double canvasX = localX(mouseX);
-        double canvasY = localY(mouseY);
-        panX = (float) Mth.clamp(canvasX - TREE_LEFT - (canvasX - TREE_LEFT - panX) / contentZoom * target,
-                -4352, 4352);
-        panY = (float) Mth.clamp(canvasY - TREE_TOP - (canvasY - TREE_TOP - panY) / contentZoom * target,
-                -4352, 4352);
-        starfield.zoom(target, (float) canvasX, (float) canvasY);
-        contentZoom = target;
-        updateNodePositions(Util.getMillis() - openingStarted);
+        zoomFrom = contentZoom;
+        zoomStarted = Util.getMillis();
+        zoomAnchorX = (float) localX(mouseX);
+        zoomAnchorY = (float) localY(mouseY);
+        zoomTarget = target;
+    }
+
+    private void updateZoom(long now) {
+        if (contentZoom == zoomTarget) {
+            return;
+        }
+        float progress = (now - zoomStarted) / (float) ZOOM_DURATION;
+        float zoom = progress >= 1 ? zoomTarget
+                : Mth.lerp(CrystalNarrativeGraphics.ease(progress), zoomFrom, zoomTarget);
+        panX = (float) Mth.clamp(zoomAnchorX - TREE_LEFT
+                - (zoomAnchorX - TREE_LEFT - panX) / contentZoom * zoom, -4352, 4352);
+        panY = (float) Mth.clamp(zoomAnchorY - TREE_TOP
+                - (zoomAnchorY - TREE_TOP - panY) / contentZoom * zoom, -4352, 4352);
+        starfield.zoom(zoom, zoomAnchorX, zoomAnchorY);
+        contentZoom = zoom;
     }
 
     private void updateTreeClipBands() {
@@ -180,6 +200,7 @@ public final class ProtoTerminalScreen extends Screen {
             openingStarted = now;
         }
         updateTransitions(now);
+        updateZoom(now);
         if (terminalClosingStarted >= 0 && windowOpacity <= 0) {
             return;
         }
@@ -342,16 +363,39 @@ public final class ProtoTerminalScreen extends Screen {
 
     private void renderConnection(GuiGraphics graphics, TerminalStoryTree.Node source,
             TerminalStoryTree.Node target, float progress) {
-        boolean forward = target.x() >= source.x();
         float nodeSlant = CrystalNarrativeGraphics.slant(NODE_HEIGHT);
-        float leftEdge = nodeSlant / 2;
-        float rightEdge = NODE_WIDTH - nodeSlant / 2;
-        float x1 = TREE_LEFT + panX + (source.x() + (forward ? rightEdge : leftEdge)) * contentZoom;
-        float y1 = TREE_TOP + panY + (source.y() + NODE_HEIGHT / 2.0F) * contentZoom;
-        float x2 = TREE_LEFT + panX + (target.x() + (forward ? leftEdge : rightEdge)) * contentZoom;
-        float y2 = TREE_TOP + panY + (target.y() + NODE_HEIGHT / 2.0F) * contentZoom;
-        CrystalNarrativeGraphics.connection(graphics, x1, y1, x2, y2,
-                nodeSlant, NODE_HEIGHT, progress, 0xFF3B5D83, Math.max(1, contentZoom));
+        float stepX = target.x() - source.x();
+        float stepY = target.y() - source.y();
+        boolean vertical = Math.abs(stepX) - NODE_WIDTH + nodeSlant
+                < Math.abs(stepY) * nodeSlant / NODE_HEIGHT
+                && Math.abs(stepY) - NODE_HEIGHT >= Math.abs(stepX) * NODE_HEIGHT / nodeSlant;
+        float x1;
+        float y1;
+        float x2;
+        float y2;
+        if (vertical) {
+            x1 = treeX(source.x() + NODE_WIDTH / 2.0F);
+            x2 = treeX(target.x() + NODE_WIDTH / 2.0F);
+            y1 = treeY(stepY < 0 ? source.y() : source.y() + NODE_HEIGHT);
+            y2 = treeY(stepY < 0 ? target.y() + NODE_HEIGHT : target.y());
+        } else {
+            boolean forward = stepX >= 0;
+            float leftEdge = nodeSlant / 2;
+            float rightEdge = NODE_WIDTH - nodeSlant / 2;
+            x1 = treeX(source.x() + (forward ? rightEdge : leftEdge));
+            y1 = treeY(source.y() + NODE_HEIGHT / 2.0F);
+            x2 = treeX(target.x() + (forward ? leftEdge : rightEdge));
+            y2 = treeY(target.y() + NODE_HEIGHT / 2.0F);
+        }
+        CrystalNarrativeGraphics.connection(graphics, x1, y1, x2, y2, nodeSlant, NODE_HEIGHT, vertical,
+                progress, 0xFF3B5D83, Math.max(1, contentZoom));
+    }
+    private float treeX(float contentX) {
+        return snap(TREE_LEFT + panX + contentX * contentZoom, deviceScale());
+    }
+
+    private float treeY(float contentY) {
+        return snap(TREE_TOP + panY + contentY * contentZoom, deviceScale());
     }
 
     private void renderDetail(GuiGraphics graphics, long now, float reveal) {
@@ -514,16 +558,30 @@ public final class ProtoTerminalScreen extends Screen {
     }
 
     private void updateNodePositions(long elapsed) {
+        // 剧情块与连线统一吸附到物理像素网格，保持描边亚像素相位恒定
+        float deviceScale = deviceScale();
         for (int i = 0; i < nodeButtons.size(); i++) {
             TerminalStoryTree.Node node = story.nodes().get(i);
             NarrativeButton button = nodeButtons.get(i);
             float progress = animation.nodeProgress(elapsed, i);
+            float x = snap(TREE_LEFT + panX + node.x() * contentZoom - 24 * (1 - progress) * contentZoom,
+                    deviceScale);
+            float y = snap(TREE_TOP + panY + node.y() * contentZoom, deviceScale);
             button.setScale(contentZoom);
-            button.setX(TREE_LEFT + Math.round(panX + node.x() * contentZoom)
-                    + Math.round(-24 * (1 - progress) * contentZoom));
-            button.setY(TREE_TOP + Math.round(panY + node.y() * contentZoom));
+            button.setX(Math.round(x));
+            button.setY(Math.round(y));
+            // 用亚像素偏移补回取整与网格吸附的残差，节点与连线共用同一套坐标
+            button.setOffset(x - button.getX(), y - button.getY());
             button.setOpacity(progress);
         }
+    }
+
+    private float deviceScale() {
+        return canvasScale * (float) minecraft.getWindow().getGuiScale();
+    }
+
+    private static float snap(float value, float deviceScale) {
+        return Math.round(value * deviceScale) / deviceScale;
     }
 
     private int maxDetailScroll() {

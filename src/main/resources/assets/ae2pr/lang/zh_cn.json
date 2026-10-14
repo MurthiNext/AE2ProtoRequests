@@ -146,6 +146,8 @@
   "screen.ae2pr.naming_factory.rename.title": "重命名名称压印工厂",
   "tooltip.ae2pr.amount": "合成数量",
   "tooltip.ae2pr.assembly_line_module": "§9提供：§r%s Lv.%s",
+  "tooltip.ae2pr.assembly_line_module.parallel": "§9提供：§r并行上限 +%s",
+  "tooltip.ae2pr.assembly_line_module.speed": "§9提供：§r速度 +%s",
   "tooltip.ae2pr.crystal_assembly_line.desc": "§7§o设计产线的益智才是王道，\n你那电动轮椅根本没技巧。",
   "tooltip.ae2pr.crystal_reaction_chamber.desc": "超临界移相器？超维度等离子锻炉？\n唯一相同点是非常耗电。",
   "tooltip.ae2pr.drag_and_drop_desc": "拖放以标记物品；中键点击设置数量。",

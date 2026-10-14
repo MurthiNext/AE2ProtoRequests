@@ -146,6 +146,8 @@
   "screen.ae2pr.naming_factory.rename.title": "Rename Naming Factory",
   "tooltip.ae2pr.amount": "Amount to Craft",
   "tooltip.ae2pr.assembly_line_module": "§9Provides: §r%s Lv.%s",
+  "tooltip.ae2pr.assembly_line_module.parallel": "§9Provides: §rMax parallel +%s",
+  "tooltip.ae2pr.assembly_line_module.speed": "§9Provides: §rSpeed +%s",
   "tooltip.ae2pr.crystal_assembly_line.desc": "§7§oThe key to success is to design a production line that is beneficial to the brain,\nYour electric wheelchair doesn't have any skill at all.",
   "tooltip.ae2pr.crystal_reaction_chamber.desc": "Supercritical Phase Shifter? Dimensionally Transcendent Plasma Forge?\nThe only thing they have in common is high power consumption.",
   "tooltip.ae2pr.drag_and_drop_desc": "Drag and drop to set the marked item; middle-click to set the amount.",

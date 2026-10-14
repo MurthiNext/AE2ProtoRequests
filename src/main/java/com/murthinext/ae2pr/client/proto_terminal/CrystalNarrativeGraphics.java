@@ -68,17 +68,20 @@ final class CrystalNarrativeGraphics {
     }
 
     /**
-     * 沿水平段与斜段逐步绘制剧情连线。
+     * 沿水平段与斜段逐步绘制剧情连线；vertical 指示是否走上下竖直段。
      */
     static void connection(GuiGraphics graphics, float x1, float y1, float x2, float y2,
-            float nodeSlant, int nodeHeight, float progress, int color, float width) {
+            float nodeSlant, int nodeHeight, boolean vertical, float progress, int color, float width) {
         if (progress <= 0) {
             return;
         }
-        float middle = (x1 + x2) / 2.0F;
-        float diagonal = -(y2 - y1) * nodeSlant / (float) Math.max(1, nodeHeight);
-        float[] xs = { x1, middle - diagonal / 2, middle + diagonal / 2, x2 };
-        float[] ys = { y1, y1, y2, y2 };
+        float middle = vertical ? (y1 + y2) / 2.0F : (x1 + x2) / 2.0F;
+        float diagonal = vertical ? -(x2 - x1) * nodeHeight / nodeSlant
+                : -(y2 - y1) * nodeSlant / nodeHeight;
+        float[] xs = vertical ? new float[] { x1, x1, x2, x2 }
+                : new float[] { x1, middle - diagonal / 2, middle + diagonal / 2, x2 };
+        float[] ys = vertical ? new float[] { y1, middle - diagonal / 2, middle + diagonal / 2, y2 }
+                : new float[] { y1, y1, y2, y2 };
         float[] lengths = new float[3];
         float total = 0;
         for (int i = 0; i < 3; i++) {

@@ -18,6 +18,8 @@ final class NarrativeButton extends Button {
     private final Icon icon;
     private float opacity = 1;
     private float scale = 1;
+    private float offsetX;
+    private float offsetY;
 
     NarrativeButton(int x, int y, int width, Component label, OnPress action) {
         this(x, y, width, 22, label, action);
@@ -49,7 +51,7 @@ final class NarrativeButton extends Button {
         int text = CrystalNarrativeGraphics.alpha(CrystalNarrativeGraphics.TEXT, opacity);
         int fill = CrystalNarrativeGraphics.alpha(highlighted ? 0xFF10233D : CrystalNarrativeGraphics.PANEL, opacity);
         graphics.pose().pushPose();
-        graphics.pose().translate(getX(), getY(), 0);
+        graphics.pose().translate(getX() + offsetX, getY() + offsetY, 0);
         graphics.pose().scale(scale, scale, 1);
         try {
             CrystalNarrativeGraphics.panel(graphics, 0, 0, width, height, slant, fill, border);
@@ -90,6 +92,11 @@ final class NarrativeButton extends Button {
         this.opacity = opacity;
     }
 
+    void setOffset(float offsetX, float offsetY) {
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+    }
+
     void setScale(float scale) {
         this.scale = scale;
     }
@@ -104,7 +111,7 @@ final class NarrativeButton extends Button {
         if (!active || !visible) {
             return false;
         }
-        return CrystalNarrativeGraphics.contains((mouseX - getX()) / scale, (mouseY - getY()) / scale,
-                0, 0, width, height, slant);
+        return CrystalNarrativeGraphics.contains((mouseX - getX() - offsetX) / scale,
+                (mouseY - getY() - offsetY) / scale, 0, 0, width, height, slant);
     }
 }

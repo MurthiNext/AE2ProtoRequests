@@ -1,8 +1,8 @@
 {
   "position": 1,
   "parent": "connection",
-  "x": 306,
-  "y": 34,
+  "anchor": "up-right",
+  "distance": 1,
   "title": "Light within the crystal",
   "dialogues": [
     {

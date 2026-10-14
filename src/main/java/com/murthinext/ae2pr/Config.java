@@ -94,10 +94,10 @@ public final class Config {
                 .defineInRange("energyPerParallel", 50000.0, 0.0, Double.MAX_VALUE);
         ASSEMBLY_MODULE_PARALLEL_PER_UNIT = BUILDER
                 .comment("每个并行控制外壳增加的并行上限")
-                .defineInRange("moduleParallelPerUnit", 8, 0, 1_000_000);
+                .defineInRange("moduleParallelPerUnit", 16, 0, 1_000_000);
         ASSEMBLY_MODULE_SPEED_PER_UNIT = BUILDER
-                .comment("每个速度控制外壳增加的速度比例（0.25 表示 +25%）")
-                .defineInRange("moduleSpeedPerUnit", 0.25, 0.0, 100.0);
+                .comment("每个速度控制外壳增加的速度比例")
+                .defineInRange("moduleSpeedPerUnit", 0.5, 0.0, 100.0);
         ASSEMBLY_MAX_PARALLEL = BUILDER
                 .comment("并行上限（包含结构长度与模块的全部加成）")
                 .defineInRange("maxParallel", Integer.MAX_VALUE, 1, Integer.MAX_VALUE);
