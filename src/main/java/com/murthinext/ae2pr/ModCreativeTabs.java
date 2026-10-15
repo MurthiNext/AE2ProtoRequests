@@ -58,6 +58,7 @@ public final class ModCreativeTabs {
 
                         // 单层板
                         output.accept(ModItems.METEOR_STEEL_PLATE.get());
+                        output.accept(ModItems.ZIRCONIUM_PLATE.get());
 
                         // 储存方块
                         output.accept(ModItems.METEOR_STEEL_BLOCK.get());
@@ -89,6 +90,7 @@ public final class ModCreativeTabs {
                         // 多方块结构 - 普通结构方块
                         output.accept(ModItems.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get());
                         output.accept(ModItems.AEV_MACHINE_CASING.get());
+                        output.accept(ModItems.REINFORCED_HIGH_POWER_CASING.get());
                         output.accept(ModItems.ZIRCONIA_CORUNDUM_BRICKS.get());
                         output.accept(ModItems.CRYSTAL_GLASS.get());
                         output.accept(ModItems.FIREPROOF_CRYSTAL_GLASS.get());

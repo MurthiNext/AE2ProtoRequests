@@ -43,6 +43,7 @@ public final class CtmSprites {
         register("block/crystal/fireproof_crystal_glass");
         register("block/certus_quartz_crystal/casing");
         register("block/aev/aev_machine_casing");
+        register("block/reinforced_high_power_casing");
         register("block/zircon/zirconia_corundum_bricks");
         register("block/meteor_steel_pipe_block/side");
         REGISTERED.add(LAVA_SMELTER_CONTROLLER_CASING);

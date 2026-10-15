@@ -4,7 +4,7 @@
   "anchor": "down-right",
   "distance": 1,
   "title": "Awaiting the next echo",
-  "dialogues": [
+  "lines": [
     {
       "speaker": "TERMINAL / SYSTEM ECHO",
       "text": "For now, the channel is silent.\n\nNo new narrative records are available.\nThe next message will unfold here when it arrives."

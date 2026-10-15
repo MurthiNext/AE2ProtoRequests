@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.client;
 
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.client.gui.TooltipRenderer;
+import com.murthinext.ae2pr.client.proto_terminal.ClientStoryProgress;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
@@ -36,5 +37,6 @@ public final class ClientEvents {
         ClientRepeatOrderFailures.clear();
         ClientRepeatOrderRounds.clear();
         ClientConfirmRounds.clear();
+        ClientStoryProgress.reset();
     }
 }

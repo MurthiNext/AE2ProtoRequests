@@ -22,6 +22,10 @@
     },
     {
       "type": "single",
+      "resource": "ae2pr:block/reinforced_high_power_casing_ctm"
+    },
+    {
+      "type": "single",
       "resource": "ae2pr:block/zircon/zirconia_corundum_bricks_ctm"
     },
     {

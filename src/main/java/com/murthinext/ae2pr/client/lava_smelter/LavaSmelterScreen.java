@@ -111,8 +111,7 @@ public class LavaSmelterScreen extends AbstractMachineScreen<LavaSmelterMenu> {
     private Component errorText() {
         return switch (menu.getErrorCode()) {
             case 1 -> Component.translatable("gui.ae2pr.lava_smelter.error.durability");
-            case 2 -> Component.translatable("gui.ae2pr.lava_smelter.error.power");
-            case 3 -> Component.translatable("gui.ae2pr.lava_smelter.error.output");
+            case 2 -> Component.translatable("gui.ae2pr.lava_smelter.error.output");
             default -> null;
         };
     }

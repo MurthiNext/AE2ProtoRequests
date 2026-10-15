@@ -32,7 +32,8 @@ public final class Config {
     private static final ForgeConfigSpec.DoubleValue NAMING_FACTORY_ENERGY_PER_ITEM;
 
     private static final ForgeConfigSpec.IntValue LAVA_SMELTER_PARALLEL;
-    private static final ForgeConfigSpec.DoubleValue LAVA_SMELTER_ENERGY_PER_PARALLEL;
+    private static final ForgeConfigSpec.DoubleValue LAVA_SMELTER_PASSIVE_ENERGY;
+    private static final ForgeConfigSpec.DoubleValue LAVA_SMELTER_DURABILITY_LOSS_CHANCE;
 
     private static final ForgeConfigSpec.IntValue MATTER_PHASE_TRANSFORMER_PARALLEL;
     private static final ForgeConfigSpec.DoubleValue MATTER_PHASE_TRANSFORMER_ENERGY_PER_PARALLEL;
@@ -119,9 +120,12 @@ public final class Config {
         LAVA_SMELTER_PARALLEL = BUILDER
                 .comment("熔岩冶炼炉的最大并行数（每并行一份消耗 1 点配方耐久）")
                 .defineInRange("parallel", 64, 1, 1_000_000);
-        LAVA_SMELTER_ENERGY_PER_PARALLEL = BUILDER
-                .comment("熔岩冶炼炉每并行一次执行从 ME 网络扣除的能量")
-                .defineInRange("energyPerParallel", 10000.0, 0.0, Double.MAX_VALUE);
+        LAVA_SMELTER_PASSIVE_ENERGY = BUILDER
+                .comment("熔岩冶炼炉结构成型后每 tick 从 ME 网络抽取的能量（AE），配方本身不再耗电")
+                .defineInRange("passiveEnergyPerTick", 1000.0, 0.0, Double.MAX_VALUE);
+        LAVA_SMELTER_DURABILITY_LOSS_CHANCE = BUILDER
+                .comment("熔岩冶炼炉电力供给不足时每秒扣除 1 点配方耐久的概率")
+                .defineInRange("durabilityLossChancePerSecond", 0.5, 0.0, 1.0);
         BUILDER.pop();
 
         BUILDER.push("matterPhaseTransformer");
@@ -237,8 +241,12 @@ public final class Config {
         return LAVA_SMELTER_PARALLEL.get();
     }
 
-    public static double lavaSmelterEnergyPerParallel() {
-        return LAVA_SMELTER_ENERGY_PER_PARALLEL.get();
+    public static double lavaSmelterPassiveEnergy() {
+        return LAVA_SMELTER_PASSIVE_ENERGY.get();
+    }
+
+    public static double lavaSmelterDurabilityLossChance() {
+        return LAVA_SMELTER_DURABILITY_LOSS_CHANCE.get();
     }
 
     public static int matterPhaseTransformerParallel() {

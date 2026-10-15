@@ -90,6 +90,9 @@ public final class CtmConfig {
         if (block == ModBlocks.AEV_MACHINE_CASING.get()) {
             return 9;
         }
+        if (block == ModBlocks.REINFORCED_HIGH_POWER_CASING.get()) {
+            return 10;
+        }
         if (block == ModBlocks.AEV_INPUT_BUS.get()
                 || block == ModBlocks.AEV_INPUT_HATCH.get()
                 || block == ModBlocks.AEV_OUTPUT_BUS.get()

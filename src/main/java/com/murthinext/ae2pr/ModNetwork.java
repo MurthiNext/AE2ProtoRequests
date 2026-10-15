@@ -14,6 +14,9 @@ import com.murthinext.ae2pr.network.RepeatOrderFailedPacket;
 import com.murthinext.ae2pr.network.RepeatOrderFinishedPacket;
 import com.murthinext.ae2pr.network.RepeatOrderRoundPacket;
 import com.murthinext.ae2pr.network.RepeatOrderStatusPacket;
+import com.murthinext.ae2pr.network.TerminalStoryRequestPacket;
+import com.murthinext.ae2pr.network.TerminalStorySyncPacket;
+import com.murthinext.ae2pr.network.TerminalStoryUpdatePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkRegistry;
@@ -24,7 +27,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
  * 模组自有网络通道。
  */
 public final class ModNetwork {
-    private static final String PROTOCOL_VERSION = "1";
+    private static final String PROTOCOL_VERSION = "2";
 
     public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
             .named(ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "main"))
@@ -122,9 +125,31 @@ public final class ModNetwork {
                 NamingFactoryRenamePacket::encode,
                 NamingFactoryRenamePacket::decode,
                 NamingFactoryRenamePacket::handle);
+
+        CHANNEL.registerMessage(nextMessageId++,
+                TerminalStoryRequestPacket.class,
+                TerminalStoryRequestPacket::encode,
+                TerminalStoryRequestPacket::decode,
+                TerminalStoryRequestPacket::handle);
+
+        CHANNEL.registerMessage(nextMessageId++,
+                TerminalStoryUpdatePacket.class,
+                TerminalStoryUpdatePacket::encode,
+                TerminalStoryUpdatePacket::decode,
+                TerminalStoryUpdatePacket::handle);
+
+        CHANNEL.registerMessage(nextMessageId++,
+                TerminalStorySyncPacket.class,
+                TerminalStorySyncPacket::encode,
+                TerminalStorySyncPacket::decode,
+                TerminalStorySyncPacket::handle);
     }
 
     public static void sendToPlayer(ServerPlayer player, RepeatOrderStatusPacket packet) {
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
+    }
+
+    public static void sendToPlayer(ServerPlayer player, TerminalStorySyncPacket packet) {
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
     }
 
@@ -177,6 +202,14 @@ public final class ModNetwork {
     }
 
     public static void sendToServer(NamingFactoryRenamePacket packet) {
+        CHANNEL.sendToServer(packet);
+    }
+
+    public static void sendToServer(TerminalStoryRequestPacket packet) {
+        CHANNEL.sendToServer(packet);
+    }
+
+    public static void sendToServer(TerminalStoryUpdatePacket packet) {
         CHANNEL.sendToServer(packet);
     }
 }

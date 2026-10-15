@@ -1,10 +1,42 @@
 {
   "position": 0,
   "title": "Link established",
-  "dialogues": [
+  "lines": [
     {
       "speaker": "TERMINAL / SYSTEM ECHO",
-      "text": "Fractured pixels assemble.\nThe faint light within the deep-blue lattice resolves into an interface.\n\nTerminal connected. The narrative channel is ready."
+      "text": "Fractured pixels assemble.\nThe faint light within the deep-blue lattice resolves into an interface.\n\nTerminal connected. The narrative channel is ready.",
+      "choices": [
+        {
+          "text": "What is this place?",
+          "content": "I want to know what this place is.",
+          "mode": "side",
+          "lines": [
+            {
+              "speaker": "TERMINAL / SYSTEM ECHO",
+              "text": "This is the echo layer: the imprint an unfinished story leaves within the lattice."
+            },
+            {
+              "text": "A faint resonance travels up from deep within the lattice, like an answer from far away."
+            }
+          ]
+        },
+        {
+          "text": "What am I supposed to do?",
+          "mode": "side",
+          "tags": ["guidance"],
+          "lines": [
+            {
+              "speaker": "TERMINAL / SYSTEM ECHO",
+              "text": "Read every echo along the connections. If you wish to ask more, you may stay here."
+            }
+          ]
+        },
+        {
+          "text": "Go deeper.",
+          "mode": "main",
+          "silence": true
+        }
+      ]
     }
   ]
 }

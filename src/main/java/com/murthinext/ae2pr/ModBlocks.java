@@ -100,6 +100,9 @@ public final class ModBlocks {
     public static final RegistryObject<Block> AEV_MACHINE_CASING = BLOCKS.register(
             "aev_machine_casing", () -> new DisassemblableBlock(casingProperties()));
 
+    public static final RegistryObject<Block> REINFORCED_HIGH_POWER_CASING = BLOCKS.register(
+            "reinforced_high_power_casing", () -> new DisassemblableBlock(casingProperties()));
+
     public static final RegistryObject<MachinePartBlock> AEV_INPUT_BUS = BLOCKS.register(
             "aev_input_bus", MachinePartBlock::new);
 

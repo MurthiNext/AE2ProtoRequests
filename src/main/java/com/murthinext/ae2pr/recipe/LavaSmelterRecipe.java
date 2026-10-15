@@ -3,8 +3,6 @@ package com.murthinext.ae2pr.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -24,7 +22,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 
-import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModRecipes;
 
 /**
@@ -39,16 +36,13 @@ public class LavaSmelterRecipe implements Recipe<Container> {
     private final List<CountedIngredient> ingredients;
     private final List<ItemStack> results;
     private final int duration;
-    @Nullable
-    private final Double energyPerParallel;
 
     public LavaSmelterRecipe(ResourceLocation id, List<CountedIngredient> ingredients, List<ItemStack> results,
-            int duration, @Nullable Double energyPerParallel) {
+            int duration) {
         this.id = id;
         this.ingredients = List.copyOf(ingredients);
         this.results = List.copyOf(results);
         this.duration = duration;
-        this.energyPerParallel = energyPerParallel;
     }
 
     public List<CountedIngredient> getCountedIngredients() {
@@ -65,10 +59,6 @@ public class LavaSmelterRecipe implements Recipe<Container> {
 
     public int getDuration() {
         return duration;
-    }
-
-    public double getEnergyPerParallel() {
-        return energyPerParallel != null ? energyPerParallel : Config.lavaSmelterEnergyPerParallel();
     }
 
     @Override
@@ -152,14 +142,7 @@ public class LavaSmelterRecipe implements Recipe<Container> {
             if (duration < 1) {
                 throw new JsonSyntaxException("duration 必须 >= 1");
             }
-            Double energyPerParallel = null;
-            if (json.has("energy")) {
-                energyPerParallel = GsonHelper.getAsDouble(json, "energy");
-                if (energyPerParallel < 0) {
-                    throw new JsonSyntaxException("energy 必须 >= 0");
-                }
-            }
-            return new LavaSmelterRecipe(id, ingredients, results, duration, energyPerParallel);
+            return new LavaSmelterRecipe(id, ingredients, results, duration);
         }
 
         @Override
@@ -178,8 +161,7 @@ public class LavaSmelterRecipe implements Recipe<Container> {
                 results.add(result);
             }
             int duration = buffer.readVarInt();
-            Double energyPerParallel = buffer.readBoolean() ? buffer.readDouble() : null;
-            return new LavaSmelterRecipe(id, ingredients, results, duration, energyPerParallel);
+            return new LavaSmelterRecipe(id, ingredients, results, duration);
         }
 
         @Override
@@ -195,10 +177,6 @@ public class LavaSmelterRecipe implements Recipe<Container> {
                 buffer.writeVarInt(result.getCount());
             }
             buffer.writeVarInt(recipe.duration);
-            buffer.writeBoolean(recipe.energyPerParallel != null);
-            if (recipe.energyPerParallel != null) {
-                buffer.writeDouble(recipe.energyPerParallel);
-            }
         }
     }
 }

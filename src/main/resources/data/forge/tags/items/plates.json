@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "ae2pr:meteor_steel_plate"
+    "ae2pr:meteor_steel_plate",
+    "ae2pr:zirconium_plate"
   ]
 }

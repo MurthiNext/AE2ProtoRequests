@@ -21,6 +21,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 
+import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
@@ -120,6 +121,6 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
         graphics.drawString(font, Component.translatable("jei.ae2pr.lava_smelter.duration",
                 recipe.getDuration()), 4, 77, COLOR_TEXT, false);
         graphics.drawString(font, Component.translatable("jei.ae2pr.lava_smelter.energy",
-                NUMBER.format(recipe.getEnergyPerParallel())), 4, 87, COLOR_TEXT, false);
+                NUMBER.format(Config.lavaSmelterPassiveEnergy())), 4, 87, COLOR_TEXT, false);
     }
 }

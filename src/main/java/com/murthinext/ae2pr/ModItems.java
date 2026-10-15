@@ -112,6 +112,10 @@ public final class ModItems {
     public static final RegistryObject<BlockItem> AEV_MACHINE_CASING = ITEMS.register("aev_machine_casing",
             () -> new BlockItem(ModBlocks.AEV_MACHINE_CASING.get(), new Item.Properties()));
 
+    public static final RegistryObject<BlockItem> REINFORCED_HIGH_POWER_CASING = ITEMS.register(
+            "reinforced_high_power_casing",
+            () -> new BlockItem(ModBlocks.REINFORCED_HIGH_POWER_CASING.get(), new Item.Properties()));
+
     public static final RegistryObject<BlockItem> AEV_INPUT_BUS = ITEMS.register("aev_input_bus",
             () -> new BlockItem(ModBlocks.AEV_INPUT_BUS.get(), new Item.Properties()));
 
@@ -146,6 +150,9 @@ public final class ModItems {
             () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> METEOR_STEEL_PLATE = ITEMS.register("meteor_steel_plate",
+            () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> ZIRCONIUM_PLATE = ITEMS.register("zirconium_plate",
             () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> SINGLE_PLATE_PRESS = ITEMS.register("single_plate_press",

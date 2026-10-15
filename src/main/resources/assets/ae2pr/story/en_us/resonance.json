@@ -4,10 +4,18 @@
   "anchor": "up-right",
   "distance": 1,
   "title": "Light within the crystal",
-  "dialogues": [
+  "lines": [
     {
       "speaker": "TERMINAL / SYSTEM ECHO",
-      "text": "Faint stars emerge within the deep-blue lattice.\n\nEach echo can hold a story of its own.\nExplore the connections, or pause to read the record before you."
+      "text": "Faint stars emerge within the deep-blue lattice.\n\nEach echo can hold a story of its own."
+    },
+    {
+      "speaker": "TERMINAL / SYSTEM ECHO",
+      "text": "You rest your attention upon a single star, and it answers your gaze.",
+      "requires": ["guidance"]
+    },
+    {
+      "text": "Explore the connections, or pause to read the record before you."
     }
   ]
 }

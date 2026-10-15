@@ -52,6 +52,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
 
     private static final int CHECK_INTERVAL = 20;
     private static final int RETRY_INTERVAL = 20;
+    private static final int POWER_SHORTAGE_INTERVAL = 20;
     public static final int MAX_DURABILITY = 128;
     public static final int DURABILITY_PER_DUST = 32;
     public static final int DUST_SLOT_CAPACITY = 64;
@@ -73,11 +74,12 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
      * 暂停原因。
      */
     public enum Error {
-        NONE, DURABILITY, POWER, OUTPUT
+        NONE, DURABILITY, OUTPUT
     }
 
     private int tickCounter;
     private int retryCounter;
+    private int powerShortageTicks;
 
     private int jobTicksLeft;
     private int jobTotalTicks;
@@ -124,7 +126,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
     }
 
     /**
-     * 服务端 tick：结构检测、陨石粉补充、空腔伤害与加工作业。
+     * 服务端 tick：结构检测、陨石粉补充、被动耗电、空腔伤害与加工作业。
      */
     public void serverTick() {
         if (level == null || level.isClientSide) {
@@ -135,6 +137,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
             validateStructure();
         }
         absorbDust();
+        tickPassivePower();
         tickCavityDamage();
         tickJob();
     }
@@ -180,6 +183,32 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
             if (!player.fireImmune()) {
                 player.hurt(player.damageSources().lava(), damage);
             }
+        }
+    }
+
+    // 被动耗电
+
+    /**
+     * 结构成型后持续抽取固定能量，供给不足时每秒按概率损失 1 点配方耐久。
+     */
+    private void tickPassivePower() {
+        if (!isFormed()) {
+            powerShortageTicks = 0;
+            return;
+        }
+        double drain = Config.lavaSmelterPassiveEnergy();
+        if (drain <= 0 || extractNetworkEnergy(drain, false) >= drain) {
+            powerShortageTicks = 0;
+            return;
+        }
+        if (++powerShortageTicks < POWER_SHORTAGE_INTERVAL) {
+            return;
+        }
+        powerShortageTicks = 0;
+        if (durability > 0 && level.random.nextDouble() < Config.lavaSmelterDurabilityLossChance()) {
+            durability--;
+            setChanged();
+            syncClient();
         }
     }
 
@@ -229,14 +258,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
             pause(Error.OUTPUT);
             return;
         }
-        // 能量按并行数与耗能倍率从能源仓网络一次性扣除
-        double cost = recipe.getEnergyPerParallel() * parallel * lossyEnergyMultiplier();
-        if (extractNetworkEnergy(cost, true) < cost) {
-            pause(Error.POWER);
-            return;
-        }
-        // 扣电、扣耐久与扣料
-        extractNetworkEnergy(cost, false);
+        // 扣耐久与扣料，电力由被动耗电单独处理
         durability -= parallel;
         consumeInputs(recipe, parallel);
 
@@ -442,10 +464,6 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
 
     public double getSpeedMultiplier() {
         return 1.0 + getSpeedCardCount() * Config.lossySpeedPerCard();
-    }
-
-    public double lossyEnergyMultiplier() {
-        return Math.pow(Config.lossyEnergyMultiplierPerCard(), getSpeedCardCount());
     }
 
     private int scaledDuration(int baseTicks) {
