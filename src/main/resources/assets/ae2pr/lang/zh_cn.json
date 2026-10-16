@@ -170,6 +170,7 @@
   "tooltip.ae2pr.export": "导出中",
   "tooltip.ae2pr.export_desc": "请求器正在尝试把合成产物导出到网络中。",
   "tooltip.ae2pr.high_reactivity_lava_smelter.desc": "熔岩冶炼炉有了，那熔岩熔铸炉呢？",
+  "tooltip.ae2pr.high_energy_core.desc": "§7§o熄灭时它是机器的零件，\n点燃时它是水晶的心脏。",
   "tooltip.ae2pr.idle": "空闲",
   "tooltip.ae2pr.idle_desc": "在接收到红石信号前，请求器保持空闲。",
   "tooltip.ae2pr.link": "合成中",

@@ -43,6 +43,19 @@ public final class Config {
     private static final ForgeConfigSpec.IntValue CRYSTAL_REACTION_PARALLEL;
     private static final ForgeConfigSpec.DoubleValue CRYSTAL_REACTION_ENERGY_PER_PARALLEL;
 
+    private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_RADIUS;
+    private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_DEPTH;
+    private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_DURATION_TICKS;
+    private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_SOUNDS_PER_TICK;
+    private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_FLAWLESS_WEIGHT;
+    private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_FLAWED_WEIGHT;
+    private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_CHIPPED_WEIGHT;
+    private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_DAMAGED_WEIGHT;
+    private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_AMETHYST_WEIGHT;
+    private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_CERTUS_WEIGHT;
+    private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_ENERGIZED_WEIGHT;
+    private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_OVERLOAD_WEIGHT;
+
     private static final ForgeConfigSpec.DoubleValue LOSSY_SPEED_PER_CARD;
     private static final ForgeConfigSpec.DoubleValue LOSSY_ENERGY_MULTIPLIER_PER_CARD;
 
@@ -152,6 +165,45 @@ public final class Config {
         CRYSTAL_REACTION_ENERGY_PER_PARALLEL = BUILDER
                 .comment("水晶反应仓每并行一次执行从 ME 网络扣除的能量")
                 .defineInRange("energyPerParallel", 20000.0, 0.0, Double.MAX_VALUE);
+        BUILDER.pop();
+
+        BUILDER.push("crystalReactor");
+        CRYSTAL_REACTOR_RADIUS = BUILDER
+                .comment("水晶反应器以核心为圆心的水平替换半径（格）")
+                .defineInRange("radius", 8, 1, 64);
+        CRYSTAL_REACTOR_DEPTH = BUILDER
+                .comment("水晶反应器以核心为顶面的向下替换层数")
+                .defineInRange("depth", 4, 0, 64);
+        CRYSTAL_REACTOR_DURATION_TICKS = BUILDER
+                .comment("水晶反应器的总扩散耗时（tick）")
+                .defineInRange("durationTicks", 160, 1, 72000);
+        CRYSTAL_REACTOR_SOUNDS_PER_TICK = BUILDER
+                .comment("每 tick 最多播放的方块破坏音效数量（避免大面积破坏时爆音，0 为不播放）")
+                .defineInRange("breakSoundsPerTick", 2, 0, 64);
+        CRYSTAL_REACTOR_FLAWLESS_WEIGHT = BUILDER
+                .comment("无瑕档位权重")
+                .defineInRange("flawlessWeight", 1, 0, 1_000_000);
+        CRYSTAL_REACTOR_FLAWED_WEIGHT = BUILDER
+                .comment("有瑕档位权重")
+                .defineInRange("flawedWeight", 4, 0, 1_000_000);
+        CRYSTAL_REACTOR_CHIPPED_WEIGHT = BUILDER
+                .comment("开裂档位权重")
+                .defineInRange("chippedWeight", 8, 0, 1_000_000);
+        CRYSTAL_REACTOR_DAMAGED_WEIGHT = BUILDER
+                .comment("损坏档位权重")
+                .defineInRange("damagedWeight", 32, 0, 1_000_000);
+        CRYSTAL_REACTOR_AMETHYST_WEIGHT = BUILDER
+                .comment("紫水晶母岩（恒为无瑕）的材质权重")
+                .defineInRange("amethystWeight", 1, 0, 1_000_000);
+        CRYSTAL_REACTOR_CERTUS_WEIGHT = BUILDER
+                .comment("赛特斯石英母岩的材质权重")
+                .defineInRange("certusWeight", 1, 0, 1_000_000);
+        CRYSTAL_REACTOR_ENERGIZED_WEIGHT = BUILDER
+                .comment("盈能水晶母岩（NeoEcoAE）的材质权重，未安装该模组时不生效")
+                .defineInRange("energizedWeight", 1, 0, 1_000_000);
+        CRYSTAL_REACTOR_OVERLOAD_WEIGHT = BUILDER
+                .comment("过载水晶母岩（AE2LT）的材质权重，未安装该模组时不生效")
+                .defineInRange("overloadWeight", 1, 0, 1_000_000);
         BUILDER.pop();
 
         BUILDER.push("upgradeCards");
@@ -279,6 +331,38 @@ public final class Config {
 
     public static double crystalReactionEnergyPerParallel() {
         return CRYSTAL_REACTION_ENERGY_PER_PARALLEL.get();
+    }
+
+    public static int crystalReactorRadius() {
+        return CRYSTAL_REACTOR_RADIUS.get();
+    }
+
+    public static int crystalReactorDepth() {
+        return CRYSTAL_REACTOR_DEPTH.get();
+    }
+
+    public static int crystalReactorDurationTicks() {
+        return CRYSTAL_REACTOR_DURATION_TICKS.get();
+    }
+
+    public static int crystalReactorBreakSoundsPerTick() {
+        return CRYSTAL_REACTOR_SOUNDS_PER_TICK.get();
+    }
+
+    /**
+     * 档位权重，顺序为无瑕、有瑕、开裂、损坏。
+     */
+    public static int[] crystalReactorTierWeights() {
+        return new int[] { CRYSTAL_REACTOR_FLAWLESS_WEIGHT.get(), CRYSTAL_REACTOR_FLAWED_WEIGHT.get(),
+                CRYSTAL_REACTOR_CHIPPED_WEIGHT.get(), CRYSTAL_REACTOR_DAMAGED_WEIGHT.get() };
+    }
+
+    /**
+     * 材质权重，顺序为紫水晶、赛特斯石英、盈能水晶、过载水晶。
+     */
+    public static int[] crystalReactorMaterialWeights() {
+        return new int[] { CRYSTAL_REACTOR_AMETHYST_WEIGHT.get(), CRYSTAL_REACTOR_CERTUS_WEIGHT.get(),
+                CRYSTAL_REACTOR_ENERGIZED_WEIGHT.get(), CRYSTAL_REACTOR_OVERLOAD_WEIGHT.get() };
     }
 
     public static double lossySpeedPerCard() {

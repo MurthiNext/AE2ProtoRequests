@@ -26,15 +26,9 @@ public class NamingFactoryScreen extends AbstractMachineScreen<NamingFactoryMenu
     private static final int OUTPUT_SLOT_Y = 74;
     private static final int PRESS_ARROW_X = 83;
     private static final int PRESS_ARROW_Y = 52;
-    private static final int GROOVE_X = 34;
-    private static final int GROOVE_Y = 94;
-    private static final int GROOVE_WIDTH = 108;
-    private static final int GROOVE_HEIGHT = 6;
-    private static final int PROGRESS_X = 35;
-    private static final int PROGRESS_Y = 95;
-    private static final int PROGRESS_WIDTH = 106;
-    private static final int PROGRESS_HEIGHT = 4;
-    private static final int PROGRESS_COLOR = 0xFF8ABBEF;
+    // 箭头右侧的竖向进度条
+    private static final int PROGRESS_X = 96;
+    private static final int PROGRESS_Y = 49;
 
     private static final int TEXT_X = 7;
     private static final int TITLE_Y = 9;
@@ -73,14 +67,9 @@ public class NamingFactoryScreen extends AbstractMachineScreen<NamingFactoryMenu
         MachineGui.drawSlot(graphics, leftPos + INPUT_SLOT_X, topPos + INPUT_SLOT_Y);
         MachineGui.drawSlot(graphics, leftPos + OUTPUT_SLOT_X, topPos + OUTPUT_SLOT_Y);
         MachineGui.drawArrow(graphics, leftPos + PRESS_ARROW_X, topPos + PRESS_ARROW_Y, true, true);
-        MachineGui.drawBarGroove(graphics, leftPos + GROOVE_X, topPos + GROOVE_Y, GROOVE_WIDTH, GROOVE_HEIGHT);
         NamingFactoryBlockEntity blockEntity = menu.getBlockEntity();
         float progress = blockEntity != null ? blockEntity.getWorkProgress(partialTick) : 0;
-        int fill = Math.round(PROGRESS_WIDTH * progress);
-        if (fill > 0) {
-            graphics.fill(leftPos + PROGRESS_X, topPos + PROGRESS_Y,
-                    leftPos + PROGRESS_X + fill, topPos + PROGRESS_Y + PROGRESS_HEIGHT, PROGRESS_COLOR);
-        }
+        MachineGui.drawProgressBar(graphics, leftPos + PROGRESS_X, topPos + PROGRESS_Y, progress);
     }
 
     @Override

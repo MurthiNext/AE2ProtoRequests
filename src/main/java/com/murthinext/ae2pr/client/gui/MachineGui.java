@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
@@ -40,12 +41,28 @@ public final class MachineGui {
     public static final int ACCENT_EMBER = 0xFFE6AF50;
     public static final int ACCENT_EMBER_DARK = 0x808A5A20;
 
+    public static final int BAR_WIDTH = 6;
+    public static final int BAR_HEIGHT = 18;
+
+    // progress_bar.png 精灵表：竖向凹槽/填充在前，横向在后
+    private static final int BAR_TEX_WIDTH = 26;
+    private static final int BAR_TEX_HEIGHT = 36;
+    private static final int BAR_GROOVE_V_U = 0;
+    private static final int BAR_GROOVE_V_V = 0;
+    private static final int BAR_FILL_V_U = 0;
+    private static final int BAR_FILL_V_V = 20;
+    private static final int BAR_GROOVE_H_U = 8;
+    private static final int BAR_GROOVE_H_V = 0;
+    private static final int BAR_FILL_H_U = 8;
+    private static final int BAR_FILL_H_V = 20;
+
     private static final int ARROW_WIDTH = 10;
     private static final int ARROW_HEIGHT = 12;
 
     private static final ResourceLocation PANEL_TEXTURE = texture("components/panel");
     private static final ResourceLocation SLOT_TEXTURE = texture("components/slot");
     private static final ResourceLocation TANK_TEXTURE = texture("components/tank");
+    private static final ResourceLocation PROGRESS_BAR_TEXTURE = texture("components/progress_bar");
     private static final ResourceLocation ARROW_ITEM_DOWN = texture("components/arrow_item_down");
     private static final ResourceLocation ARROW_ITEM_UP = texture("components/arrow_item_up");
     private static final ResourceLocation ARROW_FLUID_DOWN = texture("components/arrow_fluid_down");
@@ -108,9 +125,42 @@ public final class MachineGui {
 
     // 进度条与流体
 
-    public static void drawBarGroove(GuiGraphics graphics, int x, int y, int width, int height) {
-        graphics.fill(x, y, x + width, y + height, 0xFF39424E);
-        graphics.fill(x + 1, y + 1, x + width - 1, y + height - 1, 0xFF1B222B);
+    /**
+     * AE2 机器风格进度条，默认纵向自下而上填充。
+     */
+    public static void drawProgressBar(GuiGraphics graphics, int x, int y, float progress) {
+        drawProgressBar(graphics, x, y, BAR_WIDTH, BAR_HEIGHT, progress, true);
+    }
+
+    /**
+     * AE2 机器风格进度条：先画凹槽，再按 progress 取填充段贴图。progress 取 0~1。
+     *
+     * @param vertical {@code true} 自下而上，{@code false} 自左向右
+     */
+    public static void drawProgressBar(GuiGraphics graphics, int x, int y, int width, int height,
+            float progress, boolean vertical) {
+        int grooveU = vertical ? BAR_GROOVE_V_U : BAR_GROOVE_H_U;
+        int grooveV = vertical ? BAR_GROOVE_V_V : BAR_GROOVE_H_V;
+        graphics.blit(PROGRESS_BAR_TEXTURE, x, y, grooveU, grooveV, width, height,
+                BAR_TEX_WIDTH, BAR_TEX_HEIGHT);
+
+        int innerLength = vertical ? height - 2 : width - 2;
+        int innerThickness = vertical ? width - 2 : height - 2;
+        int filled = Math.round(Mth.clamp(progress, 0.0F, 1.0F) * innerLength);
+        if (filled <= 0 || innerThickness <= 0) {
+            return;
+        }
+        int fillU = vertical ? BAR_FILL_V_U : BAR_FILL_H_U;
+        int fillV = vertical ? BAR_FILL_V_V : BAR_FILL_H_V;
+        if (vertical) {
+            // 从底端截取，对应材质中的起始端
+            fillV += innerLength - filled;
+            graphics.blit(PROGRESS_BAR_TEXTURE, x + 1, y + 1 + innerLength - filled, fillU, fillV,
+                    innerThickness, filled, BAR_TEX_WIDTH, BAR_TEX_HEIGHT);
+        } else {
+            graphics.blit(PROGRESS_BAR_TEXTURE, x + 1, y + 1, fillU, fillV,
+                    filled, innerThickness, BAR_TEX_WIDTH, BAR_TEX_HEIGHT);
+        }
     }
 
     public static void drawFluid(GuiGraphics graphics, FluidStack fluid, int x, int y, int innerWidth,

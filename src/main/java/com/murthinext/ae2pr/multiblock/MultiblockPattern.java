@@ -37,12 +37,13 @@ public final class MultiblockPattern {
     private final List<StructurePredicate> leaves;
     private final int rows;
     private final int cols;
+    private final int originSlice;
     private final int originRow;
     private final int originCol;
 
     private MultiblockPattern(RelativeDirection sliceDir, RelativeDirection stringDir, RelativeDirection charDir,
             List<Slice> slices, Map<Character, StructurePredicate> predicates, List<StructurePredicate> leaves,
-            int rows, int cols, int originRow, int originCol) {
+            int rows, int cols, int originSlice, int originRow, int originCol) {
         this.sliceDir = sliceDir;
         this.stringDir = stringDir;
         this.charDir = charDir;
@@ -51,6 +52,7 @@ public final class MultiblockPattern {
         this.leaves = leaves;
         this.rows = rows;
         this.cols = cols;
+        this.originSlice = originSlice;
         this.originRow = originRow;
         this.originCol = originCol;
     }
@@ -246,7 +248,7 @@ public final class MultiblockPattern {
 
     private BlockPos cell(BlockPos controllerPos, Direction sliceFacing, Direction stringFacing, Direction charFacing,
             int sliceIndex, int row, int col) {
-        return controllerPos.relative(sliceFacing, sliceIndex)
+        return controllerPos.relative(sliceFacing, sliceIndex - originSlice)
                 .relative(stringFacing, row - originRow)
                 .relative(charFacing, col - originCol);
     }
@@ -275,6 +277,7 @@ public final class MultiblockPattern {
         private final Set<Character> usedChars = new HashSet<>();
         private int rows = -1;
         private int cols = -1;
+        private int originSlice;
         private int originRow;
         private int originCol;
 
@@ -308,6 +311,14 @@ public final class MultiblockPattern {
             return this;
         }
 
+        /**
+         * 指定控制器所在的片序号，用于把控制器放在结构中间片。
+         */
+        public Builder sliceOrigin(int sliceIndex) {
+            this.originSlice = sliceIndex;
+            return this;
+        }
+
         public Builder where(char symbol, StructurePredicate predicate) {
             predicates.put(symbol, predicate);
             return this;
@@ -319,6 +330,13 @@ public final class MultiblockPattern {
             }
             if (originRow < 0 || originRow >= rows || originCol < 0 || originCol >= cols) {
                 throw new IllegalStateException("控制器原点超出结构范围");
+            }
+            int minSlices = 0;
+            for (Slice slice : slices) {
+                minSlices += slice.minRepeats();
+            }
+            if (originSlice < 0 || originSlice >= minSlices) {
+                throw new IllegalStateException("控制器所在片超出结构范围");
             }
             for (char symbol : usedChars) {
                 if (!predicates.containsKey(symbol)) {
@@ -337,7 +355,7 @@ public final class MultiblockPattern {
                 leaves.addAll(predicate.leaves());
             }
             return new MultiblockPattern(sliceDir, stringDir, charDir, List.copyOf(slices), Map.copyOf(predicates),
-                    List.copyOf(leaves), rows, cols, originRow, originCol);
+                    List.copyOf(leaves), rows, cols, originSlice, originRow, originCol);
         }
 
         private void validateRows(String[] sliceRows) {
