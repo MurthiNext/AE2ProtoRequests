@@ -41,7 +41,7 @@ public class LavaSmelterJobPacket {
     public static void handle(LavaSmelterJobPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> com.murthinext.ae2pr.client.lava_smelter.LavaSmelterScreen
+                () -> () -> com.murthinext.ae2pr.client.gui.lava_smelter.LavaSmelterScreen
                         .applyJobSync(packet.pos, packet.stack)));
         context.setPacketHandled(true);
     }

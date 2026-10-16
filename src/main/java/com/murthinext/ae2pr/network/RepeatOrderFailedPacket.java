@@ -50,7 +50,7 @@ public class RepeatOrderFailedPacket {
     public static void handle(RepeatOrderFailedPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> com.murthinext.ae2pr.client.ClientRepeatOrderFailures.onFailure(
+                () -> () -> com.murthinext.ae2pr.client.repeat.ClientRepeatOrderFailures.onFailure(
                         packet.what, packet.amountPerRound, packet.totalRounds, packet.completedRounds,
                         packet.reason)));
         context.setPacketHandled(true);

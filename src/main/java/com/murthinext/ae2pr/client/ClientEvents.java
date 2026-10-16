@@ -3,6 +3,10 @@ package com.murthinext.ae2pr.client;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.client.gui.TooltipRenderer;
 import com.murthinext.ae2pr.client.proto_terminal.ClientStoryProgress;
+import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderFailures;
+import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderRounds;
+import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
@@ -22,11 +26,18 @@ public final class ClientEvents {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onGatherTooltip(RenderTooltipEvent.GatherComponents event) {
         var stack = event.getItemStack();
-        if (stack.isEmpty() || !ae2pr.MODID.equals(BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace())) {
+        if (stack.isEmpty()) {
             return;
         }
         var elements = event.getTooltipElements();
-        var prepared = TooltipRenderer.prepareElements(elements);
+        // 本模组物品沿用折行处理，其余仅在有特效时接管
+        boolean ours = ae2pr.MODID.equals(BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace());
+        if (!ours && !TooltipRenderer.containsEffect(elements)) {
+            return;
+        }
+        // 特效行由自定义组件渲染，需在此处自行折行
+        int maxWidth = event.getMaxWidth() > 0 ? event.getMaxWidth() : event.getScreenWidth() - 32;
+        var prepared = TooltipRenderer.prepareElements(elements, Minecraft.getInstance().font, maxWidth);
         elements.clear();
         elements.addAll(prepared);
     }
@@ -36,7 +47,6 @@ public final class ClientEvents {
         ClientRepeatOrderState.clear();
         ClientRepeatOrderFailures.clear();
         ClientRepeatOrderRounds.clear();
-        ClientConfirmRounds.clear();
         ClientStoryProgress.reset();
     }
 }

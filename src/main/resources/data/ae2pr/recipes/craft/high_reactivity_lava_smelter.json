@@ -10,7 +10,7 @@
       "item": "ae2pr:zirconia_corundum_bricks"
     },
     "P": {
-      "item": "ae2pr:computation_cell_component_256tops"
+      "tag": "ae2pr:circuits/aev"
     },
     "F": {
       "item": "ae2pr:fireproof_crystal_glass"

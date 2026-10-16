@@ -12,8 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.ModNetwork;
-import com.murthinext.ae2pr.network.RepeatOrderConfirmRoundsPacket;
 import com.murthinext.ae2pr.logic.repeat.GenericRepeatOrder;
 import com.murthinext.ae2pr.logic.repeat.GenericRepeatOrders;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderBinding;
@@ -26,14 +24,12 @@ import appeng.api.networking.crafting.ICraftingCPU;
 import appeng.api.networking.crafting.ICraftingPlan;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.GenericStack;
-import appeng.api.storage.ISubMenuHost;
 import appeng.menu.me.crafting.CraftConfirmMenu;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 
 /**
- * 确认菜单：同步重复轮数，未命中普通 CPU 时兜底登记通用订单。
+ * 确认菜单：未命中普通 CPU 时兜底登记通用重复订单。
  */
 @Mixin(CraftConfirmMenu.class)
 public abstract class CraftConfirmMenuMixin {
@@ -55,20 +51,6 @@ public abstract class CraftConfirmMenuMixin {
     @Unique
     @Nullable
     private Set<ICraftingCPU> ae2pr$busyBefore;
-
-    /**
-     * 打开确认界面时同步轮数给客户端（登记由 MenuOpenerMixin 完成）。
-     */
-    @Inject(method = "<init>", at = @At("TAIL"))
-    private void ae2pr$syncConfirmRounds(int id, Inventory playerInventory, ISubMenuHost host, CallbackInfo ci) {
-        var menu = (CraftConfirmMenu) (Object) this;
-        if (menu.getPlayer() instanceof ServerPlayer serverPlayer) {
-            var rounds = ServerRepeatRegistry.peek(serverPlayer.getUUID());
-            if (rounds != null && rounds > 1) {
-                ModNetwork.sendToPlayer(serverPlayer, new RepeatOrderConfirmRoundsPacket(menu.containerId, rounds));
-            }
-        }
-    }
 
     // startJob 为 AE2 自定义方法，不做映射
     @Inject(method = "startJob", at = @At("HEAD"), remap = false)

@@ -7,6 +7,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -17,19 +18,21 @@ import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModMenus;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.client.ctm.CtmBakedModel;
-import com.murthinext.ae2pr.client.assembly_line.AssemblyLineScreen;
-import com.murthinext.ae2pr.client.crystal_reaction_chamber.CrystalReactionChamberRenderer;
-import com.murthinext.ae2pr.client.crystal_reaction_chamber.CrystalReactionChamberScreen;
-import com.murthinext.ae2pr.client.machine_part.FluidHatchScreen;
-import com.murthinext.ae2pr.client.machine_part.ItemBusScreen;
-import com.murthinext.ae2pr.client.emitter.MultiLevelEmitterScreen;
-import com.murthinext.ae2pr.client.emitter.MultiThresholdLevelEmitterScreen;
-import com.murthinext.ae2pr.client.lava_smelter.LavaSmelterRenderer;
-import com.murthinext.ae2pr.client.lava_smelter.LavaSmelterScreen;
-import com.murthinext.ae2pr.client.matter_phase_transformer.MatterPhaseTransformerRenderer;
-import com.murthinext.ae2pr.client.matter_phase_transformer.MatterPhaseTransformerScreen;
-import com.murthinext.ae2pr.client.naming_factory.NamingFactoryRenderer;
-import com.murthinext.ae2pr.client.naming_factory.NamingFactoryScreen;
+import com.murthinext.ae2pr.client.gui.tooltip.ColorEffectClientTooltip;
+import com.murthinext.ae2pr.client.gui.tooltip.ColorEffectLine;
+import com.murthinext.ae2pr.client.gui.assembly_line.AssemblyLineScreen;
+import com.murthinext.ae2pr.client.gui.crystal_reaction_chamber.CrystalReactionChamberRenderer;
+import com.murthinext.ae2pr.client.gui.crystal_reaction_chamber.CrystalReactionChamberScreen;
+import com.murthinext.ae2pr.client.gui.machine_part.FluidHatchScreen;
+import com.murthinext.ae2pr.client.gui.machine_part.ItemBusScreen;
+import com.murthinext.ae2pr.client.gui.level_emitter.MultiLevelEmitterScreen;
+import com.murthinext.ae2pr.client.gui.level_emitter.MultiThresholdLevelEmitterScreen;
+import com.murthinext.ae2pr.client.gui.lava_smelter.LavaSmelterRenderer;
+import com.murthinext.ae2pr.client.gui.lava_smelter.LavaSmelterScreen;
+import com.murthinext.ae2pr.client.gui.matter_phase_transformer.MatterPhaseTransformerRenderer;
+import com.murthinext.ae2pr.client.gui.matter_phase_transformer.MatterPhaseTransformerScreen;
+import com.murthinext.ae2pr.client.gui.naming_factory.NamingFactoryRenderer;
+import com.murthinext.ae2pr.client.gui.naming_factory.NamingFactoryScreen;
 
 /**
  * 客户端初始化：注册界面。
@@ -55,6 +58,11 @@ public final class ClientSetup {
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_ITEM_BUS.get(), ItemBusScreen::new);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), FluidHatchScreen::new);
         MenuScreens.register(ModMenus.NAMING_FACTORY.get(), NamingFactoryScreen::new);
+    }
+
+    @SubscribeEvent
+    public static void registerTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
+        event.register(ColorEffectLine.class, ColorEffectClientTooltip::new);
     }
 
     @SubscribeEvent

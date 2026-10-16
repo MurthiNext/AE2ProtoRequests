@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.murthinext.ae2pr.Config;
-import com.murthinext.ae2pr.client.gui.RepeatOrderButton;
+import com.murthinext.ae2pr.client.repeat.RepeatOrderButton;
 import com.murthinext.ae2pr.logic.repeat.IRepeatRoundsHolder;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderConstants;
 

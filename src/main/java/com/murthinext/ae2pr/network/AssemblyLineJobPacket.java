@@ -41,7 +41,7 @@ public class AssemblyLineJobPacket {
     public static void handle(AssemblyLineJobPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> com.murthinext.ae2pr.client.assembly_line.AssemblyLineScreen
+                () -> () -> com.murthinext.ae2pr.client.gui.assembly_line.AssemblyLineScreen
                         .applyJobSync(packet.pos, packet.stack)));
         context.setPacketHandled(true);
     }

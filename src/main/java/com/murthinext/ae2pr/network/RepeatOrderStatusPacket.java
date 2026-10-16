@@ -44,7 +44,7 @@ public class RepeatOrderStatusPacket {
     public static void handle(RepeatOrderStatusPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> com.murthinext.ae2pr.client.ClientRepeatOrderState.update(packet.containerId, packet.entries)));
+                () -> () -> com.murthinext.ae2pr.client.repeat.ClientRepeatOrderState.update(packet.containerId, packet.entries)));
         context.setPacketHandled(true);
     }
 }

@@ -1,23 +1,13 @@
 package com.murthinext.ae2pr.compat.jade;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.fluids.FluidStack;
 
-import snownee.jade.api.BlockAccessor;
-import snownee.jade.api.IBlockComponentProvider;
-import snownee.jade.api.IServerDataProvider;
-import snownee.jade.api.ITooltip;
-import snownee.jade.api.IWailaClientRegistration;
-import snownee.jade.api.IWailaCommonRegistration;
-import snownee.jade.api.IWailaPlugin;
 import snownee.jade.api.WailaPlugin;
-import snownee.jade.api.config.IPluginConfig;
-import snownee.jade.api.ui.BoxStyle;
-import snownee.jade.api.ui.IProgressStyle;
 
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineControllerBlockEntity;
@@ -27,95 +17,38 @@ import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
  * 显示水晶装配线连接状态与作业的 Jade 插件。
  */
 @WailaPlugin(ae2pr.MODID)
-public class AssemblyLineJadePlugin implements IWailaPlugin {
-
-    private static final String KEY_FORMED = "formed";
-    private static final String KEY_ENERGY_CONNECTED = "energyConnected";
-    private static final String KEY_ELAPSED = "elapsed";
-    private static final String KEY_DURATION = "duration";
-    private static final String KEY_ITEM = "item";
-    private static final String KEY_COUNT = "count";
+public class AssemblyLineJadePlugin extends AbstractMultiblockJadePlugin {
 
     @Override
-    public void register(IWailaCommonRegistration registration) {
-        registration.registerBlockDataProvider(ServerData.INSTANCE, AssemblyLineControllerBlockEntity.class);
+    protected Class<? extends BlockEntity> controllerType() {
+        return AssemblyLineControllerBlockEntity.class;
     }
 
     @Override
-    public void registerClient(IWailaClientRegistration registration) {
-        registration.registerBlockComponent(ComponentProvider.INSTANCE, CrystalAssemblyLineBlock.class);
+    protected Class<? extends Block> blockType() {
+        return CrystalAssemblyLineBlock.class;
     }
 
-    /**
-     * 服务端数据提供器。
-     */
-    private enum ServerData implements IServerDataProvider<BlockAccessor> {
-        INSTANCE;
-
-        @Override
-        public void appendServerData(CompoundTag data, BlockAccessor accessor) {
-            if (!(accessor.getBlockEntity() instanceof AssemblyLineControllerBlockEntity controller)) {
-                return;
-            }
-            data.putBoolean(KEY_FORMED, controller.isFormed());
-            data.putBoolean(KEY_ENERGY_CONNECTED, controller.isEnergyConnected());
-            data.putInt(KEY_ELAPSED, controller.getJobElapsed());
-            data.putInt(KEY_DURATION, controller.getJobDuration());
-            ItemStack output = controller.getJobOutput();
-            if (!output.isEmpty()) {
-                data.putString(KEY_ITEM, ForgeRegistries.ITEMS.getKey(output.getItem()).toString());
-                data.putInt(KEY_COUNT, output.getCount());
-            }
-        }
-
-        @Override
-        public ResourceLocation getUid() {
-            return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "assembly_line_data");
-        }
+    @Override
+    protected ResourceLocation dataUid() {
+        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "assembly_line_data");
     }
 
-    /**
-     * 客户端提示提供器。
-     */
-    private enum ComponentProvider implements IBlockComponentProvider {
-        INSTANCE;
+    @Override
+    protected ResourceLocation componentUid() {
+        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "assembly_line");
+    }
 
-        @Override
-        public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
-            CompoundTag data = accessor.getServerData();
-            if (!data.contains(KEY_FORMED)) {
-                return;
-            }
-            tooltip.add(Component.translatable(data.getBoolean(KEY_ENERGY_CONNECTED)
-                    ? "jade.ae2pr.multiblock.connected"
-                    : "jade.ae2pr.multiblock.disconnected"));
+    @Override
+    protected int progressColor() {
+        return 0xFF3E9BC8;
+    }
 
-            int duration = data.getInt(KEY_DURATION);
-            String itemId = data.getString(KEY_ITEM);
-            if (!itemId.isEmpty() && duration > 0) {
-                Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(itemId));
-                if (item != null) {
-                    ItemStack output = new ItemStack(item, data.getInt(KEY_COUNT));
-                    tooltip.add(Component.translatable("jade.ae2pr.crystal_assembly_line.job",
-                            output.getHoverName(), output.getCount()));
-                }
-                int elapsed = data.getInt(KEY_ELAPSED);
-                float progress = Math.min(1.0F, (float) elapsed / duration);
-                IProgressStyle style = tooltip.getElementHelper().progressStyle().color(0xFF3E9BC8, 0xFF1B222B);
-                tooltip.add(tooltip.getElementHelper().progress(progress,
-                        Component.translatable("jade.ae2pr.crystal_assembly_line.progress",
-                                seconds(elapsed), seconds(duration)),
-                        style, BoxStyle.DEFAULT, false));
-            }
-        }
-
-        @Override
-        public ResourceLocation getUid() {
-            return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "assembly_line");
-        }
-
-        private static String seconds(int ticks) {
-            return String.format(java.util.Locale.ROOT, "%.1f", ticks / 20.0D);
-        }
+    @Override
+    protected JobState jobState(BlockEntity controller) {
+        AssemblyLineControllerBlockEntity line = (AssemblyLineControllerBlockEntity) controller;
+        ItemStack output = line.getJobOutput();
+        return new JobState(line.isFormed(), line.isEnergyConnected(), line.getJobElapsed(), line.getJobDuration(),
+                output, FluidStack.EMPTY);
     }
 }

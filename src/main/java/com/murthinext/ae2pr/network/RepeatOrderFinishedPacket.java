@@ -39,7 +39,7 @@ public class RepeatOrderFinishedPacket {
     public static void handle(RepeatOrderFinishedPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> com.murthinext.ae2pr.client.ClientRepeatOrderRounds.onFinished(
+                () -> () -> com.murthinext.ae2pr.client.repeat.ClientRepeatOrderRounds.onFinished(
                         packet.what, packet.amountPerRound, packet.totalRounds)));
         context.setPacketHandled(true);
     }

@@ -38,7 +38,7 @@ public class MatterPhaseTransformerJobPacket {
     public static void handle(MatterPhaseTransformerJobPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> com.murthinext.ae2pr.client.matter_phase_transformer.MatterPhaseTransformerScreen
+                () -> () -> com.murthinext.ae2pr.client.gui.matter_phase_transformer.MatterPhaseTransformerScreen
                         .applyJobSync(packet.pos, packet.fluid)));
         context.setPacketHandled(true);
     }

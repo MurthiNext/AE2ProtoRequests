@@ -32,15 +32,6 @@ public final class ServerRepeatRegistry {
         return pending.rounds;
     }
 
-    @Nullable
-    public static Integer peek(UUID playerId) {
-        var pending = PENDING.get(playerId);
-        if (pending == null || System.currentTimeMillis() - pending.timestamp > MAX_AGE_MILLIS) {
-            return null;
-        }
-        return pending.rounds;
-    }
-
     public static void clear(UUID playerId) {
         PENDING.remove(playerId);
     }

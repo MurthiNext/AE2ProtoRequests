@@ -32,7 +32,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 
 import com.murthinext.ae2pr.ModTags;
-import com.murthinext.ae2pr.client.naming_factory.NamingFactoryRenameScreen;
+import com.murthinext.ae2pr.client.gui.naming_factory.NamingFactoryRenameScreen;
 import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
 /**

@@ -9,7 +9,6 @@ import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 import com.murthinext.ae2pr.network.MachinePartStackPacket;
 import com.murthinext.ae2pr.network.MatterPhaseTransformerJobPacket;
 import com.murthinext.ae2pr.network.NamingFactoryRenamePacket;
-import com.murthinext.ae2pr.network.RepeatOrderConfirmRoundsPacket;
 import com.murthinext.ae2pr.network.RepeatOrderFailedPacket;
 import com.murthinext.ae2pr.network.RepeatOrderFinishedPacket;
 import com.murthinext.ae2pr.network.RepeatOrderRoundPacket;
@@ -65,12 +64,6 @@ public final class ModNetwork {
                 RepeatOrderFinishedPacket::encode,
                 RepeatOrderFinishedPacket::decode,
                 RepeatOrderFinishedPacket::handle);
-
-        CHANNEL.registerMessage(nextMessageId++,
-                RepeatOrderConfirmRoundsPacket.class,
-                RepeatOrderConfirmRoundsPacket::encode,
-                RepeatOrderConfirmRoundsPacket::decode,
-                RepeatOrderConfirmRoundsPacket::handle);
 
         CHANNEL.registerMessage(nextMessageId++,
                 MachinePartFluidPacket.class,
@@ -162,10 +155,6 @@ public final class ModNetwork {
     }
 
     public static void sendToPlayer(ServerPlayer player, RepeatOrderFinishedPacket packet) {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
-    }
-
-    public static void sendToPlayer(ServerPlayer player, RepeatOrderConfirmRoundsPacket packet) {
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
     }
 

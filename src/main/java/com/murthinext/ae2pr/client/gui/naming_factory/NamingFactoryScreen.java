@@ -1,0 +1,129 @@
+package com.murthinext.ae2pr.client.gui.naming_factory;
+
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.ItemLike;
+
+import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
+import com.murthinext.ae2pr.block.naming_factory.NamingFactoryMenu;
+import com.murthinext.ae2pr.client.ModGuide;
+import com.murthinext.ae2pr.client.gui.AbstractMachineScreen;
+import com.murthinext.ae2pr.client.gui.MachineGui;
+
+/**
+ * 名称压印工厂界面。
+ */
+public class NamingFactoryScreen extends AbstractMachineScreen<NamingFactoryMenu> {
+
+    private static final int TEMPLATE_SLOT_X = 120;
+    private static final int TEMPLATE_SLOT_Y = 50;
+    private static final int INPUT_SLOT_X = 80;
+    private static final int INPUT_SLOT_Y = 26;
+    private static final int OUTPUT_SLOT_X = 80;
+    private static final int OUTPUT_SLOT_Y = 74;
+    private static final int PRESS_ARROW_X = 83;
+    private static final int PRESS_ARROW_Y = 52;
+    private static final int GROOVE_X = 34;
+    private static final int GROOVE_Y = 94;
+    private static final int GROOVE_WIDTH = 108;
+    private static final int GROOVE_HEIGHT = 6;
+    private static final int PROGRESS_X = 35;
+    private static final int PROGRESS_Y = 95;
+    private static final int PROGRESS_WIDTH = 106;
+    private static final int PROGRESS_HEIGHT = 4;
+    private static final int PROGRESS_COLOR = 0xFF8ABBEF;
+
+    private static final int TEXT_X = 7;
+    private static final int TITLE_Y = 9;
+    private static final int NAME_Y = 103;
+
+    private static final int COLOR_TITLE = 0x55FFFF;
+    private static final int COLOR_VALUE = 0xACE9FF;
+    private static final int COLOR_TEXT = 0xAAB8C6;
+    private static final int COLOR_GRAY = 0x7A8794;
+
+    public NamingFactoryScreen(NamingFactoryMenu menu, Inventory playerInventory, Component title) {
+        super(menu, playerInventory, title);
+    }
+
+    @Override
+    protected ResourceLocation guidePage() {
+        return ModGuide.NAMING_FACTORY_PAGE;
+    }
+
+    @Override
+    protected ItemLike upgradeMachine() {
+        return ModBlocks.NAMING_FACTORY.get();
+    }
+
+    @Override
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        this.renderBackground(graphics);
+        super.render(graphics, mouseX, mouseY, partialTick);
+        this.renderTooltip(graphics, mouseX, mouseY);
+    }
+
+    @Override
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+        super.renderBg(graphics, partialTick, mouseX, mouseY);
+        MachineGui.drawSlot(graphics, leftPos + TEMPLATE_SLOT_X, topPos + TEMPLATE_SLOT_Y);
+        MachineGui.drawSlot(graphics, leftPos + INPUT_SLOT_X, topPos + INPUT_SLOT_Y);
+        MachineGui.drawSlot(graphics, leftPos + OUTPUT_SLOT_X, topPos + OUTPUT_SLOT_Y);
+        MachineGui.drawArrow(graphics, leftPos + PRESS_ARROW_X, topPos + PRESS_ARROW_Y, true, true);
+        MachineGui.drawBarGroove(graphics, leftPos + GROOVE_X, topPos + GROOVE_Y, GROOVE_WIDTH, GROOVE_HEIGHT);
+        NamingFactoryBlockEntity blockEntity = menu.getBlockEntity();
+        float progress = blockEntity != null ? blockEntity.getWorkProgress(partialTick) : 0;
+        int fill = Math.round(PROGRESS_WIDTH * progress);
+        if (fill > 0) {
+            graphics.fill(leftPos + PROGRESS_X, topPos + PROGRESS_Y,
+                    leftPos + PROGRESS_X + fill, topPos + PROGRESS_Y + PROGRESS_HEIGHT, PROGRESS_COLOR);
+        }
+    }
+
+    @Override
+    protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+        if (renderToolbarTooltip(graphics, mouseX, mouseY) || renderUpgradeTooltip(graphics, mouseX, mouseY)) {
+            return;
+        }
+        super.renderTooltip(graphics, mouseX, mouseY);
+    }
+
+    @Override
+    protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+        graphics.drawString(font, title, TEXT_X, TITLE_Y, COLOR_TITLE, false);
+
+        drawSlotLabelAbove(graphics, "gui.ae2pr.naming_factory.template", 120, 50);
+        drawSlotLabelLeft(graphics, "gui.ae2pr.naming_factory.input", 80, 26);
+        drawSlotLabelLeft(graphics, "gui.ae2pr.naming_factory.output", 80, 74);
+
+        NamingFactoryBlockEntity blockEntity = menu.getBlockEntity();
+        String name = blockEntity != null ? blockEntity.getImprintName() : null;
+        if (name == null) {
+            graphics.drawString(font, Component.translatable("gui.ae2pr.naming_factory.name.none"),
+                    TEXT_X, NAME_Y, COLOR_GRAY, false);
+        } else {
+            String text = Component.translatable("gui.ae2pr.naming_factory.name", name).getString();
+            graphics.drawString(font, clip(text, imageWidth - TEXT_X * 2), TEXT_X, NAME_Y, COLOR_VALUE, false);
+        }
+    }
+
+    private void drawSlotLabelAbove(GuiGraphics graphics, String key, int slotX, int slotY) {
+        Component label = Component.translatable(key);
+        graphics.drawString(font, label, slotX + (16 - font.width(label)) / 2, slotY - 10, COLOR_TEXT, false);
+    }
+
+    private void drawSlotLabelLeft(GuiGraphics graphics, String key, int slotX, int slotY) {
+        Component label = Component.translatable(key);
+        graphics.drawString(font, label, slotX - 4 - font.width(label), slotY + 4, COLOR_TEXT, false);
+    }
+
+    private String clip(String text, int maxWidth) {
+        if (font.width(text) <= maxWidth) {
+            return text;
+        }
+        return font.plainSubstrByWidth(text, maxWidth - font.width("…")) + "…";
+    }
+}

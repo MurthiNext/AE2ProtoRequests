@@ -10,7 +10,7 @@
       "item": "ae2pr:crystal_reinforced_composite_machine_casing"
     },
     "C": {
-      "item": "ae2pr:computation_cell_component_256tops"
+      "tag": "ae2pr:circuits/aev"
     },
     "P": {
       "item": "ae2pr:high_energy_core"

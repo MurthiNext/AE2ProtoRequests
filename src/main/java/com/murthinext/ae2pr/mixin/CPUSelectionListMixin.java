@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.murthinext.ae2pr.client.ClientRepeatOrderState;
+import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderState;
 
 import appeng.client.Point;
 import appeng.client.gui.Tooltip;

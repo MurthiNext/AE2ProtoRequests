@@ -15,11 +15,33 @@ import net.minecraft.util.StringDecomposer;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
+import com.murthinext.ae2pr.client.gui.tooltip.ColorEffectLine;
+import com.murthinext.ae2pr.client.gui.tooltip.ColorEffectLine.Segment;
+import com.murthinext.ae2pr.logic.tooltip.TooltipColorEffect;
+
 /**
  * 统一物品 Tooltip 文本处理与渲染入口。
  */
 public final class TooltipRenderer {
     private TooltipRenderer() {
+    }
+
+    // 渐变文字
+    public static MutableComponent gradient(String text, int... colors) {
+        return gradient(text, TooltipColorEffect.DEFAULT_SPEED, colors);
+    }
+
+    public static MutableComponent gradient(String text, float speed, int[] colors) {
+        return MutableComponent.create(new TooltipColorEffect(text, colors, speed, false));
+    }
+
+    // 硬切换文字
+    public static MutableComponent hardSwitch(String text, int... colors) {
+        return hardSwitch(text, TooltipColorEffect.DEFAULT_SPEED, colors);
+    }
+
+    public static MutableComponent hardSwitch(String text, float speed, int[] colors) {
+        return MutableComponent.create(new TooltipColorEffect(text, colors, speed, true));
     }
 
     public static void renderItem(GuiGraphics graphics, Font font, ItemStack stack, int mouseX, int mouseY) {
@@ -29,7 +51,21 @@ public final class TooltipRenderer {
     // 富文本和图片组件沿用 Forge 的折行、定位及渲染事件。
     public static void renderElements(GuiGraphics graphics, Font font,
             List<Either<FormattedText, TooltipComponent>> elements, ItemStack stack, int mouseX, int mouseY) {
-        graphics.renderComponentTooltipFromElements(font, new ArrayList<>(elements), mouseX, mouseY, stack);
+        graphics.renderComponentTooltipFromElements(font, new ArrayList<>(prepareElements(elements)), mouseX, mouseY,
+                stack);
+    }
+
+    // 元素列表中是否包含特效文本
+    public static boolean containsEffect(List<Either<FormattedText, TooltipComponent>> elements) {
+        for (var element : elements) {
+            if (element.left().filter(Component.class::isInstance)
+                    .map(Component.class::cast)
+                    .filter(ColorEffectLine::containsEffect)
+                    .isPresent()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static List<Component> format(List<? extends FormattedText> lines) {
@@ -42,15 +78,39 @@ public final class TooltipRenderer {
 
     public static List<Either<FormattedText, TooltipComponent>> prepareElements(
             List<Either<FormattedText, TooltipComponent>> elements) {
+        return prepareElements(elements, null, 0);
+    }
+
+    /**
+     * 携带特效的文本行改由 TooltipComponent 渲染，其余保持原样。
+     */
+    public static List<Either<FormattedText, TooltipComponent>> prepareElements(
+            List<Either<FormattedText, TooltipComponent>> elements, Font font, int maxWidth) {
         List<Either<FormattedText, TooltipComponent>> result = new ArrayList<>(elements.size());
         for (var element : elements) {
-            element.ifLeft(text -> {
-                for (Component line : splitLines(text)) {
-                    result.add(Either.left(line));
-                }
-            }).ifRight(component -> result.add(element));
+            element.ifLeft(text -> prepareText(text, result, font, maxWidth)).ifRight(component -> result.add(element));
         }
         return result;
+    }
+
+    private static void prepareText(FormattedText text, List<Either<FormattedText, TooltipComponent>> result, Font font,
+            int maxWidth) {
+        if (text instanceof Component component && ColorEffectLine.containsEffect(component)) {
+            List<Segment> segments = ColorEffectLine.collect(component);
+            List<List<Segment>> lines = font == null ? ColorEffectLine.split(segments)
+                    : ColorEffectLine.wrap(segments, font, maxWidth);
+            for (List<Segment> line : lines) {
+                if (ColorEffectLine.hasEffect(line)) {
+                    result.add(Either.right(new ColorEffectLine(line)));
+                } else {
+                    result.add(Either.left(ColorEffectLine.toComponent(line)));
+                }
+            }
+            return;
+        }
+        for (Component line : splitLines(text)) {
+            result.add(Either.left(line));
+        }
     }
 
     public static List<Component> splitLines(FormattedText text) {

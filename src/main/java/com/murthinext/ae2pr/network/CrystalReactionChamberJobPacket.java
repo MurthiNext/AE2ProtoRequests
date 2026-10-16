@@ -41,7 +41,7 @@ public class CrystalReactionChamberJobPacket {
     public static void handle(CrystalReactionChamberJobPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> com.murthinext.ae2pr.client.crystal_reaction_chamber.CrystalReactionChamberScreen
+                () -> () -> com.murthinext.ae2pr.client.gui.crystal_reaction_chamber.CrystalReactionChamberScreen
                         .applyJobSync(packet.pos, packet.item, packet.fluid)));
         context.setPacketHandled(true);
     }

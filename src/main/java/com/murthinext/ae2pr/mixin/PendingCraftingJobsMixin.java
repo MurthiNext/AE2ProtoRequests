@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.client.ClientRepeatOrderRounds;
+import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderRounds;
 
 import appeng.api.stacks.AEKey;
 import appeng.client.gui.me.common.PendingCraftingJobs;
