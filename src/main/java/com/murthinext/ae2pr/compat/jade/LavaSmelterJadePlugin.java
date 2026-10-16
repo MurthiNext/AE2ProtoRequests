@@ -19,6 +19,7 @@ import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.BoxStyle;
 import snownee.jade.api.ui.IProgressStyle;
 
+import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
@@ -110,7 +111,7 @@ public class LavaSmelterJadePlugin implements IWailaPlugin {
                         style, BoxStyle.DEFAULT, false));
             }
             tooltip.add(Component.translatable("jade.ae2pr.lava_smelter.durability",
-                    data.getInt(KEY_DURABILITY), LavaSmelterControllerBlockEntity.MAX_DURABILITY));
+                    data.getInt(KEY_DURABILITY), Config.lavaSmelterMaxDurability()));
         }
 
         @Override

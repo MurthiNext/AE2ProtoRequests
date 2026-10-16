@@ -15,15 +15,15 @@
     },
     {
       "item": "ae2:charged_certus_quartz_crystal",
-      "count": 1024
+      "count": 32768
     },
     {
       "item": "ae2:fluix_crystal",
-      "count": 1024
+      "count": 32768
     },
     {
       "item": "ae2pr:computation_cell_component_256tops",
-      "count": 16
+      "count": 32768
     }
   ],
   "item_outputs": [

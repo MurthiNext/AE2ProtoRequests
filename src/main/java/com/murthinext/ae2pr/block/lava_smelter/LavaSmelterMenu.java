@@ -16,6 +16,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import appeng.api.upgrades.Upgrades;
 
+import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.network.LavaSmelterJobPacket;
 
@@ -142,7 +143,7 @@ public class LavaSmelterMenu extends AbstractContainerMenu {
     }
 
     public int getMaxDurability() {
-        return LavaSmelterControllerBlockEntity.MAX_DURABILITY;
+        return Config.lavaSmelterMaxDurability();
     }
 
     public int getErrorCode() {

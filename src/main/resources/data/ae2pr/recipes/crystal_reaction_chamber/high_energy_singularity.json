@@ -1,0 +1,35 @@
+{
+  "type": "ae2pr:crystal_reaction_chamber",
+  "duration": 100,
+  "energy": 50000000,
+  "item_inputs": [
+    {
+      "item": "ae2pr:high_energy_singularity",
+      "count": 2
+    },
+    {
+      "item": "ae2:singularity",
+      "count": 256
+    },
+    {
+      "item": "ae2:charged_certus_quartz_crystal",
+      "count": 1024
+    },
+    {
+      "tag": "ae2:all_fluix",
+      "count": 1024
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 1000000
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:high_energy_singularity",
+      "count": 4
+    }
+  ]
+}

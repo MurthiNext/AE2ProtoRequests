@@ -40,6 +40,8 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.ALIEN_LAVA_BUCKET.get());
                         output.accept(ModItems.LIQUID_CERTUS_QUARTZ_BUCKET.get());
                         output.accept(ModItems.LIQUID_FLUIX_CRYSTAL_BUCKET.get());
+                        output.accept(ModItems.LIQUID_AMETHYST_BUCKET.get());
+                        output.accept(ModItems.LIQUID_CRYSTALINE_BUCKET.get());
 
                         // 锭 & 宝石
                         output.accept(ModItems.METEOR_STEEL_INGOT.get());
@@ -47,6 +49,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.ZIRCONIUM_IRON_ALLOY_INGOT.get());
                         output.accept(ModItems.ZIRCON_BRICK.get());
                         output.accept(ModItems.ZIRCON.get());
+                        output.accept(ModItems.CRYSTALINE.get());
 
                         // 粉末
                         output.accept(ModItems.METEOR_STEEL_DUST.get());

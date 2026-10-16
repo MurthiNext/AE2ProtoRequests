@@ -1,0 +1,21 @@
+{
+  "type": "ae2pr:lava_smelter",
+  "item_inputs": [
+    {
+      "item": "ae2:fluix_crystal",
+      "count": 1
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:liquid_crystaline",
+      "amount": 144
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2:fluix_crystal",
+      "count": 2
+    }
+  ]
+}

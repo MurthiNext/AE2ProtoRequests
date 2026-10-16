@@ -1,0 +1,31 @@
+{
+  "type": "ae2pr:crystal_reaction_chamber",
+  "duration": 100,
+  "energy": 7000000,
+  "item_inputs": [
+    {
+      "item": "ae2:matter_ball",
+      "count": 64
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:liquid_certus_quartz",
+      "amount": 288
+    },
+    {
+      "fluid": "ae2pr:liquid_fluix_crystal",
+      "amount": 144
+    },
+    {
+      "fluid": "ae2pr:liquid_amethyst",
+      "amount": 72
+    }
+  ],
+  "fluid_outputs": [
+    {
+      "fluid": "ae2pr:liquid_crystaline",
+      "amount": 1
+    }
+  ]
+}

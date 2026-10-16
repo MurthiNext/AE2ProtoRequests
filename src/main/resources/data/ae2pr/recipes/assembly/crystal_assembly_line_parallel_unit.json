@@ -1,6 +1,7 @@
 {
   "type": "ae2pr:crystal_assembly_line",
   "duration": 100,
+  "energy": 1000000,
   "item_inputs": [
     {
       "item": "ae2pr:crystal_assembly_line_unit",
@@ -8,11 +9,11 @@
     },
     {
       "item": "ae2:engineering_processor",
-      "count": 64
+      "count": 256
     },
     {
-      "item": "ae2pr:computation_cell_component_16tops",
-      "count": 2
+      "item": "ae2pr:computation_cell_component_256tops",
+      "count": 4
     }
   ],
   "item_outputs": [

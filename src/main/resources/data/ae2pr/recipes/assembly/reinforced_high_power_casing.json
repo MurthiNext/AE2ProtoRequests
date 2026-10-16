@@ -1,0 +1,31 @@
+{
+  "type": "ae2pr:crystal_assembly_line",
+  "duration": 100,
+  "energy": 1000000,
+  "item_inputs": [
+    {
+      "item": "ae2pr:aev_machine_casing",
+      "count": 1
+    },
+    {
+      "item": "ae2pr:high_energy_singularity",
+      "count": 1
+    },
+    {
+      "tag": "forge:plates/zirconium",
+      "count": 8
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:liquid_certus_quartz",
+      "amount": 1440
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:reinforced_high_power_casing",
+      "count": 1
+    }
+  ]
+}

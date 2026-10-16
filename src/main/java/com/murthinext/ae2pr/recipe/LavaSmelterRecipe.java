@@ -21,6 +21,10 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import com.murthinext.ae2pr.ModRecipes;
 
@@ -31,22 +35,30 @@ public class LavaSmelterRecipe implements Recipe<Container> {
 
     public static final int DEFAULT_DURATION = 100;
     public static final int MAX_RESULTS = 2;
+    public static final int MAX_ITEM_INPUTS = 4;
+    public static final int MAX_FLUID_INPUTS = 2;
 
     private final ResourceLocation id;
     private final List<CountedIngredient> ingredients;
+    private final List<FluidStack> fluidInputs;
     private final List<ItemStack> results;
     private final int duration;
 
-    public LavaSmelterRecipe(ResourceLocation id, List<CountedIngredient> ingredients, List<ItemStack> results,
-            int duration) {
+    public LavaSmelterRecipe(ResourceLocation id, List<CountedIngredient> ingredients, List<FluidStack> fluidInputs,
+            List<ItemStack> results, int duration) {
         this.id = id;
         this.ingredients = List.copyOf(ingredients);
+        this.fluidInputs = List.copyOf(fluidInputs);
         this.results = List.copyOf(results);
         this.duration = duration;
     }
 
     public List<CountedIngredient> getCountedIngredients() {
         return ingredients;
+    }
+
+    public List<FluidStack> getFluidInputs() {
+        return fluidInputs;
     }
 
     public ItemStack getResultItem() {
@@ -116,7 +128,7 @@ public class LavaSmelterRecipe implements Recipe<Container> {
         @Override
         public LavaSmelterRecipe fromJson(ResourceLocation id, JsonObject json) {
             List<CountedIngredient> ingredients = new ArrayList<>();
-            for (JsonElement element : GsonHelper.getAsJsonArray(json, "item_inputs")) {
+            for (JsonElement element : GsonHelper.getAsJsonArray(json, "item_inputs", new JsonArray())) {
                 JsonObject entry = element.getAsJsonObject();
                 int count = GsonHelper.getAsInt(entry, "count", 1);
                 if (count < 1) {
@@ -124,8 +136,20 @@ public class LavaSmelterRecipe implements Recipe<Container> {
                 }
                 ingredients.add(new CountedIngredient(Ingredient.fromJson(entry), count));
             }
-            if (ingredients.isEmpty()) {
+
+            List<FluidStack> fluidInputs = new ArrayList<>();
+            for (JsonElement element : GsonHelper.getAsJsonArray(json, "fluid_inputs", new JsonArray())) {
+                fluidInputs.add(readFluid(element.getAsJsonObject(), "fluid_inputs"));
+            }
+
+            if (ingredients.isEmpty() && fluidInputs.isEmpty()) {
                 throw new JsonSyntaxException("配方至少需要一个输入");
+            }
+            if (fluidInputs.size() > MAX_FLUID_INPUTS) {
+                throw new JsonSyntaxException("流体输入数量必须为 0 至 " + MAX_FLUID_INPUTS);
+            }
+            if (ingredients.size() > MAX_ITEM_INPUTS) {
+                throw new JsonSyntaxException("物品输入数量必须为 0 至 " + MAX_ITEM_INPUTS);
             }
 
             List<ItemStack> results = new ArrayList<>();
@@ -142,7 +166,20 @@ public class LavaSmelterRecipe implements Recipe<Container> {
             if (duration < 1) {
                 throw new JsonSyntaxException("duration 必须 >= 1");
             }
-            return new LavaSmelterRecipe(id, ingredients, results, duration);
+            return new LavaSmelterRecipe(id, ingredients, fluidInputs, results, duration);
+        }
+
+        private static FluidStack readFluid(JsonObject obj, String key) {
+            ResourceLocation fluidId = ResourceLocation.parse(GsonHelper.getAsString(obj, "fluid"));
+            Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidId);
+            if (fluid == null || fluid == Fluids.EMPTY) {
+                throw new JsonSyntaxException(key + " 的流体不存在：" + fluidId);
+            }
+            int amount = GsonHelper.getAsInt(obj, "amount", 1000);
+            if (amount < 1) {
+                throw new JsonSyntaxException(key + " 的 amount 必须 >= 1");
+            }
+            return new FluidStack(fluid, amount);
         }
 
         @Override
@@ -153,6 +190,11 @@ public class LavaSmelterRecipe implements Recipe<Container> {
                 int count = buffer.readVarInt();
                 ingredients.add(new CountedIngredient(Ingredient.fromNetwork(buffer), count));
             }
+            int fluidInputCount = buffer.readVarInt();
+            List<FluidStack> fluidInputs = new ArrayList<>(fluidInputCount);
+            for (int i = 0; i < fluidInputCount; i++) {
+                fluidInputs.add(buffer.readFluidStack());
+            }
             int resultCount = buffer.readVarInt();
             List<ItemStack> results = new ArrayList<>(resultCount);
             for (int i = 0; i < resultCount; i++) {
@@ -161,7 +203,7 @@ public class LavaSmelterRecipe implements Recipe<Container> {
                 results.add(result);
             }
             int duration = buffer.readVarInt();
-            return new LavaSmelterRecipe(id, ingredients, results, duration);
+            return new LavaSmelterRecipe(id, ingredients, fluidInputs, results, duration);
         }
 
         @Override
@@ -170,6 +212,10 @@ public class LavaSmelterRecipe implements Recipe<Container> {
             for (CountedIngredient entry : recipe.ingredients) {
                 buffer.writeVarInt(entry.count());
                 entry.ingredient().toNetwork(buffer);
+            }
+            buffer.writeVarInt(recipe.fluidInputs.size());
+            for (FluidStack fluid : recipe.fluidInputs) {
+                buffer.writeFluidStack(fluid);
             }
             buffer.writeVarInt(recipe.results.size());
             for (ItemStack result : recipe.results) {

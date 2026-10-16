@@ -1,6 +1,7 @@
 {
   "type": "ae2pr:crystal_assembly_line",
   "duration": 100,
+  "energy": 1000000,
   "item_inputs": [
     {
       "item": "ae2pr:crystal_assembly_line_unit",
@@ -8,10 +9,14 @@
     },
     {
       "item": "ae2:charger",
-      "count": 16
+      "count": 64
     },
     {
-      "item": "ae2pr:computation_cell_component_16tops",
+      "item": "ae2:singularity",
+      "count": 64
+    },
+    {
+      "item": "ae2pr:computation_cell_component_256tops",
       "count": 2
     }
   ],

@@ -1,7 +1,7 @@
 {
   "type": "ae2pr:crystal_assembly_line",
   "duration": 60,
-  "energy": 50000,
+  "energy": 1000000,
   "item_inputs": [
     {
       "item": "ae2pr:aev_machine_casing",

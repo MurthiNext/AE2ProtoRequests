@@ -1,14 +1,15 @@
 {
   "type": "ae2pr:matter_phase_transformer",
+  "energy": 500000,
   "item_inputs": [
     {
-      "item": "ae2:certus_quartz_crystal",
+      "tag": "forge:gems/amethyst",
       "count": 1
     }
   ],
   "fluid_outputs": [
     {
-      "fluid": "ae2pr:liquid_certus_quartz",
+      "fluid": "ae2pr:liquid_amethyst",
       "amount": 144
     }
   ]

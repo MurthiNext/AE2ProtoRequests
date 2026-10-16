@@ -176,6 +176,14 @@ public final class ModItems {
             "liquid_fluix_crystal_bucket", () -> new NoBlockFluidBucketItem(ModFluids.LIQUID_FLUIX_CRYSTAL,
                     new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
+    public static final RegistryObject<BucketItem> LIQUID_AMETHYST_BUCKET = ITEMS.register(
+            "liquid_amethyst_bucket", () -> new NoBlockFluidBucketItem(ModFluids.LIQUID_AMETHYST,
+                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+
+    public static final RegistryObject<BucketItem> LIQUID_CRYSTALINE_BUCKET = ITEMS.register(
+            "liquid_crystaline_bucket", () -> new NoBlockFluidBucketItem(ModFluids.LIQUID_CRYSTALINE,
+                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+
     public static final RegistryObject<BlockItem> NAMING_FACTORY = ITEMS.register("naming_factory",
             () -> new BlockItem(ModBlocks.NAMING_FACTORY.get(), new Item.Properties()));
 
@@ -201,6 +209,9 @@ public final class ModItems {
             () -> new BlockItem(ModBlocks.METEORITE_ZIRCON_ORE.get(), new Item.Properties()));
 
     public static final RegistryObject<Item> ZIRCON = ITEMS.register("zircon", () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> CRYSTALINE = ITEMS.register("crystaline",
+            () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<BlockItem> METEOR_STEEL_BLOCK = ITEMS.register("meteor_steel_block",
             () -> new BlockItem(ModBlocks.METEOR_STEEL_BLOCK.get(), new Item.Properties()));

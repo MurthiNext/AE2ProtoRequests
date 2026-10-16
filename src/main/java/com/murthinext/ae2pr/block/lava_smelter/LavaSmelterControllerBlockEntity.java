@@ -22,6 +22,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -38,6 +40,7 @@ import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntity;
+import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
 import com.murthinext.ae2pr.multiblock.StructureResult;
 import com.murthinext.ae2pr.multiblock.StructureValidator;
@@ -53,8 +56,6 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
     private static final int CHECK_INTERVAL = 20;
     private static final int RETRY_INTERVAL = 20;
     private static final int POWER_SHORTAGE_INTERVAL = 20;
-    public static final int MAX_DURABILITY = 128;
-    public static final int DURABILITY_PER_DUST = 32;
     public static final int DUST_SLOT_CAPACITY = 64;
     private static final float LAVA_DAMAGE = 4.0F;
 
@@ -98,6 +99,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
 
     private final List<ItemBusBlockEntity> inputBuses = new ArrayList<>();
     private final List<ItemBusBlockEntity> outputBuses = new ArrayList<>();
+    private final List<FluidHatchBlockEntity> inputHatches = new ArrayList<>();
     private final List<FluixCrystalEnergyHatchBlockEntity> energyHatches = new ArrayList<>();
     private final StructureValidator structure = new StructureValidator(LavaSmelterStructure.PATTERN);
     private final IUpgradeInventory upgrades = UpgradeInventories.forMachine(
@@ -148,7 +150,9 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
      * 陨石粉转耐久：仅当一批耐久能完整存入时才消耗。
      */
     private void absorbDust() {
-        if (durability > MAX_DURABILITY - DURABILITY_PER_DUST) {
+        int max = Config.lavaSmelterMaxDurability();
+        int perDust = Math.min(Config.lavaSmelterDurabilityPerDust(), max);
+        if (durability > max - perDust) {
             return;
         }
         ItemStack stack = dustSlot.getStackInSlot(0);
@@ -158,7 +162,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         if (dustSlot.extractItem(0, 1, false).isEmpty()) {
             return;
         }
-        durability += DURABILITY_PER_DUST;
+        durability += perDust;
         setChanged();
         syncClient();
     }
@@ -323,20 +327,42 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
 
     private boolean hasIngredients(LavaSmelterRecipe recipe) {
         for (CountedIngredient ingredient : recipe.getCountedIngredients()) {
-            int available = 0;
-            for (ItemBusBlockEntity bus : inputBuses) {
-                for (int slot = 0; slot < bus.getSlotCount(); slot++) {
-                    ItemStack stack = bus.getStorage().getStackInSlot(slot);
-                    if (!stack.isEmpty() && ingredient.ingredient().test(stack)) {
-                        available += stack.getCount();
-                    }
-                }
+            if (availableIngredient(ingredient) < ingredient.count()) {
+                return false;
             }
-            if (available < ingredient.count()) {
+        }
+        for (FluidStack input : recipe.getFluidInputs()) {
+            if (availableFluid(input) < input.getAmount()) {
                 return false;
             }
         }
         return true;
+    }
+
+    private int availableIngredient(CountedIngredient ingredient) {
+        int available = 0;
+        for (ItemBusBlockEntity bus : inputBuses) {
+            for (int slot = 0; slot < bus.getSlotCount(); slot++) {
+                ItemStack stack = bus.getStorage().getStackInSlot(slot);
+                if (!stack.isEmpty() && ingredient.ingredient().test(stack)) {
+                    available += stack.getCount();
+                }
+            }
+        }
+        return available;
+    }
+
+    private int availableFluid(FluidStack input) {
+        long total = 0;
+        for (FluidHatchBlockEntity hatch : inputHatches) {
+            for (int tank = 0; tank < hatch.getTankCount(); tank++) {
+                FluidStack stored = hatch.getTank(tank).getFluid();
+                if (stored.isFluidEqual(input)) {
+                    total += stored.getAmount();
+                }
+            }
+        }
+        return (int) Math.min(total, Integer.MAX_VALUE);
     }
 
     private void consumeInputs(LavaSmelterRecipe recipe, int parallel) {
@@ -362,6 +388,27 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
                 }
             }
         }
+        consumeFluids(recipe, parallel);
+    }
+
+    private void consumeFluids(LavaSmelterRecipe recipe, int parallel) {
+        for (FluidStack input : recipe.getFluidInputs()) {
+            long remaining = (long) input.getAmount() * parallel;
+            for (FluidHatchBlockEntity hatch : inputHatches) {
+                for (int tank = 0; tank < hatch.getTankCount() && remaining > 0; tank++) {
+                    FluidStack stored = hatch.getTank(tank).getFluid();
+                    if (!stored.isFluidEqual(input)) {
+                        continue;
+                    }
+                    FluidStack drained = hatch.getTank(tank).drain((int) Math.min(remaining, Integer.MAX_VALUE),
+                            IFluidHandler.FluidAction.EXECUTE);
+                    remaining -= drained.getAmount();
+                }
+                if (remaining <= 0) {
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -371,16 +418,13 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
         int parallel = maxParallel();
         parallel = Math.min(parallel, durability);
         for (CountedIngredient ingredient : recipe.getCountedIngredients()) {
-            int available = 0;
-            for (ItemBusBlockEntity bus : inputBuses) {
-                for (int slot = 0; slot < bus.getSlotCount(); slot++) {
-                    ItemStack stack = bus.getStorage().getStackInSlot(slot);
-                    if (!stack.isEmpty() && ingredient.ingredient().test(stack)) {
-                        available += stack.getCount();
-                    }
-                }
-            }
-            parallel = Math.min(parallel, available / ingredient.count());
+            parallel = Math.min(parallel, availableIngredient(ingredient) / ingredient.count());
+        }
+        for (FluidStack input : recipe.getFluidInputs()) {
+            parallel = Math.min(parallel, availableFluid(input) / input.getAmount());
+        }
+        if (parallel <= 0) {
+            return 0;
         }
         return outputParallel(recipe, parallel);
     }
@@ -532,6 +576,7 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
     private void refreshParts(Level level, StructureResult result) {
         inputBuses.clear();
         outputBuses.clear();
+        inputHatches.clear();
         energyHatches.clear();
         if (!result.formed()) {
             return;
@@ -548,6 +593,10 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
                     outputBuses.add(bus);
                 } else {
                     inputBuses.add(bus);
+                }
+            } else if (blockEntity instanceof FluidHatchBlockEntity hatch) {
+                if (!hatch.isOutputHatch()) {
+                    inputHatches.add(hatch);
                 }
             } else if (blockEntity instanceof FluixCrystalEnergyHatchBlockEntity hatch) {
                 energyHatches.add(hatch);
@@ -717,6 +766,10 @@ public class LavaSmelterControllerBlockEntity extends BlockEntity {
 
     public int getDurability() {
         return durability;
+    }
+
+    public int getMaxDurability() {
+        return Config.lavaSmelterMaxDurability();
     }
 
     public boolean isMirrorSide() {

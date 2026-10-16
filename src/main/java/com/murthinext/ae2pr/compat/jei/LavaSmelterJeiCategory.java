@@ -1,6 +1,5 @@
 package com.murthinext.ae2pr.compat.jei;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,8 +8,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -21,7 +22,6 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 
-import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
@@ -41,7 +41,6 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
     private static final int OUTPUT_Y = 12;
     private static final int OUTPUT_GAP = 18;
     private static final int COLOR_TEXT = 0x404040;
-    private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
     private final IDrawable icon;
 
@@ -81,11 +80,11 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, LavaSmelterRecipe recipe, IFocusGroup focuses) {
-        // 固定绘制六个炉膛输入槽
+        // 物品输入
         List<CountedIngredient> ingredients = recipe.getCountedIngredients();
-        for (int index = 0; index < LavaSmelterJeiFurnace.SLOT_COUNT; index++) {
-            int x = LavaSmelterJeiFurnace.slotX(index);
-            int y = LavaSmelterJeiFurnace.slotY(index);
+        for (int index = 0; index < LavaSmelterJeiFurnace.ITEM_COUNT; index++) {
+            int x = LavaSmelterJeiFurnace.itemSlotX(index);
+            int y = LavaSmelterJeiFurnace.itemSlotY(index);
             IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, x, y);
             if (index < ingredients.size()) {
                 CountedIngredient ingredient = ingredients.get(index);
@@ -96,6 +95,19 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
                 slot.addItemStacks(stacks);
                 slot.setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
             }
+        }
+
+        // 流体输入
+        List<FluidStack> fluidInputs = recipe.getFluidInputs();
+        for (int index = 0; index < LavaSmelterJeiFurnace.FLUID_COUNT; index++) {
+            IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT,
+                    LavaSmelterJeiFurnace.fluidSlotX(index), LavaSmelterJeiFurnace.fluidSlotY(index));
+            if (index >= fluidInputs.size()) {
+                continue;
+            }
+            FluidStack fluid = fluidInputs.get(index);
+            slot.addFluidStack(fluid.getFluid(), fluid.getAmount());
+            slot.setCustomRenderer(ForgeTypes.FLUID_STACK, FluidStackAmountRenderer.INSTANCE);
         }
 
         // 主/副产物槽固定显示并对齐输入槽
@@ -120,7 +132,5 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
                 1), 4, 67, COLOR_TEXT, false);
         graphics.drawString(font, Component.translatable("jei.ae2pr.lava_smelter.duration",
                 recipe.getDuration()), 4, 77, COLOR_TEXT, false);
-        graphics.drawString(font, Component.translatable("jei.ae2pr.lava_smelter.energy",
-                NUMBER.format(Config.lavaSmelterPassiveEnergy())), 4, 87, COLOR_TEXT, false);
     }
 }
