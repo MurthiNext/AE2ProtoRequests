@@ -6,6 +6,13 @@ navigation:
   position: 10
 item_ids:
   - ae2pr:crystal_assembly_line
+  - ae2pr:crystal_assembly_line_casing
+  - ae2pr:crystal_assembly_line_grating
+  - ae2pr:crystal_assembly_line_unit
+  - ae2pr:crystal_assembly_line_charging_unit
+  - ae2pr:crystal_assembly_line_advanced_charging_unit
+  - ae2pr:crystal_assembly_line_parallel_unit
+  - ae2pr:crystal_assembly_line_speed_unit
 ---
 
 # 水晶装配线
@@ -22,14 +29,17 @@ item_ids:
 
 ## 替换模块
 
-结构每片的控制外壳位都可以替换为模块（该位置始终需要方块，不安装模块时保留普通控制外壳）：
+<ItemGrid>
+  <ItemIcon id="ae2pr:crystal_assembly_line_unit" />
+  <ItemIcon id="ae2pr:crystal_assembly_line_charging_unit" />
+  <ItemIcon id="ae2pr:crystal_assembly_line_advanced_charging_unit" />
+  <ItemIcon id="ae2pr:crystal_assembly_line_parallel_unit" />
+  <ItemIcon id="ae2pr:crystal_assembly_line_speed_unit" />
+</ItemGrid>
 
-- **充能控制外壳**：提供 1 级充能。
-- **高级充能控制外壳**：提供 2 级充能。
-- **并行控制外壳**：每个提升 8 并行上限，可安装多个叠加效果。
-- **速度控制外壳**：每个提升 25% 速度，可安装多个叠加效果。
+水晶装配线的所有控制外壳都可以替换为升级模块，模块分为配方类和增益类。
 
-高等级的“配方控制外壳”可以兼容低等级；**同一种功能模块最多安装一个**，初级与高级混装同样视为重复安装，违规会导致结构不成型。
+高等级的配方控制外壳可以兼容低等级；**同一种配方模块最多安装一个**，初级与高级混装同样视为重复安装，违规会导致结构不成型。
 <GameScene zoom="3">
   <ImportStructure src="crystal_assembly_line.nbt" />
 </GameScene>

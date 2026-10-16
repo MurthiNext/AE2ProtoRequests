@@ -12,7 +12,11 @@ item_ids:
 
 <BlockImage id="ae2pr:matter_phase_transformer" scale="3" />
 
-高能之物。
+液态水晶？液态水晶！
+
+液态的物质总是拥有更高的反应性，因此你还是不得不用它来制取一些液体。
+
+AEV 阶段，主要会用来制作水晶素
 
 <GameScene zoom="3">
   <ImportStructure src="matter_phase_transformer.nbt" />

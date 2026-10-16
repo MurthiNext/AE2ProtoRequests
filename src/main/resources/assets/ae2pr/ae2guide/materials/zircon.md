@@ -3,7 +3,7 @@ navigation:
   title: 锆英石
   parent: materials/materials_index.md
   icon: ae2pr:zircon
-  position: 20
+  position: 30
 item_ids:
   - ae2pr:zircon
   - ae2pr:zircon_dust

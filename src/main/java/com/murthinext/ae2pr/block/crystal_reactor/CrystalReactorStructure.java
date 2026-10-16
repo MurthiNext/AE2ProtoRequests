@@ -19,7 +19,7 @@ import com.murthinext.ae2pr.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.multiblock.StructurePredicate;
 
 /**
- * 水晶反应器结构定义：以高能核心为中心的三乘三方块，形似旧版下界反应器。
+ * 水晶反应器结构。
  */
 public final class CrystalReactorStructure {
 
@@ -36,7 +36,6 @@ public final class CrystalReactorStructure {
             .where('#', StructurePredicate.any())
             .build();
 
-    /** 外壳相对核心的偏移，共十八块。 */
     private static final List<BlockPos> SHELL_OFFSETS = buildShellOffsets();
 
     private static final Map<Long, List<BlockPos>> EXPANSION_CACHE = new HashMap<>();
@@ -44,23 +43,14 @@ public final class CrystalReactorStructure {
     private CrystalReactorStructure() {
     }
 
-    /**
-     * 以核心为锚点校验三乘三结构。
-     */
     public static boolean matches(Level level, BlockPos core) {
         return PATTERN.match(level, core, Direction.NORTH, Direction.UP, PATTERN.minSlices()).formed();
     }
 
-    /**
-     * 外壳相对核心的偏移。
-     */
     public static List<BlockPos> shellOffsets() {
         return SHELL_OFFSETS;
     }
 
-    /**
-     * 扩散区域相对核心的偏移，按水平半径由内向外排序，已排除核心与外壳。
-     */
     public static List<BlockPos> expansionOffsets() {
         int radius = Config.crystalReactorRadius();
         int depth = Config.crystalReactorDepth();

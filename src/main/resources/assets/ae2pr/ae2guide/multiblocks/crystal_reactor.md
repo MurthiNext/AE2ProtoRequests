@@ -12,7 +12,7 @@ item_ids:
 
 <GameScene zoom="3">
   <ImportStructure src="crystal_reactor.nbt" />
-  <IsometricCamera yaw="70" pitch="30" />
+  <IsometricCamera yaw="90" pitch="10" />
 </GameScene>
 
 *~看哭十亿 Minecraft 老玩家。~*
