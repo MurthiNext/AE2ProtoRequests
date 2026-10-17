@@ -15,7 +15,7 @@ import net.minecraft.client.Minecraft;
 /**
  * 客户端缓存的玩家阅读进度；改动即时上报服务端存档。
  */
-public final class ClientStoryProgress {
+public final class TerminalStoryProgressCache {
 
     // 与 TerminalStoryUpdatePacket 的字段上限保持一致
     private static final int MAX_PAYLOAD = 16000;
@@ -23,7 +23,7 @@ public final class ClientStoryProgress {
     private static final Set<String> touched = new HashSet<>();
     private static TerminalStoryProgress progress = new TerminalStoryProgress();
 
-    private ClientStoryProgress() {
+    private TerminalStoryProgressCache() {
     }
 
     public static TerminalStoryProgress get() {
@@ -47,12 +47,12 @@ public final class ClientStoryProgress {
 
     public static void apply(String json, boolean replace) {
         if (replace) {
-            progress = TerminalStoryProgress.fromJson(json);
+            progress = TerminalStoryJson.parseProgress(json);
             touched.clear();
-            ProtoTerminalScreen.onProgressSynced(true);
+            TerminalScreen.onProgressSynced(true);
             return;
         }
-        TerminalStoryProgress synced = TerminalStoryProgress.fromJson(json);
+        TerminalStoryProgress synced = TerminalStoryJson.parseProgress(json);
         for (String tag : progress.tags) {
             if (!synced.tags.contains(tag)) {
                 synced.tags.add(tag);
@@ -65,7 +65,7 @@ public final class ClientStoryProgress {
         }
         progress = synced;
         touched.clear();
-        ProtoTerminalScreen.onProgressSynced(false);
+        TerminalScreen.onProgressSynced(false);
     }
 
     public static void record(String nodeId, TerminalStoryProgress.NodeProgress node, Collection<String> tags) {
@@ -75,7 +75,7 @@ public final class ClientStoryProgress {
         if (Minecraft.getInstance().getConnection() == null) {
             return;
         }
-        String json = TerminalStoryProgress.toJson(node);
+        String json = TerminalStoryJson.writeProgress(node);
         if (json.length() > MAX_PAYLOAD) {
             ae2pr.LOGGER.warn("源始终端剧情进度过大，未上报服务端：{}（{} 字符）", nodeId, json.length());
             return;

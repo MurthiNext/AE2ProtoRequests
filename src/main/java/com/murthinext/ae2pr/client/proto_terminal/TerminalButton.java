@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component;
 /**
  * 叙事屏幕的平行四边形按钮。
  */
-final class NarrativeButton extends Button {
+final class TerminalButton extends Button {
 
     enum Icon {
         CLOSE, BACK
@@ -21,21 +21,21 @@ final class NarrativeButton extends Button {
     private float offsetX;
     private float offsetY;
 
-    NarrativeButton(int x, int y, int width, Component label, OnPress action) {
+    TerminalButton(int x, int y, int width, Component label, OnPress action) {
         this(x, y, width, 22, label, action);
     }
 
-    NarrativeButton(int x, int y, int width, int height, Component label, OnPress action) {
+    TerminalButton(int x, int y, int width, int height, Component label, OnPress action) {
         this(x, y, width, height, null, label, action);
     }
 
-    NarrativeButton(int x, int y, int size, Icon icon, Component label, OnPress action) {
+    TerminalButton(int x, int y, int size, Icon icon, Component label, OnPress action) {
         this(x, y, size, size, icon, label, action);
     }
 
-    private NarrativeButton(int x, int y, int width, int height, Icon icon, Component label, OnPress action) {
+    private TerminalButton(int x, int y, int width, int height, Icon icon, Component label, OnPress action) {
         super(x, y, width, height, label, action, DEFAULT_NARRATION);
-        this.slant = CrystalNarrativeGraphics.slant(height);
+        this.slant = TerminalGraphicsRenderer.slant(height);
         this.icon = icon;
     }
 
@@ -46,26 +46,26 @@ final class NarrativeButton extends Button {
         }
         isHovered = isMouseOver(mouseX, mouseY);
         boolean highlighted = isHovered || isFocused() && Minecraft.getInstance().getLastInputType().isKeyboard();
-        int border = CrystalNarrativeGraphics.alpha(
-                highlighted ? CrystalNarrativeGraphics.ACCENT : CrystalNarrativeGraphics.BORDER, opacity);
-        int text = CrystalNarrativeGraphics.alpha(CrystalNarrativeGraphics.TEXT, opacity);
-        int fill = CrystalNarrativeGraphics.alpha(highlighted ? 0xFF10233D : CrystalNarrativeGraphics.PANEL, opacity);
+        int border = TerminalGraphicsRenderer.alpha(
+                highlighted ? TerminalGraphicsRenderer.ACCENT : TerminalGraphicsRenderer.BORDER, opacity);
+        int text = TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.TEXT, opacity);
+        int fill = TerminalGraphicsRenderer.alpha(highlighted ? 0xFF10233D : TerminalGraphicsRenderer.PANEL, opacity);
         graphics.pose().pushPose();
         graphics.pose().translate(getX() + offsetX, getY() + offsetY, 0);
         graphics.pose().scale(scale, scale, 1);
         try {
-            CrystalNarrativeGraphics.panel(graphics, 0, 0, width, height, slant, fill, border);
+            TerminalGraphicsRenderer.panel(graphics, 0, 0, width, height, slant, fill, border);
             if (icon != null) {
                 float x = width / 2.0F;
                 float y = height / 2.0F;
                 graphics.drawManaged(() -> {
                     if (icon == Icon.CLOSE) {
-                        CrystalNarrativeGraphics.line(graphics, x - 4, y - 4, x + 4, y + 4, text);
-                        CrystalNarrativeGraphics.line(graphics, x - 4, y + 4, x + 4, y - 4, text);
+                        TerminalGraphicsRenderer.line(graphics, x - 4, y - 4, x + 4, y + 4, text);
+                        TerminalGraphicsRenderer.line(graphics, x - 4, y + 4, x + 4, y - 4, text);
                     } else {
-                        CrystalNarrativeGraphics.line(graphics, x - 5, y, x + 5, y, text);
-                        CrystalNarrativeGraphics.line(graphics, x - 5, y, x - 1, y - 4, text);
-                        CrystalNarrativeGraphics.line(graphics, x - 5, y, x - 1, y + 4, text);
+                        TerminalGraphicsRenderer.line(graphics, x - 5, y, x + 5, y, text);
+                        TerminalGraphicsRenderer.line(graphics, x - 5, y, x - 1, y - 4, text);
+                        TerminalGraphicsRenderer.line(graphics, x - 5, y, x - 1, y + 4, text);
                     }
                 });
                 return;
@@ -111,7 +111,7 @@ final class NarrativeButton extends Button {
         if (!active || !visible) {
             return false;
         }
-        return CrystalNarrativeGraphics.contains((mouseX - getX() - offsetX) / scale,
+        return TerminalGraphicsRenderer.contains((mouseX - getX() - offsetX) / scale,
                 (mouseY - getY() - offsetY) / scale, 0, 0, width, height, slant);
     }
 }

@@ -10,7 +10,7 @@ import net.minecraft.util.Mth;
 /**
  * 水晶叙事界面的矢量面板与描边。
  */
-final class CrystalNarrativeGraphics {
+final class TerminalGraphicsRenderer {
 
     static final int BACKGROUND = 0xFF030817;
     static final int PANEL = 0xFF070E1D;
@@ -21,7 +21,7 @@ final class CrystalNarrativeGraphics {
     static final int MUTED = 0xFF8AA6C4;
     static final float EDGE_SLOPE = 38.0F / 324;
 
-    private CrystalNarrativeGraphics() {
+    private TerminalGraphicsRenderer() {
     }
 
     static float slant(float height) {
@@ -151,6 +151,14 @@ final class CrystalNarrativeGraphics {
 
     static int alpha(int color, float opacity) {
         return (Mth.clamp(Math.round(opacity * 255), 0, 255) << 24) | (color & 0xFFFFFF);
+    }
+
+    static int mix(int from, int to, float progress) {
+        float value = Mth.clamp(progress, 0, 1);
+        int red = Math.round(Mth.lerp(value, from >> 16 & 255, to >> 16 & 255));
+        int green = Math.round(Mth.lerp(value, from >> 8 & 255, to >> 8 & 255));
+        int blue = Math.round(Mth.lerp(value, from & 255, to & 255));
+        return 0xFF000000 | red << 16 | green << 8 | blue;
     }
 
     static float ease(float progress) {

@@ -38,7 +38,7 @@ public class TerminalStorySyncPacket {
     public static void handle(TerminalStorySyncPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> com.murthinext.ae2pr.client.proto_terminal.ClientStoryProgress.apply(packet.json,
+                () -> () -> com.murthinext.ae2pr.client.proto_terminal.TerminalStoryProgressCache.apply(packet.json,
                         packet.replace)));
         context.setPacketHandled(true);
     }

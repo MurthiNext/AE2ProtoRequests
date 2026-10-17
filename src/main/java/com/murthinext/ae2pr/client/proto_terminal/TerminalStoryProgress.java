@@ -5,16 +5,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.murthinext.ae2pr.ae2pr;
-
 /**
  * 单个玩家在源始终端里的阅读进度。
  */
 public final class TerminalStoryProgress {
-
-    private static final Gson GSON = new Gson();
 
     public List<String> tags = new ArrayList<>();
     public Map<String, NodeProgress> nodes = new LinkedHashMap<>();
@@ -58,31 +52,10 @@ public final class TerminalStoryProgress {
         public List<FrameState> frames = new ArrayList<>();
         public List<ConsumedState> consumed = new ArrayList<>();
         public LogRef branch;
+        public LogRef pendingChoice;
+        public LogRef pendingLine;
+        public int delay;
         public int typed;
         public boolean typing;
-    }
-
-    public static TerminalStoryProgress fromJson(String json) {
-        if (json == null || json.isBlank()) {
-            return new TerminalStoryProgress();
-        }
-        try {
-            TerminalStoryProgress progress = GSON.fromJson(json, TerminalStoryProgress.class);
-            if (progress == null || progress.tags == null || progress.nodes == null) {
-                return new TerminalStoryProgress();
-            }
-            return progress;
-        } catch (JsonSyntaxException exception) {
-            ae2pr.LOGGER.warn("源始终端阅读进度解析失败", exception);
-            return new TerminalStoryProgress();
-        }
-    }
-
-    public String toJson() {
-        return GSON.toJson(this);
-    }
-
-    public static String toJson(NodeProgress node) {
-        return GSON.toJson(node);
     }
 }

@@ -1,6 +1,6 @@
 package com.murthinext.ae2pr.item;
 
-import com.murthinext.ae2pr.client.proto_terminal.ProtoTerminalScreen;
+import com.murthinext.ae2pr.client.proto_terminal.TerminalScreen;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -24,7 +24,7 @@ public class ProtoTerminalItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (level.isClientSide) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ProtoTerminalScreen::open);
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> TerminalScreen::open);
         }
         return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide);
     }
@@ -32,7 +32,7 @@ public class ProtoTerminalItem extends Item {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         if (context.getLevel().isClientSide) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ProtoTerminalScreen::open);
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> TerminalScreen::open);
         }
         return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
     }

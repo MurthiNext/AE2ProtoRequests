@@ -10,7 +10,7 @@ import net.minecraft.util.Mth;
 /**
  * 分层深空星云与随机闪烁星光。
  */
-final class TerminalStarfield {
+final class TerminalStarfieldRenderer {
 
     private static final int SEED = 0xAE2C1257;
     private static final int FIELD_SIZE = 256;
@@ -31,7 +31,7 @@ final class TerminalStarfield {
             new Layer(1, 63, 0.62F, 1.1F)
     };
 
-    TerminalStarfield(int x, int y, int width, int height) {
+    TerminalStarfieldRenderer(int x, int y, int width, int height) {
         halfWidth = width / 2.0F;
         halfHeight = height / 2.0F;
         centerX = x + halfWidth;
@@ -156,9 +156,9 @@ final class TerminalStarfield {
                         float py = (row + random(seed, 3)) * cellSize + layer.offsetY;
                         float size = layer.size * (float) Math.sqrt(layer.scale);
                         float margin = size * 5;
-                        if (!CrystalNarrativeGraphics.contains(px - margin, py - margin,
+                        if (!TerminalGraphicsRenderer.contains(px - margin, py - margin,
                                 x, y, width, height, slant)
-                                || !CrystalNarrativeGraphics.contains(px + margin, py + margin,
+                                || !TerminalGraphicsRenderer.contains(px + margin, py + margin,
                                         x, y, width, height, slant)) {
                             continue;
                         }

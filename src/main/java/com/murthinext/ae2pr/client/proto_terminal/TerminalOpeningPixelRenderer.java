@@ -10,7 +10,7 @@ import net.minecraft.util.Mth;
 /**
  * 入场数据块的流动轨迹与合并外轮廓。
  */
-final class OpeningPixelStream {
+final class TerminalOpeningPixelRenderer {
 
     private static final int MARGIN = 80;
 
@@ -31,7 +31,7 @@ final class OpeningPixelStream {
     private float fillOpacity;
     private float outlineOpacity;
 
-    OpeningPixelStream(int width, int height) {
+    TerminalOpeningPixelRenderer(int width, int height) {
         maskWidth = width + MARGIN * 2 + 1;
         rows = new BitSet[height + MARGIN * 2 + 1];
         panelRows = new BitSet[rows.length];
@@ -47,26 +47,26 @@ final class OpeningPixelStream {
     }
 
     void render(GuiGraphics graphics, int x, int y, int width, int height, float slant,
-            float progress, float seconds, TerminalStarfield starfield) {
+            float progress, float seconds, TerminalStarfieldRenderer starfield) {
         if (progress <= 0 || progress >= 1 || width <= slant || height <= 0) {
             return;
         }
         drawX = x - MARGIN;
         drawY = y - MARGIN;
         updateShape(width, height, slant, progress, seconds);
-        fillOpacity = CrystalNarrativeGraphics.ease(progress / 0.1F);
+        fillOpacity = TerminalGraphicsRenderer.ease(progress / 0.1F);
         float blend = Mth.clamp((progress - 0.86F) / 0.14F, 0, 1);
         blend = blend * blend * (3 - 2 * blend);
-        outlineOpacity = CrystalNarrativeGraphics.ease(progress) * (1 - blend);
+        outlineOpacity = TerminalGraphicsRenderer.ease(progress) * (1 - blend);
         graphics.drawManaged(() -> {
             for (int row = firstRow; row <= lastRow; row++) {
                 drawNebulaRow(graphics, row, starfield, seconds);
             }
         });
         renderOutline(graphics);
-        int border = CrystalNarrativeGraphics.alpha(CrystalNarrativeGraphics.BORDER,
-                CrystalNarrativeGraphics.ease(progress) * blend);
-        graphics.drawManaged(() -> CrystalNarrativeGraphics.outline(graphics, x, y, width, height, slant, border));
+        int border = TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.BORDER,
+                TerminalGraphicsRenderer.ease(progress) * blend);
+        graphics.drawManaged(() -> TerminalGraphicsRenderer.outline(graphics, x, y, width, height, slant, border));
     }
 
     private void renderOutline(GuiGraphics graphics) {
@@ -185,8 +185,8 @@ final class OpeningPixelStream {
                 if (age <= 0 || age >= 1) {
                     continue;
                 }
-                float opacity = CrystalNarrativeGraphics.ease(age / 0.15F)
-                        * (1 - CrystalNarrativeGraphics.ease((age - 0.25F) / 0.75F)) * brightness;
+                float opacity = TerminalGraphicsRenderer.ease(age / 0.15F)
+                        * (1 - TerminalGraphicsRenderer.ease((age - 0.25F) / 0.75F)) * brightness;
                 addBlock(Math.round(px + normalX * distance + tangentX * bend) + MARGIN - size / 2,
                         Math.round(py + normalY * distance + tangentY * bend) + MARGIN - size / 2, size, opacity);
             }
@@ -212,7 +212,7 @@ final class OpeningPixelStream {
         lastRow = Math.max(lastRow, bottom - 1);
     }
 
-    private void drawNebulaRow(GuiGraphics graphics, int row, TerminalStarfield starfield, float seconds) {
+    private void drawNebulaRow(GuiGraphics graphics, int row, TerminalStarfieldRenderer starfield, float seconds) {
         occupied.clear();
         occupied.or(rows[row]);
         occupied.or(panelRows[row]);
@@ -252,7 +252,7 @@ final class OpeningPixelStream {
                     right++;
                 }
                 graphics.fill(drawX + left, drawY + row, drawX + right, drawY + row + 1,
-                        CrystalNarrativeGraphics.alpha(CrystalNarrativeGraphics.BORDER, outlineOpacity * strength / 255));
+                        TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.BORDER, outlineOpacity * strength / 255));
                 left = right;
             }
             left = pixels.nextSetBit(end);
