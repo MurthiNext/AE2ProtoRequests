@@ -33,6 +33,8 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_64TOPS.get());
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_256TOPS.get());
                         output.accept(ModItems.SINGLE_PLATE_PRESS.get());
+                        output.accept(ModItems.DIAMOND_WAFER.get());
+                        output.accept(ModItems.ZIRCON_CIRCUIT_BOARD.get());
 
                         // 奇点
                         output.accept(ModItems.UNCHARGED_SINGULARITY.get());
@@ -94,6 +96,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get());
                         output.accept(ModItems.AEV_MACHINE_CASING.get());
                         output.accept(ModItems.REINFORCED_HIGH_POWER_CASING.get());
+                        output.accept(ModItems.HIGH_ENERGY_STABILITY_CASING.get());
                         output.accept(ModItems.ZIRCONIA_CORUNDUM_BRICKS.get());
                         output.accept(ModItems.CRYSTAL_GLASS.get());
                         output.accept(ModItems.FIREPROOF_CRYSTAL_GLASS.get());

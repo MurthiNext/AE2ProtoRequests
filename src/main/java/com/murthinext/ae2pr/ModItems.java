@@ -120,6 +120,10 @@ public final class ModItems {
             "reinforced_high_power_casing",
             () -> new BlockItem(ModBlocks.REINFORCED_HIGH_POWER_CASING.get(), new Item.Properties()));
 
+    public static final RegistryObject<BlockItem> HIGH_ENERGY_STABILITY_CASING = ITEMS.register(
+            "high_energy_stability_casing",
+            () -> new BlockItem(ModBlocks.HIGH_ENERGY_STABILITY_CASING.get(), new Item.Properties()));
+
     public static final RegistryObject<BlockItem> AEV_INPUT_BUS = ITEMS.register("aev_input_bus",
             () -> new BlockItem(ModBlocks.AEV_INPUT_BUS.get(), new Item.Properties()));
 
@@ -160,6 +164,12 @@ public final class ModItems {
             () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> SINGLE_PLATE_PRESS = ITEMS.register("single_plate_press",
+            () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> DIAMOND_WAFER = ITEMS.register("diamond_wafer",
+            () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> ZIRCON_CIRCUIT_BOARD = ITEMS.register("zircon_circuit_board",
             () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> UNCHARGED_SINGULARITY = ITEMS.register("uncharged_singularity",
