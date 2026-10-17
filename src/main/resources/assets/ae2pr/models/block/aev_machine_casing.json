@@ -1,7 +1,7 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "ae2pr:block/aev/aev_machine_casing"
+    "all": "ae2pr:block/aev_machine_casing"
   },
   "ambientocclusion": true
 }

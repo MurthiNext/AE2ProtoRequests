@@ -1,7 +1,7 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "ae2pr:block/crystal/assembly_line_grating"
+    "all": "ae2pr:block/crystal_assembly_line/grating"
   },
   "ambientocclusion": true
 }

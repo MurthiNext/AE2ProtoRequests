@@ -2,7 +2,7 @@
   "render_type": "cutout_mipped",
   "parent": "block/cube_all",
   "textures": {
-    "all": "ae2pr:block/crystal/assembly_line_unit"
+    "all": "ae2pr:block/crystal_assembly_line/unit"
   },
   "ambientocclusion": true
 }

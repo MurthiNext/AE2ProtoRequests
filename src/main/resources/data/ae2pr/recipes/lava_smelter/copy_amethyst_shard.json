@@ -2,7 +2,7 @@
   "type": "ae2pr:lava_smelter",
   "item_inputs": [
     {
-      "item": "minecraft:amethyst",
+      "item": "minecraft:amethyst_shard",
       "count": 1
     }
   ],
@@ -14,7 +14,7 @@
   ],
   "item_outputs": [
     {
-      "item": "minecraft:amethyst",
+      "item": "minecraft:amethyst_shard",
       "count": 2
     }
   ]

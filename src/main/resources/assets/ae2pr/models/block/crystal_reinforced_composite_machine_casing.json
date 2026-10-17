@@ -1,7 +1,7 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "ae2pr:block/crystal/crystal_reinforced_composite_machine_casing"
+    "all": "ae2pr:block/crystal_reinforced_composite_machine_casing"
   },
   "ambientocclusion": true
 }

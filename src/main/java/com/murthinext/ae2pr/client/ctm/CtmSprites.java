@@ -22,8 +22,7 @@ import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
  */
 public final class CtmSprites {
 
-    public static final ResourceLocation CERTUS_PART_CASING = id("block/certus_quartz_crystal/casing");
-    public static final ResourceLocation AEV_PART_CASING = id("block/aev/aev_machine_casing");
+    public static final ResourceLocation AEV_PART_CASING = id("block/aev_machine_casing");
     public static final ResourceLocation LAVA_SMELTER_CONTROLLER_CASING = id("block/lava_smelter/controller_casing");
     public static final ResourceLocation MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING = id("block/matter_phase_transformer/controller_casing");
     public static final ResourceLocation CRYSTAL_REACTION_CONTROLLER_CASING = id("block/crystal_reaction_chamber/controller_casing");
@@ -38,14 +37,13 @@ public final class CtmSprites {
 
     static {
         // 与 CtmConfig 的登记保持一致
-        register("block/crystal/crystal_reinforced_composite_machine_casing");
-        register("block/crystal/crystal_glass");
-        register("block/crystal/fireproof_crystal_glass");
-        register("block/certus_quartz_crystal/casing");
-        register("block/aev/aev_machine_casing");
+        register("block/crystal_reinforced_composite_machine_casing");
+        register("block/crystal_glass");
+        register("block/fireproof_crystal_glass");
+        register("block/aev_machine_casing");
         register("block/reinforced_high_power_casing");
-        register("block/zircon/zirconia_corundum_bricks");
-        register("block/meteor_steel_pipe_block/side");
+        register("block/zirconia_corundum_bricks");
+        register("block/meteor_steel_pipe_side");
         REGISTERED.add(LAVA_SMELTER_CONTROLLER_CASING);
         REGISTERED.add(MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING);
         REGISTERED.add(CRYSTAL_REACTION_CONTROLLER_CASING);

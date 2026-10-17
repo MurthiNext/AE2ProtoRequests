@@ -170,16 +170,14 @@ public final class CtmConfig {
         }
         if (block == ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()) {
             // 能源仓的成型模型以水晶机壳为基础贴图
-            return CtmSprites.baseSprite(state.getValue(FluixCrystalEnergyHatchBlock.FORMED)
-                    ? MachinePartFacade.CRYSTAL.texture()
-                    : CtmSprites.CERTUS_PART_CASING);
+            return CtmSprites.baseSprite(MachinePartFacade.CRYSTAL.texture());
         }
         if (!(block instanceof MachinePartBlock)) {
             return null;
         }
         return MachinePartBlock.isAevPart(block)
                 ? CtmSprites.baseSprite(CtmSprites.AEV_PART_CASING)
-                : CtmSprites.baseSprite(CtmSprites.CERTUS_PART_CASING);
+                : CtmSprites.baseSprite(MachinePartFacade.CRYSTAL.texture());
     }
 
     /**

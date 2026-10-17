@@ -3,7 +3,7 @@
   "parent": "ae2pr:block/crystal_assembly_line_unit_active",
   "textures": {
     "particle": "#all",
-    "all": "ae2pr:block/crystal/assembly_line_unit_speed",
-    "overlay": "ae2pr:block/crystal/assembly_line_unit_speed_bloom"
+    "all": "ae2pr:block/crystal_assembly_line/speed_unit",
+    "overlay": "ae2pr:block/crystal_assembly_line/speed_unit_bloom"
   }
 }

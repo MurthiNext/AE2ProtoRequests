@@ -2,23 +2,19 @@
   "sources": [
     {
       "type": "single",
-      "resource": "ae2pr:block/crystal/crystal_reinforced_composite_machine_casing_ctm"
+      "resource": "ae2pr:block/crystal_reinforced_composite_machine_casing_ctm"
     },
     {
       "type": "single",
-      "resource": "ae2pr:block/crystal/crystal_glass_ctm"
+      "resource": "ae2pr:block/crystal_glass_ctm"
     },
     {
       "type": "single",
-      "resource": "ae2pr:block/crystal/fireproof_crystal_glass_ctm"
+      "resource": "ae2pr:block/fireproof_crystal_glass_ctm"
     },
     {
       "type": "single",
-      "resource": "ae2pr:block/certus_quartz_crystal/casing_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/aev/aev_machine_casing_ctm"
+      "resource": "ae2pr:block/aev_machine_casing_ctm"
     },
     {
       "type": "single",
@@ -26,11 +22,11 @@
     },
     {
       "type": "single",
-      "resource": "ae2pr:block/zircon/zirconia_corundum_bricks_ctm"
+      "resource": "ae2pr:block/zirconia_corundum_bricks_ctm"
     },
     {
       "type": "single",
-      "resource": "ae2pr:block/meteor_steel_pipe_block/side_ctm"
+      "resource": "ae2pr:block/meteor_steel_pipe_side_ctm"
     },
     {
       "type": "single",

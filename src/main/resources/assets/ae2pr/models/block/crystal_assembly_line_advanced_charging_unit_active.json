@@ -3,7 +3,7 @@
   "parent": "ae2pr:block/crystal_assembly_line_unit_active",
   "textures": {
     "particle": "#all",
-    "all": "ae2pr:block/crystal/assembly_line_unit_charging_advanced",
-    "overlay": "ae2pr:block/crystal/assembly_line_unit_charging_advanced_bloom"
+    "all": "ae2pr:block/crystal_assembly_line/advanced_charging_unit",
+    "overlay": "ae2pr:block/crystal_assembly_line/advanced_charging_unit_bloom"
   }
 }

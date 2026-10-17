@@ -3,8 +3,8 @@
   "parent": "block/block",
   "textures": {
     "particle": "#all",
-    "all": "ae2pr:block/crystal/assembly_line_unit",
-    "overlay": "ae2pr:block/crystal/assembly_line_unit_bloom"
+    "all": "ae2pr:block/crystal_assembly_line/unit",
+    "overlay": "ae2pr:block/crystal_assembly_line/unit_bloom"
   },
   "elements": [
     {
