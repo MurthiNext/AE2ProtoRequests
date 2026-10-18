@@ -28,6 +28,8 @@ public final class ModGuide {
             ae2pr.MODID, "multiblocks/crystal_reaction_chamber.md");
     public static final ResourceLocation CRYSTAL_REACTOR_PAGE = ResourceLocation.fromNamespaceAndPath(
             ae2pr.MODID, "multiblocks/crystal_reactor.md");
+    public static final ResourceLocation CRYSTAL_WORKSTATION_PAGE = ResourceLocation.fromNamespaceAndPath(
+            ae2pr.MODID, "multiblocks/crystal_workstation.md");
     public static final ResourceLocation NAMING_FACTORY_PAGE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "machines/naming_factory.md");
     public static final ResourceLocation CHAMBERS_PAGE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,

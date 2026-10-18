@@ -23,6 +23,7 @@ import com.murthinext.ae2pr.client.gui.tooltip.ColorEffectLine;
 import com.murthinext.ae2pr.client.gui.assembly_line.AssemblyLineScreen;
 import com.murthinext.ae2pr.client.gui.crystal_reaction_chamber.CrystalReactionChamberRenderer;
 import com.murthinext.ae2pr.client.gui.crystal_reaction_chamber.CrystalReactionChamberScreen;
+import com.murthinext.ae2pr.client.gui.crystal_workstation.CrystalWorkstationScreen;
 import com.murthinext.ae2pr.client.gui.machine_part.FluidHatchScreen;
 import com.murthinext.ae2pr.client.gui.machine_part.ItemBusScreen;
 import com.murthinext.ae2pr.client.gui.level_emitter.MultiLevelEmitterScreen;
@@ -55,6 +56,7 @@ public final class ClientSetup {
         MenuScreens.register(ModMenus.HIGH_REACTIVITY_LAVA_SMELTER.get(), LavaSmelterScreen::new);
         MenuScreens.register(ModMenus.MATTER_PHASE_TRANSFORMER.get(), MatterPhaseTransformerScreen::new);
         MenuScreens.register(ModMenus.CRYSTAL_REACTION_CHAMBER.get(), CrystalReactionChamberScreen::new);
+        MenuScreens.register(ModMenus.CRYSTAL_WORKSTATION.get(), CrystalWorkstationScreen::new);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_ITEM_BUS.get(), ItemBusScreen::new);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), FluidHatchScreen::new);
         MenuScreens.register(ModMenus.NAMING_FACTORY.get(), NamingFactoryScreen::new);

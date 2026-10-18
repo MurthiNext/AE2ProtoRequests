@@ -1,15 +1,18 @@
 package com.murthinext.ae2pr;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationMode;
 import com.murthinext.ae2pr.recipe.AlienLavaRecipe;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
 import com.murthinext.ae2pr.recipe.CrystalReactionChamberRecipe;
+import com.murthinext.ae2pr.recipe.CrystalWorkstationRecipe;
 import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
 import com.murthinext.ae2pr.recipe.MatterPhaseTransformerRecipe;
 
@@ -81,4 +84,20 @@ public final class ModRecipes {
 
     public static final RegistryObject<CrystalReactionChamberRecipe.Serializer> CRYSTAL_REACTION_CHAMBER = SERIALIZERS
             .register("crystal_reaction_chamber", CrystalReactionChamberRecipe.Serializer::new);
+
+    public static final RegistryObject<RecipeType<CrystalWorkstationRecipe>> CRYSTAL_WORKSTATION_ETCHING_TYPE = RECIPE_TYPES
+            .register("crystal_workstation_etching", () -> RecipeType.simple(
+                    ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "crystal_workstation_etching")));
+
+    public static final RegistryObject<RecipeType<CrystalWorkstationRecipe>> CRYSTAL_WORKSTATION_CUTTING_TYPE = RECIPE_TYPES
+            .register("crystal_workstation_cutting", () -> RecipeType.simple(
+                    ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "crystal_workstation_cutting")));
+
+    public static final RegistryObject<CrystalWorkstationRecipe.Serializer> CRYSTAL_WORKSTATION_ETCHING = SERIALIZERS
+            .register("crystal_workstation_etching",
+                    () -> new CrystalWorkstationRecipe.Serializer(CrystalWorkstationMode.ETCHING));
+
+    public static final RegistryObject<CrystalWorkstationRecipe.Serializer> CRYSTAL_WORKSTATION_CUTTING = SERIALIZERS
+            .register("crystal_workstation_cutting",
+                    () -> new CrystalWorkstationRecipe.Serializer(CrystalWorkstationMode.CUTTING));
 }

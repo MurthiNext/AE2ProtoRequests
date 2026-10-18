@@ -220,5 +220,18 @@
   "config.jade.plugin_ae2pr.assembly_line": "水晶装配线",
   "config.jade.plugin_ae2pr.crystal_reaction_chamber": "水晶反应仓",
   "config.jade.plugin_ae2pr.lava_smelter": "高反应性熔岩冶炼炉",
-  "config.jade.plugin_ae2pr.matter_phase_transformer": "物质相变仪"
+  "config.jade.plugin_ae2pr.matter_phase_transformer": "物质相变仪",
+  "block.ae2pr.crystal_workstation": "晶能工作站",
+  "tooltip.ae2pr.crystal_workstation.desc": "真不是什么精密组装机！",
+  "gui.ae2pr.crystal_workstation.mode": "工作模式：%s",
+  "gui.ae2pr.crystal_workstation.mode.etching": "蚀刻",
+  "gui.ae2pr.crystal_workstation.mode.cutting": "切割",
+  "gui.ae2pr.crystal_workstation.mode.busy": "已锁定：作业进行中",
+  "gui.ae2pr.crystal_workstation.error.power": "电力不足",
+  "gui.ae2pr.crystal_workstation.error.output": "产物空间不足",
+  "jei.ae2pr.crystal_workstation.etching": "晶能工作站 · 蚀刻",
+  "jei.ae2pr.crystal_workstation.cutting": "晶能工作站 · 切割",
+  "jei.ae2pr.crystal_workstation.duration": "加工时长：%s ticks",
+  "jei.ae2pr.crystal_workstation.energy": "单次能耗：%s AE",
+  "config.jade.plugin_ae2pr.crystal_workstation": "晶能工作站"
 }

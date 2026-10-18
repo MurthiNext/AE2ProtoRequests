@@ -221,5 +221,18 @@
   "config.jade.plugin_ae2pr.assembly_line": "Crystal Assembly Line",
   "config.jade.plugin_ae2pr.crystal_reaction_chamber": "Crystal Reaction Chamber",
   "config.jade.plugin_ae2pr.lava_smelter": "High Reactivity Lava Smelter",
-  "config.jade.plugin_ae2pr.matter_phase_transformer": "Matter Phase Transformer"
+  "config.jade.plugin_ae2pr.matter_phase_transformer": "Matter Phase Transformer",
+  "block.ae2pr.crystal_workstation": "Crystal Workstation",
+  "tooltip.ae2pr.crystal_workstation.desc": "Really not a Precision Assembler!",
+  "gui.ae2pr.crystal_workstation.mode": "Mode: %s",
+  "gui.ae2pr.crystal_workstation.mode.etching": "Etching",
+  "gui.ae2pr.crystal_workstation.mode.cutting": "Cutting",
+  "gui.ae2pr.crystal_workstation.mode.busy": "Locked: The job is in progress",
+  "gui.ae2pr.crystal_workstation.error.power": "Insufficient power",
+  "gui.ae2pr.crystal_workstation.error.output": "Insufficient output space",
+  "jei.ae2pr.crystal_workstation.etching": "Crystal Workstation · Etching",
+  "jei.ae2pr.crystal_workstation.cutting": "Crystal Workstation · Cutting",
+  "jei.ae2pr.crystal_workstation.duration": "Processing time: %s ticks",
+  "jei.ae2pr.crystal_workstation.energy": "Energy per operation: %s AE",
+  "config.jade.plugin_ae2pr.crystal_workstation": "Crystal Workstation"
 }

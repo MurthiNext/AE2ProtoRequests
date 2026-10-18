@@ -23,8 +23,9 @@ import com.murthinext.ae2pr.client.gui.machine_part.AutoTransferButton;
  */
 public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> extends AbstractContainerScreen<M> {
 
-    private static final int TOOLBAR_X = -22;
-    private static final int TOOLBAR_Y = 2;
+    protected static final int TOOLBAR_X = -22;
+    protected static final int TOOLBAR_Y = 2;
+    protected static final int TOOLBAR_ROW_STEP = 20;
 
     private static final int UPGRADE_PANEL_X = 178;
     private static final int UPGRADE_PANEL_Y = 2;
@@ -70,7 +71,14 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
     }
 
     protected void renderToolbar(GuiGraphics graphics) {
-        AutoTransferButton.renderToolbar(graphics, leftPos + TOOLBAR_X, topPos + TOOLBAR_Y, 1);
+        AutoTransferButton.renderToolbar(graphics, leftPos + TOOLBAR_X, topPos + TOOLBAR_Y, toolbarButtons());
+    }
+
+    /**
+     * 左侧工具栏占用的按钮格数，子类增加按钮时覆盖。
+     */
+    protected int toolbarButtons() {
+        return 1;
     }
 
     protected void renderUpgradeSlots(GuiGraphics graphics) {

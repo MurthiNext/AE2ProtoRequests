@@ -30,6 +30,12 @@ navigation:
 
 [水晶反应仓](crystal_reaction_chamber.md)，灵感来自于 Advanced AE 的反应仓，但这个更大，更强！并且拥有并行！
 
+[晶能工作站](crystal_workstation.md)，*或称精密组装机*，迈向 XPV 阶段前的最后一个多方块机器！
+
+## XPV 阶段
+
+暂无。
+
 ## 支线内容
 
 [水晶反应器](crystal_reactor.md)，下界反应器的 Modern Edition.

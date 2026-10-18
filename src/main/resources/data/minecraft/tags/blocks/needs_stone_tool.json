@@ -7,6 +7,7 @@
     "ae2pr:zirconia_corundum_bricks",
     "ae2pr:high_reactivity_lava_smelter",
     "ae2pr:matter_phase_transformer",
-    "ae2pr:crystal_reaction_chamber"
+    "ae2pr:crystal_reaction_chamber",
+    "ae2pr:crystal_workstation"
   ]
 }

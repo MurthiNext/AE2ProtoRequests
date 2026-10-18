@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CFC",
+    "WPE",
+    "CFC"
+  ],
+  "key": {
+    "C": {
+      "tag": "ae2pr:circuits/aev"
+    },
+    "F": {
+      "item": "ae2pr:reinforced_high_power_casing"
+    },
+    "W": {
+      "item": "minecraft:diamond"
+    },
+    "P": {
+      "item": "ae2pr:high_energy_core"
+    },
+    "E": {
+      "item": "ae2:engineering_processor"
+    }
+  },
+  "result": {
+    "item": "ae2pr:crystal_workstation"
+  }
+}

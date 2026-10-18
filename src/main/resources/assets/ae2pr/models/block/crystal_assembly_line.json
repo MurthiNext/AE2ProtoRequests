@@ -4,7 +4,6 @@
   "textures": {
     "particle": "#all",
     "all": "ae2pr:block/crystal_assembly_line/controller_casing",
-    "top_bottom": "ae2pr:block/crystal_assembly_line/controller_casing_top_bottom",
     "overlay_front": "ae2pr:block/crystal_assembly_line/controller_front",
     "overlay_front_emissive": "ae2pr:block/crystal_assembly_line/controller_front_emissive"
   },
@@ -13,8 +12,8 @@
       "from": [0, 0, 0],
       "to": [16, 16, 16],
       "faces": {
-        "down": { "texture": "#top_bottom", "cullface": "down" },
-        "up": { "texture": "#top_bottom", "cullface": "up" },
+        "down": { "texture": "#all", "cullface": "down" },
+        "up": { "texture": "#all", "cullface": "up" },
         "north": { "texture": "#all", "cullface": "north" },
         "south": { "texture": "#all", "cullface": "south" },
         "west": { "texture": "#all", "cullface": "west" },

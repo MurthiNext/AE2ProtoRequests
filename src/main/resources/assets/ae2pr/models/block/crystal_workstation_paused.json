@@ -1,0 +1,7 @@
+{
+  "parent": "ae2pr:block/crystal_workstation",
+  "textures": {
+    "overlay_front": "ae2pr:block/crystal_workstation/front_paused",
+    "overlay_front_emissive": "ae2pr:block/crystal_workstation/front_paused_emissive"
+  }
+}

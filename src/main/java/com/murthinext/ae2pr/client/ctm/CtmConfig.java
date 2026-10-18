@@ -12,7 +12,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
 import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberBlock;
+import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationBlock;
 import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
@@ -108,7 +110,9 @@ public final class CtmConfig {
         }
         if (block == ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()
                 || block == ModBlocks.MATTER_PHASE_TRANSFORMER.get()
-                || block == ModBlocks.CRYSTAL_REACTION_CHAMBER.get()) {
+                || block == ModBlocks.CRYSTAL_REACTION_CHAMBER.get()
+                || block == ModBlocks.CRYSTAL_WORKSTATION.get()
+                || block == ModBlocks.CRYSTAL_ASSEMBLY_LINE.get()) {
             MachinePartFacade facade = facade(state);
             return facade != null ? facade.ctmFamily() : 0;
         }
@@ -129,6 +133,13 @@ public final class CtmConfig {
 
     @Nullable
     public static MachinePartFacade facade(BlockState state) {
+        if (state.is(ModBlocks.CRYSTAL_WORKSTATION.get()) && state.getValue(CrystalWorkstationBlock.FORMED)) {
+            return MachinePartFacade.HIGH_POWER;
+        }
+        if (state.is(ModBlocks.CRYSTAL_ASSEMBLY_LINE.get())
+                && state.getValue(CrystalAssemblyLineBlock.FORMED)) {
+            return MachinePartFacade.CRYSTAL;
+        }
         if (state.is(ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get())
                 && state.getValue(HighReactivityLavaSmelterBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIA;
@@ -159,6 +170,12 @@ public final class CtmConfig {
     @Nullable
     public static TextureAtlasSprite facadeBaseSprite(BlockState state) {
         Block block = state.getBlock();
+        if (block == ModBlocks.CRYSTAL_WORKSTATION.get()) {
+            return CtmSprites.baseSprite(CtmSprites.CRYSTAL_WORKSTATION_CONTROLLER_CASING);
+        }
+        if (block == ModBlocks.CRYSTAL_ASSEMBLY_LINE.get()) {
+            return CtmSprites.baseSprite(CtmSprites.CRYSTAL_ASSEMBLY_LINE_CONTROLLER_CASING);
+        }
         if (block == ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()) {
             return CtmSprites.baseSprite(CtmSprites.LAVA_SMELTER_CONTROLLER_CASING);
         }

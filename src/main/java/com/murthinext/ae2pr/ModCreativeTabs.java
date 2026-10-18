@@ -91,6 +91,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.HIGH_REACTIVITY_LAVA_SMELTER.get());
                         output.accept(ModItems.MATTER_PHASE_TRANSFORMER.get());
                         output.accept(ModItems.CRYSTAL_REACTION_CHAMBER.get());
+                        output.accept(ModItems.CRYSTAL_WORKSTATION.get());
 
                         // 多方块结构 - 普通结构方块
                         output.accept(ModItems.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get());

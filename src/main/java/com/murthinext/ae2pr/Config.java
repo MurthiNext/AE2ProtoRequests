@@ -41,6 +41,7 @@ public final class Config {
     private static final ForgeConfigSpec.DoubleValue MATTER_PHASE_TRANSFORMER_ENERGY_PER_PARALLEL;
 
     private static final ForgeConfigSpec.IntValue CRYSTAL_REACTION_PARALLEL;
+    private static final ForgeConfigSpec.IntValue CRYSTAL_WORKSTATION_PARALLEL;
     private static final ForgeConfigSpec.DoubleValue CRYSTAL_REACTION_ENERGY_PER_PARALLEL;
 
     private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_RADIUS;
@@ -165,6 +166,12 @@ public final class Config {
         CRYSTAL_REACTION_ENERGY_PER_PARALLEL = BUILDER
                 .comment("水晶反应仓每并行一次执行从 ME 网络扣除的能量")
                 .defineInRange("energyPerParallel", 20000.0, 0.0, Double.MAX_VALUE);
+        BUILDER.pop();
+
+        BUILDER.push("crystalWorkstation");
+        CRYSTAL_WORKSTATION_PARALLEL = BUILDER
+                .comment("晶能工作站最大并行数，蚀刻与切割共用")
+                .defineInRange("parallel", 32, 1, 1_000_000);
         BUILDER.pop();
 
         BUILDER.push("crystalReactor");
@@ -327,6 +334,10 @@ public final class Config {
 
     public static int crystalReactionParallel() {
         return CRYSTAL_REACTION_PARALLEL.get();
+    }
+
+    public static int crystalWorkstationParallel() {
+        return CRYSTAL_WORKSTATION_PARALLEL.get();
     }
 
     public static double crystalReactionEnergyPerParallel() {

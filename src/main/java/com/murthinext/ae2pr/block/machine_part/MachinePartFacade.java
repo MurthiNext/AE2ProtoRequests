@@ -23,6 +23,9 @@ public final class MachinePartFacade {
     public static final MachinePartFacade ZIRCONIA = register(2,
             "block/zirconia_corundum_bricks", 4);
 
+    public static final MachinePartFacade HIGH_POWER = register(3,
+            "block/reinforced_high_power_casing", 10);
+
     public static final int MAX_STYLE = BY_STYLE.keySet().stream().mapToInt(Integer::intValue).max().orElse(1);
 
     private final int style;

@@ -4,8 +4,8 @@
   "textures": {
     "particle": "#all",
     "all": "ae2pr:block/matter_phase_transformer/controller_casing",
-    "overlay_front": "ae2pr:block/lava_smelter/front",
-    "overlay_front_emissive": "ae2pr:block/lava_smelter/front_emissive"
+    "overlay_front": "ae2pr:block/matter_phase_transformer/front",
+    "overlay_front_emissive": "ae2pr:block/matter_phase_transformer/front_emissive"
   },
   "elements": [
     {
