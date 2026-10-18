@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.client.proto_terminal;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -10,10 +11,11 @@ import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.network.TerminalStoryRequestPacket;
 import com.murthinext.ae2pr.network.TerminalStoryUpdatePacket;
+import com.murthinext.ae2pr.network.TerminalStoryWatchPacket;
 import net.minecraft.client.Minecraft;
 
 /**
- * 客户端缓存的玩家阅读进度；改动即时上报服务端存档。
+ * 客户端缓存的玩家阅读进度与已满足的解锁条件；进度改动即时上报服务端存档。
  */
 public final class TerminalStoryProgressCache {
 
@@ -21,7 +23,10 @@ public final class TerminalStoryProgressCache {
     private static final int MAX_PAYLOAD = 16000;
 
     private static final Set<String> touched = new HashSet<>();
+    private static final Set<String> satisfiedUnlocks = new LinkedHashSet<>();
     private static TerminalStoryProgress progress = new TerminalStoryProgress();
+    // 服务端首次快照是否已经抵达
+    private static boolean synced;
 
     private TerminalStoryProgressCache() {
     }
@@ -34,36 +39,64 @@ public final class TerminalStoryProgressCache {
         return progress.nodes.get(id);
     }
 
-    public static void reset() {
-        progress = new TerminalStoryProgress();
-        touched.clear();
+    public static boolean isUnlocked(String key) {
+        return satisfiedUnlocks.contains(key);
     }
 
-    public static void request() {
+    public static boolean isSynced() {
+        return synced;
+    }
+
+    public static void reset() {
+        progress = new TerminalStoryProgress();
+        satisfiedUnlocks.clear();
+        touched.clear();
+        synced = false;
+    }
+
+    // 请求进度快照
+    public static void request(Collection<String> conditions) {
+        if (Minecraft.getInstance().getConnection() == null) {
+            return;
+        }
+        ModNetwork.sendToServer(new TerminalStoryRequestPacket());
+        ModNetwork.sendToServer(new TerminalStoryWatchPacket(List.copyOf(conditions)));
+    }
+
+    public static void stopWatching() {
         if (Minecraft.getInstance().getConnection() != null) {
-            ModNetwork.sendToServer(new TerminalStoryRequestPacket());
+            ModNetwork.sendToServer(new TerminalStoryWatchPacket(List.of()));
+        }
+    }
+
+    public static void applyUnlocks(Collection<String> conditions) {
+        satisfiedUnlocks.clear();
+        satisfiedUnlocks.addAll(conditions);
+        if (Minecraft.getInstance().screen instanceof TerminalScreen screen) {
+            screen.onUnlocksSynced();
         }
     }
 
     public static void apply(String json, boolean replace) {
+        synced = true;
         if (replace) {
             progress = TerminalStoryJson.parseProgress(json);
             touched.clear();
             TerminalScreen.onProgressSynced(true);
             return;
         }
-        TerminalStoryProgress synced = TerminalStoryJson.parseProgress(json);
+        TerminalStoryProgress syncedProgress = TerminalStoryJson.parseProgress(json);
         for (String tag : progress.tags) {
-            if (!synced.tags.contains(tag)) {
-                synced.tags.add(tag);
+            if (!syncedProgress.tags.contains(tag)) {
+                syncedProgress.tags.add(tag);
             }
         }
         for (Map.Entry<String, TerminalStoryProgress.NodeProgress> entry : progress.nodes.entrySet()) {
             if (touched.contains(entry.getKey())) {
-                synced.nodes.put(entry.getKey(), entry.getValue());
+                syncedProgress.nodes.put(entry.getKey(), entry.getValue());
             }
         }
-        progress = synced;
+        progress = syncedProgress;
         touched.clear();
         TerminalScreen.onProgressSynced(false);
     }

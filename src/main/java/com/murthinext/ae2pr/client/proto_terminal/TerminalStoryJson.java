@@ -17,6 +17,7 @@ import com.murthinext.ae2pr.client.proto_terminal.TerminalStoryTree.Anchor;
 import com.murthinext.ae2pr.client.proto_terminal.TerminalStoryTree.Choice;
 import com.murthinext.ae2pr.client.proto_terminal.TerminalStoryTree.Definition;
 import com.murthinext.ae2pr.client.proto_terminal.TerminalStoryTree.Line;
+import com.murthinext.ae2pr.client.proto_terminal.TerminalStoryTree.Unlock;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
@@ -34,6 +35,8 @@ final class TerminalStoryJson {
     private static final int MAX_LINES = 256;
     private static final int MAX_CHOICES = 12;
     private static final int MAX_NESTING = 4;
+    private static final int MAX_UNLOCKS = 8;
+    private static final int MAX_UNLOCK_COUNT = 9999;
     private static final int MAX_TAG_LENGTH = 64;
     private static final float MIN_DISTANCE = 0.25F;
     private static final float MAX_DISTANCE = 16;
@@ -101,9 +104,45 @@ final class TerminalStoryJson {
         }
         return new Definition(id, GsonHelper.getAsInt(json, "position", 0), parent.isBlank() ? null : parent, x, y,
                 anchor, Mth.clamp(GsonHelper.getAsFloat(json, "distance", 1), MIN_DISTANCE, MAX_DISTANCE),
-                Component.literal(GsonHelper.getAsString(json, "title")), lines, requires, image,
+                Component.literal(GsonHelper.getAsString(json, "title")), lines, requires, parseUnlocks(json, id),
+                GsonHelper.getAsString(json, "tip", ""), image,
                 Mth.clamp(GsonHelper.getAsInt(json, "image_width", 256), 1, 4096),
                 Mth.clamp(GsonHelper.getAsInt(json, "image_height", 256), 1, 4096));
+    }
+
+    /**
+     * 剧情块的额外解锁条件。
+     */
+    private static List<Unlock> parseUnlocks(JsonObject json, String id) {
+        if (!json.has("unlocks") || !json.get("unlocks").isJsonArray()) {
+            return List.of();
+        }
+        List<Unlock> unlocks = new ArrayList<>();
+        for (JsonElement element : json.getAsJsonArray("unlocks")) {
+            if (unlocks.size() >= MAX_UNLOCKS) {
+                ae2pr.LOGGER.warn("源始终端剧情块解锁条件过多，已截断：{}", id);
+                break;
+            }
+            if (!element.isJsonObject()) {
+                continue;
+            }
+            JsonObject unlock = element.getAsJsonObject();
+            boolean tag = unlock.has("tag");
+            String raw = GsonHelper.getAsString(unlock, tag ? "tag" : "item", "").trim();
+            if (raw.isEmpty()) {
+                continue;
+            }
+            ResourceLocation location;
+            try {
+                location = ResourceLocation.parse(raw);
+            } catch (RuntimeException exception) {
+                ae2pr.LOGGER.warn("源始终端剧情块解锁条件无效：{} -> {}", id, raw);
+                continue;
+            }
+            unlocks.add(new Unlock(location, tag,
+                    Mth.clamp(GsonHelper.getAsInt(unlock, "count", 1), 1, MAX_UNLOCK_COUNT)));
+        }
+        return List.copyOf(unlocks);
     }
 
     private static List<Line> parseLines(JsonObject json, String id) {

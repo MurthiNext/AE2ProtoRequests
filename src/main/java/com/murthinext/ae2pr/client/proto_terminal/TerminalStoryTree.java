@@ -30,7 +30,8 @@ record TerminalStoryTree(List<Node> nodes) {
      * 单个剧情块。
      */
     record Node(String id, int position, String parent, int x, int y, Component title,
-            List<Line> lines, List<String> requires, ResourceLocation image, int imageWidth, int imageHeight) {
+            List<Line> lines, List<String> requires, List<Unlock> unlocks, String tip,
+            ResourceLocation image, int imageWidth, int imageHeight) {
     }
 
     /**
@@ -48,6 +49,12 @@ record TerminalStoryTree(List<Node> nodes) {
     }
 
     /**
+     * 剧情块的额外解锁条件；id 为物品或物品标签（tag 为 true 时）的标识。
+     */
+    record Unlock(ResourceLocation id, boolean tag, int count) {
+    }
+
+    /**
      * 分叉口选项：main 为主线选项；side 为旁支选项；text 为选项文本；content 为内容文本。
      */
     record Choice(String text, String content, boolean silence, boolean mainLine, List<String> tags,
@@ -55,8 +62,8 @@ record TerminalStoryTree(List<Node> nodes) {
     }
 
     record Definition(String id, int position, String parent, Integer x, Integer y, Anchor anchor,
-            float distance, Component title, List<Line> lines, List<String> requires, ResourceLocation image,
-            int imageWidth, int imageHeight) {
+            float distance, Component title, List<Line> lines, List<String> requires, List<Unlock> unlocks,
+            String tip, ResourceLocation image, int imageWidth, int imageHeight) {
     }
 
     enum Anchor {
@@ -111,8 +118,8 @@ record TerminalStoryTree(List<Node> nodes) {
         for (Definition definition : definitions) {
             int[] position = resolve(definition, byId, positions, new HashSet<>());
             nodes.add(new Node(definition.id(), definition.position(), definition.parent(), position[0], position[1],
-                    definition.title(), definition.lines(), definition.requires(), definition.image(),
-                    definition.imageWidth(), definition.imageHeight()));
+                    definition.title(), definition.lines(), definition.requires(), definition.unlocks(),
+                    definition.tip(), definition.image(), definition.imageWidth(), definition.imageHeight()));
         }
         return new TerminalStoryTree(List.copyOf(nodes));
     }
@@ -160,6 +167,6 @@ record TerminalStoryTree(List<Node> nodes) {
                 List.of(new Line(Component.translatable("gui.ae2pr.proto_terminal.speaker"),
                         Component.translatable("gui.ae2pr.proto_terminal.standby.text").getString(), 0, List.of(),
                         List.of())),
-                List.of(), null, 256, 256);
+                List.of(), List.of(), "", null, 256, 256);
     }
 }

@@ -19,6 +19,11 @@ final class TerminalGraphicsRenderer {
     static final int ACCENT = 0xFF9AC8E8;
     static final int TEXT = 0xFFD2E6FA;
     static final int MUTED = 0xFF8AA6C4;
+    // 未解锁剧情块的暗淡配色
+    static final int LOCKED_PANEL = 0xFF05080F;
+    static final int LOCKED_BORDER = 0xFF35506B;
+    static final int LOCKED_ACCENT = 0xFF5B7791;
+    static final int LOCKED_TEXT = 0xFF7C90A6;
     static final float EDGE_SLOPE = 38.0F / 324;
 
     private TerminalGraphicsRenderer() {

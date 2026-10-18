@@ -20,6 +20,7 @@ final class TerminalButton extends Button {
     private float scale = 1;
     private float offsetX;
     private float offsetY;
+    private boolean locked;
 
     TerminalButton(int x, int y, int width, Component label, OnPress action) {
         this(x, y, width, 22, label, action);
@@ -47,9 +48,14 @@ final class TerminalButton extends Button {
         isHovered = isMouseOver(mouseX, mouseY);
         boolean highlighted = isHovered || isFocused() && Minecraft.getInstance().getLastInputType().isKeyboard();
         int border = TerminalGraphicsRenderer.alpha(
-                highlighted ? TerminalGraphicsRenderer.ACCENT : TerminalGraphicsRenderer.BORDER, opacity);
+                highlighted ? (locked ? TerminalGraphicsRenderer.LOCKED_ACCENT : TerminalGraphicsRenderer.ACCENT)
+                        : locked ? TerminalGraphicsRenderer.LOCKED_BORDER : TerminalGraphicsRenderer.BORDER,
+                opacity);
         int text = TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.TEXT, opacity);
-        int fill = TerminalGraphicsRenderer.alpha(highlighted ? 0xFF10233D : TerminalGraphicsRenderer.PANEL, opacity);
+        int fill = TerminalGraphicsRenderer.alpha(
+                highlighted ? (locked ? 0xFF08111F : 0xFF10233D)
+                        : locked ? TerminalGraphicsRenderer.LOCKED_PANEL : TerminalGraphicsRenderer.PANEL,
+                opacity);
         graphics.pose().pushPose();
         graphics.pose().translate(getX() + offsetX, getY() + offsetY, 0);
         graphics.pose().scale(scale, scale, 1);
@@ -71,7 +77,10 @@ final class TerminalButton extends Button {
                 return;
             }
             var font = Minecraft.getInstance().font;
-            if (height > 22) {
+            if (locked) {
+                // 未解锁的剧情块不显示标题
+                graphics.fill(14, height - 7, 24, height - 6, border);
+            } else if (height > 22) {
                 var lines = font.split(getMessage(), width - 30);
                 int count = Math.min(2, lines.size());
                 for (int i = 0; i < count; i++) {
@@ -99,6 +108,10 @@ final class TerminalButton extends Button {
 
     void setScale(float scale) {
         this.scale = scale;
+    }
+
+    void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
     @Override

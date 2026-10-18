@@ -132,7 +132,7 @@ final class TerminalStarfieldRenderer {
     }
 
     void renderStars(GuiGraphics graphics, int x, int y, int width, int height, float slant,
-            float seconds, float opacity) {
+            float seconds, float opacity, TerminalOpeningPixelRenderer aperture) {
         if (width <= slant || height <= 0 || opacity <= 0) {
             return;
         }
@@ -156,10 +156,13 @@ final class TerminalStarfieldRenderer {
                         float py = (row + random(seed, 3)) * cellSize + layer.offsetY;
                         float size = layer.size * (float) Math.sqrt(layer.scale);
                         float margin = size * 5;
-                        if (!TerminalGraphicsRenderer.contains(px - margin, py - margin,
-                                x, y, width, height, slant)
-                                || !TerminalGraphicsRenderer.contains(px + margin, py + margin,
-                                        x, y, width, height, slant)) {
+                        boolean inside = aperture != null
+                                ? aperture.contains(px - margin, py - margin, px + margin, py + margin)
+                                : TerminalGraphicsRenderer.contains(px - margin, py - margin,
+                                        x, y, width, height, slant)
+                                        && TerminalGraphicsRenderer.contains(px + margin, py + margin,
+                                                x, y, width, height, slant);
+                        if (!inside) {
                             continue;
                         }
                         float light = starlight(seed, seconds);

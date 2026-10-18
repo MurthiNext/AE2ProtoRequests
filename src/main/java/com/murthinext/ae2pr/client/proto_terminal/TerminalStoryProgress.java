@@ -57,5 +57,6 @@ public final class TerminalStoryProgress {
         public int delay;
         public int typed;
         public boolean typing;
+        public boolean finished;
     }
 }
