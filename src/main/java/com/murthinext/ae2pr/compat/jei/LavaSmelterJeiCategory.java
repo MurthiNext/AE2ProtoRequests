@@ -81,7 +81,7 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, LavaSmelterRecipe recipe, IFocusGroup focuses) {
         // 物品输入
-        List<CountedIngredient> ingredients = recipe.getCountedIngredients();
+        List<CountedIngredient> ingredients = recipe.getItemInputs();
         for (int index = 0; index < LavaSmelterJeiFurnace.ITEM_COUNT; index++) {
             int x = LavaSmelterJeiFurnace.itemSlotX(index);
             int y = LavaSmelterJeiFurnace.itemSlotY(index);
@@ -111,7 +111,7 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
         }
 
         // 主/副产物槽固定显示并对齐输入槽
-        List<ItemStack> results = recipe.getResults();
+        List<ItemStack> results = recipe.getItemOutputs();
         for (int index = 0; index < LavaSmelterRecipe.MAX_RESULTS; index++) {
             IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT,
                     OUTPUT_X, OUTPUT_Y + index * OUTPUT_GAP);

@@ -25,6 +25,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 
 import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.CrystalReactionChamberRecipe;
 
 /**
@@ -106,7 +107,7 @@ public class CrystalReactionChamberJeiCategory implements IRecipeCategory<Crysta
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, CrystalReactionChamberRecipe recipe, IFocusGroup focuses) {
         // 物品输入：固定槽位，消耗数量写入 ItemStack
-        List<CrystalReactionChamberRecipe.ItemInput> itemInputs = recipe.getItemInputs();
+        List<CountedIngredient> itemInputs = recipe.getItemInputs();
         for (int index = 0; index < ITEM_SLOT_COUNT; index++) {
             IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT,
                     ITEMS_X + (index % ITEM_COLS) * SLOT, CONTENT_Y + (index / ITEM_COLS) * SLOT);
@@ -114,7 +115,7 @@ public class CrystalReactionChamberJeiCategory implements IRecipeCategory<Crysta
             if (index >= itemInputs.size()) {
                 continue;
             }
-            CrystalReactionChamberRecipe.ItemInput input = itemInputs.get(index);
+            CountedIngredient input = itemInputs.get(index);
             List<ItemStack> stacks = new ArrayList<>();
             for (ItemStack stack : input.ingredient().getItems()) {
                 stacks.add(stack.copyWithCount(input.count()));

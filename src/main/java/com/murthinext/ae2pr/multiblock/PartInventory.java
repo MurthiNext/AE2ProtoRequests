@@ -1,6 +1,7 @@
-package com.murthinext.ae2pr.block.crystal_workstation;
+package com.murthinext.ae2pr.multiblock;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.world.item.ItemStack;
@@ -11,15 +12,17 @@ import net.minecraftforge.items.ItemStackHandler;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
-import com.murthinext.ae2pr.recipe.CrystalWorkstationRecipe;
+import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
-// 总线与流体仓的事务快照。
-final class WorkstationInventory {
+/**
+ * 总线与流体仓的事务快照，用于模拟扣料与产物容纳。
+ */
+public final class PartInventory {
 
     private final List<ItemSlot> items = new ArrayList<>();
     private final List<TankSlot> fluids = new ArrayList<>();
 
-    WorkstationInventory(List<ItemBusBlockEntity> buses, List<FluidHatchBlockEntity> hatches) {
+    public PartInventory(List<ItemBusBlockEntity> buses, List<FluidHatchBlockEntity> hatches) {
         for (ItemBusBlockEntity bus : buses) {
             for (int slot = 0; slot < bus.getSlotCount(); slot++) {
                 items.add(new ItemSlot(bus.getStorage(), slot));
@@ -32,13 +35,19 @@ final class WorkstationInventory {
         }
     }
 
-    boolean consume(CrystalWorkstationRecipe recipe, int parallel) {
+    /**
+     * 按配方扣除输入；原料重叠时按最大流分配，失败时不修改任何实际存储。
+     */
+    public boolean consume(MultiblockRecipe recipe, int parallel) {
         if (!consumeItems(recipe.getItemInputs(), parallel)) {
             return false;
         }
         for (FluidStack input : recipe.getFluidInputs()) {
             long remaining = (long) input.getAmount() * parallel;
             for (TankSlot slot : fluids) {
+                if (remaining <= 0) {
+                    break;
+                }
                 if (slot.stack.isFluidEqual(input)) {
                     int taken = (int) Math.min(remaining, slot.stack.getAmount());
                     slot.stack.shrink(taken);
@@ -76,7 +85,7 @@ final class WorkstationInventory {
         int[] queue = new int[sink + 1];
         while (matched < required) {
             int[] parent = new int[sink + 1];
-            java.util.Arrays.fill(parent, -1);
+            Arrays.fill(parent, -1);
             parent[source] = source;
             queue[0] = source;
             int tail = 1;
@@ -108,15 +117,23 @@ final class WorkstationInventory {
         return true;
     }
 
-    boolean insert(CrystalWorkstationRecipe recipe, int parallel) {
+    /**
+     * 模拟写入产物，返回全部放得下时为 true；快照需 {@link #commit()} 才生效。
+     */
+    public boolean insert(MultiblockRecipe recipe, int parallel) {
         for (ItemStack output : recipe.getItemOutputs()) {
             long remaining = (long) output.getCount() * parallel;
+            // 先在同类物品槽位堆叠，再占用空槽位
             for (boolean sameItem : new boolean[] { true, false }) {
                 for (ItemSlot slot : items) {
+                    if (remaining <= 0) {
+                        break;
+                    }
                     if (sameItem ? !ItemStack.isSameItemSameTags(slot.stack, output) : !slot.stack.isEmpty()) {
                         continue;
                     }
-                    int moved = (int) Math.min(remaining, Math.max(0, slot.storage.getSlotLimit(slot.index) - slot.stack.getCount()));
+                    int capacity = slot.storage.getSlotLimit(slot.index);
+                    int moved = (int) Math.min(remaining, Math.max(0, capacity - slot.stack.getCount()));
                     if (moved > 0) {
                         slot.stack = output.copyWithCount(slot.stack.getCount() + moved);
                         remaining -= moved;
@@ -131,10 +148,14 @@ final class WorkstationInventory {
             long remaining = (long) output.getAmount() * parallel;
             for (boolean sameFluid : new boolean[] { true, false }) {
                 for (TankSlot slot : fluids) {
+                    if (remaining <= 0) {
+                        break;
+                    }
                     if (sameFluid ? !slot.stack.isFluidEqual(output) : !slot.stack.isEmpty()) {
                         continue;
                     }
-                    int moved = (int) Math.min(remaining, Math.max(0, slot.tank.getCapacity() - slot.stack.getAmount()));
+                    int moved = (int) Math.min(remaining,
+                            Math.max(0, slot.tank.getCapacity() - slot.stack.getAmount()));
                     if (moved > 0) {
                         int amount = slot.stack.getAmount() + moved;
                         slot.stack = output.copy();
@@ -150,7 +171,7 @@ final class WorkstationInventory {
         return true;
     }
 
-    void commit() {
+    public void commit() {
         for (ItemSlot slot : items) {
             slot.storage.setStackInSlot(slot.index, slot.stack);
         }
@@ -161,6 +182,7 @@ final class WorkstationInventory {
     }
 
     private static final class ItemSlot {
+
         private final ItemStackHandler storage;
         private final int index;
         private ItemStack stack;
@@ -173,6 +195,7 @@ final class WorkstationInventory {
     }
 
     private static final class TankSlot {
+
         private final FluidHatchBlockEntity hatch;
         private final FluidTank tank;
         private FluidStack stack;

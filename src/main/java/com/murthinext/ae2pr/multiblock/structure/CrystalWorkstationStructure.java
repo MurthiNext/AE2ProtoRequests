@@ -1,24 +1,20 @@
 package com.murthinext.ae2pr.multiblock.structure;
 
-import java.util.List;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.ModBlocks;
-import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlock;
-import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
+import com.murthinext.ae2pr.multiblock.AbstractStructureFacade;
 import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.multiblock.StructurePredicate;
-import com.murthinext.ae2pr.multiblock.StructureResult;
 
-public final class CrystalWorkstationStructure {
+/**
+ * 晶能工作站结构定义。
+ */
+public final class CrystalWorkstationStructure extends AbstractStructureFacade {
 
     public static final MultiblockPattern PATTERN = MultiblockPattern
             .builder(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.RIGHT)
@@ -42,40 +38,14 @@ public final class CrystalWorkstationStructure {
             .where('#', StructurePredicate.blocks(Blocks.AIR, Blocks.CAVE_AIR, Blocks.VOID_AIR))
             .build();
 
+    public static final CrystalWorkstationStructure INSTANCE = new CrystalWorkstationStructure();
+
     private CrystalWorkstationStructure() {
+        super(PATTERN, MachinePartFacade.HIGH_POWER);
     }
 
     public static BlockPos corePos(BlockPos controllerPos, Direction facing, boolean mirrorFront) {
         return controllerPos.relative(RelativeDirection.BACK.getFacing(facing, Direction.UP, false, mirrorFront), 2)
                 .above(2);
-    }
-
-    public static void updateFormed(Level level, BlockPos pos, Direction facing, StructureResult result) {
-        if (result.formed()) {
-            applyParts(level, result.cells(), true);
-        } else {
-            for (boolean[] mirror : MultiblockPattern.MIRRORS) {
-                applyParts(level, PATTERN.cells(pos, facing, Direction.UP, mirror[0], mirror[1], PATTERN.minSlices()), false);
-            }
-        }
-    }
-
-    private static void applyParts(Level level, List<BlockPos> cells, boolean formed) {
-        int style = formed ? MachinePartFacade.HIGH_POWER.style() : MachinePartBlock.DEFAULT_STYLE;
-        for (BlockPos pos : cells) {
-            BlockState state = level.getBlockState(pos);
-            BlockState updated;
-            if (state.getBlock() instanceof MachinePartBlock) {
-                updated = state.setValue(MachinePartBlock.FORMED, formed).setValue(MachinePartBlock.STYLE, style);
-            } else if (state.getBlock() instanceof FluixCrystalEnergyHatchBlock) {
-                updated = state.setValue(FluixCrystalEnergyHatchBlock.FORMED, formed)
-                        .setValue(FluixCrystalEnergyHatchBlock.STYLE, style);
-            } else {
-                continue;
-            }
-            if (updated != state) {
-                level.setBlock(pos, updated, Block.UPDATE_ALL);
-            }
-        }
     }
 }

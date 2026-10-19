@@ -3,10 +3,8 @@ package com.murthinext.ae2pr.compat.jade;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.fluids.FluidStack;
 
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.WailaPlugin;
@@ -47,14 +45,6 @@ public class LavaSmelterJadePlugin extends AbstractMultiblockJadePlugin {
     @Override
     protected int progressColor() {
         return 0xFFE0681C;
-    }
-
-    @Override
-    protected JobState jobState(BlockEntity controller) {
-        LavaSmelterControllerBlockEntity smelter = (LavaSmelterControllerBlockEntity) controller;
-        ItemStack output = smelter.getJobOutput();
-        return new JobState(smelter.isFormed(), smelter.isEnergyConnected(), smelter.getJobElapsed(),
-                smelter.getJobDuration(), output, FluidStack.EMPTY);
     }
 
     @Override

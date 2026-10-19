@@ -43,13 +43,6 @@ public class CrystalWorkstationJadePlugin extends AbstractMultiblockJadePlugin {
     }
 
     @Override
-    protected JobState jobState(BlockEntity controller) {
-        var workstation = (CrystalWorkstationControllerBlockEntity) controller;
-        return new JobState(workstation.isFormed(), workstation.isEnergyConnected(), workstation.getJobElapsed(),
-                workstation.getJobDuration(), workstation.getJobItem(), workstation.getJobFluid());
-    }
-
-    @Override
     protected void appendExtraServerData(CompoundTag data, BlockEntity controller) {
         data.putString("mode", ((CrystalWorkstationControllerBlockEntity) controller).getMode().id());
     }

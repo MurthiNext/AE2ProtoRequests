@@ -1,9 +1,6 @@
 package com.murthinext.ae2pr.multiblock.structure;
 
-import java.util.List;
-
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -12,18 +9,16 @@ import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ModModules;
 import com.murthinext.ae2pr.block.assembly_line.AssemblyLineUnitBlock;
-import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlock;
-import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
+import com.murthinext.ae2pr.multiblock.AbstractStructureFacade;
 import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.multiblock.StructurePredicate;
-import com.murthinext.ae2pr.multiblock.StructureResult;
 
 /**
  * 水晶装配线结构定义与外观同步。
  */
-public final class AssemblyLineStructure {
+public final class AssemblyLineStructure extends AbstractStructureFacade {
 
     public static final MultiblockPattern PATTERN = MultiblockPattern
             .builder(RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.BACK)
@@ -49,81 +44,32 @@ public final class AssemblyLineStructure {
             .where('#', StructurePredicate.any())
             .build();
 
+    public static final AssemblyLineStructure INSTANCE = new AssemblyLineStructure();
+
     public static final int MIN_SLICES = PATTERN.minSlices();
 
     private AssemblyLineStructure() {
+        super(PATTERN, MachinePartFacade.CRYSTAL);
     }
 
-    public static int maxSlices() {
+    @Override
+    public int maxSlices() {
         return Math.max(MIN_SLICES, Config.assemblyLineMaxSlices());
     }
 
-    /**
-     * 同步结构内“状态型”方块的外观。
-     */
-    public static void updateFormed(Level level, BlockPos controllerPos, Direction facing, StructureResult result,
-            boolean running) {
-        if (result.formed()) {
-            applyState(level, PATTERN.cells(controllerPos, facing, Direction.UP, result.mirrorSide(),
-                    result.mirrorFront(), result.slices()), true, running);
-            return;
-        }
-        // 未成型：逐一复位全部镜像组合
-        for (boolean[] mirror : MultiblockPattern.MIRRORS) {
-            applyState(level, PATTERN.cells(controllerPos, facing, Direction.UP, mirror[0], mirror[1], maxSlices()),
-                    false, false);
-        }
+    @Override
+    protected void onPartCell(Level level, BlockPos pos, boolean active) {
+        updateUnitActive(level, pos, active);
     }
 
+    /**
+     * 控制外壳与替换模块的工作外观。
+     */
     public static void updateUnitActive(Level level, BlockPos pos, boolean active) {
         BlockState state = level.getBlockState(pos);
         if (state.getBlock() instanceof AssemblyLineUnitBlock
                 && state.getValue(AssemblyLineUnitBlock.ACTIVE) != active) {
             level.setBlock(pos, state.setValue(AssemblyLineUnitBlock.ACTIVE, active), Block.UPDATE_ALL);
         }
-    }
-
-    private static void applyState(Level level, List<BlockPos> cells, boolean partsFormed, boolean unitActive) {
-        for (BlockPos pos : cells) {
-            updateUnitActive(level, pos, unitActive);
-            BlockState state = level.getBlockState(pos);
-            BlockState updated = null;
-            if (state.is(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get())) {
-                BlockState candidate = state;
-                if (candidate.getValue(FluixCrystalEnergyHatchBlock.FORMED) != partsFormed) {
-                    candidate = candidate.setValue(FluixCrystalEnergyHatchBlock.FORMED, partsFormed);
-                }
-                // 由装配线成型时外观为水晶机壳
-                int style = partsFormed ? MachinePartFacade.CRYSTAL.style() : MachinePartBlock.DEFAULT_STYLE;
-                if (candidate.getValue(FluixCrystalEnergyHatchBlock.STYLE) != style) {
-                    candidate = candidate.setValue(FluixCrystalEnergyHatchBlock.STYLE, style);
-                }
-                if (candidate != state) {
-                    updated = candidate;
-                }
-            } else if (isPart(state)) {
-                BlockState candidate = state;
-                if (candidate.getValue(MachinePartBlock.FORMED) != partsFormed) {
-                    candidate = candidate.setValue(MachinePartBlock.FORMED, partsFormed);
-                }
-                // 由装配线成型时外观为水晶机壳
-                int style = MachinePartFacade.CRYSTAL.style();
-                if (candidate.getValue(MachinePartBlock.STYLE) != style) {
-                    candidate = candidate.setValue(MachinePartBlock.STYLE, style);
-                }
-                if (candidate != state) {
-                    updated = candidate;
-                }
-            }
-            if (updated != null) {
-                level.setBlock(pos, updated, Block.UPDATE_ALL);
-            }
-        }
-    }
-
-    private static boolean isPart(BlockState state) {
-        return state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get())
-                || state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get())
-                || state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get());
     }
 }

@@ -24,6 +24,8 @@ import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.BoxStyle;
 import snownee.jade.api.ui.IProgressStyle;
 
+import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlockEntity;
+
 /**
  * 多方块机器 Jade 提示的公共基底。
  */
@@ -63,7 +65,14 @@ public abstract class AbstractMultiblockJadePlugin implements IWailaPlugin {
 
     protected abstract int progressColor();
 
-    protected abstract JobState jobState(BlockEntity controller);
+    /**
+     * 作业状态，默认从控制器基类读取。
+     */
+    protected JobState jobState(BlockEntity controller) {
+        AbstractMultiblockControllerBlockEntity base = (AbstractMultiblockControllerBlockEntity) controller;
+        return new JobState(base.isFormed(), base.isEnergyConnected(), base.getJobElapsed(), base.getJobDuration(),
+                base.getJobItem(), base.getJobFluid());
+    }
 
     protected void appendExtraServerData(CompoundTag data, BlockEntity controller) {
     }

@@ -102,7 +102,7 @@ public class MatterPhaseTransformerJeiCategory implements IRecipeCategory<Matter
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, MatterPhaseTransformerRecipe recipe, IFocusGroup focuses) {
         // 物品输入：固定槽位，消耗数量写入 ItemStack
-        List<CountedIngredient> ingredients = recipe.getCountedIngredients();
+        List<CountedIngredient> ingredients = recipe.getItemInputs();
         for (int index = 0; index < INPUT_COUNT; index++) {
             IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT,
                     INPUT_X + (index % INPUT_COLS) * SLOT, INPUT_Y + (index / INPUT_COLS) * SLOT);
@@ -136,7 +136,7 @@ public class MatterPhaseTransformerJeiCategory implements IRecipeCategory<Matter
                 recipe.getDuration()), PADDING, INFO_Y, COLOR_TEXT, false);
         graphics.drawString(font, Component.translatable("jei.ae2pr.matter_phase_transformer.energy",
                 NUMBER.format(recipe.getEnergyPerParallel())), PADDING, INFO_Y + INFO_STEP, COLOR_TEXT, false);
-        int hidden = recipe.getCountedIngredients().size() - INPUT_COUNT;
+        int hidden = recipe.getItemInputs().size() - INPUT_COUNT;
         if (hidden > 0) {
             graphics.drawString(font, Component.translatable("jei.ae2pr.matter_phase_transformer.more_inputs", hidden),
                     PADDING, INFO_Y + 2 * INFO_STEP, COLOR_HINT, false);

@@ -1,11 +1,8 @@
 package com.murthinext.ae2pr.compat.jade;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.fluids.FluidStack;
 
 import snownee.jade.api.WailaPlugin;
 
@@ -42,13 +39,5 @@ public class AssemblyLineJadePlugin extends AbstractMultiblockJadePlugin {
     @Override
     protected int progressColor() {
         return 0xFF3E9BC8;
-    }
-
-    @Override
-    protected JobState jobState(BlockEntity controller) {
-        AssemblyLineControllerBlockEntity line = (AssemblyLineControllerBlockEntity) controller;
-        ItemStack output = line.getJobOutput();
-        return new JobState(line.isFormed(), line.isEnergyConnected(), line.getJobElapsed(), line.getJobDuration(),
-                output, FluidStack.EMPTY);
     }
 }

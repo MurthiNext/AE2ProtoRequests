@@ -31,7 +31,7 @@ import com.murthinext.ae2pr.ModRecipes;
 /**
  * 熔岩冶炼炉配方。
  */
-public class LavaSmelterRecipe implements Recipe<Container> {
+public class LavaSmelterRecipe implements Recipe<Container>, MultiblockRecipe {
 
     public static final int DEFAULT_DURATION = 100;
     public static final int MAX_RESULTS = 2;
@@ -53,24 +53,44 @@ public class LavaSmelterRecipe implements Recipe<Container> {
         this.duration = duration;
     }
 
-    public List<CountedIngredient> getCountedIngredients() {
+    @Override
+    public List<CountedIngredient> getItemInputs() {
         return ingredients;
     }
 
+    @Override
     public List<FluidStack> getFluidInputs() {
         return fluidInputs;
     }
 
-    public ItemStack getResultItem() {
-        return results.isEmpty() ? ItemStack.EMPTY : results.get(0);
-    }
-
-    public List<ItemStack> getResults() {
+    @Override
+    public List<ItemStack> getItemOutputs() {
         return results;
     }
 
+    @Override
+    public List<FluidStack> getFluidOutputs() {
+        return List.of();
+    }
+
+    @Override
     public int getDuration() {
         return duration;
+    }
+
+    /**
+     * 熔岩冶炼炉不按作业扣电，由结构被动耗电承担。
+     */
+    @Override
+    public double getEnergyPerParallel() {
+        return 0;
+    }
+
+    /**
+     * 主产物。
+     */
+    public ItemStack getResultItem() {
+        return results.isEmpty() ? ItemStack.EMPTY : results.get(0);
     }
 
     @Override

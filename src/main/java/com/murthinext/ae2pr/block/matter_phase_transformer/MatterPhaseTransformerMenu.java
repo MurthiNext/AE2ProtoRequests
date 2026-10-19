@@ -1,198 +1,28 @@
 package com.murthinext.ae2pr.block.matter_phase_transformer;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.inventory.SimpleContainerData;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.extensions.IForgeMenuType;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.SlotItemHandler;
 
-import appeng.api.upgrades.Upgrades;
-
-import com.murthinext.ae2pr.ModNetwork;
-import com.murthinext.ae2pr.network.MatterPhaseTransformerJobPacket;
+import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerMenu;
 
 /**
  * 物质相变仪主机的容器菜单。
  */
-public class MatterPhaseTransformerMenu extends AbstractContainerMenu {
+public class MatterPhaseTransformerMenu
+        extends AbstractMultiblockControllerMenu<MatterPhaseTransformerControllerBlockEntity> {
 
-    public static final MenuType<MatterPhaseTransformerMenu> TYPE = IForgeMenuType.create(MatterPhaseTransformerMenu::new);
-
-    private static final int INV_COLS = 9;
-    private static final int INV_ROWS = 3;
-    private static final int SLOT = 18;
-
-    private static final int INV_X = 8;
-    private static final int INV_Y = 122;
-    private static final int HOTBAR_Y = 180;
-
-    private static final int UPGRADE_SLOTS = 4;
-    private static final int UPGRADE_X = 180;
-    private static final int UPGRADE_Y = 4;
-    private static final int UPGRADE_STEP = 20;
-    private static final int PLAYER_SLOT_FIRST = UPGRADE_SLOTS;
-
-    private static final int FLAG_FORMED = 1;
-    private static final int FLAG_RUNNING = 2;
-    private static final int FLAG_PAUSED = 4;
-
-    private static final int DATA_FLAGS = 0;
-    private static final int DATA_ERROR = 1;
-    private static final int DATA_ELAPSED = 2;
-    private static final int DATA_DURATION = 3;
-    private static final int DATA_ENERGY_CONNECTED = 4;
-    private static final int DATA_POWER_LO = 5;
-    private static final int DATA_POWER_HI = 6;
-    private static final int DATA_PARALLEL = 7;
-
-    private final MatterPhaseTransformerControllerBlockEntity controller;
-    private final Player owner;
-    private final SimpleContainerData data = new SimpleContainerData(8);
-    private final boolean clientSide;
-    private FluidStack lastJobFluid = FluidStack.EMPTY;
-    private boolean jobFluidSynced;
+    public static final MenuType<MatterPhaseTransformerMenu> TYPE = IForgeMenuType
+            .create(MatterPhaseTransformerMenu::new);
 
     public MatterPhaseTransformerMenu(int id, Inventory playerInventory,
             MatterPhaseTransformerControllerBlockEntity controller) {
-        super(TYPE, id);
-        this.controller = controller;
-        this.owner = playerInventory.player;
-        this.clientSide = playerInventory.player.level().isClientSide;
-
-        if (controller != null) {
-            var upgrades = controller.getUpgrades().toItemHandler();
-            for (int i = 0; i < UPGRADE_SLOTS; i++) {
-                addSlot(new SlotItemHandler(upgrades, i, UPGRADE_X, UPGRADE_Y + i * UPGRADE_STEP));
-            }
-        }
-        for (int row = 0; row < INV_ROWS; row++) {
-            for (int col = 0; col < INV_COLS; col++) {
-                addSlot(new Slot(playerInventory, col + row * INV_COLS + INV_COLS,
-                        INV_X + col * SLOT, INV_Y + row * SLOT));
-            }
-        }
-        for (int col = 0; col < INV_COLS; col++) {
-            addSlot(new Slot(playerInventory, col, INV_X + col * SLOT, HOTBAR_Y));
-        }
-        addDataSlots(data);
+        super(TYPE, id, playerInventory, controller, 0);
     }
 
     public MatterPhaseTransformerMenu(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
-        this(id, playerInventory, (MatterPhaseTransformerControllerBlockEntity) playerInventory.player.level()
-                .getBlockEntity(buffer.readBlockPos()));
-    }
-
-    @Override
-    public void broadcastChanges() {
-        if (!clientSide && controller != null) {
-            BlockState state = controller.getBlockState();
-            int flags = (controller.isFormed() ? FLAG_FORMED : 0)
-                    | (state.getValue(MatterPhaseTransformerBlock.RUNNING) ? FLAG_RUNNING : 0)
-                    | (state.getValue(MatterPhaseTransformerBlock.PAUSED) ? FLAG_PAUSED : 0);
-            data.set(DATA_FLAGS, flags);
-            data.set(DATA_ERROR, controller.getError().ordinal());
-            data.set(DATA_ELAPSED, controller.getJobElapsed());
-            data.set(DATA_DURATION, controller.getJobDuration());
-            long power = (long) Math.min(Math.max(controller.getNetworkStoredPower(), 0), Long.MAX_VALUE);
-            data.set(DATA_ENERGY_CONNECTED, controller.isEnergyConnected() ? 1 : 0);
-            data.set(DATA_POWER_LO, (int) (power & 0xFFFFFFFFL));
-            data.set(DATA_POWER_HI, (int) (power >>> 32));
-            data.set(DATA_PARALLEL, controller.maxParallel());
-
-            FluidStack jobFluid = controller.getJobFluid();
-            if (owner instanceof ServerPlayer serverPlayer
-                    && (!jobFluidSynced || !sameFluid(jobFluid, lastJobFluid))) {
-                jobFluidSynced = true;
-                lastJobFluid = jobFluid.copy();
-                ModNetwork.sendToPlayer(serverPlayer,
-                        new MatterPhaseTransformerJobPacket(controller.getBlockPos(), lastJobFluid));
-            }
-        }
-        super.broadcastChanges();
-    }
-
-    private static boolean sameFluid(FluidStack a, FluidStack b) {
-        if (a.isEmpty() || b.isEmpty()) {
-            return a.isEmpty() && b.isEmpty();
-        }
-        return a.isFluidEqual(b) && a.getAmount() == b.getAmount();
-    }
-
-    public boolean isFormed() {
-        return (data.get(DATA_FLAGS) & FLAG_FORMED) != 0;
-    }
-
-    public boolean isRunning() {
-        return (data.get(DATA_FLAGS) & FLAG_RUNNING) != 0;
-    }
-
-    public boolean isPaused() {
-        return (data.get(DATA_FLAGS) & FLAG_PAUSED) != 0;
-    }
-
-    public int getErrorCode() {
-        return data.get(DATA_ERROR);
-    }
-
-    public int getJobElapsed() {
-        return data.get(DATA_ELAPSED);
-    }
-
-    public int getJobDuration() {
-        return data.get(DATA_DURATION);
-    }
-
-    public FluidStack getJobFluid() {
-        return controller != null ? controller.getClientJobFluid() : FluidStack.EMPTY;
-    }
-
-    public boolean isEnergyConnected() {
-        return (data.get(DATA_ENERGY_CONNECTED) & 1) != 0;
-    }
-
-    public long getNetworkStoredPower() {
-        return (data.get(DATA_POWER_LO) & 0xFFFFFFFFL) | ((long) data.get(DATA_POWER_HI) << 32);
-    }
-
-    public int getMaxParallel() {
-        return data.get(DATA_PARALLEL);
-    }
-
-    @Override
-    public ItemStack quickMoveStack(Player player, int index) {
-        Slot slot = slots.get(index);
-        if (!slot.hasItem()) {
-            return ItemStack.EMPTY;
-        }
-        ItemStack stack = slot.getItem();
-        ItemStack original = stack.copy();
-        if (index < PLAYER_SLOT_FIRST) {
-            if (!moveItemStackTo(stack, PLAYER_SLOT_FIRST, slots.size(), true)) {
-                return ItemStack.EMPTY;
-            }
-        } else if (!Upgrades.isUpgradeCardItem(stack)
-                || !moveItemStackTo(stack, 0, PLAYER_SLOT_FIRST, false)) {
-            return ItemStack.EMPTY;
-        }
-        if (stack.isEmpty()) {
-            slot.setByPlayer(ItemStack.EMPTY);
-        } else {
-            slot.setChanged();
-        }
-        return original;
-    }
-
-    @Override
-    public boolean stillValid(Player player) {
-        return controller != null && player.distanceToSqr(controller.getBlockPos().getCenter()) <= 64.0;
+        this(id, playerInventory, readController(playerInventory.player, buffer,
+                MatterPhaseTransformerControllerBlockEntity.class));
     }
 }

@@ -35,6 +35,7 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.multiblock.module.ModuleDefinition;
 import com.murthinext.ae2pr.multiblock.module.ModuleProvider;
 import com.murthinext.ae2pr.multiblock.module.ModuleRequirement;
+import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
 
 /**
@@ -125,7 +126,7 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, CrystalAssemblyLineRecipe recipe, IFocusGroup focuses) {
         // 物品输入：4x4 网格
-        List<CrystalAssemblyLineRecipe.ItemInput> itemInputs = recipe.getItemInputs();
+        List<CountedIngredient> itemInputs = recipe.getItemInputs();
         for (int i = 0; i < ITEM_SLOT_COUNT; i++) {
             IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT,
                     ITEMS_X + (i % ITEM_COLS) * SLOT, ITEMS_Y + (i / ITEM_COLS) * SLOT);
@@ -133,7 +134,7 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
             if (i >= itemInputs.size() || i >= MAX_ITEM_INPUTS) {
                 continue;
             }
-            CrystalAssemblyLineRecipe.ItemInput input = itemInputs.get(i);
+            CountedIngredient input = itemInputs.get(i);
             final int inputIndex = i;
             // 消耗数量写入 ItemStack
             List<ItemStack> stacks = new ArrayList<>(input.ingredient().getItems().length);

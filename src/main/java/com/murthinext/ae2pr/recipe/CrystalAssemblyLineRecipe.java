@@ -40,20 +40,10 @@ import com.murthinext.ae2pr.multiblock.module.ModuleType;
 /**
  * 水晶装配线配方。
  */
-public class CrystalAssemblyLineRecipe implements Recipe<Container> {
-
-    /**
-     * 物品输入：匹配器与单次消耗数量。
-     */
-    public record ItemInput(Ingredient ingredient, int count) {
-
-        public boolean test(ItemStack stack) {
-            return !stack.isEmpty() && ingredient.test(stack);
-        }
-    }
+public class CrystalAssemblyLineRecipe implements Recipe<Container>, MultiblockRecipe {
 
     private final ResourceLocation id;
-    private final List<ItemInput> itemInputs;
+    private final List<CountedIngredient> itemInputs;
     private final List<FluidStack> fluidInputs;
     private final List<ItemStack> itemOutputs;
     private final List<ModuleRequirement> moduleRequirements;
@@ -61,9 +51,9 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container> {
     @Nullable
     private final Double energyPerParallel;
 
-    public CrystalAssemblyLineRecipe(ResourceLocation id, List<ItemInput> itemInputs, List<FluidStack> fluidInputs,
-            List<ItemStack> itemOutputs, List<ModuleRequirement> moduleRequirements, int duration,
-            @Nullable Double energyPerParallel) {
+    public CrystalAssemblyLineRecipe(ResourceLocation id, List<CountedIngredient> itemInputs,
+            List<FluidStack> fluidInputs, List<ItemStack> itemOutputs, List<ModuleRequirement> moduleRequirements,
+            int duration, @Nullable Double energyPerParallel) {
         this.id = id;
         this.itemInputs = List.copyOf(itemInputs);
         this.fluidInputs = List.copyOf(fluidInputs);
@@ -73,26 +63,36 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container> {
         this.energyPerParallel = energyPerParallel;
     }
 
-    public List<ItemInput> getItemInputs() {
+    @Override
+    public List<CountedIngredient> getItemInputs() {
         return itemInputs;
     }
 
+    @Override
     public List<FluidStack> getFluidInputs() {
         return fluidInputs;
     }
 
+    @Override
     public List<ItemStack> getItemOutputs() {
         return itemOutputs;
+    }
+
+    @Override
+    public List<FluidStack> getFluidOutputs() {
+        return List.of();
     }
 
     public List<ModuleRequirement> getModuleRequirements() {
         return moduleRequirements;
     }
 
+    @Override
     public int getDuration() {
         return duration;
     }
 
+    @Override
     public double getEnergyPerParallel() {
         return energyPerParallel != null ? energyPerParallel : Config.assemblyEnergyPerParallel();
     }
@@ -141,7 +141,7 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container> {
 
         @Override
         public CrystalAssemblyLineRecipe fromJson(ResourceLocation id, JsonObject json) {
-            List<ItemInput> itemInputs = new ArrayList<>();
+            List<CountedIngredient> itemInputs = new ArrayList<>();
             for (JsonElement element : GsonHelper.getAsJsonArray(json, "item_inputs", new JsonArray())) {
                 JsonObject obj = element.getAsJsonObject();
                 Ingredient ingredient = Ingredient.fromJson(obj);
@@ -149,7 +149,7 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container> {
                 if (count < 1) {
                     throw new JsonSyntaxException("item_inputs 的 count 必须 >= 1");
                 }
-                itemInputs.add(new ItemInput(ingredient, count));
+                itemInputs.add(new CountedIngredient(ingredient, count));
             }
 
             List<FluidStack> fluidInputs = new ArrayList<>();
@@ -225,9 +225,9 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container> {
         @Override
         public CrystalAssemblyLineRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
             int itemCount = buffer.readVarInt();
-            List<ItemInput> itemInputs = new ArrayList<>(itemCount);
+            List<CountedIngredient> itemInputs = new ArrayList<>(itemCount);
             for (int i = 0; i < itemCount; i++) {
-                itemInputs.add(new ItemInput(Ingredient.fromNetwork(buffer), buffer.readVarInt()));
+                itemInputs.add(new CountedIngredient(Ingredient.fromNetwork(buffer), buffer.readVarInt()));
             }
             int fluidCount = buffer.readVarInt();
             List<FluidStack> fluidInputs = new ArrayList<>(fluidCount);
@@ -259,7 +259,7 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container> {
         @Override
         public void toNetwork(FriendlyByteBuf buffer, CrystalAssemblyLineRecipe recipe) {
             buffer.writeVarInt(recipe.itemInputs.size());
-            for (ItemInput input : recipe.itemInputs) {
+            for (CountedIngredient input : recipe.itemInputs) {
                 input.ingredient().toNetwork(buffer);
                 buffer.writeVarInt(input.count());
             }

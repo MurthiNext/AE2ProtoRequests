@@ -34,22 +34,12 @@ import com.murthinext.ae2pr.ModRecipes;
 /**
  * 水晶反应仓配方。
  */
-public class CrystalReactionChamberRecipe implements Recipe<Container> {
+public class CrystalReactionChamberRecipe implements Recipe<Container>, MultiblockRecipe {
 
     public static final int DEFAULT_DURATION = 200;
 
-    /**
-     * 物品输入：匹配器与单次消耗数量。
-     */
-    public record ItemInput(Ingredient ingredient, int count) {
-
-        public boolean test(ItemStack stack) {
-            return !stack.isEmpty() && ingredient.test(stack);
-        }
-    }
-
     private final ResourceLocation id;
-    private final List<ItemInput> itemInputs;
+    private final List<CountedIngredient> itemInputs;
     private final List<FluidStack> fluidInputs;
     private final List<ItemStack> itemOutputs;
     private final List<FluidStack> fluidOutputs;
@@ -57,8 +47,8 @@ public class CrystalReactionChamberRecipe implements Recipe<Container> {
     @Nullable
     private final Double energyPerParallel;
 
-    public CrystalReactionChamberRecipe(ResourceLocation id, List<ItemInput> itemInputs, List<FluidStack> fluidInputs,
-            List<ItemStack> itemOutputs, List<FluidStack> fluidOutputs, int duration,
+    public CrystalReactionChamberRecipe(ResourceLocation id, List<CountedIngredient> itemInputs,
+            List<FluidStack> fluidInputs, List<ItemStack> itemOutputs, List<FluidStack> fluidOutputs, int duration,
             @Nullable Double energyPerParallel) {
         this.id = id;
         this.itemInputs = List.copyOf(itemInputs);
@@ -69,26 +59,32 @@ public class CrystalReactionChamberRecipe implements Recipe<Container> {
         this.energyPerParallel = energyPerParallel;
     }
 
-    public List<ItemInput> getItemInputs() {
+    @Override
+    public List<CountedIngredient> getItemInputs() {
         return itemInputs;
     }
 
+    @Override
     public List<FluidStack> getFluidInputs() {
         return fluidInputs;
     }
 
+    @Override
     public List<ItemStack> getItemOutputs() {
         return itemOutputs;
     }
 
+    @Override
     public List<FluidStack> getFluidOutputs() {
         return fluidOutputs;
     }
 
+    @Override
     public int getDuration() {
         return duration;
     }
 
+    @Override
     public double getEnergyPerParallel() {
         return energyPerParallel != null ? energyPerParallel : Config.crystalReactionEnergyPerParallel();
     }
@@ -142,14 +138,14 @@ public class CrystalReactionChamberRecipe implements Recipe<Container> {
 
         @Override
         public CrystalReactionChamberRecipe fromJson(ResourceLocation id, JsonObject json) {
-            List<ItemInput> itemInputs = new ArrayList<>();
+            List<CountedIngredient> itemInputs = new ArrayList<>();
             for (JsonElement element : GsonHelper.getAsJsonArray(json, "item_inputs", new JsonArray())) {
                 JsonObject obj = element.getAsJsonObject();
                 int count = GsonHelper.getAsInt(obj, "count", 1);
                 if (count < 1) {
                     throw new JsonSyntaxException("item_inputs 的 count 必须 >= 1");
                 }
-                itemInputs.add(new ItemInput(Ingredient.fromJson(obj), count));
+                itemInputs.add(new CountedIngredient(Ingredient.fromJson(obj), count));
             }
 
             List<FluidStack> fluidInputs = new ArrayList<>();
@@ -214,9 +210,9 @@ public class CrystalReactionChamberRecipe implements Recipe<Container> {
         @Override
         public CrystalReactionChamberRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
             int itemInputCount = buffer.readVarInt();
-            List<ItemInput> itemInputs = new ArrayList<>(itemInputCount);
+            List<CountedIngredient> itemInputs = new ArrayList<>(itemInputCount);
             for (int i = 0; i < itemInputCount; i++) {
-                itemInputs.add(new ItemInput(Ingredient.fromNetwork(buffer), buffer.readVarInt()));
+                itemInputs.add(new CountedIngredient(Ingredient.fromNetwork(buffer), buffer.readVarInt()));
             }
             int fluidInputCount = buffer.readVarInt();
             List<FluidStack> fluidInputs = new ArrayList<>(fluidInputCount);
@@ -243,7 +239,7 @@ public class CrystalReactionChamberRecipe implements Recipe<Container> {
         @Override
         public void toNetwork(FriendlyByteBuf buffer, CrystalReactionChamberRecipe recipe) {
             buffer.writeVarInt(recipe.itemInputs.size());
-            for (ItemInput input : recipe.itemInputs) {
+            for (CountedIngredient input : recipe.itemInputs) {
                 input.ingredient().toNetwork(buffer);
                 buffer.writeVarInt(input.count());
             }

@@ -27,7 +27,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationMode;
 
-public class CrystalWorkstationRecipe implements Recipe<Container> {
+public class CrystalWorkstationRecipe implements Recipe<Container>, MultiblockRecipe {
 
     public static final int MAX_ITEM_INPUTS = 6;
     public static final int MAX_ITEM_OUTPUTS = 6;
@@ -59,26 +59,32 @@ public class CrystalWorkstationRecipe implements Recipe<Container> {
         return mode;
     }
 
+    @Override
     public List<CountedIngredient> getItemInputs() {
         return itemInputs;
     }
 
+    @Override
     public List<FluidStack> getFluidInputs() {
         return fluidInputs;
     }
 
+    @Override
     public List<ItemStack> getItemOutputs() {
         return itemOutputs;
     }
 
+    @Override
     public List<FluidStack> getFluidOutputs() {
         return fluidOutputs;
     }
 
+    @Override
     public int getDuration() {
         return duration;
     }
 
+    @Override
     public double getEnergyPerParallel() {
         return energy;
     }

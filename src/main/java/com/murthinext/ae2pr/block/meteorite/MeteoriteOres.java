@@ -34,9 +34,8 @@ public final class MeteoriteOres {
     private MeteoriteOres() {
     }
 
-    /**
-     * 随机选取一种矿石，锆英石与原版矿石约为 1:1。
-     */
+
+    // 锆英石：原版矿石=1:1
     public static BlockState randomOre(RandomSource random) {
         if (random.nextFloat() < 0.5F) {
             return ModBlocks.METEORITE_ZIRCON_ORE.get().defaultBlockState();
@@ -51,9 +50,6 @@ public final class MeteoriteOres {
         return ModBlocks.METEORITE_IRON_ORE.get().defaultBlockState();
     }
 
-    /**
-     * 与天空石一致：使用铁镐以上工具挖掘时速度提升 10 倍。
-     */
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
         if (!(event.getState().getBlock() instanceof MeteoriteOreBlock)) {
             return;

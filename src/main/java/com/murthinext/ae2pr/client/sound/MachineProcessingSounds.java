@@ -14,7 +14,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,10 +21,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import com.murthinext.ae2pr.ModSounds;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
-import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberBlock;
-import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
-import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerBlock;
+import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 
 /**
  * 客户端加工循环音效与卸载清理。
@@ -37,27 +33,18 @@ public final class MachineProcessingSounds {
     private static final Map<BlockEntity, ProcessingSound> SOUNDS = new HashMap<>();
 
     public enum Type {
-        ASSEMBLY_LINE(ModSounds.ASSEMBLY_LINE, CrystalAssemblyLineBlock.FORMED,
-                CrystalAssemblyLineBlock.RUNNING, 1.0F, 1.0F, 0),
-        LAVA_SMELTER(() -> SoundEvents.LAVA_AMBIENT, HighReactivityLavaSmelterBlock.FORMED,
-                HighReactivityLavaSmelterBlock.RUNNING, 0.4F, 0.8F, 0),
-        MATTER_PHASE_TRANSFORMER(ModSounds.MATTER_PHASE_TRANSFORMER, MatterPhaseTransformerBlock.FORMED,
-                MatterPhaseTransformerBlock.RUNNING, 0.65F, 1.0F, 0),
-        CRYSTAL_REACTION(ModSounds.CRYSTAL_REACTION, CrystalReactionChamberBlock.FORMED,
-                CrystalReactionChamberBlock.RUNNING, 0.7F, 1.0F, 0);
+        ASSEMBLY_LINE(ModSounds.ASSEMBLY_LINE, 1.0F, 1.0F, 0),
+        LAVA_SMELTER(() -> SoundEvents.LAVA_AMBIENT, 0.4F, 0.8F, 0),
+        MATTER_PHASE_TRANSFORMER(ModSounds.MATTER_PHASE_TRANSFORMER, 0.65F, 1.0F, 0),
+        CRYSTAL_REACTION(ModSounds.CRYSTAL_REACTION, 0.7F, 1.0F, 0);
 
         private final Supplier<SoundEvent> sound;
-        private final BooleanProperty formed;
-        private final BooleanProperty running;
         private final float volume;
         private final float pitch;
         private final int delay;
 
-        Type(Supplier<SoundEvent> sound, BooleanProperty formed, BooleanProperty running,
-                float volume, float pitch, int delay) {
+        Type(Supplier<SoundEvent> sound, float volume, float pitch, int delay) {
             this.sound = sound;
-            this.formed = formed;
-            this.running = running;
             this.volume = volume;
             this.pitch = pitch;
             this.delay = delay;
@@ -65,8 +52,10 @@ public final class MachineProcessingSounds {
 
         private boolean isRunning(BlockEntity controller) {
             BlockState state = controller.getBlockState();
-            return state.hasProperty(formed) && state.hasProperty(running)
-                    && state.getValue(formed) && state.getValue(running);
+            return state.hasProperty(AbstractMultiblockControllerBlock.FORMED)
+                    && state.hasProperty(AbstractMultiblockControllerBlock.RUNNING)
+                    && state.getValue(AbstractMultiblockControllerBlock.FORMED)
+                    && state.getValue(AbstractMultiblockControllerBlock.RUNNING);
         }
     }
 

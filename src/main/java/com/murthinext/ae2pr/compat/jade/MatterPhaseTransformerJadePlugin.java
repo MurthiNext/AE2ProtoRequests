@@ -1,10 +1,8 @@
 package com.murthinext.ae2pr.compat.jade;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.fluids.FluidStack;
 
 import snownee.jade.api.WailaPlugin;
 
@@ -41,14 +39,5 @@ public class MatterPhaseTransformerJadePlugin extends AbstractMultiblockJadePlug
     @Override
     protected int progressColor() {
         return 0xFF62D0DA;
-    }
-
-    @Override
-    protected JobState jobState(BlockEntity controller) {
-        MatterPhaseTransformerControllerBlockEntity transformer =
-                (MatterPhaseTransformerControllerBlockEntity) controller;
-        FluidStack output = transformer.getJobFluid();
-        return new JobState(transformer.isFormed(), transformer.isEnergyConnected(), transformer.getJobElapsed(),
-                transformer.getJobDuration(), ItemStack.EMPTY, output);
     }
 }

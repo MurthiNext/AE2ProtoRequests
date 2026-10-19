@@ -33,7 +33,7 @@ import com.murthinext.ae2pr.ModRecipes;
 /**
  * 物质相变仪配方。
  */
-public class MatterPhaseTransformerRecipe implements Recipe<Container> {
+public class MatterPhaseTransformerRecipe implements Recipe<Container>, MultiblockRecipe {
 
     public static final int DEFAULT_DURATION = 200;
 
@@ -53,18 +53,39 @@ public class MatterPhaseTransformerRecipe implements Recipe<Container> {
         this.energyPerParallel = energyPerParallel;
     }
 
-    public List<CountedIngredient> getCountedIngredients() {
+    @Override
+    public List<CountedIngredient> getItemInputs() {
         return ingredients;
     }
 
+    @Override
+    public List<FluidStack> getFluidInputs() {
+        return List.of();
+    }
+
+    @Override
+    public List<ItemStack> getItemOutputs() {
+        return List.of();
+    }
+
+    @Override
+    public List<FluidStack> getFluidOutputs() {
+        return List.of(fluidOutput);
+    }
+
+    /**
+     * 唯一流体产物的副本。
+     */
     public FluidStack getFluidOutput() {
         return fluidOutput.copy();
     }
 
+    @Override
     public int getDuration() {
         return duration;
     }
 
+    @Override
     public double getEnergyPerParallel() {
         return energyPerParallel != null ? energyPerParallel : Config.matterPhaseTransformerEnergyPerParallel();
     }

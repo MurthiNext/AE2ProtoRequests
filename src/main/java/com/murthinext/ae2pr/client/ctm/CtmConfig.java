@@ -12,14 +12,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.ModBlocks;
-import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
-import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberBlock;
-import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationBlock;
-import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
-import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerBlock;
+import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
 
 /**
@@ -133,22 +129,22 @@ public final class CtmConfig {
 
     @Nullable
     public static MachinePartFacade facade(BlockState state) {
-        if (state.is(ModBlocks.CRYSTAL_WORKSTATION.get()) && state.getValue(CrystalWorkstationBlock.FORMED)) {
+        if (state.is(ModBlocks.CRYSTAL_WORKSTATION.get()) && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
             return MachinePartFacade.HIGH_POWER;
         }
         if (state.is(ModBlocks.CRYSTAL_ASSEMBLY_LINE.get())
-                && state.getValue(CrystalAssemblyLineBlock.FORMED)) {
+                && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
             return MachinePartFacade.CRYSTAL;
         }
         if (state.is(ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get())
-                && state.getValue(HighReactivityLavaSmelterBlock.FORMED)) {
+                && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIA;
         }
-        if (state.is(ModBlocks.MATTER_PHASE_TRANSFORMER.get()) && state.getValue(MatterPhaseTransformerBlock.FORMED)) {
+        if (state.is(ModBlocks.MATTER_PHASE_TRANSFORMER.get()) && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIA;
         }
         if (state.is(ModBlocks.CRYSTAL_REACTION_CHAMBER.get())
-                && state.getValue(CrystalReactionChamberBlock.FORMED)) {
+                && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
             return MachinePartFacade.CRYSTAL;
         }
         if (state.getBlock() instanceof MachinePartBlock && state.getValue(MachinePartBlock.FORMED)) {
