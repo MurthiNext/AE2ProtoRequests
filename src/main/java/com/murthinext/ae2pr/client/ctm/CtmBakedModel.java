@@ -17,6 +17,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.data.ModelData;
 
+import com.murthinext.ae2pr.client.gui.crystal_workstation.CrystalWorkstationCtm;
+
 /**
  * 连接纹理的模型包装：注入方块位置并按邻居重写 UV。
  */
@@ -45,46 +47,42 @@ public class CtmBakedModel extends BakedModelWrapper<BakedModel> {
             return quads;
         }
 
+        BlockAndTintGetter level = data.get(CtmModelProperties.LEVEL);
+        BlockPos pos = data.get(CtmModelProperties.POS);
+
         // 多方块成型换装：替换基础面贴图为结构外观贴图
         TextureAtlasSprite facade = CtmConfig.facadeSprite(state);
         if (facade != null) {
             TextureAtlasSprite base = CtmConfig.facadeBaseSprite(state);
             if (base != null && base != facade) {
-                quads = retargetFacade(quads, base, facade);
+                quads = retarget(quads, base, facade);
             }
         }
 
-        BlockAndTintGetter level = data.get(CtmModelProperties.LEVEL);
-        BlockPos pos = data.get(CtmModelProperties.POS);
-        if (level == null || pos == null || !CtmConfig.enabled(state)) {
+        if (level == null || pos == null) {
             return quads;
         }
-
-        int worldMask = CtmConfig.worldMask(level, pos, state);
-        List<BakedQuad> result = null;
-        for (int i = 0; i < quads.size(); i++) {
-            BakedQuad quad = quads.get(i);
-            TextureAtlasSprite atlas = CtmSprites.atlasFor(quad.getSprite());
-            if (atlas == null) {
-                if (result != null) {
-                    result.add(quad);
-                }
-                continue;
-            }
-            if (result == null) {
-                result = new ArrayList<>(quads.size());
-                result.addAll(quads.subList(0, i));
-            }
-            result.add(CtmMeshBuilder.rewrite(quad, quad.getSprite(), atlas, worldMask));
+        // 晶能工作站成型外观全部在客户端替换
+        List<BakedQuad> appearance = CrystalWorkstationCtm.appearance(quads, side, level, pos);
+        if (appearance != null) {
+            return appearance;
         }
-        return result != null ? result : quads;
-    }
-
-    private static List<BakedQuad> retargetFacade(List<BakedQuad> quads, TextureAtlasSprite base,
-            TextureAtlasSprite facade) {
+        if (!CtmConfig.enabled(state)) {
+            return quads;
+        }
+        int worldMask = CtmConfig.worldMask(level, pos, state);
         List<BakedQuad> result = new ArrayList<>(quads.size());
         for (BakedQuad quad : quads) {
-            result.add(quad.getSprite() == base ? CtmMeshBuilder.retarget(quad, base, facade) : quad);
+            TextureAtlasSprite atlas = CtmSprites.atlasFor(quad.getSprite());
+            result.add(atlas != null ? CtmMeshBuilder.rewrite(quad, quad.getSprite(), atlas, worldMask) : quad);
+        }
+        return result;
+    }
+
+    private static List<BakedQuad> retarget(List<BakedQuad> quads, TextureAtlasSprite from, TextureAtlasSprite to) {
+        List<BakedQuad> result = new ArrayList<>(quads.size());
+        for (BakedQuad quad : quads) {
+            result.add(quad.getSprite() == from ? CtmMeshBuilder.retarget(quad, from, to) : quad);
         }
         return result;
     }

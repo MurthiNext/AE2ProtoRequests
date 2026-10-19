@@ -18,7 +18,7 @@ public class CrystalWorkstationScreen extends AbstractMultiblockControllerScreen
 
     private static final int COLOR_TITLE = 0x8EE6E0;
 
-    private WorkstationModeButton modeButton;
+    private CrystalWorkstationModeButton modeButton;
 
     public CrystalWorkstationScreen(CrystalWorkstationMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -47,7 +47,7 @@ public class CrystalWorkstationScreen extends AbstractMultiblockControllerScreen
     @Override
     protected void init() {
         super.init();
-        modeButton = new WorkstationModeButton(leftPos + TOOLBAR_X + 1,
+        modeButton = new CrystalWorkstationModeButton(leftPos + TOOLBAR_X + 1,
                 topPos + TOOLBAR_Y + 1 + TOOLBAR_ROW_STEP, () -> {
                     if (minecraft != null && minecraft.gameMode != null) {
                         minecraft.gameMode.handleInventoryButtonClick(menu.containerId,

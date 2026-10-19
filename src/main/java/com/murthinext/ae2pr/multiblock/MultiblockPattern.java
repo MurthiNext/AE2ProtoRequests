@@ -79,15 +79,33 @@ public final class MultiblockPattern {
     }
 
     /**
+     * 结构内单元格及其符号、片行列信息。
+     */
+    public record PatternCell(BlockPos pos, char symbol, int slice, int row, int col) {
+    }
+
+    /**
      * 按给定片数计算结构内全部单元格；可重复片尽量取满。
      */
     public List<BlockPos> cells(BlockPos controllerPos, Direction front, Direction up, boolean mirrorSide,
+            boolean mirrorFront, int totalSlices) {
+        List<BlockPos> result = new ArrayList<>();
+        for (PatternCell cell : patternCells(controllerPos, front, up, mirrorSide, mirrorFront, totalSlices)) {
+            result.add(cell.pos());
+        }
+        return result;
+    }
+
+    /**
+     * 同 {@link #cells}，同时保留符号与片行列坐标，供外观逻辑区分结构部位。
+     */
+    public List<PatternCell> patternCells(BlockPos controllerPos, Direction front, Direction up, boolean mirrorSide,
             boolean mirrorFront, int totalSlices) {
         Direction sliceFacing = sliceDir.getFacing(front, up, mirrorSide, mirrorFront);
         Direction stringFacing = stringDir.getFacing(front, up, mirrorSide, mirrorFront);
         Direction charFacing = charDir.getFacing(front, up, mirrorSide, mirrorFront);
         int[] repeats = expandCounts(totalSlices);
-        List<BlockPos> result = new ArrayList<>();
+        List<PatternCell> result = new ArrayList<>();
         int sliceIndex = 0;
         for (int i = 0; i < slices.size(); i++) {
             Slice slice = slices.get(i);
@@ -95,10 +113,12 @@ public final class MultiblockPattern {
                 for (int r = 0; r < rows; r++) {
                     String row = slice.rows()[r];
                     for (int c = 0; c < cols; c++) {
-                        if (predicates.get(row.charAt(c)).isAny()) {
+                        char symbol = row.charAt(c);
+                        if (predicates.get(symbol).isAny()) {
                             continue;
                         }
-                        result.add(cell(controllerPos, sliceFacing, stringFacing, charFacing, sliceIndex, r, c));
+                        BlockPos pos = cell(controllerPos, sliceFacing, stringFacing, charFacing, sliceIndex, r, c);
+                        result.add(new PatternCell(pos, symbol, sliceIndex, r, c));
                     }
                 }
             }

@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 
+import com.murthinext.ae2pr.client.gui.crystal_workstation.CrystalWorkstationShell;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 
 /**
@@ -40,5 +41,10 @@ public class CrystalWorkstationBlock extends AbstractMultiblockControllerBlock<C
         return new SimpleMenuProvider(
                 (id, inventory, player) -> new CrystalWorkstationMenu(id, inventory, controller),
                 Component.translatable("block.ae2pr.crystal_workstation"));
+    }
+
+    @Override
+    protected void clientTick(CrystalWorkstationControllerBlockEntity controller) {
+        CrystalWorkstationShell.update(controller);
     }
 }

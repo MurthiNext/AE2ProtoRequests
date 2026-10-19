@@ -23,6 +23,7 @@ import com.murthinext.ae2pr.client.gui.tooltip.ColorEffectLine;
 import com.murthinext.ae2pr.client.gui.assembly_line.AssemblyLineScreen;
 import com.murthinext.ae2pr.client.gui.crystal_reaction_chamber.CrystalReactionChamberRenderer;
 import com.murthinext.ae2pr.client.gui.crystal_reaction_chamber.CrystalReactionChamberScreen;
+import com.murthinext.ae2pr.client.gui.crystal_workstation.CrystalWorkstationRenderer;
 import com.murthinext.ae2pr.client.gui.crystal_workstation.CrystalWorkstationScreen;
 import com.murthinext.ae2pr.client.gui.machine_part.FluidHatchScreen;
 import com.murthinext.ae2pr.client.gui.machine_part.ItemBusScreen;
@@ -95,6 +96,8 @@ public final class ClientSetup {
                 MatterPhaseTransformerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_REACTION_CHAMBER.get(),
                 CrystalReactionChamberRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_WORKSTATION.get(),
+                CrystalWorkstationRenderer::new);
     }
 
     @SubscribeEvent

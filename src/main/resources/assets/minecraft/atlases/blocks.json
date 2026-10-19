@@ -30,6 +30,10 @@
     },
     {
       "type": "single",
+      "resource": "ae2pr:block/crystal_workstation/panel_face"
+    },
+    {
+      "type": "single",
       "resource": "ae2pr:block/naming_factory"
     },
     {

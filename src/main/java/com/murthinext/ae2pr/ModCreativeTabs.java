@@ -27,23 +27,20 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.FILTER_CELL.get());
                         output.accept(ModItems.ADVANCED_FILTER_CELL.get());
                         output.accept(ModItems.PROTO_TERMINAL.get());
+                        output.accept(ModItems.SINGLE_PLATE_PRESS.get());
+                        output.accept(ModItems.DIAMOND_WAFER.get());
+                        output.accept(ModItems.ZIRCON_CIRCUIT_BOARD.get());
+
+                        // 电路板
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_1TOPS.get());
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_4TOPS.get());
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_16TOPS.get());
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_64TOPS.get());
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_256TOPS.get());
-                        output.accept(ModItems.SINGLE_PLATE_PRESS.get());
-                        output.accept(ModItems.DIAMOND_WAFER.get());
-                        output.accept(ModItems.ZIRCON_CIRCUIT_BOARD.get());
 
                         // 奇点
                         output.accept(ModItems.UNCHARGED_SINGULARITY.get());
                         output.accept(ModItems.HIGH_ENERGY_SINGULARITY.get());
-                        output.accept(ModItems.ALIEN_LAVA_BUCKET.get());
-                        output.accept(ModItems.LIQUID_CERTUS_QUARTZ_BUCKET.get());
-                        output.accept(ModItems.LIQUID_FLUIX_CRYSTAL_BUCKET.get());
-                        output.accept(ModItems.LIQUID_AMETHYST_BUCKET.get());
-                        output.accept(ModItems.LIQUID_CRYSTALINE_BUCKET.get());
 
                         // 锭 & 宝石
                         output.accept(ModItems.METEOR_STEEL_INGOT.get());
@@ -51,6 +48,8 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.ZIRCONIUM_IRON_ALLOY_INGOT.get());
                         output.accept(ModItems.ZIRCON_BRICK.get());
                         output.accept(ModItems.ZIRCON.get());
+
+                        // 特殊物品
                         output.accept(ModItems.CRYSTALINE.get());
 
                         // 粉末
@@ -64,6 +63,13 @@ public final class ModCreativeTabs {
                         // 单层板
                         output.accept(ModItems.METEOR_STEEL_PLATE.get());
                         output.accept(ModItems.ZIRCONIUM_PLATE.get());
+
+                        // 桶
+                        output.accept(ModItems.ALIEN_LAVA_BUCKET.get());
+                        output.accept(ModItems.LIQUID_CERTUS_QUARTZ_BUCKET.get());
+                        output.accept(ModItems.LIQUID_FLUIX_CRYSTAL_BUCKET.get());
+                        output.accept(ModItems.LIQUID_AMETHYST_BUCKET.get());
+                        output.accept(ModItems.LIQUID_CRYSTALINE_BUCKET.get());
 
                         // 储存方块
                         output.accept(ModItems.METEOR_STEEL_BLOCK.get());

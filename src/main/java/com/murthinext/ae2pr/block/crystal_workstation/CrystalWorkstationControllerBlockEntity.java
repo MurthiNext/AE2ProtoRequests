@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModBlockEntities;
@@ -88,5 +89,12 @@ public class CrystalWorkstationControllerBlockEntity extends AbstractMultiblockC
     @Override
     public BlockPos getCorePos() {
         return CrystalWorkstationStructure.corePos(worldPosition, getFacing(), mirrorFront);
+    }
+
+    @Override
+    public AABB getRenderBoundingBox() {
+        BlockPos core = getCorePos();
+        // 覆盖两侧面板与内腔粒子
+        return new AABB(core).inflate(5.0);
     }
 }

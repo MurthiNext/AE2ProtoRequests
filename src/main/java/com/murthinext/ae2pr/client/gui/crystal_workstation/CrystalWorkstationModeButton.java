@@ -12,7 +12,7 @@ import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationMode;
 /**
  * 左侧工具栏的工作模式切换按钮，图标随当前模式变化。
  */
-public class WorkstationModeButton extends AbstractWidget {
+public class CrystalWorkstationModeButton extends AbstractWidget {
 
     private static final int SIZE = 18;
     private static final int ICON_OFFSET = 1;
@@ -27,7 +27,7 @@ public class WorkstationModeButton extends AbstractWidget {
     private final Runnable onPress;
     private CrystalWorkstationMode mode = CrystalWorkstationMode.ETCHING;
 
-    public WorkstationModeButton(int x, int y, Runnable onPress) {
+    public CrystalWorkstationModeButton(int x, int y, Runnable onPress) {
         super(x, y, SIZE, SIZE, Component.empty());
         this.onPress = onPress;
     }

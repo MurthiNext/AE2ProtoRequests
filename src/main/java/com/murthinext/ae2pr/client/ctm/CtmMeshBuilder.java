@@ -80,6 +80,16 @@ public final class CtmMeshBuilder {
         return new BakedQuad(out, quad.getTintIndex(), quad.getDirection(), to, quad.isShade());
     }
 
+    @Nullable
+    public static Direction uAxis(BakedQuad quad) {
+        return axisFromUvs(quad.getVertices(), true);
+    }
+
+    @Nullable
+    public static Direction vAxis(BakedQuad quad) {
+        return axisFromUvs(quad.getVertices(), false);
+    }
+
     /**
      * 计算该面的 47-tile 图块序号，角掩码需两条邻边均已连接。
      */

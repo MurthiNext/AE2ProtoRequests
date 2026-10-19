@@ -1,6 +1,7 @@
 package com.murthinext.ae2pr.client.ctm;
 
 import java.util.Arrays;
+import java.util.function.BiPredicate;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -208,6 +209,31 @@ public final class CtmConfig {
                 continue;
             }
             if (connects(level.getBlockState(pos.relative(EDGES[i][0]).relative(EDGES[i][1])), state)) {
+                mask |= 1 << (6 + i);
+            }
+        }
+        return mask;
+    }
+
+    /**
+     * 以自定义连接判定计算掩码，用于跨方块族的成型外观。
+     *
+     * @param joined 判定某个邻居位置是否与本方块相连
+     */
+    public static int mask(BlockAndTintGetter level, BlockPos pos, BiPredicate<BlockPos, BlockState> joined) {
+        int mask = 0;
+        for (Direction dir : Direction.values()) {
+            BlockPos neighbor = pos.relative(dir);
+            if (joined.test(neighbor, level.getBlockState(neighbor))) {
+                mask |= 1 << dir.ordinal();
+            }
+        }
+        for (int i = 0; i < EDGES.length; i++) {
+            if (!connected(mask, EDGES[i][0]) || !connected(mask, EDGES[i][1])) {
+                continue;
+            }
+            BlockPos neighbor = pos.relative(EDGES[i][0]).relative(EDGES[i][1]);
+            if (joined.test(neighbor, level.getBlockState(neighbor))) {
                 mask |= 1 << (6 + i);
             }
         }
