@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr;
 
+import java.util.Optional;
+
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
@@ -17,6 +19,7 @@ import com.murthinext.ae2pr.network.TerminalStoryWatchPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
@@ -24,7 +27,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
  * 模组自有网络通道。
  */
 public final class ModNetwork {
-    private static final String PROTOCOL_VERSION = "3";
+    private static final String PROTOCOL_VERSION = "4";
 
     public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
             .named(ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "main"))
@@ -97,31 +100,31 @@ public final class ModNetwork {
                 TerminalStoryRequestPacket.class,
                 TerminalStoryRequestPacket::encode,
                 TerminalStoryRequestPacket::decode,
-                TerminalStoryRequestPacket::handle);
+                TerminalStoryRequestPacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
         CHANNEL.registerMessage(nextMessageId++,
                 TerminalStoryUpdatePacket.class,
                 TerminalStoryUpdatePacket::encode,
                 TerminalStoryUpdatePacket::decode,
-                TerminalStoryUpdatePacket::handle);
+                TerminalStoryUpdatePacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
         CHANNEL.registerMessage(nextMessageId++,
                 TerminalStoryWatchPacket.class,
                 TerminalStoryWatchPacket::encode,
                 TerminalStoryWatchPacket::decode,
-                TerminalStoryWatchPacket::handle);
+                TerminalStoryWatchPacket::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
         CHANNEL.registerMessage(nextMessageId++,
                 TerminalStorySyncPacket.class,
                 TerminalStorySyncPacket::encode,
                 TerminalStorySyncPacket::decode,
-                TerminalStorySyncPacket::handle);
+                TerminalStorySyncPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 
         CHANNEL.registerMessage(nextMessageId++,
                 TerminalStoryUnlockPacket.class,
                 TerminalStoryUnlockPacket::encode,
                 TerminalStoryUnlockPacket::decode,
-                TerminalStoryUnlockPacket::handle);
+                TerminalStoryUnlockPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToPlayer(ServerPlayer player, RepeatOrderStatusPacket packet) {

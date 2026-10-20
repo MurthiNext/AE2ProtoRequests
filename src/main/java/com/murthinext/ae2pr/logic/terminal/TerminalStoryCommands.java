@@ -15,6 +15,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -73,10 +74,14 @@ public final class TerminalStoryCommands {
     }
 
     private static int resetBlock(CommandSourceStack source, String block, List<ServerPlayer> targets) {
+        ResourceLocation location = ResourceLocation.tryParse(block.contains(":") ? block : "ae2pr:" + block);
+        if (location == null) {
+            return usage(source);
+        }
         TerminalStorySavedData data = TerminalStorySavedData.get(source.getServer());
         List<ServerPlayer> reset = new ArrayList<>();
         for (ServerPlayer player : targets) {
-            if (data.resetNode(player.getUUID(), block)) {
+            if (data.resetNode(player.getUUID(), location.toString())) {
                 reset.add(player);
             }
             sync(data, player);
@@ -92,7 +97,7 @@ public final class TerminalStoryCommands {
 
     private static void sync(TerminalStorySavedData data, ServerPlayer player) {
         ModNetwork.sendToPlayer(player,
-                new TerminalStorySyncPacket(data.get(player.getUUID()), true));
+                new TerminalStorySyncPacket(data.get(player.getUUID())));
     }
 
     private static String names(List<ServerPlayer> players) {

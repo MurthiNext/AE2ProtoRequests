@@ -1,125 +1,79 @@
 package com.murthinext.ae2pr.logic.terminal;
 
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 import com.murthinext.ae2pr.ae2pr;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
 
 /**
- * 存档内的源始终端阅读进度，按玩家 UUID 保存。
+ * 按玩家保存 Ink 快照与终端阅读记录。
  */
 public class TerminalStorySavedData extends SavedData {
 
-    private static final String DATA_NAME = "ae2pr_terminal_story";
-    private static final String PLAYERS_KEY = "players";
-    private static final int MAX_NODE_JSON = 16384;
-    private static final int MAX_NODES = 256;
-    private static final int MAX_PROGRESS = 1048576;
-
-    private final Map<UUID, String> players = new HashMap<>();
+    private static final String DATA_NAME = "ae2pr_terminal_ink";
+    private final Map<UUID, TerminalStoryProgress> players = new HashMap<>();
 
     public static TerminalStorySavedData get(MinecraftServer server) {
         return server.overworld().getDataStorage()
                 .computeIfAbsent(TerminalStorySavedData::load, TerminalStorySavedData::new, DATA_NAME);
     }
 
-    /**
-     * 玩家当前存档的完整进度 JSON，没有记录时返回空串。
-     */
-    public String get(UUID player) {
-        String json = players.getOrDefault(player, "");
-        if (json.length() > MAX_PROGRESS) {
-            ae2pr.LOGGER.warn("源始终端阅读进度过大，已忽略：{}", player);
-            return "";
-        }
-        return json;
+    public TerminalStoryProgress get(UUID player) {
+        return players.getOrDefault(player, new TerminalStoryProgress());
     }
 
-    /**
-     * 合并单个剧情块进度与标签集合。
-     */
-    public void merge(UUID player, String nodeId, String nodeJson, List<String> tags) {
-        if (nodeId.isEmpty() || nodeJson == null || nodeJson.length() > MAX_NODE_JSON) {
-            return;
+    public boolean update(UUID player, TerminalStoryProgress progress) throws IOException {
+        TerminalStoryProgress current = players.get(player);
+        if (progress.epoch != (current == null ? 0 : current.epoch)) {
+            return false;
         }
-        JsonObject root;
-        try {
-            root = players.containsKey(player) ? JsonParser.parseString(players.get(player)).getAsJsonObject()
-                    : new JsonObject();
-        } catch (JsonSyntaxException | IllegalStateException exception) {
-            ae2pr.LOGGER.warn("源始终端阅读进度损坏，已重建：{}", player, exception);
-            root = new JsonObject();
+        if (current != null && current.programId.equals(progress.programId)) {
+            var nodes = new LinkedHashMap<>(current.nodes);
+            nodes.putAll(progress.nodes);
+            progress.nodes = nodes;
         }
-        JsonObject node;
-        try {
-            node = JsonParser.parseString(nodeJson).getAsJsonObject();
-        } catch (JsonSyntaxException | IllegalStateException exception) {
-            ae2pr.LOGGER.warn("源始终端剧情进度无效：{} / {}", player, nodeId, exception);
-            return;
+        if (progress.nodes.size() > 128) {
+            throw new IOException("剧情块存档超过上限");
         }
-        JsonArray tagArray = new JsonArray();
-        for (String tag : tags) {
-            tagArray.add(tag);
-        }
-        root.add("tags", tagArray);
-        JsonObject nodes = root.has("nodes") && root.get("nodes").isJsonObject()
-                ? root.getAsJsonObject("nodes") : new JsonObject();
-        if (!nodes.has(nodeId) && nodes.size() >= MAX_NODES) {
-            ae2pr.LOGGER.warn("源始终端阅读进度剧情块过多，已忽略：{} / {}", player, nodeId);
-            return;
-        }
-        nodes.add(nodeId, node);
-        root.add("nodes", nodes);
-        players.put(player, root.toString());
+        progress.compress();
+        players.put(player, progress);
         setDirty();
+        return true;
     }
 
     public void resetAll(UUID player) {
-        if (players.remove(player) != null) {
-            setDirty();
-        }
+        TerminalStoryProgress previous = players.get(player);
+        TerminalStoryProgress progress = new TerminalStoryProgress();
+        progress.epoch = previous == null ? 1 : previous.epoch + 1;
+        players.put(player, progress);
+        setDirty();
     }
 
     public boolean resetNode(UUID player, String nodeId) {
-        String json = players.get(player);
-        if (json == null) {
+        TerminalStoryProgress progress = players.get(player);
+        if (progress == null || !progress.resetNode(nodeId)) {
             return false;
         }
-        JsonObject root;
-        try {
-            root = JsonParser.parseString(json).getAsJsonObject();
-        } catch (JsonSyntaxException | IllegalStateException exception) {
-            players.remove(player);
-            setDirty();
-            ae2pr.LOGGER.warn("源始终端阅读进度损坏，已清空：{}", player, exception);
-            return false;
-        }
-        if (!root.has("nodes") || !root.get("nodes").isJsonObject()
-                || root.getAsJsonObject("nodes").remove(nodeId) == null) {
-            return false;
-        }
-        players.put(player, root.toString());
+        progress.epoch++;
         setDirty();
         return true;
     }
 
     private static TerminalStorySavedData load(CompoundTag tag) {
         TerminalStorySavedData data = new TerminalStorySavedData();
-        CompoundTag playersTag = tag.getCompound(PLAYERS_KEY);
-        for (String key : playersTag.getAllKeys()) {
+        CompoundTag players = tag.getCompound("players");
+        for (String key : players.getAllKeys()) {
             try {
-                data.players.put(UUID.fromString(key), playersTag.getString(key));
-            } catch (IllegalArgumentException exception) {
-                ae2pr.LOGGER.warn("源始终端阅读进度玩家标识无效：{}", key);
+                TerminalStoryProgress progress = TerminalStoryProgress.decompress(players.getByteArray(key));
+                data.players.put(UUID.fromString(key), progress);
+            } catch (IOException | RuntimeException exception) {
+                ae2pr.LOGGER.warn("源始终端剧情存档无效，已忽略玩家记录：{}", key, exception);
             }
         }
         return data;
@@ -128,8 +82,14 @@ public class TerminalStorySavedData extends SavedData {
     @Override
     public CompoundTag save(CompoundTag tag) {
         CompoundTag playersTag = new CompoundTag();
-        players.forEach((player, json) -> playersTag.putString(player.toString(), json));
-        tag.put(PLAYERS_KEY, playersTag);
+        players.forEach((player, progress) -> {
+            try {
+                playersTag.putByteArray(player.toString(), progress.compress());
+            } catch (IOException exception) {
+                throw new IllegalStateException("无法保存玩家剧情快照：" + player, exception);
+            }
+        });
+        tag.put("players", playersTag);
         return tag;
     }
 }

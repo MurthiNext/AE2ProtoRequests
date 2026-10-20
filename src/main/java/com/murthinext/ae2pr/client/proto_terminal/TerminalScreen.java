@@ -1,22 +1,22 @@
 package com.murthinext.ae2pr.client.proto_terminal;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Deque;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.client.proto_terminal.TerminalStoryTree.Unlock;
+import com.murthinext.ae2pr.logic.terminal.TerminalStoryCondition;
+import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress;
+import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress.Line;
+import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress.NodeProgress;
+import com.murthinext.ae2pr.logic.terminal.TerminalStoryRunner;
+import com.murthinext.ae2pr.logic.terminal.TerminalStoryRunner.Choice;
 import com.murthinext.ae2pr.logic.terminal.TerminalUnlockCondition;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -109,20 +109,17 @@ public final class TerminalScreen extends Screen {
     private long openingStarted = -1;
     private TerminalStoryTree.Node selectedNode;
     private boolean lockedNode;
+    private boolean playbackFailed;
     private final List<String> lockRows = new ArrayList<>();
     private final List<StoryLog> storyLog = new ArrayList<>();
     private final List<TextRow> storyRows = new ArrayList<>();
-    private final Deque<StoryFrame> storyFrames = new ArrayDeque<>();
-    private final Set<String> storyTags = new HashSet<>();
-    private Map<TerminalStoryTree.Line, Set<Integer>> consumedChoices = new IdentityHashMap<>();
+    private TerminalStoryRunner runner;
+    private NodeProgress nodeProgress;
+    private List<Choice> choices = List.of();
     private final List<OptionHit> optionHits = new ArrayList<>();
-    private TerminalStoryTree.Line waitingBranch;
-    private StoryLog waitingBranchRef;
-    private PendingChoice pendingChoice;
+    private long answerContinueAt = -1;
     private PendingLine pendingLine;
     private boolean typing;
-    // 当前剧情块是否已完整读完；写进存档用于解锁子块
-    private boolean finished;
     private int typedGlyphs;
     private long typingStarted;
     private int storyTextHeight;
@@ -163,45 +160,23 @@ public final class TerminalScreen extends Screen {
      */
     private static final class StoryLog {
 
-        private final TerminalStoryTree.Line line;
+        private final Line line;
         private final TerminalStoryText text;
         private final String prefix;
-        private final List<Integer> path;
-        private final int index;
-        private final int answer;
         private final List<String> wrapped = new ArrayList<>();
         private int wrappedWidth = -1;
         private long enteredAt = -1;
         private long speakerStarted = -1;
         private long pastStarted = -1;
 
-        StoryLog(TerminalStoryTree.Line line, List<Integer> path, int index) {
-            this(line, path, index, -1);
-        }
-
-        StoryLog(TerminalStoryTree.Line line, List<Integer> path, int index, int answer) {
+        StoryLog(Line line) {
             this.line = line;
             this.text = TerminalStoryText.of(line.text());
-            this.prefix = line.prefix();
-            this.path = List.copyOf(path);
-            this.index = index;
-            this.answer = answer;
+            this.prefix = TerminalStoryText.plainOf(line.prefix());
         }
 
-        int answer() {
-            return answer;
-        }
-
-        TerminalStoryTree.Line line() {
+        Line line() {
             return line;
-        }
-
-        List<Integer> path() {
-            return path;
-        }
-
-        int index() {
-            return index;
         }
 
         List<String> wrapped(Font font, int width) {
@@ -272,36 +247,10 @@ public final class TerminalScreen extends Screen {
     private record TextRow(String text, int speakerGlyphs, int y, StoryLog log, boolean current) {
     }
 
-    /**
-     * 一段待播放的台词序列。
-     */
-    private static final class StoryFrame {
-
-        private final List<TerminalStoryTree.Line> lines;
-        private final List<Integer> path;
-        private final TerminalStoryTree.Line branch;
-        private final boolean returnToBranch;
-        private int index;
-
-        StoryFrame(List<TerminalStoryTree.Line> lines, List<Integer> path, TerminalStoryTree.Line branch,
-                boolean returnToBranch) {
-            this.lines = lines;
-            this.path = List.copyOf(path);
-            this.branch = branch;
-            this.returnToBranch = returnToBranch;
-        }
-    }
-
-    private record Option(int index, TerminalStoryTree.Choice choice) {
-    }
-
-    private record PendingChoice(TerminalStoryTree.Choice choice, StoryLog branchRef, int index, long continueAt) {
-    }
-
     private record PendingLine(StoryLog entry, long revealAt) {
     }
 
-    private record OptionHit(int left, int top, int right, int bottom, TerminalStoryTree.Choice choice) {
+    private record OptionHit(int left, int top, int right, int bottom, Choice choice) {
 
         boolean contains(double x, double y) {
             return x >= left && x < right && y >= top && y < bottom;
@@ -326,43 +275,53 @@ public final class TerminalScreen extends Screen {
         Minecraft minecraft = Minecraft.getInstance();
         if (!(minecraft.screen instanceof TerminalScreen)) {
             TerminalFadeOutRenderer.clear();
-            TerminalStoryTree story = TerminalStoryTree.load();
-            TerminalStoryProgressCache.request(unlockKeys(story));
-            minecraft.setScreen(new TerminalScreen(story));
-        }
-    }
-
-    // 需要的解锁条件
-    private static List<String> unlockKeys(TerminalStoryTree story) {
-        List<String> keys = new ArrayList<>();
-        for (TerminalStoryTree.Node node : story.nodes()) {
-            for (Unlock unlock : node.unlocks()) {
-                String key = TerminalUnlockCondition.key(unlock.id(), unlock.tag(), unlock.count());
-                if (key.length() <= TerminalUnlockCondition.MAX_KEY_LENGTH && !keys.contains(key)) {
-                    keys.add(key);
+            try {
+                TerminalStoryTree story = TerminalStoryTree.load();
+                TerminalStoryProgressCache.request(story.inventoryKeys());
+                minecraft.setScreen(new TerminalScreen(story));
+            } catch (Exception exception) {
+                ae2pr.LOGGER.error("源始终端剧情加载失败", exception);
+                if (minecraft.player != null) {
+                    minecraft.player.sendSystemMessage(label("load_failed"));
                 }
             }
         }
-        return keys;
     }
 
-    static void onProgressSynced(boolean reset) {
+    static void onProgressSynced() {
         if (Minecraft.getInstance().screen instanceof TerminalScreen screen) {
-            if (reset) {
-                screen.applyProgressReset();
-            } else {
-                screen.storyTags.addAll(TerminalStoryProgressCache.get().tags);
-                screen.updateVisibility();
-            }
+            screen.applyProgressReset();
         }
     }
 
     private void applyProgressReset() {
-        storyTags.clear();
-        storyTags.addAll(TerminalStoryProgressCache.get().tags);
-        revealAt.clear();
         if (selectedNode != null) {
             showTree();
+        }
+        revealAt.clear();
+        TerminalStoryProgress progress = TerminalStoryProgressCache.get();
+        boolean changed = !progress.programId.isEmpty()
+                && !progress.programId.equals(TerminalStoryRunner.programId(story.program()));
+        if (changed) {
+            long epoch = progress.epoch;
+            progress = new TerminalStoryProgress();
+            progress.epoch = epoch;
+            ae2pr.LOGGER.warn("源始终端剧情程序已改变，阅读进度已重新开始");
+            if (minecraft.player != null) {
+                minecraft.player.sendSystemMessage(label("program_changed"));
+            }
+        }
+        try {
+            runner = new TerminalStoryRunner(story.program(), progress, TerminalStoryText.playerName());
+            if (changed) {
+                TerminalStoryProgressCache.record(runner.snapshot(), null);
+            }
+        } catch (RuntimeException exception) {
+            runner = null;
+            ae2pr.LOGGER.error("源始终端剧情恢复失败", exception);
+            if (minecraft.player != null) {
+                minecraft.player.sendSystemMessage(label("load_failed"));
+            }
         }
         updateVisibility();
     }
@@ -746,7 +705,7 @@ public final class TerminalScreen extends Screen {
                     TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.ACCENT, reveal));
         }
         // 等待点击推进时，右下角闪烁下箭头
-        if (!typing && waitingBranch == null && pendingChoice == null && pendingLine == null && hasPendingStory()) {
+        if (!typing && choices.isEmpty() && answerContinueAt < 0 && pendingLine == null && hasPendingStory()) {
             float blink = 0.55F + 0.45F * Mth.sin(now / 260.0F);
             int markerX = textRight - 16 + shift;
             int markerY = TEXT_BOTTOM - 12 + Math.round(Mth.sin(now / 260.0F) * 1.5F);
@@ -785,18 +744,15 @@ public final class TerminalScreen extends Screen {
 
     private void renderOptions(GuiGraphics graphics, int shift, float reveal, int mouseX, int mouseY) {
         optionHits.clear();
-        if (waitingBranch == null || typing || detailClosingStarted >= 0) {
+        if (choices.isEmpty() || typing || detailClosingStarted >= 0) {
             return;
         }
-        List<Option> options = availableOptions(waitingBranch);
-        if (options.isEmpty()) {
-            return;
-        }
+        List<Choice> options = choices;
         long now = Util.getMillis();
         int right = DETAIL_X + DETAIL_WIDTH - 22;
         int bottom = DETAIL_Y + DETAIL_HEIGHT - 14;
         for (int i = 0; i < options.size(); i++) {
-            Option option = options.get(i);
+            Choice option = options.get(i);
             float progress = choiceStarted < 0 ? 1 : Mth.clamp(
                     (now - choiceStarted - Math.min(i, 5) * CHOICE_REVEAL_STAGGER)
                             / (float) CHOICE_REVEAL_DURATION, 0, 1);
@@ -804,19 +760,20 @@ public final class TerminalScreen extends Screen {
                 continue;
             }
             float appear = TerminalGraphicsRenderer.ease(progress);
-            String text = TerminalStoryText.plainOf(option.choice().text());
+            String text = TerminalStoryText.plainOf(option.text());
             int choiceWidth = Mth.clamp(font.width(text) + 26, 56, CHOICE_MAX_WIDTH);
             int x = right - choiceWidth + Math.round((1 - appear) * 12) + shift;
             int y = bottom - CHOICE_HEIGHT - i * (CHOICE_HEIGHT + CHOICE_GAP);
             boolean hovered = mouseX >= x && mouseX < x + choiceWidth && mouseY >= y && mouseY < y + CHOICE_HEIGHT;
             TerminalChoiceRenderer.render(graphics, font, x, y, choiceWidth, CHOICE_HEIGHT,
                     font.plainSubstrByWidth(text, choiceWidth - 20), hovered, reveal, progress, now, option.index());
-            optionHits.add(new OptionHit(x, y, x + choiceWidth, y + CHOICE_HEIGHT, option.choice()));
+            optionHits.add(new OptionHit(x, y, x + choiceWidth, y + CHOICE_HEIGHT, option));
         }
     }
 
     private void showNode(TerminalStoryTree.Node node) {
         selectedNode = node;
+        playbackFailed = false;
         lockedNode = !isNodeUnlocked(node);
         detailStarted = Util.getMillis();
         detailClosingStarted = -1;
@@ -825,17 +782,14 @@ public final class TerminalScreen extends Screen {
         detailScroll = 0;
         storyLog.clear();
         storyRows.clear();
-        storyFrames.clear();
-        consumedChoices = new IdentityHashMap<>();
         optionHits.clear();
-        waitingBranch = null;
-        waitingBranchRef = null;
-        pendingChoice = null;
+        choices = List.of();
+        nodeProgress = null;
+        answerContinueAt = -1;
         pendingLine = null;
         typing = false;
         autoScroll = true;
         choiceStarted = -1;
-        finished = false;
         if (lockedNode) {
             resetLockRows(node);
         } else {
@@ -864,243 +818,62 @@ public final class TerminalScreen extends Screen {
     }
 
     private void restoreProgress(TerminalStoryTree.Node node) {
-        storyTags.addAll(TerminalStoryProgressCache.get().tags);
-        TerminalStoryProgress.NodeProgress saved = TerminalStoryProgressCache.node(node.id());
-        if (saved == null) {
-            storyFrames.push(new StoryFrame(node.lines(), List.of(), null, false));
-            revealNext();
-            return;
-        }
-        finished = saved.finished;
-        for (TerminalStoryProgress.LogRef ref : saved.log) {
-            if (ref.choice >= 0) {
-                TerminalStoryTree.Choice answer = resolveChoice(node.lines(), ref.path, ref.line, ref.choice);
-                if (answer != null && !answer.silence()) {
-                    storyLog.add(new StoryLog(new TerminalStoryTree.Line(Component.literal(playerName()),
-                            answer.content(), 0, List.of(), List.of()), ref.path, ref.line, ref.choice));
-                }
-                continue;
+        try {
+            nodeProgress = runner.open(node.id(), node.entry());
+            for (Line line : nodeProgress.log) {
+                storyLog.add(new StoryLog(line));
             }
-            TerminalStoryTree.Line line = resolveLine(node.lines(), ref.path, ref.line);
-            if (line != null) {
-                storyLog.add(new StoryLog(line, ref.path, ref.line));
+            var playback = nodeProgress.playback;
+            StoryLog current = storyLog.isEmpty() ? null : storyLog.get(storyLog.size() - 1);
+            typedGlyphs = current == null ? 0 : Mth.clamp(playback.typed, current.prefixLength(), current.length());
+            typing = current != null && playback.typing && typedGlyphs < current.length();
+            if (typing) {
+                typingStarted = Util.getMillis() - current.durationAt(typedGlyphs);
             }
-        }
-        boolean framesValid = !saved.frames.isEmpty();
-        for (TerminalStoryProgress.FrameState savedFrame : saved.frames) {
-            StoryFrame frame = restoreFrame(node, savedFrame);
-            if (frame == null) {
-                framesValid = false;
-                break;
+            if (playback.pendingLine != null) {
+                pendingLine = new PendingLine(new StoryLog(playback.pendingLine),
+                        Util.getMillis() + Mth.clamp(playback.delay, 0, 60000));
             }
-            storyFrames.push(frame);
-        }
-        if (!framesValid || storyFrames.isEmpty() || !storyFrames.peekLast().path.isEmpty()) {
-            // 根帧缺失或已经播完：按读完处理，只展示日志
-            framesValid = false;
-            storyFrames.clear();
-            StoryFrame done = new StoryFrame(node.lines(), List.of(), null, false);
-            done.index = node.lines().size();
-            storyFrames.push(done);
-        }
-        for (TerminalStoryProgress.ConsumedState consumed : saved.consumed) {
-            TerminalStoryTree.Line branch = resolveLine(node.lines(), consumed.path, consumed.line);
-            if (branch != null) {
-                consumedChoices.put(branch, new HashSet<>(consumed.choices));
+            if (playback.answerDelay > 0) {
+                answerContinueAt = Util.getMillis() + Mth.clamp(playback.answerDelay, 1, (int) ANSWER_ENTER_DURATION);
             }
-        }
-        StoryLog current = storyLog.isEmpty() ? null : storyLog.get(storyLog.size() - 1);
-        int length = current == null ? 0 : current.length();
-        int prefix = current == null ? 0 : current.prefixLength();
-        typedGlyphs = Mth.clamp(saved.typed, prefix, length);
-        typing = saved.typing && typedGlyphs < length;
-        if (saved.pendingChoice != null && framesValid) {
-            TerminalStoryProgress.LogRef ref = saved.pendingChoice;
-            TerminalStoryTree.Choice choice = resolveChoice(node.lines(), ref.path, ref.line, ref.choice);
-            TerminalStoryTree.Line branch = resolveLine(node.lines(), ref.path, ref.line);
-            StoryLog branchRef = branch == null ? null : findLog(branch);
-            if (choice != null && branchRef != null) {
-                pendingChoice = new PendingChoice(choice, branchRef, ref.choice,
-                        Util.getMillis() + Mth.clamp(saved.delay, 0, (int) ANSWER_ENTER_DURATION));
-                typing = false;
-                typedGlyphs = length;
+            if (storyLog.isEmpty() && pendingLine == null && !nodeProgress.finished) {
+                revealNext();
+            } else {
+                updateChoices();
+                checkFinished();
             }
+        } catch (RuntimeException exception) {
+            storyFailed(exception);
         }
-        if (saved.pendingLine != null && framesValid) {
-            TerminalStoryProgress.LogRef ref = saved.pendingLine;
-            TerminalStoryTree.Line line = resolveLine(node.lines(), ref.path, ref.line);
-            if (line != null) {
-                pendingLine = new PendingLine(new StoryLog(line, ref.path, ref.line),
-                        Util.getMillis() + Mth.clamp(saved.delay, 0, 60000));
-                typing = false;
-                typedGlyphs = length;
-            }
-        }
-        if (typing) {
-            // 从停下的字符继续，标记停顿按同一条时间轴重放
-            typingStarted = Util.getMillis() - (long) (current == null ? 0 : current.durationAt(typedGlyphs));
-        } else if (pendingChoice == null && pendingLine == null) {
-            restoreWaitingBranch(node, saved);
-        }
-        if (!finished && !typing && waitingBranch == null && pendingChoice == null && pendingLine == null
-                && !hasPendingStory()) {
-            finished = true;
-            persistStory();
-        }
-    }
-
-    private void restoreWaitingBranch(TerminalStoryTree.Node node, TerminalStoryProgress.NodeProgress saved) {
-        if (saved.branch == null) {
-            return;
-        }
-        TerminalStoryTree.Line branch = resolveLine(node.lines(), saved.branch.path, saved.branch.line);
-        if (branch == null || availableOptions(branch).isEmpty()) {
-            return;
-        }
-        StoryLog ref = findLog(branch);
-        if (ref == null) {
-            return;
-        }
-        waitingBranch = branch;
-        waitingBranchRef = ref;
-        choiceStarted = Util.getMillis();
-    }
-
-    private StoryFrame restoreFrame(TerminalStoryTree.Node node, TerminalStoryProgress.FrameState state) {
-        List<TerminalStoryTree.Line> lines = linesAt(node.lines(), state.path);
-        if (lines == null) {
-            return null;
-        }
-        StoryFrame frame;
-        if (state.path.isEmpty()) {
-            frame = new StoryFrame(node.lines(), List.of(), null, false);
-        } else {
-            int last = state.path.size() - 1;
-            List<TerminalStoryTree.Line> parentLines = linesAt(node.lines(), state.path.subList(0, last - 1));
-            if (parentLines == null) {
-                return null;
-            }
-            int lineIndex = state.path.get(last - 1);
-            int choiceIndex = state.path.get(last);
-            if (lineIndex < 0 || lineIndex >= parentLines.size()) {
-                return null;
-            }
-            TerminalStoryTree.Line branch = parentLines.get(lineIndex);
-            if (choiceIndex < 0 || choiceIndex >= branch.choices().size()) {
-                return null;
-            }
-            TerminalStoryTree.Choice choice = branch.choices().get(choiceIndex);
-            frame = new StoryFrame(choice.lines(), state.path, branch, !choice.mainLine());
-        }
-        frame.index = Mth.clamp(state.index, 0, frame.lines.size());
-        return frame;
-    }
-
-    private static List<TerminalStoryTree.Line> linesAt(List<TerminalStoryTree.Line> root, List<Integer> path) {
-        List<TerminalStoryTree.Line> lines = root;
-        for (int i = 0; i + 1 < path.size(); i += 2) {
-            int lineIndex = path.get(i);
-            if (lineIndex < 0 || lineIndex >= lines.size()) {
-                return null;
-            }
-            List<TerminalStoryTree.Choice> choices = lines.get(lineIndex).choices();
-            int choiceIndex = path.get(i + 1);
-            if (choiceIndex < 0 || choiceIndex >= choices.size()) {
-                return null;
-            }
-            lines = choices.get(choiceIndex).lines();
-        }
-        return lines;
-    }
-
-    private static TerminalStoryTree.Line resolveLine(List<TerminalStoryTree.Line> root, List<Integer> path, int line) {
-        List<TerminalStoryTree.Line> lines = linesAt(root, path);
-        return lines == null || line < 0 || line >= lines.size() ? null : lines.get(line);
-    }
-
-    private static TerminalStoryTree.Choice resolveChoice(List<TerminalStoryTree.Line> root, List<Integer> path,
-            int line, int choice) {
-        TerminalStoryTree.Line branch = resolveLine(root, path, line);
-        return branch == null || choice < 0 || choice >= branch.choices().size() ? null
-                : branch.choices().get(choice);
     }
 
     /**
      * 把当前演绎状态写入客户端缓存并上报服务端存档。
      */
     private void persistStory() {
-        // 未解锁的剧情块不写进度，避免覆盖既有记录
-        if (selectedNode == null || lockedNode) {
+        if (selectedNode == null || lockedNode || nodeProgress == null || runner == null) {
             return;
         }
-        TerminalStoryProgress.NodeProgress state = new TerminalStoryProgress.NodeProgress();
-        for (StoryLog entry : storyLog) {
-            TerminalStoryProgress.LogRef ref = reference(entry);
-            ref.choice = entry.answer();
-            state.log.add(ref);
-        }
-        var iterator = storyFrames.descendingIterator();
-        while (iterator.hasNext()) {
-            StoryFrame frame = iterator.next();
-            TerminalStoryProgress.FrameState frameState = new TerminalStoryProgress.FrameState();
-            frameState.path = frame.path;
-            frameState.index = frame.index;
-            state.frames.add(frameState);
-        }
-        for (Map.Entry<TerminalStoryTree.Line, Set<Integer>> entry : consumedChoices.entrySet()) {
-            StoryLog ref = findLog(entry.getKey());
-            if (ref == null) {
-                continue;
-            }
-            TerminalStoryProgress.ConsumedState consumed = new TerminalStoryProgress.ConsumedState();
-            consumed.path = ref.path();
-            consumed.line = ref.index();
-            consumed.choices = new ArrayList<>(entry.getValue());
-            state.consumed.add(consumed);
-        }
-        state.typing = typing && !storyLog.isEmpty();
-        state.typed = storyLog.isEmpty() ? 0 : Math.min(typedGlyphs, storyLog.get(storyLog.size() - 1).length());
-        state.finished = finished;
-        state.branch = waitingBranchRef == null ? null : reference(waitingBranchRef);
-        if (pendingChoice != null) {
-            state.pendingChoice = reference(pendingChoice.branchRef());
-            state.pendingChoice.choice = pendingChoice.index();
-            state.delay = (int) Mth.clamp(pendingChoice.continueAt() - Util.getMillis(),
-                    0L, ANSWER_ENTER_DURATION);
-        } else if (pendingLine != null) {
-            state.pendingLine = reference(pendingLine.entry());
-            state.delay = (int) Mth.clamp(pendingLine.revealAt() - Util.getMillis(), 0L, 60000L);
-        }
-        TerminalStoryProgressCache.record(selectedNode.id(), state, storyTags);
-    }
-
-    private static TerminalStoryProgress.LogRef reference(StoryLog entry) {
-        TerminalStoryProgress.LogRef ref = new TerminalStoryProgress.LogRef();
-        ref.path = entry.path();
-        ref.line = entry.index();
-        return ref;
-    }
-    private StoryLog findLog(TerminalStoryTree.Line line) {
-        for (StoryLog entry : storyLog) {
-            if (entry.line() == line) {
-                return entry;
-            }
-        }
-        return null;
+        var playback = nodeProgress.playback;
+        playback.typing = typing;
+        playback.typed = typedGlyphs;
+        playback.pendingLine = pendingLine == null ? null : pendingLine.entry().line();
+        playback.delay = pendingLine == null ? 0
+                : (int) Mth.clamp(pendingLine.revealAt() - Util.getMillis(), 0L, 60000L);
+        playback.answerDelay = answerContinueAt < 0 ? 0
+                : (int) Mth.clamp(answerContinueAt - Util.getMillis(), 1L, ANSWER_ENTER_DURATION);
+        TerminalStoryProgressCache.record(runner.snapshot(), selectedNode.id());
     }
 
     private void revealNext() {
-        waitingBranch = null;
-        waitingBranchRef = null;
         typing = false;
-        while (!storyFrames.isEmpty()) {
-            StoryFrame frame = storyFrames.peek();
-            if (frame.index < frame.lines.size()) {
-                TerminalStoryTree.Line line = frame.lines.get(frame.index++);
-                if (!storyTags.containsAll(line.requires())) {
-                    continue;
-                }
-                StoryLog entry = new StoryLog(line, frame.path, frame.index - 1);
+        choices = List.of();
+        answerContinueAt = -1;
+        try {
+            Line line = runner.advance();
+            if (line != null) {
+                StoryLog entry = new StoryLog(line);
                 if (line.delay() > 0) {
                     pendingLine = new PendingLine(entry, Util.getMillis() + line.delay());
                     persistStory();
@@ -1109,17 +882,12 @@ public final class TerminalScreen extends Screen {
                 }
                 return;
             }
-            storyFrames.pop();
-            if (frame.returnToBranch && frame.branch != null && !availableOptions(frame.branch).isEmpty()) {
-                waitingBranch = frame.branch;
-                waitingBranchRef = findLog(frame.branch);
-                choiceStarted = Util.getMillis();
-                persistStory();
-                return;
-            }
+            updateChoices();
+            checkFinished();
+            persistStory();
+        } catch (RuntimeException exception) {
+            storyFailed(exception);
         }
-        finished = true;
-        persistStory();
     }
 
     private void startLine(StoryLog entry) {
@@ -1130,25 +898,33 @@ public final class TerminalScreen extends Screen {
             storyLog.get(storyLog.size() - 1).pastStarted = now;
         }
         storyLog.add(entry);
-        typing = true;
-        typedGlyphs = entry.prefixLength();
+        runner.append(entry.line());
+        if (storyLog.size() > TerminalStoryProgress.MAX_LOG_LINES) {
+            storyLog.remove(0);
+        }
+        typing = !entry.line().answer();
+        typedGlyphs = typing ? entry.prefixLength() : entry.length();
+        if (entry.line().answer()) {
+            entry.enteredAt = now;
+            answerContinueAt = now + ANSWER_ENTER_DURATION;
+        }
         typingStarted = now;
         autoScroll = true;
         if (minecraft != null) {
-            minecraft.getNarrator().sayNow(entry.line().display());
+            minecraft.getNarrator().sayNow(Component.literal(entry.plain()));
         }
         persistStory();
     }
 
     private void advanceStory() {
-        if (lockedNode || pendingChoice != null || pendingLine != null) {
+        if (lockedNode || runner == null || answerContinueAt >= 0 || pendingLine != null) {
             return;
         }
         if (typing) {
             finishTyping();
             return;
         }
-        if (waitingBranch == null) {
+        if (choices.isEmpty() && hasPendingStory()) {
             revealNext();
         }
     }
@@ -1156,108 +932,66 @@ public final class TerminalScreen extends Screen {
     private void finishTyping() {
         typing = false;
         typedGlyphs = storyLog.isEmpty() ? 0 : storyLog.get(storyLog.size() - 1).length();
-        updateWaitingBranch();
+        updateChoices();
         checkFinished();
         persistStory();
     }
 
     private void checkFinished() {
-        if (finished || typing || waitingBranch != null || pendingChoice != null || pendingLine != null) {
+        if (lockedNode || runner == null || nodeProgress == null || nodeProgress.finished || typing || !choices.isEmpty()
+                || answerContinueAt >= 0 || pendingLine != null) {
             return;
         }
         if (!hasPendingStory()) {
-            finished = true;
+            runner.finish();
         }
     }
 
-    private void updateWaitingBranch() {
-        if (typing || waitingBranch != null || pendingChoice != null || pendingLine != null || storyLog.isEmpty()) {
+    private void updateChoices() {
+        if (runner == null || typing || answerContinueAt >= 0 || pendingLine != null) {
             return;
         }
-        StoryLog entry = storyLog.get(storyLog.size() - 1);
-        if (!availableOptions(entry.line()).isEmpty()) {
-            waitingBranch = entry.line();
-            waitingBranchRef = entry;
-            choiceStarted = Util.getMillis();
-        }
-    }
-
-    private void chooseOption(TerminalStoryTree.Choice choice) {
-        TerminalStoryTree.Line branch = waitingBranch;
-        StoryLog branchRef = waitingBranchRef;
-        if (branch == null || branchRef == null) {
-            return;
-        }
-        Option selected = null;
-        for (Option option : availableOptions(branch)) {
-            if (option.choice() == choice) {
-                selected = option;
-                break;
+        try {
+            List<Choice> available = runner.choices();
+            if (!available.equals(choices)) {
+                choices = available;
+                choiceStarted = Util.getMillis();
             }
+        } catch (RuntimeException exception) {
+            storyFailed(exception);
         }
-        if (selected == null) {
+    }
+
+    private void chooseOption(Choice choice) {
+        if (runner == null || typing || !choices.contains(choice)) {
             return;
         }
-        consumedChoices.computeIfAbsent(branch, key -> new HashSet<>()).add(selected.index());
-        storyTags.addAll(choice.tags());
-        waitingBranch = null;
-        waitingBranchRef = null;
+        choices = List.of();
         choiceStarted = -1;
         optionHits.clear();
-        appendAnswer(branchRef, selected);
-        pendingChoice = new PendingChoice(choice, branchRef, selected.index(), Util.getMillis()
-                + (choice.silence() ? 0 : ANSWER_ENTER_DURATION));
-        persistStory();
-    }
-
-    private void continueChoice() {
-        PendingChoice pending = pendingChoice;
-        pendingChoice = null;
-        TerminalStoryTree.Choice choice = pending.choice();
-        StoryLog branchRef = pending.branchRef();
-        TerminalStoryTree.Line branch = branchRef.line();
-        if (!choice.lines().isEmpty()) {
-            List<Integer> path = new ArrayList<>(branchRef.path());
-            path.add(branchRef.index());
-            path.add(pending.index());
-            storyFrames.push(new StoryFrame(choice.lines(), path, branch, !choice.mainLine()));
+        try {
+            runner.choose(choice.id());
             revealNext();
-            return;
+        } catch (RuntimeException exception) {
+            storyFailed(exception);
         }
-        if (!choice.mainLine() && !availableOptions(branch).isEmpty()) {
-            waitingBranch = branch;
-            waitingBranchRef = branchRef;
-            choiceStarted = Util.getMillis();
-        } else {
-            revealNext();
-            return;
-        }
-        persistStory();
     }
 
-    private void appendAnswer(StoryLog branchRef, Option option) {
-        if (option.choice().silence()) {
-            return;
-        }
-        TerminalStoryTree.Line answer = new TerminalStoryTree.Line(Component.literal(playerName()),
-                option.choice().content(), 0, List.of(), List.of());
-        long now = Util.getMillis();
-        if (!storyLog.isEmpty()) {
-            storyLog.get(storyLog.size() - 1).pastStarted = now;
-        }
-        StoryLog entry = new StoryLog(answer, branchRef.path(), branchRef.index(), option.index());
-        entry.enteredAt = now;
-        storyLog.add(entry);
-        typedGlyphs = entry.length();
-        autoScroll = true;
-    }
-
-    private String playerName() {
-        return TerminalStoryText.playerName();
+    private void storyFailed(RuntimeException exception) {
+        ae2pr.LOGGER.error("源始终端剧情播放失败：{}", selectedNode.id(), exception);
+        lockedNode = true;
+        playbackFailed = true;
+        choices = List.of();
+        typing = false;
+        pendingLine = null;
+        answerContinueAt = -1;
+        lockRows.clear();
+        wrap(font, label("load_failed").getString(), TEXT_RIGHT - TEXT_LEFT - 10, lockRows);
+        storyTextHeight = lockRows.size() * LINE_HEIGHT;
     }
 
     void onUnlocksSynced() {
-        if (selectedNode != null && lockedNode && isNodeUnlocked(selectedNode)) {
+        if (selectedNode != null && lockedNode && !playbackFailed && isNodeUnlocked(selectedNode)) {
             showUnlockedNode();
             return;
         }
@@ -1269,15 +1003,11 @@ public final class TerminalScreen extends Screen {
         lockRows.clear();
         storyLog.clear();
         storyRows.clear();
-        storyFrames.clear();
-        consumedChoices = new IdentityHashMap<>();
         optionHits.clear();
-        waitingBranch = null;
-        waitingBranchRef = null;
-        pendingChoice = null;
+        choices = List.of();
+        answerContinueAt = -1;
         pendingLine = null;
         typing = false;
-        finished = false;
         detailScroll = 0;
         autoScroll = true;
         choiceStarted = -1;
@@ -1318,7 +1048,7 @@ public final class TerminalScreen extends Screen {
             if (revealAt.containsKey(node.id()) || !isNodeVisible(node)) {
                 continue;
             }
-            boolean root = node.parent() == null;
+            boolean root = node.links().isEmpty();
             if (!root && (showingDetail || !TerminalStoryProgressCache.isSynced())) {
                 continue;
             }
@@ -1328,77 +1058,60 @@ public final class TerminalScreen extends Screen {
         }
     }
 
-    /**
-     * 父块必须已解锁且被完整读完，子块才会出现；父块不存在时按根块处理。
-     */
-    private boolean isParentRead(TerminalStoryTree.Node node) {
-        if (node.parent() == null) {
-            return true;
-        }
-        TerminalStoryTree.Node parent = findNode(node.parent());
-        if (parent == null) {
-            return true;
-        }
-        TerminalStoryProgress.NodeProgress progress = TerminalStoryProgressCache.node(parent.id());
-        // 旧存档没有 finished 标记时，只剩空帧即视为已读完
-        if (progress == null || !(progress.finished || progress.frames.isEmpty())) {
-            return false;
-        }
-        return isNodeUnlocked(parent);
-    }
-
-    private TerminalStoryTree.Node findNode(String id) {
-        for (TerminalStoryTree.Node node : story.nodes()) {
-            if (node.id().equals(id)) {
-                return node;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * 剧情块是否已经出现：默认要求父块已解锁并读完，requires 不齐时仍出现但保持锁定。
-     */
     private boolean isNodeVisible(TerminalStoryTree.Node node) {
-        return isParentRead(node);
+        return runner != null && (node.visibleWhen().inventoryKeys().isEmpty()
+                || TerminalStoryProgressCache.areUnlocksSynced())
+                && node.visibleWhen().matches(runner, TerminalStoryProgressCache::isUnlocked);
     }
 
     /**
      * 剧情块是否已解锁。
      */
     private boolean isNodeUnlocked(TerminalStoryTree.Node node) {
-        if (!storyTags.containsAll(node.requires())) {
-            return false;
-        }
-        for (Unlock unlock : node.unlocks()) {
-            if (!TerminalStoryProgressCache.isUnlocked(
-                    TerminalUnlockCondition.key(unlock.id(), unlock.tag(), unlock.count()))) {
-                return false;
-            }
-        }
-        return true;
+        return runner != null && (node.availableWhen().inventoryKeys().isEmpty()
+                || TerminalStoryProgressCache.areUnlocksSynced())
+                && node.availableWhen().matches(runner, TerminalStoryProgressCache::isUnlocked);
     }
 
     private List<String> unlockTip(TerminalStoryTree.Node node) {
         if (node.tip() != null && !node.tip().isBlank()) {
-            return List.of(node.tip());
+            return List.of(Component.translatable(node.tip()).getString());
         }
-        List<String> tips = new ArrayList<>();
-        if (!storyTags.containsAll(node.requires())) {
-            tips.add(Component.translatable("gui.ae2pr.proto_terminal.locked.requires").getString());
-        }
-        for (Unlock unlock : node.unlocks()) {
-            if (TerminalStoryProgressCache.isUnlocked(
-                    TerminalUnlockCondition.key(unlock.id(), unlock.tag(), unlock.count()))) {
-                continue;
-            }
-            tips.add(Component.translatable("gui.ae2pr.proto_terminal.locked.condition",
-                    unlockName(unlock), unlock.count()).getString());
-        }
-        return List.copyOf(tips);
+        return List.of(label("locked.requires").getString(), conditionText(node.availableWhen()));
     }
 
-    private static Component unlockName(Unlock unlock) {
+    private String conditionText(TerminalStoryCondition condition) {
+        if (condition instanceof TerminalStoryCondition.Group group) {
+            String separator = label(group.all() ? "locked.and" : "locked.or").getString();
+            return String.join(separator, group.conditions().stream()
+                    .map(child -> "(" + conditionText(child) + ")").toList());
+        }
+        if (condition instanceof TerminalStoryCondition.Not not) {
+            return Component.translatable("gui.ae2pr.proto_terminal.locked.not",
+                    conditionText(not.condition())).getString();
+        }
+        if (condition instanceof TerminalStoryCondition.Completed completed) {
+            String name = story.nodes().stream().filter(node -> node.id().equals(completed.id()))
+                    .map(node -> node.title().getString()).findFirst().orElse(completed.id());
+            return Component.translatable("gui.ae2pr.proto_terminal.locked.completed", name).getString();
+        }
+        if (condition instanceof TerminalStoryCondition.Variable variable) {
+            String operator = switch (variable.operator()) {
+                case "at_least" -> "≥";
+                case "at_most" -> "≤";
+                default -> "=";
+            };
+            return variable.name() + " " + operator + " " + variable.expected();
+        }
+        if (condition instanceof TerminalStoryCondition.Inventory inventory) {
+            TerminalUnlockCondition unlock = TerminalUnlockCondition.parse(inventory.key());
+            return Component.translatable("gui.ae2pr.proto_terminal.locked.condition",
+                    unlockName(unlock), unlock.count()).getString();
+        }
+        return label("locked.requires").getString();
+    }
+
+    private static Component unlockName(TerminalUnlockCondition unlock) {
         if (unlock.tag()) {
             return Component.translatable("gui.ae2pr.proto_terminal.locked.tag", unlock.id().toString());
         }
@@ -1406,38 +1119,16 @@ public final class TerminalScreen extends Screen {
         return item == null ? Component.literal(unlock.id().toString()) : new ItemStack(item).getHoverName();
     }
 
-    private List<Option> availableOptions(TerminalStoryTree.Line line) {
-        List<Option> options = new ArrayList<>();
-        Set<Integer> used = consumedChoices.get(line);
-        for (int i = 0; i < line.choices().size(); i++) {
-            if ((used == null || !used.contains(i)) && storyTags.containsAll(line.choices().get(i).requires())) {
-                options.add(new Option(i, line.choices().get(i)));
-            }
-        }
-        return options;
-    }
-
     private boolean hasPendingStory() {
-        for (StoryFrame frame : storyFrames) {
-            for (int i = frame.index; i < frame.lines.size(); i++) {
-                if (storyTags.containsAll(frame.lines.get(i).requires())) {
-                    return true;
-                }
-            }
-            if (frame.returnToBranch && frame.branch != null && !availableOptions(frame.branch).isEmpty()) {
-                return true;
-            }
-        }
-        return false;
+        return runner != null && runner.canContinue();
     }
 
     private void updateStory(long now) {
-        if (selectedNode == null || lockedNode) {
+        if (selectedNode == null || lockedNode || detailClosingStarted >= 0 || terminalClosingStarted >= 0) {
             return;
         }
-        if (pendingChoice != null && now >= pendingChoice.continueAt()
-                && detailClosingStarted < 0 && terminalClosingStarted < 0) {
-            continueChoice();
+        if (answerContinueAt >= 0 && now >= answerContinueAt) {
+            revealNext();
         }
         if (pendingLine != null && now >= pendingLine.revealAt()
                 && detailClosingStarted < 0 && terminalClosingStarted < 0) {
@@ -1449,7 +1140,7 @@ public final class TerminalScreen extends Screen {
                     Math.max(typedGlyphs, current.glyphsAt(now - typingStarted)));
             if (typedGlyphs >= current.length()) {
                 typing = false;
-                updateWaitingBranch();
+                updateChoices();
                 checkFinished();
                 persistStory();
             }
@@ -1491,16 +1182,17 @@ public final class TerminalScreen extends Screen {
 
     private void showTree() {
         selectedNode = null;
+        playbackFailed = false;
         lockedNode = false;
         lockRows.clear();
         detailClosingStarted = -1;
         detailOpacity = 0;
         storyLog.clear();
         storyRows.clear();
-        storyFrames.clear();
         optionHits.clear();
-        waitingBranch = null;
-        pendingChoice = null;
+        choices = List.of();
+        nodeProgress = null;
+        answerContinueAt = -1;
         pendingLine = null;
         typing = false;
         setFocused(null);
@@ -1582,7 +1274,8 @@ public final class TerminalScreen extends Screen {
             boolean locked = progress > 0 && !isNodeUnlocked(node);
             button.setLocked(locked);
             button.visible = progress > 0;
-            button.active = button.visible && !showingDetail && interactive;
+            button.active = button.visible && !showingDetail && interactive
+                    && TerminalStoryProgressCache.isSynced() && runner != null;
         }
         backButton.visible = selectedNode != null;
         backButton.active = selectedNode != null && interactive;
@@ -1778,10 +1471,12 @@ public final class TerminalScreen extends Screen {
                 neighbors.put(node.id(), new ArrayList<>());
             }
             for (TerminalStoryTree.Node node : nodes) {
-                TerminalStoryTree.Node parent = byId.get(node.parent());
-                if (parent != null && parent != node && !neighbors.get(node.id()).contains(parent)) {
-                    neighbors.get(node.id()).add(parent);
-                    neighbors.get(parent.id()).add(node);
+                for (String link : node.links()) {
+                    TerminalStoryTree.Node source = byId.get(link);
+                    if (source != null && source != node && !neighbors.get(node.id()).contains(source)) {
+                        neighbors.get(node.id()).add(source);
+                        neighbors.get(source.id()).add(node);
+                    }
                 }
             }
             List<TerminalStoryTree.Node> ordered = new ArrayList<>(nodes);

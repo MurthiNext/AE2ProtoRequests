@@ -1,63 +1,54 @@
 package com.murthinext.ae2pr.network;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 import java.util.function.Supplier;
 
+import com.murthinext.ae2pr.ModNetwork;
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress;
 import com.murthinext.ae2pr.logic.terminal.TerminalStorySavedData;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;
 
 /**
- * 客户端 -> 服务端：上报单个剧情块的阅读进度与全局标签。
+ * 客户端上报压缩后的剧情快照。
  */
 public class TerminalStoryUpdatePacket {
 
-    private static final int MAX_NODE_ID = 64;
-    private static final int MAX_NODE_JSON = 16384;
-    private static final int MAX_TAG = 64;
-    private static final int MAX_TAGS = 64;
+    private final byte[] snapshot;
 
-    private final String nodeId;
-    private final String nodeJson;
-    private final List<String> tags;
-
-    public TerminalStoryUpdatePacket(String nodeId, String nodeJson, List<String> tags) {
-        this.nodeId = nodeId;
-        this.nodeJson = nodeJson;
-        this.tags = List.copyOf(tags);
+    public TerminalStoryUpdatePacket(byte[] snapshot) {
+        this.snapshot = snapshot;
     }
 
     public static void encode(TerminalStoryUpdatePacket packet, FriendlyByteBuf buffer) {
-        buffer.writeUtf(packet.nodeId, MAX_NODE_ID);
-        buffer.writeUtf(packet.nodeJson, MAX_NODE_JSON);
-        buffer.writeVarInt(Math.min(packet.tags.size(), MAX_TAGS));
-        for (int i = 0; i < packet.tags.size() && i < MAX_TAGS; i++) {
-            buffer.writeUtf(packet.tags.get(i), MAX_TAG);
-        }
+        buffer.writeByteArray(packet.snapshot);
     }
 
     public static TerminalStoryUpdatePacket decode(FriendlyByteBuf buffer) {
-        String nodeId = buffer.readUtf(MAX_NODE_ID);
-        String nodeJson = buffer.readUtf(MAX_NODE_JSON);
-        int count = Math.min(buffer.readVarInt(), MAX_TAGS);
-        List<String> tags = new ArrayList<>(count);
-        for (int i = 0; i < count; i++) {
-            tags.add(buffer.readUtf(MAX_TAG));
-        }
-        return new TerminalStoryUpdatePacket(nodeId, nodeJson, tags);
+        return new TerminalStoryUpdatePacket(buffer.readByteArray(TerminalStoryProgress.MAX_UPDATE_BYTES));
     }
 
     public static void handle(TerminalStoryUpdatePacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> {
-            ServerPlayer player = context.getSender();
+            var player = context.getSender();
             if (player == null) {
                 return;
             }
-            TerminalStorySavedData.get(player.server)
-                    .merge(player.getUUID(), packet.nodeId, packet.nodeJson, packet.tags);
+            try {
+                TerminalStoryProgress progress = TerminalStoryProgress.decompress(packet.snapshot);
+                TerminalStorySavedData data = TerminalStorySavedData.get(player.server);
+                if (!data.update(player.getUUID(), progress)) {
+                    ModNetwork.sendToPlayer(player, new TerminalStorySyncPacket(data.get(player.getUUID())));
+                }
+            } catch (IOException | RuntimeException exception) {
+                ae2pr.LOGGER.warn("源始终端剧情快照无效：{}", player.getUUID(), exception);
+                player.sendSystemMessage(Component.translatable("gui.ae2pr.proto_terminal.save_failed"));
+                ModNetwork.sendToPlayer(player, new TerminalStorySyncPacket(
+                        TerminalStorySavedData.get(player.server).get(player.getUUID())));
+            }
         });
         context.setPacketHandled(true);
     }

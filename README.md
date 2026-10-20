@@ -3,7 +3,15 @@
 Working still...
 
 ## LICENSES
-- ME Redstone Requester: Codes from [ME Requester](https://github.com/AlmostReliable/merequester) under [LGPL-3.0](licenses/LGPL-3.0.txt), for details, see [ME-Requester-NOTICE](licenses/ME-Requester-NOTICE.txt)
-- Multiblocks: Design from [GregTech Modern](https://github.com/GregTechCEu/GregTech-Modern) under [LGPL-3.0](licenses/LGPL-3.0.txt)
-- AE2 style from [Applied Energistics 2](https://github.com/AppliedEnergistics/Applied-Energistics-2) under CC BY-NC-SA 3.0
 - Original: [MIT License](LICENSE)
+- Ink Runtime：[MIT License](licenses/ink)
+- blade-ink-java: [MIT License](licenses/blade-ink-java)
+- ME Requester: [LGPL-3.0](licenses/me-requester), includes codes under `src/requester/`
+- GregTech Modern: [LGPL-3.0](licenses/gregtech-modern), includes the design of multiblocks, some textures and sounds
+- Applied Energistics 2
+  - Textures and Models 
+    - (c) 2020, Ridanisaurus Rid, (c) 2013 - 2020 AlgorithmX2 et al
+    - [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode.en)
+  - API
+    - (c) 2013 - 2020 AlgorithmX2 et al
+    - [MIT License](https://opensource.org/license/MIT)

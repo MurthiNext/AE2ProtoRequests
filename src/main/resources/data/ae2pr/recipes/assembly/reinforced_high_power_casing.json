@@ -8,12 +8,12 @@
       "count": 1
     },
     {
-      "item": "ae2pr:high_energy_singularity",
-      "count": 1
-    },
-    {
       "tag": "forge:plates/zirconium",
       "count": 8
+    },
+    {
+      "item": "ae2pr:high_energy_singularity",
+      "count": 1
     }
   ],
   "fluid_inputs": [
