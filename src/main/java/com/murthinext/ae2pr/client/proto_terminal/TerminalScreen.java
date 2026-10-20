@@ -280,7 +280,7 @@ public final class TerminalScreen extends Screen {
                 TerminalStoryProgressCache.request(story.inventoryKeys());
                 minecraft.setScreen(new TerminalScreen(story));
             } catch (Exception exception) {
-                ae2pr.LOGGER.error("源始终端剧情加载失败", exception);
+                ae2pr.LOGGER.error("Failed to load proto terminal story", exception);
                 if (minecraft.player != null) {
                     minecraft.player.sendSystemMessage(label("load_failed"));
                 }
@@ -306,7 +306,7 @@ public final class TerminalScreen extends Screen {
             long epoch = progress.epoch;
             progress = new TerminalStoryProgress();
             progress.epoch = epoch;
-            ae2pr.LOGGER.warn("源始终端剧情程序已改变，阅读进度已重新开始");
+            ae2pr.LOGGER.warn("Proto terminal story program changed, reading progress has been reset");
             if (minecraft.player != null) {
                 minecraft.player.sendSystemMessage(label("program_changed"));
             }
@@ -318,7 +318,7 @@ public final class TerminalScreen extends Screen {
             }
         } catch (RuntimeException exception) {
             runner = null;
-            ae2pr.LOGGER.error("源始终端剧情恢复失败", exception);
+            ae2pr.LOGGER.error("Failed to restore proto terminal story", exception);
             if (minecraft.player != null) {
                 minecraft.player.sendSystemMessage(label("load_failed"));
             }
@@ -978,7 +978,7 @@ public final class TerminalScreen extends Screen {
     }
 
     private void storyFailed(RuntimeException exception) {
-        ae2pr.LOGGER.error("源始终端剧情播放失败：{}", selectedNode.id(), exception);
+        ae2pr.LOGGER.error("Failed to play proto terminal story node {}", selectedNode.id(), exception);
         lockedNode = true;
         playbackFailed = true;
         choices = List.of();

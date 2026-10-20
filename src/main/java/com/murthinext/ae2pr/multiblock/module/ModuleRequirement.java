@@ -7,7 +7,7 @@ public record ModuleRequirement(ModuleType type, int minLevel) {
 
     public ModuleRequirement {
         if (minLevel < 1) {
-            throw new IllegalArgumentException("模块最低等级必须 >= 1：" + minLevel);
+            throw new IllegalArgumentException("Module minimum level must be >= 1: " + minLevel);
         }
     }
 }

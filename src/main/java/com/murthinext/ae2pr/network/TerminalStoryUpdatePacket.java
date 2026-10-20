@@ -44,7 +44,7 @@ public class TerminalStoryUpdatePacket {
                     ModNetwork.sendToPlayer(player, new TerminalStorySyncPacket(data.get(player.getUUID())));
                 }
             } catch (IOException | RuntimeException exception) {
-                ae2pr.LOGGER.warn("源始终端剧情快照无效：{}", player.getUUID(), exception);
+                ae2pr.LOGGER.warn("Invalid proto terminal story snapshot from player {}", player.getUUID(), exception);
                 player.sendSystemMessage(Component.translatable("gui.ae2pr.proto_terminal.save_failed"));
                 ModNetwork.sendToPlayer(player, new TerminalStorySyncPacket(
                         TerminalStorySavedData.get(player.server).get(player.getUUID())));

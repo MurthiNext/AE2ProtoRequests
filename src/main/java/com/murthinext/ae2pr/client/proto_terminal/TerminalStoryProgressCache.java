@@ -85,7 +85,7 @@ public final class TerminalStoryProgressCache {
             saveErrorReported = false;
             TerminalScreen.onProgressSynced();
         } catch (IOException | RuntimeException exception) {
-            ae2pr.LOGGER.error("源始终端进度同步失败", exception);
+            ae2pr.LOGGER.error("Failed to sync proto terminal story progress", exception);
             if (Minecraft.getInstance().player != null) {
                 Minecraft.getInstance().player.sendSystemMessage(
                         Component.translatable("gui.ae2pr.proto_terminal.load_failed"));
@@ -108,12 +108,12 @@ public final class TerminalStoryProgressCache {
             }
             byte[] bytes = update.compress();
             if (bytes.length > TerminalStoryProgress.MAX_UPDATE_BYTES) {
-                throw new IOException("单个剧情块与共享 Ink 状态超过上传上限");
+                throw new IOException("Story node and shared Ink state exceed the upload limit");
             }
             ModNetwork.sendToServer(new TerminalStoryUpdatePacket(bytes));
         } catch (IOException exception) {
             if (!saveErrorReported) {
-                ae2pr.LOGGER.error("源始终端阅读进度未能保存", exception);
+                ae2pr.LOGGER.error("Failed to save proto terminal reading progress", exception);
                 if (Minecraft.getInstance().player != null) {
                     Minecraft.getInstance().player.sendSystemMessage(
                             Component.translatable("gui.ae2pr.proto_terminal.save_failed"));

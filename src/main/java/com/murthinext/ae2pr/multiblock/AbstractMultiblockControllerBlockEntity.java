@@ -145,7 +145,8 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             }
             if (!remaining.isEmpty()) {
                 // 启动前已检查，兜底掉落避免产物丢失
-                ae2pr.LOGGER.warn("{} 产物无法放入输出总线，已掉落 {}", machineKey(), remaining);
+                ae2pr.LOGGER.warn("{} output could not be inserted into output buses, dropped {}", machineKey(),
+                        remaining);
                 Block.popResource(level, worldPosition, remaining);
             }
         }
@@ -162,7 +163,8 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             }
             if (!remaining.isEmpty()) {
                 // 启动前已检查，兜底记录避免产物丢失
-                ae2pr.LOGGER.warn("{} 产物无法存入输出仓，已丢弃 {}", machineKey(), remaining);
+                ae2pr.LOGGER.warn("{} output could not be stored in output hatches, discarded {}", machineKey(),
+                        remaining);
             }
         }
     }

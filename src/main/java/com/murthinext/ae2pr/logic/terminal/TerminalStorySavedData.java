@@ -39,7 +39,7 @@ public class TerminalStorySavedData extends SavedData {
             progress.nodes = nodes;
         }
         if (progress.nodes.size() > 128) {
-            throw new IOException("剧情块存档超过上限");
+            throw new IOException("Story node save data exceeds the size limit");
         }
         progress.compress();
         players.put(player, progress);
@@ -73,7 +73,8 @@ public class TerminalStorySavedData extends SavedData {
                 TerminalStoryProgress progress = TerminalStoryProgress.decompress(players.getByteArray(key));
                 data.players.put(UUID.fromString(key), progress);
             } catch (IOException | RuntimeException exception) {
-                ae2pr.LOGGER.warn("源始终端剧情存档无效，已忽略玩家记录：{}", key, exception);
+                ae2pr.LOGGER.warn("Invalid proto terminal story save data, ignored record of player {}", key,
+                        exception);
             }
         }
         return data;
@@ -86,7 +87,7 @@ public class TerminalStorySavedData extends SavedData {
             try {
                 playersTag.putByteArray(player.toString(), progress.compress());
             } catch (IOException exception) {
-                throw new IllegalStateException("无法保存玩家剧情快照：" + player, exception);
+                throw new IllegalStateException("Failed to save player story snapshot: " + player, exception);
             }
         });
         tag.put("players", playersTag);

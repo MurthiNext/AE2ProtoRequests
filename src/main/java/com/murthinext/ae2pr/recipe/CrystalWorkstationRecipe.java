@@ -145,7 +145,7 @@ public class CrystalWorkstationRecipe implements Recipe<Container>, MultiblockRe
                 JsonObject input = element.getAsJsonObject();
                 int count = GsonHelper.getAsInt(input, "count", 1);
                 if (count < 1) {
-                    throw new JsonSyntaxException("item_inputs 的 count 必须 >= 1");
+                    throw new JsonSyntaxException("item_inputs count must be >= 1");
                 }
                 itemInputs.add(new CountedIngredient(Ingredient.fromJson(input), count));
             }
@@ -156,23 +156,24 @@ public class CrystalWorkstationRecipe implements Recipe<Container>, MultiblockRe
                 var item = ForgeRegistries.ITEMS.getValue(itemId);
                 int count = GsonHelper.getAsInt(output, "count", 1);
                 if (item == null || item == Items.AIR || count < 1) {
-                    throw new JsonSyntaxException("无效的物品产物：" + output);
+                    throw new JsonSyntaxException("Invalid item output: " + output);
                 }
                 itemOutputs.add(new ItemStack(item, count));
             }
             List<FluidStack> fluidInputs = readFluids(json, "fluid_inputs");
             List<FluidStack> fluidOutputs = readFluids(json, "fluid_outputs");
             if (itemInputs.isEmpty() && fluidInputs.isEmpty() || itemOutputs.isEmpty() && fluidOutputs.isEmpty()) {
-                throw new JsonSyntaxException("配方必须同时具有输入和产物");
+                throw new JsonSyntaxException("Recipe requires both inputs and outputs");
             }
             if (itemInputs.size() > MAX_ITEM_INPUTS || itemOutputs.size() > MAX_ITEM_OUTPUTS
                     || fluidInputs.size() > MAX_FLUIDS || fluidOutputs.size() > MAX_FLUIDS) {
-                throw new JsonSyntaxException("晶能工作站最多支持各 6 种物品和 3 种流体输入/输出");
+                throw new JsonSyntaxException(
+                        "Crystal workstation supports at most 6 item and 3 fluid inputs/outputs each");
             }
             int duration = GsonHelper.getAsInt(json, "duration", 200);
             double energy = GsonHelper.getAsDouble(json, "energy");
             if (duration < 1 || !Double.isFinite(energy) || energy < 0) {
-                throw new JsonSyntaxException("duration 必须 >= 1，energy 必须为有限非负数");
+                throw new JsonSyntaxException("duration must be >= 1 and energy must be a finite non-negative number");
             }
             return new CrystalWorkstationRecipe(id, mode, itemInputs, fluidInputs, itemOutputs, fluidOutputs,
                     duration, energy);
@@ -186,7 +187,7 @@ public class CrystalWorkstationRecipe implements Recipe<Container>, MultiblockRe
                 var fluid = ForgeRegistries.FLUIDS.getValue(id);
                 int amount = GsonHelper.getAsInt(entry, "amount", 1000);
                 if (fluid == null || fluid == Fluids.EMPTY || amount < 1) {
-                    throw new JsonSyntaxException("无效的流体：" + entry);
+                    throw new JsonSyntaxException("Invalid fluid: " + entry);
                 }
                 fluids.add(new FluidStack(fluid, amount));
             }

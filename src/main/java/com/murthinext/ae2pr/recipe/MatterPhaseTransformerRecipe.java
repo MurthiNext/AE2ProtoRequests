@@ -149,38 +149,38 @@ public class MatterPhaseTransformerRecipe implements Recipe<Container>, Multiblo
                 JsonObject entry = element.getAsJsonObject();
                 int count = GsonHelper.getAsInt(entry, "count", 1);
                 if (count < 1) {
-                    throw new JsonSyntaxException("ingredients 的 count 必须 >= 1");
+                    throw new JsonSyntaxException("ingredients count must be >= 1");
                 }
                 ingredients.add(new CountedIngredient(Ingredient.fromJson(entry), count));
             }
             if (ingredients.isEmpty()) {
-                throw new JsonSyntaxException("配方至少需要一个输入");
+                throw new JsonSyntaxException("Recipe requires at least one input");
             }
 
             JsonArray outputs = GsonHelper.getAsJsonArray(json, "fluid_outputs");
             if (outputs.size() != 1) {
-                throw new JsonSyntaxException("配方必须恰有一个流体输出");
+                throw new JsonSyntaxException("Recipe must have exactly one fluid output");
             }
             JsonObject output = outputs.get(0).getAsJsonObject();
             Fluid fluid = ForgeRegistries.FLUIDS.getValue(
                     ResourceLocation.parse(GsonHelper.getAsString(output, "fluid")));
             if (fluid == null) {
-                throw new JsonSyntaxException("fluid_output 的流体不存在：" + output.get("fluid"));
+                throw new JsonSyntaxException("fluid_output fluid does not exist: " + output.get("fluid"));
             }
             int amount = GsonHelper.getAsInt(output, "amount", 1);
             if (amount < 1) {
-                throw new JsonSyntaxException("fluid_output 的 amount 必须 >= 1");
+                throw new JsonSyntaxException("fluid_output amount must be >= 1");
             }
 
             int duration = GsonHelper.getAsInt(json, "duration", DEFAULT_DURATION);
             if (duration < 1) {
-                throw new JsonSyntaxException("duration 必须 >= 1");
+                throw new JsonSyntaxException("duration must be >= 1");
             }
             Double energyPerParallel = null;
             if (json.has("energy")) {
                 energyPerParallel = GsonHelper.getAsDouble(json, "energy");
                 if (energyPerParallel < 0) {
-                    throw new JsonSyntaxException("energy 必须 >= 0");
+                    throw new JsonSyntaxException("energy must be >= 0");
                 }
             }
             return new MatterPhaseTransformerRecipe(id, ingredients, new FluidStack(fluid, amount), duration, energyPerParallel);

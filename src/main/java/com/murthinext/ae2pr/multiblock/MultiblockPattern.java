@@ -313,7 +313,7 @@ public final class MultiblockPattern {
 
         public Builder sliceRepeatable(int minRepeats, int maxRepeats, String... rows) {
             if (minRepeats < 1 || maxRepeats < minRepeats) {
-                throw new IllegalArgumentException("重复次数非法：" + minRepeats + "~" + maxRepeats);
+                throw new IllegalArgumentException("Invalid repeat count: " + minRepeats + "~" + maxRepeats);
             }
             validateRows(rows);
             for (String row : rows) {
@@ -346,21 +346,21 @@ public final class MultiblockPattern {
 
         public MultiblockPattern build() {
             if (slices.isEmpty()) {
-                throw new IllegalStateException("结构模式至少需要一个片");
+                throw new IllegalStateException("Structure pattern needs at least one slice");
             }
             if (originRow < 0 || originRow >= rows || originCol < 0 || originCol >= cols) {
-                throw new IllegalStateException("控制器原点超出结构范围");
+                throw new IllegalStateException("Controller origin is outside the structure");
             }
             int minSlices = 0;
             for (Slice slice : slices) {
                 minSlices += slice.minRepeats();
             }
             if (originSlice < 0 || originSlice >= minSlices) {
-                throw new IllegalStateException("控制器所在片超出结构范围");
+                throw new IllegalStateException("Controller slice is outside the structure");
             }
             for (char symbol : usedChars) {
                 if (!predicates.containsKey(symbol)) {
-                    throw new IllegalStateException("字符 '" + symbol + "' 缺少谓词");
+                    throw new IllegalStateException("Missing predicate for symbol '" + symbol + "'");
                 }
             }
             int axes = 0;
@@ -368,7 +368,7 @@ public final class MultiblockPattern {
                 axes |= 1 << dir.axisIndex();
             }
             if (axes != 0b111) {
-                throw new IllegalStateException("三个方向必须各占一个轴");
+                throw new IllegalStateException("The three axes must each occupy a distinct direction");
             }
             List<StructurePredicate> leaves = new ArrayList<>();
             for (StructurePredicate predicate : predicates.values()) {
@@ -380,18 +380,20 @@ public final class MultiblockPattern {
 
         private void validateRows(String[] sliceRows) {
             if (sliceRows.length == 0 || sliceRows[0].isEmpty()) {
-                throw new IllegalArgumentException("结构片不能为空");
+                throw new IllegalArgumentException("Structure slice must not be empty");
             }
             if (rows == -1) {
                 rows = sliceRows.length;
                 cols = sliceRows[0].length();
             }
             if (sliceRows.length != rows) {
-                throw new IllegalArgumentException("结构片行数不一致：期望 " + rows + "，实际 " + sliceRows.length);
+                throw new IllegalArgumentException(
+                        "Structure slice row count mismatch: expected " + rows + ", got " + sliceRows.length);
             }
             for (String row : sliceRows) {
                 if (row.length() != cols) {
-                    throw new IllegalArgumentException("结构片行宽不一致：期望 " + cols + "，实际 " + row.length());
+                    throw new IllegalArgumentException(
+                            "Structure slice row width mismatch: expected " + cols + ", got " + row.length());
                 }
             }
         }

@@ -20,7 +20,7 @@ public class TerminalStorySyncPacket {
         try {
             this.snapshot = progress.compress();
         } catch (IOException exception) {
-            throw new IllegalArgumentException("剧情快照无法同步", exception);
+            throw new IllegalArgumentException("Story snapshot could not be synced", exception);
         }
     }
 

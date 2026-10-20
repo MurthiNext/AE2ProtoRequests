@@ -143,7 +143,7 @@ public class CrystalReactionChamberRecipe implements Recipe<Container>, Multiblo
                 JsonObject obj = element.getAsJsonObject();
                 int count = GsonHelper.getAsInt(obj, "count", 1);
                 if (count < 1) {
-                    throw new JsonSyntaxException("item_inputs 的 count 必须 >= 1");
+                    throw new JsonSyntaxException("item_inputs count must be >= 1");
                 }
                 itemInputs.add(new CountedIngredient(Ingredient.fromJson(obj), count));
             }
@@ -159,11 +159,11 @@ public class CrystalReactionChamberRecipe implements Recipe<Container>, Multiblo
                 ResourceLocation itemId = ResourceLocation.parse(GsonHelper.getAsString(obj, "item"));
                 Item item = ForgeRegistries.ITEMS.getValue(itemId);
                 if (item == null || item == Items.AIR) {
-                    throw new JsonSyntaxException("未知物品：" + itemId);
+                    throw new JsonSyntaxException("Unknown item: " + itemId);
                 }
                 int count = GsonHelper.getAsInt(obj, "count", 1);
                 if (count < 1) {
-                    throw new JsonSyntaxException("item_outputs 的 count 必须 >= 1");
+                    throw new JsonSyntaxException("item_outputs count must be >= 1");
                 }
                 itemOutputs.add(new ItemStack(item, count));
             }
@@ -174,20 +174,20 @@ public class CrystalReactionChamberRecipe implements Recipe<Container>, Multiblo
             }
 
             if (itemInputs.isEmpty() && fluidInputs.isEmpty()) {
-                throw new JsonSyntaxException("配方至少需要一个输入");
+                throw new JsonSyntaxException("Recipe requires at least one input");
             }
             if (itemOutputs.isEmpty() && fluidOutputs.isEmpty()) {
-                throw new JsonSyntaxException("配方至少需要一个产物");
+                throw new JsonSyntaxException("Recipe requires at least one output");
             }
             int duration = GsonHelper.getAsInt(json, "duration", DEFAULT_DURATION);
             if (duration < 1) {
-                throw new JsonSyntaxException("duration 必须 >= 1");
+                throw new JsonSyntaxException("duration must be >= 1");
             }
             Double energyPerParallel = null;
             if (json.has("energy")) {
                 energyPerParallel = GsonHelper.getAsDouble(json, "energy");
                 if (energyPerParallel < 0) {
-                    throw new JsonSyntaxException("energy 必须 >= 0");
+                    throw new JsonSyntaxException("energy must be >= 0");
                 }
             }
             return new CrystalReactionChamberRecipe(id, itemInputs, fluidInputs, itemOutputs, fluidOutputs, duration,
@@ -198,11 +198,11 @@ public class CrystalReactionChamberRecipe implements Recipe<Container>, Multiblo
             ResourceLocation fluidId = ResourceLocation.parse(GsonHelper.getAsString(obj, "fluid"));
             Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidId);
             if (fluid == null || fluid == Fluids.EMPTY) {
-                throw new JsonSyntaxException(key + " 的流体不存在：" + fluidId);
+                throw new JsonSyntaxException("Unknown fluid in " + key + ": " + fluidId);
             }
             int amount = GsonHelper.getAsInt(obj, "amount", 1000);
             if (amount < 1) {
-                throw new JsonSyntaxException(key + " 的 amount 必须 >= 1");
+                throw new JsonSyntaxException("Invalid amount in " + key + ", must be >= 1");
             }
             return new FluidStack(fluid, amount);
         }

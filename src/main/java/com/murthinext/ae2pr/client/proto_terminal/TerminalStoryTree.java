@@ -60,7 +60,7 @@ record TerminalStoryTree(List<Node> nodes, String program) {
             }
         }
         if (program == null) {
-            throw new IOException("未找到已编译的 Ink 剧情，请先运行 compileStories");
+            throw new IOException("No compiled Ink story found, run compileStories first");
         }
         TerminalStoryRunner runner = new TerminalStoryRunner(program, new TerminalStoryProgress(), playerName);
         Map<String, Node> definitions = new LinkedHashMap<>();
@@ -74,7 +74,7 @@ record TerminalStoryTree(List<Node> nodes, String program) {
                 JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
                 String knot = GsonHelper.getAsString(json, "entry");
                 if (id.length() > 256 || knot.length() > 256 || !runner.hasEntry(knot)) {
-                    throw new IllegalArgumentException("剧情入口不存在：" + knot);
+                    throw new IllegalArgumentException("Story entry does not exist: " + knot);
                 }
                 List<String> links = new ArrayList<>();
                 if (json.has("links")) {
@@ -85,12 +85,12 @@ record TerminalStoryTree(List<Node> nodes, String program) {
                 ResourceLocation image = json.has("image")
                         ? ResourceLocation.parse(GsonHelper.getAsString(json, "image")) : null;
                 if (image != null && resources.getResource(image).isEmpty()) {
-                    throw new IllegalArgumentException("剧情图片不存在：" + image);
+                    throw new IllegalArgumentException("Story image does not exist: " + image);
                 }
                 int imageWidth = GsonHelper.getAsInt(json, "image_width", 256);
                 int imageHeight = GsonHelper.getAsInt(json, "image_height", 256);
                 if (imageWidth < 1 || imageWidth > 4096 || imageHeight < 1 || imageHeight > 4096) {
-                    throw new IllegalArgumentException("剧情图片尺寸无效");
+                    throw new IllegalArgumentException("Invalid story image size");
                 }
                 definitions.put(id, new Node(id, knot, GsonHelper.getAsInt(json, "position", 0), List.copyOf(links),
                         0, 0, Component.translatable(GsonHelper.getAsString(json, "title")),
@@ -99,18 +99,18 @@ record TerminalStoryTree(List<Node> nodes, String program) {
                         GsonHelper.getAsString(json, "locked_tip", ""), image, imageWidth, imageHeight));
                 layouts.put(id, parseLayout(GsonHelper.getAsJsonObject(json, "layout", new JsonObject())));
             } catch (RuntimeException exception) {
-                throw new IOException("剧情节点无效：" + entry.getKey(), exception);
+                throw new IOException("Invalid story node: " + entry.getKey(), exception);
             }
         }
         if (definitions.isEmpty() || definitions.size() > 128) {
-            throw new IOException("剧情节点目录必须包含 1–128 个节点");
+            throw new IOException("Story node directory must contain 1-128 nodes");
         }
         Map<String, int[]> positions = new HashMap<>();
         List<Node> nodes = new ArrayList<>();
         for (Node node : definitions.values()) {
             for (String link : node.links()) {
                 if (link.equals(node.id()) || !definitions.containsKey(link)) {
-                    throw new IOException("剧情连线引用无效：" + node.id() + " -> " + link);
+                    throw new IOException("Invalid story link reference: " + node.id() + " -> " + link);
                 }
             }
             node.visibleWhen().validate(definitions.keySet(), runner);
@@ -123,7 +123,7 @@ record TerminalStoryTree(List<Node> nodes, String program) {
         nodes.sort(Comparator.comparingInt(Node::position).thenComparing(Node::id));
         TerminalStoryTree tree = new TerminalStoryTree(List.copyOf(nodes), program);
         if (tree.inventoryKeys().size() > 128) {
-            throw new IOException("背包条件不能超过 128 条");
+            throw new IOException("Inventory conditions must not exceed 128 entries");
         }
         return tree;
     }
@@ -139,7 +139,8 @@ record TerminalStoryTree(List<Node> nodes, String program) {
         Integer y = json.has("y") ? GsonHelper.getAsInt(json, "y") : null;
         String relative = GsonHelper.getAsString(json, "relative_to", "");
         if ((x == null) != (y == null) || x != null && !relative.isEmpty()) {
-            throw new IllegalArgumentException("布局需成对提供 x/y，且不能同时指定 relative_to");
+            throw new IllegalArgumentException(
+                    "Layout requires both x and y, and cannot combine them with relative_to");
         }
         String anchor = GsonHelper.getAsString(json, "anchor", "center-right");
         int[] direction = switch (anchor) {
@@ -151,11 +152,11 @@ record TerminalStoryTree(List<Node> nodes, String program) {
             case "down-left" -> new int[] { -1, 1 };
             case "down-center" -> new int[] { 0, 1 };
             case "down-right" -> new int[] { 1, 1 };
-            default -> throw new IllegalArgumentException("剧情布局方位无效：" + anchor);
+            default -> throw new IllegalArgumentException("Invalid story layout anchor: " + anchor);
         };
         float distance = GsonHelper.getAsFloat(json, "distance", 1);
         if (!Float.isFinite(distance) || distance < 0.25F || distance > 16) {
-            throw new IllegalArgumentException("布局距离应在 0.25–16 之间");
+            throw new IllegalArgumentException("Layout distance must be between 0.25 and 16");
         }
         return new Layout(x, y, relative, Math.round(direction[0] * STEP_X * distance),
                 Math.round(direction[1] * STEP_Y * distance));
@@ -168,7 +169,7 @@ record TerminalStoryTree(List<Node> nodes, String program) {
         }
         Layout layout = layouts.get(id);
         if (layout == null || !visiting.add(id)) {
-            throw new IllegalArgumentException("布局引用不存在或成环：" + id);
+            throw new IllegalArgumentException("Layout reference is missing or cyclic: " + id);
         }
         int[] position;
         if (layout.x() != null) {
@@ -180,7 +181,7 @@ record TerminalStoryTree(List<Node> nodes, String program) {
             position = new int[] { parent[0] + layout.dx(), parent[1] + layout.dy() };
         }
         if (Math.abs((long) position[0]) > 4096 || Math.abs((long) position[1]) > 4096) {
-            throw new IllegalArgumentException("布局坐标超出范围：" + id);
+            throw new IllegalArgumentException("Layout coordinates out of range: " + id);
         }
         visiting.remove(id);
         positions.put(id, position);

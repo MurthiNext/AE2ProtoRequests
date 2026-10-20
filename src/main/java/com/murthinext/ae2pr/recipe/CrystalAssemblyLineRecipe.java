@@ -147,7 +147,7 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container>, MultiblockR
                 Ingredient ingredient = Ingredient.fromJson(obj);
                 int count = GsonHelper.getAsInt(obj, "count", 1);
                 if (count < 1) {
-                    throw new JsonSyntaxException("item_inputs 的 count 必须 >= 1");
+                    throw new JsonSyntaxException("item_inputs count must be >= 1");
                 }
                 itemInputs.add(new CountedIngredient(ingredient, count));
             }
@@ -158,11 +158,11 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container>, MultiblockR
                 ResourceLocation fluidId = ResourceLocation.parse(GsonHelper.getAsString(obj, "fluid"));
                 Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidId);
                 if (fluid == null || fluid == Fluids.EMPTY) {
-                    throw new JsonSyntaxException("未知流体：" + fluidId);
+                    throw new JsonSyntaxException("Unknown fluid: " + fluidId);
                 }
                 int amount = GsonHelper.getAsInt(obj, "amount", 1000);
                 if (amount < 1) {
-                    throw new JsonSyntaxException("fluid_inputs 的 amount 必须 >= 1");
+                    throw new JsonSyntaxException("fluid_inputs amount must be >= 1");
                 }
                 fluidInputs.add(new FluidStack(fluid, amount));
             }
@@ -173,11 +173,11 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container>, MultiblockR
                 ResourceLocation itemId = ResourceLocation.parse(GsonHelper.getAsString(obj, "item"));
                 Item item = ForgeRegistries.ITEMS.getValue(itemId);
                 if (item == null || item == Items.AIR) {
-                    throw new JsonSyntaxException("未知物品：" + itemId);
+                    throw new JsonSyntaxException("Unknown item: " + itemId);
                 }
                 int count = GsonHelper.getAsInt(obj, "count", 1);
                 if (count < 1) {
-                    throw new JsonSyntaxException("item_outputs 的 count 必须 >= 1");
+                    throw new JsonSyntaxException("item_outputs count must be >= 1");
                 }
                 itemOutputs.add(new ItemStack(item, count));
             }
@@ -189,33 +189,33 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container>, MultiblockR
                 ResourceLocation moduleId = ResourceLocation.parse(GsonHelper.getAsString(obj, "module"));
                 ModuleType type = ModModules.byId(moduleId);
                 if (type == null) {
-                    throw new JsonSyntaxException("未知模块：" + moduleId);
+                    throw new JsonSyntaxException("Unknown module: " + moduleId);
                 }
                 if (!seenModules.add(moduleId)) {
-                    throw new JsonSyntaxException("重复的模块要求：" + moduleId);
+                    throw new JsonSyntaxException("Duplicate module requirement: " + moduleId);
                 }
                 int minLevel = GsonHelper.getAsInt(obj, "min_level", 1);
                 if (minLevel < 1) {
-                    throw new JsonSyntaxException("module_requirements 的 min_level 必须 >= 1");
+                    throw new JsonSyntaxException("module_requirements min_level must be >= 1");
                 }
                 moduleRequirements.add(new ModuleRequirement(type, minLevel));
             }
 
             if (itemInputs.isEmpty() && fluidInputs.isEmpty()) {
-                throw new JsonSyntaxException("配方至少需要一个输入");
+                throw new JsonSyntaxException("Recipe requires at least one input");
             }
             if (itemOutputs.isEmpty()) {
-                throw new JsonSyntaxException("配方至少需要一个物品输出");
+                throw new JsonSyntaxException("Recipe requires at least one item output");
             }
             int duration = GsonHelper.getAsInt(json, "duration", 100);
             if (duration < 1) {
-                throw new JsonSyntaxException("duration 必须 >= 1");
+                throw new JsonSyntaxException("duration must be >= 1");
             }
             Double energyPerParallel = null;
             if (json.has("energy")) {
                 energyPerParallel = GsonHelper.getAsDouble(json, "energy");
                 if (energyPerParallel < 0) {
-                    throw new JsonSyntaxException("energy 必须 >= 0");
+                    throw new JsonSyntaxException("energy must be >= 0");
                 }
             }
             return new CrystalAssemblyLineRecipe(id, itemInputs, fluidInputs, itemOutputs, moduleRequirements, duration,
@@ -247,7 +247,7 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container>, MultiblockR
                 ResourceLocation moduleId = buffer.readResourceLocation();
                 ModuleType type = ModModules.byId(moduleId);
                 if (type == null) {
-                    throw new IllegalArgumentException("未知模块：" + moduleId);
+                    throw new IllegalArgumentException("Unknown module: " + moduleId);
                 }
                 moduleRequirements.add(new ModuleRequirement(type, buffer.readVarInt()));
             }

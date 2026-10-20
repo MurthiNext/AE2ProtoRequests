@@ -154,14 +154,14 @@ public class AlienLavaRecipe implements Recipe<Container> {
                             ModTags.ALIEN_LAVA.location().toString())));
             JsonArray itemOutputs = GsonHelper.getAsJsonArray(json, "item_outputs", new JsonArray());
             if (itemOutputs.size() > 1) {
-                throw new JsonSyntaxException("item_outputs 最多只能有一个产物");
+                throw new JsonSyntaxException("item_outputs allows at most one output");
             }
             ItemStack resultItem = itemOutputs.isEmpty()
                     ? ItemStack.EMPTY
                     : ShapedRecipe.itemStackFromJson(itemOutputs.get(0).getAsJsonObject());
             JsonArray fluidOutputs = GsonHelper.getAsJsonArray(json, "fluid_outputs", new JsonArray());
             if (fluidOutputs.size() > 1) {
-                throw new JsonSyntaxException("fluid_outputs 最多只能有一个产物");
+                throw new JsonSyntaxException("fluid_outputs allows at most one output");
             }
             Fluid resultFluid = null;
             if (!fluidOutputs.isEmpty()) {
@@ -170,7 +170,7 @@ public class AlienLavaRecipe implements Recipe<Container> {
                 resultFluid = ForgeRegistries.FLUIDS.getValue(fluidId);
                 int amount = GsonHelper.getAsInt(output, "amount");
                 if (resultFluid == null || amount != FluidType.BUCKET_VOLUME) {
-                    throw new JsonSyntaxException("fluid_outputs 仅支持有效流体且 amount 必须为 1000");
+                    throw new JsonSyntaxException("fluid_outputs only supports valid fluids and amount must be 1000");
                 }
             }
             return new AlienLavaRecipe(id, ingredients, catalyst, resultItem, resultFluid);

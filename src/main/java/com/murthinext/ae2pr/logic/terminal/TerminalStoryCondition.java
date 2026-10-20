@@ -76,7 +76,7 @@ public sealed interface TerminalStoryCondition {
         @Override
         public void validate(Set<String> nodes, TerminalStoryRunner runner) {
             if (!nodes.contains(id)) {
-                throw new IllegalArgumentException("条件引用的剧情块不存在：" + id);
+                throw new IllegalArgumentException("Condition references missing story node: " + id);
             }
         }
     }
@@ -102,7 +102,7 @@ public sealed interface TerminalStoryCondition {
             Object value = runner.variable(name);
             if (value == null || (expected instanceof Number) != (value instanceof Number)
                     || (expected instanceof Boolean) != (value instanceof Boolean)) {
-                throw new IllegalArgumentException("条件变量未声明或类型不匹配：" + name);
+                throw new IllegalArgumentException("Condition variable is undeclared or has mismatched type: " + name);
             }
         }
     }
@@ -129,7 +129,7 @@ public sealed interface TerminalStoryCondition {
             return new Constant(true);
         }
         if (depth > 16) {
-            throw new IllegalArgumentException("剧情条件嵌套过深");
+            throw new IllegalArgumentException("Story condition is nested too deeply");
         }
         if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isBoolean()) {
             return new Constant(element.getAsBoolean());
@@ -138,13 +138,13 @@ public sealed interface TerminalStoryCondition {
         long kinds = List.of("all", "any", "not", "completed", "variable", "item", "tag").stream()
                 .filter(json::has).count();
         if (kinds != 1) {
-            throw new IllegalArgumentException("每个剧情条件必须指定一种判定方式");
+            throw new IllegalArgumentException("Each story condition must specify exactly one kind");
         }
         if (json.has("all") || json.has("any")) {
             boolean all = json.has("all");
             var array = json.getAsJsonArray(all ? "all" : "any");
             if (array.isEmpty() || array.size() > 32) {
-                throw new IllegalArgumentException("条件组合必须包含 1–32 个子条件");
+                throw new IllegalArgumentException("Condition group must contain 1-32 children");
             }
             return new Group(all, array.asList().stream().map(child -> parse(child, depth + 1)).toList());
         }
@@ -157,14 +157,14 @@ public sealed interface TerminalStoryCondition {
         if (json.has("variable")) {
             List<String> operators = List.of("equals", "at_least", "at_most").stream().filter(json::has).toList();
             if (operators.size() != 1) {
-                throw new IllegalArgumentException("变量条件必须指定 equals、at_least 或 at_most");
+                throw new IllegalArgumentException("Variable condition must specify equals, at_least or at_most");
             }
             String operator = operators.get(0);
             var value = json.getAsJsonPrimitive(operator);
             Object expected = value.isBoolean() ? value.getAsBoolean()
                     : value.isNumber() ? value.getAsDouble() : value.getAsString();
             if (!operator.equals("equals") && !(expected instanceof Number)) {
-                throw new IllegalArgumentException("范围条件仅支持数值变量");
+                throw new IllegalArgumentException("Range conditions only support numeric variables");
             }
             return new Variable(json.get("variable").getAsString(), operator, expected);
         }
@@ -172,11 +172,11 @@ public sealed interface TerminalStoryCondition {
         String id = json.get(tag ? "tag" : "item").getAsString();
         int count = json.has("count") ? json.get("count").getAsInt() : 1;
         if (!id.matches("[a-z0-9_.-]+:[a-z0-9/._-]+") || count < 1 || count > 9999) {
-            throw new IllegalArgumentException("物品条件无效：" + id);
+            throw new IllegalArgumentException("Invalid item condition id: " + id);
         }
         String key = (tag ? "tag|" : "item|") + id + "|" + count;
         if (key.length() > 160) {
-            throw new IllegalArgumentException("物品条件标识过长");
+            throw new IllegalArgumentException("Item condition key is too long");
         }
         return new Inventory(key);
     }

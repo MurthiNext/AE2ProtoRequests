@@ -152,7 +152,7 @@ public class LavaSmelterRecipe implements Recipe<Container>, MultiblockRecipe {
                 JsonObject entry = element.getAsJsonObject();
                 int count = GsonHelper.getAsInt(entry, "count", 1);
                 if (count < 1) {
-                    throw new JsonSyntaxException("item_inputs 的 count 必须 >= 1");
+                    throw new JsonSyntaxException("item_inputs count must be >= 1");
                 }
                 ingredients.add(new CountedIngredient(Ingredient.fromJson(entry), count));
             }
@@ -163,13 +163,13 @@ public class LavaSmelterRecipe implements Recipe<Container>, MultiblockRecipe {
             }
 
             if (ingredients.isEmpty() && fluidInputs.isEmpty()) {
-                throw new JsonSyntaxException("配方至少需要一个输入");
+                throw new JsonSyntaxException("Recipe requires at least one input");
             }
             if (fluidInputs.size() > MAX_FLUID_INPUTS) {
-                throw new JsonSyntaxException("流体输入数量必须为 0 至 " + MAX_FLUID_INPUTS);
+                throw new JsonSyntaxException("Fluid input count must be between 0 and " + MAX_FLUID_INPUTS);
             }
             if (ingredients.size() > MAX_ITEM_INPUTS) {
-                throw new JsonSyntaxException("物品输入数量必须为 0 至 " + MAX_ITEM_INPUTS);
+                throw new JsonSyntaxException("Item input count must be between 0 and " + MAX_ITEM_INPUTS);
             }
 
             List<ItemStack> results = new ArrayList<>();
@@ -180,11 +180,11 @@ public class LavaSmelterRecipe implements Recipe<Container>, MultiblockRecipe {
                 }
             }
             if (results.isEmpty() || results.size() > MAX_RESULTS) {
-                throw new JsonSyntaxException("配方产物数量必须为 1 至 " + MAX_RESULTS);
+                throw new JsonSyntaxException("Recipe output count must be between 1 and " + MAX_RESULTS);
             }
             int duration = GsonHelper.getAsInt(json, "duration", DEFAULT_DURATION);
             if (duration < 1) {
-                throw new JsonSyntaxException("duration 必须 >= 1");
+                throw new JsonSyntaxException("duration must be >= 1");
             }
             return new LavaSmelterRecipe(id, ingredients, fluidInputs, results, duration);
         }
@@ -193,11 +193,11 @@ public class LavaSmelterRecipe implements Recipe<Container>, MultiblockRecipe {
             ResourceLocation fluidId = ResourceLocation.parse(GsonHelper.getAsString(obj, "fluid"));
             Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidId);
             if (fluid == null || fluid == Fluids.EMPTY) {
-                throw new JsonSyntaxException(key + " 的流体不存在：" + fluidId);
+                throw new JsonSyntaxException("Unknown fluid in " + key + ": " + fluidId);
             }
             int amount = GsonHelper.getAsInt(obj, "amount", 1000);
             if (amount < 1) {
-                throw new JsonSyntaxException(key + " 的 amount 必须 >= 1");
+                throw new JsonSyntaxException("Invalid amount in " + key + ", must be >= 1");
             }
             return new FluidStack(fluid, amount);
         }

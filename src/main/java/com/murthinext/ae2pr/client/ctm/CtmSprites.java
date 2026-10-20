@@ -112,7 +112,8 @@ public final class CtmSprites {
             CACHE.put(baseSprite.contents().name(), ctmSprite);
         }
         if (!missing.isEmpty()) {
-            ae2pr.LOGGER.warn("连接纹理图集缺失，相关方块将使用普通贴图: {}", missing);
+            ae2pr.LOGGER.warn("Connected texture atlas is missing, affected blocks will use plain textures: {}",
+                    missing);
         }
     }
 

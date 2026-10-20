@@ -7,7 +7,7 @@ public record ModuleDefinition(ModuleType type, int level) {
 
     public ModuleDefinition {
         if (level < 1) {
-            throw new IllegalArgumentException("模块等级必须 >= 1：" + level);
+            throw new IllegalArgumentException("Module level must be >= 1: " + level);
         }
     }
 

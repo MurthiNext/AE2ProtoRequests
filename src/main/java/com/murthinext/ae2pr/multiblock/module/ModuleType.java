@@ -11,7 +11,7 @@ public record ModuleType(ResourceLocation id, int maxCount) {
 
     public ModuleType {
         if (maxCount < -1) {
-            throw new IllegalArgumentException("模块安装上限非法：" + maxCount);
+            throw new IllegalArgumentException("Invalid module install limit: " + maxCount);
         }
     }
 

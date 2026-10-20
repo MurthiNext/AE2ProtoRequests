@@ -30,7 +30,7 @@ public final class InkStoryCompiler {
             languages = directories.filter(Files::isDirectory).sorted().toList();
         }
         if (languages.isEmpty()) {
-            throw new IllegalArgumentException("至少需要一个剧情语言目录");
+            throw new IllegalArgumentException("At least one story language directory is required");
         }
         Set<Path> targets = new HashSet<>();
         for (Path language : languages) {
@@ -52,10 +52,10 @@ public final class InkStoryCompiler {
                 while (matcher.find()) {
                     String id = matcher.group(1).strip();
                     if (id.length() > 256 || !id.matches("[A-Za-z0-9_./-]+")) {
-                        throw new IllegalArgumentException("剧情 ID 格式无效：" + file + " / " + id);
+                        throw new IllegalArgumentException("Invalid story ID: " + file + " / " + id);
                     }
                     if (!ids.add(id)) {
-                        throw new IllegalArgumentException("剧情 ID 重复：" + file + " / " + id);
+                        throw new IllegalArgumentException("Duplicate story ID: " + file + " / " + id);
                     }
                 }
             }
@@ -74,7 +74,8 @@ public final class InkStoryCompiler {
             public String resolveInkFilename(String includeName) {
                 Path file = language.resolve(includeName).normalize();
                 if (!file.startsWith(language)) {
-                    throw new IllegalArgumentException("INCLUDE 超出当前语言目录：" + includeName);
+                    throw new IllegalArgumentException(
+                            "INCLUDE escapes the current language directory: " + includeName);
                 }
                 return file.toString();
             }
@@ -86,20 +87,21 @@ public final class InkStoryCompiler {
         };
         var program = new Compiler(Files.readString(language.resolve("main.ink")), options).compile();
         if (program == null) {
-            throw new IllegalStateException("剧情编译失败：" + language);
+            throw new IllegalStateException("Story compilation failed: " + language);
         }
         try (var definitions = Files.walk(nodes)) {
             for (Path file : definitions.filter(path -> path.toString().endsWith(".json")).sorted().toList()) {
                 Object entry = SimpleJson.textToDictionary(Files.readString(file)).get("entry");
                 if (!(entry instanceof String knot) || !program.hasFunction(knot)) {
-                    throw new IllegalArgumentException("剧情入口不存在：" + file + " / " + language.getFileName());
+                    throw new IllegalArgumentException(
+                            "Story entry does not exist: " + file + " / " + language.getFileName());
                 }
             }
         }
         Path target = output.resolve("assets/ae2pr/story/" + language.getFileName() + "/main.ink.json");
         Files.createDirectories(target.getParent());
         Files.writeString(target, program.toJson(), StandardCharsets.UTF_8);
-        System.out.println("已编译剧情：" + language.getFileName());
+        System.out.println("Compiled story: " + language.getFileName());
         return target;
     }
 }

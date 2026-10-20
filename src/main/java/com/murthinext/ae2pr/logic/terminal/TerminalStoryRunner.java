@@ -29,7 +29,7 @@ public final class TerminalStoryRunner {
             story = new Story(program);
             String programId = programId(program);
             if (!saved.programId.isEmpty() && !saved.programId.equals(programId)) {
-                throw new IllegalArgumentException("剧情程序已改变，需要重置阅读进度");
+                throw new IllegalArgumentException("Story program changed, reading progress must be reset");
             }
             progress = saved;
             progress.programId = programId;
@@ -41,7 +41,7 @@ public final class TerminalStoryRunner {
             }
             snapshot();
         } catch (Exception exception) {
-            throw new IllegalArgumentException("无法恢复 Ink 剧情", exception);
+            throw new IllegalArgumentException("Failed to restore Ink story", exception);
         }
     }
 
@@ -73,7 +73,7 @@ public final class TerminalStoryRunner {
 
     public NodeProgress open(String id, String entry) {
         if (!hasEntry(entry)) {
-            throw new IllegalArgumentException("剧情入口不存在：" + entry);
+            throw new IllegalArgumentException("Story entry does not exist: " + entry);
         }
         try {
             activeNode = id;
@@ -85,11 +85,11 @@ public final class TerminalStoryRunner {
                 story.choosePathString(entry);
                 snapshot();
             } else if (!node.entry.equals(entry)) {
-                throw new IllegalArgumentException("剧情块入口已改变：" + id);
+                throw new IllegalArgumentException("Story node entry changed: " + id);
             }
             return node;
         } catch (Exception exception) {
-            throw new IllegalStateException("无法打开剧情块：" + id, exception);
+            throw new IllegalStateException("Failed to open story node: " + id, exception);
         }
     }
 
@@ -98,11 +98,11 @@ public final class TerminalStoryRunner {
             long deadline = System.nanoTime() + 100000000;
             for (int i = 0; i < 256 && story.canContinue(); i++) {
                 if (System.nanoTime() >= deadline) {
-                    throw new IllegalStateException("剧情执行超时，请检查无输出的循环");
+                    throw new IllegalStateException("Story execution timed out, check for loops without output");
                 }
                 story.continueAsync(20);
                 if (!story.asyncContinueComplete()) {
-                    throw new IllegalStateException("剧情执行超时，请检查无输出的循环");
+                    throw new IllegalStateException("Story execution timed out, check for loops without output");
                 }
                 String output = story.getCurrentText().strip();
                 List<String> tags = story.getCurrentTags();
@@ -119,7 +119,7 @@ public final class TerminalStoryRunner {
                 }
                 int delay = Integer.parseInt(tag(tags, "delay", "0"));
                 if (delay < 0 || delay > 60000) {
-                    throw new IllegalArgumentException("剧情延时应在 0–60000 毫秒之间");
+                    throw new IllegalArgumentException("Story delay must be between 0 and 60000 ms");
                 }
                 Line line = new Line(id == null ? activeNode + "/end" : id, speaker,
                         output.replace("<br/>", "\n"), delay, tags.contains("answer"));
@@ -130,7 +130,7 @@ public final class TerminalStoryRunner {
             snapshot();
             return null;
         } catch (Exception exception) {
-            throw new IllegalStateException("剧情推进失败：" + activeNode, exception);
+            throw new IllegalStateException("Failed to advance story: " + activeNode, exception);
         }
     }
 
@@ -141,7 +141,7 @@ public final class TerminalStoryRunner {
 
     public List<Choice> choices() {
         if (story.getCurrentChoices().size() > 12) {
-            throw new IllegalStateException("同一组选项不能超过 12 个");
+            throw new IllegalStateException("A single choice group must not exceed 12 options");
         }
         return story.getCurrentChoices().stream().map(choice -> {
             try {
@@ -155,12 +155,12 @@ public final class TerminalStoryRunner {
 
     public void choose(String id) {
         Choice selected = choices().stream().filter(choice -> choice.id().equals(id)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("剧情选项不存在：" + id));
+                .orElseThrow(() -> new IllegalArgumentException("Story choice does not exist: " + id));
         try {
             story.chooseChoiceIndex(selected.index());
             snapshot();
         } catch (Exception exception) {
-            throw new IllegalStateException("无法选择剧情选项：" + id, exception);
+            throw new IllegalStateException("Failed to choose story option: " + id, exception);
         }
     }
 
@@ -198,7 +198,7 @@ public final class TerminalStoryRunner {
             progress.inkState = json;
             return progress;
         } catch (Exception exception) {
-            throw new IllegalStateException("无法保存 Ink 剧情", exception);
+            throw new IllegalStateException("Failed to save Ink story", exception);
         }
     }
 }

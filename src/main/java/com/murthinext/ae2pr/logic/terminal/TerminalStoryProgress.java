@@ -63,13 +63,13 @@ public final class TerminalStoryProgress {
             return new TerminalStoryProgress();
         }
         if (json.length() > MAX_JSON_BYTES) {
-            throw new IllegalArgumentException("剧情快照过大");
+            throw new IllegalArgumentException("Story snapshot is too large");
         }
         TerminalStoryProgress progress = GSON.fromJson(json, TerminalStoryProgress.class);
         if (progress == null || progress.epoch < 0 || progress.programId == null || progress.inkState == null
                 || progress.nodes == null || progress.nodes.size() > 128
                 || !progress.programId.isEmpty() && !progress.programId.matches("[0-9a-f]{64}")) {
-            throw new IllegalArgumentException("剧情快照无效");
+            throw new IllegalArgumentException("Invalid story snapshot");
         }
         for (var entry : progress.nodes.entrySet()) {
             NodeProgress node = entry.getValue();
@@ -78,13 +78,13 @@ public final class TerminalStoryProgress {
                     || node.log.size() > MAX_LOG_LINES || node.playback == null || node.visitedPaths == null
                     || node.visitedPaths.size() > 16384
                     || node.visitedPaths.stream().anyMatch(path -> path == null || path.length() > 256)) {
-                throw new IllegalArgumentException("剧情块进度无效：" + entry.getKey());
+                throw new IllegalArgumentException("Invalid story node progress: " + entry.getKey());
             }
             Playback playback = node.playback;
             if (playback.delay < 0 || playback.delay > 60000 || playback.answerDelay < 0 || playback.answerDelay > 320
                     || playback.typed < 0 || playback.typed > 17000
                     || playback.pendingLine != null && playback.typing) {
-                throw new IllegalArgumentException("剧情演出状态无效：" + entry.getKey());
+                throw new IllegalArgumentException("Invalid story playback state: " + entry.getKey());
             }
             for (Line line : node.log) {
                 validate(line);
@@ -101,10 +101,10 @@ public final class TerminalStoryProgress {
                     || !state.has("currentFlowName") || !state.get("currentFlowName").isJsonPrimitive()
                     || !state.getAsJsonObject("flows").has(state.get("currentFlowName").getAsString())
                     || !state.getAsJsonObject("flows").has("DEFAULT_FLOW") || !state.has("inkSaveVersion")) {
-                throw new IllegalArgumentException("Ink 快照无效");
+                throw new IllegalArgumentException("Invalid Ink snapshot");
             }
         } else if (!progress.nodes.isEmpty()) {
-            throw new IllegalArgumentException("剧情块进度缺少 Ink 快照");
+            throw new IllegalArgumentException("Story node progress is missing the Ink snapshot");
         }
         return progress;
     }
@@ -114,7 +114,7 @@ public final class TerminalStoryProgress {
                 || line.id().isBlank() || line.id().length() > 256
                 || line.speaker().length() > 256 || line.text().length() > 16384
                 || line.delay() < 0 || line.delay() > 60000) {
-            throw new IllegalArgumentException("剧情台词无效");
+            throw new IllegalArgumentException("Invalid story line");
         }
     }
 
@@ -125,26 +125,26 @@ public final class TerminalStoryProgress {
     public byte[] compress() throws IOException {
         byte[] json = toJson().getBytes(StandardCharsets.UTF_8);
         if (json.length > MAX_JSON_BYTES) {
-            throw new IOException("剧情快照超过 1 MiB");
+            throw new IOException("Story snapshot exceeds 1 MiB");
         }
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try (GZIPOutputStream gzip = new GZIPOutputStream(output)) {
             gzip.write(json);
         }
         if (output.size() > MAX_SNAPSHOT_BYTES) {
-            throw new IOException("剧情压缩快照超过网络上限");
+            throw new IOException("Compressed story snapshot exceeds the network limit");
         }
         return output.toByteArray();
     }
 
     public static TerminalStoryProgress decompress(byte[] bytes) throws IOException {
         if (bytes.length > MAX_SNAPSHOT_BYTES) {
-            throw new IOException("剧情数据包过大");
+            throw new IOException("Story packet is too large");
         }
         try (GZIPInputStream gzip = new GZIPInputStream(new ByteArrayInputStream(bytes))) {
             byte[] json = gzip.readNBytes(MAX_JSON_BYTES + 1);
             if (json.length > MAX_JSON_BYTES) {
-                throw new IOException("剧情解压快照过大");
+                throw new IOException("Decompressed story snapshot is too large");
             }
             return fromJson(new String(json, StandardCharsets.UTF_8));
         }
