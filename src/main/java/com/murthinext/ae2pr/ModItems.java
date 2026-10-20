@@ -164,6 +164,9 @@ public final class ModItems {
     public static final RegistryObject<Item> ZIRCONIUM_PLATE = ITEMS.register("zirconium_plate",
             () -> new Item(new Item.Properties()));
 
+    public static final RegistryObject<Item> FINE_FLUIX_WIRE = ITEMS.register("fine_fluix_wire",
+            () -> new Item(new Item.Properties()));
+
     public static final RegistryObject<Item> SINGLE_PLATE_PRESS = ITEMS.register("single_plate_press",
             () -> new Item(new Item.Properties()));
 
@@ -215,6 +218,14 @@ public final class ModItems {
 
     public static final RegistryObject<BucketItem> LIQUID_CRYSTALINE_BUCKET = ITEMS.register(
             "liquid_crystaline_bucket", () -> new NoBlockFluidBucketItem(ModFluids.LIQUID_CRYSTALINE,
+                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+
+    public static final RegistryObject<BucketItem> CRYSTAL_ADHESIVE_BUCKET = ITEMS.register(
+            "crystal_adhesive_bucket", () -> new NoBlockFluidBucketItem(ModFluids.CRYSTAL_ADHESIVE,
+                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+
+    public static final RegistryObject<BucketItem> MOLTEN_ZIRCONIUM_BUCKET = ITEMS.register(
+            "molten_zirconium_bucket", () -> new NoBlockFluidBucketItem(ModFluids.MOLTEN_ZIRCONIUM,
                     new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
     public static final RegistryObject<BlockItem> NAMING_FACTORY = ITEMS.register("naming_factory",

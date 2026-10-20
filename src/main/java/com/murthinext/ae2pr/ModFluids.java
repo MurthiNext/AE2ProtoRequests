@@ -2,10 +2,12 @@ package com.murthinext.ae2pr;
 
 import com.murthinext.ae2pr.fluid.AlienLavaFluid;
 import com.murthinext.ae2pr.fluid.AlienLavaFluidType;
+import com.murthinext.ae2pr.fluid.CrystalAdhesiveFluidType;
 import com.murthinext.ae2pr.fluid.LiquidAmethystFluidType;
 import com.murthinext.ae2pr.fluid.LiquidCertusQuartzFluidType;
 import com.murthinext.ae2pr.fluid.LiquidCrystalineFluidType;
 import com.murthinext.ae2pr.fluid.LiquidFluixCrystalFluidType;
+import com.murthinext.ae2pr.fluid.MoltenZirconiumFluidType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -104,5 +106,35 @@ public final class ModFluids {
         return new ForgeFlowingFluid.Properties(LIQUID_CRYSTALINE_TYPE, LIQUID_CRYSTALINE,
                 FLOWING_LIQUID_CRYSTALINE)
                 .bucket(ModItems.LIQUID_CRYSTALINE_BUCKET);
+    }
+
+    public static final RegistryObject<FluidType> CRYSTAL_ADHESIVE_TYPE = FLUID_TYPES.register(
+            "crystal_adhesive", CrystalAdhesiveFluidType::new);
+
+    public static final RegistryObject<ForgeFlowingFluid> CRYSTAL_ADHESIVE = FLUIDS.register(
+            "crystal_adhesive", () -> new ForgeFlowingFluid.Source(crystalAdhesiveProperties()));
+
+    public static final RegistryObject<ForgeFlowingFluid> FLOWING_CRYSTAL_ADHESIVE = FLUIDS.register(
+            "flowing_crystal_adhesive", () -> new ForgeFlowingFluid.Flowing(crystalAdhesiveProperties()));
+
+    private static ForgeFlowingFluid.Properties crystalAdhesiveProperties() {
+        return new ForgeFlowingFluid.Properties(CRYSTAL_ADHESIVE_TYPE, CRYSTAL_ADHESIVE,
+                FLOWING_CRYSTAL_ADHESIVE)
+                .bucket(ModItems.CRYSTAL_ADHESIVE_BUCKET);
+    }
+
+    public static final RegistryObject<FluidType> MOLTEN_ZIRCONIUM_TYPE = FLUID_TYPES.register(
+            "molten_zirconium", MoltenZirconiumFluidType::new);
+
+    public static final RegistryObject<ForgeFlowingFluid> MOLTEN_ZIRCONIUM = FLUIDS.register(
+            "molten_zirconium", () -> new ForgeFlowingFluid.Source(moltenZirconiumProperties()));
+
+    public static final RegistryObject<ForgeFlowingFluid> FLOWING_MOLTEN_ZIRCONIUM = FLUIDS.register(
+            "flowing_molten_zirconium", () -> new ForgeFlowingFluid.Flowing(moltenZirconiumProperties()));
+
+    private static ForgeFlowingFluid.Properties moltenZirconiumProperties() {
+        return new ForgeFlowingFluid.Properties(MOLTEN_ZIRCONIUM_TYPE, MOLTEN_ZIRCONIUM,
+                FLOWING_MOLTEN_ZIRCONIUM)
+                .bucket(ModItems.MOLTEN_ZIRCONIUM_BUCKET);
     }
 }

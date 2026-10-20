@@ -23,15 +23,18 @@ public final class ModCreativeTabs {
                     .title(Component.translatable("itemGroup.ae2pr"))
                     .icon(() -> new ItemStack(ModItems.FILTER_CELL.get()))
                     .displayItems((params, output) -> {
-                        // 普通物品
+                        // 功能物品
                         output.accept(ModItems.FILTER_CELL.get());
                         output.accept(ModItems.ADVANCED_FILTER_CELL.get());
                         output.accept(ModItems.PROTO_TERMINAL.get());
+
+                        // 材料 / 中间产物
                         output.accept(ModItems.SINGLE_PLATE_PRESS.get());
                         output.accept(ModItems.ZIRCON_CIRCUIT_BOARD.get());
                         output.accept(ModItems.DIAMOND_WAFER.get());
                         output.accept(ModItems.DIAMOND_SOC_WAFER.get());
                         output.accept(ModItems.DIAMOND_SOC.get());
+                        output.accept(ModItems.FINE_FLUIX_WIRE.get());
 
                         // 电路板
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_1TOPS.get());
@@ -76,6 +79,8 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.LIQUID_FLUIX_CRYSTAL_BUCKET.get());
                         output.accept(ModItems.LIQUID_AMETHYST_BUCKET.get());
                         output.accept(ModItems.LIQUID_CRYSTALINE_BUCKET.get());
+                        output.accept(ModItems.CRYSTAL_ADHESIVE_BUCKET.get());
+                        output.accept(ModItems.MOLTEN_ZIRCONIUM_BUCKET.get());
 
                         // 储存方块
                         output.accept(ModItems.METEOR_STEEL_BLOCK.get());
