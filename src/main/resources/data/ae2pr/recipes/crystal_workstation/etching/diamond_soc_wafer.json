@@ -1,0 +1,23 @@
+{
+  "type": "ae2pr:crystal_workstation_etching",
+  "item_inputs": [
+    {
+      "item": "ae2pr:diamond_wafer",
+      "count": 1
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:liquid_crystaline",
+      "amount": 1000
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:diamond_soc_wafer",
+      "count": 1
+    }
+  ],
+  "duration": 200,
+  "energy": 1000000
+}

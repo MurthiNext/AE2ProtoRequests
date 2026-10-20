@@ -1,0 +1,27 @@
+{
+  "type": "ae2pr:crystal_workstation_cutting",
+  "item_inputs": [
+    {
+      "item": "ae2pr:zircon_block",
+      "count": 1
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 1000
+    },
+    {
+      "fluid": "ae2pr:liquid_certus_quartz",
+      "amount": 1440
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:zircon_circuit_board",
+      "count": 4
+    }
+  ],
+  "duration": 100,
+  "energy": 100000
+}

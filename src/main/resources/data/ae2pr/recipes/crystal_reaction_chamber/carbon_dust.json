@@ -1,0 +1,23 @@
+{
+  "type": "ae2pr:crystal_reaction_chamber",
+  "duration": 100,
+  "energy": 50000,
+  "item_inputs": [
+    {
+      "tag": "forge:dustscoal",
+      "count": 36
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 5000
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:carbon_dust",
+      "count": 32
+    }
+  ]
+}

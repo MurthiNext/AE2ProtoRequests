@@ -1,7 +1,7 @@
 {
   "type": "ae2pr:crystal_reaction_chamber",
   "duration": 100,
-  "energy": 50000000,
+  "energy": 20000000,
   "item_inputs": [
     {
       "item": "ae2pr:high_energy_singularity",
@@ -13,10 +13,6 @@
     },
     {
       "item": "ae2:charged_certus_quartz_crystal",
-      "count": 1024
-    },
-    {
-      "tag": "ae2:all_fluix",
       "count": 1024
     }
   ],

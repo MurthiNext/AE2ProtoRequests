@@ -40,6 +40,10 @@ public final class ModTags {
     public static final TagKey<Item> CIRCUIT_AEV_D4 = ItemTags.create(
             ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "circuits/aev_d4"));
 
+    // XPV 级电路
+    public static final TagKey<Item> CIRCUIT_XPV = ItemTags.create(
+            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "circuits/xpv"));
+
     public static final TagKey<Fluid> ALIEN_LAVA = TagKey.create(Registries.FLUID,
             ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "alien_lava"));
 }

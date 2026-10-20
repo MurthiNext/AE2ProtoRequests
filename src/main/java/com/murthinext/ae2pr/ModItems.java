@@ -2,6 +2,7 @@ package com.murthinext.ae2pr;
 
 import com.murthinext.ae2pr.item.NoBlockFluidBucketItem;
 import com.murthinext.ae2pr.item.ComputationCellComponentItem;
+import com.murthinext.ae2pr.item.CrystalProcessorItem;
 import com.murthinext.ae2pr.item.crystaline.CrystalineItem;
 import com.murthinext.ae2pr.item.level_emitter.MultiLevelEmitterPartItem;
 import com.murthinext.ae2pr.item.level_emitter.MultiThresholdLevelEmitterPartItem;
@@ -168,6 +169,24 @@ public final class ModItems {
 
     public static final RegistryObject<Item> DIAMOND_WAFER = ITEMS.register("diamond_wafer",
             () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> DIAMOND_SOC_WAFER = ITEMS.register("diamond_soc_wafer",
+            () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> DIAMOND_SOC = ITEMS.register("diamond_soc",
+            () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<CrystalProcessorItem> CRYSTAL_PROCESSOR = ITEMS.register("crystal_processor",
+            () -> new CrystalProcessorItem(new Item.Properties(), "aev_d2"));
+
+    public static final RegistryObject<CrystalProcessorItem> CRYSTAL_PROCESSOR_ASSEMBLY = ITEMS.register(
+            "crystal_processor_assembly", () -> new CrystalProcessorItem(new Item.Properties(), "aev_d1"));
+
+    public static final RegistryObject<CrystalProcessorItem> CRYSTAL_PROCESSOR_COMPUTER = ITEMS.register(
+            "crystal_processor_computer", () -> new CrystalProcessorItem(new Item.Properties(), "aev"));
+
+    public static final RegistryObject<CrystalProcessorItem> CRYSTAL_PROCESSOR_MAINFRAME = ITEMS.register(
+            "crystal_processor_mainframe", () -> new CrystalProcessorItem(new Item.Properties(), "xpv"));
 
     public static final RegistryObject<Item> ZIRCON_CIRCUIT_BOARD = ITEMS.register("zircon_circuit_board",
             () -> new Item(new Item.Properties()));

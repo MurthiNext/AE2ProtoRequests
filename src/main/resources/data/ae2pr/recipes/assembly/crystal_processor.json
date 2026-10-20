@@ -1,0 +1,35 @@
+{
+  "type": "ae2pr:crystal_assembly_line",
+  "duration": 100,
+  "energy": 75000,
+  "item_inputs": [
+    {
+      "item": "ae2pr:zircon_circuit_board",
+      "count": 1
+    },
+    {
+      "item": "ae2pr:diamond_soc",
+      "count": 1
+    },
+    {
+      "item": "ae2pr:computation_cell_component_1tops",
+      "count": 2
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:liquid_certus_quartz",
+      "amount": 1440
+    },
+    {
+      "fluid": "ae2pr:liquid_crystaline",
+      "amount": 1440
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:crystal_processor",
+      "count": 1
+    }
+  ]
+}

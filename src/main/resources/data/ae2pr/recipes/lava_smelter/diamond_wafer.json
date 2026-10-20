@@ -1,0 +1,30 @@
+{
+  "type": "ae2pr:lava_smelter",
+  "duration": 2400,
+  "item_inputs": [
+    {
+      "tag": "forge:storage_blocks/diamond",
+      "count": 4
+    },
+    {
+      "tag": "forge:dusts/carbon",
+      "count": 72
+    },
+    {
+      "tag": "forge:dusts/silicon",
+      "count": 8
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:liquid_crystaline",
+      "amount": 1000
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:diamond_wafer",
+      "count": 1
+    }
+  ]
+}

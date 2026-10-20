@@ -1,0 +1,23 @@
+{
+  "type": "ae2pr:crystal_workstation_cutting",
+  "item_inputs": [
+    {
+      "item": "ae2pr:diamond_soc_wafer",
+      "count": 1
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 1000
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:diamond_soc",
+      "count": 32
+    }
+  ],
+  "duration": 200,
+  "energy": 750000
+}

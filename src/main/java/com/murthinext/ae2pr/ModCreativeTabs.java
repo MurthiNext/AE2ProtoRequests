@@ -28,8 +28,10 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.ADVANCED_FILTER_CELL.get());
                         output.accept(ModItems.PROTO_TERMINAL.get());
                         output.accept(ModItems.SINGLE_PLATE_PRESS.get());
-                        output.accept(ModItems.DIAMOND_WAFER.get());
                         output.accept(ModItems.ZIRCON_CIRCUIT_BOARD.get());
+                        output.accept(ModItems.DIAMOND_WAFER.get());
+                        output.accept(ModItems.DIAMOND_SOC_WAFER.get());
+                        output.accept(ModItems.DIAMOND_SOC.get());
 
                         // 电路板
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_1TOPS.get());
@@ -37,6 +39,10 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_16TOPS.get());
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_64TOPS.get());
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_256TOPS.get());
+                        output.accept(ModItems.CRYSTAL_PROCESSOR.get());
+                        output.accept(ModItems.CRYSTAL_PROCESSOR_ASSEMBLY.get());
+                        output.accept(ModItems.CRYSTAL_PROCESSOR_COMPUTER.get());
+                        output.accept(ModItems.CRYSTAL_PROCESSOR_MAINFRAME.get());
 
                         // 奇点
                         output.accept(ModItems.UNCHARGED_SINGULARITY.get());
@@ -107,7 +113,6 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.ZIRCONIA_CORUNDUM_BRICKS.get());
                         output.accept(ModItems.CRYSTAL_GLASS.get());
                         output.accept(ModItems.FIREPROOF_CRYSTAL_GLASS.get());
-                        output.accept(ModItems.HIGH_ENERGY_CORE.get());
 
                         // 多方块结构 - 特色结构方块
                         output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_UNIT.get());
@@ -119,6 +124,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_GRATING.get());
                         output.accept(ModItems.LOGISTICS_CONTROL_CASING.get());
                         output.accept(ModItems.METEOR_STEEL_PIPE_BLOCK.get());
+                        output.accept(ModItems.HIGH_ENERGY_CORE.get());
 
                         // 多方块结构 - 仓室
                         output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get());
