@@ -1,0 +1,26 @@
+{
+  "type": "ae2pr:lava_smelter",
+  "duration": 70,
+  "item_inputs": [
+    {
+      "item": "ae2:fluix_glass_cable",
+      "count": 1
+    },
+    {
+      "tag": "forge:dusts/zirconium",
+      "count": 1
+    }
+  ],
+  "fluid_inputs": [
+  {
+    "fluid": "ae2pr:liquid_crystaline",
+    "amount": 10
+  }
+],
+  "item_outputs": [
+    {
+      "item": "ae2pr:fine_fluix_wire",
+      "count": 4
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "type": "ae2pr:lava_smelter",
+  "duration": 400,
   "item_inputs": [
     {
       "item": "minecraft:iron_ingot",

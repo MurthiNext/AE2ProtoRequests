@@ -4,7 +4,7 @@
   "energy": 50000,
   "item_inputs": [
     {
-      "tag": "forge:dustscoal",
+      "tag": "forge:dusts/coal",
       "count": 36
     }
   ],

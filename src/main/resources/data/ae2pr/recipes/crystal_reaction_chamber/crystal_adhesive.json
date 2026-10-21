@@ -1,0 +1,27 @@
+{
+  "type": "ae2pr:crystal_reaction_chamber",
+  "duration": 100,
+  "energy": 50000,
+  "item_inputs": [
+    {
+      "item": "ae2:matter_ball",
+      "count": 64
+    },
+    {
+      "tag": "forge:dusts/certus_quartz",
+      "count": 1
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:liquid_crystaline",
+      "amount": 10
+    }
+  ],
+  "fluid_outputs": [
+    {
+      "fluid": "ae2pr:crystal_adhesive",
+      "amount": 8
+    }
+  ]
+}

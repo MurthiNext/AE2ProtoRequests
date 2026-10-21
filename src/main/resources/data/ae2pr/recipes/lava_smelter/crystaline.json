@@ -1,5 +1,6 @@
 {
   "type": "ae2pr:lava_smelter",
+  "duration": 200,
   "item_inputs": [
     {
       "item": "ae2:singularity",

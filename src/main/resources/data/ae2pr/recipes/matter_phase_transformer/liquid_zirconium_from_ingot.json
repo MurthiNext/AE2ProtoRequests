@@ -1,0 +1,16 @@
+{
+  "type": "ae2pr:matter_phase_transformer",
+  "energy": 50000,
+  "item_inputs": [
+    {
+      "tag": "forge:ingots/zirconium",
+      "count": 1
+    }
+  ],
+  "fluid_outputs": [
+    {
+      "fluid": "ae2pr:liquid_zirconium",
+      "amount": 144
+    }
+  ]
+}

@@ -4,7 +4,7 @@
   "energy": 1000000,
   "item_inputs": [
     {
-      "item": "ae2pr:aev_machine_casing",
+      "item": "ae2pr:high_energy_core",
       "count": 1
     },
     {
@@ -12,8 +12,8 @@
       "count": 8
     },
     {
-      "item": "ae2pr:high_energy_singularity",
-      "count": 1
+      "tag": "ae2pr:circuits/aev_d2",
+      "count": 2
     }
   ],
   "fluid_inputs": [

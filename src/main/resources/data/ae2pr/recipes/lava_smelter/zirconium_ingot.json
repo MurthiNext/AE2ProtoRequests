@@ -1,5 +1,6 @@
 {
   "type": "ae2pr:lava_smelter",
+  "duration": 300,
   "item_inputs": [
     {
       "tag": "forge:gems/zircon",

@@ -1,7 +1,13 @@
 {
   "type": "ae2pr:crystal_assembly_line",
   "duration": 60,
-  "energy": 1000000,
+  "energy": 100000,
+  "module_requirements": [
+    {
+      "module": "ae2pr:charging",
+      "min_level": 1
+    }
+  ],
   "item_inputs": [
     {
       "item": "ae2pr:aev_machine_casing",

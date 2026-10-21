@@ -194,6 +194,10 @@ public final class ModItems {
     public static final RegistryObject<Item> ZIRCON_CIRCUIT_BOARD = ITEMS.register("zircon_circuit_board",
             () -> new Item(new Item.Properties()));
 
+    public static final RegistryObject<Item> ZIRCON_PRINTED_CIRCUIT_BOARD = ITEMS.register(
+            "zircon_printed_circuit_board", () -> new Item(new Item.Properties()));
+
+
     public static final RegistryObject<Item> UNCHARGED_SINGULARITY = ITEMS.register("uncharged_singularity",
             () -> new Item(new Item.Properties()));
 

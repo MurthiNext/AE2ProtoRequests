@@ -4,7 +4,7 @@
   "energy": 75000,
   "item_inputs": [
     {
-      "item": "ae2pr:zircon_circuit_board",
+      "item": "ae2pr:zircon_printed_circuit_board",
       "count": 1
     },
     {
@@ -14,16 +14,16 @@
     {
       "item": "ae2pr:computation_cell_component_1tops",
       "count": 2
+    },
+    {
+      "item": "ae2pr:fine_fluix_wire",
+      "count": 8
     }
   ],
   "fluid_inputs": [
     {
-      "fluid": "ae2pr:liquid_certus_quartz",
-      "amount": 1440
-    },
-    {
-      "fluid": "ae2pr:liquid_crystaline",
-      "amount": 1440
+      "fluid": "ae2pr:crystal_adhesive",
+      "amount": 144
     }
   ],
   "item_outputs": [

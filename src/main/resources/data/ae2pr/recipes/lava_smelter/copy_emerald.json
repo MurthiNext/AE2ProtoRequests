@@ -1,5 +1,6 @@
 {
   "type": "ae2pr:lava_smelter",
+  "duration": 100,
   "item_inputs": [
     {
       "item": "minecraft:emerald",

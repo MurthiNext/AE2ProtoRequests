@@ -1,0 +1,37 @@
+{
+  "type": "ae2pr:crystal_assembly_line",
+  "duration": 100,
+  "energy": 500000,
+  "module_requirements": [
+    {
+      "module": "ae2pr:charging",
+      "min_level": 1
+    }
+  ],
+  "item_inputs": [
+    {
+      "item": "ae2pr:reinforced_high_power_casing",
+      "count": 1
+    },
+    {
+      "tag": "forge:plates/zirconium",
+      "count": 8
+    },
+    {
+      "tag": "ae2pr:circuits/aev",
+      "count": 2
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:liquid_crystaline",
+      "amount": 720
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:high_energy_stability_casing",
+      "count": 1
+    }
+  ]
+}

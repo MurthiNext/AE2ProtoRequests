@@ -31,6 +31,7 @@ public final class ModCreativeTabs {
                         // 材料 / 中间产物
                         output.accept(ModItems.SINGLE_PLATE_PRESS.get());
                         output.accept(ModItems.ZIRCON_CIRCUIT_BOARD.get());
+                        output.accept(ModItems.ZIRCON_PRINTED_CIRCUIT_BOARD.get());
                         output.accept(ModItems.DIAMOND_WAFER.get());
                         output.accept(ModItems.DIAMOND_SOC_WAFER.get());
                         output.accept(ModItems.DIAMOND_SOC.get());
