@@ -56,6 +56,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     private static final String JOB_PARALLEL_ID = "jobParallel";
     private static final String MIRROR_SIDE_ID = "mirrorSide";
     private static final String MIRROR_FRONT_ID = "mirrorFront";
+    private static final String FORMED_CELLS_ID = "formedCells";
     private static final String TAG_UPGRADES = "upgrades";
 
     protected final StructureValidator structure;
@@ -71,8 +72,12 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     protected boolean mirrorSide;
     protected boolean mirrorFront;
 
+    // 上一次成型时覆盖的方块
+    private List<BlockPos> formedCells = List.of();
+
     private int tickCounter;
     private int retryTicks;
+    private boolean validating;
 
     protected int jobTicksLeft;
     protected int jobTotalTicks;
@@ -473,7 +478,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     public void validateStructure() {
-        if (level == null || level.isClientSide) {
+        if (level == null || level.isClientSide || validating) {
             return;
         }
         BlockState state = getBlockState();
@@ -481,8 +486,24 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             return;
         }
         Direction facing = state.getValue(block.facingProperty());
+        validating = true;
+        try {
+            validateStructure(facing);
+        } finally {
+            validating = false;
+        }
+    }
+
+    private void validateStructure(Direction facing) {
         StructureResult result = structure.validate(level, worldPosition, facing, Direction.UP, maxSlices());
         if (result.fromCache()) {
+            // 结构未变化，但相邻控制器可能重置过部件外观，此处补回
+            if (formedCells.isEmpty()) {
+                formedCells = structureFacade.updateFormed(level, worldPosition, facing, result, formedCells,
+                        jobTicksLeft > 0);
+            } else {
+                structureFacade.reapply(level, formedCells, jobTicksLeft > 0);
+            }
             return;
         }
         onStructureChanged(result);
@@ -492,7 +513,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             mirrorFront = result.mirrorFront();
         }
         boolean active = result.formed() && jobTicksLeft > 0;
-        structureFacade.updateFormed(level, worldPosition, facing, result, active);
+        formedCells = structureFacade.updateFormed(level, worldPosition, facing, result, formedCells, active);
         refreshParts(result);
         applyControllerState(result.formed());
         // 镜像状态变化时通知客户端更新渲染基准
@@ -608,11 +629,8 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         }
         structure.invalidate();
         updateCoreLight(false);
-        BlockState state = getBlockState();
-        if (state.getBlock() instanceof MultiblockControllerBlock block) {
-            structureFacade.updateFormed(level, worldPosition, state.getValue(block.facingProperty()),
-                    StructureResult.EMPTY, false);
-        }
+        structureFacade.reset(level, formedCells);
+        formedCells = List.of();
         for (ItemStack upgrade : upgrades) {
             Block.popResource(level, worldPosition, upgrade);
         }
@@ -643,6 +661,8 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag tag = saveWithoutMetadata();
+        // 部件位置仅服务端撤销外观时使用，不同步到客户端
+        tag.remove(FORMED_CELLS_ID);
         tag.putBoolean(MIRROR_SIDE_ID, mirrorSide);
         tag.putBoolean(MIRROR_FRONT_ID, mirrorFront);
         return tag;
@@ -669,6 +689,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         super.saveAdditional(tag);
         tag.putBoolean(MIRROR_SIDE_ID, mirrorSide);
         tag.putBoolean(MIRROR_FRONT_ID, mirrorFront);
+        tag.putLongArray(FORMED_CELLS_ID, formedCells.stream().mapToLong(BlockPos::asLong).toArray());
         upgrades.writeToNBT(tag, TAG_UPGRADES);
         if (jobRecipeId != null && jobTicksLeft > 0) {
             tag.putString(JOB_RECIPE_ID, jobRecipeId.toString());
@@ -683,6 +704,12 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         super.load(tag);
         mirrorSide = tag.getBoolean(MIRROR_SIDE_ID);
         mirrorFront = tag.getBoolean(MIRROR_FRONT_ID);
+        long[] cells = tag.getLongArray(FORMED_CELLS_ID);
+        List<BlockPos> loadedCells = new ArrayList<>(cells.length);
+        for (long packed : cells) {
+            loadedCells.add(BlockPos.of(packed));
+        }
+        formedCells = loadedCells.isEmpty() ? List.of() : List.copyOf(loadedCells);
         upgrades.readFromNBT(tag, TAG_UPGRADES);
         jobRecipeId = tag.contains(JOB_RECIPE_ID) ? ResourceLocation.tryParse(tag.getString(JOB_RECIPE_ID)) : null;
         jobParallel = Math.max(1, tag.getInt(JOB_PARALLEL_ID));
