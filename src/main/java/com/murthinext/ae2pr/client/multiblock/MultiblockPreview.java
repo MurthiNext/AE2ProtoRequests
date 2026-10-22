@@ -160,6 +160,16 @@ public final class MultiblockPreview implements BlockAndTintGetter {
         return true;
     }
 
+    /**
+     * 把玩家替换过的方块恢复为默认方块。
+     */
+    public void resetBlocks() {
+        for (Cell cell : cells) {
+            states.put(cell.pos(), stateFor(cell, cell.candidates().get(0)));
+        }
+        updateMaterials();
+    }
+
     private BlockState stateFor(Cell cell, Block block) {
         BlockState state = block.defaultBlockState();
         Direction facing = Direction.NORTH;

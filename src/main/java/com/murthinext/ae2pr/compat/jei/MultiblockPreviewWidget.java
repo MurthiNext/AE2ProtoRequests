@@ -1,6 +1,9 @@
 package com.murthinext.ae2pr.compat.jei;
 
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -11,6 +14,7 @@ import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -45,6 +49,8 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
     private static final int MUTED = 0xFF687987;
     private static final int ACCENT = MachineGui.ACCENT_CRYSTAL;
 
+    private static final Map<ResourceLocation, WeakReference<MultiblockPreviewWidget>> OPEN_WIDGETS = new HashMap<>();
+
     private final MultiblockPreviewRecipe recipe;
     private final MultiblockPreview preview;
     private final MultiblockPreviewRenderer renderer;
@@ -59,6 +65,13 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
         this.recipe = recipe;
         preview = new MultiblockPreview(recipe.pattern(), Minecraft.getInstance().level.getLightEngine());
         renderer = new MultiblockPreviewRenderer(preview, VIEW.left(), VIEW.top(), VIEW.width(), VIEW.height());
+        OPEN_WIDGETS.put(recipe.id(), new WeakReference<>(this));
+    }
+
+    public static List<ItemStack> materials(MultiblockPreviewRecipe recipe) {
+        WeakReference<MultiblockPreviewWidget> reference = OPEN_WIDGETS.get(recipe.id());
+        MultiblockPreviewWidget widget = reference == null ? null : reference.get();
+        return widget == null ? recipe.defaultMaterials() : widget.preview.materials();
     }
 
     @Override
@@ -79,6 +92,7 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
     @Override
     public void drawWidget(GuiGraphics graphics, double mouseX, double mouseY) {
         var font = Minecraft.getInstance().font;
+        OPEN_WIDGETS.put(recipe.id(), new WeakReference<>(this));
         drawButton(graphics, RESET, "R", true, mouseX, mouseY);
         drawButton(graphics, LAYER, preview.layer() < 0 ? "L: *" : "L:" + (preview.layer() + 1),
                 true, mouseX, mouseY);
@@ -126,11 +140,9 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
             MachineGui.drawSlot(graphics, x, MATERIAL_Y);
             ItemStackAmountRenderer.INSTANCE.render(graphics, stack, x, MATERIAL_Y);
         }
-        if (materials.size() > MATERIAL_COLUMNS) {
-            drawButton(graphics, MATERIAL_PREV, "<", materialOffset > 0, mouseX, mouseY);
-            drawButton(graphics, MATERIAL_NEXT, ">", materialOffset + MATERIAL_COLUMNS < materials.size(),
-                    mouseX, mouseY);
-        }
+        drawButton(graphics, MATERIAL_PREV, "<", materialOffset > 0, mouseX, mouseY);
+        drawButton(graphics, MATERIAL_NEXT, ">", materialOffset + MATERIAL_COLUMNS < materials.size(),
+                mouseX, mouseY);
     }
 
     @Override
@@ -147,6 +159,15 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
             tooltip.add(text("length_hint", recipe.pattern().minSlices(), recipe.maxSlices().getAsInt()));
             return;
         }
+        if (contains(MATERIAL_PREV, mouseX, mouseY) && materialOffset > 0) {
+            tooltip.add(text("prev_page"));
+            return;
+        }
+        if (contains(MATERIAL_NEXT, mouseX, mouseY)
+                && materialOffset + MATERIAL_COLUMNS < preview.materials().size()) {
+            tooltip.add(text("next_page"));
+            return;
+        }
         int material = materialIndex(mouseX, mouseY);
         if (material >= 0) {
             ItemStack stack = preview.materials().get(material);
@@ -156,6 +177,7 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
         }
         int replacement = replacementIndex(mouseX, mouseY);
         if (replacement >= 0 && selected != null) {
+            addItemTooltip(tooltip, new ItemStack(replacements().get(replacement)));
             tooltip.add(text("apply"));
             return;
         }
@@ -191,11 +213,20 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
         if (contains(RESET, mouseX, mouseY)) {
             renderer.reset();
             preview.setLayer(-1);
+            preview.resetBlocks();
+            replacementOffset = 0;
+            materialOffset = 0;
         } else if (contains(MATERIAL_PREV, mouseX, mouseY)) {
+            if (materialOffset <= 0) {
+                return false;
+            }
             materialOffset = Math.max(0, materialOffset - MATERIAL_PAGE_SIZE);
         } else if (contains(MATERIAL_NEXT, mouseX, mouseY)) {
-            materialOffset = Math.min(Math.max(0, preview.materials().size() - MATERIAL_COLUMNS),
-                    materialOffset + MATERIAL_PAGE_SIZE);
+            int max = Math.max(0, preview.materials().size() - MATERIAL_COLUMNS);
+            if (materialOffset >= max) {
+                return false;
+            }
+            materialOffset = Math.min(max, materialOffset + MATERIAL_PAGE_SIZE);
         } else {
             int index = replacementIndex(mouseX, mouseY);
             if (index < 0 || selected == null) {
@@ -300,6 +331,9 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
     private static void drawButton(GuiGraphics graphics, ScreenRectangle area, String label, boolean enabled,
             double mouseX, double mouseY) {
         int color = enabled && contains(area, mouseX, mouseY) ? ACCENT : 0xFFC2CCD4;
+        if (!enabled) {
+            color = 0xFFE4E8EB;
+        }
         graphics.fill(area.left(), area.top(), area.right(), area.bottom(), color);
         var font = Minecraft.getInstance().font;
         graphics.drawString(font, label, area.left() + (area.width() - font.width(label)) / 2,

@@ -10,6 +10,7 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.IRecipeTransferRegistration;
 
 import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ModRecipes;
@@ -46,5 +47,11 @@ public class CrystalAssemblyLineJeiPlugin implements IModPlugin {
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalysts(CrystalAssemblyLineJeiCategory.RECIPE_TYPE,
                 ModBlocks.CRYSTAL_ASSEMBLY_LINE.get());
+    }
+
+    @Override
+    public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
+        registration.addRecipeTransferHandler(new CrystalAssemblyLinePatternTransferHandler(),
+                CrystalAssemblyLineJeiCategory.RECIPE_TYPE);
     }
 }

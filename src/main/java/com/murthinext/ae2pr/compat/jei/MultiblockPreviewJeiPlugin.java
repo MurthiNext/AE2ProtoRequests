@@ -6,6 +6,7 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.IRecipeTransferRegistration;
 
 import com.murthinext.ae2pr.ae2pr;
 
@@ -26,5 +27,11 @@ public class MultiblockPreviewJeiPlugin implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(MultiblockPreviewJeiCategory.RECIPE_TYPE, MultiblockPreviewRecipe.recipes());
+    }
+
+    @Override
+    public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
+        registration.addRecipeTransferHandler(new MultiblockPatternTransferHandler(),
+                MultiblockPreviewJeiCategory.RECIPE_TYPE);
     }
 }

@@ -227,6 +227,8 @@
   "jei.ae2pr.multiblock.materials": "Required blocks:",
   "jei.ae2pr.multiblock.total": "x%s",
   "jei.ae2pr.multiblock.apply": "Left-click to replace the selected block",
+  "jei.ae2pr.multiblock.prev_page": "Previous page",
+  "jei.ae2pr.multiblock.next_page": "Next page",
   "jei.ae2pr.multiblock.reset": "Reset",
   "jei.ae2pr.alien_lava": "Alien Lava Transformation",
   "jei.ae2pr.alien_lava.submerge": "Submerge In",

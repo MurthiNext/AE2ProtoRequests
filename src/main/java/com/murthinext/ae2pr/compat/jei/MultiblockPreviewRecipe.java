@@ -1,6 +1,8 @@
 package com.murthinext.ae2pr.compat.jei;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.IntSupplier;
 
 import net.minecraft.core.BlockPos;
@@ -46,6 +48,18 @@ public record MultiblockPreviewRecipe(ResourceLocation id, Component title, Bloc
                 .stream().map(cell -> pattern.predicate(cell.symbol())).distinct()
                 .flatMap(predicate -> predicate.previewBlocks().stream()).distinct()
                 .filter(block -> block.asItem() != Items.AIR).map(ItemStack::new).toList();
+    }
+
+    public List<ItemStack> defaultMaterials() {
+        Map<Block, Integer> totals = new LinkedHashMap<>();
+        for (MultiblockPattern.PatternCell cell : pattern.patternCells(BlockPos.ZERO, Direction.NORTH, Direction.UP,
+                false, false, pattern.minSlices())) {
+            List<Block> candidates = pattern.predicate(cell.symbol()).previewBlocks();
+            if (!candidates.isEmpty() && candidates.get(0).asItem() != Items.AIR) {
+                totals.merge(candidates.get(0), 1, Integer::sum);
+            }
+        }
+        return totals.entrySet().stream().map(entry -> new ItemStack(entry.getKey(), entry.getValue())).toList();
     }
 
     private static MultiblockPreviewRecipe of(String name, Block controller, MultiblockPattern pattern,

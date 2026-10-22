@@ -226,6 +226,8 @@
   "jei.ae2pr.multiblock.materials": "所需方块：",
   "jei.ae2pr.multiblock.total": "x%s",
   "jei.ae2pr.multiblock.apply": "左键替换选中方块",
+  "jei.ae2pr.multiblock.prev_page": "上一页",
+  "jei.ae2pr.multiblock.next_page": "下一页",
   "jei.ae2pr.multiblock.reset": "重置",
   "jei.ae2pr.alien_lava": "异星熔岩转化",
   "jei.ae2pr.alien_lava.submerge": "浸入",
