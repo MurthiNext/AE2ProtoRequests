@@ -228,8 +228,8 @@ public final class ModItems {
             "crystal_adhesive_bucket", () -> new NoBlockFluidBucketItem(ModFluids.CRYSTAL_ADHESIVE,
                     new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
-    public static final RegistryObject<BucketItem> MOLTEN_ZIRCONIUM_BUCKET = ITEMS.register(
-            "molten_zirconium_bucket", () -> new NoBlockFluidBucketItem(ModFluids.MOLTEN_ZIRCONIUM,
+    public static final RegistryObject<BucketItem> LIQUID_ZIRCONIUM_BUCKET = ITEMS.register(
+            "liquid_zirconium_bucket", () -> new NoBlockFluidBucketItem(ModFluids.LIQUID_ZIRCONIUM,
                     new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
     public static final RegistryObject<BlockItem> NAMING_FACTORY = ITEMS.register("naming_factory",

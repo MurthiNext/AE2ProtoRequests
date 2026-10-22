@@ -7,7 +7,7 @@ import com.murthinext.ae2pr.fluid.LiquidAmethystFluidType;
 import com.murthinext.ae2pr.fluid.LiquidCertusQuartzFluidType;
 import com.murthinext.ae2pr.fluid.LiquidCrystalineFluidType;
 import com.murthinext.ae2pr.fluid.LiquidFluixCrystalFluidType;
-import com.murthinext.ae2pr.fluid.MoltenZirconiumFluidType;
+import com.murthinext.ae2pr.fluid.LiquidZirconiumFluidType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -123,18 +123,18 @@ public final class ModFluids {
                 .bucket(ModItems.CRYSTAL_ADHESIVE_BUCKET);
     }
 
-    public static final RegistryObject<FluidType> MOLTEN_ZIRCONIUM_TYPE = FLUID_TYPES.register(
-            "molten_zirconium", MoltenZirconiumFluidType::new);
+    public static final RegistryObject<FluidType> LIQUID_ZIRCONIUM_TYPE = FLUID_TYPES.register(
+            "liquid_zirconium", LiquidZirconiumFluidType::new);
 
-    public static final RegistryObject<ForgeFlowingFluid> MOLTEN_ZIRCONIUM = FLUIDS.register(
-            "molten_zirconium", () -> new ForgeFlowingFluid.Source(moltenZirconiumProperties()));
+    public static final RegistryObject<ForgeFlowingFluid> LIQUID_ZIRCONIUM = FLUIDS.register(
+            "liquid_zirconium", () -> new ForgeFlowingFluid.Source(liquidZirconiumProperties()));
 
-    public static final RegistryObject<ForgeFlowingFluid> FLOWING_MOLTEN_ZIRCONIUM = FLUIDS.register(
-            "flowing_molten_zirconium", () -> new ForgeFlowingFluid.Flowing(moltenZirconiumProperties()));
+    public static final RegistryObject<ForgeFlowingFluid> FLOWING_LIQUID_ZIRCONIUM = FLUIDS.register(
+            "flowing_liquid_zirconium", () -> new ForgeFlowingFluid.Flowing(liquidZirconiumProperties()));
 
-    private static ForgeFlowingFluid.Properties moltenZirconiumProperties() {
-        return new ForgeFlowingFluid.Properties(MOLTEN_ZIRCONIUM_TYPE, MOLTEN_ZIRCONIUM,
-                FLOWING_MOLTEN_ZIRCONIUM)
-                .bucket(ModItems.MOLTEN_ZIRCONIUM_BUCKET);
+    private static ForgeFlowingFluid.Properties liquidZirconiumProperties() {
+        return new ForgeFlowingFluid.Properties(LIQUID_ZIRCONIUM_TYPE, LIQUID_ZIRCONIUM,
+                FLOWING_LIQUID_ZIRCONIUM)
+                .bucket(ModItems.LIQUID_ZIRCONIUM_BUCKET);
     }
 }

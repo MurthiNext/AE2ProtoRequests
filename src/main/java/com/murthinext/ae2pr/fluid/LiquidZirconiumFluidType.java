@@ -14,9 +14,9 @@ import com.murthinext.ae2pr.ae2pr;
 /**
  * 液态锆流体。
  */
-public class MoltenZirconiumFluidType extends FluidType {
+public class LiquidZirconiumFluidType extends FluidType {
 
-    public MoltenZirconiumFluidType() {
+    public LiquidZirconiumFluidType() {
         super(FluidType.Properties.create()
                 .canSwim(false)
                 .canDrown(false)
@@ -24,10 +24,10 @@ public class MoltenZirconiumFluidType extends FluidType {
                 .adjacentPathType(null)
                 .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL_LAVA)
                 .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY_LAVA)
-                .lightLevel(12)
+                .lightLevel(8)
                 .density(2600)
                 .viscosity(5000)
-                .temperature(2100));
+                .temperature(400));
     }
 
     @Override
@@ -35,12 +35,12 @@ public class MoltenZirconiumFluidType extends FluidType {
         consumer.accept(new IClientFluidTypeExtensions() {
             @Override
             public ResourceLocation getStillTexture() {
-                return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "block/fluid/molten_zirconium_still");
+                return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "block/fluid/liquid_zirconium_still");
             }
 
             @Override
             public ResourceLocation getFlowingTexture() {
-                return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "block/fluid/molten_zirconium_flow");
+                return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "block/fluid/liquid_zirconium_flow");
             }
         });
     }
