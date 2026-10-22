@@ -69,6 +69,18 @@ public final class MultiblockPattern {
         return total;
     }
 
+    public int maxSlices() {
+        long total = 0;
+        for (Slice slice : slices) {
+            total += slice.maxRepeats();
+        }
+        return (int) Math.min(total, Integer.MAX_VALUE);
+    }
+
+    public StructurePredicate predicate(char symbol) {
+        return predicates.get(symbol);
+    }
+
     /**
      * 沿片 → 行 → 列方向的坐标比较器，保证部件顺序稳定。
      */

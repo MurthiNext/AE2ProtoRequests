@@ -1,13 +1,15 @@
 package com.murthinext.ae2pr.multiblock;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -85,8 +87,12 @@ public abstract class StructurePredicate {
         return List.of(this);
     }
 
+    public List<Block> previewBlocks() {
+        return List.of();
+    }
+
     public static StructurePredicate blocks(Block... blocks) {
-        return new Blocks(new HashSet<>(List.of(blocks)));
+        return new Blocks(new LinkedHashSet<>(List.of(blocks)));
     }
 
     /**
@@ -115,6 +121,11 @@ public abstract class StructurePredicate {
         @Override
         public StructurePredicate test(Level level, BlockPos pos, BlockState state) {
             return blocks.contains(state.getBlock()) ? this : null;
+        }
+
+        @Override
+        public List<Block> previewBlocks() {
+            return List.copyOf(blocks);
         }
     }
 
@@ -146,6 +157,20 @@ public abstract class StructurePredicate {
             if (state.getBlock() instanceof ModuleProvider provider) {
                 modules.add(new ModuleInstance(pos, provider.moduleDefinition()));
             }
+        }
+
+        @Override
+        public List<Block> previewBlocks() {
+            List<Block> result = new ArrayList<>();
+            result.add(base);
+            BuiltInRegistries.BLOCK.stream()
+                    .filter(block -> block instanceof ModuleProvider provider
+                            && allowed.contains(provider.moduleDefinition().type()))
+                    .sorted(Comparator.comparingInt((Block block) ->
+                            ((ModuleProvider) block).moduleDefinition().level())
+                            .thenComparing(block -> BuiltInRegistries.BLOCK.getKey(block).toString()))
+                    .forEach(result::add);
+            return List.copyOf(result);
         }
     }
 
@@ -179,6 +204,11 @@ public abstract class StructurePredicate {
                 result.addAll(part.leaves());
             }
             return result;
+        }
+
+        @Override
+        public List<Block> previewBlocks() {
+            return parts.stream().flatMap(part -> part.previewBlocks().stream()).distinct().toList();
         }
     }
 
