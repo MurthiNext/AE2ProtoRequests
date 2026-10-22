@@ -18,6 +18,7 @@ import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.data.ModelData;
 
 import com.murthinext.ae2pr.client.gui.crystal_workstation.CrystalWorkstationCtm;
+import com.murthinext.ae2pr.client.multiblock.MultiblockPreview;
 
 /**
  * 连接纹理的模型包装：注入方块位置并按邻居重写 UV。
@@ -63,7 +64,8 @@ public class CtmBakedModel extends BakedModelWrapper<BakedModel> {
             return quads;
         }
         // 晶能工作站成型外观全部在客户端替换
-        List<BakedQuad> appearance = CrystalWorkstationCtm.appearance(quads, side, level, pos);
+        List<BakedQuad> appearance = level instanceof MultiblockPreview ? null
+                : CrystalWorkstationCtm.appearance(quads, side, level, pos);
         if (appearance != null) {
             return appearance;
         }
@@ -73,8 +75,15 @@ public class CtmBakedModel extends BakedModelWrapper<BakedModel> {
         int worldMask = CtmConfig.worldMask(level, pos, state);
         List<BakedQuad> result = new ArrayList<>(quads.size());
         for (BakedQuad quad : quads) {
-            TextureAtlasSprite atlas = CtmSprites.atlasFor(quad.getSprite());
-            result.add(atlas != null ? CtmMeshBuilder.rewrite(quad, quad.getSprite(), atlas, worldMask) : quad);
+            TextureAtlasSprite base = quad.getSprite();
+            TextureAtlasSprite atlas = CtmSprites.atlasFor(base);
+            if (atlas == null) {
+                result.add(quad);
+            } else if (CtmSprites.isQuadrant(base)) {
+                result.addAll(QuadrantCtmMeshBuilder.build(quad, base, atlas, worldMask));
+            } else {
+                result.add(CtmMeshBuilder.rewrite(quad, base, atlas, worldMask));
+            }
         }
         return result;
     }

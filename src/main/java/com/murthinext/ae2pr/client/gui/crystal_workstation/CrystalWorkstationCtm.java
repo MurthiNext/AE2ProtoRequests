@@ -19,6 +19,7 @@ import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
 import com.murthinext.ae2pr.client.ctm.CtmConfig;
 import com.murthinext.ae2pr.client.ctm.CtmMeshBuilder;
 import com.murthinext.ae2pr.client.ctm.CtmSprites;
+import com.murthinext.ae2pr.client.ctm.QuadrantCtmMeshBuilder;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 import com.murthinext.ae2pr.multiblock.structure.CrystalWorkstationStructure;
 
@@ -108,8 +109,15 @@ public final class CrystalWorkstationCtm {
     private static List<BakedQuad> rewrite(List<BakedQuad> quads, int worldMask) {
         List<BakedQuad> result = new ArrayList<>(quads.size());
         for (BakedQuad quad : quads) {
-            TextureAtlasSprite atlas = CtmSprites.atlasFor(quad.getSprite());
-            result.add(atlas != null ? CtmMeshBuilder.rewrite(quad, quad.getSprite(), atlas, worldMask) : quad);
+            TextureAtlasSprite base = quad.getSprite();
+            TextureAtlasSprite atlas = CtmSprites.atlasFor(base);
+            if (atlas == null) {
+                result.add(quad);
+            } else if (CtmSprites.isQuadrant(base)) {
+                result.addAll(QuadrantCtmMeshBuilder.build(quad, base, atlas, worldMask));
+            } else {
+                result.add(CtmMeshBuilder.rewrite(quad, base, atlas, worldMask));
+            }
         }
         return result;
     }

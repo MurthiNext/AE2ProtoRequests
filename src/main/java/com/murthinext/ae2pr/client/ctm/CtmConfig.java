@@ -116,6 +116,9 @@ public final class CtmConfig {
         if (block == ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get()) {
             return 4;
         }
+        if (block == ModBlocks.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING.get()) {
+            return 11;
+        }
         if (block == ModBlocks.METEOR_STEEL_PIPE_BLOCK.get()) {
             // 管道按轴向分族
             return 5 + state.getValue(MeteorSteelPipeBlock.FACING).getAxis().ordinal();

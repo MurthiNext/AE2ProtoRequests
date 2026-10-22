@@ -38,6 +38,11 @@ public final class CtmSprites {
 
     private static final Map<ResourceLocation, TextureAtlasSprite> CACHE = new HashMap<>();
 
+    /**
+     * 使用 GT 式 4×4 象限图集的底图；其余沿用 47-tile 图集。
+     */
+    private static final Set<ResourceLocation> QUADRANTS = new LinkedHashSet<>();
+
     static {
         // 与 CtmConfig 的登记保持一致
         register("block/crystal_reinforced_composite_machine_casing");
@@ -46,6 +51,7 @@ public final class CtmSprites {
         register("block/aev_machine_casing");
         register("block/reinforced_high_power_casing");
         register("block/zirconia_corundum_bricks");
+        registerQuadrant("block/zirconium_iron_alloy_machine_casing");
         register("block/meteor_steel_pipe_side");
         REGISTERED.add(LAVA_SMELTER_CONTROLLER_CASING);
         REGISTERED.add(MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING);
@@ -62,10 +68,30 @@ public final class CtmSprites {
     private CtmSprites() {
     }
 
+    /**
+     * 登记底图：沿用 47-tile 图集。
+     */
     private static void register(String basePath) {
         ResourceLocation base = id(basePath);
         ATLASES.put(base, id(basePath + "_ctm"));
         REGISTERED.add(base);
+    }
+
+    /**
+     * 登记底图：使用 GT 式 4×4 象限图集。
+     */
+    private static void registerQuadrant(String basePath) {
+        ResourceLocation base = id(basePath);
+        ATLASES.put(base, id(basePath + "_ctm"));
+        REGISTERED.add(base);
+        QUADRANTS.add(base);
+    }
+
+    /**
+     * 该底图是否使用 GT 式 4×4 象限图集。
+     */
+    public static boolean isQuadrant(TextureAtlasSprite base) {
+        return QUADRANTS.contains(base.contents().name());
     }
 
     private static void registerFacade(MachinePartFacade facade) {
