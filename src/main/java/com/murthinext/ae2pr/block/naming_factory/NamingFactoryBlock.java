@@ -1,22 +1,17 @@
 package com.murthinext.ae2pr.block.naming_factory;
 
-import java.util.List;
-
 import org.jetbrains.annotations.Nullable;
 
 import appeng.block.AEBaseEntityBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -32,7 +27,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 
 import com.murthinext.ae2pr.ModTags;
-import com.murthinext.ae2pr.client.gui.naming_factory.NamingFactoryRenameScreen;
+import com.murthinext.ae2pr.client.naming_factory.NamingFactoryRenameScreen;
 import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
 /**

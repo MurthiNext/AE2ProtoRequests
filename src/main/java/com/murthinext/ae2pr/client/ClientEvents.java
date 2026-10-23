@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.client;
 
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.client.gui.TooltipRenderer;
 import com.murthinext.ae2pr.client.proto_terminal.TerminalStoryProgressCache;
 import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderFailures;
 import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderRounds;

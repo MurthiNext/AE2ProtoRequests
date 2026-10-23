@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 
-import com.murthinext.ae2pr.client.gui.crystal_workstation.CrystalWorkstationShell;
+import com.murthinext.ae2pr.client.crystal_workstation.CrystalWorkstationShell;
 import com.murthinext.ae2pr.client.sound.MachineProcessingSounds;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 

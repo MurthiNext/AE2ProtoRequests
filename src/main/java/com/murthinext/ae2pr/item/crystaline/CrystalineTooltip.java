@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.minecraft.network.chat.Component;
 
-import com.murthinext.ae2pr.client.gui.TooltipRenderer;
+import com.murthinext.ae2pr.client.TooltipRenderer;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

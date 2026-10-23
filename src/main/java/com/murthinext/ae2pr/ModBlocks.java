@@ -15,9 +15,9 @@ import com.murthinext.ae2pr.block.DisassemblableBlock;
 import com.murthinext.ae2pr.block.DisassemblableGlassBlock;
 import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
 import com.murthinext.ae2pr.block.alien_lava.AlienLavaBlock;
-import com.murthinext.ae2pr.block.assembly_line.AssemblyLineModuleBlock;
-import com.murthinext.ae2pr.block.assembly_line.AssemblyLineUnitBlock;
-import com.murthinext.ae2pr.block.assembly_line.CrystalAssemblyLineBlock;
+import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineModuleBlock;
+import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineUnitBlock;
+import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineBlock;
 import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberBlock;
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationBlock;
 import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
@@ -48,24 +48,24 @@ public final class ModBlocks {
     public static final RegistryObject<Block> CRYSTAL_ASSEMBLY_LINE_CASING = BLOCKS.register(
             "crystal_assembly_line_casing", () -> new DisassemblableBlock(casingProperties()));
 
-    public static final RegistryObject<AssemblyLineUnitBlock> CRYSTAL_ASSEMBLY_LINE_UNIT = BLOCKS.register(
-            "crystal_assembly_line_unit", AssemblyLineUnitBlock::new);
+    public static final RegistryObject<CrystalAssemblyLineUnitBlock> CRYSTAL_ASSEMBLY_LINE_UNIT = BLOCKS.register(
+            "crystal_assembly_line_unit", CrystalAssemblyLineUnitBlock::new);
 
-    public static final RegistryObject<AssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT = BLOCKS.register(
+    public static final RegistryObject<CrystalAssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT = BLOCKS.register(
             "crystal_assembly_line_charging_unit",
-            () -> new AssemblyLineModuleBlock(ModuleDefinition.of(ModModules.CHARGING, 1)));
+            () -> new CrystalAssemblyLineModuleBlock(ModuleDefinition.of(ModModules.CHARGING, 1)));
 
-    public static final RegistryObject<AssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT = BLOCKS
+    public static final RegistryObject<CrystalAssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT = BLOCKS
             .register("crystal_assembly_line_advanced_charging_unit",
-                    () -> new AssemblyLineModuleBlock(ModuleDefinition.of(ModModules.CHARGING, 2)));
+                    () -> new CrystalAssemblyLineModuleBlock(ModuleDefinition.of(ModModules.CHARGING, 2)));
 
-    public static final RegistryObject<AssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT = BLOCKS.register(
+    public static final RegistryObject<CrystalAssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT = BLOCKS.register(
             "crystal_assembly_line_parallel_unit",
-            () -> new AssemblyLineModuleBlock(ModuleDefinition.of(ModModules.PARALLEL, 1)));
+            () -> new CrystalAssemblyLineModuleBlock(ModuleDefinition.of(ModModules.PARALLEL, 1)));
 
-    public static final RegistryObject<AssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT = BLOCKS.register(
+    public static final RegistryObject<CrystalAssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT = BLOCKS.register(
             "crystal_assembly_line_speed_unit",
-            () -> new AssemblyLineModuleBlock(ModuleDefinition.of(ModModules.SPEED, 1)));
+            () -> new CrystalAssemblyLineModuleBlock(ModuleDefinition.of(ModModules.SPEED, 1)));
 
     public static final RegistryObject<Block> CRYSTAL_ASSEMBLY_LINE_GRATING = BLOCKS.register(
             "crystal_assembly_line_grating", () -> new DisassemblableBlock(casingProperties()));

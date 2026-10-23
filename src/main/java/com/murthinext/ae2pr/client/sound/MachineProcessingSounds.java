@@ -35,7 +35,7 @@ public final class MachineProcessingSounds {
     private static final Map<BlockEntity, ProcessingSound> SOUNDS = new HashMap<>();
 
     public enum Type {
-        ASSEMBLY_LINE(ModSounds.ASSEMBLY_LINE, 1.0F, 1.0F, 0),
+        CRYSTAL_ASSEMBLY_LINE(ModSounds.CRYSTAL_ASSEMBLY_LINE, 1.0F, 1.0F, 0),
         LAVA_SMELTER(() -> SoundEvents.LAVA_AMBIENT, 0.4F, 0.8F, 0, ModSounds.LAVA_SMELTER),
         MATTER_PHASE_TRANSFORMER(ModSounds.MATTER_PHASE_TRANSFORMER, 0.65F, 1.0F, 0),
         CRYSTAL_REACTION(ModSounds.CRYSTAL_REACTION, 0.7F, 1.0F, 0),

@@ -5,7 +5,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import com.murthinext.ae2pr.block.assembly_line.AssemblyLineMenu;
+import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineMenu;
 import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberMenu;
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationMenu;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterMenu;
@@ -33,8 +33,8 @@ public final class ModMenus {
     public static final RegistryObject<MenuType<MultiThresholdLevelEmitterMenu>> MULTI_THRESHOLD_LEVEL_EMITTER = MENUS
             .register("multi_threshold_level_emitter", () -> MultiThresholdLevelEmitterMenu.TYPE);
 
-    public static final RegistryObject<MenuType<AssemblyLineMenu>> CRYSTAL_ASSEMBLY_LINE = MENUS
-            .register("crystal_assembly_line", () -> AssemblyLineMenu.TYPE);
+    public static final RegistryObject<MenuType<CrystalAssemblyLineMenu>> CRYSTAL_ASSEMBLY_LINE = MENUS
+            .register("crystal_assembly_line", () -> CrystalAssemblyLineMenu.TYPE);
 
     public static final RegistryObject<MenuType<LavaSmelterMenu>> HIGH_REACTIVITY_LAVA_SMELTER = MENUS
             .register("high_reactivity_lava_smelter", () -> LavaSmelterMenu.TYPE);

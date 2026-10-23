@@ -272,7 +272,7 @@ public final class Config {
         return ASSEMBLY_PARALLEL_PER_SLICE.get();
     }
 
-    public static int assemblyLineMaxSlices() {
+    public static int crystalAssemblyLineMaxSlices() {
         return ASSEMBLY_MAX_SLICES.get();
     }
 

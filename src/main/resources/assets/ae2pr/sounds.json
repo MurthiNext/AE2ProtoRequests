@@ -1,6 +1,6 @@
 {
-  "assembly_line_processing": {
-    "subtitle": "subtitle.ae2pr.assembly_line_processing",
+  "crystal_assembly_line_processing": {
+    "subtitle": "subtitle.ae2pr.crystal_assembly_line_processing",
     "sounds": [
       "ae2pr:machine/crystal_assembly_line"
     ]

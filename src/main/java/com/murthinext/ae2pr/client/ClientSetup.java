@@ -18,23 +18,23 @@ import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModMenus;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.client.ctm.CtmBakedModel;
-import com.murthinext.ae2pr.client.gui.tooltip.ColorEffectClientTooltip;
-import com.murthinext.ae2pr.client.gui.tooltip.ColorEffectLine;
-import com.murthinext.ae2pr.client.gui.assembly_line.AssemblyLineScreen;
-import com.murthinext.ae2pr.client.gui.crystal_reaction_chamber.CrystalReactionChamberRenderer;
-import com.murthinext.ae2pr.client.gui.crystal_reaction_chamber.CrystalReactionChamberScreen;
-import com.murthinext.ae2pr.client.gui.crystal_workstation.CrystalWorkstationRenderer;
-import com.murthinext.ae2pr.client.gui.crystal_workstation.CrystalWorkstationScreen;
-import com.murthinext.ae2pr.client.gui.machine_part.FluidHatchScreen;
-import com.murthinext.ae2pr.client.gui.machine_part.ItemBusScreen;
-import com.murthinext.ae2pr.client.gui.level_emitter.MultiLevelEmitterScreen;
-import com.murthinext.ae2pr.client.gui.level_emitter.MultiThresholdLevelEmitterScreen;
-import com.murthinext.ae2pr.client.gui.lava_smelter.LavaSmelterRenderer;
-import com.murthinext.ae2pr.client.gui.lava_smelter.LavaSmelterScreen;
-import com.murthinext.ae2pr.client.gui.matter_phase_transformer.MatterPhaseTransformerRenderer;
-import com.murthinext.ae2pr.client.gui.matter_phase_transformer.MatterPhaseTransformerScreen;
-import com.murthinext.ae2pr.client.gui.naming_factory.NamingFactoryRenderer;
-import com.murthinext.ae2pr.client.gui.naming_factory.NamingFactoryScreen;
+import com.murthinext.ae2pr.client.tooltip.ColorEffectClientTooltip;
+import com.murthinext.ae2pr.client.tooltip.ColorEffectLine;
+import com.murthinext.ae2pr.client.crystal_assembly_line.CrystalAssemblyLineScreen;
+import com.murthinext.ae2pr.client.crystal_reaction_chamber.CrystalReactionChamberRenderer;
+import com.murthinext.ae2pr.client.crystal_reaction_chamber.CrystalReactionChamberScreen;
+import com.murthinext.ae2pr.client.crystal_workstation.CrystalWorkstationRenderer;
+import com.murthinext.ae2pr.client.crystal_workstation.CrystalWorkstationScreen;
+import com.murthinext.ae2pr.client.machine_part.FluidHatchScreen;
+import com.murthinext.ae2pr.client.machine_part.ItemBusScreen;
+import com.murthinext.ae2pr.client.level_emitter.MultiLevelEmitterScreen;
+import com.murthinext.ae2pr.client.level_emitter.MultiThresholdLevelEmitterScreen;
+import com.murthinext.ae2pr.client.lava_smelter.LavaSmelterRenderer;
+import com.murthinext.ae2pr.client.lava_smelter.LavaSmelterScreen;
+import com.murthinext.ae2pr.client.matter_phase_transformer.MatterPhaseTransformerRenderer;
+import com.murthinext.ae2pr.client.matter_phase_transformer.MatterPhaseTransformerScreen;
+import com.murthinext.ae2pr.client.naming_factory.NamingFactoryRenderer;
+import com.murthinext.ae2pr.client.naming_factory.NamingFactoryScreen;
 
 /**
  * 客户端初始化：注册界面。
@@ -53,7 +53,7 @@ public final class ClientSetup {
         InitScreens.register(ModMenus.MULTI_THRESHOLD_LEVEL_EMITTER.get(),
                 MultiThresholdLevelEmitterScreen::new,
                 "/screens/multi_threshold_level_emitter.json");
-        MenuScreens.register(ModMenus.CRYSTAL_ASSEMBLY_LINE.get(), AssemblyLineScreen::new);
+        MenuScreens.register(ModMenus.CRYSTAL_ASSEMBLY_LINE.get(), CrystalAssemblyLineScreen::new);
         MenuScreens.register(ModMenus.HIGH_REACTIVITY_LAVA_SMELTER.get(), LavaSmelterScreen::new);
         MenuScreens.register(ModMenus.MATTER_PHASE_TRANSFORMER.get(), MatterPhaseTransformerScreen::new);
         MenuScreens.register(ModMenus.CRYSTAL_REACTION_CHAMBER.get(), CrystalReactionChamberScreen::new);
