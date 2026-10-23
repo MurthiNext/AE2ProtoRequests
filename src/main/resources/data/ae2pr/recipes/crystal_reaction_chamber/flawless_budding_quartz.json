@@ -15,7 +15,7 @@
   "fluid_inputs": [
     {
       "fluid": "minecraft:water",
-      "amount": 5000000
+      "amount": 1000000
     }
   ],
   "item_outputs": [

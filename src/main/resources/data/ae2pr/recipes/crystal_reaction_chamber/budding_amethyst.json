@@ -1,0 +1,27 @@
+{
+  "type": "ae2pr:crystal_reaction_chamber",
+  "duration": 100,
+  "energy": 50000000,
+  "item_inputs": [
+    {
+      "item": "ae2pr:high_energy_singularity",
+      "count": 8
+    },
+    {
+      "tag": "forge:storage_blocks/amethyst",
+      "count": 8
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 1000000
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "minecraft:budding_amethyst",
+      "count": 8
+    }
+  ]
+}
