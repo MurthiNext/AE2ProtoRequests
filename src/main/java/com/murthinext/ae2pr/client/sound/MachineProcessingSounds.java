@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.WeighedSoundEvents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -30,24 +31,34 @@ import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 public final class MachineProcessingSounds {
 
     private static final double RANGE_SQUARED = 16.0 * 16.0;
+    private static final int SUBTITLE_INTERVAL = 40;
     private static final Map<BlockEntity, ProcessingSound> SOUNDS = new HashMap<>();
 
     public enum Type {
         ASSEMBLY_LINE(ModSounds.ASSEMBLY_LINE, 1.0F, 1.0F, 0),
-        LAVA_SMELTER(() -> SoundEvents.LAVA_AMBIENT, 0.4F, 0.8F, 0),
+        LAVA_SMELTER(() -> SoundEvents.LAVA_AMBIENT, 0.4F, 0.8F, 0, ModSounds.LAVA_SMELTER),
         MATTER_PHASE_TRANSFORMER(ModSounds.MATTER_PHASE_TRANSFORMER, 0.65F, 1.0F, 0),
-        CRYSTAL_REACTION(ModSounds.CRYSTAL_REACTION, 0.7F, 1.0F, 0);
+        CRYSTAL_REACTION(ModSounds.CRYSTAL_REACTION, 0.7F, 1.0F, 0),
+        CRYSTAL_WORKSTATION_ETCHING(ModSounds.CRYSTAL_WORKSTATION_ETCHING, 0.7F, 1.0F, 0),
+        CRYSTAL_WORKSTATION_CUTTING(ModSounds.CRYSTAL_WORKSTATION_CUTTING, 0.7F, 1.0F, 0);
 
         private final Supplier<SoundEvent> sound;
         private final float volume;
         private final float pitch;
         private final int delay;
+        private final Supplier<SoundEvent> subtitleSource;
 
         Type(Supplier<SoundEvent> sound, float volume, float pitch, int delay) {
+            this(sound, volume, pitch, delay, sound);
+        }
+
+        Type(Supplier<SoundEvent> sound, float volume, float pitch, int delay,
+                Supplier<SoundEvent> subtitleSource) {
             this.sound = sound;
             this.volume = volume;
             this.pitch = pitch;
             this.delay = delay;
+            this.subtitleSource = subtitleSource;
         }
 
         private boolean isRunning(BlockEntity controller) {
@@ -69,11 +80,19 @@ public final class MachineProcessingSounds {
             return;
         }
         ProcessingSound sound = SOUNDS.get(controller);
+        if (sound != null && sound.type != type) {
+            // 工作模式切换后换成对应音效
+            sound.release();
+            minecraft.getSoundManager().stop(sound);
+            SOUNDS.remove(controller);
+            sound = null;
+        }
         if (sound == null) {
             sound = new ProcessingSound(controller, type);
             SOUNDS.put(controller, sound);
             minecraft.getSoundManager().play(sound);
         }
+        sound.keepSubtitle(minecraft);
         if (type == Type.LAVA_SMELTER) {
             sound.tickSplashes(minecraft);
         }
@@ -118,6 +137,7 @@ public final class MachineProcessingSounds {
         private final List<LavaSplashSound> splashes = new ArrayList<>();
         private int inactiveTicks;
         private int splashTicks;
+        private int subtitleTicks;
 
         private ProcessingSound(BlockEntity controller, Type type) {
             super(type.sound.get(), SoundSource.BLOCKS, SoundInstance.createUnseededRandom());
@@ -138,6 +158,20 @@ public final class MachineProcessingSounds {
             Minecraft minecraft = Minecraft.getInstance();
             return !isStopped() && type.isRunning(controller) && isAudible(minecraft, controller)
                     && minecraft.level.getBlockEntity(controller.getBlockPos()) == controller;
+        }
+
+        // 刷新字幕
+        private void keepSubtitle(Minecraft minecraft) {
+            if (!minecraft.options.showSubtitles().get() || ++subtitleTicks < SUBTITLE_INTERVAL) {
+                return;
+            }
+            subtitleTicks = 0;
+            WeighedSoundEvents events = minecraft.getSoundManager()
+                    .getSoundEvent(type.subtitleSource.get().getLocation());
+            if (events == null || events.getSubtitle() == null) {
+                return;
+            }
+            minecraft.gui.subtitleOverlay.onPlaySound(this, events);
         }
 
         private void release() {

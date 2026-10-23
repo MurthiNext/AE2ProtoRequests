@@ -1,6 +1,8 @@
 {
   "subtitle.ae2pr.assembly_line_processing": "Crystal Assembly Line assembles",
   "subtitle.ae2pr.crystal_reaction_processing": "Crystal Reaction Chamber rumbles",
+  "subtitle.ae2pr.crystal_workstation_etching": "Crystal Workstation etches",
+  "subtitle.ae2pr.crystal_workstation_cutting": "Crystal Workstation cuts",
   "subtitle.ae2pr.lava_smelter_processing": "Lava Smelter bubbles",
   "subtitle.ae2pr.matter_phase_transformer_processing": "Matter Phase Transformer hums",
   "itemGroup.ae2pr": "AE2 Proto Requests",

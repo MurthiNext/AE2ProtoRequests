@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 
 import com.murthinext.ae2pr.client.gui.crystal_workstation.CrystalWorkstationShell;
+import com.murthinext.ae2pr.client.sound.MachineProcessingSounds;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 
 /**
@@ -46,5 +47,8 @@ public class CrystalWorkstationBlock extends AbstractMultiblockControllerBlock<C
     @Override
     protected void clientTick(CrystalWorkstationControllerBlockEntity controller) {
         CrystalWorkstationShell.update(controller);
+        MachineProcessingSounds.tick(controller, controller.getMode() == CrystalWorkstationMode.ETCHING
+                ? MachineProcessingSounds.Type.CRYSTAL_WORKSTATION_ETCHING
+                : MachineProcessingSounds.Type.CRYSTAL_WORKSTATION_CUTTING);
     }
 }

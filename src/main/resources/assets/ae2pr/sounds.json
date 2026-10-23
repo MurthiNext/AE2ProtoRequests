@@ -25,5 +25,17 @@
     "sounds": [
       "ae2pr:machine/crystal_reaction_chamber"
     ]
+  },
+  "crystal_workstation_etching": {
+    "subtitle": "subtitle.ae2pr.crystal_workstation_etching",
+    "sounds": [
+      "ae2pr:machine/crystal_workstation_etching"
+    ]
+  },
+  "crystal_workstation_cutting": {
+    "subtitle": "subtitle.ae2pr.crystal_workstation_cutting",
+    "sounds": [
+      "ae2pr:machine/crystal_workstation_cutting"
+    ]
   }
 }
