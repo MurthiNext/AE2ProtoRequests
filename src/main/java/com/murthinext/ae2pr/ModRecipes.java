@@ -9,7 +9,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationMode;
-import com.murthinext.ae2pr.recipe.AlienLavaRecipe;
+import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
 import com.murthinext.ae2pr.recipe.CrystalReactionChamberRecipe;
 import com.murthinext.ae2pr.recipe.CrystalWorkstationRecipe;
@@ -41,16 +41,12 @@ public final class ModRecipes {
     public static final RegistryObject<CrystalAssemblyLineRecipe.Serializer> CRYSTAL_ASSEMBLY_LINE = SERIALIZERS
             .register("crystal_assembly_line", CrystalAssemblyLineRecipe.Serializer::new);
 
-    public static final RegistryObject<RecipeType<AlienLavaRecipe>> ALIEN_LAVA_TYPE = RECIPE_TYPES
-            .register("alien_lava", () -> new RecipeType<AlienLavaRecipe>() {
-                @Override
-                public String toString() {
-                    return ae2pr.MODID + ":alien_lava";
-                }
-            });
+    public static final RegistryObject<RecipeType<ComplexWorldInteractionRecipe>> COMPLEX_WORLD_INTERACTION_TYPE = RECIPE_TYPES
+            .register("complex_world_interaction", () -> RecipeType.simple(
+                    ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "complex_world_interaction")));
 
-    public static final RegistryObject<AlienLavaRecipe.Serializer> ALIEN_LAVA = SERIALIZERS
-            .register("alien_lava", AlienLavaRecipe.Serializer::new);
+    public static final RegistryObject<ComplexWorldInteractionRecipe.Serializer> COMPLEX_WORLD_INTERACTION = SERIALIZERS
+            .register("complex_world_interaction", ComplexWorldInteractionRecipe.Serializer::new);
 
     public static final RegistryObject<RecipeType<LavaSmelterRecipe>> LAVA_SMELTER_TYPE = RECIPE_TYPES
             .register("lava_smelter", () -> new RecipeType<LavaSmelterRecipe>() {

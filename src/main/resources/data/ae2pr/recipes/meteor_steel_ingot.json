@@ -1,6 +1,10 @@
 {
-  "type": "ae2pr:alien_lava",
-  "catalyst": "ae2pr:alien_lava",
+  "type": "ae2pr:complex_world_interaction",
+  "circumstance": {
+    "type": "fluid",
+    "tag": "ae2pr:alien_lava",
+    "source_only": true
+  },
   "item_inputs": [
     {
       "item": "minecraft:iron_ingot",

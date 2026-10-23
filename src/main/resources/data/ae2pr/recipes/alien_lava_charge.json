@@ -1,6 +1,10 @@
 {
-  "type": "ae2pr:alien_lava",
-  "catalyst": "minecraft:lava",
+  "type": "ae2pr:complex_world_interaction",
+  "circumstance": {
+    "type": "fluid",
+    "tag": "minecraft:lava",
+    "source_only": true
+  },
   "item_inputs": [
     {
       "item": "ae2:sky_dust",

@@ -7,40 +7,38 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.murthinext.ae2pr.logic.alien_lava.AlienLavaInteractions;
-import com.murthinext.ae2pr.logic.alien_lava.AlienLavaTransformTimer;
+import com.murthinext.ae2pr.logic.world_interaction.ComplexWorldInteractions;
+import com.murthinext.ae2pr.logic.world_interaction.WorldInteractionEntity;
+import com.murthinext.ae2pr.logic.world_interaction.WorldInteractionProgress;
 
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.item.ItemEntity;
 
 /**
- * 物品实体：挂载异星熔岩转化计时器，并处理岩浆伤害前的充能转化。
+ * 物品实体的复杂世界交互与伤害保护。
  */
 @Mixin(ItemEntity.class)
-public abstract class ItemEntityMixin implements AlienLavaTransformTimer {
+public abstract class ItemEntityMixin implements WorldInteractionEntity {
 
     @Unique
-    private int ae2pr$transformTicks;
+    private final WorldInteractionProgress ae2pr$interactionProgress = new WorldInteractionProgress();
 
     @Override
-    public int ae2pr$getTransformTicks() {
-        return ae2pr$transformTicks;
-    }
-
-    @Override
-    public void ae2pr$setTransformTicks(int ticks) {
-        this.ae2pr$transformTicks = ticks;
+    public WorldInteractionProgress ae2pr$getWorldInteractionProgress() {
+        return ae2pr$interactionProgress;
     }
 
     @Inject(method = "tick()V", at = @At("RETURN"))
     private void ae2pr$onTick(CallbackInfo ci) {
-        AlienLavaInteractions.onItemTick((ItemEntity) (Object) this);
+        ComplexWorldInteractions.onItemTick((ItemEntity) (Object) this);
     }
 
     @Inject(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
     private void ae2pr$onHurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (source.is(DamageTypes.LAVA) && AlienLavaInteractions.tryChargeLava((ItemEntity) (Object) this)) {
+        ItemEntity item = (ItemEntity) (Object) this;
+        if ((source.is(DamageTypeTags.IS_EXPLOSION) && ComplexWorldInteractions.tryExplosion(item))
+                || (source.is(DamageTypeTags.IS_FIRE) && ComplexWorldInteractions.protectFromFire(item))) {
             cir.setReturnValue(false);
         }
     }

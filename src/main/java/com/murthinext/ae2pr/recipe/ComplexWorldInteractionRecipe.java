@@ -12,10 +12,8 @@ import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -26,55 +24,48 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import com.murthinext.ae2pr.ModRecipes;
-import com.murthinext.ae2pr.ModTags;
 
 /**
- * 异星熔岩世界交互配方：物品实体浸入流体后消耗并产出。
+ * 支持带数量原料、多产物和流体源替换的复杂世界交互配方。
  */
-public class AlienLavaRecipe implements Recipe<Container> {
+public class ComplexWorldInteractionRecipe implements Recipe<Container> {
 
     private final ResourceLocation id;
     private final List<CountedIngredient> ingredients;
-    private final TagKey<Fluid> catalyst;
-    private final ItemStack resultItem;
+    private final WorldInteractionCircumstance circumstance;
+    private final List<ItemStack> results;
     @Nullable
     private final Fluid resultFluid;
 
-    public AlienLavaRecipe(ResourceLocation id, List<CountedIngredient> ingredients, TagKey<Fluid> catalyst,
-            ItemStack resultItem, @Nullable Fluid resultFluid) {
+    public ComplexWorldInteractionRecipe(ResourceLocation id, List<CountedIngredient> ingredients,
+            WorldInteractionCircumstance circumstance, List<ItemStack> results,
+            @Nullable Fluid resultFluid) {
         this.id = id;
         this.ingredients = List.copyOf(ingredients);
-        this.catalyst = catalyst;
-        this.resultItem = resultItem;
+        this.circumstance = circumstance;
+        this.results = results.stream().map(ItemStack::copy).toList();
         this.resultFluid = resultFluid;
     }
 
-    public boolean isCatalyst(FluidState state) {
-        return state.is(catalyst);
-    }
-
-    /**
-     * 触发物品是否匹配首个原料。
-     */
     public boolean canTrigger(ItemStack stack) {
-        return !ingredients.isEmpty() && ingredients.get(0).ingredient().test(stack);
+        return ingredients.stream().anyMatch(ingredient -> ingredient.test(stack));
     }
 
     public List<CountedIngredient> getCountedIngredients() {
         return ingredients;
     }
 
-    public TagKey<Fluid> getCatalyst() {
-        return catalyst;
+    public WorldInteractionCircumstance getCircumstance() {
+        return circumstance;
     }
 
-    public ItemStack getResultItem() {
-        return resultItem;
+    public List<ItemStack> getResults() {
+        return results;
     }
 
     @Nullable
@@ -82,10 +73,7 @@ public class AlienLavaRecipe implements Recipe<Container> {
         return resultFluid;
     }
 
-    /**
-     * 是否将催化剂源方块转化为结果流体而非产出物品。
-     */
-    public boolean convertsCatalyst() {
+    public boolean convertsFluid() {
         return resultFluid != null;
     }
 
@@ -96,7 +84,7 @@ public class AlienLavaRecipe implements Recipe<Container> {
 
     @Override
     public ItemStack assemble(Container container, RegistryAccess registryAccess) {
-        return resultItem.copy();
+        return getResultItem(registryAccess).copy();
     }
 
     @Override
@@ -106,7 +94,7 @@ public class AlienLavaRecipe implements Recipe<Container> {
 
     @Override
     public ItemStack getResultItem(RegistryAccess registryAccess) {
-        return resultItem;
+        return results.isEmpty() ? ItemStack.EMPTY : results.get(0);
     }
 
     @Override
@@ -123,12 +111,12 @@ public class AlienLavaRecipe implements Recipe<Container> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.ALIEN_LAVA.get();
+        return ModRecipes.COMPLEX_WORLD_INTERACTION.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return ModRecipes.ALIEN_LAVA_TYPE.get();
+        return ModRecipes.COMPLEX_WORLD_INTERACTION_TYPE.get();
     }
 
     @Override
@@ -136,72 +124,81 @@ public class AlienLavaRecipe implements Recipe<Container> {
         return true;
     }
 
-    /**
-     * JSON 与网络序列化。
-     */
-    public static class Serializer implements RecipeSerializer<AlienLavaRecipe> {
+    public static class Serializer implements RecipeSerializer<ComplexWorldInteractionRecipe> {
 
         @Override
-        public AlienLavaRecipe fromJson(ResourceLocation id, JsonObject json) {
+        public ComplexWorldInteractionRecipe fromJson(ResourceLocation id, JsonObject json) {
             List<CountedIngredient> ingredients = new ArrayList<>();
             for (JsonElement element : GsonHelper.getAsJsonArray(json, "item_inputs")) {
                 JsonObject entry = element.getAsJsonObject();
                 int count = GsonHelper.getAsInt(entry, "count", 1);
-                ingredients.add(new CountedIngredient(Ingredient.fromJson(entry), count));
+                Ingredient ingredient = Ingredient.fromJson(entry);
+                if (count <= 0 || ingredient.isEmpty()) {
+                    throw new JsonSyntaxException("item_inputs requires non-empty ingredients and positive counts");
+                }
+                ingredients.add(new CountedIngredient(ingredient, count));
             }
-            TagKey<Fluid> catalyst = TagKey.create(Registries.FLUID,
-                    ResourceLocation.parse(GsonHelper.getAsString(json, "catalyst",
-                            ModTags.ALIEN_LAVA.location().toString())));
-            JsonArray itemOutputs = GsonHelper.getAsJsonArray(json, "item_outputs", new JsonArray());
-            if (itemOutputs.size() > 1) {
-                throw new JsonSyntaxException("item_outputs allows at most one output");
+            if (ingredients.isEmpty()) {
+                throw new JsonSyntaxException("item_inputs must not be empty");
             }
-            ItemStack resultItem = itemOutputs.isEmpty()
-                    ? ItemStack.EMPTY
-                    : ShapedRecipe.itemStackFromJson(itemOutputs.get(0).getAsJsonObject());
+            WorldInteractionCircumstance circumstance = WorldInteractionCircumstance.fromJson(
+                    GsonHelper.getAsJsonObject(json, "circumstance"));
+            List<ItemStack> results = new ArrayList<>();
+            for (JsonElement element : GsonHelper.getAsJsonArray(json, "item_outputs", new JsonArray())) {
+                ItemStack result = ShapedRecipe.itemStackFromJson(element.getAsJsonObject());
+                if (result.isEmpty() || result.getCount() <= 0) {
+                    throw new JsonSyntaxException("item_outputs requires non-empty stacks and positive counts");
+                }
+                results.add(result);
+            }
             JsonArray fluidOutputs = GsonHelper.getAsJsonArray(json, "fluid_outputs", new JsonArray());
             if (fluidOutputs.size() > 1) {
                 throw new JsonSyntaxException("fluid_outputs allows at most one output");
             }
             Fluid resultFluid = null;
             if (!fluidOutputs.isEmpty()) {
+                if (circumstance.isExplosion() || !circumstance.sourceOnly()) {
+                    throw new JsonSyntaxException("fluid_outputs requires a source-only fluid circumstance");
+                }
                 JsonObject output = fluidOutputs.get(0).getAsJsonObject();
                 ResourceLocation fluidId = ResourceLocation.parse(GsonHelper.getAsString(output, "fluid"));
                 resultFluid = ForgeRegistries.FLUIDS.getValue(fluidId);
-                int amount = GsonHelper.getAsInt(output, "amount");
-                if (resultFluid == null || amount != FluidType.BUCKET_VOLUME) {
-                    throw new JsonSyntaxException("fluid_outputs only supports valid fluids and amount must be 1000");
+                if (resultFluid == null || resultFluid == Fluids.EMPTY || !resultFluid.defaultFluidState().isSource()
+                        || GsonHelper.getAsInt(output, "amount") != FluidType.BUCKET_VOLUME) {
+                    throw new JsonSyntaxException("fluid_outputs requires a source fluid and amount must be 1000");
                 }
             }
-            return new AlienLavaRecipe(id, ingredients, catalyst, resultItem, resultFluid);
+            if (results.isEmpty() && resultFluid == null) {
+                throw new JsonSyntaxException("World interaction recipes must have at least one output");
+            }
+            return new ComplexWorldInteractionRecipe(id, ingredients, circumstance, results, resultFluid);
         }
 
-        @Nullable
         @Override
-        public AlienLavaRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
+        public ComplexWorldInteractionRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
             int size = buffer.readVarInt();
             List<CountedIngredient> ingredients = new ArrayList<>(size);
             for (int i = 0; i < size; i++) {
                 int count = buffer.readVarInt();
                 ingredients.add(new CountedIngredient(Ingredient.fromNetwork(buffer), count));
             }
-            TagKey<Fluid> catalyst = TagKey.create(Registries.FLUID, buffer.readResourceLocation());
-            ItemStack resultItem = buffer.readItem();
+            WorldInteractionCircumstance circumstance = WorldInteractionCircumstance.fromNetwork(buffer);
+            List<ItemStack> results = buffer.readList(FriendlyByteBuf::readItem);
             Fluid resultFluid = buffer.readBoolean()
                     ? ForgeRegistries.FLUIDS.getValue(buffer.readResourceLocation())
                     : null;
-            return new AlienLavaRecipe(id, ingredients, catalyst, resultItem, resultFluid);
+            return new ComplexWorldInteractionRecipe(id, ingredients, circumstance, results, resultFluid);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, AlienLavaRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buffer, ComplexWorldInteractionRecipe recipe) {
             buffer.writeVarInt(recipe.ingredients.size());
             for (CountedIngredient entry : recipe.ingredients) {
                 buffer.writeVarInt(entry.count());
                 entry.ingredient().toNetwork(buffer);
             }
-            buffer.writeResourceLocation(recipe.catalyst.location());
-            buffer.writeItem(recipe.resultItem);
+            recipe.circumstance.toNetwork(buffer);
+            buffer.writeCollection(recipe.results, FriendlyByteBuf::writeItem);
             buffer.writeBoolean(recipe.resultFluid != null);
             if (recipe.resultFluid != null) {
                 buffer.writeResourceLocation(ForgeRegistries.FLUIDS.getKey(recipe.resultFluid));
