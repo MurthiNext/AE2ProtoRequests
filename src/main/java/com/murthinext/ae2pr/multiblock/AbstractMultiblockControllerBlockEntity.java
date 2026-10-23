@@ -35,6 +35,7 @@ import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
+import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
 /**
@@ -361,13 +362,59 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return true;
     }
 
+    /**
+     * 当前机器可用的配方，已按 {@link #compareRecipePriority} 从高到低排序。
+     */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected List<MultiblockRecipe> recipes() {
         if (level == null) {
             return List.of();
         }
         RecipeManager manager = level.getRecipeManager();
-        return (List<MultiblockRecipe>) (List<?>) manager.getAllRecipesFor((RecipeType) recipeType());
+        List<MultiblockRecipe> sorted = new ArrayList<>((List<MultiblockRecipe>) (List<?>) manager
+                .getAllRecipesFor((RecipeType) recipeType()));
+        // 原料种类多的配方更具体，优先尝试可避免泛用配方在满仓时抢料
+        sorted.sort(AbstractMultiblockControllerBlockEntity::compareRecipePriority);
+        return sorted;
+    }
+
+    /**
+     * 配方竞争优先级：原料种类多者优先，其次单次物品总量、流体总量，最后按 ID 稳定排序。
+     */
+    private static int compareRecipePriority(MultiblockRecipe left, MultiblockRecipe right) {
+        int result = Integer.compare(inputKinds(right), inputKinds(left));
+        if (result != 0) {
+            return result;
+        }
+        result = Long.compare(itemInputAmount(right), itemInputAmount(left));
+        if (result != 0) {
+            return result;
+        }
+        result = Long.compare(fluidInputAmount(right), fluidInputAmount(left));
+        if (result != 0) {
+            return result;
+        }
+        return left.getId().compareTo(right.getId());
+    }
+
+    private static int inputKinds(MultiblockRecipe recipe) {
+        return recipe.getItemInputs().size() + recipe.getFluidInputs().size();
+    }
+
+    private static long itemInputAmount(MultiblockRecipe recipe) {
+        long total = 0;
+        for (CountedIngredient input : recipe.getItemInputs()) {
+            total += input.count();
+        }
+        return total;
+    }
+
+    private static long fluidInputAmount(MultiblockRecipe recipe) {
+        long total = 0;
+        for (FluidStack input : recipe.getFluidInputs()) {
+            total += input.getAmount();
+        }
+        return total;
     }
 
     /**
