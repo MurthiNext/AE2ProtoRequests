@@ -1,0 +1,12 @@
+{
+  "type": "ae2pr:jig",
+  "item_inputs": [
+    { "item": "minecraft:gravel", "count": 1 }
+  ],
+  "item_outputs": [
+    { "item": "minecraft:flint", "count": 1 }
+  ],
+  "fluid_outputs": [],
+  "duration": 200,
+  "energy": 1000
+}

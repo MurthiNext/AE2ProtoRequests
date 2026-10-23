@@ -44,6 +44,9 @@ public final class Config {
     private static final ForgeConfigSpec.IntValue CRYSTAL_WORKSTATION_PARALLEL;
     private static final ForgeConfigSpec.DoubleValue CRYSTAL_REACTION_ENERGY_PER_PARALLEL;
 
+    private static final ForgeConfigSpec.IntValue JIG_PARALLEL;
+    private static final ForgeConfigSpec.DoubleValue JIG_ENERGY_PER_PARALLEL;
+
     private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_RADIUS;
     private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_DEPTH;
     private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_DURATION_TICKS;
@@ -68,10 +71,10 @@ public final class Config {
                 .comment("单次重复下单允许的最大轮数")
                 .defineInRange("maxRounds", Integer.MAX_VALUE, 1, Integer.MAX_VALUE);
         RETRY_COUNT = BUILDER
-                .comment("开始下一轮失败后的重试次数（每次重试会重新模拟计划）")
+                .comment("开始下一轮失败后的重试次数")
                 .defineInRange("retryCount", 3, 0, 100);
         RETRY_INTERVAL_TICKS = BUILDER
-                .comment("相邻两次重试之间的间隔（tick）")
+                .comment("相邻两次重试之间的间隔（ticks）")
                 .defineInRange("retryIntervalTicks", 20, 1, 72000);
         NOTIFY_ON_FAILURE = BUILDER
                 .comment("重复订单失败时是否发送无线终端通知")
@@ -80,7 +83,7 @@ public final class Config {
 
         BUILDER.push("redstoneRequester");
         REQUESTER_SLOTS = BUILDER
-                .comment("单个 ME 红石请求器可标记的物品数量")
+                .comment("ME 红石请求器可标记的物品数量")
                 .defineInRange("slots", 5, 1, 63);
         REQUESTER_IDLE_ENERGY = BUILDER
                 .comment("ME 红石请求器空闲时从网络抽取的能量（AE）")
@@ -92,34 +95,34 @@ public final class Config {
 
         BUILDER.push("crystalAssemblyLine");
         ASSEMBLY_ITEMS_ORDERED = BUILDER
-                .comment("物品输入是否有序")
+                .comment("水晶装配线物品输入是否有序")
                 .define("itemInputsOrdered", true);
         ASSEMBLY_FLUIDS_ORDERED = BUILDER
-                .comment("流体输入是否有序")
+                .comment("水晶装配线流体输入是否有序")
                 .define("fluidInputsOrdered", false);
         ASSEMBLY_BASE_PARALLEL = BUILDER
-                .comment("最短结构（5 片）的最大并行数")
+                .comment("水晶装配线最短结构的并行上限")
                 .defineInRange("baseParallel", 16, 1, 1_000_000);
         ASSEMBLY_PARALLEL_PER_SLICE = BUILDER
-                .comment("结构每超出最短长度 1 片增加的最大并行数")
+                .comment("结构每超出最短长度1片增加的并行上限")
                 .defineInRange("parallelPerSlice", 8, 0, 1_000_000);
+        ASSEMBLY_MAX_PARALLEL = BUILDER
+                .comment("水晶装配线最大并行上限")
+                .defineInRange("maxParallel", Integer.MAX_VALUE, 1, Integer.MAX_VALUE);
         ASSEMBLY_MAX_SLICES = BUILDER
-                .comment("结构允许的最大片数（最长长度，默认 31 格）")
+                .comment("水晶装配线结构允许的最大片数")
                 .defineInRange("maxSlices", 31, 5, 1024);
         ASSEMBLY_ENERGY_PER_PARALLEL = BUILDER
-                .comment("每并行一次执行从 ME 网络扣除的能量")
+                .comment("水晶装配线默认扣除的能量（AE）")
                 .defineInRange("energyPerParallel", 50000.0, 0.0, Double.MAX_VALUE);
         ASSEMBLY_MODULE_PARALLEL_PER_UNIT = BUILDER
-                .comment("每个并行控制外壳增加的并行上限")
+                .comment("水晶装配线每个并行控制外壳增加的并行上限")
                 .defineInRange("moduleParallelPerUnit", 16, 0, 1_000_000);
         ASSEMBLY_MODULE_SPEED_PER_UNIT = BUILDER
-                .comment("每个速度控制外壳增加的速度比例")
+                .comment("水晶装配线每个速度控制外壳增加的速度比例")
                 .defineInRange("moduleSpeedPerUnit", 0.5, 0.0, 100.0);
-        ASSEMBLY_MAX_PARALLEL = BUILDER
-                .comment("并行上限（包含结构长度与模块的全部加成）")
-                .defineInRange("maxParallel", Integer.MAX_VALUE, 1, Integer.MAX_VALUE);
         ASSEMBLY_MAX_SPEED_MULTIPLIER = BUILDER
-                .comment("速度倍率上限")
+                .comment("水晶装配线速度倍率上限")
                 .defineInRange("maxSpeedMultiplier", 64.0, 1.0, Double.MAX_VALUE);
         BUILDER.pop();
 
@@ -128,16 +131,16 @@ public final class Config {
                 .comment("名称压印工厂的内部能量缓存上限（AE）")
                 .defineInRange("maxPower", 16000.0, 0.0, Double.MAX_VALUE);
         NAMING_FACTORY_ENERGY_PER_ITEM = BUILDER
-                .comment("每重命名一个物品消耗的能量（AE）")
+                .comment("名称压印工厂每重命名一个物品消耗的能量（AE）")
                 .defineInRange("energyPerItem", 250.0, 0.0, Double.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("lavaSmelter");
         LAVA_SMELTER_PARALLEL = BUILDER
-                .comment("熔岩冶炼炉的最大并行数（每并行一份消耗 1 点配方耐久）")
+                .comment("熔岩冶炼炉并行上限")
                 .defineInRange("parallel", 64, 1, 1_000_000);
         LAVA_SMELTER_PASSIVE_ENERGY = BUILDER
-                .comment("熔岩冶炼炉结构成型后每 tick 从 ME 网络抽取的能量（AE），配方本身不再耗电")
+                .comment("熔岩冶炼炉被动耗电量（AE/tick）")
                 .defineInRange("passiveEnergyPerTick", 1000.0, 0.0, Double.MAX_VALUE);
         LAVA_SMELTER_DURABILITY_LOSS_CHANCE = BUILDER
                 .comment("熔岩冶炼炉电力供给不足时每秒扣除 1 点配方耐久的概率")
@@ -146,70 +149,79 @@ public final class Config {
                 .comment("熔岩冶炼炉的配方耐久上限")
                 .defineInRange("maxDurability", 128, 1, Integer.MAX_VALUE);
         LAVA_SMELTER_DURABILITY_PER_DUST = BUILDER
-                .comment("每份陨石粉补充的配方耐久（冶炼炉会按次数消耗陨石粉，补齐到上限为止）")
+                .comment("每份陨石粉补充的配方耐久")
                 .defineInRange("durabilityPerDust", 32, 1, Integer.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("matterPhaseTransformer");
         MATTER_PHASE_TRANSFORMER_PARALLEL = BUILDER
-                .comment("物质相变仪的最大并行数（每并行一份消耗一组输入并按并行数产出流体）")
+                .comment("物质相变仪并行上限")
                 .defineInRange("parallel", 32, 1, 1_000_000);
         MATTER_PHASE_TRANSFORMER_ENERGY_PER_PARALLEL = BUILDER
-                .comment("物质相变仪每并行一次执行从 ME 网络扣除的能量")
+                .comment("物质相变仪默认扣除的能量（AE）")
                 .defineInRange("energyPerParallel", 50000.0, 0.0, Double.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("crystalReactionChamber");
         CRYSTAL_REACTION_PARALLEL = BUILDER
-                .comment("水晶反应仓的最大并行数（输入与产物容量不足时自动降低）")
+                .comment("水晶反应仓并行上限")
                 .defineInRange("parallel", 32, 1, 1_000_000);
         CRYSTAL_REACTION_ENERGY_PER_PARALLEL = BUILDER
-                .comment("水晶反应仓每并行一次执行从 ME 网络扣除的能量")
+                .comment("水晶反应仓默认扣除的能量（AE）")
                 .defineInRange("energyPerParallel", 20000.0, 0.0, Double.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("crystalWorkstation");
         CRYSTAL_WORKSTATION_PARALLEL = BUILDER
-                .comment("晶能工作站最大并行数，蚀刻与切割共用")
+                .comment("晶能工作站并行上限")
                 .defineInRange("parallel", 32, 1, 1_000_000);
+        BUILDER.pop();
+
+        BUILDER.push("jig");
+        JIG_PARALLEL = BUILDER
+                .comment("跳汰机并行上限")
+                .defineInRange("parallel", 32, 1, 1_000_000);
+        JIG_ENERGY_PER_PARALLEL = BUILDER
+                .comment("跳汰机默认扣除的能量（AE）")
+                .defineInRange("energyPerParallel", 1000.0, 0.0, Double.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("crystalReactor");
         CRYSTAL_REACTOR_RADIUS = BUILDER
-                .comment("水晶反应器以核心为圆心的水平替换半径（格）")
+                .comment("水晶反应器以核心为圆心的水平替换半径")
                 .defineInRange("radius", 8, 1, 64);
         CRYSTAL_REACTOR_DEPTH = BUILDER
                 .comment("水晶反应器以核心为顶面的向下替换层数")
                 .defineInRange("depth", 4, 0, 64);
         CRYSTAL_REACTOR_DURATION_TICKS = BUILDER
-                .comment("水晶反应器的总扩散耗时（tick）")
+                .comment("水晶反应器的总扩散耗时（ticks）")
                 .defineInRange("durationTicks", 160, 1, 72000);
         CRYSTAL_REACTOR_SOUNDS_PER_TICK = BUILDER
-                .comment("每 tick 最多播放的方块破坏音效数量（避免大面积破坏时爆音，0 为不播放）")
+                .comment("水晶反应器每 tick 最多播放的方块破坏音效数量")
                 .defineInRange("breakSoundsPerTick", 2, 0, 64);
         CRYSTAL_REACTOR_FLAWLESS_WEIGHT = BUILDER
-                .comment("无瑕档位权重")
+                .comment("水晶反应器无瑕档位权重")
                 .defineInRange("flawlessWeight", 1, 0, 1_000_000);
         CRYSTAL_REACTOR_FLAWED_WEIGHT = BUILDER
-                .comment("有瑕档位权重")
+                .comment("水晶反应器有瑕档位权重")
                 .defineInRange("flawedWeight", 4, 0, 1_000_000);
         CRYSTAL_REACTOR_CHIPPED_WEIGHT = BUILDER
-                .comment("开裂档位权重")
+                .comment("水晶反应器开裂档位权重")
                 .defineInRange("chippedWeight", 8, 0, 1_000_000);
         CRYSTAL_REACTOR_DAMAGED_WEIGHT = BUILDER
-                .comment("损坏档位权重")
+                .comment("水晶反应器损坏档位权重")
                 .defineInRange("damagedWeight", 32, 0, 1_000_000);
         CRYSTAL_REACTOR_AMETHYST_WEIGHT = BUILDER
-                .comment("紫水晶母岩（恒为无瑕）的材质权重")
+                .comment("水晶反应器紫水晶母岩（恒为无瑕）的材质权重")
                 .defineInRange("amethystWeight", 1, 0, 1_000_000);
         CRYSTAL_REACTOR_CERTUS_WEIGHT = BUILDER
-                .comment("赛特斯石英母岩的材质权重")
+                .comment("水晶反应器赛特斯石英母岩的材质权重")
                 .defineInRange("certusWeight", 1, 0, 1_000_000);
         CRYSTAL_REACTOR_ENERGIZED_WEIGHT = BUILDER
-                .comment("盈能水晶母岩（NeoEcoAE）的材质权重，未安装该模组时不生效")
+                .comment("水晶反应器 Neo ECO AE Extension 盈能水晶母岩的材质权重")
                 .defineInRange("energizedWeight", 1, 0, 1_000_000);
         CRYSTAL_REACTOR_OVERLOAD_WEIGHT = BUILDER
-                .comment("过载水晶母岩（AE2LT）的材质权重，未安装该模组时不生效")
+                .comment("水晶反应器 AE2 Lightning Tech 过载水晶母岩的材质权重")
                 .defineInRange("overloadWeight", 1, 0, 1_000_000);
         BUILDER.pop();
 
@@ -342,6 +354,14 @@ public final class Config {
 
     public static double crystalReactionEnergyPerParallel() {
         return CRYSTAL_REACTION_ENERGY_PER_PARALLEL.get();
+    }
+
+    public static int jigParallel() {
+        return JIG_PARALLEL.get();
+    }
+
+    public static double jigEnergyPerParallel() {
+        return JIG_ENERGY_PER_PARALLEL.get();
     }
 
     public static int crystalReactorRadius() {

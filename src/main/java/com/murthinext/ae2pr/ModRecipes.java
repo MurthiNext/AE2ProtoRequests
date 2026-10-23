@@ -14,6 +14,7 @@ import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
 import com.murthinext.ae2pr.recipe.CrystalReactionChamberRecipe;
 import com.murthinext.ae2pr.recipe.CrystalWorkstationRecipe;
 import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
+import com.murthinext.ae2pr.recipe.JigRecipe;
 import com.murthinext.ae2pr.recipe.MatterPhaseTransformerRecipe;
 
 /**
@@ -29,6 +30,11 @@ public final class ModRecipes {
 
     public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS = DeferredRegister.create(
             ForgeRegistries.RECIPE_SERIALIZERS, ae2pr.MODID);
+
+    public static final RegistryObject<RecipeType<JigRecipe>> JIG_TYPE = RECIPE_TYPES.register("jig",
+            () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "jig")));
+
+    public static final RegistryObject<JigRecipe.Serializer> JIG = SERIALIZERS.register("jig", JigRecipe.Serializer::new);
 
     public static final RegistryObject<RecipeType<CrystalAssemblyLineRecipe>> CRYSTAL_ASSEMBLY_LINE_TYPE = RECIPE_TYPES
             .register("crystal_assembly_line", () -> new RecipeType<CrystalAssemblyLineRecipe>() {

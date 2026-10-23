@@ -1,4 +1,10 @@
 {
+  "jig_processing": {
+    "subtitle": "subtitle.ae2pr.jig_processing",
+    "sounds": [
+      "ae2pr:machine/jig"
+    ]
+  },
   "crystal_assembly_line_processing": {
     "subtitle": "subtitle.ae2pr.crystal_assembly_line_processing",
     "sounds": [

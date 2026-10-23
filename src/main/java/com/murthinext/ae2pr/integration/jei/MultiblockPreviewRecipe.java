@@ -21,6 +21,7 @@ import com.murthinext.ae2pr.multiblock.structure.CrystalAssemblyLineStructure;
 import com.murthinext.ae2pr.multiblock.structure.CrystalReactionChamberStructure;
 import com.murthinext.ae2pr.multiblock.structure.CrystalWorkstationStructure;
 import com.murthinext.ae2pr.multiblock.structure.LavaSmelterStructure;
+import com.murthinext.ae2pr.multiblock.structure.JigStructure;
 import com.murthinext.ae2pr.multiblock.structure.MatterPhaseTransformerStructure;
 
 public record MultiblockPreviewRecipe(ResourceLocation id, Component title, Block controller,
@@ -34,6 +35,7 @@ public record MultiblockPreviewRecipe(ResourceLocation id, Component title, Bloc
                         CrystalReactionChamberStructure.PATTERN, CrystalReactionChamberStructure.PATTERN::maxSlices),
                 of("crystal_workstation", ModBlocks.CRYSTAL_WORKSTATION.get(), CrystalWorkstationStructure.PATTERN,
                         CrystalWorkstationStructure.PATTERN::maxSlices),
+                of("jig", ModBlocks.JIG.get(), JigStructure.PATTERN, JigStructure.PATTERN::maxSlices),
                 of("high_reactivity_lava_smelter", ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get(),
                         LavaSmelterStructure.PATTERN, LavaSmelterStructure.PATTERN::maxSlices),
                 of("matter_phase_transformer", ModBlocks.MATTER_PHASE_TRANSFORMER.get(),

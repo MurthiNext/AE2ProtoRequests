@@ -273,5 +273,16 @@
   "jei.ae2pr.crystal_workstation.cutting": "Crystal Workstation · Cutting",
   "jei.ae2pr.crystal_workstation.duration": "Processing time: %s ticks",
   "jei.ae2pr.crystal_workstation.energy": "Energy per operation: %s AE",
-  "config.jade.plugin_ae2pr.crystal_workstation": "Crystal Workstation"
+  "config.jade.plugin_ae2pr.crystal_workstation": "Crystal Workstation",
+  "block.ae2pr.jig": "Jig",
+  "subtitle.ae2pr.jig_processing": "Jig washes",
+  "tooltip.ae2pr.jig.desc": "Gravity beneficiation, preliminary screening.",
+  "gui.ae2pr.jig.error.power": "Insufficient power",
+  "gui.ae2pr.jig.error.output": "Insufficient output space",
+  "config.jade.plugin_ae2pr.jig": "Jig",
+  "jei.ae2pr.jig.duration": "Processing time: %s ticks",
+  "jei.ae2pr.jig.energy": "Energy per operation: %s AE",
+  "jei.ae2pr.jig.more_io": "Extra inputs: %s / outputs: %s",
+  "jei.ae2pr.jig.extra_inputs": "More inputs:",
+  "jei.ae2pr.jig.extra_outputs": "More outputs:"
 }

@@ -272,5 +272,16 @@
   "jei.ae2pr.crystal_workstation.cutting": "晶能工作站 · 切割",
   "jei.ae2pr.crystal_workstation.duration": "加工时长：%s ticks",
   "jei.ae2pr.crystal_workstation.energy": "单次能耗：%s AE",
-  "config.jade.plugin_ae2pr.crystal_workstation": "晶能工作站"
+  "config.jade.plugin_ae2pr.crystal_workstation": "晶能工作站",
+  "block.ae2pr.jig": "跳汰机",
+  "subtitle.ae2pr.jig_processing": "跳汰机：冲洗",
+  "tooltip.ae2pr.jig.desc": "重力选矿，初步筛分。",
+  "gui.ae2pr.jig.error.power": "电力不足",
+  "gui.ae2pr.jig.error.output": "产物空间不足",
+  "config.jade.plugin_ae2pr.jig": "跳汰机",
+  "jei.ae2pr.jig.duration": "加工时长：%s ticks",
+  "jei.ae2pr.jig.energy": "单次能耗：%s AE",
+  "jei.ae2pr.jig.more_io": "额外输入：%s / 产物：%s",
+  "jei.ae2pr.jig.extra_inputs": "更多输入：",
+  "jei.ae2pr.jig.extra_outputs": "更多产物："
 }

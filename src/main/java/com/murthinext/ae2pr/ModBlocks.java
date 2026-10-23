@@ -20,6 +20,7 @@ import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineUnitB
 import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineBlock;
 import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberBlock;
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationBlock;
+import com.murthinext.ae2pr.block.jig.JigBlock;
 import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
@@ -197,6 +198,8 @@ public final class ModBlocks {
 
     public static final RegistryObject<CrystalWorkstationBlock> CRYSTAL_WORKSTATION = BLOCKS.register(
             "crystal_workstation", CrystalWorkstationBlock::new);
+
+    public static final RegistryObject<JigBlock> JIG = BLOCKS.register("jig", JigBlock::new);
 
     public static final RegistryObject<Block> ZIRCONIA_CORUNDUM_BRICKS = BLOCKS.register(
             "zirconia_corundum_bricks", () -> new DisassemblableBlock(Block.Properties.of()

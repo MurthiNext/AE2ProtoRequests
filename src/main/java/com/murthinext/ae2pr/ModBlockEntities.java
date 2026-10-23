@@ -10,6 +10,7 @@ import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineContr
 import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberControllerBlockEntity;
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationControllerBlockEntity;
 import com.murthinext.ae2pr.block.crystal_reactor.CrystalReactorCoreBlockEntity;
+import com.murthinext.ae2pr.block.jig.JigControllerBlockEntity;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntity;
@@ -81,4 +82,8 @@ public final class ModBlockEntities {
             .register("crystal_reactor_core", () -> BlockEntityType.Builder.of(
                     CrystalReactorCoreBlockEntity::new,
                     ModBlocks.HIGH_ENERGY_CORE.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<JigControllerBlockEntity>> JIG = BLOCK_ENTITIES
+            .register("jig", () -> BlockEntityType.Builder.of(JigControllerBlockEntity::new,
+                    ModBlocks.JIG.get()).build(null));
 }

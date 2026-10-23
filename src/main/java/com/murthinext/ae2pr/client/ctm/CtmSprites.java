@@ -28,6 +28,7 @@ public final class CtmSprites {
     public static final ResourceLocation CRYSTAL_REACTION_CONTROLLER_CASING = id("block/crystal_reaction_chamber/controller_casing");
     public static final ResourceLocation CRYSTAL_ASSEMBLY_LINE_CONTROLLER_CASING = id("block/crystal_assembly_line/controller_casing");
     public static final ResourceLocation CRYSTAL_WORKSTATION_CONTROLLER_CASING = id("block/crystal_workstation/controller_casing");
+    public static final ResourceLocation JIG_CONTROLLER_CASING = id("block/jig/controller_casing");
     public static final ResourceLocation WORKSTATION_PANEL_INNER = id("block/crystal_workstation/panel_face");
 
     private static final Map<ResourceLocation, ResourceLocation> ATLASES = new HashMap<>();
@@ -59,6 +60,7 @@ public final class CtmSprites {
         REGISTERED.add(CRYSTAL_ASSEMBLY_LINE_CONTROLLER_CASING);
         REGISTERED.add(WORKSTATION_PANEL_INNER);
         REGISTERED.add(CRYSTAL_WORKSTATION_CONTROLLER_CASING);
+        REGISTERED.add(JIG_CONTROLLER_CASING);
         // 成型外观贴图随注册表自动登记
         for (MachinePartFacade facade : MachinePartFacade.all()) {
             registerFacade(facade);

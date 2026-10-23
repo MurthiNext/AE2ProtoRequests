@@ -25,6 +25,8 @@ import com.murthinext.ae2pr.client.crystal_reaction_chamber.CrystalReactionChamb
 import com.murthinext.ae2pr.client.crystal_reaction_chamber.CrystalReactionChamberScreen;
 import com.murthinext.ae2pr.client.crystal_workstation.CrystalWorkstationRenderer;
 import com.murthinext.ae2pr.client.crystal_workstation.CrystalWorkstationScreen;
+import com.murthinext.ae2pr.client.jig.JigRenderer;
+import com.murthinext.ae2pr.client.jig.JigScreen;
 import com.murthinext.ae2pr.client.machine_part.FluidHatchScreen;
 import com.murthinext.ae2pr.client.machine_part.ItemBusScreen;
 import com.murthinext.ae2pr.client.level_emitter.MultiLevelEmitterScreen;
@@ -58,6 +60,7 @@ public final class ClientSetup {
         MenuScreens.register(ModMenus.MATTER_PHASE_TRANSFORMER.get(), MatterPhaseTransformerScreen::new);
         MenuScreens.register(ModMenus.CRYSTAL_REACTION_CHAMBER.get(), CrystalReactionChamberScreen::new);
         MenuScreens.register(ModMenus.CRYSTAL_WORKSTATION.get(), CrystalWorkstationScreen::new);
+        MenuScreens.register(ModMenus.JIG.get(), JigScreen::new);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_ITEM_BUS.get(), ItemBusScreen::new);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), FluidHatchScreen::new);
         MenuScreens.register(ModMenus.NAMING_FACTORY.get(), NamingFactoryScreen::new);
@@ -98,6 +101,7 @@ public final class ClientSetup {
                 CrystalReactionChamberRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_WORKSTATION.get(),
                 CrystalWorkstationRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.JIG.get(), JigRenderer::new);
     }
 
     @SubscribeEvent

@@ -17,6 +17,7 @@ public final class ModSounds {
     public static final RegistryObject<SoundEvent> CRYSTAL_REACTION = register("crystal_reaction_processing");
     public static final RegistryObject<SoundEvent> CRYSTAL_WORKSTATION_ETCHING = register("crystal_workstation_etching");
     public static final RegistryObject<SoundEvent> CRYSTAL_WORKSTATION_CUTTING = register("crystal_workstation_cutting");
+    public static final RegistryObject<SoundEvent> JIG = register("jig_processing");
 
     private ModSounds() {
     }

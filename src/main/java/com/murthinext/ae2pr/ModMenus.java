@@ -8,6 +8,7 @@ import net.minecraftforge.registries.RegistryObject;
 import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineMenu;
 import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberMenu;
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationMenu;
+import com.murthinext.ae2pr.block.jig.JigMenu;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterMenu;
 import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterMenu;
 import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterMenu;
@@ -47,6 +48,8 @@ public final class ModMenus {
 
     public static final RegistryObject<MenuType<CrystalWorkstationMenu>> CRYSTAL_WORKSTATION = MENUS
             .register("crystal_workstation", () -> CrystalWorkstationMenu.TYPE);
+
+    public static final RegistryObject<MenuType<JigMenu>> JIG = MENUS.register("jig", () -> JigMenu.TYPE);
 
     public static final RegistryObject<MenuType<ItemBusMenu>> CERTUS_QUARTZ_CRYSTAL_ITEM_BUS = MENUS
             .register("certus_quartz_crystal_item_bus", () -> ItemBusMenu.TYPE);
