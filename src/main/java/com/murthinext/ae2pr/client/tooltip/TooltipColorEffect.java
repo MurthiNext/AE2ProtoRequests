@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.logic.tooltip;
+package com.murthinext.ae2pr.client.tooltip;
 
 import java.util.Optional;
 
@@ -16,13 +16,13 @@ public final class TooltipColorEffect implements ComponentContents {
     private final String text;
     private final int[] colors;
     private final float speed;
-    private final boolean hardSwitch;
+    private final boolean flow;
 
-    public TooltipColorEffect(String text, int[] colors, float speed, boolean hardSwitch) {
+    public TooltipColorEffect(String text, int[] colors, float speed, boolean flow) {
         this.text = text;
         this.colors = normalize(colors);
         this.speed = speed > 0.0F ? speed : DEFAULT_SPEED;
-        this.hardSwitch = hardSwitch;
+        this.flow = flow;
     }
 
     // 颜色统一按 RGB 处理
@@ -49,8 +49,8 @@ public final class TooltipColorEffect implements ComponentContents {
         return speed;
     }
 
-    public boolean hardSwitch() {
-        return hardSwitch;
+    public boolean flow() {
+        return flow;
     }
 
     // 按顺序取色，索引自动循环

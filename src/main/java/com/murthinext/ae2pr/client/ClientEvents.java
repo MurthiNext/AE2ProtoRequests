@@ -5,6 +5,7 @@ import com.murthinext.ae2pr.client.proto_terminal.TerminalStoryProgressCache;
 import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderFailures;
 import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderRounds;
 import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderState;
+import com.murthinext.ae2pr.client.tooltip.TooltipRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraftforge.api.distmarker.Dist;

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.murthinext.ae2pr.client.tooltip.ColorEffectLine.Segment;
-import com.murthinext.ae2pr.logic.tooltip.TooltipColorEffect;
 
 import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
@@ -73,10 +72,10 @@ public final class ColorEffectClientTooltip implements ClientTooltipComponent {
     private void renderEffect(Segment segment, Font font, int lineX, int x, int y, int lineWidth, long now,
             Matrix4f pose, MultiBufferSource.BufferSource bufferSource) {
         TooltipColorEffect effect = segment.effect();
-        if (effect.hardSwitch()) {
+        if (effect.flow()) {
             // 颜色写在字符样式上，阴影由原版按亮度系数自动压暗
             int shift = (int) (now / 1000.0D * effect.speed() * SWITCH_STEPS_PER_SECOND);
-            font.drawInBatch(hardSwitchText(segment, shift), x, y, -1, true, pose, bufferSource,
+            font.drawInBatch(flowText(segment, shift), x, y, -1, true, pose, bufferSource,
                     Font.DisplayMode.NORMAL, 0, TRANSPARENT_LIGHT);
         } else {
             // 顶点颜色由渐变着色器接管，样式固定白色以让亮度系数只表示明暗
@@ -89,7 +88,7 @@ public final class ColorEffectClientTooltip implements ClientTooltipComponent {
     }
 
     // 每个字符取列表中顺序下一个颜色，整体随时间轮换
-    private static FormattedCharSequence hardSwitchText(Segment segment, int shift) {
+    private static FormattedCharSequence flowText(Segment segment, int shift) {
         TooltipColorEffect effect = segment.effect();
         Style style = segment.style();
         String text = segment.text();

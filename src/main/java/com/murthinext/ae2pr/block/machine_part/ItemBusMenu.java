@@ -20,7 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import com.murthinext.ae2pr.ModNetwork;
-import com.murthinext.ae2pr.menu.DisplaySlot;
+import com.murthinext.ae2pr.client.DisplaySlot;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 import com.murthinext.ae2pr.network.MachinePartStackPacket;
 

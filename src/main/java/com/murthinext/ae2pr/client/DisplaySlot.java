@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.menu;
+package com.murthinext.ae2pr.client;
 
 import java.util.function.Supplier;
 

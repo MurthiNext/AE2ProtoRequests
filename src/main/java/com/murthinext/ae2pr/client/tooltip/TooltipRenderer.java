@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.client;
+package com.murthinext.ae2pr.client.tooltip;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +15,7 @@ import net.minecraft.util.StringDecomposer;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 
-import com.murthinext.ae2pr.client.tooltip.ColorEffectLine;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectLine.Segment;
-import com.murthinext.ae2pr.logic.tooltip.TooltipColorEffect;
 
 /**
  * 统一物品 Tooltip 文本处理与渲染入口。
@@ -35,12 +33,12 @@ public final class TooltipRenderer {
         return MutableComponent.create(new TooltipColorEffect(text, colors, speed, false));
     }
 
-    // 硬切换文字
-    public static MutableComponent hardSwitch(String text, int... colors) {
-        return hardSwitch(text, TooltipColorEffect.DEFAULT_SPEED, colors);
+    // 流动
+    public static MutableComponent flow(String text, int... colors) {
+        return flow(text, TooltipColorEffect.DEFAULT_SPEED, colors);
     }
 
-    public static MutableComponent hardSwitch(String text, float speed, int[] colors) {
+    public static MutableComponent flow(String text, float speed, int[] colors) {
         return MutableComponent.create(new TooltipColorEffect(text, colors, speed, true));
     }
 

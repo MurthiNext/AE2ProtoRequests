@@ -24,7 +24,7 @@ import com.murthinext.ae2pr.block.machine_part.MachinePartFluidStorage;
 import com.murthinext.ae2pr.block.machine_part.MachinePartLayout;
 import com.murthinext.ae2pr.client.CustomIngredientSource;
 import com.murthinext.ae2pr.client.MachineGui;
-import com.murthinext.ae2pr.menu.DisplaySlot;
+import com.murthinext.ae2pr.client.DisplaySlot;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 
@@ -137,7 +137,7 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
     private int slotY(int slot) {
         return topPos + MachinePartLayout.itemSlotY(menu.getFluidStorage() != null, slot);
     }
-    
+
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         int tank = hoveredTank((int) mouseX, (int) mouseY);

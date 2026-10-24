@@ -12,9 +12,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
-/**
- * 水晶素，tooltip 使用青蓝色硬切换效果。
- */
 public class CrystalineItem extends Item {
 
     public CrystalineItem(Properties properties) {

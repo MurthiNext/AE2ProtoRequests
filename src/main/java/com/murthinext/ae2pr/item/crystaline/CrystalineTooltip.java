@@ -4,14 +4,11 @@ import java.util.List;
 
 import net.minecraft.network.chat.Component;
 
-import com.murthinext.ae2pr.client.TooltipRenderer;
+import com.murthinext.ae2pr.client.tooltip.TooltipRenderer;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-/**
- * 水晶素的 tooltip 文本，仅客户端可用。
- */
 @OnlyIn(Dist.CLIENT)
 public final class CrystalineTooltip {
 
@@ -24,7 +21,7 @@ public final class CrystalineTooltip {
     }
 
     public static void append(List<Component> tooltip) {
-        tooltip.add(TooltipRenderer.hardSwitch(
+        tooltip.add(TooltipRenderer.flow(
                 Component.translatable("tooltip.ae2pr.crystaline.desc").getString(), GROWTH_COLORS));
     }
 }
