@@ -1,7 +1,11 @@
 package com.murthinext.ae2pr.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -29,6 +33,15 @@ public final class MachineGui {
     public static final int TANK_STEP = 22;
     public static final int TANK_INNER_WIDTH = 14;
     public static final int TANK_INNER_HEIGHT = 64;
+
+    public static final int TOOLBAR_X = -22;
+    public static final int TOOLBAR_Y = 2;
+    public static final int TOOLBAR_ROW_STEP = 20;
+    public static final int TOOLBAR_WIDTH = 20;
+    public static final int UPGRADE_PANEL_X = 178;
+    public static final int UPGRADE_PANEL_Y = 2;
+    public static final int UPGRADE_SLOTS = 4;
+    public static final int UPGRADE_SLOT_STEP = 20;
 
     private static final int SEPARATOR_Y = 21;
     private static final int SEPARATOR_LEFT = 7;
@@ -73,6 +86,23 @@ public final class MachineGui {
 
     private static ResourceLocation texture(String path) {
         return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "textures/gui/" + path + ".png");
+    }
+
+    /**
+     * 界面之外占据空间的区域，用于让配方查看器的物品列表避让。
+     *
+     * @param toolbarButtons 左侧工具栏的按钮格数
+     * @param upgradePanel   是否绘制了右侧升级面板
+     */
+    public static List<Rect2i> exclusionAreas(int left, int top, int toolbarButtons, boolean upgradePanel) {
+        List<Rect2i> areas = new ArrayList<>(2);
+        areas.add(new Rect2i(left + TOOLBAR_X, top + TOOLBAR_Y, TOOLBAR_WIDTH,
+                toolbarButtons * TOOLBAR_ROW_STEP + 2));
+        if (upgradePanel) {
+            areas.add(new Rect2i(left + UPGRADE_PANEL_X, top + UPGRADE_PANEL_Y, TOOLBAR_WIDTH,
+                    UPGRADE_SLOTS * UPGRADE_SLOT_STEP + 2));
+        }
+        return areas;
     }
 
     // 面板与槽位

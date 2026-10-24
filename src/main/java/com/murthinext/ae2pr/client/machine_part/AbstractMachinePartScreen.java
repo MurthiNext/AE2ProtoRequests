@@ -7,10 +7,12 @@ import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
+import com.murthinext.ae2pr.client.GuiExtraAreas;
 import com.murthinext.ae2pr.client.ModGuide;
 import com.murthinext.ae2pr.client.GuideButton;
 import com.murthinext.ae2pr.client.MachineGui;
@@ -18,11 +20,8 @@ import com.murthinext.ae2pr.client.MachineGui;
 /**
  * 机器部件界面基类。
  */
-public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu> extends AbstractContainerScreen<M> {
-
-    private static final int TOOLBAR_X = -22;
-    private static final int TOOLBAR_Y = 2;
-    private static final int TOOLBAR_ROW_STEP = 20;
+public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu> extends AbstractContainerScreen<M>
+        implements GuiExtraAreas {
 
     private static final int TITLE_X = 7;
     private static final int TITLE_Y = 9;
@@ -45,12 +44,22 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
     protected abstract boolean autoTransferEnabled();
 
     @Override
+    public List<Rect2i> getGuiExtraAreas() {
+        return MachineGui.exclusionAreas(leftPos, topPos, toolbarButtons(), false);
+    }
+
+    protected int toolbarButtons() {
+        return 2;
+    }
+
+    @Override
     protected void init() {
         super.init();
-        guideButton = new GuideButton(leftPos + TOOLBAR_X + 1, topPos + TOOLBAR_Y + 1,
+        guideButton = new GuideButton(leftPos + MachineGui.TOOLBAR_X + 1, topPos + MachineGui.TOOLBAR_Y + 1,
                 () -> ModGuide.openAt(ModGuide.CHAMBERS_PAGE));
         addRenderableWidget(guideButton);
-        autoTransferButton = new AutoTransferButton(leftPos + TOOLBAR_X + 1, topPos + TOOLBAR_Y + 1 + TOOLBAR_ROW_STEP,
+        autoTransferButton = new AutoTransferButton(leftPos + MachineGui.TOOLBAR_X + 1,
+                topPos + MachineGui.TOOLBAR_Y + 1 + MachineGui.TOOLBAR_ROW_STEP,
                 isOutput() ? AutoTransferButton.Type.PUSH : AutoTransferButton.Type.PULL,
                 this::autoTransferEnabled,
                 () -> Minecraft.getInstance().gameMode.handleInventoryButtonClick(menu.containerId, 0));
@@ -71,7 +80,8 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
     }
 
     protected void renderToolbar(GuiGraphics graphics) {
-        AutoTransferButton.renderToolbar(graphics, leftPos + TOOLBAR_X, topPos + TOOLBAR_Y, 2);
+        AutoTransferButton.renderToolbar(graphics, leftPos + MachineGui.TOOLBAR_X, topPos + MachineGui.TOOLBAR_Y,
+                toolbarButtons());
     }
 
     protected boolean renderToolbarTooltip(GuiGraphics graphics, int mouseX, int mouseY) {

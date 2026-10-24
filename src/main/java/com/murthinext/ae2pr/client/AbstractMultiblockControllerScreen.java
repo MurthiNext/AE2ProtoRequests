@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -20,7 +21,7 @@ import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerMenu;
  * 多方块控制器界面的公共基底：信息布局、产物显示与工具提示。
  */
 public abstract class AbstractMultiblockControllerScreen<M extends AbstractMultiblockControllerMenu<?>>
-        extends AbstractMachineScreen<M> {
+        extends AbstractMachineScreen<M> implements CustomIngredientSource {
 
     private static final int TITLE_X = MultiblockInfoLayout.TEXT_X;
     private static final int TITLE_Y = 9;
@@ -118,5 +119,22 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
             }
         }
         super.renderTooltip(graphics, mouseX, mouseY);
+    }
+
+    @Override
+    public List<Area> getCustomAreas() {
+        ItemStack item = menu.getJobItem();
+        if (!item.isEmpty()) {
+            return List.of(Area.ofItem(item, jobItemArea()));
+        }
+        FluidStack fluid = menu.getJobFluid();
+        if (!fluid.isEmpty()) {
+            return List.of(Area.ofFluid(fluid, jobItemArea()));
+        }
+        return List.of();
+    }
+
+    public Rect2i jobItemArea() {
+        return MultiblockInfoLayout.jobItemArea(leftPos, topPos);
     }
 }

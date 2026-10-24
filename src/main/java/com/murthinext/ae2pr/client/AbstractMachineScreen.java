@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -20,16 +21,8 @@ import com.murthinext.ae2pr.client.machine_part.AutoTransferButton;
 /**
  * 机器界面基类。
  */
-public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> extends AbstractContainerScreen<M> {
-
-    protected static final int TOOLBAR_X = -22;
-    protected static final int TOOLBAR_Y = 2;
-    protected static final int TOOLBAR_ROW_STEP = 20;
-
-    private static final int UPGRADE_PANEL_X = 178;
-    private static final int UPGRADE_PANEL_Y = 2;
-    private static final int UPGRADE_SLOTS = 4;
-    private static final int UPGRADE_SLOT_STEP = 20;
+public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> extends AbstractContainerScreen<M>
+        implements GuiExtraAreas {
 
     @Nullable
     private GuideButton guideButton;
@@ -44,6 +37,11 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
 
     protected abstract ItemLike upgradeMachine();
 
+    @Override
+    public List<Rect2i> getGuiExtraAreas() {
+        return MachineGui.exclusionAreas(leftPos, topPos, toolbarButtons(), true);
+    }
+
     protected int separatorAccent() {
         return MachineGui.ACCENT_CRYSTAL;
     }
@@ -55,7 +53,7 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
     @Override
     protected void init() {
         super.init();
-        guideButton = new GuideButton(leftPos + TOOLBAR_X + 1, topPos + TOOLBAR_Y + 1,
+        guideButton = new GuideButton(leftPos + MachineGui.TOOLBAR_X + 1, topPos + MachineGui.TOOLBAR_Y + 1,
                 () -> ModGuide.openAt(guidePage()));
         addRenderableWidget(guideButton);
     }
@@ -70,7 +68,8 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
     }
 
     protected void renderToolbar(GuiGraphics graphics) {
-        AutoTransferButton.renderToolbar(graphics, leftPos + TOOLBAR_X, topPos + TOOLBAR_Y, toolbarButtons());
+        AutoTransferButton.renderToolbar(graphics, leftPos + MachineGui.TOOLBAR_X, topPos + MachineGui.TOOLBAR_Y,
+                toolbarButtons());
     }
 
     /**
@@ -81,12 +80,12 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
     }
 
     protected void renderUpgradeSlots(GuiGraphics graphics) {
-        int x = leftPos + UPGRADE_PANEL_X;
-        int y = topPos + UPGRADE_PANEL_Y;
-        AutoTransferButton.renderToolbar(graphics, x, y, UPGRADE_SLOTS);
-        for (int i = 0; i < UPGRADE_SLOTS; i++) {
+        int x = leftPos + MachineGui.UPGRADE_PANEL_X;
+        int y = topPos + MachineGui.UPGRADE_PANEL_Y;
+        AutoTransferButton.renderToolbar(graphics, x, y, MachineGui.UPGRADE_SLOTS);
+        for (int i = 0; i < MachineGui.UPGRADE_SLOTS; i++) {
             // 面板内缩 1px，槽位组件自带 1px 描边
-            MachineGui.drawSlot(graphics, x + 2, y + 2 + i * UPGRADE_SLOT_STEP);
+            MachineGui.drawSlot(graphics, x + 2, y + 2 + i * MachineGui.UPGRADE_SLOT_STEP);
         }
     }
 
@@ -111,9 +110,9 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
     }
 
     private boolean isHoveringUpgradePanel(int mouseX, int mouseY) {
-        int x = leftPos + UPGRADE_PANEL_X;
-        int y = topPos + UPGRADE_PANEL_Y;
-        int height = UPGRADE_SLOTS * UPGRADE_SLOT_STEP + 2;
+        int x = leftPos + MachineGui.UPGRADE_PANEL_X;
+        int y = topPos + MachineGui.UPGRADE_PANEL_Y;
+        int height = MachineGui.UPGRADE_SLOTS * MachineGui.UPGRADE_SLOT_STEP + 2;
         return mouseX >= x && mouseX < x + 20 && mouseY >= y && mouseY < y + height;
     }
 }

@@ -9,6 +9,7 @@ import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -88,6 +89,10 @@ public final class MultiblockInfoLayout {
         int x = leftPos + JOB_ITEM_X;
         int y = topPos + JOB_ITEM_Y;
         return mouseX >= x - 1 && mouseX < x + 17 && mouseY >= y - 1 && mouseY < y + 17;
+    }
+
+    public static Rect2i jobItemArea(int leftPos, int topPos) {
+        return new Rect2i(leftPos + JOB_ITEM_X - 1, topPos + JOB_ITEM_Y - 1, 18, 18);
     }
 
     public static void renderFluidJob(GuiGraphics graphics, Font font, int leftPos, int topPos, FluidStack fluid,

@@ -20,11 +20,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import com.murthinext.ae2pr.ModNetwork;
+import com.murthinext.ae2pr.menu.DisplaySlot;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 import com.murthinext.ae2pr.network.MachinePartStackPacket;
 
 /**
- * 机器部件物品总线的容器菜单：存储不占槽位，经同步包展示。
+ * 机器部件物品总线的容器菜单：存储经只读槽位展示，数量由界面层绘制。
  */
 public class ItemBusMenu extends AbstractContainerMenu {
 
@@ -35,11 +36,14 @@ public class ItemBusMenu extends AbstractContainerMenu {
     private static final int INV_X = 8;
     private static final int INV_Y = 122;
     private static final int HOTBAR_Y = 180;
+    // 单次点击搬运上限
+    private static final int MAX_CLICK_TRANSFER = 64;
 
     private final BlockPos pos;
     private final Player owner;
     private final boolean serverSide;
     private final ItemBusBlockEntity blockEntity;
+    private final int playerSlotFirst;
     private List<ItemStack> lastSentStacks;
     private List<FluidStack> lastSentFluids;
     private boolean stackSynced;
@@ -52,6 +56,15 @@ public class ItemBusMenu extends AbstractContainerMenu {
         this.owner = playerInventory.player;
         this.serverSide = !playerInventory.player.level().isClientSide;
         this.blockEntity = blockEntity;
+        this.playerSlotFirst = getSlotCount();
+        boolean dual = getFluidStorage() != null;
+        for (int slot = 0; slot < playerSlotFirst; slot++) {
+            int index = slot;
+            // 槽位只画单个图标，数量由界面绘制
+            addSlot(new DisplaySlot(() -> getStoredStack(index),
+                    MachinePartLayout.itemSlotX(dual, playerSlotFirst, slot),
+                    MachinePartLayout.itemSlotY(dual, slot)));
+        }
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < INV_COLS; col++) {
                 addSlot(new Slot(playerInventory, col + row * INV_COLS + INV_COLS,
@@ -98,16 +111,14 @@ public class ItemBusMenu extends AbstractContainerMenu {
         }
     }
 
-    /**
-     * 数量即储量，客户端为同步数据。
-     */
     public ItemStack getStoredStack(int slot) {
         return blockEntity != null ? blockEntity.getStorage().getStackInSlot(slot) : ItemStack.EMPTY;
     }
 
-    /**
-     * 存储/开关变化或首次广播时向打开界面的玩家同步。
-     */
+    public int getStorageSlotIndex(int menuSlot) {
+        return menuSlot >= 0 && menuSlot < playerSlotFirst ? menuSlot : -1;
+    }
+
     @Override
     public void broadcastChanges() {
         if (blockEntity != null && owner instanceof ServerPlayer serverPlayer) {
@@ -160,23 +171,24 @@ public class ItemBusMenu extends AbstractContainerMenu {
         return true;
     }
 
-    /**
-     * 由客户端点击包调用，按钮 0 左键、1 右键。
-     */
+    // 单次点击可搬运的数量
+    private static int clickTransferLimit(ItemStack stack) {
+        return Math.min(MAX_CLICK_TRANSFER, stack.getMaxStackSize());
+    }
+
     public void handleStorageClick(int slot, int button, boolean shift) {
         if (!serverSide || blockEntity == null || slot < 0 || slot >= blockEntity.getSlotCount()) {
             return;
         }
         if (shift) {
-            // 单次抽取上限 64，循环取到背包放不下或清空
-            while (true) {
-                ItemStack taken = blockEntity.getStorage().extractItem(slot, Integer.MAX_VALUE, false);
-                if (taken.isEmpty()) {
-                    break;
-                }
-                if (!moveItemStackTo(taken, 0, slots.size(), true) || !taken.isEmpty()) {
-                    ItemHandlerHelper.insertItemStacked(blockEntity.getStorage(), taken, false);
-                    break;
+            ItemStack stored = getStoredStack(slot);
+            ItemStack taken = blockEntity.getStorage().extractItem(slot,
+                    stored.isEmpty() ? MAX_CLICK_TRANSFER : clickTransferLimit(stored), false);
+            if (!taken.isEmpty()) {
+                ItemStack remainder = taken.copy();
+                moveItemStackTo(remainder, playerSlotFirst, slots.size(), true);
+                if (!remainder.isEmpty()) {
+                    ItemHandlerHelper.insertItemStacked(blockEntity.getStorage(), remainder, false);
                 }
             }
         } else if (!getCarried().isEmpty()) {
@@ -189,7 +201,9 @@ public class ItemBusMenu extends AbstractContainerMenu {
             carried.shrink(count - remainder.getCount());
             setCarried(carried.isEmpty() ? ItemStack.EMPTY : carried);
         } else {
-            ItemStack taken = blockEntity.getStorage().extractItem(slot, button == 1 ? 1 : 64, false);
+            ItemStack stored = getStoredStack(slot);
+            int amount = button == 1 ? 1 : clickTransferLimit(stored);
+            ItemStack taken = blockEntity.getStorage().extractItem(slot, amount, false);
             if (!taken.isEmpty()) {
                 setCarried(taken);
             }
@@ -197,8 +211,22 @@ public class ItemBusMenu extends AbstractContainerMenu {
         broadcastChanges();
     }
 
+    public void handleCreativeClone(int slot, Player player) {
+        if (!serverSide || blockEntity == null || !player.getAbilities().instabuild
+                || !player.containerMenu.getCarried().isEmpty()) {
+            return;
+        }
+        ItemStack stored = getStoredStack(slot);
+        if (!stored.isEmpty()) {
+            setCarried(stored.copyWithCount(clickTransferLimit(stored)));
+        }
+    }
+
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
+        if (index < playerSlotFirst) {
+            return ItemStack.EMPTY;
+        }
         Slot slot = slots.get(index);
         if (!slot.hasItem() || !serverSide || blockEntity == null || !blockEntity.acceptsPlayerInsert()) {
             return ItemStack.EMPTY;

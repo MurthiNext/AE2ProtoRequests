@@ -1,12 +1,14 @@
 package com.murthinext.ae2pr.client.machine_part;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,13 +18,14 @@ import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.block.machine_part.DualHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
+import com.murthinext.ae2pr.client.CustomIngredientSource;
 import com.murthinext.ae2pr.client.MachineGui;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 
 /**
  * 机器部件流体仓界面。
  */
-public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> {
+public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> implements CustomIngredientSource {
 
     private static final int TANK_X0 = 20;
     private static final int TANK_Y = 34;
@@ -57,6 +60,20 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
     @Override
     protected boolean isOutput() {
         return menu.isOutputHatch();
+    }
+
+    @Override
+    public List<Area> getCustomAreas() {
+        List<Area> areas = new ArrayList<>(menu.getTankCount());
+        for (int tank = 0; tank < menu.getTankCount(); tank++) {
+            FluidStack fluid = clientFluid(tank);
+            if (fluid.isEmpty()) {
+                continue;
+            }
+            areas.add(Area.ofFluid(fluid, new Rect2i(leftPos + TANK_X0 + tank * TANK_STEP, topPos + TANK_Y,
+                    MachineGui.TANK_WIDTH, MachineGui.TANK_HEIGHT)));
+        }
+        return areas;
     }
 
     @Override

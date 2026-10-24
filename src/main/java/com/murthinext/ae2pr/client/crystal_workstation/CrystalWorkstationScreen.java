@@ -9,6 +9,7 @@ import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationMenu;
 import com.murthinext.ae2pr.client.ModGuide;
 import com.murthinext.ae2pr.client.AbstractMultiblockControllerScreen;
+import com.murthinext.ae2pr.client.MachineGui;
 import com.murthinext.ae2pr.client.MultiblockInfoLayout;
 
 /**
@@ -47,8 +48,8 @@ public class CrystalWorkstationScreen extends AbstractMultiblockControllerScreen
     @Override
     protected void init() {
         super.init();
-        modeButton = new CrystalWorkstationModeButton(leftPos + TOOLBAR_X + 1,
-                topPos + TOOLBAR_Y + 1 + TOOLBAR_ROW_STEP, () -> {
+        modeButton = new CrystalWorkstationModeButton(leftPos + MachineGui.TOOLBAR_X + 1,
+                topPos + MachineGui.TOOLBAR_Y + 1 + MachineGui.TOOLBAR_ROW_STEP, () -> {
                     if (minecraft != null && minecraft.gameMode != null) {
                         minecraft.gameMode.handleInventoryButtonClick(menu.containerId,
                                 CrystalWorkstationMenu.SWITCH_MODE);

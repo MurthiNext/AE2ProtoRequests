@@ -18,12 +18,14 @@ public class BusSlotClickPacket {
     private final int slot;
     private final int button;
     private final boolean shift;
+    private final boolean creativeClone;
 
-    public BusSlotClickPacket(BlockPos pos, int slot, int button, boolean shift) {
+    public BusSlotClickPacket(BlockPos pos, int slot, int button, boolean shift, boolean creativeClone) {
         this.pos = pos;
         this.slot = slot;
         this.button = button;
         this.shift = shift;
+        this.creativeClone = creativeClone;
     }
 
     public static void encode(BusSlotClickPacket packet, FriendlyByteBuf buffer) {
@@ -31,11 +33,12 @@ public class BusSlotClickPacket {
         buffer.writeVarInt(packet.slot);
         buffer.writeVarInt(packet.button);
         buffer.writeBoolean(packet.shift);
+        buffer.writeBoolean(packet.creativeClone);
     }
 
     public static BusSlotClickPacket decode(FriendlyByteBuf buffer) {
         return new BusSlotClickPacket(buffer.readBlockPos(), buffer.readVarInt(), buffer.readVarInt(),
-                buffer.readBoolean());
+                buffer.readBoolean(), buffer.readBoolean());
     }
 
     public static void handle(BusSlotClickPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
@@ -44,7 +47,11 @@ public class BusSlotClickPacket {
             ServerPlayer player = context.getSender();
             if (player != null && player.containerMenu instanceof ItemBusMenu menu
                     && menu.getBlockPos().equals(packet.pos)) {
-                menu.handleStorageClick(packet.slot, packet.button, packet.shift);
+                if (packet.creativeClone) {
+                    menu.handleCreativeClone(packet.slot, player);
+                } else {
+                    menu.handleStorageClick(packet.slot, packet.button, packet.shift);
+                }
             }
         });
         context.setPacketHandled(true);
