@@ -35,6 +35,7 @@ public final class CrystalWorkstationStructure extends AbstractStructureFacade {
                     .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get(), ModBlocks.AEV_OUTPUT_BUS.get()))
                     .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), ModBlocks.AEV_INPUT_HATCH.get()))
                     .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get(), ModBlocks.AEV_OUTPUT_HATCH.get()))
+                    .or(StructurePredicate.blocks(ModBlocks.AEV_DUAL_INPUT_HATCH.get(), ModBlocks.AEV_DUAL_OUTPUT_HATCH.get()))
                     .or(StructurePredicate.blocks(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()).maxCount(1)))
             .where('B', StructurePredicate.blocks(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()))
             .where('C', StructurePredicate.blocks(ModBlocks.HIGH_ENERGY_STABILITY_CASING.get()))

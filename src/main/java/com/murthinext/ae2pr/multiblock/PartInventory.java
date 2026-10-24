@@ -9,8 +9,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 
-import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
+import com.murthinext.ae2pr.block.machine_part.MachinePartFluidStorage;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
@@ -22,13 +22,13 @@ public final class PartInventory {
     private final List<ItemSlot> items = new ArrayList<>();
     private final List<TankSlot> fluids = new ArrayList<>();
 
-    public PartInventory(List<ItemBusBlockEntity> buses, List<FluidHatchBlockEntity> hatches) {
+    public PartInventory(List<ItemBusBlockEntity> buses, List<MachinePartFluidStorage> hatches) {
         for (ItemBusBlockEntity bus : buses) {
             for (int slot = 0; slot < bus.getSlotCount(); slot++) {
                 items.add(new ItemSlot(bus.getStorage(), slot));
             }
         }
-        for (FluidHatchBlockEntity hatch : hatches) {
+        for (MachinePartFluidStorage hatch : hatches) {
             for (int tank = 0; tank < hatch.getTankCount(); tank++) {
                 fluids.add(new TankSlot(hatch, hatch.getTank(tank)));
             }
@@ -196,11 +196,11 @@ public final class PartInventory {
 
     private static final class TankSlot {
 
-        private final FluidHatchBlockEntity hatch;
+        private final MachinePartFluidStorage hatch;
         private final FluidTank tank;
         private FluidStack stack;
 
-        private TankSlot(FluidHatchBlockEntity hatch, FluidTank tank) {
+        private TankSlot(MachinePartFluidStorage hatch, FluidTank tank) {
             this.hatch = hatch;
             this.tank = tank;
             this.stack = tank.getFluid().copy();

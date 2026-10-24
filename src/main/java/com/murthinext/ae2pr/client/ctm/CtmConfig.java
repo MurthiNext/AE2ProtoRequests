@@ -92,10 +92,7 @@ public final class CtmConfig {
         if (block == ModBlocks.REINFORCED_HIGH_POWER_CASING.get()) {
             return 10;
         }
-        if (block == ModBlocks.AEV_INPUT_BUS.get()
-                || block == ModBlocks.AEV_INPUT_HATCH.get()
-                || block == ModBlocks.AEV_OUTPUT_BUS.get()
-                || block == ModBlocks.AEV_OUTPUT_HATCH.get()) {
+        if (MachinePartBlock.isAevPart(block)) {
 
             return partFamily(state, 9);
         }

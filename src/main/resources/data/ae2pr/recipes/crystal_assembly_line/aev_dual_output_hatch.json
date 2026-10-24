@@ -1,0 +1,35 @@
+{
+  "type": "ae2pr:crystal_assembly_line",
+  "duration": 100,
+  "energy": 100000,
+  "item_inputs": [
+    {
+      "item": "ae2pr:aev_output_bus",
+      "count": 1
+    },
+    {
+      "item": "ae2pr:aev_output_hatch",
+      "count": 1
+    },
+    {
+      "tag": "forge:plates/zirconium",
+      "count": 8
+    },
+    {
+      "tag": "ae2pr:circuits/aev",
+      "count": 2
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:crystal_adhesive",
+      "amount": 144
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:aev_dual_output_hatch",
+      "count": 1
+    }
+  ]
+}

@@ -125,7 +125,7 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         return false;
     }
 
-    private static boolean sameFluids(List<FluidStack> a, @Nullable List<FluidStack> b) {
+    static boolean sameFluids(List<FluidStack> a, @Nullable List<FluidStack> b) {
         if (a == null || b == null || a.size() != b.size()) {
             return false;
         }
@@ -148,25 +148,33 @@ public class FluidHatchMenu extends AbstractContainerMenu {
      * 由客户端点击包调用，按钮 0 取出、1 存入。
      */
     public void handleTankClick(int tank, int button) {
-        if (!serverSide || blockEntity == null || tank < 0 || tank >= blockEntity.getTankCount()) {
+        if (serverSide && blockEntity != null) {
+            handleTankClick(this, owner, blockEntity.getFluidStorage(), tank, button);
+        }
+    }
+
+    public static void handleTankClick(AbstractContainerMenu menu, Player owner, MachinePartFluidStorage storage,
+            int tank, int button) {
+        if (owner.level().isClientSide || tank < 0 || tank >= storage.getTankCount()) {
             return;
         }
-        ItemStack carried = getCarried();
+        ItemStack carried = menu.getCarried();
         if (carried.isEmpty()) {
             return;
         }
         if (button == 0) {
-            takeFluid(carried, tank);
+            takeFluid(menu, owner, storage, carried, tank);
         } else if (button == 1) {
-            if (!blockEntity.acceptsPlayerInsert()) {
+            if (!storage.acceptsPlayerInsert()) {
                 return; // 输出仓仅接受机器内部产出
             }
-            storeFluid(carried, tank);
+            storeFluid(menu, owner, storage, carried, tank);
         }
-        broadcastChanges();
+        menu.broadcastChanges();
     }
 
-    private void storeFluid(ItemStack carried, int tank) {
+    private static void storeFluid(AbstractContainerMenu menu, Player owner, MachinePartFluidStorage storage,
+            ItemStack carried, int tank) {
         ItemStack single = carried.copyWithCount(1);
         IFluidHandlerItem handler = single.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
         if (handler == null) {
@@ -176,22 +184,23 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         if (drained.isEmpty()) {
             return;
         }
-        int accepted = blockEntity.getTank(tank).fill(drained, IFluidHandler.FluidAction.SIMULATE);
+        int accepted = storage.getTank(tank).fill(drained, IFluidHandler.FluidAction.SIMULATE);
         if (accepted <= 0) {
             return;
         }
         FluidStack moved = handler.drain(accepted, IFluidHandler.FluidAction.EXECUTE);
-        blockEntity.getTank(tank).fill(moved, IFluidHandler.FluidAction.EXECUTE);
-        replaceCarried(carried, handler.getContainer());
+        storage.getTank(tank).fill(moved, IFluidHandler.FluidAction.EXECUTE);
+        replaceCarried(menu, owner, carried, handler.getContainer());
     }
 
-    private void takeFluid(ItemStack carried, int tank) {
+    private static void takeFluid(AbstractContainerMenu menu, Player owner, MachinePartFluidStorage storage,
+            ItemStack carried, int tank) {
         ItemStack single = carried.copyWithCount(1);
         IFluidHandlerItem handler = single.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
         if (handler == null) {
             return;
         }
-        FluidStack stored = blockEntity.getTank(tank).getFluid();
+        FluidStack stored = storage.getTank(tank).getFluid();
         if (stored.isEmpty()) {
             return;
         }
@@ -200,17 +209,17 @@ public class FluidHatchMenu extends AbstractContainerMenu {
             return;
         }
         handler.fill(stored.copy(), IFluidHandler.FluidAction.EXECUTE);
-        blockEntity.getTank(tank).drain(filled, IFluidHandler.FluidAction.EXECUTE);
-        replaceCarried(carried, handler.getContainer());
+        storage.getTank(tank).drain(filled, IFluidHandler.FluidAction.EXECUTE);
+        replaceCarried(menu, owner, carried, handler.getContainer());
     }
 
-    private void replaceCarried(ItemStack carried, ItemStack result) {
+    private static void replaceCarried(AbstractContainerMenu menu, Player owner, ItemStack carried, ItemStack result) {
         if (carried.getCount() <= 1) {
-            setCarried(result);
+            menu.setCarried(result);
             return;
         }
         carried.shrink(1);
-        setCarried(carried.isEmpty() ? ItemStack.EMPTY : carried);
+        menu.setCarried(carried.isEmpty() ? ItemStack.EMPTY : carried);
         ItemStack remainder = ItemHandlerHelper.insertItemStacked(
                 new PlayerMainInvWrapper(owner.getInventory()), result, false);
         if (!remainder.isEmpty()) {

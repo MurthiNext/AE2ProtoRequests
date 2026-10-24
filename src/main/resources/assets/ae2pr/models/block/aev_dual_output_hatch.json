@@ -1,0 +1,7 @@
+{
+  "parent": "ae2pr:block/machine_part/output_hatch",
+  "textures": {
+    "all": "ae2pr:block/aev_machine_casing",
+    "overlay": "ae2pr:block/overlay/dual_hatch_output"
+  }
+}

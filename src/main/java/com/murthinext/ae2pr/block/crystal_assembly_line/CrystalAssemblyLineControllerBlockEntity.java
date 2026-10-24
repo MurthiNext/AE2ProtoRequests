@@ -19,8 +19,8 @@ import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModItems;
 import com.murthinext.ae2pr.ModModules;
 import com.murthinext.ae2pr.ModRecipes;
-import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
+import com.murthinext.ae2pr.block.machine_part.MachinePartFluidStorage;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlockEntity;
 import com.murthinext.ae2pr.multiblock.PartInventory;
 import com.murthinext.ae2pr.multiblock.StructureResult;
@@ -52,7 +52,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
     @Nullable
     private List<ItemBusBlockEntity> jobBuses;
     @Nullable
-    private List<FluidHatchBlockEntity> jobHatches;
+    private List<MachinePartFluidStorage> jobHatches;
 
     public CrystalAssemblyLineControllerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CRYSTAL_ASSEMBLY_LINE.get(), pos, state, CrystalAssemblyLineStructure.INSTANCE,
@@ -117,7 +117,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
             if (buses == null) {
                 continue;
             }
-            List<FluidHatchBlockEntity> hatches = matchFluids(lineRecipe);
+            List<MachinePartFluidStorage> hatches = matchFluids(lineRecipe);
             if (hatches == null) {
                 continue;
             }
@@ -180,9 +180,9 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
      * 流体输入匹配，返回按配方顺序排列的仓。
      */
     @Nullable
-    private List<FluidHatchBlockEntity> matchFluids(CrystalAssemblyLineRecipe recipe) {
+    private List<MachinePartFluidStorage> matchFluids(CrystalAssemblyLineRecipe recipe) {
         List<FluidStack> inputs = recipe.getFluidInputs();
-        List<FluidHatchBlockEntity> matched = new ArrayList<>(inputs.size());
+        List<MachinePartFluidStorage> matched = new ArrayList<>(inputs.size());
         if (inputs.isEmpty()) {
             return matched;
         }
@@ -216,7 +216,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
         return matched;
     }
 
-    private static boolean hasFluid(FluidHatchBlockEntity hatch, FluidStack input) {
+    private static boolean hasFluid(MachinePartFluidStorage hatch, FluidStack input) {
         FluidStack stored = hatch.getTank().getFluid();
         return stored.isFluidEqual(input) && stored.getAmount() > 0;
     }
@@ -225,7 +225,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
      * 匹配到的总线与仓中可执行的份数，产物容量交给基类统一检查。
      */
     private int minSlotParallel(CrystalAssemblyLineRecipe recipe, List<ItemBusBlockEntity> buses,
-            List<FluidHatchBlockEntity> hatches) {
+            List<MachinePartFluidStorage> hatches) {
         int low = 0;
         int high = maxParallel();
         while (low < high) {
@@ -242,7 +242,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
     @Override
     protected boolean consumeInputs(Match match) {
         List<ItemBusBlockEntity> buses = jobBuses;
-        List<FluidHatchBlockEntity> hatches = jobHatches;
+        List<MachinePartFluidStorage> hatches = jobHatches;
         if (buses == null || hatches == null) {
             return false;
         }

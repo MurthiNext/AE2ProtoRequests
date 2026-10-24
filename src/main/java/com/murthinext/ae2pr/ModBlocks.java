@@ -130,6 +130,12 @@ public final class ModBlocks {
     public static final RegistryObject<MachinePartBlock> AEV_OUTPUT_HATCH = BLOCKS.register(
             "aev_output_hatch", MachinePartBlock::new);
 
+    public static final RegistryObject<MachinePartBlock> AEV_DUAL_INPUT_HATCH = BLOCKS.register(
+            "aev_dual_input_hatch", MachinePartBlock::new);
+
+    public static final RegistryObject<MachinePartBlock> AEV_DUAL_OUTPUT_HATCH = BLOCKS.register(
+            "aev_dual_output_hatch", MachinePartBlock::new);
+
     public static final RegistryObject<FluixCrystalEnergyHatchBlock> FLUIX_CRYSTAL_ENERGY_HATCH = BLOCKS.register(
             "fluix_crystal_energy_hatch", FluixCrystalEnergyHatchBlock::new);
 

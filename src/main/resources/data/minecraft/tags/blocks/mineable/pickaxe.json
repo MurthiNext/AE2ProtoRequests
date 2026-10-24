@@ -27,6 +27,8 @@
     "ae2pr:aev_input_hatch",
     "ae2pr:aev_output_bus",
     "ae2pr:aev_output_hatch",
+    "ae2pr:aev_dual_input_hatch",
+    "ae2pr:aev_dual_output_hatch",
     "ae2pr:logistics_control_casing",
     "ae2pr:redstone_requester",
     "ae2pr:naming_factory",

@@ -12,9 +12,7 @@ import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationControll
 import com.murthinext.ae2pr.block.crystal_reactor.CrystalReactorCoreBlockEntity;
 import com.murthinext.ae2pr.block.jig.JigControllerBlockEntity;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
-import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntity;
-import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerControllerBlockEntity;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
@@ -37,9 +35,7 @@ public final class ModBlockEntities {
 
     public static final RegistryObject<BlockEntityType<BlockEntity>> CERTUS_QUARTZ_CRYSTAL_MACHINE_PART = BLOCK_ENTITIES
             .register("certus_quartz_crystal_machine_part", () -> BlockEntityType.Builder.of(
-                    (pos, state) -> MachinePartBlock.isFluidPart(state)
-                            ? new FluidHatchBlockEntity(pos, state)
-                            : new ItemBusBlockEntity(pos, state),
+                    MachinePartBlock::createBlockEntity,
                     ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get(),
                     ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(),
                     ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get(),
@@ -47,7 +43,9 @@ public final class ModBlockEntities {
                     ModBlocks.AEV_INPUT_BUS.get(),
                     ModBlocks.AEV_INPUT_HATCH.get(),
                     ModBlocks.AEV_OUTPUT_BUS.get(),
-                    ModBlocks.AEV_OUTPUT_HATCH.get()).build(null));
+                    ModBlocks.AEV_OUTPUT_HATCH.get(),
+                    ModBlocks.AEV_DUAL_INPUT_HATCH.get(),
+                    ModBlocks.AEV_DUAL_OUTPUT_HATCH.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<FluixCrystalEnergyHatchBlockEntity>> FLUIX_CRYSTAL_ENERGY_HATCH = BLOCK_ENTITIES
             .register("fluix_crystal_energy_hatch", () -> BlockEntityType.Builder.of(

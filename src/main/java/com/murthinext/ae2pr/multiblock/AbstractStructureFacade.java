@@ -135,9 +135,6 @@ public abstract class AbstractStructureFacade {
                 || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()
                 || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()
                 || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()
-                || block == ModBlocks.AEV_INPUT_BUS.get()
-                || block == ModBlocks.AEV_OUTPUT_BUS.get()
-                || block == ModBlocks.AEV_INPUT_HATCH.get()
-                || block == ModBlocks.AEV_OUTPUT_HATCH.get();
+                || MachinePartBlock.isAevPart(block);
     }
 }

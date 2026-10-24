@@ -146,6 +146,8 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.AEV_INPUT_HATCH.get());
                         output.accept(ModItems.AEV_OUTPUT_BUS.get());
                         output.accept(ModItems.AEV_OUTPUT_HATCH.get());
+                        output.accept(ModItems.AEV_DUAL_INPUT_HATCH.get());
+                        output.accept(ModItems.AEV_DUAL_OUTPUT_HATCH.get());
                     })
                     .build());
 }

@@ -32,9 +32,11 @@ import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
+import com.murthinext.ae2pr.block.machine_part.DualHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
+import com.murthinext.ae2pr.block.machine_part.MachinePartFluidStorage;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
@@ -66,8 +68,8 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
 
     protected final List<ItemBusBlockEntity> inputBuses = new ArrayList<>();
     protected final List<ItemBusBlockEntity> outputBuses = new ArrayList<>();
-    protected final List<FluidHatchBlockEntity> inputHatches = new ArrayList<>();
-    protected final List<FluidHatchBlockEntity> outputHatches = new ArrayList<>();
+    protected final List<MachinePartFluidStorage> inputHatches = new ArrayList<>();
+    protected final List<MachinePartFluidStorage> outputHatches = new ArrayList<>();
     protected final List<FluixCrystalEnergyHatchBlockEntity> energyHatches = new ArrayList<>();
 
     protected boolean mirrorSide;
@@ -159,7 +161,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         for (FluidStack output : recipe.getFluidOutputs()) {
             FluidStack remaining = output.copy();
             remaining.setAmount(clampCount((long) output.getAmount() * parallel));
-            for (FluidHatchBlockEntity hatch : outputHatches) {
+            for (MachinePartFluidStorage hatch : outputHatches) {
                 for (int tank = 0; tank < hatch.getTankCount() && !remaining.isEmpty(); tank++) {
                     int filled = hatch.getTank(tank).fill(remaining, IFluidHandler.FluidAction.EXECUTE);
                     if (filled > 0) {
@@ -587,9 +589,14 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             BlockEntity part = level.getBlockEntity(pos);
             if (part instanceof ItemBusBlockEntity bus) {
                 (bus.isOutputBus() ? outputBuses : inputBuses).add(bus);
-            } else if (part instanceof FluidHatchBlockEntity hatch) {
-                (hatch.isOutputHatch() ? outputHatches : inputHatches).add(hatch);
-            } else if (part instanceof FluixCrystalEnergyHatchBlockEntity hatch) {
+            }
+            MachinePartFluidStorage fluidStorage = part instanceof DualHatchBlockEntity dual
+                    ? dual.getFluidStorage()
+                    : part instanceof FluidHatchBlockEntity hatch ? hatch.getFluidStorage() : null;
+            if (fluidStorage != null) {
+                (fluidStorage.isOutputHatch() ? outputHatches : inputHatches).add(fluidStorage);
+            }
+            if (part instanceof FluixCrystalEnergyHatchBlockEntity hatch) {
                 energyHatches.add(hatch);
             }
             collectExtraPart(pos, part);
@@ -838,5 +845,4 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return getJobFluid();
     }
 }
-
 

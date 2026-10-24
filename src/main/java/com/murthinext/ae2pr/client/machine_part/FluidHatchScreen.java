@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.murthinext.ae2pr.ModNetwork;
+import com.murthinext.ae2pr.block.machine_part.DualHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
 import com.murthinext.ae2pr.client.MachineGui;
@@ -43,6 +44,13 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
                 hatch.applyClientFluid(i, fluids.get(i));
             }
             hatch.setAutoTransfer(autoTransfer);
+        } else if (minecraft.level != null
+                && minecraft.level.getBlockEntity(pos) instanceof DualHatchBlockEntity dual) {
+            var storage = dual.getFluidStorage();
+            for (int i = 0; i < fluids.size() && i < storage.getTankCount(); i++) {
+                storage.applyClientFluid(i, fluids.get(i));
+            }
+            dual.setAutoTransfer(autoTransfer);
         }
     }
 

@@ -16,9 +16,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import com.murthinext.ae2pr.ModNetwork;
+import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 import com.murthinext.ae2pr.network.MachinePartStackPacket;
 
 /**
@@ -39,6 +41,7 @@ public class ItemBusMenu extends AbstractContainerMenu {
     private final boolean serverSide;
     private final ItemBusBlockEntity blockEntity;
     private List<ItemStack> lastSentStacks;
+    private List<FluidStack> lastSentFluids;
     private boolean stackSynced;
     private boolean lastAutoTransfer;
     private boolean autoTransferSynced;
@@ -83,6 +86,18 @@ public class ItemBusMenu extends AbstractContainerMenu {
         return blockEntity != null ? blockEntity.getSlotCount() : 1;
     }
 
+    @Nullable
+    public MachinePartFluidStorage getFluidStorage() {
+        return blockEntity instanceof DualHatchBlockEntity dual ? dual.getFluidStorage() : null;
+    }
+
+    public void handleTankClick(int tank, int button) {
+        MachinePartFluidStorage storage = getFluidStorage();
+        if (serverSide && storage != null) {
+            FluidHatchMenu.handleTankClick(this, owner, storage, tank, button);
+        }
+    }
+
     /**
      * 数量即储量，客户端为同步数据。
      */
@@ -98,6 +113,16 @@ public class ItemBusMenu extends AbstractContainerMenu {
         if (blockEntity != null && owner instanceof ServerPlayer serverPlayer) {
             List<ItemStack> current = blockEntity.getStorageSnapshots();
             boolean autoTransfer = blockEntity.isAutoTransfer();
+            MachinePartFluidStorage storage = getFluidStorage();
+            if (storage != null) {
+                List<FluidStack> fluids = storage.getFluidSnapshots();
+                if (!autoTransferSynced || autoTransfer != lastAutoTransfer
+                        || !FluidHatchMenu.sameFluids(fluids, lastSentFluids)) {
+                    lastSentFluids = fluids;
+                    ModNetwork.sendToPlayer(serverPlayer,
+                            new MachinePartFluidPacket(pos, fluids, autoTransfer));
+                }
+            }
             if (!stackSynced || !autoTransferSynced || autoTransfer != lastAutoTransfer
                     || !sameStacks(current, lastSentStacks)) {
                 stackSynced = true;

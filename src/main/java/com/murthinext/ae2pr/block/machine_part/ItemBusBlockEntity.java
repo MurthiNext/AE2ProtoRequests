@@ -8,6 +8,8 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -69,7 +71,7 @@ public class ItemBusBlockEntity extends BlockEntity {
     };
 
     private final IItemHandler exposedStorage;
-    private final LazyOptional<IItemHandler> storageCapability;
+    private LazyOptional<IItemHandler> storageCapability;
 
     public ItemBusBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CERTUS_QUARTZ_CRYSTAL_MACHINE_PART.get(), pos, state);
@@ -96,6 +98,36 @@ public class ItemBusBlockEntity extends BlockEntity {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();
+            }
+
+            @Override
+            public CompoundTag serializeNBT() {
+                CompoundTag tag = super.serializeNBT();
+                ListTag items = tag.getList("Items", Tag.TAG_COMPOUND);
+                for (int i = 0; i < items.size(); i++) {
+                    CompoundTag item = items.getCompound(i);
+                    item.putInt("Count", getStackInSlot(item.getInt("Slot")).getCount());
+                }
+                return tag;
+            }
+
+            @Override
+            public void deserializeNBT(CompoundTag tag) {
+                ListTag items = tag.getList("Items", Tag.TAG_COMPOUND);
+                for (int slot = 0; slot < getSlots(); slot++) {
+                    setStackInSlot(slot, ItemStack.EMPTY);
+                }
+                for (int i = 0; i < items.size(); i++) {
+                    CompoundTag item = items.getCompound(i).copy();
+                    int slot = item.getInt("Slot");
+                    if (slot >= 0 && slot < getSlots()) {
+                        int count = item.getInt("Count");
+                        item.putByte("Count", (byte) 1);
+                        ItemStack stack = ItemStack.of(item);
+                        stack.setCount(count);
+                        setStackInSlot(slot, stack);
+                    }
+                }
             }
         };
         this.exposedStorage = isOutputBus() ? externalStorage : storage;
@@ -136,13 +168,20 @@ public class ItemBusBlockEntity extends BlockEntity {
         storageCapability.invalidate();
     }
 
+    @Override
+    public void reviveCaps() {
+        super.reviveCaps();
+        storageCapability = LazyOptional.of(() -> exposedStorage);
+    }
+
     public boolean acceptsPlayerInsert() {
         return !isOutputBus();
     }
 
     public boolean isOutputBus() {
         return getBlockState().is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get())
-                || getBlockState().is(ModBlocks.AEV_OUTPUT_BUS.get());
+                || getBlockState().is(ModBlocks.AEV_OUTPUT_BUS.get())
+                || getBlockState().is(ModBlocks.AEV_DUAL_OUTPUT_HATCH.get());
     }
 
     public boolean isAutoTransfer() {

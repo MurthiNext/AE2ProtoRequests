@@ -148,6 +148,12 @@ public final class ModItems {
     public static final RegistryObject<BlockItem> AEV_OUTPUT_HATCH = ITEMS.register("aev_output_hatch",
             () -> new BlockItem(ModBlocks.AEV_OUTPUT_HATCH.get(), new Item.Properties()));
 
+    public static final RegistryObject<BlockItem> AEV_DUAL_INPUT_HATCH = ITEMS.register("aev_dual_input_hatch",
+            () -> new BlockItem(ModBlocks.AEV_DUAL_INPUT_HATCH.get(), new Item.Properties()));
+
+    public static final RegistryObject<BlockItem> AEV_DUAL_OUTPUT_HATCH = ITEMS.register("aev_dual_output_hatch",
+            () -> new BlockItem(ModBlocks.AEV_DUAL_OUTPUT_HATCH.get(), new Item.Properties()));
+
     public static final RegistryObject<BlockItem> FLUIX_CRYSTAL_ENERGY_HATCH = ITEMS.register(
             "fluix_crystal_energy_hatch",
             () -> new BlockItem(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get(), new Item.Properties()));

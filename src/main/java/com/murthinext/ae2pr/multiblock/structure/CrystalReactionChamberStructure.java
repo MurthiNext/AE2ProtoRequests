@@ -35,6 +35,7 @@ public final class CrystalReactionChamberStructure extends AbstractStructureFaca
                     .or(StructurePredicate.blocks(ModBlocks.AEV_OUTPUT_BUS.get()))
                     .or(StructurePredicate.blocks(ModBlocks.AEV_INPUT_HATCH.get()))
                     .or(StructurePredicate.blocks(ModBlocks.AEV_OUTPUT_HATCH.get()))
+                    .or(StructurePredicate.blocks(ModBlocks.AEV_DUAL_INPUT_HATCH.get(), ModBlocks.AEV_DUAL_OUTPUT_HATCH.get()))
                     .or(StructurePredicate.blocks(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()).maxCount(1)))
             .where('B', StructurePredicate.blocks(ModBlocks.CRYSTAL_GLASS.get()))
             .where('D', StructurePredicate.blocks(ModBlocks.METEOR_STEEL_BLOCK.get()))

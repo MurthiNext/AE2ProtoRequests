@@ -80,7 +80,19 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return createBlockEntity(pos, state);
+    }
+
+    public static BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        if (isDualPart(state.getBlock())) {
+            return new DualHatchBlockEntity(pos, state);
+        }
         return isFluidPart(state) ? new FluidHatchBlockEntity(pos, state) : new ItemBusBlockEntity(pos, state);
+    }
+
+    public static boolean isDualPart(Block block) {
+        return block == ModBlocks.AEV_DUAL_INPUT_HATCH.get()
+                || block == ModBlocks.AEV_DUAL_OUTPUT_HATCH.get();
     }
 
     public static boolean isFluidPart(BlockState state) {
@@ -98,7 +110,8 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
         return block == ModBlocks.AEV_INPUT_BUS.get()
                 || block == ModBlocks.AEV_OUTPUT_BUS.get()
                 || block == ModBlocks.AEV_INPUT_HATCH.get()
-                || block == ModBlocks.AEV_OUTPUT_HATCH.get();
+                || block == ModBlocks.AEV_OUTPUT_HATCH.get()
+                || isDualPart(block);
     }
 
     public static int fluidTankCount(BlockState state) {
@@ -189,6 +202,17 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
         Block block = Block.byItem(stack.getItem());
+        if (isDualPart(block)) {
+            tooltip.add(Component.translatable("tooltip.ae2pr.machine_part.stack_limit.items",
+                    NUMBER.format(ItemBusBlockEntity.AEV_CAPACITY)));
+            tooltip.add(Component.translatable("tooltip.ae2pr.machine_part.item_type_count",
+                    NUMBER.format(itemSlotCount(block.defaultBlockState()))));
+            tooltip.add(Component.translatable("tooltip.ae2pr.machine_part.stack_limit.fluid",
+                    NUMBER.format(FluidHatchBlockEntity.AEV_CAPACITY)));
+            tooltip.add(Component.translatable("tooltip.ae2pr.machine_part.fluid_type_count",
+                    NUMBER.format(fluidTankCount(block.defaultBlockState()))));
+            return;
+        }
         boolean fluid = isFluidPart(block);
         boolean aev = isAevPart(block);
         int types = fluid ? (aev ? 2 : 1) : (aev ? 4 : 1);
@@ -199,6 +223,9 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
                 ? "tooltip.ae2pr.machine_part.stack_limit.fluid"
                 : "tooltip.ae2pr.machine_part.stack_limit.items",
                 NUMBER.format(capacity)));
-        tooltip.add(Component.translatable("tooltip.ae2pr.machine_part.type_count", NUMBER.format(types)));
+        tooltip.add(Component.translatable(fluid
+                ? "tooltip.ae2pr.machine_part.fluid_type_count"
+                : "tooltip.ae2pr.machine_part.item_type_count",
+                NUMBER.format(types)));
     }
 }
