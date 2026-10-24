@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "ae2pr:fluix_crystal_energy_hatch"
+          "name": "ae2pr:me_network_access_hatch"
         }
       ],
       "conditions": [

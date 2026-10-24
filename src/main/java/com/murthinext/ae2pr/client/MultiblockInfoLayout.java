@@ -50,7 +50,7 @@ public final class MultiblockInfoLayout {
     /**
      * 单台多方块机器的一次布局数据。
      */
-    public record Info(boolean formed, boolean running, boolean paused, boolean energyConnected,
+    public record Info(boolean formed, boolean running, boolean paused, boolean networkConnected,
             double storedPower, int maxParallel, ItemStack jobOutput, int jobElapsed, int jobDuration,
             @Nullable Component error) {
     }
@@ -68,7 +68,7 @@ public final class MultiblockInfoLayout {
                 TEXT_X, STATUS_Y, info.formed() ? COLOR_OK : COLOR_FAIL, false);
         // 网络状态
         graphics.drawString(font, powerText(info), TEXT_X, POWER_Y,
-                info.energyConnected() ? COLOR_INFO : COLOR_GRAY, false);
+                info.networkConnected() ? COLOR_INFO : COLOR_GRAY, false);
         // 最多同时执行的配方数
         graphics.drawString(font, Component.translatable("gui.ae2pr.multiblock.parallel", info.maxParallel()),
                 TEXT_X, PARALLEL_Y, COLOR_INFO, false);
@@ -156,7 +156,7 @@ public final class MultiblockInfoLayout {
     }
 
     private static Component powerText(Info info) {
-        if (!info.energyConnected()) {
+        if (!info.networkConnected()) {
             return Component.translatable("gui.ae2pr.multiblock.power.disconnected");
         }
         return Component.translatable("gui.ae2pr.multiblock.power.stored",

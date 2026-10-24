@@ -23,7 +23,7 @@ import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChambe
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationBlock;
 import com.murthinext.ae2pr.block.jig.JigBlock;
 import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
-import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlock;
+import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerBlock;
 import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
@@ -136,8 +136,8 @@ public final class ModBlocks {
     public static final RegistryObject<MachinePartBlock> AEV_DUAL_OUTPUT_HATCH = BLOCKS.register(
             "aev_dual_output_hatch", MachinePartBlock::new);
 
-    public static final RegistryObject<FluixCrystalEnergyHatchBlock> FLUIX_CRYSTAL_ENERGY_HATCH = BLOCKS.register(
-            "fluix_crystal_energy_hatch", FluixCrystalEnergyHatchBlock::new);
+    public static final RegistryObject<MENetworkAccessHatchBlock> ME_NETWORK_ACCESS_HATCH = BLOCKS.register(
+            "me_network_access_hatch", MENetworkAccessHatchBlock::new);
 
     public static final RegistryObject<HighReactivityLavaSmelterBlock> HIGH_REACTIVITY_LAVA_SMELTER = BLOCKS.register(
             "high_reactivity_lava_smelter", HighReactivityLavaSmelterBlock::new);

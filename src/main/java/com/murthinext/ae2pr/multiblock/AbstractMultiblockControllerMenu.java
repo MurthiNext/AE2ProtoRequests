@@ -33,12 +33,14 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
     protected static final int DATA_ELAPSED_HI = 3;
     protected static final int DATA_DURATION_LO = 4;
     protected static final int DATA_DURATION_HI = 5;
-    protected static final int DATA_ENERGY_CONNECTED = 6;
+    protected static final int DATA_NETWORK_CONNECTED = 6;
     protected static final int DATA_POWER_LO = 7;
     protected static final int DATA_POWER_HI = 8;
     protected static final int DATA_PARALLEL_LO = 9;
     protected static final int DATA_PARALLEL_HI = 10;
-    protected static final int DATA_COUNT = 11;
+    protected static final int DATA_ALLOCATED_CHANNELS = 11;
+    protected static final int DATA_REQUIRED_CHANNELS_LO = 12;
+    protected static final int DATA_COUNT = 14;
 
     private static final int INV_COLS = 9;
     private static final int INV_ROWS = 3;
@@ -118,7 +120,9 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
             data.set(DATA_ERROR, controller.getError().ordinal());
             setIntData(data, DATA_ELAPSED_LO, controller.getJobElapsed());
             setIntData(data, DATA_DURATION_LO, controller.getJobDuration());
-            data.set(DATA_ENERGY_CONNECTED, controller.isEnergyConnected() ? 1 : 0);
+            data.set(DATA_NETWORK_CONNECTED, controller.isNetworkConnected() ? 1 : 0);
+            data.set(DATA_ALLOCATED_CHANNELS, controller.getAllocatedChannels());
+            setIntData(data, DATA_REQUIRED_CHANNELS_LO, controller.getRequiredChannels());
             long power = (long) Math.min(Math.max(controller.getNetworkStoredPower(), 0), Long.MAX_VALUE);
             data.set(DATA_POWER_LO, (int) (power & 0xFFFFFFFFL));
             data.set(DATA_POWER_HI, (int) (power >>> 32));
@@ -156,8 +160,16 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
         return getIntData(data, DATA_DURATION_LO);
     }
 
-    public boolean isEnergyConnected() {
-        return (data.get(DATA_ENERGY_CONNECTED) & 1) != 0;
+    public boolean isNetworkConnected() {
+        return (data.get(DATA_NETWORK_CONNECTED) & 1) != 0;
+    }
+
+    public int getAllocatedChannels() {
+        return data.get(DATA_ALLOCATED_CHANNELS);
+    }
+
+    public int getRequiredChannels() {
+        return getIntData(data, DATA_REQUIRED_CHANNELS_LO);
     }
 
     public long getNetworkStoredPower() {
@@ -220,5 +232,4 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
         return type.isInstance(blockEntity) ? type.cast(blockEntity) : null;
     }
 }
-
 

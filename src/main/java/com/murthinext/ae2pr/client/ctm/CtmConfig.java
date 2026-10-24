@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.ModBlocks;
-import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlock;
+import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
@@ -81,10 +81,13 @@ public final class CtmConfig {
         if (block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get()
                 || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()
                 || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()
-                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()
-                || block == ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()) {
+                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()) {
 
             return partFamily(state, 1);
+        }
+        if (block == ModBlocks.ME_NETWORK_ACCESS_HATCH.get()) {
+            // 接入仓仅成型后加入结构机壳的连接族
+            return partFamily(state, 0);
         }
         if (block == ModBlocks.AEV_MACHINE_CASING.get()) {
             return 9;
@@ -161,9 +164,9 @@ public final class CtmConfig {
         if (state.getBlock() instanceof MachinePartBlock && state.getValue(MachinePartBlock.FORMED)) {
             return MachinePartFacade.byStyle(state.getValue(MachinePartBlock.STYLE));
         }
-        if (state.is(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get())
-                && state.getValue(FluixCrystalEnergyHatchBlock.FORMED)) {
-            return MachinePartFacade.byStyle(state.getValue(FluixCrystalEnergyHatchBlock.STYLE));
+        if (state.is(ModBlocks.ME_NETWORK_ACCESS_HATCH.get())
+                && state.getValue(MENetworkAccessHatchBlock.FORMED)) {
+            return MachinePartFacade.byStyle(state.getValue(MENetworkAccessHatchBlock.STYLE));
         }
         return null;
     }
@@ -195,8 +198,8 @@ public final class CtmConfig {
         if (block == ModBlocks.CRYSTAL_REACTION_CHAMBER.get()) {
             return CtmSprites.baseSprite(CtmSprites.CRYSTAL_REACTION_CONTROLLER_CASING);
         }
-        if (block == ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()) {
-            // 能源仓的成型模型以水晶机壳为基础贴图
+        if (block == ModBlocks.ME_NETWORK_ACCESS_HATCH.get()) {
+            // 接入仓成型外壳以水晶强化复合机壳为基础贴图
             return CtmSprites.baseSprite(MachinePartFacade.CRYSTAL.texture());
         }
         if (!(block instanceof MachinePartBlock)) {

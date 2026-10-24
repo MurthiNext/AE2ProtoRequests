@@ -1,5 +1,5 @@
 {
-  "parent": "ae2pr:block/machine_part/energy_hatch",
+  "parent": "ae2pr:block/machine_part/network_access_hatch",
   "textures": {
     "all": "ae2pr:block/crystal_reinforced_composite_machine_casing"
   }

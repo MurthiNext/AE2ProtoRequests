@@ -1,8 +1,16 @@
 package com.murthinext.ae2pr.block.machine_part;
 
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -19,16 +27,16 @@ import appeng.block.AEBaseEntityBlock;
 import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
 /**
- * 福鲁伊克斯水晶能源仓方块：从 ME 网络直接为多方块机器供电。
+ * ME 网络接入仓方块。
  */
-public class FluixCrystalEnergyHatchBlock extends AEBaseEntityBlock<FluixCrystalEnergyHatchBlockEntity>
+public class MENetworkAccessHatchBlock extends AEBaseEntityBlock<MENetworkAccessHatchBlockEntity>
         implements Wrenchable {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty FORMED = BooleanProperty.create("formed");
     public static final IntegerProperty STYLE = MachinePartBlock.STYLE;
 
-    public FluixCrystalEnergyHatchBlock() {
+    public MENetworkAccessHatchBlock() {
         super(Properties.of()
                 .mapColor(MapColor.METAL)
                 .strength(3.0F)
@@ -68,8 +76,15 @@ public class FluixCrystalEnergyHatchBlock extends AEBaseEntityBlock<FluixCrystal
 
     @Override
     public void onWrenchRotated(Level level, BlockPos pos, BlockState state) {
-        if (level.getBlockEntity(pos) instanceof FluixCrystalEnergyHatchBlockEntity hatch) {
+        if (level.getBlockEntity(pos) instanceof MENetworkAccessHatchBlockEntity hatch) {
             hatch.updateGridConnectableSides();
         }
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip,
+            TooltipFlag flag) {
+        super.appendHoverText(stack, level, tooltip, flag);
+        tooltip.add(Component.translatable("tooltip.ae2pr.me_network_access_hatch"));
     }
 }

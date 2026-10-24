@@ -82,12 +82,12 @@ public class ae2pr {
             Upgrades.add(AEItems.SPEED_CARD, ModBlocks.JIG.get(), 4);
 
             // 绑定方块实体类型并登记代表物品
-            var energyHatchType = ModBlockEntities.FLUIX_CRYSTAL_ENERGY_HATCH.get();
-            ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get().setBlockEntity(
-                    com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntity.class,
-                    energyHatchType, null, null);
-            appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(energyHatchType,
-                    ModItems.FLUIX_CRYSTAL_ENERGY_HATCH.get());
+            var networkAccessHatchType = ModBlockEntities.ME_NETWORK_ACCESS_HATCH.get();
+            ModBlocks.ME_NETWORK_ACCESS_HATCH.get().setBlockEntity(
+                    com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlockEntity.class,
+                    networkAccessHatchType, null, null);
+            appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(networkAccessHatchType,
+                    ModItems.ME_NETWORK_ACCESS_HATCH.get());
 
             // 绑定方块实体类型并登记代表物品
             var namingFactoryType = ModBlockEntities.NAMING_FACTORY.get();

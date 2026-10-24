@@ -37,7 +37,7 @@ public final class LavaSmelterStructure extends AbstractStructureFacade {
                     .or(StructurePredicate.blocks(ModBlocks.AEV_INPUT_HATCH.get()))
                     .or(StructurePredicate.blocks(ModBlocks.AEV_OUTPUT_HATCH.get()))
                     .or(StructurePredicate.blocks(ModBlocks.AEV_DUAL_INPUT_HATCH.get(), ModBlocks.AEV_DUAL_OUTPUT_HATCH.get()))
-                    .or(StructurePredicate.blocks(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()).maxCount(1)))
+                    .or(StructurePredicate.blocks(ModBlocks.ME_NETWORK_ACCESS_HATCH.get()).maxCount(1)))
             .where('G', StructurePredicate.blocks(ModBlocks.FIREPROOF_CRYSTAL_GLASS.get()))
             .where('P', StructurePredicate.blocks(ModBlocks.METEOR_STEEL_PIPE_BLOCK.get()))
             .where('L', StructurePredicate.blocks(ModBlocks.LOGISTICS_CONTROL_CASING.get()))

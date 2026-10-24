@@ -27,10 +27,9 @@ public final class CrystalAssemblyLineStructure extends AbstractStructureFacade 
             .sliceRepeatable(3, Integer.MAX_VALUE, "FIF", "RTR", "DAG", "#Y#")
             .slice("FOF", "RTR", "DAG", "#Y#")
             .where('S', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE.get()))
-            // 机壳位允许输入仓 / 能源仓替代，能源仓最多 1 个
             .where('F', StructurePredicate.blocks(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get())
                     .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()))
-                    .or(StructurePredicate.blocks(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()).maxCount(1)))
+                    .or(StructurePredicate.blocks(ModBlocks.ME_NETWORK_ACCESS_HATCH.get()).maxCount(1)))
             .where('Y', StructurePredicate.blocks(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()))
             .where('I', StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get()))
             .where('O', StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()))
@@ -38,7 +37,6 @@ public final class CrystalAssemblyLineStructure extends AbstractStructureFacade 
             .where('G', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get()))
             .where('D', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get()))
             .where('R', StructurePredicate.blocks(ModBlocks.CRYSTAL_GLASS.get()))
-            // 控制外壳位：外壳或允许的替换模块
             .where('T', StructurePredicate.moduleSlot(ModBlocks.CRYSTAL_ASSEMBLY_LINE_UNIT.get(),
                     ModModules.CHARGING, ModModules.PARALLEL, ModModules.SPEED))
             .where('#', StructurePredicate.any())

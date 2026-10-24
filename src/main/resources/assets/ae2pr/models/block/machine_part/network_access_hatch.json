@@ -3,8 +3,9 @@
   "parent": "block/block",
   "textures": {
     "particle": "#all",
-    "overlay": "ae2pr:block/overlay/energy_hatch",
-    "overlay_emissive": "ae2pr:block/overlay/energy_hatch_emissive"
+    "all": "ae2pr:block/me_network_access_hatch",
+    "overlay": "ae2pr:block/overlay/network_access_hatch",
+    "overlay_emissive": "ae2pr:block/overlay/network_access_hatch_emissive"
   },
   "elements": [
     {

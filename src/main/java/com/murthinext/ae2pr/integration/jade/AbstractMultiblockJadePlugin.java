@@ -32,7 +32,9 @@ import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlockEntity;
 public abstract class AbstractMultiblockJadePlugin implements IWailaPlugin {
 
     protected static final String KEY_FORMED = "formed";
-    protected static final String KEY_ENERGY_CONNECTED = "energyConnected";
+    protected static final String KEY_NETWORK_CONNECTED = "networkConnected";
+    protected static final String KEY_ALLOCATED_CHANNELS = "allocatedChannels";
+    protected static final String KEY_REQUIRED_CHANNELS = "requiredChannels";
     protected static final String KEY_ELAPSED = "elapsed";
     protected static final String KEY_DURATION = "duration";
     protected static final String KEY_ITEM = "item";
@@ -70,7 +72,7 @@ public abstract class AbstractMultiblockJadePlugin implements IWailaPlugin {
      */
     protected JobState jobState(BlockEntity controller) {
         AbstractMultiblockControllerBlockEntity base = (AbstractMultiblockControllerBlockEntity) controller;
-        return new JobState(base.isFormed(), base.isEnergyConnected(), base.getJobElapsed(), base.getJobDuration(),
+        return new JobState(base.isFormed(), base.isNetworkConnected(), base.getJobElapsed(), base.getJobDuration(),
                 base.getJobItem(), base.getJobFluid());
     }
 
@@ -80,7 +82,7 @@ public abstract class AbstractMultiblockJadePlugin implements IWailaPlugin {
     protected void appendExtraTooltip(ITooltip tooltip, CompoundTag data) {
     }
 
-    protected record JobState(boolean formed, boolean energyConnected, int elapsed, int duration, ItemStack item,
+    protected record JobState(boolean formed, boolean networkConnected, int elapsed, int duration, ItemStack item,
                               FluidStack fluid) {
     }
 
@@ -94,7 +96,10 @@ public abstract class AbstractMultiblockJadePlugin implements IWailaPlugin {
             }
             JobState state = jobState(controller);
             data.putBoolean(KEY_FORMED, state.formed());
-            data.putBoolean(KEY_ENERGY_CONNECTED, state.energyConnected());
+            data.putBoolean(KEY_NETWORK_CONNECTED, state.networkConnected());
+            AbstractMultiblockControllerBlockEntity base = (AbstractMultiblockControllerBlockEntity) controller;
+            data.putInt(KEY_ALLOCATED_CHANNELS, base.getAllocatedChannels());
+            data.putInt(KEY_REQUIRED_CHANNELS, base.getRequiredChannels());
             data.putInt(KEY_ELAPSED, state.elapsed());
             data.putInt(KEY_DURATION, state.duration());
             if (!state.item().isEmpty()) {
@@ -121,9 +126,11 @@ public abstract class AbstractMultiblockJadePlugin implements IWailaPlugin {
             if (!data.contains(KEY_FORMED)) {
                 return;
             }
-            tooltip.add(Component.translatable(data.getBoolean(KEY_ENERGY_CONNECTED)
+            tooltip.add(Component.translatable(data.getBoolean(KEY_NETWORK_CONNECTED)
                     ? "jade.ae2pr.multiblock.connected"
                     : "jade.ae2pr.multiblock.disconnected"));
+            tooltip.add(Component.translatable("gui.ae2pr.multiblock.channels",
+                    data.getInt(KEY_ALLOCATED_CHANNELS), data.getInt(KEY_REQUIRED_CHANNELS)));
             appendJob(tooltip, data);
             appendExtraTooltip(tooltip, data);
         }

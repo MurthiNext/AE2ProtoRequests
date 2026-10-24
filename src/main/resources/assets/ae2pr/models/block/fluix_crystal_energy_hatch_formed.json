@@ -1,6 +1,0 @@
-{
-  "parent": "ae2pr:block/fluix_crystal_energy_hatch",
-  "textures": {
-    "all": "ae2pr:block/crystal_reinforced_composite_machine_casing"
-  }
-}

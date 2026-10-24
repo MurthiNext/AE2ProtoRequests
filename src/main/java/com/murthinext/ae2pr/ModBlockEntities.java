@@ -12,7 +12,7 @@ import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationControll
 import com.murthinext.ae2pr.block.crystal_reactor.CrystalReactorCoreBlockEntity;
 import com.murthinext.ae2pr.block.jig.JigControllerBlockEntity;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
-import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntity;
+import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerControllerBlockEntity;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
@@ -47,10 +47,10 @@ public final class ModBlockEntities {
                     ModBlocks.AEV_DUAL_INPUT_HATCH.get(),
                     ModBlocks.AEV_DUAL_OUTPUT_HATCH.get()).build(null));
 
-    public static final RegistryObject<BlockEntityType<FluixCrystalEnergyHatchBlockEntity>> FLUIX_CRYSTAL_ENERGY_HATCH = BLOCK_ENTITIES
-            .register("fluix_crystal_energy_hatch", () -> BlockEntityType.Builder.of(
-                    FluixCrystalEnergyHatchBlockEntity::new,
-                    ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get()).build(null));
+    public static final RegistryObject<BlockEntityType<MENetworkAccessHatchBlockEntity>> ME_NETWORK_ACCESS_HATCH = BLOCK_ENTITIES
+            .register("me_network_access_hatch", () -> BlockEntityType.Builder.of(
+                    MENetworkAccessHatchBlockEntity::new,
+                    ModBlocks.ME_NETWORK_ACCESS_HATCH.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<LavaSmelterControllerBlockEntity>> HIGH_REACTIVITY_LAVA_SMELTER = BLOCK_ENTITIES
             .register("high_reactivity_lava_smelter", () -> BlockEntityType.Builder.of(

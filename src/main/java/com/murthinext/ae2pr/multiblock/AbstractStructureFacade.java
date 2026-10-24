@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.ModBlocks;
-import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlock;
+import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
 
@@ -94,12 +94,12 @@ public abstract class AbstractStructureFacade {
             onPartCell(level, pos, active);
             BlockState state = level.getBlockState(pos);
             BlockState updated = state;
-            if (state.is(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get())) {
-                if (state.getValue(FluixCrystalEnergyHatchBlock.FORMED) != formed) {
-                    updated = updated.setValue(FluixCrystalEnergyHatchBlock.FORMED, formed);
+            if (state.is(ModBlocks.ME_NETWORK_ACCESS_HATCH.get())) {
+                if (state.getValue(MENetworkAccessHatchBlock.FORMED) != formed) {
+                    updated = updated.setValue(MENetworkAccessHatchBlock.FORMED, formed);
                 }
-                if (updated.getValue(FluixCrystalEnergyHatchBlock.STYLE) != style) {
-                    updated = updated.setValue(FluixCrystalEnergyHatchBlock.STYLE, style);
+                if (updated.getValue(MENetworkAccessHatchBlock.STYLE) != style) {
+                    updated = updated.setValue(MENetworkAccessHatchBlock.STYLE, style);
                 }
             } else if (isPart(state)) {
                 if (state.getValue(MachinePartBlock.FORMED) != formed) {
@@ -124,7 +124,7 @@ public abstract class AbstractStructureFacade {
     }
 
     /**
-     * 结构零件：普通机器部件，能源仓单独处理。
+     * 结构零件：普通机器部件，网络接入仓单独处理。
      */
     protected boolean isPart(BlockState state) {
         return isCommonPart(state.getBlock());

@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlockEntity;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerMenu;
 
 /**
@@ -45,6 +46,9 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
         if (code <= 0) {
             return null;
         }
+        if (code == 4) {
+            return Component.translatable("gui.ae2pr.multiblock.error.network");
+        }
         String key = switch (code) {
             case 1 -> "power";
             case 2 -> "output";
@@ -66,7 +70,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         graphics.drawString(font, title, TITLE_X, TITLE_Y, titleColor(), false);
         MultiblockInfoLayout.render(graphics, font, leftPos, topPos, new MultiblockInfoLayout.Info(
-                menu.isFormed(), menu.isRunning(), menu.isPaused(), menu.isEnergyConnected(),
+                menu.isFormed(), menu.isRunning(), menu.isPaused(), menu.isNetworkConnected(),
                 menu.getNetworkStoredPower(), menu.getMaxParallel(), menu.getJobItem(),
                 menu.getJobElapsed(), menu.getJobDuration(), errorText()));
         if (menu.getJobItem().isEmpty()) {
@@ -85,6 +89,16 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     @Override
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
         if (renderToolbarTooltip(graphics, mouseX, mouseY) || renderUpgradeTooltip(graphics, mouseX, mouseY)) {
+            return;
+        }
+        if (mouseX >= leftPos + MultiblockInfoLayout.TEXT_X && mouseX < leftPos + 174
+                && mouseY >= topPos + MultiblockInfoLayout.POWER_Y
+                && mouseY < topPos + MultiblockInfoLayout.POWER_Y + font.lineHeight) {
+            graphics.renderComponentTooltip(font, List.of(
+                    Component.translatable("gui.ae2pr.multiblock.channels", menu.getAllocatedChannels(),
+                            menu.getRequiredChannels()),
+                    Component.translatable("gui.ae2pr.multiblock.channels.limit",
+                            MENetworkAccessHatchBlockEntity.MAX_CHANNELS)), mouseX, mouseY);
             return;
         }
         if (MultiblockInfoLayout.isHoveringJobItem(leftPos, topPos, mouseX, mouseY)) {

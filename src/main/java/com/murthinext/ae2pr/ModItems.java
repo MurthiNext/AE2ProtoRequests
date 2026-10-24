@@ -154,9 +154,9 @@ public final class ModItems {
     public static final RegistryObject<BlockItem> AEV_DUAL_OUTPUT_HATCH = ITEMS.register("aev_dual_output_hatch",
             () -> new BlockItem(ModBlocks.AEV_DUAL_OUTPUT_HATCH.get(), new Item.Properties()));
 
-    public static final RegistryObject<BlockItem> FLUIX_CRYSTAL_ENERGY_HATCH = ITEMS.register(
-            "fluix_crystal_energy_hatch",
-            () -> new BlockItem(ModBlocks.FLUIX_CRYSTAL_ENERGY_HATCH.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> ME_NETWORK_ACCESS_HATCH = ITEMS.register(
+            "me_network_access_hatch",
+            () -> new BlockItem(ModBlocks.ME_NETWORK_ACCESS_HATCH.get(), new Item.Properties()));
 
     public static final RegistryObject<BlockItem> HIGH_REACTIVITY_LAVA_SMELTER = ITEMS.register(
             "high_reactivity_lava_smelter",

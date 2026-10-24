@@ -34,7 +34,7 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
 import com.murthinext.ae2pr.block.machine_part.DualHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
-import com.murthinext.ae2pr.block.machine_part.FluixCrystalEnergyHatchBlockEntity;
+import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFluidStorage;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
@@ -46,7 +46,7 @@ import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntity {
 
     public enum Error {
-        NONE, POWER, OUTPUT, DURABILITY
+        NONE, POWER, OUTPUT, DURABILITY, NETWORK
     }
 
     private static final int CHECK_INTERVAL = 20;
@@ -70,7 +70,9 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     protected final List<ItemBusBlockEntity> outputBuses = new ArrayList<>();
     protected final List<MachinePartFluidStorage> inputHatches = new ArrayList<>();
     protected final List<MachinePartFluidStorage> outputHatches = new ArrayList<>();
-    protected final List<FluixCrystalEnergyHatchBlockEntity> energyHatches = new ArrayList<>();
+    private final List<MultiblockChannelConsumer> channelConsumers = new ArrayList<>();
+    @Nullable
+    private MENetworkAccessHatchBlockEntity networkAccessHatch;
 
     protected boolean mirrorSide;
     protected boolean mirrorFront;
@@ -192,6 +194,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             tickCounter = 0;
             validateStructure();
         }
+        updateNetworkAccess();
         tickMachine();
         tickJob();
     }
@@ -208,6 +211,17 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         if (!isFormed()) {
             cancelJob();
             return;
+        }
+        if (!isNetworkConnected()) {
+            if (!paused || error != Error.NETWORK) {
+                paused = true;
+                error = Error.NETWORK;
+                applyControllerState();
+            }
+            return;
+        }
+        if (error == Error.NETWORK) {
+            clearPause();
         }
         if (jobTicksLeft > 0) {
             // 配方被移除或不再适用时立即中止
@@ -232,6 +246,10 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         if (level == null) {
             return;
         }
+        if (!isNetworkConnected()) {
+            pause(Error.NETWORK);
+            return;
+        }
         Match match = findMatch();
         if (match == null) {
             clearPause();
@@ -251,7 +269,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             return;
         }
         match = new Match(match.recipe(), parallel);
-        // 能量按并行数与耗能倍率从能源仓网络一次性扣除
+        // 能量按并行数与耗能倍率从接入仓网络一次性扣除
         double cost = energyCost(match);
         if (cost > 0) {
             if (extractNetworkEnergy(cost, true) < cost) {
@@ -494,27 +512,46 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     protected double extractNetworkEnergy(double amount, boolean simulate) {
-        double remaining = amount;
-        for (FluixCrystalEnergyHatchBlockEntity hatch : energyHatches) {
-            if (remaining <= 0) {
-                break;
-            }
-            remaining -= hatch.extractAEPower(remaining, simulate);
-        }
-        return amount - remaining;
+        return isNetworkConnected() ? networkAccessHatch.extractAEPower(amount, simulate) : 0;
     }
 
-    public boolean isEnergyConnected() {
-        for (FluixCrystalEnergyHatchBlockEntity hatch : energyHatches) {
-            if (hatch.isGridConnected()) {
-                return true;
-            }
+    protected int getControllerChannelUsage() {
+        return 1;
+    }
+
+    public int getRequiredChannels() {
+        long required = Math.max(1, getControllerChannelUsage());
+        for (MultiblockChannelConsumer consumer : channelConsumers) {
+            required += Math.max(0, consumer.getRequiredChannels());
         }
-        return false;
+        return (int) Math.min(Integer.MAX_VALUE, required);
+    }
+
+    public int getAllocatedChannels() {
+        return isFormed() && networkAccessHatch != null && !networkAccessHatch.isRemoved()
+                ? networkAccessHatch.getAllocatedChannels() : 0;
+    }
+
+    public boolean isNetworkConnected() {
+        return isFormed() && networkAccessHatch != null && !networkAccessHatch.isRemoved()
+                && networkAccessHatch.isNetworkConnected(this);
     }
 
     public double getNetworkStoredPower() {
-        return FluixCrystalEnergyHatchBlockEntity.totalAvailableAEPower(energyHatches);
+        return isNetworkConnected() ? networkAccessHatch.getAvailableAEPower() : 0;
+    }
+
+    private void updateNetworkAccess() {
+        if (isFormed() && networkAccessHatch != null && !networkAccessHatch.isRemoved()) {
+            networkAccessHatch.updateController(this);
+        }
+    }
+
+    private void detachNetworkAccess() {
+        if (networkAccessHatch != null) {
+            networkAccessHatch.detachController(this);
+            networkAccessHatch = null;
+        }
     }
 
     // 结构检测
@@ -549,10 +586,11 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             // 结构未变化，但相邻控制器可能重置过部件外观，此处补回
             if (formedCells.isEmpty()) {
                 formedCells = structureFacade.updateFormed(level, worldPosition, facing, result, formedCells,
-                        jobTicksLeft > 0);
+                        isRunning());
             } else {
-                structureFacade.reapply(level, formedCells, jobTicksLeft > 0);
+                structureFacade.reapply(level, formedCells, isRunning());
             }
+            refreshParts(result);
             return;
         }
         onStructureChanged(result);
@@ -561,7 +599,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             mirrorSide = result.mirrorSide();
             mirrorFront = result.mirrorFront();
         }
-        boolean active = result.formed() && jobTicksLeft > 0;
+        boolean active = result.formed() && jobTicksLeft > 0 && !paused;
         formedCells = structureFacade.updateFormed(level, worldPosition, facing, result, formedCells, active);
         refreshParts(result);
         applyControllerState(result.formed());
@@ -576,9 +614,14 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         outputBuses.clear();
         inputHatches.clear();
         outputHatches.clear();
-        energyHatches.clear();
+        MENetworkAccessHatchBlockEntity previousAccessHatch = networkAccessHatch;
+        networkAccessHatch = null;
+        channelConsumers.clear();
         onPartsCleared();
         if (!result.formed() || level == null) {
+            if (previousAccessHatch != null) {
+                previousAccessHatch.detachController(this);
+            }
             return;
         }
         // 按 片 → 行 → 列 排序，保证部件顺序稳定
@@ -596,10 +639,16 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             if (fluidStorage != null) {
                 (fluidStorage.isOutputHatch() ? outputHatches : inputHatches).add(fluidStorage);
             }
-            if (part instanceof FluixCrystalEnergyHatchBlockEntity hatch) {
-                energyHatches.add(hatch);
+            if (part instanceof MENetworkAccessHatchBlockEntity hatch) {
+                networkAccessHatch = hatch;
+            }
+            if (part != this && part instanceof MultiblockChannelConsumer consumer) {
+                channelConsumers.add(consumer);
             }
             collectExtraPart(pos, part);
+        }
+        if (previousAccessHatch != null && previousAccessHatch != networkAccessHatch) {
+            previousAccessHatch.detachController(this);
         }
     }
 
@@ -641,7 +690,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         if (!(state.getBlock() instanceof MultiblockControllerBlock block)) {
             return;
         }
-        boolean showRunning = formed && jobTicksLeft > 0;
+        boolean showRunning = formed && jobTicksLeft > 0 && !paused;
         boolean showPaused = formed && paused;
         BlockState updated = state;
         if (state.getValue(block.formedProperty()) != formed) {
@@ -682,6 +731,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             return;
         }
         structure.invalidate();
+        detachNetworkAccess();
         updateCoreLight(false);
         structureFacade.reset(level, formedCells);
         formedCells = List.of();
@@ -692,6 +742,18 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     protected void onControllerRemovedHook() {
+    }
+
+    @Override
+    public void setRemoved() {
+        detachNetworkAccess();
+        super.setRemoved();
+    }
+
+    @Override
+    public void onChunkUnloaded() {
+        detachNetworkAccess();
+        super.onChunkUnloaded();
     }
 
     @Override
@@ -788,7 +850,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     public boolean isRunning() {
-        return isFormed() && jobTicksLeft > 0;
+        return isFormed() && jobTicksLeft > 0 && !paused;
     }
 
     public boolean isPaused() {
@@ -845,4 +907,3 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return getJobFluid();
     }
 }
-

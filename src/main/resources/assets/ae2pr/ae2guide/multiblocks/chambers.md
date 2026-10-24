@@ -5,7 +5,7 @@ navigation:
   icon: ae2pr:certus_quartz_crystal_input_hatch
   position: 30
 item_ids:
-  - ae2pr:fluix_crystal_energy_hatch
+  - ae2pr:me_network_access_hatch
   - ae2pr:certus_quartz_crystal_input_bus
   - ae2pr:certus_quartz_crystal_input_hatch
   - ae2pr:certus_quartz_crystal_output_bus
@@ -27,7 +27,7 @@ item_ids:
   <BlockImage id="ae2pr:certus_quartz_crystal_output_hatch" scale="3" />
 </Row>
 
-机器部件（或称仓室）是多方块机器与外界的接口：**总线**搬运物品、**仓**搬运流体、**能源仓**为机器提供电力。
+机器部件（或称仓室）是多方块机器与外界的接口：**总线**搬运物品、**仓**搬运流体、**ME 网络接入仓**连接 ME 网络并为机器提供电力与频道。
 
 把它们放入结构中的对应位置，即可随结构一起成型。
 
@@ -51,10 +51,14 @@ item_ids:
 
 自动搬运只与**朝向面**的容器交互，可以用扳手旋转部件来改变朝向。
 
-## 能源仓
+## ME 网络接入仓
 
-<BlockImage id="ae2pr:fluix_crystal_energy_hatch" scale="3" />
+<BlockImage id="ae2pr:me_network_access_hatch" scale="3" />
 
-福鲁伊克斯水晶能源仓不占用频道、也不缓存能量，AE2 Proto Requests 所有的电力需求都基于 ME 网络。
+将接入仓安装至成型结构，并从其朝向面连接 ME 线缆，即可让主机接入网络。
 
-以及，这个东西在多方块机器中只能安装一个，多装会不成形，也没有意义。
+主机默认占用 **1 频道**。
+
+实际分配受接入线缆及沿途网络的剩余频道限制：若最多只能分配 6 频道，机器就不可能获得超过 6 频道；频道不足、断线或网络断电时，机器暂停工作，网络恢复后继续。
+
+每台多方块机器最多安装 **1 个**接入仓，多装会导致结构无法成型。
