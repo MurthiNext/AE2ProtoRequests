@@ -53,6 +53,11 @@ public final class CtmSprites {
         register("block/reinforced_high_power_casing");
         register("block/zirconia_corundum_bricks");
         registerQuadrant("block/zirconium_iron_alloy_machine_casing");
+        for (String casing : List.of("me_computer_casing", "me_advanced_computer_casing")) {
+            for (String face : List.of("front", "back", "side", "top", "bottom")) {
+                registerQuadrant("block/" + casing + "/" + face);
+            }
+        }
         register("block/meteor_steel_pipe_side");
         REGISTERED.add(LAVA_SMELTER_CONTROLLER_CASING);
         REGISTERED.add(MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING);

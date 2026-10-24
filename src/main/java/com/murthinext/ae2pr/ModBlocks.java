@@ -11,6 +11,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import com.murthinext.ae2pr.block.ComputerCasingBlock;
 import com.murthinext.ae2pr.block.DisassemblableBlock;
 import com.murthinext.ae2pr.block.DisassemblableGlassBlock;
 import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
@@ -110,6 +111,12 @@ public final class ModBlocks {
 
     public static final RegistryObject<Block> ZIRCONIUM_IRON_ALLOY_MACHINE_CASING = BLOCKS.register(
             "zirconium_iron_alloy_machine_casing", () -> new DisassemblableBlock(casingProperties()));
+
+    public static final RegistryObject<ComputerCasingBlock> ME_COMPUTER_CASING = BLOCKS.register(
+            "me_computer_casing", () -> new ComputerCasingBlock(casingProperties()));
+
+    public static final RegistryObject<ComputerCasingBlock> ME_ADVANCED_COMPUTER_CASING = BLOCKS.register(
+            "me_advanced_computer_casing", () -> new ComputerCasingBlock(casingProperties()));
 
     public static final RegistryObject<MachinePartBlock> AEV_INPUT_BUS = BLOCKS.register(
             "aev_input_bus", MachinePartBlock::new);

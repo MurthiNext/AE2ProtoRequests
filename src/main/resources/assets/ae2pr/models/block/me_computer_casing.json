@@ -1,0 +1,13 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "#side",
+    "down": "ae2pr:block/me_computer_casing/bottom",
+    "up": "ae2pr:block/me_computer_casing/top",
+    "north": "ae2pr:block/me_computer_casing/front",
+    "south": "ae2pr:block/me_computer_casing/back",
+    "east": "#side",
+    "west": "#side",
+    "side": "ae2pr:block/me_computer_casing/side"
+  }
+}

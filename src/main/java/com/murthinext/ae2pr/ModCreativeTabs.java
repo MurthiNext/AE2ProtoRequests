@@ -118,6 +118,8 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.REINFORCED_HIGH_POWER_CASING.get());
                         output.accept(ModItems.HIGH_ENERGY_STABILITY_CASING.get());
                         output.accept(ModItems.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING.get());
+                        output.accept(ModItems.ME_COMPUTER_CASING.get());
+                        output.accept(ModItems.ME_ADVANCED_COMPUTER_CASING.get());
                         output.accept(ModItems.ZIRCONIA_CORUNDUM_BRICKS.get());
                         output.accept(ModItems.CRYSTAL_GLASS.get());
                         output.accept(ModItems.FIREPROOF_CRYSTAL_GLASS.get());

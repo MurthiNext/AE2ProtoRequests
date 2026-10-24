@@ -120,6 +120,12 @@ public final class CtmConfig {
         if (block == ModBlocks.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING.get()) {
             return 11;
         }
+        if (block == ModBlocks.ME_COMPUTER_CASING.get()) {
+            return 12;
+        }
+        if (block == ModBlocks.ME_ADVANCED_COMPUTER_CASING.get()) {
+            return 13;
+        }
         if (block == ModBlocks.METEOR_STEEL_PIPE_BLOCK.get()) {
             // 管道按轴向分族
             return 5 + state.getValue(MeteorSteelPipeBlock.FACING).getAxis().ordinal();

@@ -129,6 +129,13 @@ public final class ModItems {
             "zirconium_iron_alloy_machine_casing",
             () -> new BlockItem(ModBlocks.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING.get(), new Item.Properties()));
 
+    public static final RegistryObject<BlockItem> ME_COMPUTER_CASING = ITEMS.register("me_computer_casing",
+            () -> new BlockItem(ModBlocks.ME_COMPUTER_CASING.get(), new Item.Properties()));
+
+    public static final RegistryObject<BlockItem> ME_ADVANCED_COMPUTER_CASING = ITEMS.register(
+            "me_advanced_computer_casing",
+            () -> new BlockItem(ModBlocks.ME_ADVANCED_COMPUTER_CASING.get(), new Item.Properties()));
+
     public static final RegistryObject<BlockItem> AEV_INPUT_BUS = ITEMS.register("aev_input_bus",
             () -> new BlockItem(ModBlocks.AEV_INPUT_BUS.get(), new Item.Properties()));
 

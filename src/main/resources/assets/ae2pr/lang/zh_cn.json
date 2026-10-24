@@ -79,6 +79,8 @@
   "block.ae2pr.high_reactivity_lava_smelter": "高反应性熔岩冶炼炉",
   "block.ae2pr.logistics_control_casing": "物流控制机械方块",
   "block.ae2pr.matter_phase_transformer": "物质相变仪",
+  "block.ae2pr.me_advanced_computer_casing": "ME高级计算机外壳",
+  "block.ae2pr.me_computer_casing": "ME计算机外壳",
   "block.ae2pr.meteor_steel_block": "陨钢块",
   "block.ae2pr.meteor_steel_pipe_block": "陨钢管道方块",
   "block.ae2pr.meteorite_copper_ore": "陨石铜矿石",

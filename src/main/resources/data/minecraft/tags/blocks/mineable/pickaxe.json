@@ -21,6 +21,8 @@
     "ae2pr:aev_machine_casing",
     "ae2pr:reinforced_high_power_casing",
     "ae2pr:high_energy_stability_casing",
+    "ae2pr:me_computer_casing",
+    "ae2pr:me_advanced_computer_casing",
     "ae2pr:aev_input_bus",
     "ae2pr:aev_input_hatch",
     "ae2pr:aev_output_bus",

@@ -1,0 +1,10 @@
+{
+  "parent": "ae2pr:block/me_computer_casing",
+  "textures": {
+    "down": "ae2pr:block/me_advanced_computer_casing/bottom",
+    "up": "ae2pr:block/me_advanced_computer_casing/top",
+    "north": "ae2pr:block/me_advanced_computer_casing/front",
+    "south": "ae2pr:block/me_advanced_computer_casing/back",
+    "side": "ae2pr:block/me_advanced_computer_casing/side"
+  }
+}
