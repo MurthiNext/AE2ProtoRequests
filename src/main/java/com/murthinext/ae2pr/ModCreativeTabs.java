@@ -69,6 +69,9 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.ZIRCONIUM_DUST.get());
                         output.accept(ModItems.CARBON_ZIRCONIUM_MIXTURE_DUST.get());
                         output.accept(ModItems.ZIRCON_DUST.get());
+                        output.accept(ModItems.COPPER_OXIDE_DUST.get());
+                        output.accept(ModItems.IRON_OXIDE_DUST.get());
+                        output.accept(ModItems.GOLD_OXIDE_DUST.get());
 
                         // 单层板
                         output.accept(ModItems.METEOR_STEEL_PLATE.get());

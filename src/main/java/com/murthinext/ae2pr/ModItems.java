@@ -308,6 +308,15 @@ public final class ModItems {
     public static final RegistryObject<Item> ZIRCON_DUST = ITEMS.register("zircon_dust",
             () -> new Item(new Item.Properties()));
 
+    public static final RegistryObject<Item> COPPER_OXIDE_DUST = ITEMS.register("copper_oxide_dust",
+            () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> IRON_OXIDE_DUST = ITEMS.register("iron_oxide_dust",
+            () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> GOLD_OXIDE_DUST = ITEMS.register("gold_oxide_dust",
+            () -> new Item(new Item.Properties()));
+
     public static final RegistryObject<Item> ZIRCON_BRICK = ITEMS.register("zircon_brick",
             () -> new Item(new Item.Properties()));
 

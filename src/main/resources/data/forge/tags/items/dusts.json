@@ -6,6 +6,9 @@
     "ae2pr:carbon_dust",
     "ae2pr:zirconium_dust",
     "ae2pr:carbon_zirconium_mixture_dust",
-    "ae2pr:zircon_dust"
+    "ae2pr:zircon_dust",
+    "ae2pr:copper_oxide_dust",
+    "ae2pr:iron_oxide_dust",
+    "ae2pr:gold_oxide_dust"
   ]
 }
