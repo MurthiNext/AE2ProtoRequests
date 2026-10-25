@@ -89,8 +89,8 @@ public class ComplexWorldInteractionJeiCategory implements IRecipeCategory<Compl
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, ComplexWorldInteractionRecipe recipe, IFocusGroup focuses) {
         int index = 0;
-        int inputTop = TOP + (ROWS - Math.min(ROWS, recipe.getCountedIngredients().size())) * SLOT / 2;
-        for (CountedIngredient ingredient : recipe.getCountedIngredients()) {
+        int inputTop = TOP + (ROWS - Math.min(ROWS, recipe.getItemInputs().size())) * SLOT / 2;
+        for (CountedIngredient ingredient : recipe.getItemInputs()) {
             IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT,
                     6 + index / ROWS * SLOT, inputTop + index % ROWS * SLOT);
             slot.setStandardSlotBackground();
@@ -125,9 +125,9 @@ public class ComplexWorldInteractionJeiCategory implements IRecipeCategory<Compl
         }
 
         index = 0;
-        int outputCount = recipe.getResults().size() + (recipe.convertsFluid() ? 1 : 0);
+        int outputCount = recipe.getItemOutputs().size() + (recipe.convertsFluid() ? 1 : 0);
         int outputTop = TOP + (ROWS - Math.min(ROWS, outputCount)) * SLOT / 2;
-        for (ItemStack result : recipe.getResults()) {
+        for (ItemStack result : recipe.getItemOutputs()) {
             builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_X - index / ROWS * SLOT,
                     outputTop + index % ROWS * SLOT)
                     .setStandardSlotBackground()

@@ -5,82 +5,36 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jetbrains.annotations.Nullable;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.Container;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModModules;
 import com.murthinext.ae2pr.ModRecipes;
-import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.multiblock.module.ModuleRequirement;
 import com.murthinext.ae2pr.multiblock.module.ModuleType;
 
 /**
  * 水晶装配线配方。
  */
-public class CrystalAssemblyLineRecipe implements Recipe<Container>, MultiblockRecipe {
+public class CrystalAssemblyLineRecipe extends AbstractMultiblockRecipe {
 
-    private final ResourceLocation id;
-    private final List<CountedIngredient> itemInputs;
-    private final List<FluidStack> fluidInputs;
-    private final List<ItemStack> itemOutputs;
+    public static final int DEFAULT_DURATION = 100;
+
     private final List<ModuleRequirement> moduleRequirements;
-    private final int duration;
-    @Nullable
-    private final Double energyPerParallel;
 
-    public CrystalAssemblyLineRecipe(ResourceLocation id, List<CountedIngredient> itemInputs,
-            List<FluidStack> fluidInputs, List<ItemStack> itemOutputs, List<ModuleRequirement> moduleRequirements,
-            int duration, @Nullable Double energyPerParallel) {
-        this.id = id;
-        this.itemInputs = List.copyOf(itemInputs);
-        this.fluidInputs = List.copyOf(fluidInputs);
-        this.itemOutputs = List.copyOf(itemOutputs);
+    public CrystalAssemblyLineRecipe(ResourceLocation id, RecipeDraft draft,
+            List<ModuleRequirement> moduleRequirements) {
+        super(id, draft);
         this.moduleRequirements = List.copyOf(moduleRequirements);
-        this.duration = duration;
-        this.energyPerParallel = energyPerParallel;
-    }
-
-    @Override
-    public List<CountedIngredient> getItemInputs() {
-        return itemInputs;
-    }
-
-    @Override
-    public List<FluidStack> getFluidInputs() {
-        return fluidInputs;
-    }
-
-    @Override
-    public List<ItemStack> getItemOutputs() {
-        return itemOutputs;
-    }
-
-    @Override
-    public List<FluidStack> getFluidOutputs() {
-        return List.of();
     }
 
     public List<ModuleRequirement> getModuleRequirements() {
@@ -88,40 +42,8 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container>, MultiblockR
     }
 
     @Override
-    public int getDuration() {
-        return duration;
-    }
-
-    @Override
-    public double getEnergyPerParallel() {
-        return energyPerParallel != null ? energyPerParallel : Config.assemblyEnergyPerParallel();
-    }
-
-    // Recipe 接口
-
-    @Override
-    public boolean matches(Container container, Level level) {
-        return false;
-    }
-
-    @Override
-    public ItemStack assemble(Container container, RegistryAccess registries) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return false;
-    }
-
-    @Override
-    public ItemStack getResultItem(RegistryAccess registries) {
-        return itemOutputs.isEmpty() ? ItemStack.EMPTY : itemOutputs.get(0);
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return id;
+    protected double defaultEnergyPerParallel() {
+        return Config.assemblyEnergyPerParallel();
     }
 
     @Override
@@ -134,154 +56,74 @@ public class CrystalAssemblyLineRecipe implements Recipe<Container>, MultiblockR
         return ModRecipes.CRYSTAL_ASSEMBLY_LINE_TYPE.get();
     }
 
-    /**
-     * JSON 与网络序列化。
-     */
-    public static class Serializer implements RecipeSerializer<CrystalAssemblyLineRecipe> {
+    public static class Serializer extends AbstractMultiblockRecipeSerializer<CrystalAssemblyLineRecipe> {
 
-        @Override
-        public CrystalAssemblyLineRecipe fromJson(ResourceLocation id, JsonObject json) {
-            List<CountedIngredient> itemInputs = new ArrayList<>();
-            for (JsonElement element : GsonHelper.getAsJsonArray(json, "item_inputs", new JsonArray())) {
-                JsonObject obj = element.getAsJsonObject();
-                Ingredient ingredient = Ingredient.fromJson(obj);
-                int count = GsonHelper.getAsInt(obj, "count", 1);
-                if (count < 1) {
-                    throw new JsonSyntaxException("item_inputs count must be >= 1");
-                }
-                itemInputs.add(new CountedIngredient(ingredient, count));
-            }
-
-            List<FluidStack> fluidInputs = new ArrayList<>();
-            for (JsonElement element : GsonHelper.getAsJsonArray(json, "fluid_inputs", new JsonArray())) {
-                JsonObject obj = element.getAsJsonObject();
-                ResourceLocation fluidId = ResourceLocation.parse(GsonHelper.getAsString(obj, "fluid"));
-                Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidId);
-                if (fluid == null || fluid == Fluids.EMPTY) {
-                    throw new JsonSyntaxException("Unknown fluid: " + fluidId);
-                }
-                int amount = GsonHelper.getAsInt(obj, "amount", 1000);
-                if (amount < 1) {
-                    throw new JsonSyntaxException("fluid_inputs amount must be >= 1");
-                }
-                fluidInputs.add(new FluidStack(fluid, amount));
-            }
-
-            List<ItemStack> itemOutputs = new ArrayList<>();
-            for (JsonElement element : GsonHelper.getAsJsonArray(json, "item_outputs", new JsonArray())) {
-                JsonObject obj = element.getAsJsonObject();
-                ResourceLocation itemId = ResourceLocation.parse(GsonHelper.getAsString(obj, "item"));
-                Item item = ForgeRegistries.ITEMS.getValue(itemId);
-                if (item == null || item == Items.AIR) {
-                    throw new JsonSyntaxException("Unknown item: " + itemId);
-                }
-                int count = GsonHelper.getAsInt(obj, "count", 1);
-                if (count < 1) {
-                    throw new JsonSyntaxException("item_outputs count must be >= 1");
-                }
-                itemOutputs.add(new ItemStack(item, count));
-            }
-
-            List<ModuleRequirement> moduleRequirements = new ArrayList<>();
-            Set<ResourceLocation> seenModules = new HashSet<>();
-            for (JsonElement element : GsonHelper.getAsJsonArray(json, "module_requirements", new JsonArray())) {
-                JsonObject obj = element.getAsJsonObject();
-                ResourceLocation moduleId = ResourceLocation.parse(GsonHelper.getAsString(obj, "module"));
-                ModuleType type = ModModules.byId(moduleId);
-                if (type == null) {
-                    throw new JsonSyntaxException("Unknown module: " + moduleId);
-                }
-                if (!seenModules.add(moduleId)) {
-                    throw new JsonSyntaxException("Duplicate module requirement: " + moduleId);
-                }
-                int minLevel = GsonHelper.getAsInt(obj, "min_level", 1);
-                if (minLevel < 1) {
-                    throw new JsonSyntaxException("module_requirements min_level must be >= 1");
-                }
-                moduleRequirements.add(new ModuleRequirement(type, minLevel));
-            }
-
-            if (itemInputs.isEmpty() && fluidInputs.isEmpty()) {
-                throw new JsonSyntaxException("Recipe requires at least one input");
-            }
-            if (itemOutputs.isEmpty()) {
-                throw new JsonSyntaxException("Recipe requires at least one item output");
-            }
-            int duration = GsonHelper.getAsInt(json, "duration", 100);
-            if (duration < 1) {
-                throw new JsonSyntaxException("duration must be >= 1");
-            }
-            Double energyPerParallel = null;
-            if (json.has("energy")) {
-                energyPerParallel = GsonHelper.getAsDouble(json, "energy");
-                if (energyPerParallel < 0) {
-                    throw new JsonSyntaxException("energy must be >= 0");
-                }
-            }
-            return new CrystalAssemblyLineRecipe(id, itemInputs, fluidInputs, itemOutputs, moduleRequirements, duration,
-                    energyPerParallel);
+        public Serializer() {
+            super(DEFAULT_DURATION);
         }
 
         @Override
-        public CrystalAssemblyLineRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
-            int itemCount = buffer.readVarInt();
-            List<CountedIngredient> itemInputs = new ArrayList<>(itemCount);
-            for (int i = 0; i < itemCount; i++) {
-                itemInputs.add(new CountedIngredient(Ingredient.fromNetwork(buffer), buffer.readVarInt()));
+        protected void validate(RecipeDraft draft, JsonObject json) {
+            super.validate(draft, json);
+            if (draft.itemOutputs().isEmpty()) {
+                throw new JsonSyntaxException("Recipe requires at least one item output");
             }
-            int fluidCount = buffer.readVarInt();
-            List<FluidStack> fluidInputs = new ArrayList<>(fluidCount);
-            for (int i = 0; i < fluidCount; i++) {
-                fluidInputs.add(buffer.readFluidStack());
+            if (!draft.fluidOutputs().isEmpty()) {
+                throw new JsonSyntaxException("Crystal assembly line does not support fluid outputs");
             }
-            int outputCount = buffer.readVarInt();
-            List<ItemStack> itemOutputs = new ArrayList<>(outputCount);
-            for (int i = 0; i < outputCount; i++) {
-                ItemStack stack = buffer.readItem();
-                stack.setCount(buffer.readVarInt());
-                itemOutputs.add(stack);
-            }
-            int requirementCount = buffer.readVarInt();
-            List<ModuleRequirement> moduleRequirements = new ArrayList<>(requirementCount);
-            for (int i = 0; i < requirementCount; i++) {
+        }
+
+        @Override
+        protected CrystalAssemblyLineRecipe create(ResourceLocation id, RecipeDraft draft, JsonObject json) {
+            return new CrystalAssemblyLineRecipe(id, draft, readModules(json));
+        }
+
+        @Override
+        protected CrystalAssemblyLineRecipe createFromNetwork(ResourceLocation id, RecipeDraft draft,
+                FriendlyByteBuf buffer) {
+            int size = buffer.readVarInt();
+            List<ModuleRequirement> requirements = new ArrayList<>(size);
+            for (int i = 0; i < size; i++) {
                 ResourceLocation moduleId = buffer.readResourceLocation();
                 ModuleType type = ModModules.byId(moduleId);
                 if (type == null) {
                     throw new IllegalArgumentException("Unknown module: " + moduleId);
                 }
-                moduleRequirements.add(new ModuleRequirement(type, buffer.readVarInt()));
+                requirements.add(new ModuleRequirement(type, buffer.readVarInt()));
             }
-            Double energyPerParallel = buffer.readBoolean() ? buffer.readDouble() : null;
-            return new CrystalAssemblyLineRecipe(id, itemInputs, fluidInputs, itemOutputs, moduleRequirements,
-                    buffer.readVarInt(), energyPerParallel);
+            return new CrystalAssemblyLineRecipe(id, draft, requirements);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, CrystalAssemblyLineRecipe recipe) {
-            buffer.writeVarInt(recipe.itemInputs.size());
-            for (CountedIngredient input : recipe.itemInputs) {
-                input.ingredient().toNetwork(buffer);
-                buffer.writeVarInt(input.count());
-            }
-            buffer.writeVarInt(recipe.fluidInputs.size());
-            for (FluidStack fluid : recipe.fluidInputs) {
-                buffer.writeFluidStack(fluid);
-            }
-            buffer.writeVarInt(recipe.itemOutputs.size());
-            for (ItemStack output : recipe.itemOutputs) {
-                buffer.writeItem(output.copyWithCount(1));
-                buffer.writeVarInt(output.getCount());
-            }
-            buffer.writeVarInt(recipe.moduleRequirements.size());
-            for (ModuleRequirement requirement : recipe.moduleRequirements) {
+        protected void writeExtra(FriendlyByteBuf buffer, CrystalAssemblyLineRecipe recipe) {
+            List<ModuleRequirement> requirements = recipe.getModuleRequirements();
+            buffer.writeVarInt(requirements.size());
+            for (ModuleRequirement requirement : requirements) {
                 buffer.writeResourceLocation(requirement.type().id());
                 buffer.writeVarInt(requirement.minLevel());
             }
-            buffer.writeBoolean(recipe.energyPerParallel != null);
-            if (recipe.energyPerParallel != null) {
-                buffer.writeDouble(recipe.energyPerParallel);
+        }
+
+        private static List<ModuleRequirement> readModules(JsonObject json) {
+            List<ModuleRequirement> requirements = new ArrayList<>();
+            Set<ResourceLocation> seen = new HashSet<>();
+            for (JsonElement element : GsonHelper.getAsJsonArray(json, "module_requirements", new JsonArray())) {
+                JsonObject entry = element.getAsJsonObject();
+                ResourceLocation moduleId = ResourceLocation.parse(GsonHelper.getAsString(entry, "module"));
+                ModuleType type = ModModules.byId(moduleId);
+                if (type == null) {
+                    throw new JsonSyntaxException("Unknown module: " + moduleId);
+                }
+                if (!seen.add(moduleId)) {
+                    throw new JsonSyntaxException("Duplicate module requirement: " + moduleId);
+                }
+                int minLevel = GsonHelper.getAsInt(entry, "min_level", 1);
+                if (minLevel < 1) {
+                    throw new JsonSyntaxException("module_requirements min_level must be >= 1");
+                }
+                requirements.add(new ModuleRequirement(type, minLevel));
             }
-            buffer.writeVarInt(recipe.duration);
+            return requirements;
         }
     }
 }

@@ -1,28 +1,19 @@
 package com.murthinext.ae2pr.recipe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidType;
@@ -33,38 +24,31 @@ import com.murthinext.ae2pr.ModRecipes;
 /**
  * 支持带数量原料、多产物和流体源替换的复杂世界交互配方。
  */
-public class ComplexWorldInteractionRecipe implements Recipe<Container> {
+public class ComplexWorldInteractionRecipe extends AbstractRecipe {
 
-    private final ResourceLocation id;
-    private final List<CountedIngredient> ingredients;
     private final WorldInteractionCircumstance circumstance;
     private final List<ItemStack> results;
     @Nullable
     private final Fluid resultFluid;
 
     public ComplexWorldInteractionRecipe(ResourceLocation id, List<CountedIngredient> ingredients,
-            WorldInteractionCircumstance circumstance, List<ItemStack> results,
-            @Nullable Fluid resultFluid) {
-        this.id = id;
-        this.ingredients = List.copyOf(ingredients);
+            WorldInteractionCircumstance circumstance, List<ItemStack> results, @Nullable Fluid resultFluid) {
+        super(id, ingredients);
         this.circumstance = circumstance;
         this.results = results.stream().map(ItemStack::copy).toList();
         this.resultFluid = resultFluid;
     }
 
     public boolean canTrigger(ItemStack stack) {
-        return ingredients.stream().anyMatch(ingredient -> ingredient.test(stack));
-    }
-
-    public List<CountedIngredient> getCountedIngredients() {
-        return ingredients;
+        return getItemInputs().stream().anyMatch(ingredient -> ingredient.test(stack));
     }
 
     public WorldInteractionCircumstance getCircumstance() {
         return circumstance;
     }
 
-    public List<ItemStack> getResults() {
+    @Override
+    public List<ItemStack> getItemOutputs() {
         return results;
     }
 
@@ -78,38 +62,6 @@ public class ComplexWorldInteractionRecipe implements Recipe<Container> {
     }
 
     @Override
-    public boolean matches(Container container, Level level) {
-        return false;
-    }
-
-    @Override
-    public ItemStack assemble(Container container, RegistryAccess registryAccess) {
-        return getResultItem(registryAccess).copy();
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return false;
-    }
-
-    @Override
-    public ItemStack getResultItem(RegistryAccess registryAccess) {
-        return results.isEmpty() ? ItemStack.EMPTY : results.get(0);
-    }
-
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        NonNullList<Ingredient> vanilla = NonNullList.create();
-        ingredients.forEach(entry -> vanilla.add(entry.ingredient()));
-        return vanilla;
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return id;
-    }
-
-    @Override
     public RecipeSerializer<?> getSerializer() {
         return ModRecipes.COMPLEX_WORLD_INTERACTION.get();
     }
@@ -119,38 +71,17 @@ public class ComplexWorldInteractionRecipe implements Recipe<Container> {
         return ModRecipes.COMPLEX_WORLD_INTERACTION_TYPE.get();
     }
 
-    @Override
-    public boolean isSpecial() {
-        return true;
-    }
-
     public static class Serializer implements RecipeSerializer<ComplexWorldInteractionRecipe> {
 
         @Override
         public ComplexWorldInteractionRecipe fromJson(ResourceLocation id, JsonObject json) {
-            List<CountedIngredient> ingredients = new ArrayList<>();
-            for (JsonElement element : GsonHelper.getAsJsonArray(json, "item_inputs")) {
-                JsonObject entry = element.getAsJsonObject();
-                int count = GsonHelper.getAsInt(entry, "count", 1);
-                Ingredient ingredient = Ingredient.fromJson(entry);
-                if (count <= 0 || ingredient.isEmpty()) {
-                    throw new JsonSyntaxException("item_inputs requires non-empty ingredients and positive counts");
-                }
-                ingredients.add(new CountedIngredient(ingredient, count));
-            }
+            List<CountedIngredient> ingredients = RecipeJson.readItemInputs(json, "item_inputs");
             if (ingredients.isEmpty()) {
                 throw new JsonSyntaxException("item_inputs must not be empty");
             }
             WorldInteractionCircumstance circumstance = WorldInteractionCircumstance.fromJson(
                     GsonHelper.getAsJsonObject(json, "circumstance"));
-            List<ItemStack> results = new ArrayList<>();
-            for (JsonElement element : GsonHelper.getAsJsonArray(json, "item_outputs", new JsonArray())) {
-                ItemStack result = ShapedRecipe.itemStackFromJson(element.getAsJsonObject());
-                if (result.isEmpty() || result.getCount() <= 0) {
-                    throw new JsonSyntaxException("item_outputs requires non-empty stacks and positive counts");
-                }
-                results.add(result);
-            }
+            List<ItemStack> results = RecipeJson.readItemStacks(json, "item_outputs");
             JsonArray fluidOutputs = GsonHelper.getAsJsonArray(json, "fluid_outputs", new JsonArray());
             if (fluidOutputs.size() > 1) {
                 throw new JsonSyntaxException("fluid_outputs allows at most one output");
@@ -176,14 +107,9 @@ public class ComplexWorldInteractionRecipe implements Recipe<Container> {
 
         @Override
         public ComplexWorldInteractionRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
-            int size = buffer.readVarInt();
-            List<CountedIngredient> ingredients = new ArrayList<>(size);
-            for (int i = 0; i < size; i++) {
-                int count = buffer.readVarInt();
-                ingredients.add(new CountedIngredient(Ingredient.fromNetwork(buffer), count));
-            }
+            List<CountedIngredient> ingredients = RecipeNetwork.readItemInputs(buffer);
             WorldInteractionCircumstance circumstance = WorldInteractionCircumstance.fromNetwork(buffer);
-            List<ItemStack> results = buffer.readList(FriendlyByteBuf::readItem);
+            List<ItemStack> results = RecipeNetwork.readItemStacks(buffer);
             Fluid resultFluid = buffer.readBoolean()
                     ? ForgeRegistries.FLUIDS.getValue(buffer.readResourceLocation())
                     : null;
@@ -192,13 +118,9 @@ public class ComplexWorldInteractionRecipe implements Recipe<Container> {
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, ComplexWorldInteractionRecipe recipe) {
-            buffer.writeVarInt(recipe.ingredients.size());
-            for (CountedIngredient entry : recipe.ingredients) {
-                buffer.writeVarInt(entry.count());
-                entry.ingredient().toNetwork(buffer);
-            }
+            RecipeNetwork.writeItemInputs(buffer, recipe.getItemInputs());
             recipe.circumstance.toNetwork(buffer);
-            buffer.writeCollection(recipe.results, FriendlyByteBuf::writeItem);
+            RecipeNetwork.writeItemStacks(buffer, recipe.results);
             buffer.writeBoolean(recipe.resultFluid != null);
             if (recipe.resultFluid != null) {
                 buffer.writeResourceLocation(ForgeRegistries.FLUIDS.getKey(recipe.resultFluid));

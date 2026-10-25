@@ -126,7 +126,7 @@ public final class ComplexWorldInteractions {
 
     private static WorldInteractionInputPlan plan(ComplexWorldInteractionRecipe recipe, List<ItemEntity> nearby,
             int limit) {
-        List<CountedIngredient> ingredients = recipe.getCountedIngredients();
+        List<CountedIngredient> ingredients = recipe.getItemInputs();
         int[] available = new int[nearby.size()];
         int[] required = ingredients.stream().mapToInt(CountedIngredient::count).toArray();
         boolean[][] matches = new boolean[nearby.size()][ingredients.size()];
@@ -168,7 +168,7 @@ public final class ComplexWorldInteractions {
                 catalyst.consumeInteractions(level, pos, state, plan.batches());
             }
         }
-        for (ItemStack result : recipe.getResults()) {
+        for (ItemStack result : recipe.getItemOutputs()) {
             long total = (long) result.getCount() * plan.batches();
             while (total > 0) {
                 ItemStack stack = result.copyWithCount((int) Math.min(total, result.getMaxStackSize()));
