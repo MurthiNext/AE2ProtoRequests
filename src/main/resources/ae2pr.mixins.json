@@ -26,7 +26,8 @@
     "CellWorkbenchScreenMixin",
     "CraftAmountScreenMixin",
     "MEStorageScreenMixin",
-    "PendingCraftingJobsMixin"
+    "PendingCraftingJobsMixin",
+    "UpgradeCardItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1

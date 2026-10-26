@@ -232,6 +232,7 @@
   "tooltip.ae2pr.status": "请求状态",
   "tooltip.ae2pr.submit": "提交更改",
   "tooltip.ae2pr.toggle": "启用/禁用该请求",
+  "tooltip.ae2pr.upgrade_card.shift_for_supported": "[按住 Shift 查看可用内容]",
   "tooltip.ae2pr.whole_number": "必须为整数！",
   "jei.ae2pr.chance": "产出概率：%s",
   "jei.ae2pr.multiblock.title": "多方块结构预览",

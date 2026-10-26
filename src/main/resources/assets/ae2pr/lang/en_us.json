@@ -233,6 +233,7 @@
   "tooltip.ae2pr.status": "Request Status",
   "tooltip.ae2pr.submit": "Submit Changes",
   "tooltip.ae2pr.toggle": "Toggle Request",
+  "tooltip.ae2pr.upgrade_card.shift_for_supported": "[Hold Shift to view supported machines]",
   "tooltip.ae2pr.whole_number": "Must be whole number!",
   "jei.ae2pr.chance": "Output chance: %s",
   "jei.ae2pr.multiblock.title": "Multiblock Structure Preview",
