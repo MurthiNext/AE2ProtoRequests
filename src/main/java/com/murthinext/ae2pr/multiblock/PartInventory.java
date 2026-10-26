@@ -11,6 +11,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFluidStorage;
+import com.murthinext.ae2pr.recipe.ChancedItemStack;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
@@ -121,7 +122,9 @@ public final class PartInventory {
      * 模拟写入产物，返回全部放得下时为 true；快照需 {@link #commit()} 才生效。
      */
     public boolean insert(MultiblockRecipe recipe, int parallel) {
-        for (ItemStack output : recipe.getItemOutputs()) {
+        // 概率产物按全量预留，避免实际产出时溢出掉落
+        for (ChancedItemStack chanced : recipe.getChancedItemOutputs()) {
+            ItemStack output = chanced.stack();
             long remaining = (long) output.getCount() * parallel;
             // 先在同类物品槽位堆叠，再占用空槽位
             for (boolean sameItem : new boolean[] { true, false }) {

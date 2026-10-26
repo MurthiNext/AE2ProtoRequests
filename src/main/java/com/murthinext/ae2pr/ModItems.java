@@ -249,6 +249,10 @@ public final class ModItems {
             "liquid_zirconium_bucket", () -> new NoBlockFluidBucketItem(ModFluids.LIQUID_ZIRCONIUM,
                     new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
+    public static final RegistryObject<BucketItem> COARSE_METEORITE_SLURRY_BUCKET = ITEMS.register(
+            "coarse_meteorite_slurry_bucket", () -> new NoBlockFluidBucketItem(ModFluids.COARSE_METEORITE_SLURRY,
+                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+
     public static final RegistryObject<BlockItem> NAMING_FACTORY = ITEMS.register("naming_factory",
             () -> new BlockItem(ModBlocks.NAMING_FACTORY.get(), new Item.Properties()));
 

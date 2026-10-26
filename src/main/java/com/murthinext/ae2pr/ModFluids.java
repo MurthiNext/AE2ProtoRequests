@@ -2,6 +2,7 @@ package com.murthinext.ae2pr;
 
 import com.murthinext.ae2pr.fluid.AlienLavaFluid;
 import com.murthinext.ae2pr.fluid.AlienLavaFluidType;
+import com.murthinext.ae2pr.fluid.CoarseMeteoriteSlurryFluidType;
 import com.murthinext.ae2pr.fluid.CrystalAdhesiveFluidType;
 import com.murthinext.ae2pr.fluid.LiquidAmethystFluidType;
 import com.murthinext.ae2pr.fluid.LiquidCertusQuartzFluidType;
@@ -136,5 +137,21 @@ public final class ModFluids {
         return new ForgeFlowingFluid.Properties(LIQUID_ZIRCONIUM_TYPE, LIQUID_ZIRCONIUM,
                 FLOWING_LIQUID_ZIRCONIUM)
                 .bucket(ModItems.LIQUID_ZIRCONIUM_BUCKET);
+    }
+
+    public static final RegistryObject<FluidType> COARSE_METEORITE_SLURRY_TYPE = FLUID_TYPES.register(
+            "coarse_meteorite_slurry", CoarseMeteoriteSlurryFluidType::new);
+
+    public static final RegistryObject<ForgeFlowingFluid> COARSE_METEORITE_SLURRY = FLUIDS.register(
+            "coarse_meteorite_slurry", () -> new ForgeFlowingFluid.Source(coarseMeteoriteSlurryProperties()));
+
+    public static final RegistryObject<ForgeFlowingFluid> FLOWING_COARSE_METEORITE_SLURRY = FLUIDS.register(
+            "flowing_coarse_meteorite_slurry",
+            () -> new ForgeFlowingFluid.Flowing(coarseMeteoriteSlurryProperties()));
+
+    private static ForgeFlowingFluid.Properties coarseMeteoriteSlurryProperties() {
+        return new ForgeFlowingFluid.Properties(COARSE_METEORITE_SLURRY_TYPE, COARSE_METEORITE_SLURRY,
+                FLOWING_COARSE_METEORITE_SLURRY)
+                .bucket(ModItems.COARSE_METEORITE_SLURRY_BUCKET);
     }
 }

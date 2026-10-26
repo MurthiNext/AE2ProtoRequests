@@ -85,6 +85,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.LIQUID_CRYSTALINE_BUCKET.get());
                         output.accept(ModItems.CRYSTAL_ADHESIVE_BUCKET.get());
                         output.accept(ModItems.LIQUID_ZIRCONIUM_BUCKET.get());
+                        output.accept(ModItems.COARSE_METEORITE_SLURRY_BUCKET.get());
 
                         // 储存方块
                         output.accept(ModItems.METEOR_STEEL_BLOCK.get());

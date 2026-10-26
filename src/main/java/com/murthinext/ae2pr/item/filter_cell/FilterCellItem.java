@@ -55,9 +55,6 @@ public class FilterCellItem extends AEBaseItem implements ICellWorkbenchItem, Fi
         is.getOrCreateTag().putString(FUZZY_MODE_TAG, fzMode.name());
     }
 
-    /**
-     * 依据元件配置构建过滤表；未配置过滤项时白名单恒通过。
-     */
     public static IPartitionList createFilter(ItemStack cell) {
         var builder = IPartitionList.builder();
         if (cell.getItem() instanceof FilterCellItem item) {
@@ -69,9 +66,6 @@ public class FilterCellItem extends AEBaseItem implements ICellWorkbenchItem, Fi
         return builder.build();
     }
 
-    /**
-     * 判断 AE 键是否通过过滤元件（白名单语义；未配置过滤项时恒通过）。
-     */
     public static boolean matches(ItemStack cell, AEKey key) {
         if (key == null) {
             return false;

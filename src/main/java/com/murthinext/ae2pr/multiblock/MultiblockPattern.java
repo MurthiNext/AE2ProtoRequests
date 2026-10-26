@@ -81,24 +81,15 @@ public final class MultiblockPattern {
         return predicates.get(symbol);
     }
 
-    /**
-     * 沿片 → 行 → 列方向的坐标比较器，保证部件顺序稳定。
-     */
     public Comparator<BlockPos> posComparator(Direction front, Direction up, boolean mirrorSide, boolean mirrorFront) {
         return sliceDir.getPosComparator(front, up, mirrorSide, mirrorFront)
                 .thenComparing(stringDir.getPosComparator(front, up, mirrorSide, mirrorFront))
                 .thenComparing(charDir.getPosComparator(front, up, mirrorSide, mirrorFront));
     }
 
-    /**
-     * 结构内单元格及其符号、片行列信息。
-     */
     public record PatternCell(BlockPos pos, char symbol, int slice, int row, int col) {
     }
 
-    /**
-     * 按给定片数计算结构内全部单元格；可重复片尽量取满。
-     */
     public List<BlockPos> cells(BlockPos controllerPos, Direction front, Direction up, boolean mirrorSide,
             boolean mirrorFront, int totalSlices) {
         List<BlockPos> result = new ArrayList<>();
@@ -108,9 +99,6 @@ public final class MultiblockPattern {
         return result;
     }
 
-    /**
-     * 同 {@link #cells}，同时保留符号与片行列坐标，供外观逻辑区分结构部位。
-     */
     public List<PatternCell> patternCells(BlockPos controllerPos, Direction front, Direction up, boolean mirrorSide,
             boolean mirrorFront, int totalSlices) {
         Direction sliceFacing = sliceDir.getFacing(front, up, mirrorSide, mirrorFront);
@@ -138,9 +126,6 @@ public final class MultiblockPattern {
         return result;
     }
 
-    /**
-     * 以控制器为原点匹配结构（只读），均不匹配时返回最接近结果用于诊断。
-     */
     public StructureResult match(Level level, BlockPos controllerPos, Direction front, Direction up, int maxSlices) {
         Attempt attempt = new Attempt();
         for (boolean[] mirror : MIRRORS) {
@@ -285,9 +270,6 @@ public final class MultiblockPattern {
                 .relative(charFacing, col - originCol);
     }
 
-    /**
-     * 一次匹配的中间状态。
-     */
     private static final class Attempt {
 
         @Nullable
@@ -296,9 +278,7 @@ public final class MultiblockPattern {
         StructureResult best;
     }
 
-    /**
-     * 模式构建器。
-     */
+
     public static final class Builder {
 
         private final RelativeDirection sliceDir;
@@ -343,9 +323,6 @@ public final class MultiblockPattern {
             return this;
         }
 
-        /**
-         * 指定控制器所在的片序号，用于把控制器放在结构中间片。
-         */
         public Builder sliceOrigin(int sliceIndex) {
             this.originSlice = sliceIndex;
             return this;

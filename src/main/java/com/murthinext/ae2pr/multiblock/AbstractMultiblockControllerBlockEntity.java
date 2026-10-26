@@ -37,6 +37,7 @@ import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFluidStorage;
+import com.murthinext.ae2pr.recipe.ChancedItemStack;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
@@ -100,53 +101,32 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         this.upgrades = UpgradeInventories.forMachine(machine, UPGRADE_SLOTS, this::setChanged);
     }
 
-    /**
-     * 机器标识，用于日志与界面翻译键。
-     */
     public abstract String machineKey();
 
     protected abstract RecipeType<? extends MultiblockRecipe> recipeType();
 
-    /**
-     * 最大并行数。
-     */
     public abstract int maxParallel();
 
-    /**
-     * 机器类型专属的配方匹配。
-     */
     @Nullable
     protected abstract Match findMatch();
 
-    /**
-     * 启动前对并行数的额外上限，返回 0 时按 {@link #parallelShortageError()} 暂停。
-     */
     protected int capParallel(MultiblockRecipe recipe, int parallel) {
         return parallel;
     }
 
-    /**
-     * 并行数被压到 0 时的暂停原因。
-     */
     protected Error parallelShortageError() {
         return Error.OUTPUT;
     }
 
-    /**
-     * 作业启动时的额外消耗，例如配方耐久。
-     */
     protected void onJobStarted(Match match) {
     }
 
-    /**
-     * 产物入库。
-     */
     protected void outputProducts(MultiblockRecipe recipe, int parallel) {
         if (level == null) {
             return;
         }
-        for (ItemStack output : recipe.getItemOutputs()) {
-            ItemStack remaining = output.copyWithCount(clampCount((long) output.getCount() * parallel));
+        for (ItemStack output : rolledItemOutputs(recipe, parallel)) {
+            ItemStack remaining = output.copy();
             for (ItemBusBlockEntity bus : outputBuses) {
                 if (remaining.isEmpty()) {
                     break;
@@ -183,9 +163,29 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return (int) Math.min(amount, Integer.MAX_VALUE);
     }
 
-    /**
-     * 服务端 tick：结构检测与作业推进。
-     */
+    protected List<ItemStack> rolledItemOutputs(MultiblockRecipe recipe, int parallel) {
+        if (level == null) {
+            return List.of();
+        }
+        List<ItemStack> produced = new ArrayList<>();
+        for (ChancedItemStack output : recipe.getChancedItemOutputs()) {
+            if (output.certain()) {
+                produced.add(output.stack().copyWithCount(clampCount((long) output.stack().getCount() * parallel)));
+                continue;
+            }
+            int rolled = 0;
+            for (int i = 0; i < parallel; i++) {
+                if (output.roll(level.random)) {
+                    rolled++;
+                }
+            }
+            if (rolled > 0) {
+                produced.add(output.stack().copyWithCount(clampCount((long) output.stack().getCount() * rolled)));
+            }
+        }
+        return produced;
+    }
+
     public void serverTick() {
         if (level == null || level.isClientSide) {
             return;
@@ -199,9 +199,6 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         tickJob();
     }
 
-    /**
-     * 机器专属的每 tick 逻辑。
-     */
     protected void tickMachine() {
     }
 
@@ -295,9 +292,6 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         applyControllerState();
     }
 
-    /**
-     * 扣除本次作业的输入；默认按全部输入总线与输入仓的最大流分配。
-     */
     protected boolean consumeInputs(Match match) {
         PartInventory inputs = new PartInventory(inputBuses, inputHatches);
         if (!inputs.consume(match.recipe(), match.parallel())) {
@@ -307,9 +301,6 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return true;
     }
 
-    /**
-     * 一次作业消耗的网络能量。
-     */
     protected double energyCost(Match match) {
         return match.recipe().getEnergyPerParallel() * match.parallel() * lossyEnergyMultiplier();
     }
@@ -363,9 +354,6 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         clearPause();
     }
 
-    /**
-     * 当前作业对应的配方。
-     */
     @Nullable
     protected MultiblockRecipe currentRecipe() {
         if (level == null || jobRecipeId == null) {
@@ -375,16 +363,10 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return recipe instanceof MultiblockRecipe multiblock && isRecipeApplicable(multiblock) ? multiblock : null;
     }
 
-    /**
-     * 配方是否仍适用于当前机器状态。
-     */
     protected boolean isRecipeApplicable(MultiblockRecipe recipe) {
         return true;
     }
 
-    /**
-     * 当前机器可用的配方，已按 {@link #compareRecipePriority} 从高到低排序。
-     */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected List<MultiblockRecipe> recipes() {
         if (level == null) {
@@ -398,9 +380,6 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return sorted;
     }
 
-    /**
-     * 配方竞争优先级：原料种类多者优先，其次单次物品总量、流体总量，最后按 ID 稳定排序。
-     */
     private static int compareRecipePriority(MultiblockRecipe left, MultiblockRecipe right) {
         int result = Integer.compare(inputKinds(right), inputKinds(left));
         if (result != 0) {
@@ -437,9 +416,6 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return total;
     }
 
-    /**
-     * 输入允许的执行份数，常用于 {@link #findMatch()}。
-     */
     protected int inputParallel(MultiblockRecipe recipe, int maximum) {
         int low = 0;
         int high = outputCountBound(recipe, maximum);
@@ -454,9 +430,6 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return low;
     }
 
-    /**
-     * 产物容量允许的执行份数。
-     */
     protected int outputParallel(MultiblockRecipe recipe, int maximum) {
         int low = 0;
         int high = outputCountBound(recipe, maximum);
@@ -483,9 +456,6 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return Math.max(0, high);
     }
 
-    /**
-     * 配方匹配结果。
-     */
     public record Match(MultiblockRecipe recipe, int parallel) {
     }
 
@@ -709,9 +679,6 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         onControllerStateChanged(formed, showRunning);
     }
 
-    /**
-     * 机器专属的方块状态联动。
-     */
     protected void onControllerStateChanged(boolean formed, boolean running) {
     }
 
@@ -896,9 +863,6 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return mirrorFront;
     }
 
-    /**
-     * 当前作业产物的客户端视图。
-     */
     public ItemStack getClientJobItem() {
         return getJobItem();
     }

@@ -1,0 +1,43 @@
+{
+  "type": "ae2pr:jig",
+  "item_inputs": [
+    {
+      "item": "ae2:sky_dust",
+      "count": 256
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 512000
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:copper_oxide_dust",
+      "count": 8,
+      "chance": 0.8
+    },
+    {
+      "item": "ae2pr:zircon_dust",
+      "count": 8,
+      "chance": 0.6
+    },
+    {
+      "item": "ae2pr:iron_oxide_dust",
+      "count": 8,
+      "chance": 0.2
+    },
+    {
+      "item": "ae2pr:gold_oxide_dust",
+      "count": 4,
+      "chance": 0.1
+    }
+  ],
+  "fluid_outputs": [
+    {
+      "fluid": "ae2pr:coarse_meteorite_slurry",
+      "amount": 10000
+    }
+  ]
+}

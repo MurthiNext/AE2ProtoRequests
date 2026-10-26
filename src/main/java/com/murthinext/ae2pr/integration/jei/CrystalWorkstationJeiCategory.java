@@ -110,9 +110,10 @@ public class CrystalWorkstationJeiCategory implements IRecipeCategory<CrystalWor
         for (int i = 0; i < CrystalWorkstationRecipe.MAX_ITEM_OUTPUTS; i++) {
             var slot = builder.addSlot(RecipeIngredientRole.OUTPUT, 112 + i % 2 * 18, 4 + i / 2 * 18)
                     .setStandardSlotBackground();
-            if (i < recipe.getItemOutputs().size()) {
-                slot.addItemStack(recipe.getItemOutputs().get(i));
-                slot.setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
+            slot.setCustomRenderer(VanillaTypes.ITEM_STACK,
+                    ChancedItemStackRenderer.of(recipe.getChancedItemOutputs(), i));
+            if (i < recipe.getChancedItemOutputs().size()) {
+                slot.addItemStack(recipe.getChancedItemOutputs().get(i).stack());
             }
         }
         for (int i = 0; i < CrystalWorkstationRecipe.MAX_FLUIDS; i++) {

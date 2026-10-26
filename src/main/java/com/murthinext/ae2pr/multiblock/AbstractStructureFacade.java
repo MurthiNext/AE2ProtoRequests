@@ -37,9 +37,6 @@ public abstract class AbstractStructureFacade {
         return facade;
     }
 
-    /**
-     * 允许的最大片数，可重复片的结构需要覆盖。
-     */
     public int maxSlices() {
         return pattern.minSlices();
     }
@@ -117,15 +114,9 @@ public abstract class AbstractStructureFacade {
         }
     }
 
-    /**
-     * 每个结构单元格刷新前的额外处理，例如装配线的控制外壳工作外观。
-     */
     protected void onPartCell(Level level, BlockPos pos, boolean active) {
     }
 
-    /**
-     * 结构零件：普通机器部件，网络接入仓单独处理。
-     */
     protected boolean isPart(BlockState state) {
         return isCommonPart(state.getBlock());
     }

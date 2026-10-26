@@ -42,17 +42,16 @@ public class ItemStackAmountRenderer implements IIngredientRenderer<ItemStack> {
 
     @Override
     public List<Component> getTooltip(ItemStack ingredient, TooltipFlag tooltipFlag) {
-        return tooltipLines(ingredient, null, tooltipFlag);
+        return tooltip(ingredient, null, tooltipFlag);
     }
 
     @Override
     public void getTooltip(ITooltipBuilder tooltip, ItemStack ingredient, @Nullable Player player,
             TooltipFlag tooltipFlag) {
-        tooltip.addAll(tooltipLines(ingredient, player, tooltipFlag));
+        tooltip.addAll(tooltip(ingredient, player, tooltipFlag));
     }
 
-    private static List<Component> tooltipLines(ItemStack ingredient, @Nullable Player player,
-            TooltipFlag tooltipFlag) {
+    static List<Component> tooltip(ItemStack ingredient, @Nullable Player player, TooltipFlag tooltipFlag) {
         List<Component> lines = ingredient.getTooltipLines(player, tooltipFlag);
         int count = ingredient.getCount();
         if (!JeiAmountFormat.abbreviated(count)) {

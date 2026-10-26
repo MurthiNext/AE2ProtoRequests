@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 /**
- * 修正放大陨石后的循环边界，并按矿脉替换部分天空石为陨石矿石。
+ * 修正放大陨石后的循环边界，并按矿脉替换部分陨石为陨石矿石。
  */
 @Mixin(value = MeteoritePlacer.class, remap = false)
 public abstract class MeteoritePlacerMixin {

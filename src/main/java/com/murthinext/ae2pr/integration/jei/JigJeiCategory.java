@@ -26,6 +26,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 
 import com.murthinext.ae2pr.ModItems;
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.recipe.ChancedItemStack;
 import com.murthinext.ae2pr.recipe.JigRecipe;
 
 public class JigJeiCategory implements IRecipeCategory<JigRecipe> {
@@ -90,14 +91,16 @@ public class JigJeiCategory implements IRecipeCategory<JigRecipe> {
             int itemColumns = input ? 1 : 2;
             int itemX = input ? 4 : 100;
             int itemY = 17;
-            int itemCount = input ? recipe.getItemInputs().size() : recipe.getItemOutputs().size();
+            int itemCount = input ? recipe.getItemInputs().size() : recipe.getChancedItemOutputs().size();
             for (int index = 0; index < Math.max(itemSlots, itemCount); index++) {
                 IIngredientAcceptor<?> acceptor;
                 if (index < itemSlots) {
                     var slot = builder.addSlot(role, itemX + index % itemColumns * 18,
                             itemY + index / itemColumns * 18)
                             .setStandardSlotBackground();
-                    slot.setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
+                    slot.setCustomRenderer(VanillaTypes.ITEM_STACK,
+                            input ? ItemStackAmountRenderer.INSTANCE
+                                    : ChancedItemStackRenderer.of(recipe.getChancedItemOutputs(), index));
                     acceptor = slot;
                 } else {
                     acceptor = builder.addInvisibleIngredients(role);
@@ -108,7 +111,7 @@ public class JigJeiCategory implements IRecipeCategory<JigRecipe> {
                         acceptor.addItemStacks(Arrays.stream(ingredient.ingredient().getItems())
                                 .map(stack -> stack.copyWithCount(ingredient.count())).toList());
                     } else {
-                        acceptor.addItemStack(recipe.getItemOutputs().get(index));
+                        acceptor.addItemStack(recipe.getChancedItemOutputs().get(index).stack());
                     }
                 }
             }
@@ -159,25 +162,30 @@ public class JigJeiCategory implements IRecipeCategory<JigRecipe> {
                 boolean input = role == RecipeIngredientRole.INPUT;
                 int itemSlots = input ? ITEM_INPUT_SLOTS : ITEM_OUTPUT_SLOTS;
                 int fluidSlots = input ? FLUID_INPUT_SLOTS : FLUID_OUTPUT_SLOTS;
-                int itemCount = input ? recipe.getItemInputs().size() : recipe.getItemOutputs().size();
+                int itemCount = input ? recipe.getItemInputs().size() : recipe.getChancedItemOutputs().size();
                 List<FluidStack> fluids = input ? recipe.getFluidInputs() : recipe.getFluidOutputs();
                 if (itemCount <= itemSlots && fluids.size() <= fluidSlots) {
                     continue;
                 }
                 tooltip.add(Component.translatable(input ? "jei.ae2pr.jig.extra_inputs" : "jei.ae2pr.jig.extra_outputs"));
                 for (int index = itemSlots; index < itemCount; index++) {
-                    ItemStack stack;
                     if (input) {
                         var ingredient = recipe.getItemInputs().get(index);
                         ItemStack[] alternatives = ingredient.ingredient().getItems();
                         if (alternatives.length == 0) {
                             continue;
                         }
-                        stack = alternatives[0].copyWithCount(ingredient.count());
+                        ItemStack stack = alternatives[0].copyWithCount(ingredient.count());
+                        tooltip.add(Component.literal(NUMBER.format(stack.getCount()) + " × ")
+                                .append(stack.getHoverName()));
                     } else {
-                        stack = recipe.getItemOutputs().get(index);
+                        ChancedItemStack output = recipe.getChancedItemOutputs().get(index);
+                        tooltip.add(Component.literal(NUMBER.format(output.stack().getCount()) + " × ")
+                                .append(output.stack().getHoverName()));
+                        if (!output.certain()) {
+                            tooltip.add(ChancedItemStackRenderer.chanceTooltip(output.chance()));
+                        }
                     }
-                    tooltip.add(Component.literal(NUMBER.format(stack.getCount()) + " × ").append(stack.getHoverName()));
                 }
                 for (int index = fluidSlots; index < fluids.size(); index++) {
                     FluidStack fluid = fluids.get(index);

@@ -19,16 +19,10 @@ public record TerminalUnlockCondition(ResourceLocation id, boolean tag, int coun
     public static final int MAX_COUNT = 9999;
     public static final int MAX_KEY_LENGTH = 160;
 
-    /**
-     * 客户端与服务端共用的条件标识。
-     */
     public static String key(ResourceLocation id, boolean tag, int count) {
         return (tag ? "tag|" : "item|") + id + "|" + count;
     }
 
-    /**
-     * 解析条件标识，格式非法时返回 null。
-     */
     public static TerminalUnlockCondition parse(String key) {
         if (key == null || key.length() > MAX_KEY_LENGTH) {
             return null;

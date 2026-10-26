@@ -19,6 +19,8 @@ public interface MultiblockRecipe {
 
     List<ItemStack> getItemOutputs();
 
+    List<ChancedItemStack> getChancedItemOutputs();
+
     List<FluidStack> getFluidOutputs();
 
     int getDuration();

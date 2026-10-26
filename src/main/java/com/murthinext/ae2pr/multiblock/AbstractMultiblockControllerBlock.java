@@ -57,19 +57,10 @@ public abstract class AbstractMultiblockControllerBlock<T extends AbstractMultib
 
     protected abstract T newController(BlockPos pos, BlockState state);
 
-    /**
-     * 机器标识。
-     */
     public abstract String machineKey();
 
-    /**
-     * 组装容器菜单。
-     */
     protected abstract MenuProvider menuProvider(T controller);
 
-    /**
-     * 客户端每 tick 逻辑。
-     */
     protected void clientTick(T controller) {
     }
 
@@ -141,9 +132,6 @@ public abstract class AbstractMultiblockControllerBlock<T extends AbstractMultib
         return FACING;
     }
 
-    /**
-     * 标题与提示所用的翻译键前缀，默认与机器标识一致。
-     */
     public String tooltipKey() {
         return machineKey();
     }
@@ -173,9 +161,6 @@ public abstract class AbstractMultiblockControllerBlock<T extends AbstractMultib
         return (T) controller;
     }
 
-    /**
-     * 仅未成型时允许旋转。
-     */
     @Override
     public boolean canRotateWithWrench(BlockState state) {
         return !state.getValue(FORMED);

@@ -21,14 +21,14 @@ public final class RecipeNetwork {
     public static void writeDraft(FriendlyByteBuf buffer, RecipeDraft draft) {
         writeItemInputs(buffer, draft.itemInputs());
         writeFluidStacks(buffer, draft.fluidInputs());
-        writeItemStacks(buffer, draft.itemOutputs());
+        writeItemOutputs(buffer, draft.itemOutputs());
         writeFluidStacks(buffer, draft.fluidOutputs());
         buffer.writeVarInt(draft.duration());
         writeEnergy(buffer, draft.energy());
     }
 
     public static RecipeDraft readDraft(FriendlyByteBuf buffer) {
-        return new RecipeDraft(readItemInputs(buffer), readFluidStacks(buffer), readItemStacks(buffer),
+        return new RecipeDraft(readItemInputs(buffer), readFluidStacks(buffer), readItemOutputs(buffer),
                 readFluidStacks(buffer), buffer.readVarInt(), readEnergy(buffer));
     }
 
@@ -47,6 +47,27 @@ public final class RecipeNetwork {
             inputs.add(new CountedIngredient(Ingredient.fromNetwork(buffer), buffer.readVarInt()));
         }
         return inputs;
+    }
+
+    public static void writeItemOutputs(FriendlyByteBuf buffer, List<ChancedItemStack> outputs) {
+        buffer.writeVarInt(outputs.size());
+        for (ChancedItemStack output : outputs) {
+            ItemStack stack = output.stack();
+            buffer.writeItem(stack.copyWithCount(1));
+            buffer.writeVarInt(stack.getCount());
+            buffer.writeFloat(output.chance());
+        }
+    }
+
+    public static List<ChancedItemStack> readItemOutputs(FriendlyByteBuf buffer) {
+        int size = buffer.readVarInt();
+        List<ChancedItemStack> outputs = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            ItemStack stack = buffer.readItem();
+            stack.setCount(buffer.readVarInt());
+            outputs.add(new ChancedItemStack(stack, buffer.readFloat()));
+        }
+        return outputs;
     }
 
     public static void writeItemStacks(FriendlyByteBuf buffer, List<ItemStack> stacks) {

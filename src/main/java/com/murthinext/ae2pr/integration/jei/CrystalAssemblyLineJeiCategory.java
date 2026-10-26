@@ -165,12 +165,12 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
         }
 
         // 产物：右上角
-        List<ItemStack> outputs = recipe.getItemOutputs();
+        ChancedItemStackRenderer outputRenderer = ChancedItemStackRenderer.of(recipe.getChancedItemOutputs(), 0);
         IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_X, OUTPUT_Y);
         outputSlot.setStandardSlotBackground();
-        outputSlot.setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
-        if (!outputs.isEmpty()) {
-            outputSlot.addItemStack(outputs.get(0));
+        outputSlot.setCustomRenderer(VanillaTypes.ITEM_STACK, outputRenderer);
+        if (!recipe.getChancedItemOutputs().isEmpty()) {
+            outputSlot.addItemStack(recipe.getChancedItemOutputs().get(0).stack());
         }
 
         // 模块要求：满足要求的模块物品轮换展示

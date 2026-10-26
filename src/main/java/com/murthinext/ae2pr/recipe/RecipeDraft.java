@@ -4,14 +4,13 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
  * 配方解析出的公共内容。
  */
 public record RecipeDraft(List<CountedIngredient> itemInputs, List<FluidStack> fluidInputs,
-        List<ItemStack> itemOutputs, List<FluidStack> fluidOutputs, int duration, @Nullable Double energy) {
+        List<ChancedItemStack> itemOutputs, List<FluidStack> fluidOutputs, int duration, @Nullable Double energy) {
 
     public RecipeDraft {
         itemInputs = List.copyOf(itemInputs);

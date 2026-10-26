@@ -42,9 +42,6 @@ public final class TerminalUnlockTracker {
     private TerminalUnlockTracker() {
     }
 
-    /**
-     * 登记玩家的解锁条件并立即回推一次判定结果；条件为空表示终端已关闭。
-     */
     public static void watch(ServerPlayer player, List<String> keys) {
         if (keys.isEmpty()) {
             watches.remove(player.getUUID());

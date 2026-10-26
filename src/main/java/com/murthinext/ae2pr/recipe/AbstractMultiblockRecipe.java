@@ -14,7 +14,8 @@ import net.minecraftforge.fluids.FluidStack;
 public abstract class AbstractMultiblockRecipe extends AbstractRecipe implements MultiblockRecipe {
 
     private final List<FluidStack> fluidInputs;
-    private final List<ItemStack> itemOutputs;
+    private final List<ChancedItemStack> itemOutputs;
+    private final List<ItemStack> itemOutputStacks;
     private final List<FluidStack> fluidOutputs;
     private final int duration;
     @Nullable
@@ -23,7 +24,8 @@ public abstract class AbstractMultiblockRecipe extends AbstractRecipe implements
     protected AbstractMultiblockRecipe(ResourceLocation id, RecipeDraft draft) {
         super(id, draft.itemInputs());
         this.fluidInputs = draft.fluidInputs().stream().map(FluidStack::copy).toList();
-        this.itemOutputs = draft.itemOutputs().stream().map(ItemStack::copy).toList();
+        this.itemOutputs = draft.itemOutputs();
+        this.itemOutputStacks = itemOutputs.stream().map(ChancedItemStack::stack).toList();
         this.fluidOutputs = draft.fluidOutputs().stream().map(FluidStack::copy).toList();
         this.duration = draft.duration();
         this.energy = draft.energy();
@@ -40,6 +42,11 @@ public abstract class AbstractMultiblockRecipe extends AbstractRecipe implements
 
     @Override
     public final List<ItemStack> getItemOutputs() {
+        return itemOutputStacks;
+    }
+
+    @Override
+    public final List<ChancedItemStack> getChancedItemOutputs() {
         return itemOutputs;
     }
 
@@ -58,8 +65,5 @@ public abstract class AbstractMultiblockRecipe extends AbstractRecipe implements
         return energy != null ? energy : defaultEnergyPerParallel();
     }
 
-    /**
-     * 配方未指定能量时采用的值。
-     */
     protected abstract double defaultEnergyPerParallel();
 }

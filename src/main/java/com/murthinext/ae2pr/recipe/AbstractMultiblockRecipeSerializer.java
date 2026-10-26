@@ -37,9 +37,6 @@ public abstract class AbstractMultiblockRecipeSerializer<T extends AbstractMulti
         writeExtra(buffer, recipe);
     }
 
-    /**
-     * 公共字段以外的校验。
-     */
     protected void validate(RecipeDraft draft, JsonObject json) {
         if (draft.itemInputs().isEmpty() && draft.fluidInputs().isEmpty()) {
             throw new JsonSyntaxException("Recipe requires at least one input");

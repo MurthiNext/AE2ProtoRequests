@@ -30,7 +30,7 @@ public final class RecipeJson {
 
     public static RecipeDraft readDraft(JsonObject json, int defaultDuration) {
         return new RecipeDraft(readItemInputs(json, "item_inputs"), readFluidStacks(json, "fluid_inputs"),
-                readItemStacks(json, "item_outputs"), readFluidStacks(json, "fluid_outputs"),
+                readItemOutputs(json, "item_outputs"), readFluidStacks(json, "fluid_outputs"),
                 readDuration(json, defaultDuration), readEnergy(json));
     }
 
@@ -48,16 +48,37 @@ public final class RecipeJson {
         return inputs;
     }
 
+    public static List<ChancedItemStack> readItemOutputs(JsonObject json, String key) {
+        List<ChancedItemStack> outputs = new ArrayList<>();
+        for (JsonElement element : GsonHelper.getAsJsonArray(json, key, new JsonArray())) {
+            JsonObject entry = element.getAsJsonObject();
+            ItemStack stack = readItemStack(entry, key);
+            float chance = GsonHelper.getAsFloat(entry, "chance", 1.0F);
+            if (!(chance > 0.0F) || chance > 1.0F) {
+                throw new JsonSyntaxException(key + " chance must be in (0, 1]");
+            }
+            outputs.add(new ChancedItemStack(stack, chance));
+        }
+        return outputs;
+    }
+
+    /**
+     * 不带概率的物品产物。
+     */
     public static List<ItemStack> readItemStacks(JsonObject json, String key) {
         List<ItemStack> stacks = new ArrayList<>();
         for (JsonElement element : GsonHelper.getAsJsonArray(json, key, new JsonArray())) {
-            ItemStack stack = ShapedRecipe.itemStackFromJson(element.getAsJsonObject());
-            if (stack.isEmpty() || stack.getCount() < 1) {
-                throw new JsonSyntaxException(key + " requires non-empty stacks and positive counts");
-            }
-            stacks.add(stack);
+            stacks.add(readItemStack(element.getAsJsonObject(), key));
         }
         return stacks;
+    }
+
+    private static ItemStack readItemStack(JsonObject entry, String key) {
+        ItemStack stack = ShapedRecipe.itemStackFromJson(entry);
+        if (stack.isEmpty() || stack.getCount() < 1) {
+            throw new JsonSyntaxException(key + " requires non-empty stacks and positive counts");
+        }
+        return stack;
     }
 
     public static List<FluidStack> readFluidStacks(JsonObject json, String key) {

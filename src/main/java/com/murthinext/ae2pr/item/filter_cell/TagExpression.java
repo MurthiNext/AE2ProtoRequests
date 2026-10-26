@@ -33,9 +33,6 @@ public final class TagExpression implements Predicate<AEKey> {
         return key != null && root.test(key);
     }
 
-    /**
-     * 解析失败时返回 null。
-     */
     @Nullable
     public static TagExpression parse(String text) {
         if (text == null || text.isBlank()) {
@@ -54,9 +51,6 @@ public final class TagExpression implements Predicate<AEKey> {
         boolean test(AEKey key);
     }
 
-    /**
-     * 精确标签匹配。
-     */
         private record TagNode(TagKey<Item> tag) implements Node {
 
         @Override
@@ -65,9 +59,6 @@ public final class TagExpression implements Predicate<AEKey> {
             }
         }
 
-    /**
-     * glob 通配匹配。
-     */
     private static final class GlobNode implements Node {
         private final String pattern;
         private final Map<AEKeyType, List<TagKey<?>>> tagCache = new ConcurrentHashMap<>();
@@ -93,9 +84,6 @@ public final class TagExpression implements Predicate<AEKey> {
                     .toList();
         }
 
-        /**
-         * 经典通配匹配：{@code *} 匹配任意长度（含空）的字符序列。
-         */
         private static boolean matches(String glob, String text) {
             int g = 0;
             int t = 0;

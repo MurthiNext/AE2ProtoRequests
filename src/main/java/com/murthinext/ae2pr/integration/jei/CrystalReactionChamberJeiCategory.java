@@ -25,6 +25,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 
 import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.recipe.ChancedItemStack;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.CrystalReactionChamberRecipe;
 
@@ -138,12 +139,12 @@ public class CrystalReactionChamberJeiCategory implements IRecipeCategory<Crysta
         }
 
         // 物品产物：箭头右侧居中
-        List<ItemStack> itemOutputs = recipe.getItemOutputs();
+        List<ChancedItemStack> itemOutputs = recipe.getChancedItemOutputs();
         IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_X, OUTPUT_Y);
         outputSlot.setStandardSlotBackground();
-        outputSlot.setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
+        outputSlot.setCustomRenderer(VanillaTypes.ITEM_STACK, ChancedItemStackRenderer.of(itemOutputs, 0));
         if (!itemOutputs.isEmpty()) {
-            outputSlot.addItemStack(itemOutputs.get(0));
+            outputSlot.addItemStack(itemOutputs.get(0).stack());
         }
 
         // 流体产物：物品产物右侧一列

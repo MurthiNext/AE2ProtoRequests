@@ -24,6 +24,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 
 import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.recipe.ChancedItemStack;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
 
@@ -111,14 +112,14 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
         }
 
         // 主/副产物槽固定显示并对齐输入槽
-        List<ItemStack> results = recipe.getItemOutputs();
+        List<ChancedItemStack> results = recipe.getChancedItemOutputs();
         for (int index = 0; index < LavaSmelterRecipe.MAX_RESULTS; index++) {
             IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT,
                     OUTPUT_X, OUTPUT_Y + index * OUTPUT_GAP);
             outputSlot.setStandardSlotBackground();
+            outputSlot.setCustomRenderer(VanillaTypes.ITEM_STACK, ChancedItemStackRenderer.of(results, index));
             if (index < results.size()) {
-                outputSlot.addItemStack(results.get(index));
-                outputSlot.setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
+                outputSlot.addItemStack(results.get(index).stack());
             }
         }
     }

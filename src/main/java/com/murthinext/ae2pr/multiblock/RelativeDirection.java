@@ -23,9 +23,6 @@ public enum RelativeDirection {
         };
     }
 
-    /**
-     * 沿该方向递增的坐标比较器，用于结构内部件排序。
-     */
     public Comparator<BlockPos> getPosComparator(Direction front, Direction up, boolean flipSide, boolean flipFront) {
         Direction facing = getFacing(front, up, flipSide, flipFront);
         return switch (facing) {

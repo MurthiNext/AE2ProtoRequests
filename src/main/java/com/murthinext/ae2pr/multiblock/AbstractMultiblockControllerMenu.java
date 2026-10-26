@@ -223,9 +223,6 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
                 && player.distanceToSqr(controller.getBlockPos().getCenter()) <= 64.0;
     }
 
-    /**
-     * 读取缓冲区中的控制器引用。
-     */
     @Nullable
     protected static <C> C readController(Player player, FriendlyByteBuf buffer, Class<C> type) {
         var blockEntity = player.level().getBlockEntity(buffer.readBlockPos());
