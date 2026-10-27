@@ -16,6 +16,7 @@ import com.murthinext.ae2pr.block.DisassemblableBlock;
 import com.murthinext.ae2pr.block.DisassemblableGlassBlock;
 import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
 import com.murthinext.ae2pr.block.alien_lava.AlienLavaBlock;
+import com.murthinext.ae2pr.block.molecular_assembly_core.MolecularAssemblyCoreBlock;
 import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineModuleBlock;
 import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineUnitBlock;
 import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineBlock;
@@ -213,6 +214,9 @@ public final class ModBlocks {
             "crystal_workstation", CrystalWorkstationBlock::new);
 
     public static final RegistryObject<JigBlock> JIG = BLOCKS.register("jig", JigBlock::new);
+
+    public static final RegistryObject<MolecularAssemblyCoreBlock> MOLECULAR_ASSEMBLY_CORE = BLOCKS.register(
+            "molecular_assembly_core", MolecularAssemblyCoreBlock::new);
 
     public static final RegistryObject<Block> ZIRCONIA_CORUNDUM_BRICKS = BLOCKS.register(
             "zirconia_corundum_bricks", () -> new DisassemblableBlock(Block.Properties.of()

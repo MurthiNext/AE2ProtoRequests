@@ -18,6 +18,7 @@ import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModMenus;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.client.ctm.CtmBakedModel;
+import com.murthinext.ae2pr.client.molecular_assembly_core.MolecularAssemblyCoreRenderer;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectClientTooltip;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectLine;
 import com.murthinext.ae2pr.client.crystal_assembly_line.CrystalAssemblyLineScreen;
@@ -102,6 +103,8 @@ public final class ClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_WORKSTATION.get(),
                 CrystalWorkstationRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.JIG.get(), JigRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.MOLECULAR_ASSEMBLY_CORE.get(),
+                MolecularAssemblyCoreRenderer::new);
     }
 
     @SubscribeEvent

@@ -139,6 +139,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.LOGISTICS_CONTROL_CASING.get());
                         output.accept(ModItems.METEOR_STEEL_PIPE_BLOCK.get());
                         output.accept(ModItems.HIGH_ENERGY_CORE.get());
+                        output.accept(ModItems.MOLECULAR_ASSEMBLY_CORE.get());
 
                         // 多方块结构 - 仓室
                         output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get());

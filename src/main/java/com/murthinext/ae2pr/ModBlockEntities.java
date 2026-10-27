@@ -7,6 +7,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineControllerBlockEntity;
+import com.murthinext.ae2pr.block.molecular_assembly_core.MolecularAssemblyCoreBlockEntity;
 import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberControllerBlockEntity;
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationControllerBlockEntity;
 import com.murthinext.ae2pr.block.crystal_reactor.CrystalReactorCoreBlockEntity;
@@ -84,4 +85,9 @@ public final class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<JigControllerBlockEntity>> JIG = BLOCK_ENTITIES
             .register("jig", () -> BlockEntityType.Builder.of(JigControllerBlockEntity::new,
                     ModBlocks.JIG.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<MolecularAssemblyCoreBlockEntity>> MOLECULAR_ASSEMBLY_CORE = BLOCK_ENTITIES
+            .register("molecular_assembly_core",
+                    () -> BlockEntityType.Builder.of(MolecularAssemblyCoreBlockEntity::new,
+                            ModBlocks.MOLECULAR_ASSEMBLY_CORE.get()).build(null));
 }

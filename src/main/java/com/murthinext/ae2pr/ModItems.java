@@ -339,6 +339,9 @@ public final class ModItems {
     public static final RegistryObject<BlockItem> JIG = ITEMS.register("jig",
             () -> new BlockItem(ModBlocks.JIG.get(), new Item.Properties()));
 
+    public static final RegistryObject<BlockItem> MOLECULAR_ASSEMBLY_CORE = ITEMS.register("molecular_assembly_core",
+            () -> new BlockItem(ModBlocks.MOLECULAR_ASSEMBLY_CORE.get(), new Item.Properties()));
+
     public static final RegistryObject<BlockItem> ZIRCONIA_CORUNDUM_BRICKS = ITEMS.register("zirconia_corundum_bricks",
             () -> new BlockItem(ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get(), new Item.Properties()));
 }
