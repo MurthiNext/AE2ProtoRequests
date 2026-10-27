@@ -24,11 +24,11 @@ import static com.murthinext.ae2pr.requester.RequesterUtils.f;
 @OnlyIn(Dist.CLIENT)
 public class RequestWidget {
 
-    /** 数量输入框的视觉宽度（行内长条输入框）。 */
+    // 数量输入框的视觉宽度（行内长条输入框）
     private static final int AMOUNT_FIELD_WIDTH = 106;
-    /** 数量输入框相对行左端的偏移（与面板贴图内的长条输入框位置对应）。 */
+    // 数量输入框相对行左端的偏移（与面板贴图内的长条输入框位置对应）
     private static final int AMOUNT_FIELD_X = 36;
-    /** 状态条宽度（覆盖输入框与提交按钮下方）。 */
+    // 状态条宽度（覆盖输入框与提交按钮下方）
     private static final int STATUS_WIDTH = 123;
 
     private final RequestDisplay host;

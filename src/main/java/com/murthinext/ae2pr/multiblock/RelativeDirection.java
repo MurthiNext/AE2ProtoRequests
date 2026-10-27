@@ -5,9 +5,7 @@ import java.util.Comparator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 
-/**
- * 结构模式中的相对方向：由控制器朝向与镜像推算实际方向。
- */
+// 结构模式中的相对方向：由控制器朝向与镜像推算实际方向
 public enum RelativeDirection {
 
     UP, DOWN, LEFT, RIGHT, FRONT, BACK;

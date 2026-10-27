@@ -25,9 +25,6 @@ import net.minecraftforge.client.model.data.ModelData;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
 
-/**
- * 名称压印工厂渲染器，绘制 forge、活塞连杆与平台物品。
- */
 public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryBlockEntity> {
 
     public static final ResourceLocation FORGE_MODEL = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
@@ -57,9 +54,7 @@ public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryB
         this.atlas = minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS);
     }
 
-    /**
-     * 模型烘焙完成后注入附加模型。
-     */
+    // 模型烘焙完成后注入附加模型
     public static void acceptModels(Map<ResourceLocation, BakedModel> models) {
         forgeModel = models.get(FORGE_MODEL);
     }
@@ -88,9 +83,7 @@ public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryB
         renderPlatformItem(blockEntity, poseStack, buffers, combinedLight, combinedOverlay);
     }
 
-    /**
-     * 绘制活塞连杆，材质以底端为原点随行程平移。
-     */
+    // 绘制活塞连杆，材质以底端为原点随行程平移
     private void renderRod(PoseStack poseStack, VertexConsumer buffer, TextureAtlasSprite sprite, float offset,
             int light, int overlay) {
         float top = ROD_ANCHOR;

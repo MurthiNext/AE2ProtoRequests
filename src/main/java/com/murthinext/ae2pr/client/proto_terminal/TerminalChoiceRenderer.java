@@ -3,9 +3,7 @@ package com.murthinext.ae2pr.client.proto_terminal;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 
-/**
- * 分叉选项入场时的色差与信号撕裂。
- */
+// 选项入场特效
 final class TerminalChoiceRenderer {
 
     private static final int CYAN = 0xFF54E8F2;

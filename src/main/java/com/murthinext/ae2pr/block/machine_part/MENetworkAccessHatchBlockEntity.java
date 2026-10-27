@@ -24,9 +24,6 @@ import appeng.blockentity.grid.AENetworkBlockEntity;
 import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlockEntity;
 
-/**
- * 多方块的 ME 网络入口，按需申请频道并直接抽取 AE 能量。
- */
 public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity {
 
     public static final int MAX_CHANNELS = 8;
@@ -77,7 +74,7 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity {
         while (channelNodes.size() > requested) {
             channelNodes.remove(channelNodes.size() - 1).destroy();
         }
-        // 每个内部节点向 AE2 实际申请一个频道。
+        // 每个内部节点向 AE2 实际申请一个频道
         while (channelNodes.size() < requested) {
             IManagedGridNode node = GridHelper.createManagedNode(this, CHANNEL_LISTENER)
                     .setInWorldNode(false)

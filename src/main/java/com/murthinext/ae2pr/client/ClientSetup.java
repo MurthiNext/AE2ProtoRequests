@@ -39,9 +39,6 @@ import com.murthinext.ae2pr.client.matter_phase_transformer.MatterPhaseTransform
 import com.murthinext.ae2pr.client.naming_factory.NamingFactoryRenderer;
 import com.murthinext.ae2pr.client.naming_factory.NamingFactoryScreen;
 
-/**
- * 客户端初始化：注册界面。
- */
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientSetup {
 

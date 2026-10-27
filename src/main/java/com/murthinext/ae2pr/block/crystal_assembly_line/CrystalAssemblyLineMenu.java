@@ -7,9 +7,6 @@ import net.minecraftforge.common.extensions.IForgeMenuType;
 
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerMenu;
 
-/**
- * 水晶装配线主机的容器菜单。
- */
 public class CrystalAssemblyLineMenu extends AbstractMultiblockControllerMenu<CrystalAssemblyLineControllerBlockEntity> {
 
     public static final MenuType<CrystalAssemblyLineMenu> TYPE = IForgeMenuType.create(CrystalAssemblyLineMenu::new);

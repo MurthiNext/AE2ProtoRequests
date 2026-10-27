@@ -22,9 +22,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * 元件工作台界面：高级过滤元件用白/黑名单输入框替换 63 格配置区。
- */
+// 元件工作台界面：高级过滤元件用白/黑名单输入框替换 63 格配置区
 @Mixin(value = CellWorkbenchScreen.class, remap = false)
 public abstract class CellWorkbenchScreenMixin extends UpgradeableScreen<CellWorkbenchMenu> {
 
@@ -114,9 +112,7 @@ public abstract class CellWorkbenchScreenMixin extends UpgradeableScreen<CellWor
         black.setTextColor(AdvancedFilterCellItem.isValid(black.getValue()) ? normalColor : errorColor);
     }
 
-    /**
-     * 仅当元件 NBT 相对上次观测发生变化时才回填，避免服务端回显滞后覆盖玩家输入。
-     */
+    // 仅当元件 NBT 相对上次观测发生变化时才回填，避免服务端回显滞后覆盖玩家输入
     @Unique
     private void ae2pr$adopt(ItemStack cell, AETextField white, AETextField black) {
         var whiteValue = AdvancedFilterCellItem.getWhitelist(cell);

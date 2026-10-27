@@ -8,9 +8,7 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-/**
- * 界面中手绘的非槽位物品与流体，供配方查看器识别。
- */
+// 界面中手绘的非槽位物品与流体，供配方查看器识别
 public interface CustomIngredientSource {
 
     List<Area> getCustomAreas();

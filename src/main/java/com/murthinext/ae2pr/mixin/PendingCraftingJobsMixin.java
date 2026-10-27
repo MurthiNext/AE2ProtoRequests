@@ -13,9 +13,7 @@ import appeng.api.stacks.AEKey;
 import appeng.client.gui.me.common.PendingCraftingJobs;
 import appeng.core.sync.packets.CraftingJobStatusPacket;
 
-/**
- * 客户端：抑制重复订单物品的 AE2 原生完成 Toast，无记录时保留原生提示。
- */
+// 客户端：抑制重复订单物品的 AE2 原生完成 Toast，无记录时保留原生提示
 @Mixin(PendingCraftingJobs.class)
 public abstract class PendingCraftingJobsMixin {
 

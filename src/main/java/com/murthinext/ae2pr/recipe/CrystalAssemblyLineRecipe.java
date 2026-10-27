@@ -22,9 +22,6 @@ import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.multiblock.module.ModuleRequirement;
 import com.murthinext.ae2pr.multiblock.module.ModuleType;
 
-/**
- * 水晶装配线配方。
- */
 public class CrystalAssemblyLineRecipe extends AbstractMultiblockRecipe {
 
     public static final int DEFAULT_DURATION = 100;

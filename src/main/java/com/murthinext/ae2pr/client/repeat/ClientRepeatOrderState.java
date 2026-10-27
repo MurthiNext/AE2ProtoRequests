@@ -11,9 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-/**
- * 客户端缓存：CPU 序号到重复订单轮次信息的映射。
- */
 @OnlyIn(Dist.CLIENT)
 public final class ClientRepeatOrderState {
     private static Map<Integer, CpuRoundInfo> bySerial = Map.of();

@@ -18,35 +18,27 @@ import com.murthinext.ae2pr.requester.RedstoneRequesterBlock;
 import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
 import com.murthinext.ae2pr.requester.RedstoneRequesterMenu;
 
-/**
- * 红石请求器的注册入口。
- */
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class RequesterRegistration {
 
-    /** ME 红石请求器方块 */
     public static final RegistryObject<RedstoneRequesterBlock> REDSTONE_REQUESTER_BLOCK = ModBlocks.BLOCKS.register(
             "redstone_requester", RedstoneRequesterBlock::new);
 
-    /** ME 红石请求器物品 */
     public static final RegistryObject<BlockItem> REDSTONE_REQUESTER_ITEM = ModItems.ITEMS.register(
             "redstone_requester", () -> new BlockItem(REDSTONE_REQUESTER_BLOCK.get(), new Item.Properties()));
 
-    /** ME 红石请求器方块实体 */
     public static final RegistryObject<BlockEntityType<RedstoneRequesterBlockEntity>> REDSTONE_REQUESTER_BLOCK_ENTITY = ModBlockEntities.BLOCK_ENTITIES
             .register("redstone_requester", () -> BlockEntityType.Builder.of(
                     (pos, state) -> new RedstoneRequesterBlockEntity(
                             RequesterRegistration.REDSTONE_REQUESTER_BLOCK_ENTITY.get(), pos, state),
                     REDSTONE_REQUESTER_BLOCK.get()).build(null));
 
-    /** ME 红石请求器菜单 */
     public static final RegistryObject<MenuType<RedstoneRequesterMenu>> REDSTONE_REQUESTER_MENU = ModMenus.MENUS
             .register("redstone_requester", () -> RedstoneRequesterMenu.TYPE);
 
     private RequesterRegistration() {
     }
 
-    /** 触发本类静态字段注册；方法体无需逻辑。 */
     @SubscribeEvent
     public static void onConstruct(FMLConstructModEvent event) {
     }

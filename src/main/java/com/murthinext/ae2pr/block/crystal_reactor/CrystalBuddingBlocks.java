@@ -14,9 +14,7 @@ import appeng.core.definitions.AEBlocks;
 
 import com.murthinext.ae2pr.Config;
 
-/**
- * 水晶母岩候选表：按档位与材质解析实际方块，可选模组未安装时自动剔除。
- */
+// 水晶母岩候选表：按档位与材质解析实际方块，可选模组未安装时自动剔除
 public final class CrystalBuddingBlocks {
 
     // 档位索引，与 crystalReactorTierWeights 顺序一致
@@ -42,9 +40,7 @@ public final class CrystalBuddingBlocks {
     private CrystalBuddingBlocks() {
     }
 
-    /**
-     * 按配置权重掷出一次母岩：先定档位，再在该档位可用材质间挑选。
-     */
+    // 按配置权重掷出一次母岩：先定档位，再在该档位可用材质间挑选
     public static BlockState roll(RandomSource random) {
         Block[][] materials = resolve();
         int[] materialWeights = Config.crystalReactorMaterialWeights();

@@ -9,9 +9,6 @@ import guideme.PageAnchor;
 
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 本模组的 GuideME 指南（仅客户端）。
- */
 public final class ModGuide {
 
     public static final ResourceLocation GUIDE_ID = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "guide");
@@ -42,9 +39,6 @@ public final class ModGuide {
     private ModGuide() {
     }
 
-    /**
-     * 在模组构造阶段（客户端）调用。
-     */
     public static void init() {
         if (guide == null) {
             guide = Guide.builder(GUIDE_ID)

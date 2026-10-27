@@ -21,9 +21,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
-/**
- * 修正放大陨石后的循环边界，并按矿脉替换部分陨石为陨石矿石。
- */
+// 修正放大陨石后的循环边界，并按矿脉替换部分陨石为陨石矿石
 @Mixin(value = MeteoritePlacer.class, remap = false)
 public abstract class MeteoritePlacerMixin {
 
@@ -84,9 +82,7 @@ public abstract class MeteoritePlacerMixin {
         return Math.max(8, (int) Math.ceil(meteoriteSize) + 1);
     }
 
-    /**
-     * 按累积额度决定是否开启一条矿脉，并预先登记整条矿脉的方块。
-     */
+    // 按累积额度决定是否开启一条矿脉，并预先登记整条矿脉的方块
     @Unique
     private BlockState ae2pr$tryStartVein(BlockPos pos) {
         int length = 2 + random.nextInt(5);

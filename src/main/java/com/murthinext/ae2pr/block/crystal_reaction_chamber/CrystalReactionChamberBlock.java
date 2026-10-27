@@ -11,9 +11,6 @@ import net.minecraft.world.level.material.MapColor;
 import com.murthinext.ae2pr.client.sound.MachineProcessingSounds;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 
-/**
- * 水晶反应仓主机方块。
- */
 public class CrystalReactionChamberBlock
         extends AbstractMultiblockControllerBlock<CrystalReactionChamberControllerBlockEntity> {
 

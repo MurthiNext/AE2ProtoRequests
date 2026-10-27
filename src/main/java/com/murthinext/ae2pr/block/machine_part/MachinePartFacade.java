@@ -10,9 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 多方块部件的成型外观注册表：STYLE → 贴图 + 连接族。
- */
 public final class MachinePartFacade {
 
     private static final Map<Integer, MachinePartFacade> BY_STYLE = new HashMap<>();

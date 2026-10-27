@@ -11,9 +11,6 @@ import net.minecraftforge.fluids.FluidType;
 
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 液态水晶素流体。
- */
 public class LiquidCrystalineFluidType extends FluidType {
 
     public LiquidCrystalineFluidType() {

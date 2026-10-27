@@ -16,9 +16,7 @@ import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.multiblock.StructurePredicate;
 
-/**
- * 晶能工作站结构定义。
- */
+// 晶能工作站结构定义
 public final class CrystalWorkstationStructure extends AbstractStructureFacade {
 
     public static final MultiblockPattern PATTERN = MultiblockPattern

@@ -30,9 +30,6 @@ import com.murthinext.ae2pr.logic.world_interaction.WorldInteractionCatalyst;
 import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 
-/**
- * 复杂世界交互配方的 JEI 分类。
- */
 public class ComplexWorldInteractionJeiCategory implements IRecipeCategory<ComplexWorldInteractionRecipe> {
 
     public static final RecipeType<ComplexWorldInteractionRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID,

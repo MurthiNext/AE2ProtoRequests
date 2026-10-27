@@ -6,9 +6,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-/**
- * 多方块控制器使用的配方视图。
- */
 public interface MultiblockRecipe {
 
     ResourceLocation getId();

@@ -19,10 +19,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import appeng.util.ReadableNumberConverter;
 
-/**
- * 所有多方块机器界面共用的信息布局。
- */
-public final class MultiblockInfoLayout {
+// 所有多方块机器界面共用的信息布局
+public final class GeneralMachineInfoLayout {
 
     public static final int TEXT_X = 7;
     public static final int STATUS_Y = 30;
@@ -48,20 +46,16 @@ public final class MultiblockInfoLayout {
     private static final int COLOR_INFO = 0xACE9FF;
     private static final int COLOR_GRAY = 0x7A8794;
 
-    /**
-     * 单台多方块机器的一次布局数据。
-     */
+    // 单台多方块机器的一次布局数据
     public record Info(boolean formed, boolean running, boolean paused, boolean networkConnected,
             double storedPower, int maxParallel, ItemStack jobOutput, int jobElapsed, int jobDuration,
             @Nullable Component error) {
     }
 
-    private MultiblockInfoLayout() {
+    private GeneralMachineInfoLayout() {
     }
 
-    /**
-     * 在 renderLabels 中调用。
-     */
+    // 在 renderLabels 中调用
     public static void render(GuiGraphics graphics, Font font, int leftPos, int topPos, Info info) {
         // 成型状态
         graphics.drawString(font, Component.translatable(info.formed() ? "gui.ae2pr.multiblock.formed"
@@ -82,9 +76,7 @@ public final class MultiblockInfoLayout {
         renderJob(graphics, font, leftPos, topPos, info);
     }
 
-    /**
-     * mouseX/mouseY 为屏幕绝对坐标。
-     */
+    // mouseX/mouseY 为屏幕绝对坐标
     public static boolean isHoveringJobItem(int leftPos, int topPos, int mouseX, int mouseY) {
         int x = leftPos + JOB_ITEM_X;
         int y = topPos + JOB_ITEM_Y;

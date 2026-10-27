@@ -9,9 +9,6 @@ import appeng.client.gui.widgets.IconButton;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * 工具栏"重复下单"按钮。
- */
 public class RepeatOrderButton extends IconButton {
 
     private static final Blitter ICON = Blitter.texture(

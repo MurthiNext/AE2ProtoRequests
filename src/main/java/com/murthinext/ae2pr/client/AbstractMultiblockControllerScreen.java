@@ -17,13 +17,11 @@ import net.minecraftforge.fluids.FluidStack;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlockEntity;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerMenu;
 
-/**
- * 多方块控制器界面的公共基底：信息布局、产物显示与工具提示。
- */
+// 多方块控制器界面的公共基底：信息布局、产物显示与工具提示
 public abstract class AbstractMultiblockControllerScreen<M extends AbstractMultiblockControllerMenu<?>>
         extends AbstractMachineScreen<M> implements CustomIngredientSource {
 
-    private static final int TITLE_X = MultiblockInfoLayout.TEXT_X;
+    private static final int TITLE_X = GeneralMachineInfoLayout.TEXT_X;
     private static final int TITLE_Y = 9;
 
     protected AbstractMultiblockControllerScreen(M menu, Inventory inventory, Component title) {
@@ -38,9 +36,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
 
     protected abstract int titleColor();
 
-    /**
-     * 暂停原因，无暂停返回 null。
-     */
+    // 暂停原因，无暂停返回 null
     @Nullable
     protected Component errorText() {
         int code = menu.getErrorCode();
@@ -70,20 +66,18 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         graphics.drawString(font, title, TITLE_X, TITLE_Y, titleColor(), false);
-        MultiblockInfoLayout.render(graphics, font, leftPos, topPos, new MultiblockInfoLayout.Info(
+        GeneralMachineInfoLayout.render(graphics, font, leftPos, topPos, new GeneralMachineInfoLayout.Info(
                 menu.isFormed(), menu.isRunning(), menu.isPaused(), menu.isNetworkConnected(),
                 menu.getNetworkStoredPower(), menu.getMaxParallel(), menu.getJobItem(),
                 menu.getJobElapsed(), menu.getJobDuration(), errorText()));
         if (menu.getJobItem().isEmpty()) {
-            MultiblockInfoLayout.renderFluidJob(graphics, font, leftPos, topPos, menu.getJobFluid(),
+            GeneralMachineInfoLayout.renderFluidJob(graphics, font, leftPos, topPos, menu.getJobFluid(),
                     menu.getJobElapsed(), menu.getJobDuration());
         }
         renderExtraLabels(graphics, mouseX, mouseY);
     }
 
-    /**
-     * 机器专属的信息行。
-     */
+    // 机器专属的信息行
     protected void renderExtraLabels(GuiGraphics graphics, int mouseX, int mouseY) {
     }
 
@@ -92,9 +86,9 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
         if (renderToolbarTooltip(graphics, mouseX, mouseY) || renderUpgradeTooltip(graphics, mouseX, mouseY)) {
             return;
         }
-        if (mouseX >= leftPos + MultiblockInfoLayout.TEXT_X && mouseX < leftPos + 174
-                && mouseY >= topPos + MultiblockInfoLayout.POWER_Y
-                && mouseY < topPos + MultiblockInfoLayout.POWER_Y + font.lineHeight) {
+        if (mouseX >= leftPos + GeneralMachineInfoLayout.TEXT_X && mouseX < leftPos + 174
+                && mouseY >= topPos + GeneralMachineInfoLayout.POWER_Y
+                && mouseY < topPos + GeneralMachineInfoLayout.POWER_Y + font.lineHeight) {
             graphics.renderComponentTooltip(font, List.of(
                     Component.translatable("gui.ae2pr.multiblock.channels", menu.getAllocatedChannels(),
                             menu.getRequiredChannels()),
@@ -102,7 +96,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
                             MENetworkAccessHatchBlockEntity.MAX_CHANNELS)), mouseX, mouseY);
             return;
         }
-        if (MultiblockInfoLayout.isHoveringJobItem(leftPos, topPos, mouseX, mouseY)) {
+        if (GeneralMachineInfoLayout.isHoveringJobItem(leftPos, topPos, mouseX, mouseY)) {
             ItemStack item = menu.getJobItem();
             if (!item.isEmpty()) {
                 graphics.renderTooltip(font, Screen.getTooltipFromItem(minecraft, item), item.getTooltipImage(),
@@ -135,6 +129,6 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     }
 
     public Rect2i jobItemArea() {
-        return MultiblockInfoLayout.jobItemArea(leftPos, topPos);
+        return GeneralMachineInfoLayout.jobItemArea(leftPos, topPos);
     }
 }

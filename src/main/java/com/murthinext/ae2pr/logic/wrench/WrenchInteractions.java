@@ -21,9 +21,7 @@ import appeng.blockentity.AEBaseBlockEntity;
 
 import com.murthinext.ae2pr.ModTags;
 
-/**
- * 扳手交互统一入口：右键旋转，Shift+右键拆除。
- */
+// 扳手交互统一入口
 public final class WrenchInteractions {
 
     private static final Direction[] ROTATION_ORDER = { Direction.DOWN, Direction.UP, Direction.NORTH,
@@ -32,9 +30,7 @@ public final class WrenchInteractions {
     private WrenchInteractions() {
     }
 
-    /**
-     * 扳手右键路由：潜行拆除，否则旋转（仅限 Wrenchable）。
-     */
+    // 扳手右键路由
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         if (event.getUseBlock() == Event.Result.DENY
                 || event.getEntity().isSpectator() || !event.getItemStack().is(ModTags.WRENCHES)) {
@@ -64,9 +60,7 @@ public final class WrenchInteractions {
                 : InteractionResult.PASS);
     }
 
-    /**
-     * 旋转朝向：水平顺时针，其余按固定顺序循环。
-     */
+    // 旋转朝向：水平顺时针，其余按固定顺序循环
     private static InteractionResult rotate(Level level, BlockPos pos, BlockState state, Wrenchable wrenchable,
             DirectionProperty facing) {
         if (level.isClientSide) {
@@ -79,9 +73,7 @@ public final class WrenchInteractions {
         return InteractionResult.SUCCESS;
     }
 
-    /**
-     * 拆除：本体回收到背包，内部物品照常掉落。
-     */
+    // 拆除：本体回收到背包，内部物品照常掉落
     private static InteractionResult disassemble(Player player, Level level, BlockPos pos, BlockHitResult hit,
             ItemStack wrench) {
         if (level.isClientSide) {

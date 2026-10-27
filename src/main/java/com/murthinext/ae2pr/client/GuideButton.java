@@ -11,9 +11,6 @@ import net.minecraft.network.chat.Component;
 import appeng.client.gui.Icon;
 import appeng.core.localization.ButtonToolTips;
 
-/**
- * 界面左侧工具栏的"打开指南"按钮。
- */
 public class GuideButton extends AbstractWidget {
 
     private static final int SIZE = 18;

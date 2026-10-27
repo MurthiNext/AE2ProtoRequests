@@ -8,9 +8,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * 发光立方体。
- */
+// 发光立方体
 public final class EmissiveCubeRenderer {
 
     private static final float HALF = 0.5F;

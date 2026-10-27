@@ -19,9 +19,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import com.murthinext.ae2pr.multiblock.module.ModuleInstance;
 import com.murthinext.ae2pr.multiblock.module.ModuleSnapshot;
 
-/**
- * 可复用的声明式多方块结构模式。
- */
 public final class MultiblockPattern {
 
     public static final boolean[][] MIRRORS = { { false, false }, { true, false }, { false, true }, { true, true } };

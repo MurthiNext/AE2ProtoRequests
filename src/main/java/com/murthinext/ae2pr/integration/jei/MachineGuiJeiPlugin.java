@@ -8,11 +8,8 @@ import mezz.jei.api.registration.IGuiHandlerRegistration;
 
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.client.AbstractMachineScreen;
-import com.murthinext.ae2pr.client.machine_part.AbstractMachinePartScreen;
+import com.murthinext.ae2pr.client.AbstractMachinePartScreen;
 
-/**
- * 界面兼容插件，JEI 避让。
- */
 @JeiPlugin
 public class MachineGuiJeiPlugin implements IModPlugin {
 

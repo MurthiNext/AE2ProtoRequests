@@ -23,9 +23,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 
-/**
- * 流体槽渲染。
- */
 public class FluidStackAmountRenderer implements IIngredientRenderer<FluidStack> {
 
     public static final FluidStackAmountRenderer INSTANCE = new FluidStackAmountRenderer();

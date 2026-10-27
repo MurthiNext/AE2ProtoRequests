@@ -5,9 +5,6 @@ import net.minecraft.resources.ResourceLocation;
 
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 熔岩冶炼炉 JEI 配方的炉体外观与槽位坐标。
- */
 public final class LavaSmelterJeiFurnace {
 
     public static final int ITEM_COLS = 2;

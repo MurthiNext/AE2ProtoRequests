@@ -17,9 +17,7 @@ import net.minecraft.world.item.ItemStack;
 
 import com.murthinext.ae2pr.client.tooltip.ColorEffectLine.Segment;
 
-/**
- * 统一物品 Tooltip 文本处理与渲染入口。
- */
+// 统一物品 Tooltip 文本处理与渲染入口
 public final class TooltipRenderer {
     private TooltipRenderer() {
     }
@@ -46,7 +44,7 @@ public final class TooltipRenderer {
         graphics.renderTooltip(font, stack, mouseX, mouseY);
     }
 
-    // 富文本和图片组件沿用 Forge 的折行、定位及渲染事件。
+    // 富文本和图片组件沿用 Forge 的折行、定位及渲染事件
     public static void renderElements(GuiGraphics graphics, Font font,
             List<Either<FormattedText, TooltipComponent>> elements, ItemStack stack, int mouseX, int mouseY) {
         graphics.renderComponentTooltipFromElements(font, new ArrayList<>(prepareElements(elements)), mouseX, mouseY,
@@ -79,9 +77,7 @@ public final class TooltipRenderer {
         return prepareElements(elements, null, 0);
     }
 
-    /**
-     * 携带特效的文本行改由 TooltipComponent 渲染，其余保持原样。
-     */
+    // 携带特效的文本行改由 TooltipComponent 渲染，其余保持原样
     public static List<Either<FormattedText, TooltipComponent>> prepareElements(
             List<Either<FormattedText, TooltipComponent>> elements, Font font, int maxWidth) {
         List<Either<FormattedText, TooltipComponent>> result = new ArrayList<>(elements.size());

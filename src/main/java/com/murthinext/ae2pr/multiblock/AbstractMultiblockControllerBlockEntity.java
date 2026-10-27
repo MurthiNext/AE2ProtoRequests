@@ -41,9 +41,6 @@ import com.murthinext.ae2pr.recipe.ChancedItemStack;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
-/**
- * 多方块控制器方块实体的公共基底：结构检测、作业状态机、能量与升级卡。
- */
 public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntity {
 
     public enum Error {
@@ -636,9 +633,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return Direction.NORTH;
     }
 
-    /**
-     * 核心方块位置，没有核心的机器返回 null。
-     */
+    // 核心方块位置，没有核心的机器返回 null
     @Nullable
     public BlockPos getCorePos() {
         return null;

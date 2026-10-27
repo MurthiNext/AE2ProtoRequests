@@ -16,9 +16,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-/**
- * 流体注册入口。
- */
 public final class ModFluids {
 
     private ModFluids() {

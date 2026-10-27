@@ -28,9 +28,7 @@ import appeng.menu.me.crafting.CraftConfirmMenu;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
-/**
- * 确认菜单：未命中普通 CPU 时兜底登记通用重复订单。
- */
+// 确认菜单：未命中普通 CPU 时兜底登记通用重复订单
 @Mixin(CraftConfirmMenu.class)
 public abstract class CraftConfirmMenuMixin {
 
@@ -158,9 +156,7 @@ public abstract class CraftConfirmMenuMixin {
     }
 
     // removed(Player) 是原版菜单方法重写，必须保留重映射
-    /**
-     * 离开确认界面时转入恢复队列；GTLCore 会取消 {@code goBack} 主体，不能依赖其 RETURN。
-     */
+    // 离开确认界面时转入恢复队列；GTLCore 会取消 {@code goBack} 主体，不能依赖其 RETURN
     @Inject(method = "removed", at = @At("HEAD"))
     private void ae2pr$pushRestoreRepeatRounds(Player player, CallbackInfo ci) {
         if (player instanceof ServerPlayer serverPlayer) {

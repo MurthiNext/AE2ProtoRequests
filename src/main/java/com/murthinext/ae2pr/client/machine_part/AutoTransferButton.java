@@ -10,9 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 仓室界面左侧工具栏按钮，切换自动搬运。
- */
+// 仓室界面左侧工具栏按钮，切换自动搬运
 public class AutoTransferButton extends AbstractWidget {
 
     public enum Type {

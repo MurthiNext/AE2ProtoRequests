@@ -14,9 +14,6 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
 
-/**
- * 显示熔岩冶炼炉连接状态与作业的 Jade 插件。
- */
 @WailaPlugin(ae2pr.MODID)
 public class LavaSmelterJadePlugin extends AbstractMultiblockJadePlugin {
 

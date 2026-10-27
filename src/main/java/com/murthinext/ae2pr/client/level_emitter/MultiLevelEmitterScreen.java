@@ -23,9 +23,6 @@ import com.murthinext.ae2pr.block.level_emitter.EmitterConfigSlot;
 import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterMenu;
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 
-/**
- * ME 通式标准发信器界面。
- */
 public class MultiLevelEmitterScreen extends UpgradeableScreen<MultiLevelEmitterMenu> {
 
     private final SettingToggleButton<YesNo> craftingMode;
@@ -81,9 +78,7 @@ public class MultiLevelEmitterScreen extends UpgradeableScreen<MultiLevelEmitter
         this.level.getLongValue().ifPresent(menu::setValue);
     }
 
-    /**
-     * 配置槽内过滤元件的 shift 点击改发 QUICK_MOVE。
-     */
+    // 配置槽内过滤元件的 shift 点击改发 QUICK_MOVE
     @Override
     protected void slotClicked(Slot slot, int slotIdx, int mouseButton, ClickType clickType) {
         if (slot instanceof EmitterConfigSlot && mouseButton == 0
@@ -101,9 +96,7 @@ public class MultiLevelEmitterScreen extends UpgradeableScreen<MultiLevelEmitter
         ModGuide.openAt(ModGuide.EMITTER_PAGE);
     }
 
-    /**
-     * 返回非空即可让 AE2 帮助按钮显示。
-     */
+    // 返回非空即可让 AE2 帮助按钮显示
     @Override
     protected PageAnchor getHelpTopic() {
         return new PageAnchor(ModGuide.EMITTER_PAGE, null);

@@ -11,9 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-/**
- * 服务端 -> 客户端：同步流体仓流体与搬运开关。
- */
+// 服务端 -> 客户端：同步流体仓流体与搬运开关
 public class MachinePartFluidPacket {
 
     private final BlockPos pos;

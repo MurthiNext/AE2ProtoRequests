@@ -11,9 +11,6 @@ import net.minecraft.world.level.material.MapColor;
 import com.murthinext.ae2pr.client.sound.MachineProcessingSounds;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 
-/**
- * 物质相变仪主机方块。
- */
 public class MatterPhaseTransformerBlock
         extends AbstractMultiblockControllerBlock<MatterPhaseTransformerControllerBlockEntity> {
 

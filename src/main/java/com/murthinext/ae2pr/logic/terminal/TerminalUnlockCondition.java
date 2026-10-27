@@ -11,9 +11,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-/**
- * 源始终端剧情块的额外解锁条件：背包内持有指定物品或物品标签达到数量。
- */
 public record TerminalUnlockCondition(ResourceLocation id, boolean tag, int count) {
 
     public static final int MAX_COUNT = 9999;
@@ -54,9 +51,7 @@ public record TerminalUnlockCondition(ResourceLocation id, boolean tag, int coun
         return count < 1 || count > MAX_COUNT ? null : new TerminalUnlockCondition(id, tag, count);
     }
 
-    /**
-     * 逐条判定条件是否被该玩家满足，返回其中已满足的标识。
-     */
+    // 逐条判定条件是否被该玩家满足，返回其中已满足的标识
     public static List<String> satisfied(ServerPlayer player, List<String> keys) {
         List<String> satisfied = new ArrayList<>();
         for (String key : keys) {

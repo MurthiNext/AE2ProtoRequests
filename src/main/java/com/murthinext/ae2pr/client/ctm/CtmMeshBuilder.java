@@ -6,9 +6,7 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 
-/**
- * 连接纹理的面重写：按邻居掩码选图块并重写 UV。
- */
+// 连接纹理的面重写：按邻居掩码选图块并重写 UV
 public final class CtmMeshBuilder {
 
     private static final int STRIDE = 8;
@@ -27,9 +25,7 @@ public final class CtmMeshBuilder {
     private CtmMeshBuilder() {
     }
 
-    /**
-     * 把四边形 UV 重写到 CTM 图集中对应图块。
-     */
+    // 把四边形 UV 重写到 CTM 图集中对应图块
     public static BakedQuad rewrite(BakedQuad quad, TextureAtlasSprite base, TextureAtlasSprite atlas, int worldMask) {
         int[] src = quad.getVertices();
         int[] out = src.clone();
@@ -58,9 +54,7 @@ public final class CtmMeshBuilder {
         return new BakedQuad(out, quad.getTintIndex(), quad.getDirection(), atlas, quad.isShade());
     }
 
-    /**
-     * 替换贴图并按贴图内相对位置重映射 UV。
-     */
+    // 替换贴图并按贴图内相对位置重映射 UV
     public static BakedQuad retarget(BakedQuad quad, TextureAtlasSprite from, TextureAtlasSprite to) {
         int[] src = quad.getVertices();
         int[] out = src.clone();
@@ -90,9 +84,7 @@ public final class CtmMeshBuilder {
         return axisFromUvs(quad.getVertices(), false);
     }
 
-    /**
-     * 计算该面的 47-tile 图块序号，角掩码需两条邻边均已连接。
-     */
+    // 计算该面的 47-tile 图块序号，角掩码需两条邻边均已连接
     private static int tileIndex(int[] vertices, int worldMask) {
         Direction uAxis = axisFromUvs(vertices, true);
         Direction vAxis = axisFromUvs(vertices, false);

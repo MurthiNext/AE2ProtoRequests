@@ -16,9 +16,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
 
-/**
- * 终端界面：失败物品红闪/常亮，重新打开终端清除标记。
- */
+// 终端界面：失败物品红闪/常亮，重新打开终端清除标记
 @Mixin(MEStorageScreen.class)
 public abstract class MEStorageScreenMixin {
 

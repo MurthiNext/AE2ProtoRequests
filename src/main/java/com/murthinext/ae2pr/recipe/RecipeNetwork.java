@@ -10,9 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
 
-/**
- * 配方网络包的通用读写。
- */
 public final class RecipeNetwork {
 
     private RecipeNetwork() {

@@ -31,9 +31,6 @@ import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
 import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
-/**
- * 水晶装配线控制器方块实体。
- */
 public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
     private static final BooleanProperty ACTIVE = CrystalAssemblyLineUnitBlock.ACTIVE;
@@ -132,9 +129,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
         return null;
     }
 
-    /**
-     * 物品输入匹配，返回按配方顺序排列的总线。
-     */
+    // 物品输入匹配，返回按配方顺序排列的总线
     @Nullable
     private List<ItemBusBlockEntity> matchItems(CrystalAssemblyLineRecipe recipe) {
         List<CountedIngredient> inputs = recipe.getItemInputs();
@@ -176,9 +171,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
         return input.test(bus.getStorage().getStackInSlot(0));
     }
 
-    /**
-     * 流体输入匹配，返回按配方顺序排列的仓。
-     */
+    // 流体输入匹配，返回按配方顺序排列的仓
     @Nullable
     private List<MachinePartFluidStorage> matchFluids(CrystalAssemblyLineRecipe recipe) {
         List<FluidStack> inputs = recipe.getFluidInputs();
@@ -221,9 +214,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
         return stored.isFluidEqual(input) && stored.getAmount() > 0;
     }
 
-    /**
-     * 匹配到的总线与仓中可执行的份数，产物容量交给基类统一检查。
-     */
+    // 匹配到的总线与仓中可执行的份数，产物容量交给基类统一检查
     private int minSlotParallel(CrystalAssemblyLineRecipe recipe, List<ItemBusBlockEntity> buses,
             List<MachinePartFluidStorage> hatches) {
         int low = 0;

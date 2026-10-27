@@ -16,9 +16,6 @@ import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
 
-/**
- * 多方块结构定义与成型外观同步的公共基底。
- */
 public abstract class AbstractStructureFacade {
 
     protected final MultiblockPattern pattern;

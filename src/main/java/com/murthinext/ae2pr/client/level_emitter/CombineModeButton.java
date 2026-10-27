@@ -13,9 +13,6 @@ import appeng.client.gui.widgets.IconButton;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.level_emitter.CombineMode;
 
-/**
- * 左侧工具栏的 AND/OR 组合模式切换按钮。
- */
 public class CombineModeButton extends IconButton {
 
     private static final ResourceLocation AND_ICON = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,

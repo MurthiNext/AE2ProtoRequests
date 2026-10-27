@@ -11,9 +11,6 @@ import net.minecraftforge.fluids.FluidType;
 
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 粗陨石浆液流体。
- */
 public class CoarseMeteoriteSlurryFluidType extends FluidType {
 
     public CoarseMeteoriteSlurryFluidType() {

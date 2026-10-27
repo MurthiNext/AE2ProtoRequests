@@ -9,12 +9,9 @@ import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationMenu;
 import com.murthinext.ae2pr.client.ModGuide;
 import com.murthinext.ae2pr.client.AbstractMultiblockControllerScreen;
-import com.murthinext.ae2pr.client.MachineGui;
-import com.murthinext.ae2pr.client.MultiblockInfoLayout;
+import com.murthinext.ae2pr.client.GeneralMachineScreen;
+import com.murthinext.ae2pr.client.GeneralMachineInfoLayout;
 
-/**
- * 晶能工作站主机界面。
- */
 public class CrystalWorkstationScreen extends AbstractMultiblockControllerScreen<CrystalWorkstationMenu> {
 
     private static final int COLOR_TITLE = 0x8EE6E0;
@@ -48,8 +45,8 @@ public class CrystalWorkstationScreen extends AbstractMultiblockControllerScreen
     @Override
     protected void init() {
         super.init();
-        modeButton = new CrystalWorkstationModeButton(leftPos + MachineGui.TOOLBAR_X + 1,
-                topPos + MachineGui.TOOLBAR_Y + 1 + MachineGui.TOOLBAR_ROW_STEP, () -> {
+        modeButton = new CrystalWorkstationModeButton(leftPos + GeneralMachineScreen.TOOLBAR_X + 1,
+                topPos + GeneralMachineScreen.TOOLBAR_Y + 1 + GeneralMachineScreen.TOOLBAR_ROW_STEP, () -> {
                     if (minecraft != null && minecraft.gameMode != null) {
                         minecraft.gameMode.handleInventoryButtonClick(menu.containerId,
                                 CrystalWorkstationMenu.SWITCH_MODE);
@@ -68,7 +65,7 @@ public class CrystalWorkstationScreen extends AbstractMultiblockControllerScreen
     @Override
     protected void renderExtraLabels(net.minecraft.client.gui.GuiGraphics graphics, int mouseX, int mouseY) {
         graphics.drawString(font, Component.translatable("gui.ae2pr.crystal_workstation.mode",
-                menu.getMode().displayName()), MultiblockInfoLayout.TEXT_X, MultiblockInfoLayout.EXTRA_Y,
+                menu.getMode().displayName()), GeneralMachineInfoLayout.TEXT_X, GeneralMachineInfoLayout.EXTRA_Y,
                 COLOR_TITLE, false);
     }
 

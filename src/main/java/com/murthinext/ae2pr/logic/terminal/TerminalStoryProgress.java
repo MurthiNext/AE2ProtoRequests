@@ -17,9 +17,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-/**
- * 玩家剧情快照与各剧情块的阅读记录。
- */
 public final class TerminalStoryProgress {
 
     public static final int MAX_JSON_BYTES = 1048576;

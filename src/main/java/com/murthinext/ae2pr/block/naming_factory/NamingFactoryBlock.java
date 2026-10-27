@@ -30,9 +30,7 @@ import com.murthinext.ae2pr.ModTags;
 import com.murthinext.ae2pr.client.naming_factory.NamingFactoryRenameScreen;
 import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
-/**
- * 名称压印工厂方块。
- */
+// 名称压印工厂方块
 public class NamingFactoryBlock extends AEBaseEntityBlock<NamingFactoryBlockEntity> implements Wrenchable {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;

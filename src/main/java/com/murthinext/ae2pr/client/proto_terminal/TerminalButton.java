@@ -5,9 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 
-/**
- * 叙事屏幕的平行四边形按钮。
- */
+// 终端按钮
 final class TerminalButton extends Button {
 
     enum Icon {

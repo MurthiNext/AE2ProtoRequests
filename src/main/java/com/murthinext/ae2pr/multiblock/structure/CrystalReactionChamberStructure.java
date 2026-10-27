@@ -12,9 +12,7 @@ import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.multiblock.StructurePredicate;
 
-/**
- * 水晶反应仓结构定义。
- */
+// 水晶反应仓结构定义
 public final class CrystalReactionChamberStructure extends AbstractStructureFacade {
 
     public static final MultiblockPattern PATTERN = MultiblockPattern

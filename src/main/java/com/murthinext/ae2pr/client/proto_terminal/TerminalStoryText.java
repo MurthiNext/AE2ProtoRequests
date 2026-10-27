@@ -6,9 +6,7 @@ import java.util.regex.Pattern;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 
-/**
- * 台词文本。
- */
+// 剧情台词
 final class TerminalStoryText {
 
     // 打字机每秒显示的字符数

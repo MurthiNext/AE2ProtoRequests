@@ -12,9 +12,6 @@ import net.minecraft.network.chat.Component;
 import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.network.NamingFactoryRenamePacket;
 
-/**
- * 名称压印工厂重命名界面，回车提交（留空清除名称），ESC 取消。
- */
 public class NamingFactoryRenameScreen extends Screen {
 
     private static final int PANEL_WIDTH = 220;

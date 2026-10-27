@@ -10,9 +10,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 
-/**
- * 保留独立顶底材质、支持水平旋转的 ME 计算机外壳。
- */
 public class ComputerCasingBlock extends DisassemblableBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;

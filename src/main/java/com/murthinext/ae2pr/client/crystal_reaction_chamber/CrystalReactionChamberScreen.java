@@ -10,9 +10,6 @@ import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChambe
 import com.murthinext.ae2pr.client.ModGuide;
 import com.murthinext.ae2pr.client.AbstractMultiblockControllerScreen;
 
-/**
- * 水晶反应仓主机界面。
- */
 public class CrystalReactionChamberScreen extends AbstractMultiblockControllerScreen<CrystalReactionChamberMenu> {
 
     private static final int COLOR_TITLE = 0x8EE6E0;

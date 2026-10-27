@@ -24,9 +24,6 @@ import com.murthinext.ae2pr.client.DisplaySlot;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 import com.murthinext.ae2pr.network.MachinePartStackPacket;
 
-/**
- * 机器部件物品总线的容器菜单：存储经只读槽位展示，数量由界面层绘制。
- */
 public class ItemBusMenu extends AbstractContainerMenu {
 
     public static final MenuType<ItemBusMenu> TYPE = IForgeMenuType.create(ItemBusMenu::create);
@@ -147,9 +144,7 @@ public class ItemBusMenu extends AbstractContainerMenu {
         super.broadcastChanges();
     }
 
-    /**
-     * 工具栏按钮 id 0 = 切换自动搬运。
-     */
+    // 工具栏按钮 id 0 = 切换自动搬运
     @Override
     public boolean clickMenuButton(Player player, int id) {
         if (id == 0 && serverSide && blockEntity != null) {

@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.block.meteor_steel_pipe;
+package com.murthinext.ae2pr.block;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -12,9 +12,6 @@ import net.minecraft.world.level.material.MapColor;
 
 import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
-/**
- * 陨钢管道方块：两端开口，轴向相连时纹理连续。
- */
 public class MeteorSteelPipeBlock extends Block implements Wrenchable {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;

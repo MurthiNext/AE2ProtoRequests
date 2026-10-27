@@ -12,9 +12,6 @@ import com.murthinext.ae2pr.client.crystal_workstation.CrystalWorkstationShell;
 import com.murthinext.ae2pr.client.sound.MachineProcessingSounds;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 
-/**
- * 晶能工作站主机方块。
- */
 public class CrystalWorkstationBlock extends AbstractMultiblockControllerBlock<CrystalWorkstationControllerBlockEntity> {
 
     public static final String MACHINE_KEY = "crystal_workstation";

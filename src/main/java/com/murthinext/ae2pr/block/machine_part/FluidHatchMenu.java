@@ -26,9 +26,6 @@ import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
 import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 
-/**
- * 机器部件流体仓的容器菜单。
- */
 public class FluidHatchMenu extends AbstractContainerMenu {
 
     public static final MenuType<FluidHatchMenu> TYPE = IForgeMenuType.create(FluidHatchMenu::create);
@@ -92,9 +89,7 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         return blockEntity != null ? blockEntity.getCapacityPerTank() : FluidHatchBlockEntity.CAPACITY;
     }
 
-    /**
-     * 流体/开关变化或首次广播时向打开界面的玩家同步。
-     */
+    // 流体/开关变化或首次广播时向打开界面的玩家同步
     @Override
     public void broadcastChanges() {
         if (blockEntity != null && owner instanceof ServerPlayer serverPlayer) {
@@ -113,9 +108,7 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         super.broadcastChanges();
     }
 
-    /**
-     * 工具栏按钮 id 0 = 切换自动搬运。
-     */
+    // 工具栏按钮 id 0 = 切换自动搬运
     @Override
     public boolean clickMenuButton(Player player, int id) {
         if (id == 0 && serverSide && blockEntity != null) {
@@ -144,9 +137,7 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         return a.getAmount() == b.getAmount() && a.isFluidEqual(b);
     }
 
-    /**
-     * 由客户端点击包调用，按钮 0 取出、1 存入。
-     */
+    // 由客户端点击包调用，按钮 0 取出、1 存入
     public void handleTankClick(int tank, int button) {
         if (serverSide && blockEntity != null) {
             handleTankClick(this, owner, blockEntity.getFluidStorage(), tank, button);

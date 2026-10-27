@@ -24,9 +24,6 @@ import com.murthinext.ae2pr.block.level_emitter.EmitterConfigSlot;
 import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterMenu;
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 
-/**
- * ME 通式阈值发信器界面。
- */
 public class MultiThresholdLevelEmitterScreen extends UpgradeableScreen<MultiThresholdLevelEmitterMenu> {
 
     private final SettingToggleButton<YesNo> craftingMode;
@@ -141,9 +138,7 @@ public class MultiThresholdLevelEmitterScreen extends UpgradeableScreen<MultiThr
         ModGuide.openAt(ModGuide.INDEX_PAGE);
     }
 
-    /**
-     * 配置槽内过滤元件的 shift 点击改发 QUICK_MOVE。
-     */
+    // 配置槽内过滤元件的 shift 点击改发 QUICK_MOVE
     @Override
     protected void slotClicked(Slot slot, int slotIdx, int mouseButton, ClickType clickType) {
         if (slot instanceof EmitterConfigSlot && mouseButton == 0
@@ -156,9 +151,7 @@ public class MultiThresholdLevelEmitterScreen extends UpgradeableScreen<MultiThr
         super.slotClicked(slot, slotIdx, mouseButton, clickType);
     }
 
-    /**
-     * 返回非空即可让 AE2 帮助按钮显示。
-     */
+    // 返回非空即可让 AE2 帮助按钮显示
     @Override
     protected PageAnchor getHelpTopic() {
         return new PageAnchor(ModGuide.INDEX_PAGE, null);

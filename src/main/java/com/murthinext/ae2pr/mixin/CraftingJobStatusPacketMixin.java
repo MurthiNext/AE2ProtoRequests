@@ -12,9 +12,7 @@ import com.murthinext.ae2pr.logic.repeat.GenericRepeatOrders;
 import appeng.api.stacks.AEKey;
 import appeng.core.sync.packets.CraftingJobStatusPacket;
 
-/**
- * 构造时捕获发送用状态包参数（构造器不写实例字段），供通用订单识别轮次。
- */
+// 构造时捕获发送用状态包参数（构造器不写实例字段），供通用订单识别轮次
 @Mixin(value = CraftingJobStatusPacket.class, remap = false)
 public abstract class CraftingJobStatusPacketMixin {
 

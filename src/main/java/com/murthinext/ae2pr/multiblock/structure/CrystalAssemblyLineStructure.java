@@ -15,9 +15,7 @@ import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.multiblock.StructurePredicate;
 
-/**
- * 水晶装配线结构定义与外观同步。
- */
+// 水晶装配线结构定义与外观同步
 public final class CrystalAssemblyLineStructure extends AbstractStructureFacade {
 
     public static final MultiblockPattern PATTERN = MultiblockPattern
@@ -60,9 +58,7 @@ public final class CrystalAssemblyLineStructure extends AbstractStructureFacade 
         updateUnitActive(level, pos, active);
     }
 
-    /**
-     * 控制外壳与替换模块的工作外观。
-     */
+    // 控制外壳与替换模块的工作外观
     public static void updateUnitActive(Level level, BlockPos pos, boolean active) {
         BlockState state = level.getBlockState(pos);
         if (state.getBlock() instanceof CrystalAssemblyLineUnitBlock

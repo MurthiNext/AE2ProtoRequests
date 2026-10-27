@@ -67,7 +67,7 @@ public abstract class RequesterTerminalMenuMixin implements IOurRequesterTermina
         }
     }
 
-    /** 由方块位置导出的稳定正数 id（ME Requester 自身的 id 从 Long.MIN_VALUE 递增，均为负数，不会冲突）。 */
+    // 由方块位置导出的稳定正数 id（ME Requester 自身的 id 从 Long.MIN_VALUE 递增，均为负数，不会冲突）
     @Unique
     private static long ae2pr$idFor(RedstoneRequesterBlockEntity be) {
         long id = be.getBlockPos().asLong() & 0x7FFFFFFFFFFFFFFFL;

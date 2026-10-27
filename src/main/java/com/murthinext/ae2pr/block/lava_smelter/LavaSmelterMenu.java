@@ -15,9 +15,6 @@ import appeng.api.upgrades.Upgrades;
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerMenu;
 
-/**
- * 高反应性熔岩冶炼炉主机的容器菜单。
- */
 public class LavaSmelterMenu extends AbstractMultiblockControllerMenu<LavaSmelterControllerBlockEntity> {
 
     public static final MenuType<LavaSmelterMenu> TYPE = IForgeMenuType.create(LavaSmelterMenu::new);

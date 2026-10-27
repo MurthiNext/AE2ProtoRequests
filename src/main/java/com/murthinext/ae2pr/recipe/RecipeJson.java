@@ -20,9 +20,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-/**
- * 配方 JSON 的通用解析。
- */
 public final class RecipeJson {
 
     private RecipeJson() {
@@ -62,9 +59,7 @@ public final class RecipeJson {
         return outputs;
     }
 
-    /**
-     * 不带概率的物品产物。
-     */
+    // 不带概率的物品产物
     public static List<ItemStack> readItemStacks(JsonObject json, String key) {
         List<ItemStack> stacks = new ArrayList<>();
         for (JsonElement element : GsonHelper.getAsJsonArray(json, key, new JsonArray())) {

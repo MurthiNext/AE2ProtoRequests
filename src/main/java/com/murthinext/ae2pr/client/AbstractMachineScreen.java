@@ -18,9 +18,6 @@ import appeng.api.upgrades.Upgrades;
 
 import com.murthinext.ae2pr.client.machine_part.AutoTransferButton;
 
-/**
- * 机器界面基类。
- */
 public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> extends AbstractContainerScreen<M>
         implements GuiExtraAreas {
 
@@ -29,8 +26,8 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
 
     protected AbstractMachineScreen(M menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        this.imageWidth = MachineGui.WIDTH;
-        this.imageHeight = MachineGui.HEIGHT;
+        this.imageWidth = GeneralMachineScreen.WIDTH;
+        this.imageHeight = GeneralMachineScreen.HEIGHT;
     }
 
     protected abstract ResourceLocation guidePage();
@@ -39,53 +36,51 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
 
     @Override
     public List<Rect2i> getGuiExtraAreas() {
-        return MachineGui.exclusionAreas(leftPos, topPos, toolbarButtons(), true);
+        return GeneralMachineScreen.exclusionAreas(leftPos, topPos, toolbarButtons(), true);
     }
 
     protected int separatorAccent() {
-        return MachineGui.ACCENT_CRYSTAL;
+        return GeneralMachineScreen.ACCENT_CRYSTAL;
     }
 
     protected int separatorAccentDark() {
-        return MachineGui.ACCENT_CRYSTAL_DARK;
+        return GeneralMachineScreen.ACCENT_CRYSTAL_DARK;
     }
 
     @Override
     protected void init() {
         super.init();
-        guideButton = new GuideButton(leftPos + MachineGui.TOOLBAR_X + 1, topPos + MachineGui.TOOLBAR_Y + 1,
+        guideButton = new GuideButton(leftPos + GeneralMachineScreen.TOOLBAR_X + 1, topPos + GeneralMachineScreen.TOOLBAR_Y + 1,
                 () -> ModGuide.openAt(guidePage()));
         addRenderableWidget(guideButton);
     }
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        MachineGui.drawPanel(graphics, leftPos, topPos);
-        MachineGui.drawSeparator(graphics, leftPos, topPos, separatorAccent(), separatorAccentDark());
-        MachineGui.drawInventorySlots(graphics, leftPos, topPos);
+        GeneralMachineScreen.drawPanel(graphics, leftPos, topPos);
+        GeneralMachineScreen.drawSeparator(graphics, leftPos, topPos, separatorAccent(), separatorAccentDark());
+        GeneralMachineScreen.drawInventorySlots(graphics, leftPos, topPos);
         renderToolbar(graphics);
         renderUpgradeSlots(graphics);
     }
 
     protected void renderToolbar(GuiGraphics graphics) {
-        AutoTransferButton.renderToolbar(graphics, leftPos + MachineGui.TOOLBAR_X, topPos + MachineGui.TOOLBAR_Y,
+        AutoTransferButton.renderToolbar(graphics, leftPos + GeneralMachineScreen.TOOLBAR_X, topPos + GeneralMachineScreen.TOOLBAR_Y,
                 toolbarButtons());
     }
 
-    /**
-     * 左侧工具栏占用的按钮格数，子类增加按钮时覆盖。
-     */
+    // 左侧工具栏占用的按钮格数，子类增加按钮时覆盖
     protected int toolbarButtons() {
         return 1;
     }
 
     protected void renderUpgradeSlots(GuiGraphics graphics) {
-        int x = leftPos + MachineGui.UPGRADE_PANEL_X;
-        int y = topPos + MachineGui.UPGRADE_PANEL_Y;
-        AutoTransferButton.renderToolbar(graphics, x, y, MachineGui.UPGRADE_SLOTS);
-        for (int i = 0; i < MachineGui.UPGRADE_SLOTS; i++) {
+        int x = leftPos + GeneralMachineScreen.UPGRADE_PANEL_X;
+        int y = topPos + GeneralMachineScreen.UPGRADE_PANEL_Y;
+        AutoTransferButton.renderToolbar(graphics, x, y, GeneralMachineScreen.UPGRADE_SLOTS);
+        for (int i = 0; i < GeneralMachineScreen.UPGRADE_SLOTS; i++) {
             // 面板内缩 1px，槽位组件自带 1px 描边
-            MachineGui.drawSlot(graphics, x + 2, y + 2 + i * MachineGui.UPGRADE_SLOT_STEP);
+            GeneralMachineScreen.drawSlot(graphics, x + 2, y + 2 + i * GeneralMachineScreen.UPGRADE_SLOT_STEP);
         }
     }
 
@@ -110,9 +105,9 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
     }
 
     private boolean isHoveringUpgradePanel(int mouseX, int mouseY) {
-        int x = leftPos + MachineGui.UPGRADE_PANEL_X;
-        int y = topPos + MachineGui.UPGRADE_PANEL_Y;
-        int height = MachineGui.UPGRADE_SLOTS * MachineGui.UPGRADE_SLOT_STEP + 2;
+        int x = leftPos + GeneralMachineScreen.UPGRADE_PANEL_X;
+        int y = topPos + GeneralMachineScreen.UPGRADE_PANEL_Y;
+        int height = GeneralMachineScreen.UPGRADE_SLOTS * GeneralMachineScreen.UPGRADE_SLOT_STEP + 2;
         return mouseX >= x && mouseX < x + 20 && mouseY >= y && mouseY < y + height;
     }
 }

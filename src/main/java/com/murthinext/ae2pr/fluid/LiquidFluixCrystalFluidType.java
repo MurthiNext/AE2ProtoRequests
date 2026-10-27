@@ -11,9 +11,6 @@ import net.minecraftforge.fluids.FluidType;
 
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 液态福鲁伊克斯水晶流体。
- */
 public class LiquidFluixCrystalFluidType extends FluidType {
 
     public LiquidFluixCrystalFluidType() {

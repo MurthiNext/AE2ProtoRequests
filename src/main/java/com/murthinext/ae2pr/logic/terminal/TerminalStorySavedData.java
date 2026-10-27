@@ -11,9 +11,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
 
-/**
- * 按玩家保存 Ink 快照与终端阅读记录。
- */
 public class TerminalStorySavedData extends SavedData {
 
     private static final String DATA_NAME = "ae2pr_terminal_ink";

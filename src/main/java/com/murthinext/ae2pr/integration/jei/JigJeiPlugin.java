@@ -13,7 +13,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import com.murthinext.ae2pr.ModItems;
 import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.client.MultiblockInfoLayout;
+import com.murthinext.ae2pr.client.GeneralMachineInfoLayout;
 import com.murthinext.ae2pr.client.jig.JigScreen;
 
 @JeiPlugin
@@ -45,7 +45,7 @@ public class JigJeiPlugin implements IModPlugin {
 
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addRecipeClickArea(JigScreen.class, MultiblockInfoLayout.TEXT_X, MultiblockInfoLayout.JOB_Y,
+        registration.addRecipeClickArea(JigScreen.class, GeneralMachineInfoLayout.TEXT_X, GeneralMachineInfoLayout.JOB_Y,
                 100, 9, JigJeiCategory.RECIPE_TYPE);
     }
 }

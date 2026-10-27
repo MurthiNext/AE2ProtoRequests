@@ -17,9 +17,6 @@ import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 
-/**
- * 服务端的复杂流体与爆炸世界交互。
- */
 public final class ComplexWorldInteractions {
 
     private ComplexWorldInteractions() {

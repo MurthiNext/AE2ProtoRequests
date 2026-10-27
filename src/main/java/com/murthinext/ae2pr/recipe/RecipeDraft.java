@@ -6,9 +6,6 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraftforge.fluids.FluidStack;
 
-/**
- * 配方解析出的公共内容。
- */
 public record RecipeDraft(List<CountedIngredient> itemInputs, List<FluidStack> fluidInputs,
         List<ChancedItemStack> itemOutputs, List<FluidStack> fluidOutputs, int duration, @Nullable Double energy) {
 

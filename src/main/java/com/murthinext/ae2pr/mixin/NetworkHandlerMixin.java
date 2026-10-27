@@ -12,9 +12,7 @@ import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.CraftingJobStatusPacket;
 import net.minecraft.server.level.ServerPlayer;
 
-/**
- * 观察发往玩家的合成状态包，推进通用（VCPU）重复订单轮次（钩子需完全防御式）。
- */
+// 观察发往玩家的合成状态包，推进通用（VCPU）重复订单轮次（钩子需完全防御式）
 @Mixin(value = NetworkHandler.class, remap = false)
 public abstract class NetworkHandlerMixin {
 

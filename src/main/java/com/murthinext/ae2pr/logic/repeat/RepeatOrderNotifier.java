@@ -13,17 +13,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 
-/**
- * 重复订单通知（普通与 VCPU 路径共用）。
- */
+// 重复订单通知（普通与 VCPU 路径共用）
 public final class RepeatOrderNotifier {
 
     private RepeatOrderNotifier() {
     }
 
-    /**
-     * 通知某轮开始；remainingRounds 小于等于 0 时清除标记。
-     */
+    // 通知某轮开始；remainingRounds 小于等于 0 时清除标记
     public static void sendRound(@Nullable Integer ownerPlayerId, @Nullable Level level, @Nullable AEKey what,
             int totalRounds, int remainingRounds) {
         var player = resolvePlayer(ownerPlayerId, level);

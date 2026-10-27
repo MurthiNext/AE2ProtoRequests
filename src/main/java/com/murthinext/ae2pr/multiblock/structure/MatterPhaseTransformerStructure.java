@@ -10,9 +10,7 @@ import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.multiblock.StructurePredicate;
 
-/**
- * 物质相变仪结构定义。
- */
+// 物质相变仪结构定义
 public final class MatterPhaseTransformerStructure extends AbstractStructureFacade {
 
     public static final MultiblockPattern PATTERN = MultiblockPattern

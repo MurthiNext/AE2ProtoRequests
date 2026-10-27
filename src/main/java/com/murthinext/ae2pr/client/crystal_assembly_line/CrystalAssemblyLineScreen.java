@@ -10,9 +10,6 @@ import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineMenu;
 import com.murthinext.ae2pr.client.ModGuide;
 import com.murthinext.ae2pr.client.AbstractMultiblockControllerScreen;
 
-/**
- * 水晶装配线主机界面。
- */
 public class CrystalAssemblyLineScreen extends AbstractMultiblockControllerScreen<CrystalAssemblyLineMenu> {
 
     private static final int COLOR_TITLE = 0x55FFFF;

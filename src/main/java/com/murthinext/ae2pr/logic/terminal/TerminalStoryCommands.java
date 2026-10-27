@@ -21,9 +21,6 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-/**
- * 源始终端阅读进度管理命令。
- */
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class TerminalStoryCommands {
 

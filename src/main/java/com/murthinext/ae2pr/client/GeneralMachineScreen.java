@@ -15,10 +15,8 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 机器界面的公共绘制：面板、分隔线、物品槽、流体罐与箭标。
- */
-public final class MachineGui {
+// 机器界面的公共绘制：面板、分隔线、物品槽、流体罐与箭标
+public final class GeneralMachineScreen {
 
     public static final int WIDTH = 176;
     public static final int HEIGHT = 200;
@@ -81,7 +79,7 @@ public final class MachineGui {
     private static final ResourceLocation ARROW_FLUID_DOWN = texture("components/arrow_fluid_down");
     private static final ResourceLocation ARROW_FLUID_UP = texture("components/arrow_fluid_up");
 
-    private MachineGui() {
+    private GeneralMachineScreen() {
     }
 
     private static ResourceLocation texture(String path) {
@@ -155,9 +153,7 @@ public final class MachineGui {
 
     // 进度条与流体
 
-    /**
-     * AE2 机器风格进度条，默认纵向自下而上填充。
-     */
+    // AE2 机器风格进度条，默认纵向自下而上填充
     public static void drawProgressBar(GuiGraphics graphics, int x, int y, float progress) {
         drawProgressBar(graphics, x, y, BAR_WIDTH, BAR_HEIGHT, progress, true);
     }

@@ -2,9 +2,6 @@ package com.murthinext.ae2pr;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-/**
- * 配置文件。
- */
 public final class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
@@ -380,17 +377,11 @@ public final class Config {
         return CRYSTAL_REACTOR_SOUNDS_PER_TICK.get();
     }
 
-    /**
-     * 档位权重，顺序为无瑕、有瑕、开裂、损坏。
-     */
     public static int[] crystalReactorTierWeights() {
         return new int[] { CRYSTAL_REACTOR_FLAWLESS_WEIGHT.get(), CRYSTAL_REACTOR_FLAWED_WEIGHT.get(),
                 CRYSTAL_REACTOR_CHIPPED_WEIGHT.get(), CRYSTAL_REACTOR_DAMAGED_WEIGHT.get() };
     }
 
-    /**
-     * 材质权重，顺序为紫水晶、赛特斯石英、盈能水晶、过载水晶。
-     */
     public static int[] crystalReactorMaterialWeights() {
         return new int[] { CRYSTAL_REACTOR_AMETHYST_WEIGHT.get(), CRYSTAL_REACTOR_CERTUS_WEIGHT.get(),
                 CRYSTAL_REACTOR_ENERGIZED_WEIGHT.get(), CRYSTAL_REACTOR_OVERLOAD_WEIGHT.get() };

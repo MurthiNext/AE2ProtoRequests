@@ -9,9 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationMode;
 
-/**
- * 左侧工具栏的工作模式切换按钮，图标随当前模式变化。
- */
+// 左侧工具栏的工作模式切换按钮，图标随当前模式变化
 public class CrystalWorkstationModeButton extends AbstractWidget {
 
     private static final int SIZE = 18;

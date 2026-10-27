@@ -9,9 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-/**
- * 服务端 -> 客户端：本玩家当前已满足的剧情块解锁条件。
- */
+// 服务端 -> 客户端：本玩家当前已满足的剧情块解锁条件
 public class TerminalStoryUnlockPacket {
 
     private static final int MAX_CONDITIONS = 256;

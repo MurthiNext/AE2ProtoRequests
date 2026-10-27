@@ -16,9 +16,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-/**
- * 流体仓与总成共用的多罐存储和自动搬运。
- */
 public final class MachinePartFluidStorage {
 
     private static final String TANKS_ID = "tanks";
@@ -46,9 +43,7 @@ public final class MachinePartFluidStorage {
         this.tankCapability = LazyOptional.of(() -> tanksView);
     }
 
-    /**
-     * 多罐视图：按槽顺序注入/抽出。
-     */
+    // 多罐视图：按槽顺序注入/抽出
     private final class TanksView implements IFluidHandler {
 
         private final boolean allowFill;
@@ -135,9 +130,7 @@ public final class MachinePartFluidStorage {
         return tanks.length;
     }
 
-    /**
-     * 机器内部读写不受对外视图限制。
-     */
+    // 机器内部读写不受对外视图限制
     public FluidTank getTank(int tank) {
         return tanks[tank];
     }
@@ -186,9 +179,7 @@ public final class MachinePartFluidStorage {
         owner.setChanged();
     }
 
-    /**
-     * 与朝向面的外部流体容器搬运流体。
-     */
+    // 与朝向面的外部流体容器搬运流体
     public void serverTick() {
         var level = owner.getLevel();
         if (level == null || level.isClientSide) {
@@ -241,9 +232,7 @@ public final class MachinePartFluidStorage {
         }
     }
 
-    /**
-     * 仅由同步包调用，直接覆盖本地罐内容。
-     */
+    // 仅由同步包调用，直接覆盖本地罐内容
     public void applyClientFluid(int tank, FluidStack fluid) {
         tanks[tank].setFluid(fluid.copy());
     }

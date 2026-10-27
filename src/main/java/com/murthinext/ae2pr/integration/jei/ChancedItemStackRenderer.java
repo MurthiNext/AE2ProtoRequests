@@ -21,9 +21,6 @@ import mezz.jei.api.ingredients.IIngredientRenderer;
 
 import com.murthinext.ae2pr.recipe.ChancedItemStack;
 
-/**
- * 带概率的物品槽渲染。
- */
 public class ChancedItemStackRenderer implements IIngredientRenderer<ItemStack> {
 
     private static final float TEXT_SCALE = 0.5F;

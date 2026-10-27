@@ -6,9 +6,7 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
-/**
- * 结构成型时收集的模块快照：提供数量、等级查询与要求校验。
- */
+// 结构成型时收集的模块快照：提供数量、等级查询与要求校验
 public final class ModuleSnapshot {
 
     public static final ModuleSnapshot EMPTY = new ModuleSnapshot(List.of());

@@ -9,9 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 
 import com.murthinext.ae2pr.multiblock.module.ModuleType;
 
-/**
- * 模块功能类型注册入口。
- */
 public final class ModModules {
 
     private ModModules() {

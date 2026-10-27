@@ -10,9 +10,6 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineControllerBlockEntity;
 import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineBlock;
 
-/**
- * 显示水晶装配线连接状态与作业的 Jade 插件。
- */
 @WailaPlugin(ae2pr.MODID)
 public class CrystalAssemblyLineJadePlugin extends AbstractMultiblockJadePlugin {
 

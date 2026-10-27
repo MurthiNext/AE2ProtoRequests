@@ -20,15 +20,13 @@ import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransforme
 import com.murthinext.ae2pr.client.effect.EmissiveCubeRenderer;
 import com.murthinext.ae2pr.client.effect.RoundedBeamRenderer;
 
-/**
- * 相变仪空腔粒子、蓄能光柱与中央核心自发光。
- */
+// 相变仪空腔粒子、蓄能光柱与中央核心自发光
 public class MatterPhaseTransformerRenderer
         implements BlockEntityRenderer<MatterPhaseTransformerControllerBlockEntity> {
 
     // 三层统一使用原版信标光束层：它的着色器只做 texture * vertexColor，不参与 mix_light 方向光，
-    // 自发光体不会因视角变化发灰；光影包也把它映射到 gbuffers_beaconbeam。
-    // Forge 的 unlit 层不在光影管线里，会被 DepthColorStorage 关掉写色导致整片不可见。
+    // 自发光体不会因视角变化发灰；光影包也把它映射到 gbuffers_beaconbeam
+    // Forge 的 unlit 层不在光影管线里，会被 DepthColorStorage 关掉写色导致整片不可见
     private static final RenderType PARTICLE = RenderType.beaconBeam(
             ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "textures/particle/matter_particle.png"), true);
     private static final RenderType CORE = RenderType.beaconBeam(

@@ -28,9 +28,6 @@ import com.murthinext.ae2pr.recipe.ChancedItemStack;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
 
-/**
- * 熔岩冶炼炉配方的 JEI 分类。
- */
 public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe> {
 
     public static final RecipeType<LavaSmelterRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID, "lava_smelter",

@@ -17,9 +17,6 @@ import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-/**
- * 记录打开终端的玩家关心的解锁条件，每秒重新判定一次并在结果变化时推送。
- */
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class TerminalUnlockTracker {
 

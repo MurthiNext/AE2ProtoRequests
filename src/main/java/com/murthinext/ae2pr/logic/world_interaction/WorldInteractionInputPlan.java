@@ -2,9 +2,7 @@ package com.murthinext.ae2pr.logic.world_interaction;
 
 import java.util.Arrays;
 
-/**
- * 按原料匹配关系分配物品数量并计算最大并行数。
- */
+// 按原料匹配关系分配物品数量并计算最大并行数
 public record WorldInteractionInputPlan(int batches, int[] consumed) {
 
     public static WorldInteractionInputPlan find(int[] available, int[] required, boolean[][] matches, int limit) {

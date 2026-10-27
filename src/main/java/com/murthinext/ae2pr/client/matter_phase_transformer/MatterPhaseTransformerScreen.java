@@ -9,11 +9,8 @@ import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerMenu;
 import com.murthinext.ae2pr.client.ModGuide;
 import com.murthinext.ae2pr.client.AbstractMultiblockControllerScreen;
-import com.murthinext.ae2pr.client.MachineGui;
+import com.murthinext.ae2pr.client.GeneralMachineScreen;
 
-/**
- * 物质相变仪主机界面。
- */
 public class MatterPhaseTransformerScreen extends AbstractMultiblockControllerScreen<MatterPhaseTransformerMenu> {
 
     private static final int COLOR_TITLE = 0xFFC46B;
@@ -40,11 +37,11 @@ public class MatterPhaseTransformerScreen extends AbstractMultiblockControllerSc
 
     @Override
     protected int separatorAccent() {
-        return MachineGui.ACCENT_EMBER;
+        return GeneralMachineScreen.ACCENT_EMBER;
     }
 
     @Override
     protected int separatorAccentDark() {
-        return MachineGui.ACCENT_EMBER_DARK;
+        return GeneralMachineScreen.ACCENT_EMBER_DARK;
     }
 }

@@ -16,9 +16,6 @@ import mezz.jei.api.runtime.IClickableIngredient;
 import com.murthinext.ae2pr.client.CustomIngredientSource;
 import com.murthinext.ae2pr.client.GuiExtraAreas;
 
-/**
- * 让 JEI 识别界面中手绘的物品与流体，并避让界面外的工具栏。
- */
 public class MachineGuiHandler implements IGuiContainerHandler<AbstractContainerScreen<?>> {
 
     @Override

@@ -16,17 +16,11 @@ import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
-/**
- * 重复订单全部轮次完成的 Toast。
- */
 public class RepeatOrderFinishedToast implements Toast {
     private static final long TIME_VISIBLE = 2500;
     private static final int TITLE_COLOR = 0xFF500050;
     private static final int TEXT_COLOR = 0xFF000000;
 
-    /**
-     * 弹出条件与 AE2 完成提示相同。
-     */
     public static void show(AEKey what, long amountPerRound, int totalRounds) {
         var minecraft = Minecraft.getInstance();
         if (AEConfig.instance().isNotifyForFinishedCraftingJobs()

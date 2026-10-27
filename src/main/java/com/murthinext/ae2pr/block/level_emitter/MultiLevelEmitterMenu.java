@@ -18,9 +18,6 @@ import appeng.menu.implementations.UpgradeableMenu;
 
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 
-/**
- * ME 通式标准发信器的菜单：配置槽与过滤元件共用。
- */
 public class MultiLevelEmitterMenu extends UpgradeableMenu<MultiLevelEmitterPart> {
 
     private static final String ACTION_SET_REPORTING_VALUE = "setReportingValue";

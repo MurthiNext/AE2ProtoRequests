@@ -16,9 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 
-/**
- * 下单入口兼容层：打开确认菜单前统一登记重复轮数（兼容 AE2 与 GTLCore 路径）。
- */
+// 下单入口兼容层：打开确认菜单前统一登记重复轮数（兼容 AE2 与 GTLCore 路径）
 @Mixin(value = MenuOpener.class, remap = false)
 public abstract class MenuOpenerMixin {
 

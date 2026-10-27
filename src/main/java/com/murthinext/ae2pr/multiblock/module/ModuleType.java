@@ -4,9 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 模块功能类型：同类型模块共享安装上限（-1 表示不限）。
- */
+// 模块功能类型：同类型模块共享安装上限（-1 表示不限）
 public record ModuleType(ResourceLocation id, int maxCount) {
 
     public ModuleType {

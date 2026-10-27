@@ -12,9 +12,6 @@ import com.google.gson.JsonParser;
 import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress.Line;
 import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress.NodeProgress;
 
-/**
- * 每位玩家共享变量、每个剧情块独立 Flow 的 Ink 运行器。
- */
 public final class TerminalStoryRunner {
 
     public record Choice(String id, String text, int index) {

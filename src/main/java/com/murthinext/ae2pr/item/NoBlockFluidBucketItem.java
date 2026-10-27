@@ -20,9 +20,6 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 
-/**
- * 无方块态流体的桶。
- */
 public class NoBlockFluidBucketItem extends BucketItem {
 
     public NoBlockFluidBucketItem(Supplier<? extends Fluid> fluid, Properties properties) {

@@ -7,9 +7,7 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * 竖直光柱。
- */
+// 竖直光柱
 public final class RoundedBeamRenderer {
 
     private static final int SEGMENTS = 16;

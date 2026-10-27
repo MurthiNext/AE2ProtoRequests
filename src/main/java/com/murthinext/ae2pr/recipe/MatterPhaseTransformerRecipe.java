@@ -14,9 +14,6 @@ import net.minecraftforge.fluids.FluidStack;
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModRecipes;
 
-/**
- * 物质相变仪配方。
- */
 public class MatterPhaseTransformerRecipe extends AbstractMultiblockRecipe {
 
     public static final int DEFAULT_DURATION = 200;
@@ -25,9 +22,6 @@ public class MatterPhaseTransformerRecipe extends AbstractMultiblockRecipe {
         super(id, draft);
     }
 
-    /**
-     * 唯一流体产物。
-     */
     public FluidStack getFluidOutput() {
         List<FluidStack> outputs = getFluidOutputs();
         return outputs.isEmpty() ? FluidStack.EMPTY : outputs.get(0).copy();

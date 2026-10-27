@@ -14,9 +14,7 @@ import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.multiblock.StructurePredicate;
 
-/**
- * 高反应性熔岩冶炼炉结构定义。
- */
+// 高反应性熔岩冶炼炉结构定义
 public final class LavaSmelterStructure extends AbstractStructureFacade {
 
     public static final MultiblockPattern PATTERN = MultiblockPattern
@@ -52,9 +50,7 @@ public final class LavaSmelterStructure extends AbstractStructureFacade {
         super(PATTERN, MachinePartFacade.ZIRCONIA);
     }
 
-    /**
-     * 炉膛底面 2×2 池面的世界坐标，用于假熔岩渲染与伤害判定。
-     */
+    // 炉膛底面 2×2 池面的世界坐标，用于假熔岩渲染与伤害判定
     public static List<BlockPos> poolCells(BlockPos controllerPos, Direction facing, boolean mirrorSide,
             boolean mirrorFront) {
         Direction sliceFacing = RelativeDirection.RIGHT.getFacing(facing, Direction.UP, mirrorSide, mirrorFront);
@@ -69,9 +65,7 @@ public final class LavaSmelterStructure extends AbstractStructureFacade {
         return cells;
     }
 
-    /**
-     * 炉膛空腔（底面 2×2、高 2）的世界包围盒，用于熔岩伤害判定。
-     */
+    // 炉膛空腔（底面 2×2、高 2）的世界包围盒，用于熔岩伤害判定
     public static AABB cavityAabb(BlockPos controllerPos, Direction facing, boolean mirrorSide,
             boolean mirrorFront) {
         List<BlockPos> cells = poolCells(controllerPos, facing, mirrorSide, mirrorFront);

@@ -10,9 +10,6 @@ import appeng.api.stacks.AEKey;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-/**
- * 客户端重复订单物品的剩余/总轮数记录。
- */
 @OnlyIn(Dist.CLIENT)
 public final class ClientRepeatOrderRounds {
     private static final Map<AEKey, RoundInfo> ROUNDS = new HashMap<>();

@@ -15,9 +15,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.item.ItemEntity;
 
-/**
- * 物品实体的复杂世界交互与伤害保护。
- */
+// 物品实体的复杂世界交互与伤害保护
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityMixin implements WorldInteractionEntity {
 

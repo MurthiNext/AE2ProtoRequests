@@ -7,9 +7,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
 
-/**
- * 分层深空星云与随机闪烁星光。
- */
+// 终端星空背景
 final class TerminalStarfieldRenderer {
 
     private static final int SEED = 0xAE2C1257;
@@ -38,9 +36,7 @@ final class TerminalStarfieldRenderer {
         centerY = y + halfHeight;
     }
 
-    /**
-     * 星云与星层的鼠标锚点变换。
-     */
+    // 星云与星层的鼠标锚点变换
     private static final class Layer {
         private final float depth;
         private final int spacing;
@@ -100,9 +96,7 @@ final class TerminalStarfieldRenderer {
         vertex(vertices, matrix, x, y, nebulaColor(x, y, seconds), 255);
     }
 
-    /**
-     * 采样缩放、漂移与暗角下的星云底色。
-     */
+    // 采样缩放、漂移与暗角下的星云底色
     int nebulaColor(float x, float y, float seconds) {
         float worldX = (x - nebula.offsetX) / nebula.scale + seconds * 0.65F + 512;
         float worldY = (y - nebula.offsetY) / nebula.scale - seconds * 0.3F + 768;
@@ -188,9 +182,7 @@ final class TerminalStarfieldRenderer {
         });
     }
 
-    /**
-     * 每颗星的起伏与周期性闪光。
-     */
+    // 每颗星的起伏与周期性闪光
     private static float starlight(int seed, float seconds) {
         float time = seconds / (3 + random(seed, 6) * 7) + random(seed, 7) * 80;
         int cycle = Mth.floor(time);

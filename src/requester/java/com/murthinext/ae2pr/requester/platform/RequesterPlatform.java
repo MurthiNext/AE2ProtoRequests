@@ -29,7 +29,7 @@ public final class RequesterPlatform {
     private RequesterPlatform() {
     }
 
-    /** 单个请求器可标记的物品数量上限（可配置）。 */
+    // 单个请求器可标记的物品数量上限（可配置）
     public static int getRequestLimit() {
         return Config.requesterSlots();
     }

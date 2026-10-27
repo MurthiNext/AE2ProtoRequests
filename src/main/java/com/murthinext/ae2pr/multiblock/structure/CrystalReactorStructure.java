@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.block.crystal_reactor;
+package com.murthinext.ae2pr.multiblock.structure;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,9 +18,6 @@ import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.multiblock.StructurePredicate;
 
-/**
- * 水晶反应器结构。
- */
 public final class CrystalReactorStructure {
 
     public static final MultiblockPattern PATTERN = MultiblockPattern
@@ -65,7 +62,6 @@ public final class CrystalReactorStructure {
                 offsets.add(new BlockPos(dx, -1, dz));
             }
         }
-        // 中层：四角（四边中点为空气，不参与置换）
         for (int dz = -1; dz <= 1; dz += 2) {
             for (int dx = -1; dx <= 1; dx += 2) {
                 offsets.add(new BlockPos(dx, 0, dz));
@@ -95,7 +91,6 @@ public final class CrystalReactorStructure {
                 }
             }
         }
-        // 先按水平半径由内向外，再按核心层向下的顺序推进
         offsets.sort(Comparator
                 .comparingInt((BlockPos pos) -> pos.getX() * pos.getX() + pos.getZ() * pos.getZ())
                 .thenComparingInt(BlockPos::getY)

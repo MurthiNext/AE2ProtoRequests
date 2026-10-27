@@ -18,9 +18,6 @@ import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerControllerBlockEntity;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
 
-/**
- * 方块实体注册入口。
- */
 public final class ModBlockEntities {
 
     private ModBlockEntities() {

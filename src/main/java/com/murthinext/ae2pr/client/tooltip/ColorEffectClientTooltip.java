@@ -17,9 +17,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import org.joml.Matrix4f;
 
-/**
- * 渲染单个特效文本行。
- */
 @OnlyIn(Dist.CLIENT)
 public final class ColorEffectClientTooltip implements ClientTooltipComponent {
 

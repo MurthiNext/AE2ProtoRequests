@@ -17,9 +17,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.registries.ForgeRegistries;
 
-/**
- * 世界交互的流体或爆炸触发条件。
- */
 public record WorldInteractionCircumstance(@Nullable TagKey<Fluid> fluidTag, boolean sourceOnly) {
 
     public boolean isExplosion() {

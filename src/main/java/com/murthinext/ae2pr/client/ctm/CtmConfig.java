@@ -17,11 +17,9 @@ import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
-import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
+import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
 
-/**
- * 连接纹理的逐方块配置。
- */
+// 连接纹理的逐方块配置
 public final class CtmConfig {
 
     private static final Direction[][] EDGES = {
@@ -57,9 +55,7 @@ public final class CtmConfig {
         return key != 0 && key == familyKey(neighbor);
     }
 
-    /**
-     * 邻居是否可沿 {@code dir} 方向连接，管道还需轴向一致。
-     */
+    // 邻居是否可沿 {@code dir} 方向连接，管道还需轴向一致
     public static boolean connects(BlockState neighbor, BlockState self, Direction dir) {
         if (!connects(neighbor, self)) {
             return false;
@@ -70,9 +66,7 @@ public final class CtmConfig {
         return true;
     }
 
-    /**
-     * 连接族标识：同一标识之间才连接。
-     */
+    // 连接族标识：同一标识之间才连接
     private static int familyKey(BlockState state) {
         Block block = state.getBlock();
         if (block == ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()) {
@@ -210,9 +204,7 @@ public final class CtmConfig {
                 : CtmSprites.baseSprite(MachinePartFacade.CRYSTAL.texture());
     }
 
-    /**
-     * 世界空间连接掩码：bit 0-5 六面，bit 6-17 十二棱。
-     */
+    // 世界空间连接掩码：bit 0-5 六面，bit 6-17 十二棱
     public static int worldMask(BlockAndTintGetter level, BlockPos pos, BlockState state) {
         int mask = 0;
         for (Direction dir : Direction.values()) {
@@ -260,9 +252,7 @@ public final class CtmConfig {
         return (worldMask & (1 << dir.ordinal())) != 0;
     }
 
-    /**
-     * 棱方向是否连接，a、b 需为不同轴的面方向。
-     */
+    // 棱方向是否连接，a、b 需为不同轴的面方向
     public static boolean connected(int worldMask, Direction a, Direction b) {
         int bit = EDGE_BIT[a.ordinal()][b.ordinal()];
         return bit >= 0 && (worldMask & (1 << (6 + bit))) != 0;

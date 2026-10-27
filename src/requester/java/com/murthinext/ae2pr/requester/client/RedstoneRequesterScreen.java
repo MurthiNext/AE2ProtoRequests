@@ -86,13 +86,13 @@ public class RedstoneRequesterScreen extends AbstractRedstoneRequesterScreen<Red
         return FOOTER_BBOX;
     }
 
-    /** 复用 AE2 界面自带的帮助按钮，改为打开本模组指南。 */
+    // 复用 AE2 界面自带的帮助按钮，改为打开本模组指南
     @Override
     protected void openHelp() {
         ModGuide.openAt(ModGuide.INDEX_PAGE);
     }
 
-    /** 返回非空即可让 AE2 的帮助按钮显示（实际点击由 {@link #openHelp()} 处理）。 */
+    // 返回非空即可让 AE2 的帮助按钮显示（实际点击由 {@link #openHelp()} 处理）
     @Override
     protected PageAnchor getHelpTopic() {
         return new PageAnchor(ModGuide.INDEX_PAGE, null);

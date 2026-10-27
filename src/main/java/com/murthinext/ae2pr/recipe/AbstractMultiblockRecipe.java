@@ -8,9 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-/**
- * 多方块配方基类，持有公共的输入、输出、耗时与能量。
- */
 public abstract class AbstractMultiblockRecipe extends AbstractRecipe implements MultiblockRecipe {
 
     private final List<FluidStack> fluidInputs;

@@ -21,9 +21,7 @@ import appeng.menu.me.crafting.CraftAmountMenu;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-/**
- * 数量选择界面：添加重复下单按钮与轮数输入框。
- */
+// 数量选择界面：添加重复下单按钮与轮数输入框
 @Mixin(value = CraftAmountScreen.class, remap = false)
 public abstract class CraftAmountScreenMixin extends AEBaseScreen<CraftAmountMenu> {
 
@@ -85,9 +83,7 @@ public abstract class CraftAmountScreenMixin extends AEBaseScreen<CraftAmountMen
         input.setY(button.getY() + (button.getHeight() - input.getHeight()) / 2);
     }
 
-    /**
-     * 接受服务端同步的轮数，输入框聚焦时不覆盖玩家输入。
-     */
+    // 接受服务端同步的轮数，输入框聚焦时不覆盖玩家输入
     @Unique
     private void ae2pr$adoptRemoteRounds() {
         var input = this.ae2pr$repeatInput;

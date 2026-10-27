@@ -9,9 +9,7 @@ import com.google.common.collect.ImmutableSet;
 import appeng.api.networking.crafting.ICraftingCPU;
 import appeng.menu.me.crafting.CraftingStatusMenu;
 
-/**
- * 暴露 CPU 列表与序号分配，用于发送重复订单轮次状态。
- */
+// 暴露 CPU 列表与序号分配，用于发送重复订单轮次状态
 @Mixin(value = CraftingStatusMenu.class, remap = false)
 public interface CraftingStatusMenuAccessor {
 

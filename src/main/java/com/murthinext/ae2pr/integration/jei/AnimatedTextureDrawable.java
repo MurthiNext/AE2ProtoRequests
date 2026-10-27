@@ -8,9 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 
 import mezz.jei.api.gui.drawable.IDrawable;
 
-/**
- * 播放独立材质中的竖向动画帧。
- */
 public final class AnimatedTextureDrawable implements IDrawable {
 
     private final ResourceLocation texture;

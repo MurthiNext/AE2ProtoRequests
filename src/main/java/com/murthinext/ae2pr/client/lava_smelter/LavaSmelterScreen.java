@@ -9,12 +9,9 @@ import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterMenu;
 import com.murthinext.ae2pr.client.ModGuide;
 import com.murthinext.ae2pr.client.AbstractMultiblockControllerScreen;
-import com.murthinext.ae2pr.client.MachineGui;
-import com.murthinext.ae2pr.client.MultiblockInfoLayout;
+import com.murthinext.ae2pr.client.GeneralMachineScreen;
+import com.murthinext.ae2pr.client.GeneralMachineInfoLayout;
 
-/**
- * 高反应性熔岩冶炼炉主机界面。
- */
 public class LavaSmelterScreen extends AbstractMultiblockControllerScreen<LavaSmelterMenu> {
 
     private static final int COLOR_TITLE = 0xFFC46B;
@@ -47,17 +44,17 @@ public class LavaSmelterScreen extends AbstractMultiblockControllerScreen<LavaSm
     protected void renderBg(net.minecraft.client.gui.GuiGraphics graphics, float partialTick, int mouseX,
             int mouseY) {
         super.renderBg(graphics, partialTick, mouseX, mouseY);
-        MachineGui.drawSlot(graphics, leftPos + DUST_SLOT_X, topPos + DUST_SLOT_Y);
+        GeneralMachineScreen.drawSlot(graphics, leftPos + DUST_SLOT_X, topPos + DUST_SLOT_Y);
     }
 
     @Override
     protected int separatorAccent() {
-        return MachineGui.ACCENT_EMBER;
+        return GeneralMachineScreen.ACCENT_EMBER;
     }
 
     @Override
     protected int separatorAccentDark() {
-        return MachineGui.ACCENT_EMBER_DARK;
+        return GeneralMachineScreen.ACCENT_EMBER_DARK;
     }
 
     @Override
@@ -65,7 +62,7 @@ public class LavaSmelterScreen extends AbstractMultiblockControllerScreen<LavaSm
         int durability = menu.getDurability();
         graphics.drawString(font, Component.translatable("gui.ae2pr.lava_smelter.durability",
                 durability, menu.getMaxDurability()),
-                MultiblockInfoLayout.TEXT_X, MultiblockInfoLayout.EXTRA_Y,
+                GeneralMachineInfoLayout.TEXT_X, GeneralMachineInfoLayout.EXTRA_Y,
                 durability > 0 ? COLOR_DURABILITY : COLOR_FAIL, false);
     }
 }

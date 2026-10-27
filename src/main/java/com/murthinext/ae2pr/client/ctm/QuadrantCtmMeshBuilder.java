@@ -23,7 +23,7 @@ import net.minecraft.core.Direction;
  */
 public final class QuadrantCtmMeshBuilder {
 
-    /** 图集每边的格数。 */
+    // 图集每边的格数
     public static final int GRID = 4;
 
     private static final int STRIDE = 8;
@@ -33,9 +33,7 @@ public final class QuadrantCtmMeshBuilder {
     private QuadrantCtmMeshBuilder() {
     }
 
-    /**
-     * 把单个面拆成 4 个象限面。
-     */
+    // 把单个面拆成 4 个象限面
     public static List<BakedQuad> build(BakedQuad quad, TextureAtlasSprite base, TextureAtlasSprite atlas,
             int worldMask) {
         Direction uAxis = CtmMeshBuilder.uAxis(quad);
@@ -59,9 +57,7 @@ public final class QuadrantCtmMeshBuilder {
         return result;
     }
 
-    /**
-     * 该象限对应的图集格 {@code {col, row}}；{@code null} 表示沿用基础贴图的对应象限。
-     */
+    // 该象限对应的图集格 {@code {col, row}}；{@code null} 表示沿用基础贴图的对应象限
     @Nullable
     private static int[] cell(int qx, int qy, boolean horizontal, boolean vertical, boolean diagonal) {
         if (!horizontal && !vertical) {
@@ -73,9 +69,7 @@ public final class QuadrantCtmMeshBuilder {
         return horizontal ? new int[] { qx, qy + 2 } : new int[] { qx + 2, qy };
     }
 
-    /**
-     * 边掩码：bit0 = 最小 U 侧、bit1 = 最大 U 侧、bit2 = 最小 V 侧、bit3 = 最大 V 侧。
-     */
+    // 边掩码：bit0 = 最小 U 侧、bit1 = 最大 U 侧、bit2 = 最小 V 侧、bit3 = 最大 V 侧
     private static int edgeMask(@Nullable Direction uAxis, @Nullable Direction vAxis, int worldMask) {
         int mask = 0;
         if (uAxis != null) {
@@ -97,9 +91,7 @@ public final class QuadrantCtmMeshBuilder {
         return mask;
     }
 
-    /**
-     * 该象限的对角块是否连接；两条邻边未同时连接时恒为 false。
-     */
+    // 该象限的对角块是否连接；两条邻边未同时连接时恒为 false
     private static boolean diagonal(int cornerBit, int edgeMask, int worldMask,
             @Nullable Direction uAxis, @Nullable Direction vAxis) {
         if (uAxis == null || vAxis == null) {
@@ -115,9 +107,7 @@ public final class QuadrantCtmMeshBuilder {
         };
     }
 
-    /**
-     * 原面四角按 (s, t) 归一化位置索引，便于按象限切片。
-     */
+    // 原面四角按 (s, t) 归一化位置索引，便于按象限切片
     private record Corners(float[][] pos, boolean ccw) {
 
         static Corners of(BakedQuad quad, TextureAtlasSprite base) {
@@ -148,18 +138,14 @@ public final class QuadrantCtmMeshBuilder {
             return new Corners(pos, area >= 0.0F);
         }
 
-        /**
-         * 按 (s, t) 双线性插值取位置分量。
-         */
+        // 按 (s, t) 双线性插值取位置分量
         float posAt(int component, float s, float t) {
             float near = pos[0][component] * (1.0F - s) + pos[1][component] * s;
             float far = pos[2][component] * (1.0F - s) + pos[3][component] * s;
             return near * (1.0F - t) + far * t;
         }
 
-        /**
-         * 切出指定象限，并把 UV 重映射到目标格或基础贴图的对应象限。
-         */
+        // 切出指定象限，并把 UV 重映射到目标格或基础贴图的对应象限
         BakedQuad subQuad(BakedQuad quad, TextureAtlasSprite base, TextureAtlasSprite atlas,
                 int qx, int qy, @Nullable int[] cell, float tileWidth, float tileHeight) {
             int[] src = quad.getVertices();

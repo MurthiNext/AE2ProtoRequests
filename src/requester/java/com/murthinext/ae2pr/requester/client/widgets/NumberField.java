@@ -45,9 +45,9 @@ import java.util.function.Consumer;
 
 public class NumberField extends EditBox implements ITooltip {
 
-    /** 视觉盒子的外边距（文本区 = 视觉盒子内缩 PADDING）。 */
+    // 视觉盒子的外边距（文本区 = 视觉盒子内缩 PADDING）
     private static final int PADDING = 2;
-    /** 视觉盒子高度。 */
+    // 视觉盒子高度
     private static final int HEIGHT = 12;
 
     // 1.21.1 风格输入框配色
@@ -97,7 +97,7 @@ public class NumberField extends EditBox implements ITooltip {
         validate();
     }
 
-    /** 含边框的视觉盒子，用于点击判定与背景绘制。 */
+    // 含边框的视觉盒子，用于点击判定与背景绘制
     private Rect2i getVisualBounds() {
         return new Rect2i(getX() - PADDING, getY() - PADDING, visualWidth, HEIGHT);
     }

@@ -15,9 +15,6 @@ import com.murthinext.ae2pr.ModItems;
 import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 注册物质相变配方分类与催化剂的 JEI 插件。
- */
 @JeiPlugin
 public class MatterPhaseTransformerJeiPlugin implements IModPlugin {
 

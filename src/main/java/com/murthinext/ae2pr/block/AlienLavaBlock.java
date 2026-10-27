@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.block.alien_lava;
+package com.murthinext.ae2pr.block;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -30,9 +30,6 @@ import net.minecraftforge.fluids.FluidInteractionRegistry;
 import com.murthinext.ae2pr.fluid.AlienLavaFluid;
 import com.murthinext.ae2pr.logic.world_interaction.WorldInteractionCatalyst;
 
-/**
- * 异星熔岩方块，丢入的物品不会被岩浆销毁。
- */
 public class AlienLavaBlock extends LiquidBlock implements WorldInteractionCatalyst {
 
     private static final float DAMAGE = 8.0F;

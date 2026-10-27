@@ -40,9 +40,6 @@ import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ModTags;
 import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
-/**
- * 机器部件方块。
- */
 public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
 
     private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();

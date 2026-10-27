@@ -18,9 +18,7 @@ import appeng.menu.me.crafting.CraftingStatusMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 
-/**
- * 合成状态界面：CPU 条目与 tooltip 追加重复轮次信息。
- */
+// 合成状态界面：CPU 条目与 tooltip 追加重复轮次信息
 @Mixin(value = CPUSelectionList.class, remap = false)
 public abstract class CPUSelectionListMixin {
 

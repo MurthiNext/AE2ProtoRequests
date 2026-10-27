@@ -23,9 +23,6 @@ import appeng.api.stacks.GenericStack;
 import appeng.integration.modules.jeirei.EncodingHelper;
 import appeng.menu.me.items.PatternEncodingTermMenu;
 
-/**
- * 把多方块预览的所需方块写入处理样板。
- */
 @SuppressWarnings("removal")
 public class MultiblockPatternTransferHandler
         implements IRecipeTransferHandler<PatternEncodingTermMenu, MultiblockPreviewRecipe> {

@@ -50,9 +50,6 @@ import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 import com.murthinext.ae2pr.item.filter_cell.FilterCellItem;
 
-/**
- * ME 通式阈值发信器：达到上限开启、低于下限关闭。
- */
 public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
         implements IConfigInvHost, ICraftingProvider, InternalInventoryHost {
 
@@ -253,9 +250,6 @@ public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
         }
     }
 
-    /**
-     * 逐项取值：AND 取最小值、OR 取最大值。
-     */
     private long computeCombinedValue(IGrid grid, IPartitionList list) {
         var stacks = grid.getStorageService().getCachedInventory();
         boolean matchAll = getConfigManager().getSetting(COMBINE_MODE) == CombineMode.AND;
@@ -276,9 +270,6 @@ public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
         return result;
     }
 
-    /**
-     * 高级过滤元件：按标签表达式筛选并组合。
-     */
     private long computeAdvancedValue(IGrid grid, Predicate<AEKey> filter) {
         var stacks = grid.getStorageService().getCachedInventory();
         boolean matchAll = getConfigManager().getSetting(COMBINE_MODE) == CombineMode.AND;
@@ -553,9 +544,7 @@ public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
         configureWatchers();
     }
 
-    /**
-     * 过滤槽仅接受过滤元件。
-     */
+    // 过滤槽仅接受过滤元件
     private static class FilterCellItemFilter implements IAEItemFilter {
         @Override
         public boolean allowInsert(InternalInventory inv, int slot, ItemStack stack) {

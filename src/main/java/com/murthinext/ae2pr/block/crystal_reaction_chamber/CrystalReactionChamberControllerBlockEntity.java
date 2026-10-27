@@ -15,9 +15,6 @@ import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlockEntity;
 import com.murthinext.ae2pr.multiblock.structure.CrystalReactionChamberStructure;
 import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
-/**
- * 水晶反应仓主机方块实体。
- */
 public class CrystalReactionChamberControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
     public CrystalReactionChamberControllerBlockEntity(BlockPos pos, BlockState state) {

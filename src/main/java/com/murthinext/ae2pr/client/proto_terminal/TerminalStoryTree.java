@@ -23,9 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 
-/**
- * 与剧情脚本分离的终端节点目录与布局。
- */
+// 剧情树
 record TerminalStoryTree(List<Node> nodes, String program) {
 
     private static final String NODE_ROOT = "story/nodes";

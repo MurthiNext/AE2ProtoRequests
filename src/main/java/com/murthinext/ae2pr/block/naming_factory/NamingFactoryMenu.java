@@ -19,9 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.items.SlotItemHandler;
 
-/**
- * 名称压印工厂容器菜单。
- */
+// 名称压印工厂容器菜单
 public class NamingFactoryMenu extends AbstractContainerMenu {
 
     public static final MenuType<NamingFactoryMenu> TYPE = IForgeMenuType.create(NamingFactoryMenu::create);

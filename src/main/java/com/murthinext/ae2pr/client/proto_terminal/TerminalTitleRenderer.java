@@ -4,9 +4,7 @@ import java.util.Map;
 
 import net.minecraft.client.gui.GuiGraphics;
 
-/**
- * 标题栏的自绘像素字标与碎片组成动画。
- */
+// 终端标题
 final class TerminalTitleRenderer {
 
     static final String TEXT = "Proto Terminal";

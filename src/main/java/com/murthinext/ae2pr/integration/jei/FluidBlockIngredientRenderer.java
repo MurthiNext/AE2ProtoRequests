@@ -9,9 +9,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import mezz.jei.api.ingredients.IIngredientRenderer;
 
-/**
- * 流体方块。
- */
 public class FluidBlockIngredientRenderer implements IIngredientRenderer<FluidStack> {
 
     @Override

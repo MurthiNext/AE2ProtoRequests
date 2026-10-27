@@ -24,9 +24,6 @@ import com.murthinext.ae2pr.ModSounds;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 
-/**
- * 客户端加工循环音效与卸载清理。
- */
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT)
 public final class MachineProcessingSounds {
 

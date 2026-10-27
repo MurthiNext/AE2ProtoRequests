@@ -14,9 +14,6 @@ import appeng.api.stacks.AEKey;
 import appeng.api.storage.cells.ICellWorkbenchItem;
 import appeng.items.AEBaseItem;
 
-/**
- * 高级过滤元件：以标签表达式配置白名单与黑名单过滤规则。
- */
 public class AdvancedFilterCellItem extends AEBaseItem implements ICellWorkbenchItem, FilterCell {
 
     public static final String ACTION_SET_WHITELIST = "ae2pr:set_adv_whitelist";
@@ -61,16 +58,12 @@ public class AdvancedFilterCellItem extends AEBaseItem implements ICellWorkbench
         setString(cell, BLACKLIST_TAG, value);
     }
 
-    /**
-     * 校验单条表达式是否合法，空白视为合法。
-     */
+    // 校验单条表达式是否合法，空白视为合法
     public static boolean isValid(@Nullable String text) {
         return text == null || text.isBlank() || parse(text) != null;
     }
 
-    /**
-     * 编译为过滤谓词；无表达式时返回 null，白名单非法则全不匹配，黑名单非法则忽略。
-     */
+    // 编译为过滤谓词；无表达式时返回 null，白名单非法则全不匹配，黑名单非法则忽略
     @Nullable
     public static Predicate<AEKey> createPredicate(ItemStack cell) {
         if (!(cell.getItem() instanceof AdvancedFilterCellItem)) {

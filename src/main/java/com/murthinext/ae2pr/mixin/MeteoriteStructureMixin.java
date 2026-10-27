@@ -6,9 +6,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 import appeng.worldgen.meteorite.MeteoriteStructure;
 
-/**
- * 将陨石半径由 2~8 调整为 8~16。
- */
+// 将陨石半径由 2~8 调整为 8~16
 @Mixin(value = MeteoriteStructure.class, remap = false)
 public abstract class MeteoriteStructureMixin {
 

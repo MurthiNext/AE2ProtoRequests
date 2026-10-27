@@ -13,9 +13,6 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 注册复杂世界交互配方。
- */
 @JeiPlugin
 public class ComplexWorldInteractionJeiPlugin implements IModPlugin {
 

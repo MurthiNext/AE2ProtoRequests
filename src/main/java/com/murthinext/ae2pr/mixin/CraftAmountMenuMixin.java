@@ -18,9 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 
-/**
- * 数量选择菜单：轮数同步与回填，登记移至 {@code MenuOpenerMixin} 以兼容 GTLCore。
- */
+// 数量选择菜单：轮数同步与回填，登记移至 {@code MenuOpenerMixin} 以兼容 GTLCore
 @Mixin(value = CraftAmountMenu.class, remap = false)
 public abstract class CraftAmountMenuMixin extends AEBaseMenu implements IRepeatRoundsHolder {
 

@@ -24,9 +24,7 @@ import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationControll
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 import com.murthinext.ae2pr.multiblock.structure.CrystalWorkstationStructure;
 
-/**
- * 晶能工作站成型特效：两颗交换大小的半透明立方体、从两侧面板牵引出的立体流体与稀疏粒子。
- */
+// 晶能工作站成型特效
 public class CrystalWorkstationRenderer
         implements BlockEntityRenderer<CrystalWorkstationControllerBlockEntity> {
 
@@ -95,9 +93,7 @@ public class CrystalWorkstationRenderer
 
     // 立方体
 
-    /**
-     * 两颗立方体：棱长各自在 1~2 格之间起伏并周期交错，因此会互相换到内外位置。
-     */
+    // 两颗立方体：棱长各自在 1~2 格之间起伏并周期交错，因此会互相换到内外位置
     private static void renderCubes(PoseStack pose, VertexConsumer consumer, double time, float activity,
             Direction depthAxis) {
         double wave = Math.sin(time * (Math.PI * 2.0 / CUBE_PERIOD));
@@ -110,9 +106,7 @@ public class CrystalWorkstationRenderer
                 depthAxis, (int) ((84 + 22 * Math.cos(time * 0.049)) * activity), 0.78F, 0.74F, 1.0F);
     }
 
-    /**
-     * 角度折算到一圈以内，避免长时间运行后精度下降。
-     */
+    // 角度折算到一圈以内，避免长时间运行后精度下降
     private static float spin(double angle) {
         return (float) (angle % (Math.PI * 2.0));
     }
@@ -146,9 +140,7 @@ public class CrystalWorkstationRenderer
         pose.popPose();
     }
 
-    /**
-     * 旋转后的投影越过内腔时缩小，保证任意姿态下都不穿出玻璃。
-     */
+    // 旋转后的投影越过内腔时缩小，保证任意姿态下都不穿出玻璃
     private static float fitScale(Quaternionf rotation, float half, Direction depthAxis) {
         float x = depthAxis.getStepX();
         float y = depthAxis.getStepY();

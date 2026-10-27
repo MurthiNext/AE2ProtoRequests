@@ -23,9 +23,6 @@ import com.murthinext.ae2pr.multiblock.module.ModuleDefinition;
 import com.murthinext.ae2pr.multiblock.module.ModuleProvider;
 import com.murthinext.ae2pr.multiblock.module.ModuleType;
 
-/**
- * 水晶装配线控制外壳。
- */
 public class CrystalAssemblyLineUnitBlock extends Block implements Wrenchable {
 
     private static final NumberFormat NUMBER = NumberFormat.getNumberInstance();
@@ -53,9 +50,7 @@ public class CrystalAssemblyLineUnitBlock extends Block implements Wrenchable {
         }
     }
 
-    /**
-     * 增益模块显示实际效果，其余模块显示提供的等级。
-     */
+    // 增益模块显示实际效果，其余模块显示提供的等级
     private static Component moduleTooltip(ModuleDefinition definition) {
         ModuleType type = definition.type();
         if (type == ModModules.PARALLEL) {

@@ -21,9 +21,7 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberControllerBlockEntity;
 import com.murthinext.ae2pr.client.effect.EmissiveCubeRenderer;
 
-/**
- * 水晶母岩放射电弧与高能核心自发光。
- */
+// 水晶母岩放射电弧与高能核心自发光
 public class CrystalReactionChamberRenderer
         implements BlockEntityRenderer<CrystalReactionChamberControllerBlockEntity> {
 

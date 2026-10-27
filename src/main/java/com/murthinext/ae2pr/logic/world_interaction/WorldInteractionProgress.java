@@ -8,9 +8,7 @@ import net.minecraft.world.level.material.FluidState;
 
 import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
 
-/**
- * 物品实体的交互计时和产物伤害保护状态。
- */
+// 物品实体的交互计时和产物伤害保护状态
 public final class WorldInteractionProgress {
 
     private static final int TRANSFORM_DELAY_TICKS = 60;

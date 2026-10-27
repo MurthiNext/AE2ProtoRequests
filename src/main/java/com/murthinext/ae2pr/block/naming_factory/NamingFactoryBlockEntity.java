@@ -37,9 +37,7 @@ import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModItems;
 
-/**
- * 名称压印工厂方块实体。
- */
+// 名称压印工厂方块实体
 public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
 
     public static final int SLOT_TEMPLATE = 0;
@@ -192,9 +190,7 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         return speedSteps() / 2.0D;
     }
 
-    /**
-     * 折算各阶段时长：加速卡只加速蓄力阶段。
-     */
+    // 折算各阶段时长：加速卡只加速蓄力阶段
     private void updatePhaseDurations() {
         chargeTicks = scaledDuration(CHARGE_TICKS, getSpeedMultiplier());
         pressTicks = PRESS_TICKS;
@@ -267,9 +263,7 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         };
     }
 
-    /**
-     * 服务端每 tick 推进状态机：蓄力 → 下压输出 → 回升。
-     */
+    // 服务端每 tick 推进状态机：蓄力 → 下压输出 → 回升
     public void serverTick() {
         if (level == null || level.isClientSide) {
             return;
@@ -319,9 +313,7 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
                 && output.getCount() + input.getCount() <= output.getMaxStackSize();
     }
 
-    /**
-     * 支付压印能量：优先扣本机缓存，不足再抽 ME 网络；耗能按整组输入物品数计。
-     */
+    // 支付压印能量：优先扣本机缓存，不足再抽 ME 网络；耗能按整组输入物品数计
     private boolean consumeEnergy(int parallel) {
         double cost = Config.namingFactoryEnergyPerItem() * parallel;
         if (cost <= 0) {
@@ -379,9 +371,7 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         return result;
     }
 
-    /**
-     * 进入新状态并记录起点；各阶段时长相对自身起点计算。
-     */
+    // 进入新状态并记录起点；各阶段时长相对自身起点计算
     private void beginState(WorkState newState) {
         this.state = newState;
         this.workStart = level != null ? level.getGameTime() : 0;
@@ -398,9 +388,7 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         return x < 0.5F ? 4 * x * x * x : 1 - (float) Math.pow(-2 * x + 2, 3) / 2;
     }
 
-    /**
-     * 本机自行持久化与掉落库存，不使用 AE 基类库存系统。
-     */
+    // 本机自行持久化与掉落库存，不使用 AE 基类库存系统
     @Override
     public InternalInventory getInternalInventory() {
         return InternalInventory.empty();

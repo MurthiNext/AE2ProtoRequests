@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.murthinext.ae2pr.client.AbstractMachinePartScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
@@ -19,17 +20,14 @@ import com.murthinext.ae2pr.block.machine_part.DualHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
 import com.murthinext.ae2pr.client.CustomIngredientSource;
-import com.murthinext.ae2pr.client.MachineGui;
+import com.murthinext.ae2pr.client.GeneralMachineScreen;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 
-/**
- * 机器部件流体仓界面。
- */
 public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> implements CustomIngredientSource {
 
     private static final int TANK_X0 = 20;
     private static final int TANK_Y = 34;
-    private static final int TANK_STEP = MachineGui.TANK_STEP;
+    private static final int TANK_STEP = GeneralMachineScreen.TANK_STEP;
 
     private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
@@ -37,9 +35,7 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
         super(menu, playerInventory, title);
     }
 
-    /**
-     * 客户端同步入口，仅由同步包调用。
-     */
+    // 客户端同步入口，仅由同步包调用
     public static void applyFluidSync(BlockPos pos, List<FluidStack> fluids, boolean autoTransfer) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level != null && minecraft.level.getBlockEntity(pos) instanceof FluidHatchBlockEntity hatch) {
@@ -71,7 +67,7 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
                 continue;
             }
             areas.add(Area.ofFluid(fluid, new Rect2i(leftPos + TANK_X0 + tank * TANK_STEP, topPos + TANK_Y,
-                    MachineGui.TANK_WIDTH, MachineGui.TANK_HEIGHT)));
+                    GeneralMachineScreen.TANK_WIDTH, GeneralMachineScreen.TANK_HEIGHT)));
         }
         return areas;
     }
@@ -87,16 +83,14 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
         renderPanel(graphics);
         renderToolbar(graphics);
         for (int tank = 0; tank < menu.getTankCount(); tank++) {
-            MachineGui.drawTank(graphics, leftPos + TANK_X0 + tank * TANK_STEP, topPos + TANK_Y);
-            MachineGui.drawTankArrow(graphics, leftPos + TANK_X0 + tank * TANK_STEP, topPos + TANK_Y,
+            GeneralMachineScreen.drawTank(graphics, leftPos + TANK_X0 + tank * TANK_STEP, topPos + TANK_Y);
+            GeneralMachineScreen.drawTankArrow(graphics, leftPos + TANK_X0 + tank * TANK_STEP, topPos + TANK_Y,
                     !menu.isOutputHatch());
             renderFluid(graphics, tank);
         }
     }
 
-    /**
-     * 左键取出、右键存入，由服务端菜单校验。
-     */
+    // 左键取出、右键存入，由服务端菜单校验
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         int tank = hoveredTank((int) mouseX, (int) mouseY);
@@ -129,8 +123,8 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
         for (int tank = 0; tank < menu.getTankCount(); tank++) {
             int x = leftPos + TANK_X0 + tank * TANK_STEP;
             int y = topPos + TANK_Y;
-            if (mouseX >= x && mouseX < x + MachineGui.TANK_WIDTH
-                    && mouseY >= y && mouseY < y + MachineGui.TANK_HEIGHT) {
+            if (mouseX >= x && mouseX < x + GeneralMachineScreen.TANK_WIDTH
+                    && mouseY >= y && mouseY < y + GeneralMachineScreen.TANK_HEIGHT) {
                 return tank;
             }
         }
@@ -138,9 +132,9 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
     }
 
     private void renderFluid(GuiGraphics graphics, int tank) {
-        MachineGui.drawFluid(graphics, clientFluid(tank),
+        GeneralMachineScreen.drawFluid(graphics, clientFluid(tank),
                 leftPos + TANK_X0 + 2 + tank * TANK_STEP, topPos + TANK_Y + 2,
-                MachineGui.TANK_INNER_WIDTH, MachineGui.TANK_INNER_HEIGHT, menu.getCapacityPerTank());
+                GeneralMachineScreen.TANK_INNER_WIDTH, GeneralMachineScreen.TANK_INNER_HEIGHT, menu.getCapacityPerTank());
     }
 
     private FluidStack clientFluid(int tank) {

@@ -38,9 +38,6 @@ import com.murthinext.ae2pr.multiblock.module.ModuleRequirement;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
 
-/**
- * 水晶装配线配方的 JEI 分类。
- */
 public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAssemblyLineRecipe> {
 
     public static final RecipeType<CrystalAssemblyLineRecipe> RECIPE_TYPE = RecipeType.create(
@@ -188,9 +185,7 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
         }
     }
 
-    /**
-     * 满足要求的模块物品，按等级升序排列。
-     */
+    // 满足要求的模块物品，按等级升序排列
     private static List<ItemStack> moduleCandidates(ModuleRequirement requirement) {
         List<Block> blocks = new ArrayList<>();
         for (Block block : ForgeRegistries.BLOCKS.getValues()) {

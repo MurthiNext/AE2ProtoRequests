@@ -7,9 +7,6 @@ import net.minecraftforge.common.extensions.IForgeMenuType;
 
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerMenu;
 
-/**
- * 物质相变仪主机的容器菜单。
- */
 public class MatterPhaseTransformerMenu
         extends AbstractMultiblockControllerMenu<MatterPhaseTransformerControllerBlockEntity> {
 

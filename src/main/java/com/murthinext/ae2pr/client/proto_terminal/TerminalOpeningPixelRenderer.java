@@ -12,9 +12,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
 
-/**
- * 从中心撕开的像素裂隙、辉光前沿与数据尘埃。
- */
+// 终端展开数据流
 final class TerminalOpeningPixelRenderer {
 
     private static final int MARGIN = 32;
@@ -152,7 +150,7 @@ final class TerminalOpeningPixelRenderer {
             }
             addHorizontalEdges(row + 1);
         }
-        // 稳定内区合并成单个裁剪矩形。
+        // 稳定内区合并成单个裁剪矩形
         int coreTop = Math.max(firstRow, Mth.ceil(centerY - halfHeight + reach - originY));
         int coreBottom = Math.min(lastRow + 1, Mth.floor(centerY + halfHeight - reach - originY));
         int coreLeft = 0;

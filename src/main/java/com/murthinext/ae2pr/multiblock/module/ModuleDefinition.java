@@ -1,8 +1,6 @@
 package com.murthinext.ae2pr.multiblock.module;
 
-/**
- * 模块定义：某个模块方块提供的功能与等级。
- */
+// 模块定义：某个模块方块提供的功能与等级
 public record ModuleDefinition(ModuleType type, int level) {
 
     public ModuleDefinition {

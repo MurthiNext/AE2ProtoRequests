@@ -12,9 +12,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.registries.RegistryObject;
 
-/**
- * 陨石矿石的随机选取与采集速度处理。
- */
 public final class MeteoriteOres {
 
     private record OreEntry(RegistryObject<MeteoriteOreBlock> block, int weight) {

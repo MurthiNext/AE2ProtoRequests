@@ -24,9 +24,6 @@ import appeng.menu.me.items.PatternEncodingTermMenu;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
 
-/**
- * 把水晶装配线配方写入处理样板，隔离模块需求。
- */
 @SuppressWarnings("removal")
 public class CrystalAssemblyLinePatternTransferHandler
         implements IRecipeTransferHandler<PatternEncodingTermMenu, CrystalAssemblyLineRecipe> {

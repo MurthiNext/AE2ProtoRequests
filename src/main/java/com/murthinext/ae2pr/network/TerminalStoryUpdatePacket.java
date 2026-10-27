@@ -11,9 +11,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;
 
-/**
- * 客户端上报压缩后的剧情快照。
- */
+// 客户端上报压缩后的剧情快照
 public class TerminalStoryUpdatePacket {
 
     private final byte[] snapshot;

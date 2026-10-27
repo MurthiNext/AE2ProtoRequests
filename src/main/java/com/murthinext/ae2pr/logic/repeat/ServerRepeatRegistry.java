@@ -6,9 +6,7 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
 
-/**
- * 服务端重复轮数登记表，带时效防止串单。
- */
+// 服务端重复轮数登记表，带时效防止串单
 public final class ServerRepeatRegistry {
     private static final long MAX_AGE_MILLIS = 5 * 60 * 1000L;
     private static final long RESTORE_MAX_AGE_MILLIS = 2 * 1000L;
@@ -36,9 +34,7 @@ public final class ServerRepeatRegistry {
         PENDING.remove(playerId);
     }
 
-    /**
-     * 把待确认轮数转入恢复队列，供数量菜单回填。
-     */
+    // 把待确认轮数转入恢复队列，供数量菜单回填
     public static void pushRestore(UUID playerId) {
         var pending = PENDING.remove(playerId);
         if (pending != null) {
@@ -46,9 +42,7 @@ public final class ServerRepeatRegistry {
         }
     }
 
-    /**
-     * 消费恢复队列，仅接受短时效值。
-     */
+    // 消费恢复队列，仅接受短时效值
     @Nullable
     public static Integer consumeRestore(UUID playerId) {
         var restore = RESTORE.remove(playerId);

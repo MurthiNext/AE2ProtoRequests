@@ -28,9 +28,6 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.MatterPhaseTransformerRecipe;
 
-/**
- * 物质相变仪配方的 JEI 分类。
- */
 public class MatterPhaseTransformerJeiCategory implements IRecipeCategory<MatterPhaseTransformerRecipe> {
 
     public static final RecipeType<MatterPhaseTransformerRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID, "matter_phase_transformer",

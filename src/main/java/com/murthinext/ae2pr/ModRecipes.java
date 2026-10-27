@@ -17,9 +17,6 @@ import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
 import com.murthinext.ae2pr.recipe.JigRecipe;
 import com.murthinext.ae2pr.recipe.MatterPhaseTransformerRecipe;
 
-/**
- * 配方注册入口。
- */
 public final class ModRecipes {
 
     private ModRecipes() {

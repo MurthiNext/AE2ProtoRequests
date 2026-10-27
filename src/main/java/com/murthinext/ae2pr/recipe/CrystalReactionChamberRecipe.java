@@ -10,9 +10,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ModRecipes;
 
-/**
- * 水晶反应仓配方。
- */
 public class CrystalReactionChamberRecipe extends AbstractMultiblockRecipe {
 
     public static final int DEFAULT_DURATION = 200;

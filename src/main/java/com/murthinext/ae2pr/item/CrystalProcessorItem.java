@@ -10,9 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-/**
- * 水晶处理器，tooltip 标注电压等级。
- */
 public class CrystalProcessorItem extends Item {
 
     private final String tierKey;

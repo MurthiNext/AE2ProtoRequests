@@ -15,9 +15,6 @@ import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
-/**
- * 重复订单失败的 Toast。
- */
 public class RepeatOrderFailedToast implements Toast {
     private static final long TIME_VISIBLE = 2500;
     private static final int TITLE_COLOR = 0xFFB00020;

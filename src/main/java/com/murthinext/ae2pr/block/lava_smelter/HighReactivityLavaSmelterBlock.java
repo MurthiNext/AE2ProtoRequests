@@ -11,9 +11,6 @@ import net.minecraft.world.level.material.MapColor;
 import com.murthinext.ae2pr.client.sound.MachineProcessingSounds;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 
-/**
- * 高反应性熔岩冶炼炉主机方块。
- */
 public class HighReactivityLavaSmelterBlock
         extends AbstractMultiblockControllerBlock<LavaSmelterControllerBlockEntity> {
 

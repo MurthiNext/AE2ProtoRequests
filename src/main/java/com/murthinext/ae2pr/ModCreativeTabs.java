@@ -7,9 +7,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
-/**
- * 创造模式标签页注册入口。
- */
 public final class ModCreativeTabs {
 
     private ModCreativeTabs() {

@@ -11,9 +11,6 @@ import net.minecraftforge.fluids.FluidType;
 
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 液态锆流体。
- */
 public class LiquidZirconiumFluidType extends FluidType {
 
     public LiquidZirconiumFluidType() {

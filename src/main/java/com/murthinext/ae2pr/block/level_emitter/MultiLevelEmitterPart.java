@@ -50,9 +50,6 @@ import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 import com.murthinext.ae2pr.item.filter_cell.FilterCellItem;
 
-/**
- * ME 通式标准发信器：支持过滤元件配置多触发项。
- */
 public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
         implements IConfigInvHost, ICraftingProvider, InternalInventoryHost {
 
@@ -253,9 +250,6 @@ public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
         }
     }
 
-    /**
-     * 逐项判定并按 AND/OR 组合。
-     */
     private boolean computeFilteredOn(IGrid grid, IPartitionList list) {
         var stacks = grid.getStorageService().getCachedInventory();
         boolean lowSignal = getConfigManager().getSetting(Settings.REDSTONE_EMITTER) == RedstoneMode.LOW_SIGNAL;
@@ -277,9 +271,6 @@ public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
         return result;
     }
 
-    /**
-     * 高级过滤元件：按标签表达式筛选后逐项判定。
-     */
     private boolean computeAdvancedOn(IGrid grid, Predicate<AEKey> filter) {
         var stacks = grid.getStorageService().getCachedInventory();
         boolean lowSignal = getConfigManager().getSetting(Settings.REDSTONE_EMITTER) == RedstoneMode.LOW_SIGNAL;
@@ -536,9 +527,7 @@ public class MultiLevelEmitterPart extends AbstractLevelEmitterPart
         configureWatchers();
     }
 
-    /**
-     * 过滤槽仅接受过滤元件。
-     */
+    // 过滤槽仅接受过滤元件
     private static class FilterCellItemFilter implements IAEItemFilter {
         @Override
         public boolean allowInsert(InternalInventory inv, int slot, ItemStack stack) {

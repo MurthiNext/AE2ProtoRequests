@@ -9,9 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-/**
- * 服务端 -> 客户端：重复订单全部完成提示。
- */
+// 服务端 -> 客户端：重复订单全部完成提示
 public class RepeatOrderFinishedPacket {
     private final AEKey what;
     private final long amountPerRound;

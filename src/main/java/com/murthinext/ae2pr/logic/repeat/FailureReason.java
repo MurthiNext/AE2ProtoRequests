@@ -4,9 +4,6 @@ import org.jetbrains.annotations.Nullable;
 
 import appeng.api.networking.crafting.CraftingSubmitErrorCode;
 
-/**
- * 重复订单失败原因。
- */
 public enum FailureReason {
     MISSING_MATERIAL,
     CPU_TOO_SMALL,

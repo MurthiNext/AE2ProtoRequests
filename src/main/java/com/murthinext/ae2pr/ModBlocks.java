@@ -15,7 +15,7 @@ import com.murthinext.ae2pr.block.ComputerCasingBlock;
 import com.murthinext.ae2pr.block.DisassemblableBlock;
 import com.murthinext.ae2pr.block.DisassemblableGlassBlock;
 import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
-import com.murthinext.ae2pr.block.alien_lava.AlienLavaBlock;
+import com.murthinext.ae2pr.block.AlienLavaBlock;
 import com.murthinext.ae2pr.block.molecular_assembly_core.MolecularAssemblyCoreBlock;
 import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineModuleBlock;
 import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineUnitBlock;
@@ -27,14 +27,11 @@ import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerBlock;
-import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
+import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOreBlock;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlock;
 import com.murthinext.ae2pr.multiblock.module.ModuleDefinition;
 
-/**
- * 方块注册入口。
- */
 public final class ModBlocks {
 
     private ModBlocks() {

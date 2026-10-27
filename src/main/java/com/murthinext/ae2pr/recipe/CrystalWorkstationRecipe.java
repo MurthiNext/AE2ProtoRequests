@@ -11,9 +11,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationMode;
 
-/**
- * 晶能工作站配方。
- */
 public class CrystalWorkstationRecipe extends AbstractMultiblockRecipe {
 
     public static final int MAX_ITEM_INPUTS = 6;

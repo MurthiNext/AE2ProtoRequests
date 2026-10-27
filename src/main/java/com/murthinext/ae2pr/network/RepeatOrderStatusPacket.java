@@ -9,9 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-/**
- * 服务端 -> 客户端：菜单可见 CPU 的轮次信息。
- */
+// 服务端 -> 客户端：菜单可见 CPU 的轮次信息
 public class RepeatOrderStatusPacket {
     private final int containerId;
     private final List<CpuRoundInfo> entries;

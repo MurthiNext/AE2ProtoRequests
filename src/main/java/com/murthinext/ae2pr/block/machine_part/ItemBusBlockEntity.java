@@ -23,9 +23,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModBlocks;
 
-/**
- * 机器部件物品总线方块实体，输出总线禁止外部存入。
- */
 public class ItemBusBlockEntity extends BlockEntity {
 
     public static final int CAPACITY = 32 * 1024;
@@ -193,9 +190,7 @@ public class ItemBusBlockEntity extends BlockEntity {
         setChanged();
     }
 
-    /**
-     * 与朝向面的外部容器搬运物品。
-     */
+    // 与朝向面的外部容器搬运物品
     public void serverTick() {
         if (!autoTransfer || level == null || level.isClientSide) {
             return;

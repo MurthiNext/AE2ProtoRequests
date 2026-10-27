@@ -6,9 +6,7 @@ import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 
-/**
- * 携带特殊取色规则的文本内容。
- */
+// 携带特殊取色规则的文本内容
 public final class TooltipColorEffect implements ComponentContents {
 
     public static final float DEFAULT_SPEED = 1.0F;

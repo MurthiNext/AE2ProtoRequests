@@ -26,11 +26,9 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 
 import com.murthinext.ae2pr.block.crystal_reactor.CrystalReactorCoreBlockEntity;
-import com.murthinext.ae2pr.block.crystal_reactor.CrystalReactorStructure;
+import com.murthinext.ae2pr.multiblock.structure.CrystalReactorStructure;
 
-/**
- * 工作时提供十五级照明的高能核心，同时是水晶反应器的触发核心。
- */
+// 高能核心，可作为结构方块/水晶反应器触发器
 public class HighEnergyCoreBlock extends DisassemblableBlock implements EntityBlock {
 
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
@@ -70,9 +68,7 @@ public class HighEnergyCoreBlock extends DisassemblableBlock implements EntityBl
         };
     }
 
-    /**
-     * 反应进行中破坏核心不产生掉落。
-     */
+    // 反应进行中破坏核心不产生掉落
     @Override
     public List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
         if (state.getValue(LIT)) {
@@ -81,9 +77,7 @@ public class HighEnergyCoreBlock extends DisassemblableBlock implements EntityBl
         return super.getDrops(state, params);
     }
 
-    /**
-     * 空手右键即尝试触发水晶反应器；结构不匹配时把交互交还其他逻辑。
-     */
+    // 空手右键即尝试触发水晶反应器
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
             BlockHitResult hit) {

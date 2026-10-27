@@ -2,9 +2,6 @@ package com.murthinext.ae2pr.integration.jei;
 
 import java.text.NumberFormat;
 
-/**
- * JEI 配方界面的数量缩写与精确数量格式。
- */
 public final class JeiAmountFormat {
 
     private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();

@@ -9,9 +9,6 @@ import appeng.menu.slot.FakeSlot;
 
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 
-/**
- * 发信器的配置槽：与过滤元件共用同一槽位。
- */
 public class EmitterConfigSlot extends FakeSlot {
 
     private final InternalInventory filterInventory;

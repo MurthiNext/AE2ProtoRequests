@@ -63,7 +63,7 @@ public class JigRenderer implements BlockEntityRenderer<JigControllerBlockEntity
                 surface(consumer, pose.last(), still, side, back, x, y, z, frontHeight, backHeight,
                         -0.5F, 0.5F, 0.0F, 1.0F, color, cellLight);
             } else {
-                // 在纹理边界拆分斜面，滚动 UV 始终限制在当前图集精灵内。
+                // 在纹理边界拆分斜面，滚动 UV 始终限制在当前图集精灵内
                 surface(consumer, pose.last(), flow, side, back, x, y, z, frontHeight, backHeight,
                         -0.5F, 0.5F - phase, phase, 1.0F, color, cellLight);
                 if (phase > 0.0F) {

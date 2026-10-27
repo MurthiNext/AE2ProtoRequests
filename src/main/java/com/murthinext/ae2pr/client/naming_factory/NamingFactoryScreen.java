@@ -11,11 +11,8 @@ import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryMenu;
 import com.murthinext.ae2pr.client.ModGuide;
 import com.murthinext.ae2pr.client.AbstractMachineScreen;
-import com.murthinext.ae2pr.client.MachineGui;
+import com.murthinext.ae2pr.client.GeneralMachineScreen;
 
-/**
- * 名称压印工厂界面。
- */
 public class NamingFactoryScreen extends AbstractMachineScreen<NamingFactoryMenu> {
 
     private static final int TEMPLATE_SLOT_X = 120;
@@ -63,13 +60,13 @@ public class NamingFactoryScreen extends AbstractMachineScreen<NamingFactoryMenu
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         super.renderBg(graphics, partialTick, mouseX, mouseY);
-        MachineGui.drawSlot(graphics, leftPos + TEMPLATE_SLOT_X, topPos + TEMPLATE_SLOT_Y);
-        MachineGui.drawSlot(graphics, leftPos + INPUT_SLOT_X, topPos + INPUT_SLOT_Y);
-        MachineGui.drawSlot(graphics, leftPos + OUTPUT_SLOT_X, topPos + OUTPUT_SLOT_Y);
-        MachineGui.drawArrow(graphics, leftPos + PRESS_ARROW_X, topPos + PRESS_ARROW_Y, true, true);
+        GeneralMachineScreen.drawSlot(graphics, leftPos + TEMPLATE_SLOT_X, topPos + TEMPLATE_SLOT_Y);
+        GeneralMachineScreen.drawSlot(graphics, leftPos + INPUT_SLOT_X, topPos + INPUT_SLOT_Y);
+        GeneralMachineScreen.drawSlot(graphics, leftPos + OUTPUT_SLOT_X, topPos + OUTPUT_SLOT_Y);
+        GeneralMachineScreen.drawArrow(graphics, leftPos + PRESS_ARROW_X, topPos + PRESS_ARROW_Y, true, true);
         NamingFactoryBlockEntity blockEntity = menu.getBlockEntity();
         float progress = blockEntity != null ? blockEntity.getWorkProgress(partialTick) : 0;
-        MachineGui.drawProgressBar(graphics, leftPos + PROGRESS_X, topPos + PROGRESS_Y, progress);
+        GeneralMachineScreen.drawProgressBar(graphics, leftPos + PROGRESS_X, topPos + PROGRESS_Y, progress);
     }
 
     @Override

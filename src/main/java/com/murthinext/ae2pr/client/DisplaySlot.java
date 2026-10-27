@@ -7,9 +7,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * 只读展示槽：内容由供应器提供，仅显示单个图标，数量与提示由界面负责。
- */
 public class DisplaySlot extends Slot {
 
     private final Supplier<ItemStack> source;

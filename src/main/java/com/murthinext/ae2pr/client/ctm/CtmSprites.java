@@ -17,9 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
 
-/**
- * 连接纹理图集登记表：基础贴图 → CTM 图集，并缓存基础 sprite。
- */
+// 连接纹理图集登记表：基础贴图 → CTM 图集，并缓存基础 sprite
 public final class CtmSprites {
 
     public static final ResourceLocation AEV_PART_CASING = id("block/aev_machine_casing");
@@ -39,9 +37,7 @@ public final class CtmSprites {
 
     private static final Map<ResourceLocation, TextureAtlasSprite> CACHE = new HashMap<>();
 
-    /**
-     * 使用 GT 式 4×4 象限图集的底图；其余沿用 47-tile 图集。
-     */
+    // 使用 GT 式 4×4 象限图集的底图；其余沿用 47-tile 图集
     private static final Set<ResourceLocation> QUADRANTS = new LinkedHashSet<>();
 
     static {
@@ -75,18 +71,14 @@ public final class CtmSprites {
     private CtmSprites() {
     }
 
-    /**
-     * 登记底图：沿用 47-tile 图集。
-     */
+    // 登记底图：沿用 47-tile 图集
     private static void register(String basePath) {
         ResourceLocation base = id(basePath);
         ATLASES.put(base, id(basePath + "_ctm"));
         REGISTERED.add(base);
     }
 
-    /**
-     * 登记底图：使用 GT 式 4×4 象限图集。
-     */
+    // 登记底图：使用 GT 式 4×4 象限图集
     private static void registerQuadrant(String basePath) {
         ResourceLocation base = id(basePath);
         ATLASES.put(base, id(basePath + "_ctm"));
@@ -94,9 +86,7 @@ public final class CtmSprites {
         QUADRANTS.add(base);
     }
 
-    /**
-     * 该底图是否使用 GT 式 4×4 象限图集。
-     */
+    // 该底图是否使用 GT 式 4×4 象限图集
     public static boolean isQuadrant(TextureAtlasSprite base) {
         return QUADRANTS.contains(base.contents().name());
     }
@@ -119,9 +109,7 @@ public final class CtmSprites {
         return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, path);
     }
 
-    /**
-     * 图集拼接完成后缓存基础与图集 sprite。
-     */
+    // 图集拼接完成后缓存基础与图集 sprite
     public static void stitch(TextureAtlas atlas) {
         BASES.clear();
         CACHE.clear();

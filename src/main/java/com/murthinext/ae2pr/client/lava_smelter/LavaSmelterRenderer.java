@@ -24,9 +24,7 @@ import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
 import com.murthinext.ae2pr.multiblock.structure.LavaSmelterStructure;
 
-/**
- * 炉膛假熔岩渲染。
- */
+// 炉膛渲染异星熔岩
 public class LavaSmelterRenderer implements BlockEntityRenderer<LavaSmelterControllerBlockEntity> {
 
     private static final ResourceLocation ALIEN_LAVA_STILL = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
@@ -92,9 +90,7 @@ public class LavaSmelterRenderer implements BlockEntityRenderer<LavaSmelterContr
         return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(location);
     }
 
-    /**
-     * 按逆时针（从外侧看）顺序输出四边形。
-     */
+    // 按逆时针（从外侧看）顺序输出四边形
     private static void quad(VertexConsumer consumer, Matrix4f matrix, TextureAtlasSprite sprite,
             float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz,
             float dx, float dy, float dz, float nx, float ny, float nz) {

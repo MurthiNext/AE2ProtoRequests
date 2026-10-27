@@ -35,9 +35,7 @@ import appeng.me.service.CraftingService;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 
-/**
- * 重复订单核心状态机：轮次推进、异步重算与失败重试。
- */
+// 重复订单核心状态机：轮次推进、异步重算与失败重试
 @Mixin(value = CraftingCpuLogic.class, remap = false)
 public abstract class CraftingCpuLogicMixin implements IRepeatOrderHost {
 
@@ -89,9 +87,7 @@ public abstract class CraftingCpuLogicMixin implements IRepeatOrderHost {
         context.notifyCooldownTicks = 20;
     }
 
-    /**
-     * 任务结束：仅处理本订单的任务；成功推进轮次，取消清空。
-     */
+    // 任务结束：仅处理本订单的任务；成功推进轮次，取消清空
     @Inject(method = "finishJob", at = @At("HEAD"))
     private void ae2pr$onFinishJob(boolean success, CallbackInfo ci) {
         var context = this.ae2pr$context;
@@ -178,9 +174,7 @@ public abstract class CraftingCpuLogicMixin implements IRepeatOrderHost {
         }
     }
 
-    /**
-     * 持久化订单；计划不可直接序列化，恢复后重新模拟。
-     */
+    // 持久化订单；计划不可直接序列化，恢复后重新模拟
     @Inject(method = "writeToNBT", at = @At("TAIL"))
     private void ae2pr$writeRepeatOrder(CompoundTag data, CallbackInfo ci) {
         var context = this.ae2pr$context;
@@ -322,9 +316,7 @@ public abstract class CraftingCpuLogicMixin implements IRepeatOrderHost {
         return context.source != null ? context.source : this.cluster.getSrc();
     }
 
-    /**
-     * 通知所有者轮次开始（remainingRounds 含当前轮）；&lt;= 1 表示清除中间轮标记。
-     */
+    // 通知所有者轮次开始（remainingRounds 含当前轮）；&lt;= 1 表示清除中间轮标记
     @Unique
     private void ae2pr$sendRoundNotify(RepeatOrderContext context, int remainingRounds) {
         RepeatOrderNotifier.sendRound(context.ownerPlayerId, this.cluster.getLevel(), context.what,

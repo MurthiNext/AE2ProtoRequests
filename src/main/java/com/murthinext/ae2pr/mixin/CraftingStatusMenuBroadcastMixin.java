@@ -21,9 +21,7 @@ import appeng.me.cluster.implementations.CraftingCPUCluster;
 import appeng.menu.me.crafting.CraftingStatusMenu;
 import net.minecraft.server.level.ServerPlayer;
 
-/**
- * 合成状态菜单：列表刷新时把重复订单轮次同步给查看该菜单的玩家。
- */
+// 合成状态菜单：列表刷新时把重复订单轮次同步给查看该菜单的玩家
 @Mixin(CraftingStatusMenu.class)
 public abstract class CraftingStatusMenuBroadcastMixin {
 

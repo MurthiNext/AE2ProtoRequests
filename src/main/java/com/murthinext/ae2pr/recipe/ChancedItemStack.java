@@ -3,9 +3,7 @@ package com.murthinext.ae2pr.recipe;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * 带概率的物品产物，概率取 0~1。
- */
+// 带概率的物品产物，概率取 0~1
 public record ChancedItemStack(ItemStack stack, float chance) {
 
     public ChancedItemStack {

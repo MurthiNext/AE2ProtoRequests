@@ -8,9 +8,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
-/**
- * 客户端 -> 服务端：请求本玩家在当前存档里的源始终端阅读进度。
- */
+// 客户端 -> 服务端：请求本玩家在当前存档里的源始终端阅读进度
 public class TerminalStoryRequestPacket {
 
     public static void encode(TerminalStoryRequestPacket packet, FriendlyByteBuf buffer) {

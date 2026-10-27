@@ -10,9 +10,7 @@ import net.minecraftforge.network.NetworkEvent;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
 import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
 
-/**
- * 客户端 -> 服务端：流体仓槽位点击。
- */
+// 客户端 -> 服务端：流体仓槽位点击
 public class HatchTankClickPacket {
 
     private final BlockPos pos;

@@ -10,9 +10,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 
-/**
- * 同时提供物品总线与流体仓功能的总成。
- */
 public class DualHatchBlockEntity extends ItemBusBlockEntity {
 
     private final MachinePartFluidStorage fluidStorage;

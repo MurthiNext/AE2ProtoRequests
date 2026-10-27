@@ -18,9 +18,6 @@ import net.minecraft.world.item.TooltipFlag;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 
-/**
- * 物品槽渲染。
- */
 public class ItemStackAmountRenderer implements IIngredientRenderer<ItemStack> {
 
     public static final ItemStackAmountRenderer INSTANCE = new ItemStackAmountRenderer();

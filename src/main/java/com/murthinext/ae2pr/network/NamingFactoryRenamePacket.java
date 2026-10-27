@@ -14,9 +14,7 @@ import net.minecraftforge.network.NetworkEvent;
 import com.murthinext.ae2pr.ModTags;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
 
-/**
- * 客户端 -> 服务端：写入名称压印工厂的自定义名称。
- */
+// 客户端 -> 服务端：写入名称压印工厂的自定义名称
 public record NamingFactoryRenamePacket(BlockPos pos, String name) {
 
     private static final int MAX_NAME_LENGTH = 64;

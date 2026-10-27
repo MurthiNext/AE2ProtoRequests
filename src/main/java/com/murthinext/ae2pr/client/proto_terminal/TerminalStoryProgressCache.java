@@ -15,9 +15,7 @@ import com.murthinext.ae2pr.network.TerminalStoryWatchPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 
-/**
- * 当前存档的客户端剧情快照与服务端背包条件缓存。
- */
+// 终端剧情进度缓存
 public final class TerminalStoryProgressCache {
 
     private static final Set<String> satisfiedUnlocks = new LinkedHashSet<>();

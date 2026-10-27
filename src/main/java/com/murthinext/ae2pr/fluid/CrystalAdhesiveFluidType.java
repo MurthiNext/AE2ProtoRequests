@@ -11,9 +11,6 @@ import net.minecraftforge.fluids.FluidType;
 
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 水晶黏合剂流体。
- */
 public class CrystalAdhesiveFluidType extends FluidType {
 
     public CrystalAdhesiveFluidType() {

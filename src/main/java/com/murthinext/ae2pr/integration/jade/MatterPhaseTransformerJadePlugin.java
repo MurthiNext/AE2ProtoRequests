@@ -10,9 +10,6 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerBlock;
 import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerControllerBlockEntity;
 
-/**
- * 显示物质相变仪连接状态与作业的 Jade 插件。
- */
 @WailaPlugin(ae2pr.MODID)
 public class MatterPhaseTransformerJadePlugin extends AbstractMultiblockJadePlugin {
 

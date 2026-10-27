@@ -15,9 +15,6 @@ import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlockEntity;
 import com.murthinext.ae2pr.multiblock.structure.MatterPhaseTransformerStructure;
 import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
-/**
- * 物质相变仪主机方块实体。
- */
 public class MatterPhaseTransformerControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
     private final MatterPhaseTransformerAnimation animation = new MatterPhaseTransformerAnimation();

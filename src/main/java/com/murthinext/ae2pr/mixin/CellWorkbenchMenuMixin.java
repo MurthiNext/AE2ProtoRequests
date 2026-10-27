@@ -14,9 +14,7 @@ import appeng.menu.implementations.UpgradeableMenu;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 
-/**
- * 元件工作台菜单：注册白/黑名单表达式同步用的 client action。
- */
+// 元件工作台菜单：注册白/黑名单表达式同步用的 client action
 @Mixin(value = CellWorkbenchMenu.class, remap = false)
 public abstract class CellWorkbenchMenuMixin extends UpgradeableMenu<CellWorkbenchBlockEntity> {
 

@@ -11,9 +11,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-/**
- * 服务端 -> 客户端：同步总线存储与搬运开关。
- */
+// 服务端 -> 客户端：同步总线存储与搬运开关
 public class MachinePartStackPacket {
 
     private final BlockPos pos;

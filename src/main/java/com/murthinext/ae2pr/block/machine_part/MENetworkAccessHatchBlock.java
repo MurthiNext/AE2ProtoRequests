@@ -26,9 +26,6 @@ import appeng.block.AEBaseEntityBlock;
 
 import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
-/**
- * ME 网络接入仓方块。
- */
 public class MENetworkAccessHatchBlock extends AEBaseEntityBlock<MENetworkAccessHatchBlockEntity>
         implements Wrenchable {
 
@@ -66,9 +63,7 @@ public class MENetworkAccessHatchBlock extends AEBaseEntityBlock<MENetworkAccess
         return FACING;
     }
 
-    /**
-     * 仅未成型时允许旋转。
-     */
+    // 仅未成型时允许旋转
     @Override
     public boolean canRotateWithWrench(BlockState state) {
         return !state.getValue(FORMED);

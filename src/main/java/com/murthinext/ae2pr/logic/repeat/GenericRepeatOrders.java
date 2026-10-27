@@ -25,9 +25,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 
-/**
- * 通用重复订单管理器，接管 VCPU 型 CPU。
- */
+// 通用重复订单管理器，接管 VCPU 型 CPU
 public final class GenericRepeatOrders {
     private static final List<GenericRepeatOrder> ORDERS = new ArrayList<>();
     private static final Map<ICraftingCPU, GenericRepeatOrder> BY_CPU = new IdentityHashMap<>();
@@ -38,9 +36,7 @@ public final class GenericRepeatOrders {
     private GenericRepeatOrders() {
     }
 
-    /**
-     * 状态包构造时暂存参数（Mixin 调用）。
-     */
+    // 状态包构造时暂存参数（Mixin 调用）
     public static void observeConstruction(UUID jobId, AEKey what, long requestedAmount,
             CraftingJobStatusPacket.Status status) {
         PENDING_STATUS.set(new PendingStatus(jobId, what, requestedAmount, status));
@@ -53,9 +49,7 @@ public final class GenericRepeatOrders {
         return pending;
     }
 
-    /**
-     * 状态包观察失败的兜底日志（只记录一次）。
-     */
+    // 状态包观察失败的兜底日志（只记录一次）
     public static void logObserverFailure(Throwable t) {
         if (!observerFailureLogged) {
             observerFailureLogged = true;
@@ -309,9 +303,7 @@ public final class GenericRepeatOrders {
         return busy;
     }
 
-    /**
-     * 刷新展示用 CPU，取新进入忙碌者；提交目标不变。
-     */
+    // 刷新展示用 CPU，取新进入忙碌者；提交目标不变
     private static void updateDisplayCpu(GenericRepeatOrder order, Set<ICraftingCPU> busyBefore) {
         ICraftingCPU newlyBusy = null;
         for (var cpu : order.grid.getCraftingService().getCpus()) {
@@ -343,15 +335,11 @@ public final class GenericRepeatOrders {
         order.displayCpu = null;
     }
 
-    /**
-     * 状态界面展示信息。
-     */
+    // 状态界面展示信息
     public record RoundInfo(int round, int total) {
     }
 
-    /**
-     * 发送用状态包构造时暂存的参数。
-     */
+    // 发送用状态包构造时暂存的参数
     public record PendingStatus(UUID jobId, @Nullable AEKey what, long requestedAmount,
             CraftingJobStatusPacket.Status status) {
     }

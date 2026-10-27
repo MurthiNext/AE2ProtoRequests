@@ -16,9 +16,6 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import appeng.api.upgrades.Upgrades;
 
-/**
- * 多方块控制器菜单的公共基底：升级槽、玩家背包与状态同步。
- */
 public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultiblockControllerBlockEntity>
         extends AbstractContainerMenu {
 

@@ -21,9 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import com.murthinext.ae2pr.ModRecipes;
 
-/**
- * 支持带数量原料、多产物和流体源替换的复杂世界交互配方。
- */
+// 支持带数量原料、多产物和流体源替换的复杂世界交互配方
 public class ComplexWorldInteractionRecipe extends AbstractRecipe {
 
     private final WorldInteractionCircumstance circumstance;

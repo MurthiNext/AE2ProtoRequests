@@ -16,9 +16,6 @@ import com.murthinext.ae2pr.multiblock.structure.CrystalWorkstationStructure;
 import com.murthinext.ae2pr.recipe.CrystalWorkstationRecipe;
 import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
-/**
- * 晶能工作站主机方块实体。
- */
 public class CrystalWorkstationControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
     private CrystalWorkstationMode mode = CrystalWorkstationMode.ETCHING;

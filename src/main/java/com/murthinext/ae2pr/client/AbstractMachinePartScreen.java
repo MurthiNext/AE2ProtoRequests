@@ -1,9 +1,10 @@
-package com.murthinext.ae2pr.client.machine_part;
+package com.murthinext.ae2pr.client;
 
 import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.murthinext.ae2pr.client.machine_part.AutoTransferButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -12,14 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 
-import com.murthinext.ae2pr.client.GuiExtraAreas;
-import com.murthinext.ae2pr.client.ModGuide;
-import com.murthinext.ae2pr.client.GuideButton;
-import com.murthinext.ae2pr.client.MachineGui;
-
-/**
- * 机器部件界面基类。
- */
 public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu> extends AbstractContainerScreen<M>
         implements GuiExtraAreas {
 
@@ -35,8 +28,8 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
 
     protected AbstractMachinePartScreen(M menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        this.imageWidth = MachineGui.WIDTH;
-        this.imageHeight = MachineGui.HEIGHT;
+        this.imageWidth = GeneralMachineScreen.WIDTH;
+        this.imageHeight = GeneralMachineScreen.HEIGHT;
     }
 
     protected abstract boolean isOutput();
@@ -45,7 +38,7 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
 
     @Override
     public List<Rect2i> getGuiExtraAreas() {
-        return MachineGui.exclusionAreas(leftPos, topPos, toolbarButtons(), false);
+        return GeneralMachineScreen.exclusionAreas(leftPos, topPos, toolbarButtons(), false);
     }
 
     protected int toolbarButtons() {
@@ -55,11 +48,11 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
     @Override
     protected void init() {
         super.init();
-        guideButton = new GuideButton(leftPos + MachineGui.TOOLBAR_X + 1, topPos + MachineGui.TOOLBAR_Y + 1,
+        guideButton = new GuideButton(leftPos + GeneralMachineScreen.TOOLBAR_X + 1, topPos + GeneralMachineScreen.TOOLBAR_Y + 1,
                 () -> ModGuide.openAt(ModGuide.CHAMBERS_PAGE));
         addRenderableWidget(guideButton);
-        autoTransferButton = new AutoTransferButton(leftPos + MachineGui.TOOLBAR_X + 1,
-                topPos + MachineGui.TOOLBAR_Y + 1 + MachineGui.TOOLBAR_ROW_STEP,
+        autoTransferButton = new AutoTransferButton(leftPos + GeneralMachineScreen.TOOLBAR_X + 1,
+                topPos + GeneralMachineScreen.TOOLBAR_Y + 1 + GeneralMachineScreen.TOOLBAR_ROW_STEP,
                 isOutput() ? AutoTransferButton.Type.PUSH : AutoTransferButton.Type.PULL,
                 this::autoTransferEnabled,
                 () -> Minecraft.getInstance().gameMode.handleInventoryButtonClick(menu.containerId, 0));
@@ -74,13 +67,13 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
     }
 
     protected void renderPanel(GuiGraphics graphics) {
-        MachineGui.drawPanel(graphics, leftPos, topPos);
-        MachineGui.drawSeparator(graphics, leftPos, topPos, MachineGui.ACCENT_CRYSTAL, MachineGui.ACCENT_CRYSTAL_DARK);
-        MachineGui.drawInventorySlots(graphics, leftPos, topPos);
+        GeneralMachineScreen.drawPanel(graphics, leftPos, topPos);
+        GeneralMachineScreen.drawSeparator(graphics, leftPos, topPos, GeneralMachineScreen.ACCENT_CRYSTAL, GeneralMachineScreen.ACCENT_CRYSTAL_DARK);
+        GeneralMachineScreen.drawInventorySlots(graphics, leftPos, topPos);
     }
 
     protected void renderToolbar(GuiGraphics graphics) {
-        AutoTransferButton.renderToolbar(graphics, leftPos + MachineGui.TOOLBAR_X, topPos + MachineGui.TOOLBAR_Y,
+        AutoTransferButton.renderToolbar(graphics, leftPos + GeneralMachineScreen.TOOLBAR_X, topPos + GeneralMachineScreen.TOOLBAR_Y,
                 toolbarButtons());
     }
 

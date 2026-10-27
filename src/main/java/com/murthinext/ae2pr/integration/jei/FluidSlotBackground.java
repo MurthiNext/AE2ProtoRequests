@@ -7,9 +7,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * JEI 配方的流体槽背景。
- */
+// JEI 配方的流体槽背景
 public final class FluidSlotBackground {
 
     public static final int SIZE = 18;

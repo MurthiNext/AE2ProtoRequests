@@ -11,9 +11,6 @@ import net.minecraftforge.fluids.FluidType;
 
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 液态赛特斯石英水晶流体。
- */
 public class LiquidCertusQuartzFluidType extends FluidType {
 
     public LiquidCertusQuartzFluidType() {

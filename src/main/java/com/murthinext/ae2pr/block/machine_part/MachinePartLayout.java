@@ -1,8 +1,5 @@
 package com.murthinext.ae2pr.block.machine_part;
 
-/**
- * 机器部件界面的槽位与储罐几何，菜单与界面共用。
- */
 public final class MachinePartLayout {
 
     public static final int ITEM_Y = 47;

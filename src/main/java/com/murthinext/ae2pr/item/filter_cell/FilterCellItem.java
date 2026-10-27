@@ -13,9 +13,6 @@ import appeng.util.ConfigInventory;
 import appeng.util.prioritylist.IPartitionList;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * 过滤元件：在元件工作台中配置过滤项，并对外提供静态过滤 API。
- */
 public class FilterCellItem extends AEBaseItem implements ICellWorkbenchItem, FilterCell {
 
     public static final int CONFIG_SLOTS = 63;

@@ -57,9 +57,9 @@ public class RedstoneRequesterBlockEntity extends AENetworkBlockEntity
 
     private final Requests requests;
     private final IActionSource actionSource = new MachineSource(this);
-    /** 供合成模拟使用的来源（携带本机的 action source）。 */
+    // 供合成模拟使用的来源（携带本机的 action source）
     private final ICraftingSimulationRequester simulationRequester = () -> actionSource;
-    /** 在途的合成计划计算（红石触发后异步模拟，完成后提交）。 */
+    // 在途的合成计划计算（红石触发后异步模拟，完成后提交）
     private final List<PendingCraft> pending = new ArrayList<>();
 
     private boolean lastRedstone;
@@ -126,9 +126,7 @@ public class RedstoneRequesterBlockEntity extends AENetworkBlockEntity
 
     // ------------------------------------------------------------------ 红石触发
 
-    /**
-     * 由方块的红石信号变化回调。仅在上升沿（无信号 → 有信号）时触发一次下单。
-     */
+    // 由方块的红石信号变化回调。仅在上升沿（无信号 → 有信号）时触发一次下单
     public void onRedstoneChanged(boolean powered) {
         if (level == null || level.isClientSide) {
             return;
@@ -187,7 +185,7 @@ public class RedstoneRequesterBlockEntity extends AENetworkBlockEntity
         return pending.isEmpty() ? TickRateModulation.IDLE : TickRateModulation.URGENT;
     }
 
-    /** 轮询在途的合成计划，完成后提交任务（结果直接进入 ME 网络存储）。 */
+    // 轮询在途的合成计划，完成后提交任务（结果直接进入 ME 网络存储）
     private void pollPending() {
         if (pending.isEmpty()) {
             return;

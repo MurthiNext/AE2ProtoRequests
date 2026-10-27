@@ -11,9 +11,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 
-/**
- * 配方的公共样板，持有 id 与物品原料。
- */
 public abstract class AbstractRecipe implements Recipe<Container> {
 
     private final ResourceLocation id;

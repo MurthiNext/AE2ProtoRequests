@@ -25,16 +25,14 @@ import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 
-import com.murthinext.ae2pr.block.meteor_steel_pipe.MeteorSteelPipeBlock;
+import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
 import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.StructurePredicate;
 import com.murthinext.ae2pr.multiblock.module.ModuleInstance;
 import com.murthinext.ae2pr.multiblock.module.ModuleProvider;
 import com.murthinext.ae2pr.multiblock.module.ModuleSnapshot;
 
-/**
- * 只读预览世界，保留完整材料并按层提供渲染邻居。
- */
+// 只读预览世界，保留完整材料并按层提供渲染邻居
 public final class MultiblockPreview implements BlockAndTintGetter {
 
     public record Cell(BlockPos pos, StructurePredicate predicate, List<Block> candidates) {
@@ -160,9 +158,7 @@ public final class MultiblockPreview implements BlockAndTintGetter {
         return true;
     }
 
-    /**
-     * 把玩家替换过的方块恢复为默认方块。
-     */
+    // 把玩家替换过的方块恢复为默认方块
     public void resetBlocks() {
         for (Cell cell : cells) {
             states.put(cell.pos(), stateFor(cell, cell.candidates().get(0)));

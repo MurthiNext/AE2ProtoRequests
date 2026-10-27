@@ -35,9 +35,6 @@ import net.minecraftforge.network.NetworkHooks;
 import com.murthinext.ae2pr.ModTags;
 import com.murthinext.ae2pr.logic.wrench.Wrenchable;
 
-/**
- * 多方块控制器方块的公共基底。
- */
 public abstract class AbstractMultiblockControllerBlock<T extends AbstractMultiblockControllerBlockEntity>
         extends Block implements EntityBlock, Wrenchable, MultiblockControllerBlock {
 

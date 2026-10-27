@@ -29,9 +29,6 @@ import com.murthinext.ae2pr.recipe.ChancedItemStack;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.CrystalReactionChamberRecipe;
 
-/**
- * 水晶反应仓配方的 JEI 分类。
- */
 public class CrystalReactionChamberJeiCategory implements IRecipeCategory<CrystalReactionChamberRecipe> {
 
     public static final RecipeType<CrystalReactionChamberRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID,

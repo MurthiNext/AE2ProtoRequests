@@ -18,9 +18,6 @@ import appeng.menu.implementations.UpgradeableMenu;
 
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 
-/**
- * ME 通式阈值发信器的菜单：配置槽与过滤元件共用。
- */
 public class MultiThresholdLevelEmitterMenu extends UpgradeableMenu<MultiThresholdLevelEmitterPart> {
 
     private static final String ACTION_SET_UPPER_VALUE = "setUpperValue";

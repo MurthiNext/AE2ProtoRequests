@@ -32,9 +32,6 @@ import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlockEntity;
 import com.murthinext.ae2pr.multiblock.structure.LavaSmelterStructure;
 import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
-/**
- * 高反应性熔岩冶炼炉主机方块实体。
- */
 public class LavaSmelterControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
     public static final int DUST_SLOT_CAPACITY = 64;
@@ -131,9 +128,7 @@ public class LavaSmelterControllerBlockEntity extends AbstractMultiblockControll
 
     // 配方耐久
 
-    /**
-     * 陨石粉转耐久：仅当一批耐久能完整存入时才消耗。
-     */
+    // 陨石粉转耐久：仅当一批耐久能完整存入时才消耗
     private void absorbDust() {
         int max = Config.lavaSmelterMaxDurability();
         int perDust = Math.min(Config.lavaSmelterDurabilityPerDust(), max);
@@ -156,9 +151,7 @@ public class LavaSmelterControllerBlockEntity extends AbstractMultiblockControll
         return item != null && stack.is(item);
     }
 
-    /**
-     * 炉膛空腔伤害：耐久 > 0 时为熔岩 4 倍，否则 2 倍。
-     */
+    // 炉膛空腔伤害：耐久 > 0 时为熔岩 4 倍，否则 2 倍
     private void tickCavityDamage() {
         Level level = this.level;
         if (level == null || !isFormed()) {
@@ -173,9 +166,7 @@ public class LavaSmelterControllerBlockEntity extends AbstractMultiblockControll
         }
     }
 
-    /**
-     * 结构成型后持续抽取固定能量，供给不足时每秒按概率损失 1 点配方耐久。
-     */
+    // 结构成型后持续抽取固定能量，供给不足时每秒按概率损失 1 点配方耐久
     private void tickPassivePower() {
         if (!isFormed()) {
             powerShortageTicks = 0;
@@ -253,9 +244,7 @@ public class LavaSmelterControllerBlockEntity extends AbstractMultiblockControll
         return Config.lavaSmelterMaxDurability();
     }
 
-    /**
-     * 结构内输入/输出仓与总线，仅用于渲染与诊断。
-     */
+    // 结构内输入/输出仓与总线，仅用于渲染与诊断
     public List<BlockPos> poolCells() {
         return LavaSmelterStructure.poolCells(worldPosition, getFacing(), mirrorSide, mirrorFront);
     }

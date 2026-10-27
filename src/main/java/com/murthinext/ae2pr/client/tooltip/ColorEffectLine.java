@@ -11,9 +11,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 
-/**
- * 特效文本行。
- */
 public final class ColorEffectLine implements TooltipComponent {
 
     private final List<Segment> segments;

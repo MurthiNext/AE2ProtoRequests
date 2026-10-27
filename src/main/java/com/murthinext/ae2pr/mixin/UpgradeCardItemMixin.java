@@ -15,9 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-/**
- * 升级卡的适用机器列表仅在按住 Shift 时显示。
- */
+// 升级卡的适用机器列表仅在按住 Shift 时显示
 @Mixin(UpgradeCardItem.class)
 public abstract class UpgradeCardItemMixin {
 

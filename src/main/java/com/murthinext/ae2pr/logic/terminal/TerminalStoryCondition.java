@@ -7,9 +7,6 @@ import java.util.function.Predicate;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-/**
- * 剧情节点的可见性与可读性条件。
- */
 public sealed interface TerminalStoryCondition {
 
     boolean matches(TerminalStoryRunner runner, Predicate<String> inventory);

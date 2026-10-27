@@ -20,9 +20,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import com.murthinext.ae2pr.client.crystal_workstation.CrystalWorkstationCtm;
 import com.murthinext.ae2pr.client.multiblock.MultiblockPreview;
 
-/**
- * 连接纹理的模型包装：注入方块位置并按邻居重写 UV。
- */
+// 连接纹理的模型包装：注入方块位置并按邻居重写 UV
 public class CtmBakedModel extends BakedModelWrapper<BakedModel> {
 
     public CtmBakedModel(BakedModel originalModel) {

@@ -15,9 +15,7 @@ import com.murthinext.ae2pr.recipe.ChancedItemStack;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
-/**
- * 总线与流体仓的事务快照，用于模拟扣料与产物容纳。
- */
+// 总线与流体仓的事务快照，用于模拟扣料与产物容纳
 public final class PartInventory {
 
     private final List<ItemSlot> items = new ArrayList<>();
@@ -36,9 +34,7 @@ public final class PartInventory {
         }
     }
 
-    /**
-     * 按配方扣除输入；原料重叠时按最大流分配，失败时不修改任何实际存储。
-     */
+    // 按配方扣除输入；原料重叠时按最大流分配，失败时不修改任何实际存储
     public boolean consume(MultiblockRecipe recipe, int parallel) {
         if (!consumeItems(recipe.getItemInputs(), parallel)) {
             return false;
@@ -62,7 +58,7 @@ public final class PartInventory {
         return true;
     }
 
-    // 按容量流分配重叠原料，支持同一标签匹配多个槽位。
+    // 按容量流分配重叠原料，支持同一标签匹配多个槽位
     private boolean consumeItems(List<CountedIngredient> inputs, int parallel) {
         int source = inputs.size() + items.size();
         int sink = source + 1;
@@ -118,9 +114,7 @@ public final class PartInventory {
         return true;
     }
 
-    /**
-     * 模拟写入产物，返回全部放得下时为 true；快照需 {@link #commit()} 才生效。
-     */
+    // 模拟写入产物，返回全部放得下时为 true；快照需 {@link #commit()} 才生效
     public boolean insert(MultiblockRecipe recipe, int parallel) {
         // 概率产物按全量预留，避免实际产出时溢出掉落
         for (ChancedItemStack chanced : recipe.getChancedItemOutputs()) {

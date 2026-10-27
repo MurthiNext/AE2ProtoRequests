@@ -10,9 +10,6 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberBlock;
 import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberControllerBlockEntity;
 
-/**
- * 显示水晶反应仓连接状态与作业的 Jade 插件。
- */
 @WailaPlugin(ae2pr.MODID)
 public class CrystalReactionChamberJadePlugin extends AbstractMultiblockJadePlugin {
 

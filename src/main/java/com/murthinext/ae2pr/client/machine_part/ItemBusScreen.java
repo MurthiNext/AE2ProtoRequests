@@ -4,6 +4,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.murthinext.ae2pr.client.AbstractMachinePartScreen;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.Minecraft;
@@ -23,14 +24,11 @@ import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFluidStorage;
 import com.murthinext.ae2pr.block.machine_part.MachinePartLayout;
 import com.murthinext.ae2pr.client.CustomIngredientSource;
-import com.murthinext.ae2pr.client.MachineGui;
+import com.murthinext.ae2pr.client.GeneralMachineScreen;
 import com.murthinext.ae2pr.client.DisplaySlot;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 
-/**
- * 机器部件物品总线界面。
- */
 public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implements CustomIngredientSource {
 
     private static final int ARROW_X = 83;
@@ -45,9 +43,7 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
         super(menu, playerInventory, title);
     }
 
-    /**
-     * 客户端同步入口，仅由同步包调用。
-     */
+    // 客户端同步入口，仅由同步包调用
     public static void applyStackSync(BlockPos pos, List<ItemStack> stacks, boolean autoTransfer) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level != null && minecraft.level.getBlockEntity(pos) instanceof ItemBusBlockEntity bus) {
@@ -75,8 +71,8 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
             if (fluid.isEmpty()) {
                 continue;
             }
-            areas.add(Area.ofFluid(fluid, new Rect2i(leftPos + DUAL_TANK_X + tank * MachineGui.TANK_STEP,
-                    topPos + TANK_Y, MachineGui.TANK_WIDTH, MachineGui.TANK_HEIGHT)));
+            areas.add(Area.ofFluid(fluid, new Rect2i(leftPos + DUAL_TANK_X + tank * GeneralMachineScreen.TANK_STEP,
+                    topPos + TANK_Y, GeneralMachineScreen.TANK_WIDTH, GeneralMachineScreen.TANK_HEIGHT)));
         }
         return areas;
     }
@@ -92,19 +88,19 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
         renderPanel(graphics);
         renderToolbar(graphics);
         for (int slot = 0; slot < menu.getSlotCount(); slot++) {
-            MachineGui.drawSlot(graphics, slotX(slot), slotY(slot));
+            GeneralMachineScreen.drawSlot(graphics, slotX(slot), slotY(slot));
         }
         MachinePartFluidStorage storage = menu.getFluidStorage();
-        MachineGui.drawArrow(graphics, leftPos + (storage != null ? DUAL_SLOT_X + 12 : ARROW_X),
+        GeneralMachineScreen.drawArrow(graphics, leftPos + (storage != null ? DUAL_SLOT_X + 12 : ARROW_X),
                 topPos + ARROW_Y, !menu.isOutputBus(), true);
         if (storage != null) {
             for (int tank = 0; tank < storage.getTankCount(); tank++) {
-                int x = leftPos + DUAL_TANK_X + tank * MachineGui.TANK_STEP;
+                int x = leftPos + DUAL_TANK_X + tank * GeneralMachineScreen.TANK_STEP;
                 int y = topPos + TANK_Y;
-                MachineGui.drawTank(graphics, x, y);
-                MachineGui.drawTankArrow(graphics, x, y, !menu.isOutputBus());
-                MachineGui.drawFluid(graphics, storage.getTank(tank).getFluid(), x + 2, y + 2,
-                        MachineGui.TANK_INNER_WIDTH, MachineGui.TANK_INNER_HEIGHT, storage.getCapacityPerTank());
+                GeneralMachineScreen.drawTank(graphics, x, y);
+                GeneralMachineScreen.drawTankArrow(graphics, x, y, !menu.isOutputBus());
+                GeneralMachineScreen.drawFluid(graphics, storage.getTank(tank).getFluid(), x + 2, y + 2,
+                        GeneralMachineScreen.TANK_INNER_WIDTH, GeneralMachineScreen.TANK_INNER_HEIGHT, storage.getCapacityPerTank());
             }
         }
     }
@@ -190,10 +186,10 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
         MachinePartFluidStorage storage = menu.getFluidStorage();
         if (storage != null) {
             for (int tank = 0; tank < storage.getTankCount(); tank++) {
-                int x = leftPos + DUAL_TANK_X + tank * MachineGui.TANK_STEP;
+                int x = leftPos + DUAL_TANK_X + tank * GeneralMachineScreen.TANK_STEP;
                 int y = topPos + TANK_Y;
-                if (mouseX >= x && mouseX < x + MachineGui.TANK_WIDTH
-                        && mouseY >= y && mouseY < y + MachineGui.TANK_HEIGHT) {
+                if (mouseX >= x && mouseX < x + GeneralMachineScreen.TANK_WIDTH
+                        && mouseY >= y && mouseY < y + GeneralMachineScreen.TANK_HEIGHT) {
                     return tank;
                 }
             }

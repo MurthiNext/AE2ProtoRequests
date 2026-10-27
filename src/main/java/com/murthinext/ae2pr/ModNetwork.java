@@ -23,9 +23,6 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-/**
- * 模组自有网络通道。
- */
 public final class ModNetwork {
     private static final String PROTOCOL_VERSION = "4";
 

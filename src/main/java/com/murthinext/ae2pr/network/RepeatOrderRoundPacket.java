@@ -9,9 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-/**
- * 服务端 -> 客户端：当前轮次通知。
- */
+// 服务端 -> 客户端：当前轮次通知
 public class RepeatOrderRoundPacket {
     private final AEKey what;
     private final int remainingRounds;

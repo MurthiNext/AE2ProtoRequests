@@ -10,9 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
-/**
- * ME计算组件。
- */
 public class ComputationCellComponentItem extends Item {
 
     public static final int AEV_TIER = 0;

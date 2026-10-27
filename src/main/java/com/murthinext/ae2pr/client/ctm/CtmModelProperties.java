@@ -5,9 +5,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 
-/**
- * 连接纹理使用的模型数据属性。
- */
+// 连接纹理使用的模型数据属性
 public final class CtmModelProperties {
 
     public static final ModelProperty<BlockAndTintGetter> LEVEL = new ModelProperty<>();

@@ -9,9 +9,6 @@ import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEKey;
 import appeng.crafting.execution.ExecutingCraftingJob;
 
-/**
- * 服务端重复订单上下文（每个 CPU 一份）。
- */
 public final class RepeatOrderContext {
     public AEKey what;
     public long amountPerRound;

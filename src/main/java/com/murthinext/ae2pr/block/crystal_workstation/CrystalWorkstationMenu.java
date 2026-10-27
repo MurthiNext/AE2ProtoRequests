@@ -9,9 +9,6 @@ import net.minecraftforge.common.extensions.IForgeMenuType;
 
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerMenu;
 
-/**
- * 晶能工作站主机的容器菜单。
- */
 public class CrystalWorkstationMenu extends AbstractMultiblockControllerMenu<CrystalWorkstationControllerBlockEntity> {
 
     public static final MenuType<CrystalWorkstationMenu> TYPE = IForgeMenuType.create(CrystalWorkstationMenu::new);

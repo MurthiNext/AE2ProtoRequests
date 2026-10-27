@@ -1,8 +1,6 @@
 package com.murthinext.ae2pr.multiblock.module;
 
-/**
- * 配方对模块的要求。
- */
+// 配方对模块的要求
 public record ModuleRequirement(ModuleType type, int minLevel) {
 
     public ModuleRequirement {

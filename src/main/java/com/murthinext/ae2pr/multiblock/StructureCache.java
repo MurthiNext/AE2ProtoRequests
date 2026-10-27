@@ -9,9 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-/**
- * 结构缓存：只比较方块类型与方块实体引用，不比较方块状态。
- */
+// 结构缓存：只比较方块类型与方块实体引用，不比较方块状态
 public final class StructureCache {
 
     private final Map<BlockPos, Block> blocks = new HashMap<>();

@@ -8,9 +8,7 @@ import net.minecraft.util.Mth;
 
 import org.joml.Matrix4f;
 
-/**
- * 按字形顶点的行内横向位置重写颜色，得到子字符级平滑渐变。
- */
+// 按字形顶点的行内横向位置重写颜色，得到子字符级平滑渐变
 final class GradientBufferSource implements MultiBufferSource {
 
     private final int[] colors;

@@ -62,9 +62,10 @@ public class ae2pr {
     private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("AE2 Proto Requests initialized");
         event.enqueueWork(() -> {
-            // 过滤元件可用升级：仅模糊卡
+            // 过滤元件升级
             Upgrades.add(AEItems.FUZZY_CARD, ModItems.FILTER_CELL.get(), 1);
-            // 通式标准发信器可用升级：模糊卡 + 合成卡
+
+            // 通式标准发信器升级
             var emitterItem = ModItems.MULTI_LEVEL_EMITTER.get();
             Upgrades.add(AEItems.FUZZY_CARD, emitterItem, 1);
             Upgrades.add(AEItems.CRAFTING_CARD, emitterItem, 1);
@@ -72,7 +73,7 @@ public class ae2pr {
             Upgrades.add(AEItems.FUZZY_CARD, thresholdEmitterItem, 1);
             Upgrades.add(AEItems.CRAFTING_CARD, thresholdEmitterItem, 1);
 
-            // 机器升级槽
+            // 多方块机器升级
             Upgrades.add(AEItems.SPEED_CARD, ModBlocks.NAMING_FACTORY.get(), 4);
             Upgrades.add(AEItems.SPEED_CARD, ModBlocks.CRYSTAL_ASSEMBLY_LINE.get(), 4);
             Upgrades.add(AEItems.SPEED_CARD, ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get(), 4);
@@ -89,7 +90,6 @@ public class ae2pr {
             appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(networkAccessHatchType,
                     ModItems.ME_NETWORK_ACCESS_HATCH.get());
 
-            // 绑定方块实体类型并登记代表物品
             var namingFactoryType = ModBlockEntities.NAMING_FACTORY.get();
             ModBlocks.NAMING_FACTORY.get().setBlockEntity(
                     com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity.class,

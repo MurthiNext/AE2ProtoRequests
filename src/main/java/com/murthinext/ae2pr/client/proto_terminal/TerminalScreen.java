@@ -35,9 +35,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
-/**
- * 源始终端的剧情树与图文展示界面。
- */
+// 终端界面主要渲染
 public final class TerminalScreen extends Screen {
 
     private static final int CANVAS_WIDTH = 548;
@@ -155,9 +153,7 @@ public final class TerminalScreen extends Screen {
     private record Star(float x, float y, float phase, float speed, boolean cross) {
     }
 
-    /**
-     * 累积日志中的一条已读台词，按当前逐字进度缓存排版结果。
-     */
+    // 累积日志中的一条已读台词，按当前逐字进度缓存排版结果
     private static final class StoryLog {
 
         private final Line line;
@@ -200,16 +196,12 @@ public final class TerminalScreen extends Screen {
             return prefix.length();
         }
 
-        /**
-         * 已显示的字符数（含说话人前缀）；标记的停顿已计入。
-         */
+        // 已显示的字符数（含说话人前缀）；标记的停顿已计入
         int glyphsAt(long elapsedMillis) {
             return prefixLength() + text.glyphsAt(elapsedMillis / 1000.0);
         }
 
-        /**
-         * 显示到指定字符数所需的时间，用于存档恢复续播。
-         */
+        // 显示到指定字符数所需的时间，用于存档恢复续播
         long durationAt(int glyphs) {
             return Math.round(text.durationAt(glyphs - prefixLength()) * 1000);
         }
@@ -241,9 +233,7 @@ public final class TerminalScreen extends Screen {
         }
     }
 
-    /**
-     * 已排版的日志行。
-     */
+    // 已排版的日志行
     private record TextRow(String text, int speakerGlyphs, int y, StoryLog log, boolean current) {
     }
 
@@ -353,9 +343,7 @@ public final class TerminalScreen extends Screen {
                 && Util.getMillis() - openingStarted >= TerminalAnimation.OPEN_DURATION;
     }
 
-    /**
-     * 平滑缩放。
-     */
+    // 平滑缩放
     private void zoomContent(double mouseX, double mouseY, double amount) {
         float target = Mth.clamp(zoomTarget + (float) amount * ZOOM_STEP, MIN_ZOOM, MAX_ZOOM);
         if (target == zoomTarget) {
@@ -848,9 +836,7 @@ public final class TerminalScreen extends Screen {
         }
     }
 
-    /**
-     * 把当前演绎状态写入客户端缓存并上报服务端存档。
-     */
+    // 把当前演绎状态写入客户端缓存并上报服务端存档
     private void persistStory() {
         if (selectedNode == null || lockedNode || nodeProgress == null || runner == null) {
             return;
@@ -1019,9 +1005,7 @@ public final class TerminalScreen extends Screen {
         updateVisibility();
     }
 
-    /**
-     * 连线与节点入场都相对本块自己的 revealAt 起点播放。
-     */
+    // 连线与节点入场都相对本块自己的 revealAt 起点播放
     private float connectionProgress(long elapsed, TerminalStoryTree.Node node) {
         if (!isNodeVisible(node)) {
             return 0;
@@ -1064,9 +1048,7 @@ public final class TerminalScreen extends Screen {
                 && node.visibleWhen().matches(runner, TerminalStoryProgressCache::isUnlocked);
     }
 
-    /**
-     * 剧情块是否已解锁。
-     */
+    // 剧情块是否已解锁
     private boolean isNodeUnlocked(TerminalStoryTree.Node node) {
         return runner != null && (node.availableWhen().inventoryKeys().isEmpty()
                 || TerminalStoryProgressCache.areUnlocksSynced())
@@ -1447,9 +1429,7 @@ public final class TerminalScreen extends Screen {
         super.removed();
     }
 
-    /**
-     * 终端标题、剧情块与连线的入场时序。
-     */
+    // 终端标题、剧情块与连线的入场时序
     private static final class TerminalAnimation {
 
         private static final long OPEN_DURATION = 900;
@@ -1540,9 +1520,7 @@ public final class TerminalScreen extends Screen {
         }
     }
 
-    /**
-     * 按帧缓冲像素生成平行四边形裁剪带。
-     */
+    // 按帧缓冲像素生成平行四边形裁剪带
     private static final class TerminalParallelogramClip {
 
         private record Band(int left, int top, int right, int bottom) {
@@ -1578,9 +1556,7 @@ public final class TerminalScreen extends Screen {
         }
     }
 
-    /**
-     * 关闭屏幕后播放的终端淡出画面。
-     */
+    // 关闭屏幕后播放的终端淡出画面
     @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static final class TerminalFadeOutRenderer {
 

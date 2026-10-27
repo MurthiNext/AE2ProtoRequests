@@ -20,9 +20,6 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 import com.murthinext.ae2pr.ModBlocks;
 
-/**
- * 异星熔岩流体，行为接近岩浆，伤害与物品销毁由 AlienLavaBlock 处理。
- */
 public abstract class AlienLavaFluid extends ForgeFlowingFluid {
 
     public static final IntegerProperty CONVERSIONS = IntegerProperty.create("conversions", 0, 32);
@@ -80,9 +77,7 @@ public abstract class AlienLavaFluid extends ForgeFlowingFluid {
         return block;
     }
 
-    /**
-     * 流动状态。
-     */
+    // 流动状态
     public static class Flowing extends AlienLavaFluid {
 
         public Flowing(Properties properties) {
@@ -106,9 +101,6 @@ public abstract class AlienLavaFluid extends ForgeFlowingFluid {
         }
     }
 
-    /**
-     * 源状态。
-     */
     public static class Source extends AlienLavaFluid {
 
         public Source(Properties properties) {

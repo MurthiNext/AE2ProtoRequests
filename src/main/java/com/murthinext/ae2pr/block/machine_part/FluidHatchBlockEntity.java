@@ -18,9 +18,6 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModBlocks;
 
-/**
- * 机器部件流体仓方块实体。
- */
 public class FluidHatchBlockEntity extends BlockEntity {
 
     public static final int CAPACITY = 16 * 1024 * 1000;

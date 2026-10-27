@@ -7,9 +7,6 @@ import net.minecraftforge.common.extensions.IForgeMenuType;
 
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerMenu;
 
-/**
- * 水晶反应仓主机的容器菜单。
- */
 public class CrystalReactionChamberMenu
         extends AbstractMultiblockControllerMenu<CrystalReactionChamberControllerBlockEntity> {
 

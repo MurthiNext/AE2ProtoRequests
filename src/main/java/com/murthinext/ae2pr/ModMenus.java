@@ -17,9 +17,6 @@ import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
 import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerMenu;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryMenu;
 
-/**
- * 菜单类型注册入口。
- */
 public final class ModMenus {
 
     private ModMenus() {

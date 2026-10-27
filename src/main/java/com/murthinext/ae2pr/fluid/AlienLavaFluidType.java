@@ -14,9 +14,6 @@ import net.minecraftforge.fluids.FluidType;
 
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 异星熔岩流体类型。
- */
 public class AlienLavaFluidType extends FluidType {
 
     public AlienLavaFluidType() {

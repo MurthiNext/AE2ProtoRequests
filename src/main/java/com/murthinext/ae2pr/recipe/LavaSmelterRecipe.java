@@ -10,9 +10,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 
 import com.murthinext.ae2pr.ModRecipes;
 
-/**
- * 熔岩冶炼炉配方。
- */
 public class LavaSmelterRecipe extends AbstractMultiblockRecipe {
 
     public static final int DEFAULT_DURATION = 100;
@@ -24,9 +21,7 @@ public class LavaSmelterRecipe extends AbstractMultiblockRecipe {
         super(id, draft);
     }
 
-    /**
-     * 熔岩冶炼炉不按作业扣电，由结构被动耗电承担。
-     */
+    // 熔岩冶炼炉不按作业扣电，由结构被动耗电承担
     @Override
     protected double defaultEnergyPerParallel() {
         return 0;

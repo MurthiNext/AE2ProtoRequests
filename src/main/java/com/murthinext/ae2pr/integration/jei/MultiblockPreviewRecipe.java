@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.Block;
 
 import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.block.crystal_reactor.CrystalReactorStructure;
+import com.murthinext.ae2pr.multiblock.structure.CrystalReactorStructure;
 import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.structure.CrystalAssemblyLineStructure;
 import com.murthinext.ae2pr.multiblock.structure.CrystalReactionChamberStructure;

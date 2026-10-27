@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.block.crystal_reactor;
 
 import java.util.List;
 
+import com.murthinext.ae2pr.multiblock.structure.CrystalReactorStructure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -19,9 +20,7 @@ import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
 
-/**
- * 高能核心方块实体，水晶反应器。
- */
+// 高能核心方块实体，水晶反应器
 public class CrystalReactorCoreBlockEntity extends BlockEntity {
 
     private static final String ACTIVE_ID = "active";

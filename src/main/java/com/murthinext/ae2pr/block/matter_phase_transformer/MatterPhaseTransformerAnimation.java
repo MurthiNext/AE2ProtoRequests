@@ -1,8 +1,6 @@
 package com.murthinext.ae2pr.block.matter_phase_transformer;
 
-/**
- * 相变仪特效的快速蓄能与缓慢衰减。
- */
+// 相变仪特效的快速蓄能与缓慢衰减
 public final class MatterPhaseTransformerAnimation {
 
     private static final float CHARGE_STEP = 1.0F / 20;

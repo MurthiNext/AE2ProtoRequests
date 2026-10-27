@@ -7,9 +7,7 @@ import appeng.client.Point;
 import appeng.client.gui.widgets.CPUSelectionList;
 import appeng.menu.me.crafting.CraftingStatusMenu;
 
-/**
- * 暴露 CPU 命中的内部方法，用于 tooltip 扩展。
- */
+// 暴露 CPU 命中的内部方法，用于 tooltip 扩展
 @Mixin(value = CPUSelectionList.class, remap = false)
 public interface CPUSelectionListAccessor {
 

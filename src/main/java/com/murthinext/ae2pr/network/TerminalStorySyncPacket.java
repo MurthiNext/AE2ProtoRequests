@@ -9,9 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-/**
- * 服务端 -> 客户端：本玩家在当前存档里的源始终端阅读进度。
- */
+// 服务端 -> 客户端：本玩家在当前存档里的源始终端阅读进度
 public class TerminalStorySyncPacket {
 
     private final byte[] snapshot;

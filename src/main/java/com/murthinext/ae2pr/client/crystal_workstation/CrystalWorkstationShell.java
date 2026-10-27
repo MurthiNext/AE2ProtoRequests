@@ -20,9 +20,7 @@ import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationControll
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 import com.murthinext.ae2pr.multiblock.structure.CrystalWorkstationStructure;
 
-/**
- * 晶能工作站成型外观的客户端缓存。
- */
+// 晶能工作站成型外观的客户端缓存
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT)
 public final class CrystalWorkstationShell {
 

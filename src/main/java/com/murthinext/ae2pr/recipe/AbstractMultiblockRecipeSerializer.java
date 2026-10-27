@@ -7,9 +7,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
-/**
- * 多方块配方的序列化模板，统一处理公共字段。
- */
 public abstract class AbstractMultiblockRecipeSerializer<T extends AbstractMultiblockRecipe>
         implements RecipeSerializer<T> {
 

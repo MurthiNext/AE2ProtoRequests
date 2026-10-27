@@ -23,9 +23,7 @@ import com.murthinext.ae2pr.client.ctm.QuadrantCtmMeshBuilder;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 import com.murthinext.ae2pr.multiblock.structure.CrystalWorkstationStructure;
 
-/**
- * 晶能工作站成型外观：主机换装、隐藏核心、玻璃单面化与两侧 3x3 面板换装连纹。
- */
+// 晶能工作站成型外观：主机换装、隐藏核心、玻璃单面化与两侧 3x3 面板换装连纹
 public final class CrystalWorkstationCtm {
 
     private static final ResourceLocation STABILITY_SKIN = id("block/high_energy_stability_casing");
@@ -39,9 +37,7 @@ public final class CrystalWorkstationCtm {
         return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, path);
     }
 
-    /**
-     * 工作站成型外观的完整面重写。
-     */
+    // 工作站成型外观的完整面重写
     @Nullable
     public static List<BakedQuad> appearance(List<BakedQuad> quads, @Nullable Direction side,
             BlockAndTintGetter level, BlockPos pos) {

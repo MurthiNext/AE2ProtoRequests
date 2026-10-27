@@ -9,9 +9,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
 
-/**
- * 客户端 -> 服务端：总线存储区点击。
- */
+// 客户端 -> 服务端：总线存储区点击
 public class BusSlotClickPacket {
 
     private final BlockPos pos;
