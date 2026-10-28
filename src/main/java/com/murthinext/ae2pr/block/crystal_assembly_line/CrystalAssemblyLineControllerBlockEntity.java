@@ -22,7 +22,7 @@ import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFluidStorage;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.multiblock.PartInventory;
+import com.murthinext.ae2pr.multiblock.InputGroup;
 import com.murthinext.ae2pr.multiblock.StructureResult;
 import com.murthinext.ae2pr.multiblock.module.ModuleSnapshot;
 import com.murthinext.ae2pr.multiblock.module.ModuleType;
@@ -45,11 +45,6 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
 
     private ModuleSnapshot modules = ModuleSnapshot.EMPTY;
     private final List<UnitCell> unitCells = new ArrayList<>();
-
-    @Nullable
-    private List<ItemBusBlockEntity> jobBuses;
-    @Nullable
-    private List<MachinePartFluidStorage> jobHatches;
 
     public CrystalAssemblyLineControllerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CRYSTAL_ASSEMBLY_LINE.get(), pos, state, CrystalAssemblyLineStructure.INSTANCE,
@@ -101,8 +96,6 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
     @Nullable
     @Override
     protected Match findMatch() {
-        jobBuses = null;
-        jobHatches = null;
         for (MultiblockRecipe recipe : recipes()) {
             if (!(recipe instanceof CrystalAssemblyLineRecipe lineRecipe)) {
                 continue;
@@ -110,50 +103,62 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
             if (!modules.satisfies(lineRecipe.getModuleRequirements())) {
                 continue;
             }
-            List<ItemBusBlockEntity> buses = matchItems(lineRecipe);
-            if (buses == null) {
-                continue;
+            InputGroup best = null;
+            int bestParallel = 0;
+            // 隔离件各自成组，同一配方只能取自完全匹配的单个组
+            for (InputGroup group : inputGroups()) {
+                List<ItemBusBlockEntity> buses = matchItems(lineRecipe, group);
+                if (buses == null) {
+                    continue;
+                }
+                List<MachinePartFluidStorage> hatches = matchFluids(lineRecipe, group);
+                if (hatches == null) {
+                    continue;
+                }
+                InputGroup selected = new InputGroup();
+                buses.forEach(selected::addBus);
+                hatches.forEach(selected::addHatch);
+                int parallel = minSlotParallel(lineRecipe, selected);
+                if (parallel > bestParallel) {
+                    best = selected;
+                    bestParallel = parallel;
+                }
             }
-            List<MachinePartFluidStorage> hatches = matchFluids(lineRecipe);
-            if (hatches == null) {
-                continue;
+            if (best != null) {
+                return new Match(lineRecipe, bestParallel, best);
             }
-            int parallel = minSlotParallel(lineRecipe, buses, hatches);
-            if (parallel <= 0) {
-                continue;
-            }
-            jobBuses = buses;
-            jobHatches = hatches;
-            return new Match(lineRecipe, parallel);
         }
         return null;
     }
 
-    // 物品输入匹配，返回按配方顺序排列的总线
+    // 物品输入匹配，一仓一种原料，返回选中的总线
     @Nullable
-    private List<ItemBusBlockEntity> matchItems(CrystalAssemblyLineRecipe recipe) {
+    private List<ItemBusBlockEntity> matchItems(CrystalAssemblyLineRecipe recipe, InputGroup group) {
         List<CountedIngredient> inputs = recipe.getItemInputs();
+        List<ItemBusBlockEntity> buses = group.buses();
         List<ItemBusBlockEntity> matched = new ArrayList<>(inputs.size());
         if (inputs.isEmpty()) {
             return matched;
         }
         if (Config.assemblyItemsOrdered()) {
+            // 有序模式沿用绝对索引，并要求该部件属于候选组
             if (inputBuses.size() < inputs.size()) {
                 return null;
             }
             for (int i = 0; i < inputs.size(); i++) {
-                if (!hasItems(inputBuses.get(i), inputs.get(i))) {
+                ItemBusBlockEntity bus = inputBuses.get(i);
+                if (!buses.contains(bus) || !hasItems(bus, inputs.get(i))) {
                     return null;
                 }
-                matched.add(inputBuses.get(i));
+                matched.add(bus);
             }
             return matched;
         }
-        boolean[] used = new boolean[inputBuses.size()];
+        boolean[] used = new boolean[buses.size()];
         for (CountedIngredient input : inputs) {
             int found = -1;
-            for (int i = 0; i < inputBuses.size(); i++) {
-                if (!used[i] && hasItems(inputBuses.get(i), input)) {
+            for (int i = 0; i < buses.size(); i++) {
+                if (!used[i] && hasItems(buses.get(i), input)) {
                     found = i;
                     break;
                 }
@@ -162,7 +167,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
                 return null;
             }
             used[found] = true;
-            matched.add(inputBuses.get(found));
+            matched.add(buses.get(found));
         }
         return matched;
     }
@@ -171,10 +176,11 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
         return input.test(bus.getStorage().getStackInSlot(0));
     }
 
-    // 流体输入匹配，返回按配方顺序排列的仓
+    // 流体输入匹配，一仓一种原料，返回选中的仓
     @Nullable
-    private List<MachinePartFluidStorage> matchFluids(CrystalAssemblyLineRecipe recipe) {
+    private List<MachinePartFluidStorage> matchFluids(CrystalAssemblyLineRecipe recipe, InputGroup group) {
         List<FluidStack> inputs = recipe.getFluidInputs();
+        List<MachinePartFluidStorage> hatches = group.hatches();
         List<MachinePartFluidStorage> matched = new ArrayList<>(inputs.size());
         if (inputs.isEmpty()) {
             return matched;
@@ -184,18 +190,19 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
                 return null;
             }
             for (int i = 0; i < inputs.size(); i++) {
-                if (!hasFluid(inputHatches.get(i), inputs.get(i))) {
+                MachinePartFluidStorage hatch = inputHatches.get(i);
+                if (!hatches.contains(hatch) || !hasFluid(hatch, inputs.get(i))) {
                     return null;
                 }
-                matched.add(inputHatches.get(i));
+                matched.add(hatch);
             }
             return matched;
         }
-        boolean[] used = new boolean[inputHatches.size()];
+        boolean[] used = new boolean[hatches.size()];
         for (FluidStack input : inputs) {
             int found = -1;
-            for (int i = 0; i < inputHatches.size(); i++) {
-                if (!used[i] && hasFluid(inputHatches.get(i), input)) {
+            for (int i = 0; i < hatches.size(); i++) {
+                if (!used[i] && hasFluid(hatches.get(i), input)) {
                     found = i;
                     break;
                 }
@@ -204,7 +211,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
                 return null;
             }
             used[found] = true;
-            matched.add(inputHatches.get(found));
+            matched.add(hatches.get(found));
         }
         return matched;
     }
@@ -214,35 +221,19 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
         return stored.isFluidEqual(input) && stored.getAmount() > 0;
     }
 
-    // 匹配到的总线与仓中可执行的份数，产物容量交给基类统一检查
-    private int minSlotParallel(CrystalAssemblyLineRecipe recipe, List<ItemBusBlockEntity> buses,
-            List<MachinePartFluidStorage> hatches) {
+    // 组内可执行的份数，产物容量交给基类统一检查
+    private int minSlotParallel(CrystalAssemblyLineRecipe recipe, InputGroup group) {
         int low = 0;
         int high = maxParallel();
         while (low < high) {
             int middle = low + (high - low + 1) / 2;
-            if (new PartInventory(buses, hatches).consume(recipe, middle)) {
+            if (group.inventory().consume(recipe, middle)) {
                 low = middle;
             } else {
                 high = middle - 1;
             }
         }
         return low;
-    }
-
-    @Override
-    protected boolean consumeInputs(Match match) {
-        List<ItemBusBlockEntity> buses = jobBuses;
-        List<MachinePartFluidStorage> hatches = jobHatches;
-        if (buses == null || hatches == null) {
-            return false;
-        }
-        PartInventory inputs = new PartInventory(buses, hatches);
-        if (!inputs.consume(match.recipe(), match.parallel())) {
-            return false;
-        }
-        inputs.commit();
-        return true;
     }
 
     // 结构联动

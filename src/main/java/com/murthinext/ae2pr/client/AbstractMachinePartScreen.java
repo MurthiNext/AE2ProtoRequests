@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.murthinext.ae2pr.client.machine_part.AutoTransferButton;
+import com.murthinext.ae2pr.client.machine_part.RecipeIsolationButton;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -25,6 +26,8 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
     private GuideButton guideButton;
     @Nullable
     private AutoTransferButton autoTransferButton;
+    @Nullable
+    private RecipeIsolationButton recipeIsolationButton;
 
     protected AbstractMachinePartScreen(M menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -36,13 +39,15 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
 
     protected abstract boolean autoTransferEnabled();
 
+    protected abstract boolean recipeIsolationEnabled();
+
     @Override
     public List<Rect2i> getGuiExtraAreas() {
         return GeneralMachineScreen.exclusionAreas(leftPos, topPos, toolbarButtons(), false);
     }
 
     protected int toolbarButtons() {
-        return 2;
+        return isOutput() ? 2 : 3;
     }
 
     @Override
@@ -57,6 +62,14 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
                 this::autoTransferEnabled,
                 () -> Minecraft.getInstance().gameMode.handleInventoryButtonClick(menu.containerId, 0));
         addRenderableWidget(autoTransferButton);
+        recipeIsolationButton = null;
+        if (!isOutput()) {
+            recipeIsolationButton = new RecipeIsolationButton(leftPos + GeneralMachineScreen.TOOLBAR_X + 1,
+                    topPos + GeneralMachineScreen.TOOLBAR_Y + 1 + 2 * GeneralMachineScreen.TOOLBAR_ROW_STEP,
+                    this::recipeIsolationEnabled,
+                    () -> Minecraft.getInstance().gameMode.handleInventoryButtonClick(menu.containerId, 1));
+            addRenderableWidget(recipeIsolationButton);
+        }
     }
 
     @Override
@@ -81,6 +94,10 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
         if (guideButton != null && guideButton.renderTooltipIfHovered(graphics, font, mouseX, mouseY)) {
             return true;
         }
+        if (recipeIsolationButton != null
+                && recipeIsolationButton.renderTooltipIfHovered(graphics, font, mouseX, mouseY)) {
+            return true;
+        }
         if (autoTransferButton == null || !autoTransferButton.isHovered()) {
             return false;
         }
@@ -88,8 +105,7 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
                 Component.translatable(isOutput() ? "gui.ae2pr.machine_part.auto.push"
                         : "gui.ae2pr.machine_part.auto.pull"),
                 Component.translatable(autoTransferEnabled() ? "gui.ae2pr.machine_part.auto.enabled"
-                        : "gui.ae2pr.machine_part.auto.disabled"),
-                Component.translatable("gui.ae2pr.machine_part.auto.desc")),
+                        : "gui.ae2pr.machine_part.auto.disabled")),
                 mouseX, mouseY);
         return true;
     }

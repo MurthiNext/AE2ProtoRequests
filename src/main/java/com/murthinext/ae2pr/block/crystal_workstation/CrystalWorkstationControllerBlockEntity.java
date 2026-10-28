@@ -58,9 +58,9 @@ public class CrystalWorkstationControllerBlockEntity extends AbstractMultiblockC
     @Override
     protected Match findMatch() {
         for (MultiblockRecipe recipe : recipes()) {
-            int parallel = inputParallel(recipe, maxParallel());
-            if (parallel > 0) {
-                return new Match(recipe, parallel);
+            Match match = matchGroups(recipe);
+            if (match != null) {
+                return match;
             }
         }
         return null;

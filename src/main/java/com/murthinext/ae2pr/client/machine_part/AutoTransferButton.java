@@ -21,7 +21,7 @@ public class AutoTransferButton extends AbstractWidget {
     private static final int COLOR_BACKGROUND = 0xFF101418;
     private static final int COLOR_BORDER = 0xFF39424E;
     private static final int COLOR_BORDER_HOVER = 0xFF5A7A9A;
-    private static final int COLOR_DISABLED_LINE = 0xFFB05555;
+    private static final int COLOR_DISABLED_LINE = 0xFF5A7A9A;
 
     private static final ResourceLocation ICON_PULL_ON = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/guis/auto_transfer_pull_on.png");

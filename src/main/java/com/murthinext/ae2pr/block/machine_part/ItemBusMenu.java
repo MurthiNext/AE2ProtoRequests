@@ -45,7 +45,7 @@ public class ItemBusMenu extends AbstractContainerMenu {
     private List<FluidStack> lastSentFluids;
     private boolean stackSynced;
     private boolean lastAutoTransfer;
-    private boolean autoTransferSynced;
+    private boolean lastRecipeIsolated;
 
     private ItemBusMenu(int id, Inventory playerInventory, BlockPos pos, @Nullable ItemBusBlockEntity blockEntity) {
         super(TYPE, id);
@@ -116,39 +116,45 @@ public class ItemBusMenu extends AbstractContainerMenu {
         return menuSlot >= 0 && menuSlot < playerSlotFirst ? menuSlot : -1;
     }
 
+    // 存储/开关/隔离变化或首次广播时向打开界面的玩家同步，双仓两包同状态
     @Override
     public void broadcastChanges() {
         if (blockEntity != null && owner instanceof ServerPlayer serverPlayer) {
             List<ItemStack> current = blockEntity.getStorageSnapshots();
             boolean autoTransfer = blockEntity.isAutoTransfer();
+            boolean recipeIsolated = blockEntity.isRecipeIsolated();
+            boolean stateChanged = !stackSynced || autoTransfer != lastAutoTransfer
+                    || recipeIsolated != lastRecipeIsolated;
             MachinePartFluidStorage storage = getFluidStorage();
             if (storage != null) {
                 List<FluidStack> fluids = storage.getFluidSnapshots();
-                if (!autoTransferSynced || autoTransfer != lastAutoTransfer
-                        || !FluidHatchMenu.sameFluids(fluids, lastSentFluids)) {
+                if (stateChanged || !FluidHatchMenu.sameFluids(fluids, lastSentFluids)) {
                     lastSentFluids = fluids;
                     ModNetwork.sendToPlayer(serverPlayer,
-                            new MachinePartFluidPacket(pos, fluids, autoTransfer));
+                            new MachinePartFluidPacket(pos, fluids, autoTransfer, recipeIsolated));
                 }
             }
-            if (!stackSynced || !autoTransferSynced || autoTransfer != lastAutoTransfer
-                    || !sameStacks(current, lastSentStacks)) {
+            if (stateChanged || !sameStacks(current, lastSentStacks)) {
                 stackSynced = true;
-                autoTransferSynced = true;
                 lastSentStacks = current;
                 lastAutoTransfer = autoTransfer;
+                lastRecipeIsolated = recipeIsolated;
                 ModNetwork.sendToPlayer(serverPlayer,
-                        new MachinePartStackPacket(pos, lastSentStacks, autoTransfer));
+                        new MachinePartStackPacket(pos, lastSentStacks, autoTransfer, recipeIsolated));
             }
         }
         super.broadcastChanges();
     }
 
-    // 工具栏按钮 id 0 = 切换自动搬运
+    // 工具栏按钮 id 0 = 切换自动搬运，id 1 = 切换配方隔离（仅输入部件）
     @Override
     public boolean clickMenuButton(Player player, int id) {
         if (id == 0 && serverSide && blockEntity != null) {
             blockEntity.setAutoTransfer(!blockEntity.isAutoTransfer());
+            return true;
+        }
+        if (id == 1 && serverSide && blockEntity != null && !blockEntity.isOutputBus() && stillValid(player)) {
+            blockEntity.setRecipeIsolated(!blockEntity.isRecipeIsolated());
             return true;
         }
         return false;

@@ -43,7 +43,7 @@ public class FluidHatchMenu extends AbstractContainerMenu {
     private List<FluidStack> lastSentFluids;
     private boolean fluidSynced;
     private boolean lastAutoTransfer;
-    private boolean autoTransferSynced;
+    private boolean lastRecipeIsolated;
 
     private FluidHatchMenu(int id, Inventory playerInventory, BlockPos pos, @Nullable FluidHatchBlockEntity blockEntity) {
         super(TYPE, id);
@@ -89,30 +89,36 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         return blockEntity != null ? blockEntity.getCapacityPerTank() : FluidHatchBlockEntity.CAPACITY;
     }
 
-    // 流体/开关变化或首次广播时向打开界面的玩家同步
+    // 流体/开关/隔离变化或首次广播时向打开界面的玩家同步
     @Override
     public void broadcastChanges() {
         if (blockEntity != null && owner instanceof ServerPlayer serverPlayer) {
             List<FluidStack> current = blockEntity.getFluidSnapshots();
             boolean autoTransfer = blockEntity.isAutoTransfer();
-            if (!fluidSynced || !autoTransferSynced || autoTransfer != lastAutoTransfer
+            boolean recipeIsolated = blockEntity.isRecipeIsolated();
+            if (!fluidSynced || autoTransfer != lastAutoTransfer
+                    || recipeIsolated != lastRecipeIsolated
                     || !sameFluids(current, lastSentFluids)) {
                 fluidSynced = true;
-                autoTransferSynced = true;
                 lastSentFluids = current;
                 lastAutoTransfer = autoTransfer;
+                lastRecipeIsolated = recipeIsolated;
                 ModNetwork.sendToPlayer(serverPlayer,
-                        new MachinePartFluidPacket(pos, lastSentFluids, autoTransfer));
+                        new MachinePartFluidPacket(pos, lastSentFluids, autoTransfer, recipeIsolated));
             }
         }
         super.broadcastChanges();
     }
 
-    // 工具栏按钮 id 0 = 切换自动搬运
+    // 工具栏按钮 id 0 = 切换自动搬运，id 1 = 切换配方隔离（仅输入部件）
     @Override
     public boolean clickMenuButton(Player player, int id) {
         if (id == 0 && serverSide && blockEntity != null) {
             blockEntity.setAutoTransfer(!blockEntity.isAutoTransfer());
+            return true;
+        }
+        if (id == 1 && serverSide && blockEntity != null && !blockEntity.isOutputHatch() && stillValid(player)) {
+            blockEntity.setRecipeIsolated(!blockEntity.isRecipeIsolated());
             return true;
         }
         return false;

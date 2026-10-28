@@ -17,11 +17,14 @@ public class MachinePartFluidPacket {
     private final BlockPos pos;
     private final List<FluidStack> fluids;
     private final boolean autoTransfer;
+    private final boolean recipeIsolated;
 
-    public MachinePartFluidPacket(BlockPos pos, List<FluidStack> fluids, boolean autoTransfer) {
+    public MachinePartFluidPacket(BlockPos pos, List<FluidStack> fluids, boolean autoTransfer,
+            boolean recipeIsolated) {
         this.pos = pos;
         this.fluids = fluids;
         this.autoTransfer = autoTransfer;
+        this.recipeIsolated = recipeIsolated;
     }
 
     public static void encode(MachinePartFluidPacket packet, FriendlyByteBuf buffer) {
@@ -31,6 +34,7 @@ public class MachinePartFluidPacket {
             buffer.writeFluidStack(fluid);
         }
         buffer.writeBoolean(packet.autoTransfer);
+        buffer.writeBoolean(packet.recipeIsolated);
     }
 
     public static MachinePartFluidPacket decode(FriendlyByteBuf buffer) {
@@ -40,14 +44,14 @@ public class MachinePartFluidPacket {
         for (int i = 0; i < count; i++) {
             fluids.add(buffer.readFluidStack());
         }
-        return new MachinePartFluidPacket(pos, fluids, buffer.readBoolean());
+        return new MachinePartFluidPacket(pos, fluids, buffer.readBoolean(), buffer.readBoolean());
     }
 
     public static void handle(MachinePartFluidPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
                 () -> () -> com.murthinext.ae2pr.client.machine_part.FluidHatchScreen
-                        .applyFluidSync(packet.pos, packet.fluids, packet.autoTransfer)));
+                        .applyFluidSync(packet.pos, packet.fluids, packet.autoTransfer, packet.recipeIsolated)));
         context.setPacketHandled(true);
     }
 }

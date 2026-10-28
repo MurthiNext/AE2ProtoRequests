@@ -30,8 +30,10 @@ public class ItemBusBlockEntity extends BlockEntity {
 
     private static final String STORAGE_ID = "storage";
     private static final String AUTO_TRANSFER_ID = "autoTransfer";
+    private static final String RECIPE_ISOLATED_ID = "recipeIsolated";
 
     private boolean autoTransfer = true;
+    private boolean recipeIsolated;
 
     private final ItemStackHandler storage;
 
@@ -190,6 +192,15 @@ public class ItemBusBlockEntity extends BlockEntity {
         setChanged();
     }
 
+    public boolean isRecipeIsolated() {
+        return recipeIsolated;
+    }
+
+    public void setRecipeIsolated(boolean recipeIsolated) {
+        this.recipeIsolated = recipeIsolated;
+        setChanged();
+    }
+
     // 与朝向面的外部容器搬运物品
     public void serverTick() {
         if (!autoTransfer || level == null || level.isClientSide) {
@@ -252,6 +263,7 @@ public class ItemBusBlockEntity extends BlockEntity {
         super.saveAdditional(tag);
         tag.put(STORAGE_ID, storage.serializeNBT());
         tag.putBoolean(AUTO_TRANSFER_ID, autoTransfer);
+        tag.putBoolean(RECIPE_ISOLATED_ID, recipeIsolated);
     }
 
     @Override
@@ -263,5 +275,6 @@ public class ItemBusBlockEntity extends BlockEntity {
         if (tag.contains(AUTO_TRANSFER_ID)) {
             autoTransfer = tag.getBoolean(AUTO_TRANSFER_ID);
         }
+        recipeIsolated = tag.getBoolean(RECIPE_ISOLATED_ID);
     }
 }

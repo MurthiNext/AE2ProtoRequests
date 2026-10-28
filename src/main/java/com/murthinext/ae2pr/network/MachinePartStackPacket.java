@@ -17,11 +17,14 @@ public class MachinePartStackPacket {
     private final BlockPos pos;
     private final List<ItemStack> stacks;
     private final boolean autoTransfer;
+    private final boolean recipeIsolated;
 
-    public MachinePartStackPacket(BlockPos pos, List<ItemStack> stacks, boolean autoTransfer) {
+    public MachinePartStackPacket(BlockPos pos, List<ItemStack> stacks, boolean autoTransfer,
+            boolean recipeIsolated) {
         this.pos = pos;
         this.stacks = stacks;
         this.autoTransfer = autoTransfer;
+        this.recipeIsolated = recipeIsolated;
     }
 
     public static void encode(MachinePartStackPacket packet, FriendlyByteBuf buffer) {
@@ -32,6 +35,7 @@ public class MachinePartStackPacket {
             buffer.writeVarInt(stack.getCount());
         }
         buffer.writeBoolean(packet.autoTransfer);
+        buffer.writeBoolean(packet.recipeIsolated);
     }
 
     public static MachinePartStackPacket decode(FriendlyByteBuf buffer) {
@@ -46,14 +50,14 @@ public class MachinePartStackPacket {
             }
             stacks.add(stack);
         }
-        return new MachinePartStackPacket(pos, stacks, buffer.readBoolean());
+        return new MachinePartStackPacket(pos, stacks, buffer.readBoolean(), buffer.readBoolean());
     }
 
     public static void handle(MachinePartStackPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
                 () -> () -> com.murthinext.ae2pr.client.machine_part.ItemBusScreen
-                        .applyStackSync(packet.pos, packet.stacks, packet.autoTransfer)));
+                        .applyStackSync(packet.pos, packet.stacks, packet.autoTransfer, packet.recipeIsolated)));
         context.setPacketHandled(true);
     }
 }

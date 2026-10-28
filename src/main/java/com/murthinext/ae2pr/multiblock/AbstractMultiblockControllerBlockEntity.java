@@ -1,7 +1,9 @@
 package com.murthinext.ae2pr.multiblock;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -255,14 +257,14 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             pause(parallelShortageError());
             return;
         }
-        match = new Match(match.recipe(), capped);
+        match = new Match(match.recipe(), capped, match.group());
         // 输入够但产物放不下时单独提示，避免与“没有可用配方”混淆
         int parallel = outputParallel(match.recipe(), match.parallel());
         if (parallel <= 0) {
             pause(Error.OUTPUT);
             return;
         }
-        match = new Match(match.recipe(), parallel);
+        match = new Match(match.recipe(), parallel, match.group());
         // 能量按并行数与耗能倍率从接入仓网络一次性扣除
         double cost = energyCost(match);
         if (cost > 0) {
@@ -290,7 +292,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     protected boolean consumeInputs(Match match) {
-        PartInventory inputs = new PartInventory(inputBuses, inputHatches);
+        PartInventory inputs = match.group().inventory();
         if (!inputs.consume(match.recipe(), match.parallel())) {
             return false;
         }
@@ -413,18 +415,68 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return total;
     }
 
-    protected int inputParallel(MultiblockRecipe recipe, int maximum) {
+    protected int inputParallel(InputGroup group, MultiblockRecipe recipe, int maximum) {
         int low = 0;
         int high = outputCountBound(recipe, maximum);
         while (low < high) {
             int middle = low + (high - low + 1) / 2;
-            if (new PartInventory(inputBuses, inputHatches).consume(recipe, middle)) {
+            if (group.inventory().consume(recipe, middle)) {
                 low = middle;
             } else {
                 high = middle - 1;
             }
         }
         return low;
+    }
+
+    // 逐组试算，组间取最大并行而不相加
+    @Nullable
+    protected Match matchGroups(MultiblockRecipe recipe) {
+        InputGroup best = null;
+        int bestParallel = 0;
+        for (InputGroup group : inputGroups()) {
+            int parallel = inputParallel(group, recipe, maxParallel());
+            if (parallel > bestParallel) {
+                best = group;
+                bestParallel = parallel;
+            }
+        }
+        return best == null ? null : new Match(recipe, bestParallel, best);
+    }
+
+    // 隔离部件各自成组，未隔离部件组成共享池并排在最后
+    protected List<InputGroup> inputGroups() {
+        Map<BlockPos, InputGroup> isolated = new LinkedHashMap<>();
+        InputGroup shared = new InputGroup();
+        for (ItemBusBlockEntity bus : inputBuses) {
+            if (bus.isRecipeIsolated()) {
+                isolatedGroup(isolated, bus.getBlockPos()).addBus(bus);
+            } else {
+                shared.addBus(bus);
+            }
+        }
+        for (MachinePartFluidStorage hatch : inputHatches) {
+            // 双仓的物品与流体归属同一个组
+            if (isIsolatedHatch(hatch)) {
+                isolatedGroup(isolated, hatch.getBlockPos()).addHatch(hatch);
+            } else {
+                shared.addHatch(hatch);
+            }
+        }
+        List<InputGroup> groups = new ArrayList<>(isolated.values());
+        // 共享池始终存在，保持无输入部件时零输入配方的原有行为
+        groups.add(shared);
+        return groups;
+    }
+
+    private static InputGroup isolatedGroup(Map<BlockPos, InputGroup> groups, BlockPos owner) {
+        return groups.computeIfAbsent(owner, key -> new InputGroup());
+    }
+
+    private static boolean isIsolatedHatch(MachinePartFluidStorage hatch) {
+        BlockEntity owner = hatch.getOwner();
+        return owner instanceof ItemBusBlockEntity bus ? bus.isRecipeIsolated()
+                : owner instanceof FluidHatchBlockEntity fluid && fluid.isRecipeIsolated();
     }
 
     protected int outputParallel(MultiblockRecipe recipe, int maximum) {
@@ -453,7 +505,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return Math.max(0, high);
     }
 
-    public record Match(MultiblockRecipe recipe, int parallel) {
+    public record Match(MultiblockRecipe recipe, int parallel, InputGroup group) {
     }
 
     // 加速卡与电力

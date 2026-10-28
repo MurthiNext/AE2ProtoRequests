@@ -44,13 +44,15 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
     }
 
     // 客户端同步入口，仅由同步包调用
-    public static void applyStackSync(BlockPos pos, List<ItemStack> stacks, boolean autoTransfer) {
+    public static void applyStackSync(BlockPos pos, List<ItemStack> stacks, boolean autoTransfer,
+            boolean recipeIsolated) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level != null && minecraft.level.getBlockEntity(pos) instanceof ItemBusBlockEntity bus) {
             for (int i = 0; i < stacks.size() && i < bus.getSlotCount(); i++) {
                 bus.getStorage().setStackInSlot(i, stacks.get(i));
             }
             bus.setAutoTransfer(autoTransfer);
+            bus.setRecipeIsolated(recipeIsolated);
         }
     }
 
@@ -81,6 +83,12 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
     protected boolean autoTransferEnabled() {
         ItemBusBlockEntity bus = clientBus();
         return bus == null || bus.isAutoTransfer();
+    }
+
+    @Override
+    protected boolean recipeIsolationEnabled() {
+        ItemBusBlockEntity bus = clientBus();
+        return bus != null && bus.isRecipeIsolated();
     }
 
     @Override

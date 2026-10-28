@@ -36,13 +36,15 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
     }
 
     // 客户端同步入口，仅由同步包调用
-    public static void applyFluidSync(BlockPos pos, List<FluidStack> fluids, boolean autoTransfer) {
+    public static void applyFluidSync(BlockPos pos, List<FluidStack> fluids, boolean autoTransfer,
+            boolean recipeIsolated) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level != null && minecraft.level.getBlockEntity(pos) instanceof FluidHatchBlockEntity hatch) {
             for (int i = 0; i < fluids.size() && i < hatch.getTankCount(); i++) {
                 hatch.applyClientFluid(i, fluids.get(i));
             }
             hatch.setAutoTransfer(autoTransfer);
+            hatch.setRecipeIsolated(recipeIsolated);
         } else if (minecraft.level != null
                 && minecraft.level.getBlockEntity(pos) instanceof DualHatchBlockEntity dual) {
             var storage = dual.getFluidStorage();
@@ -50,6 +52,7 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
                 storage.applyClientFluid(i, fluids.get(i));
             }
             dual.setAutoTransfer(autoTransfer);
+            dual.setRecipeIsolated(recipeIsolated);
         }
     }
 
@@ -76,6 +79,12 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
     protected boolean autoTransferEnabled() {
         FluidHatchBlockEntity hatch = clientHatch();
         return hatch == null || hatch.isAutoTransfer();
+    }
+
+    @Override
+    protected boolean recipeIsolationEnabled() {
+        FluidHatchBlockEntity hatch = clientHatch();
+        return hatch != null && hatch.isRecipeIsolated();
     }
 
     @Override

@@ -24,9 +24,11 @@ public class FluidHatchBlockEntity extends BlockEntity {
     public static final int AEV_CAPACITY = 1024 * 1000;
 
     private static final String AUTO_TRANSFER_ID = "autoTransfer";
+    private static final String RECIPE_ISOLATED_ID = "recipeIsolated";
 
     private final MachinePartFluidStorage fluidStorage;
     private boolean autoTransfer = true;
+    private boolean recipeIsolated;
 
     public FluidHatchBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CERTUS_QUARTZ_CRYSTAL_MACHINE_PART.get(), pos, state);
@@ -96,6 +98,15 @@ public class FluidHatchBlockEntity extends BlockEntity {
         setChanged();
     }
 
+    public boolean isRecipeIsolated() {
+        return recipeIsolated;
+    }
+
+    public void setRecipeIsolated(boolean recipeIsolated) {
+        this.recipeIsolated = recipeIsolated;
+        setChanged();
+    }
+
     public void serverTick() {
         if (autoTransfer) {
             fluidStorage.serverTick();
@@ -111,6 +122,7 @@ public class FluidHatchBlockEntity extends BlockEntity {
         super.saveAdditional(tag);
         fluidStorage.save(tag);
         tag.putBoolean(AUTO_TRANSFER_ID, autoTransfer);
+        tag.putBoolean(RECIPE_ISOLATED_ID, recipeIsolated);
     }
 
     @Override
@@ -120,5 +132,6 @@ public class FluidHatchBlockEntity extends BlockEntity {
         if (tag.contains(AUTO_TRANSFER_ID)) {
             autoTransfer = tag.getBoolean(AUTO_TRANSFER_ID);
         }
+        recipeIsolated = tag.getBoolean(RECIPE_ISOLATED_ID);
     }
 }

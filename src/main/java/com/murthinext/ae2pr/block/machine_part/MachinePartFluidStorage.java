@@ -175,6 +175,10 @@ public final class MachinePartFluidStorage {
         return owner.getBlockPos();
     }
 
+    public BlockEntity getOwner() {
+        return owner;
+    }
+
     public void setChanged() {
         owner.setChanged();
     }
