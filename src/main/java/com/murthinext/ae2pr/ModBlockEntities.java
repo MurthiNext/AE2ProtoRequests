@@ -16,6 +16,7 @@ import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerControllerBlockEntity;
+import com.murthinext.ae2pr.block.multi_factory.MultiFactoryControllerBlockEntity;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
 
 public final class ModBlockEntities {
@@ -82,6 +83,10 @@ public final class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<JigControllerBlockEntity>> JIG = BLOCK_ENTITIES
             .register("jig", () -> BlockEntityType.Builder.of(JigControllerBlockEntity::new,
                     ModBlocks.JIG.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<MultiFactoryControllerBlockEntity>> MULTI_FACTORY = BLOCK_ENTITIES
+            .register("multi_factory", () -> BlockEntityType.Builder.of(
+                    MultiFactoryControllerBlockEntity::new, ModBlocks.MULTI_FACTORY.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<MolecularAssemblyCoreBlockEntity>> MOLECULAR_ASSEMBLY_CORE = BLOCK_ENTITIES
             .register("molecular_assembly_core",

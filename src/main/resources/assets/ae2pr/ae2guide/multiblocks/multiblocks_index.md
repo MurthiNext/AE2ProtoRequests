@@ -38,4 +38,6 @@ navigation:
 
 ## 支线内容
 
-[水晶反应器](crystal_reactor.md)，下界反应器的 Modern Edition.
+[通式加工厂](multi_factory.md)，批量处理压印与充能配方。
+
+[水晶反应器](crystal_reactor.md)，下界反应器：现代版.

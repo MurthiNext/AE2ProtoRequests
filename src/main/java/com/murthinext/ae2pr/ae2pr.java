@@ -81,6 +81,7 @@ public class ae2pr {
             Upgrades.add(AEItems.SPEED_CARD, ModBlocks.CRYSTAL_REACTION_CHAMBER.get(), 4);
             Upgrades.add(AEItems.SPEED_CARD, ModBlocks.CRYSTAL_WORKSTATION.get(), 4);
             Upgrades.add(AEItems.SPEED_CARD, ModBlocks.JIG.get(), 4);
+            Upgrades.add(AEItems.SPEED_CARD, ModBlocks.MULTI_FACTORY.get(), 4);
 
             // 绑定方块实体类型并登记代表物品
             var networkAccessHatchType = ModBlockEntities.ME_NETWORK_ACCESS_HATCH.get();

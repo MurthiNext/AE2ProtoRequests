@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CIC",
+    "PMP",
+    "CAC"
+  ],
+  "key": {
+    "C": {
+      "item": "ae2pr:reinforced_high_power_casing"
+    },
+    "I": {
+      "item": "ae2:inscriber"
+    },
+    "P": {
+      "item": "ae2:charger"
+    },
+    "M": {
+      "item": "ae2pr:molecular_assembly_core"
+    },
+    "A": {
+      "tag": "ae2pr:circuits/aev"
+    }
+  },
+  "result": {
+    "item": "ae2pr:multi_factory",
+    "count": 1
+  }
+}

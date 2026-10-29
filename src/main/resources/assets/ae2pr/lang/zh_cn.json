@@ -302,5 +302,16 @@
   "jei.ae2pr.jig.energy": "单次能耗：%s AE",
   "jei.ae2pr.jig.more_io": "额外输入：%s / 产物：%s",
   "jei.ae2pr.jig.extra_inputs": "更多输入：",
-  "jei.ae2pr.jig.extra_outputs": "更多产物："
+  "jei.ae2pr.jig.extra_outputs": "更多产物：",
+  "block.ae2pr.multi_factory": "通式加工厂",
+  "tooltip.ae2pr.multi_factory.desc": "集中处理压印与充能配方。",
+  "gui.ae2pr.multi_factory.mode": "工作模式：%s",
+  "gui.ae2pr.multi_factory.mode.inscribing": "压印",
+  "gui.ae2pr.multi_factory.mode.charging": "充能",
+  "gui.ae2pr.multi_factory.mode.current": "当前模式：%s",
+  "gui.ae2pr.multi_factory.mode.switch": "点击切换工作模式",
+  "gui.ae2pr.multi_factory.mode.locked": "加工期间无法切换模式",
+  "gui.ae2pr.multi_factory.error.power": "电力不足",
+  "gui.ae2pr.multi_factory.error.output": "产物空间不足",
+  "config.jade.plugin_ae2pr.multi_factory": "通式加工厂"
 }

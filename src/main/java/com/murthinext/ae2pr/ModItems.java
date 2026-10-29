@@ -336,6 +336,9 @@ public final class ModItems {
     public static final RegistryObject<BlockItem> JIG = ITEMS.register("jig",
             () -> new BlockItem(ModBlocks.JIG.get(), new Item.Properties()));
 
+    public static final RegistryObject<BlockItem> MULTI_FACTORY = ITEMS.register("multi_factory",
+            () -> new BlockItem(ModBlocks.MULTI_FACTORY.get(), new Item.Properties()));
+
     public static final RegistryObject<BlockItem> MOLECULAR_ASSEMBLY_CORE = ITEMS.register("molecular_assembly_core",
             () -> new BlockItem(ModBlocks.MOLECULAR_ASSEMBLY_CORE.get(), new Item.Properties()));
 

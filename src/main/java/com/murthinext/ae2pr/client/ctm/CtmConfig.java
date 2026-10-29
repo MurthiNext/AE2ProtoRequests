@@ -104,6 +104,7 @@ public final class CtmConfig {
                 || block == ModBlocks.CRYSTAL_REACTION_CHAMBER.get()
                 || block == ModBlocks.CRYSTAL_WORKSTATION.get()
                 || block == ModBlocks.JIG.get()
+                || block == ModBlocks.MULTI_FACTORY.get()
                 || block == ModBlocks.CRYSTAL_ASSEMBLY_LINE.get()) {
             MachinePartFacade facade = facade(state);
             return facade != null ? facade.ctmFamily() : 0;
@@ -137,7 +138,8 @@ public final class CtmConfig {
         if (state.is(ModBlocks.JIG.get()) && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIUM_IRON;
         }
-        if (state.is(ModBlocks.CRYSTAL_WORKSTATION.get()) && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
+        if ((state.is(ModBlocks.CRYSTAL_WORKSTATION.get()) || state.is(ModBlocks.MULTI_FACTORY.get()))
+                && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
             return MachinePartFacade.HIGH_POWER;
         }
         if (state.is(ModBlocks.CRYSTAL_ASSEMBLY_LINE.get())
@@ -174,6 +176,9 @@ public final class CtmConfig {
     @Nullable
     public static TextureAtlasSprite facadeBaseSprite(BlockState state) {
         Block block = state.getBlock();
+        if (block == ModBlocks.MULTI_FACTORY.get()) {
+            return CtmSprites.baseSprite(CtmSprites.MULTI_FACTORY_CONTROLLER_CASING);
+        }
         if (block == ModBlocks.JIG.get()) {
             return CtmSprites.baseSprite(CtmSprites.JIG_CONTROLLER_CASING);
         }

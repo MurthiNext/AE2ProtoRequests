@@ -112,6 +112,8 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CRYSTAL_REACTION_CHAMBER.get());
                         output.accept(ModItems.CRYSTAL_WORKSTATION.get());
                         output.accept(ModItems.JIG.get());
+                        output.accept(ModItems.MULTI_FACTORY.get());
+                        output.accept(ModItems.MULTI_FACTORY.get());
 
                         // 多方块结构 - 普通结构方块
                         output.accept(ModItems.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get());

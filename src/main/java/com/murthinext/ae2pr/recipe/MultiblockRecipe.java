@@ -12,6 +12,10 @@ public interface MultiblockRecipe {
 
     List<CountedIngredient> getItemInputs();
 
+    default List<CountedIngredient> getItemCatalysts() {
+        return List.of();
+    }
+
     List<FluidStack> getFluidInputs();
 
     List<ItemStack> getItemOutputs();

@@ -34,9 +34,9 @@ public final class PartInventory {
         }
     }
 
-    // 按配方扣除输入；原料重叠时按最大流分配，失败时不修改任何实际存储
+    // 按配方扣除输入；原料与催化剂共享同一最大流，仅原料节点会实际扣除
     public boolean consume(MultiblockRecipe recipe, int parallel) {
-        if (!consumeItems(recipe.getItemInputs(), parallel)) {
+        if (!consumeItems(recipe, parallel)) {
             return false;
         }
         for (FluidStack input : recipe.getFluidInputs()) {
@@ -58,25 +58,28 @@ public final class PartInventory {
         return true;
     }
 
-    // 按容量流分配重叠原料，支持同一标签匹配多个槽位
-    private boolean consumeItems(List<CountedIngredient> inputs, int parallel) {
-        int source = inputs.size() + items.size();
+    // 原料按并行放大，催化剂固定计 1；同物品重叠时由最大流统一分配，仅原料会被扣除
+    private boolean consumeItems(MultiblockRecipe recipe, int parallel) {
+        List<CountedIngredient> inputs = recipe.getItemInputs();
+        List<CountedIngredient> catalysts = recipe.getItemCatalysts();
+        int requirements = inputs.size() + catalysts.size();
+        int source = requirements + items.size();
         int sink = source + 1;
         long[][] capacity = new long[sink + 1][sink + 1];
         long required = 0;
-        for (int i = 0; i < inputs.size(); i++) {
-            CountedIngredient input = inputs.get(i);
-            long amount = (long) input.count() * parallel;
+        for (int i = 0; i < requirements; i++) {
+            CountedIngredient requirement = i < inputs.size() ? inputs.get(i) : catalysts.get(i - inputs.size());
+            long amount = i < inputs.size() ? (long) requirement.count() * parallel : requirement.count();
             capacity[source][i] = amount;
             required += amount;
             for (int j = 0; j < items.size(); j++) {
-                if (input.ingredient().test(items.get(j).stack)) {
-                    capacity[i][inputs.size() + j] = amount;
+                if (requirement.ingredient().test(items.get(j).stack)) {
+                    capacity[i][requirements + j] = amount;
                 }
             }
         }
         for (int j = 0; j < items.size(); j++) {
-            capacity[inputs.size() + j][sink] = items.get(j).stack.getCount();
+            capacity[requirements + j][sink] = items.get(j).stack.getCount();
         }
         long matched = 0;
         int[] queue = new int[sink + 1];
@@ -108,8 +111,14 @@ public final class PartInventory {
             }
             matched += amount;
         }
+        // 由反向边读取已分配量，仅累加原料节点；催化剂占用但不变动库存
         for (int j = 0; j < items.size(); j++) {
-            items.get(j).stack.setCount((int) capacity[inputs.size() + j][sink]);
+            int slotNode = requirements + j;
+            long deducted = 0;
+            for (int i = 0; i < inputs.size(); i++) {
+                deducted += capacity[slotNode][i];
+            }
+            items.get(j).stack.shrink((int) Math.min(deducted, items.get(j).stack.getCount()));
         }
         return true;
     }

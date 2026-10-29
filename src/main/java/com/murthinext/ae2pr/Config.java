@@ -2,6 +2,8 @@ package com.murthinext.ae2pr;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import appeng.blockentity.misc.ChargerBlockEntity;
+
 public final class Config {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
@@ -43,6 +45,12 @@ public final class Config {
 
     private static final ForgeConfigSpec.IntValue JIG_PARALLEL;
     private static final ForgeConfigSpec.DoubleValue JIG_ENERGY_PER_PARALLEL;
+
+    private static final ForgeConfigSpec.IntValue MULTI_FACTORY_PARALLEL;
+    private static final ForgeConfigSpec.IntValue MULTI_FACTORY_INSCRIBING_DURATION;
+    private static final ForgeConfigSpec.IntValue MULTI_FACTORY_CHARGING_DURATION;
+    private static final ForgeConfigSpec.DoubleValue MULTI_FACTORY_INSCRIBING_ENERGY;
+    private static final ForgeConfigSpec.DoubleValue MULTI_FACTORY_CHARGING_ENERGY;
 
     private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_RADIUS;
     private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_DEPTH;
@@ -181,6 +189,25 @@ public final class Config {
         JIG_ENERGY_PER_PARALLEL = BUILDER
                 .comment("跳汰机默认扣除的能量（AE）")
                 .defineInRange("energyPerParallel", 1000.0, 0.0, Double.MAX_VALUE);
+        BUILDER.pop();
+
+        BUILDER.push("multiFactory");
+        MULTI_FACTORY_PARALLEL = BUILDER
+                .comment("通式加工厂并行上限")
+                .defineInRange("parallel", 64, 1, 1_000_000);
+        MULTI_FACTORY_INSCRIBING_DURATION = BUILDER
+                .comment("通式加工厂压印模式单次作业时长（ticks），默认 100 为 AE2 压印器的加工步数折算")
+                .defineInRange("inscribingDuration", 100, 1, 72000);
+        MULTI_FACTORY_CHARGING_DURATION = BUILDER
+                .comment("通式加工厂充能模式单次作业时长（ticks），默认对齐 AE2 充能器")
+                .defineInRange("chargingDuration", 50, 1, 72000);
+        MULTI_FACTORY_INSCRIBING_ENERGY = BUILDER
+                .comment("通式加工厂压印模式每个并行默认扣除的能量（AE）")
+                .defineInRange("inscribingEnergyPerParallel", 2000.0, 0.0, Double.MAX_VALUE);
+        MULTI_FACTORY_CHARGING_ENERGY = BUILDER
+                .comment("通式加工厂充能模式每个并行默认扣除的能量（AE）")
+                .defineInRange("chargingEnergyPerParallel",
+                        (double) ChargerBlockEntity.POWER_MAXIMUM_AMOUNT, 0.0, Double.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("crystalReactor");
@@ -359,6 +386,26 @@ public final class Config {
 
     public static double jigEnergyPerParallel() {
         return JIG_ENERGY_PER_PARALLEL.get();
+    }
+
+    public static int multiFactoryParallel() {
+        return MULTI_FACTORY_PARALLEL.get();
+    }
+
+    public static int multiFactoryInscribingDuration() {
+        return MULTI_FACTORY_INSCRIBING_DURATION.get();
+    }
+
+    public static int multiFactoryChargingDuration() {
+        return MULTI_FACTORY_CHARGING_DURATION.get();
+    }
+
+    public static double multiFactoryInscribingEnergyPerParallel() {
+        return MULTI_FACTORY_INSCRIBING_ENERGY.get();
+    }
+
+    public static double multiFactoryChargingEnergyPerParallel() {
+        return MULTI_FACTORY_CHARGING_ENERGY.get();
     }
 
     public static int crystalReactorRadius() {

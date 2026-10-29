@@ -102,7 +102,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
 
     public abstract String machineKey();
 
-    protected abstract RecipeType<? extends MultiblockRecipe> recipeType();
+    protected abstract RecipeType<?> recipeType();
 
     public abstract int maxParallel();
 
@@ -358,28 +358,45 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         if (level == null || jobRecipeId == null) {
             return null;
         }
-        Recipe<?> recipe = level.getRecipeManager().byKey(jobRecipeId).orElse(null);
-        return recipe instanceof MultiblockRecipe multiblock && isRecipeApplicable(multiblock) ? multiblock : null;
+        MultiblockRecipe recipe = resolveRecipe(jobRecipeId);
+        return recipe != null && isRecipeApplicable(recipe) ? recipe : null;
+    }
+
+    // 作业配方解析入口，包装配方在此适配为 MultiblockRecipe
+    @Nullable
+    protected MultiblockRecipe resolveRecipe(ResourceLocation id) {
+        if (level == null) {
+            return null;
+        }
+        Recipe<?> recipe = level.getRecipeManager().byKey(id).orElse(null);
+        return recipe instanceof MultiblockRecipe multiblock ? multiblock : null;
     }
 
     protected boolean isRecipeApplicable(MultiblockRecipe recipe) {
         return true;
     }
 
+    // 逐个过滤为多方块配方，避免对非本模组配方类型做强转
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected List<MultiblockRecipe> recipes() {
         if (level == null) {
             return List.of();
         }
         RecipeManager manager = level.getRecipeManager();
-        List<MultiblockRecipe> sorted = new ArrayList<>((List<MultiblockRecipe>) (List<?>) manager
-                .getAllRecipesFor((RecipeType) recipeType()));
+        List<? extends Recipe<?>> found = (List<? extends Recipe<?>>) (List<?>) manager
+                .getAllRecipesFor((RecipeType) recipeType());
+        List<MultiblockRecipe> sorted = new ArrayList<>();
+        for (Recipe<?> recipe : found) {
+            if (recipe instanceof MultiblockRecipe multiblock) {
+                sorted.add(multiblock);
+            }
+        }
         // 原料种类多的配方更具体，优先尝试可避免泛用配方在满仓时抢料
         sorted.sort(AbstractMultiblockControllerBlockEntity::compareRecipePriority);
         return sorted;
     }
 
-    private static int compareRecipePriority(MultiblockRecipe left, MultiblockRecipe right) {
+    protected static int compareRecipePriority(MultiblockRecipe left, MultiblockRecipe right) {
         int result = Integer.compare(inputKinds(right), inputKinds(left));
         if (result != 0) {
             return result;
@@ -396,13 +413,16 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     private static int inputKinds(MultiblockRecipe recipe) {
-        return recipe.getItemInputs().size() + recipe.getFluidInputs().size();
+        return recipe.getItemInputs().size() + recipe.getFluidInputs().size() + recipe.getItemCatalysts().size();
     }
 
     private static long itemInputAmount(MultiblockRecipe recipe) {
         long total = 0;
         for (CountedIngredient input : recipe.getItemInputs()) {
             total += input.count();
+        }
+        for (CountedIngredient catalyst : recipe.getItemCatalysts()) {
+            total += catalyst.count();
         }
         return total;
     }

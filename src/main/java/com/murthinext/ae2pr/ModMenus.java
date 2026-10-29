@@ -15,6 +15,7 @@ import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterMenu;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
 import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
 import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerMenu;
+import com.murthinext.ae2pr.block.multi_factory.MultiFactoryMenu;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryMenu;
 
 public final class ModMenus {
@@ -47,6 +48,9 @@ public final class ModMenus {
             .register("crystal_workstation", () -> CrystalWorkstationMenu.TYPE);
 
     public static final RegistryObject<MenuType<JigMenu>> JIG = MENUS.register("jig", () -> JigMenu.TYPE);
+
+    public static final RegistryObject<MenuType<MultiFactoryMenu>> MULTI_FACTORY = MENUS
+            .register("multi_factory", () -> MultiFactoryMenu.TYPE);
 
     public static final RegistryObject<MenuType<ItemBusMenu>> CERTUS_QUARTZ_CRYSTAL_ITEM_BUS = MENUS
             .register("certus_quartz_crystal_item_bus", () -> ItemBusMenu.TYPE);

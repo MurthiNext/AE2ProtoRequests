@@ -29,6 +29,7 @@ import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerBlock;
 import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOreBlock;
+import com.murthinext.ae2pr.block.multi_factory.MultiFactoryBlock;
 import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlock;
 import com.murthinext.ae2pr.multiblock.module.ModuleDefinition;
 
@@ -211,6 +212,9 @@ public final class ModBlocks {
             "crystal_workstation", CrystalWorkstationBlock::new);
 
     public static final RegistryObject<JigBlock> JIG = BLOCKS.register("jig", JigBlock::new);
+
+    public static final RegistryObject<MultiFactoryBlock> MULTI_FACTORY = BLOCKS.register(
+            "multi_factory", MultiFactoryBlock::new);
 
     public static final RegistryObject<MolecularAssemblyCoreBlock> MOLECULAR_ASSEMBLY_CORE = BLOCKS.register(
             "molecular_assembly_core", MolecularAssemblyCoreBlock::new);

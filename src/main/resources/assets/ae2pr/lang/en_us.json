@@ -303,5 +303,16 @@
   "jei.ae2pr.jig.energy": "Energy per operation: %s AE",
   "jei.ae2pr.jig.more_io": "Extra inputs: %s / outputs: %s",
   "jei.ae2pr.jig.extra_inputs": "More inputs:",
-  "jei.ae2pr.jig.extra_outputs": "More outputs:"
+  "jei.ae2pr.jig.extra_outputs": "More outputs:",
+  "block.ae2pr.multi_factory": "Multi Factory",
+  "tooltip.ae2pr.multi_factory.desc": "Batch-process inscriber and charger recipes.",
+  "gui.ae2pr.multi_factory.mode": "Mode: %s",
+  "gui.ae2pr.multi_factory.mode.inscribing": "Inscribing",
+  "gui.ae2pr.multi_factory.mode.charging": "Charging",
+  "gui.ae2pr.multi_factory.mode.current": "Current mode: %s",
+  "gui.ae2pr.multi_factory.mode.switch": "Click to switch mode",
+  "gui.ae2pr.multi_factory.mode.locked": "Cannot switch modes during processing",
+  "gui.ae2pr.multi_factory.error.power": "Insufficient power",
+  "gui.ae2pr.multi_factory.error.output": "Insufficient output space",
+  "config.jade.plugin_ae2pr.multi_factory": "Multi Factory"
 }

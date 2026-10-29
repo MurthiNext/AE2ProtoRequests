@@ -38,7 +38,9 @@ public final class MachineProcessingSounds {
         CRYSTAL_REACTION(ModSounds.CRYSTAL_REACTION, 0.7F, 1.0F, 0),
         CRYSTAL_WORKSTATION_ETCHING(ModSounds.CRYSTAL_WORKSTATION_ETCHING, 0.7F, 1.0F, 0),
         CRYSTAL_WORKSTATION_CUTTING(ModSounds.CRYSTAL_WORKSTATION_CUTTING, 0.7F, 1.0F, 0),
-        JIG(ModSounds.JIG, 0.7F, 1.0F, 0);
+        JIG(ModSounds.JIG, 0.7F, 1.0F, 0),
+        MULTI_FACTORY_INSCRIBING(ModSounds.JIG, 0.7F, 1.0F, 0),
+        MULTI_FACTORY_CHARGING(ModSounds.CRYSTAL_WORKSTATION_ETCHING, 0.7F, 1.0F, 0);
 
         private final Supplier<SoundEvent> sound;
         private final float volume;
