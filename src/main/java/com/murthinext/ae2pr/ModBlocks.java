@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr;
 
+import java.util.List;
+
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
@@ -137,6 +139,19 @@ public final class ModBlocks {
 
     public static final RegistryObject<MENetworkAccessHatchBlock> ME_NETWORK_ACCESS_HATCH = BLOCKS.register(
             "me_network_access_hatch", MENetworkAccessHatchBlock::new);
+
+    // 全部仓室方块，供方块实体注册与结构判定共用
+    public static final List<RegistryObject<MachinePartBlock>> MACHINE_PARTS = List.of(
+            CERTUS_QUARTZ_CRYSTAL_INPUT_BUS,
+            CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH,
+            CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS,
+            CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH,
+            AEV_INPUT_BUS,
+            AEV_INPUT_HATCH,
+            AEV_OUTPUT_BUS,
+            AEV_OUTPUT_HATCH,
+            AEV_DUAL_INPUT_HATCH,
+            AEV_DUAL_OUTPUT_HATCH);
 
     public static final RegistryObject<HighReactivityLavaSmelterBlock> HIGH_REACTIVITY_LAVA_SMELTER = BLOCKS.register(
             "high_reactivity_lava_smelter", HighReactivityLavaSmelterBlock::new);

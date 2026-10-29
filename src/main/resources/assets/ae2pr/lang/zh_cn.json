@@ -5,6 +5,8 @@
   "subtitle.ae2pr.crystal_workstation_cutting": "晶能工作站：切割",
   "subtitle.ae2pr.lava_smelter_processing": "熔岩冶炼炉：迸溅",
   "subtitle.ae2pr.matter_phase_transformer_processing": "物质相变仪：轰鸣",
+  "subtitle.ae2pr.multi_factory_inscribing": "通式加工厂：压印",
+  "subtitle.ae2pr.multi_factory_charging": "通式加工厂：充能",
   "itemGroup.ae2pr": "应用能源：源始请求",
   "item.ae2pr.advanced_filter_cell": "高级过滤元件",
   "item.ae2pr.alien_lava_bucket": "异星熔岩桶",

@@ -5,6 +5,8 @@
   "subtitle.ae2pr.crystal_workstation_cutting": "Crystal Workstation cuts",
   "subtitle.ae2pr.lava_smelter_processing": "Lava Smelter bubbles",
   "subtitle.ae2pr.matter_phase_transformer_processing": "Matter Phase Transformer hums",
+  "subtitle.ae2pr.multi_factory_inscribing": "Multi Factory inscribes",
+  "subtitle.ae2pr.multi_factory_charging": "Multi Factory charges",
   "itemGroup.ae2pr": "AE2 Proto Requests",
   "item.ae2pr.advanced_filter_cell": "Advanced Filter Cell",
   "item.ae2pr.alien_lava_bucket": "Alien Lava Bucket",

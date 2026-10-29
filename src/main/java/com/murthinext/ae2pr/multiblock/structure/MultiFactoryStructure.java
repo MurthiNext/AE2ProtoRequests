@@ -19,13 +19,7 @@ public final class MultiFactoryStructure extends AbstractStructureFacade {
             .slice("###", "#G#", "###")
             .slice("###", "###", "###")
             .where('K', StructurePredicate.blocks(ModBlocks.MULTI_FACTORY.get()))
-            .where('#', StructurePredicate.blocks(ModBlocks.REINFORCED_HIGH_POWER_CASING.get())
-                    .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get(), ModBlocks.AEV_INPUT_BUS.get()))
-                    .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get(), ModBlocks.AEV_OUTPUT_BUS.get()))
-                    .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), ModBlocks.AEV_INPUT_HATCH.get()))
-                    .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get(), ModBlocks.AEV_OUTPUT_HATCH.get()))
-                    .or(StructurePredicate.blocks(ModBlocks.AEV_DUAL_INPUT_HATCH.get(), ModBlocks.AEV_DUAL_OUTPUT_HATCH.get()))
-                    .or(StructurePredicate.blocks(ModBlocks.ME_NETWORK_ACCESS_HATCH.get()).maxCount(1)))
+            .where('#', StructurePredicate.casingWithParts(ModBlocks.REINFORCED_HIGH_POWER_CASING.get()))
             .where('G', StructurePredicate.blocks(ModBlocks.MOLECULAR_ASSEMBLY_CORE.get()))
             .build();
 

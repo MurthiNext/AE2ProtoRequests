@@ -2,13 +2,13 @@
   "jig_processing": {
     "subtitle": "subtitle.ae2pr.jig_processing",
     "sounds": [
-      "ae2pr:machine/jig"
+      "ae2pr:machine/bath"
     ]
   },
   "crystal_assembly_line_processing": {
     "subtitle": "subtitle.ae2pr.crystal_assembly_line_processing",
     "sounds": [
-      "ae2pr:machine/crystal_assembly_line"
+      "ae2pr:machine/assembly"
     ]
   },
   "lava_smelter_processing": {
@@ -23,25 +23,37 @@
   "matter_phase_transformer_processing": {
     "subtitle": "subtitle.ae2pr.matter_phase_transformer_processing",
     "sounds": [
-      "ae2pr:machine/matter_phase_transformer"
+      "ae2pr:machine/transform"
     ]
   },
   "crystal_reaction_processing": {
     "subtitle": "subtitle.ae2pr.crystal_reaction_processing",
     "sounds": [
-      "ae2pr:machine/crystal_reaction_chamber"
+      "ae2pr:machine/react"
     ]
   },
   "crystal_workstation_etching": {
     "subtitle": "subtitle.ae2pr.crystal_workstation_etching",
     "sounds": [
-      "ae2pr:machine/crystal_workstation_etching"
+      "ae2pr:machine/electorlyzer"
     ]
   },
   "crystal_workstation_cutting": {
     "subtitle": "subtitle.ae2pr.crystal_workstation_cutting",
     "sounds": [
-      "ae2pr:machine/crystal_workstation_cutting"
+      "ae2pr:machine/cut"
+    ]
+  },
+  "multi_factory_inscribing": {
+    "subtitle": "subtitle.ae2pr.multi_factory_inscribing",
+    "sounds": [
+      "ae2pr:machine/assembly"
+    ]
+  },
+  "multi_factory_charging": {
+    "subtitle": "subtitle.ae2pr.multi_factory_charging",
+    "sounds": [
+      "ae2pr:machine/react"
     ]
   }
 }

@@ -14,6 +14,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.multiblock.module.ModuleInstance;
 import com.murthinext.ae2pr.multiblock.module.ModuleProvider;
 import com.murthinext.ae2pr.multiblock.module.ModuleType;
@@ -83,6 +85,15 @@ public abstract class StructurePredicate {
 
     public static StructurePredicate blocks(Block... blocks) {
         return new Blocks(new LinkedHashSet<>(List.of(blocks)));
+    }
+
+    // 机壳格：接受机壳或任意仓室，ME 接入仓最多 1 个
+    public static StructurePredicate casingWithParts(Block casing) {
+        StructurePredicate predicate = blocks(casing);
+        for (Block part : MachinePartBlock.allParts()) {
+            predicate = predicate.or(blocks(part));
+        }
+        return predicate.or(blocks(ModBlocks.ME_NETWORK_ACCESS_HATCH.get()).maxCount(1));
     }
 
     // 模块插槽：接受基础方块或提供允许功能的模块方块

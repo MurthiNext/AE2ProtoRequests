@@ -1,5 +1,6 @@
 package com.murthinext.ae2pr;
 
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -35,16 +36,7 @@ public final class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<BlockEntity>> CERTUS_QUARTZ_CRYSTAL_MACHINE_PART = BLOCK_ENTITIES
             .register("certus_quartz_crystal_machine_part", () -> BlockEntityType.Builder.of(
                     MachinePartBlock::createBlockEntity,
-                    ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get(),
-                    ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(),
-                    ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get(),
-                    ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get(),
-                    ModBlocks.AEV_INPUT_BUS.get(),
-                    ModBlocks.AEV_INPUT_HATCH.get(),
-                    ModBlocks.AEV_OUTPUT_BUS.get(),
-                    ModBlocks.AEV_OUTPUT_HATCH.get(),
-                    ModBlocks.AEV_DUAL_INPUT_HATCH.get(),
-                    ModBlocks.AEV_DUAL_OUTPUT_HATCH.get()).build(null));
+                    ModBlocks.MACHINE_PARTS.stream().map(RegistryObject::get).toArray(Block[]::new)).build(null));
 
     public static final RegistryObject<BlockEntityType<MENetworkAccessHatchBlockEntity>> ME_NETWORK_ACCESS_HATCH = BLOCK_ENTITIES
             .register("me_network_access_hatch", () -> BlockEntityType.Builder.of(

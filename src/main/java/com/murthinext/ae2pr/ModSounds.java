@@ -18,6 +18,8 @@ public final class ModSounds {
     public static final RegistryObject<SoundEvent> CRYSTAL_WORKSTATION_ETCHING = register("crystal_workstation_etching");
     public static final RegistryObject<SoundEvent> CRYSTAL_WORKSTATION_CUTTING = register("crystal_workstation_cutting");
     public static final RegistryObject<SoundEvent> JIG = register("jig_processing");
+    public static final RegistryObject<SoundEvent> MULTI_FACTORY_INSCRIBING = register("multi_factory_inscribing");
+    public static final RegistryObject<SoundEvent> MULTI_FACTORY_CHARGING = register("multi_factory_charging");
 
     private ModSounds() {
     }

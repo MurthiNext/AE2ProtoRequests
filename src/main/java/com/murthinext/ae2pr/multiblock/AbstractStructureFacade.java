@@ -119,10 +119,6 @@ public abstract class AbstractStructureFacade {
     }
 
     public static boolean isCommonPart(Block block) {
-        return block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get()
-                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()
-                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()
-                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()
-                || MachinePartBlock.isAevPart(block);
+        return MachinePartBlock.isCommonPart(block);
     }
 }

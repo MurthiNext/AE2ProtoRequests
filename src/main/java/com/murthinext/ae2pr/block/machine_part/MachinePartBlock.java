@@ -87,6 +87,15 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
         return isFluidPart(state) ? new FluidHatchBlockEntity(pos, state) : new ItemBusBlockEntity(pos, state);
     }
 
+    // 全部仓室方块（不含 ME 接入仓）
+    public static List<Block> allParts() {
+        return ModBlocks.MACHINE_PARTS.stream().map(entry -> (Block) entry.get()).toList();
+    }
+
+    public static boolean isCommonPart(Block block) {
+        return block instanceof MachinePartBlock;
+    }
+
     public static boolean isDualPart(Block block) {
         return block == ModBlocks.AEV_DUAL_INPUT_HATCH.get()
                 || block == ModBlocks.AEV_DUAL_OUTPUT_HATCH.get();
