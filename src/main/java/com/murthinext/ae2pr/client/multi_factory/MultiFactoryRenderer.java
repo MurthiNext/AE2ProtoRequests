@@ -83,9 +83,10 @@ public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFact
                     continue;
                 }
                 BlockState state = level.getBlockState(cell);
+                boolean host = cell.equals(controllerPos);
                 boolean port = state.getBlock() instanceof MachinePartBlock
                         || state.getBlock() instanceof MENetworkAccessHatchBlock;
-                boolean shell = cell.equals(controllerPos)
+                boolean shell = host
                         || state.is(ModBlocks.REINFORCED_HIGH_POWER_CASING.get())
                         || port;
                 // 成型外观统一覆盖机壳和仓室的外表面。
@@ -100,18 +101,21 @@ public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFact
                     renderTile(buffer, poseStack.last(), surface, glow, column, row, LIGHT_OFFSET,
                             null, overlay, 1.0F);
                 }
-                if (port) {
+                if (host || port) {
                     poseStack.translate(-0.5 + normal.getStepX() * LIGHT_OFFSET,
                             -0.5 + normal.getStepY() * LIGHT_OFFSET,
                             -0.5 + normal.getStepZ() * LIGHT_OFFSET);
-                    var model = Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
-                    random.setSeed(state.getSeed(cell));
+                    BlockState overlayState = host
+                            ? state.setValue(AbstractMultiblockControllerBlock.FACING, normal) : state;
+                    var model = Minecraft.getInstance().getBlockRenderer().getBlockModel(overlayState);
+                    random.setSeed(overlayState.getSeed(cell));
                     int light = LevelRenderer.getLightColor(level, cell.relative(normal));
-                    // 复用仓室模型的接口层，机壳底面仍使用连续成型纹理。
-                    for (var quad : model.getQuads(state, normal, random, ModelData.EMPTY, null)) {
+                    // 主机与仓室共用原模型 overlay，机壳底面仍使用连续成型纹理。
+                    for (var quad : model.getQuads(overlayState, normal, random, ModelData.EMPTY, null)) {
                         ResourceLocation texture = quad.getSprite().contents().name();
                         if (texture.getNamespace().equals(ae2pr.MODID)
-                                && texture.getPath().startsWith("block/overlay/")) {
+                                && (texture.getPath().startsWith("block/overlay/")
+                                        || host && texture.getPath().startsWith("block/multi_factory/front"))) {
                             float brightness = quad.isShade() ? shade : 1.0F;
                             buffer.putBulkData(poseStack.last(), quad, brightness, brightness, brightness,
                                     light, overlay);
