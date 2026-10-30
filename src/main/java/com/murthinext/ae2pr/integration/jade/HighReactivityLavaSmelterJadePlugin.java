@@ -11,17 +11,17 @@ import snownee.jade.api.WailaPlugin;
 
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
-import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
+import com.murthinext.ae2pr.block.high_reactivity_lava_smelter.HighReactivityLavaSmelterBlock;
+import com.murthinext.ae2pr.block.high_reactivity_lava_smelter.HighReactivityLavaSmelterControllerBlockEntity;
 
 @WailaPlugin(ae2pr.MODID)
-public class LavaSmelterJadePlugin extends AbstractMultiblockJadePlugin {
+public class HighReactivityLavaSmelterJadePlugin extends AbstractMultiblockJadePlugin {
 
     private static final String KEY_DURABILITY = "durability";
 
     @Override
     protected Class<? extends BlockEntity> controllerType() {
-        return LavaSmelterControllerBlockEntity.class;
+        return HighReactivityLavaSmelterControllerBlockEntity.class;
     }
 
     @Override
@@ -31,12 +31,12 @@ public class LavaSmelterJadePlugin extends AbstractMultiblockJadePlugin {
 
     @Override
     protected ResourceLocation dataUid() {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "lava_smelter_data");
+        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "high_reactivity_lava_smelter_data");
     }
 
     @Override
     protected ResourceLocation componentUid() {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "lava_smelter");
+        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "high_reactivity_lava_smelter");
     }
 
     @Override
@@ -46,12 +46,12 @@ public class LavaSmelterJadePlugin extends AbstractMultiblockJadePlugin {
 
     @Override
     protected void appendExtraServerData(CompoundTag data, BlockEntity controller) {
-        data.putInt(KEY_DURABILITY, ((LavaSmelterControllerBlockEntity) controller).getDurability());
+        data.putInt(KEY_DURABILITY, ((HighReactivityLavaSmelterControllerBlockEntity) controller).getDurability());
     }
 
     @Override
     protected void appendExtraTooltip(ITooltip tooltip, CompoundTag data) {
-        tooltip.add(Component.translatable("jade.ae2pr.lava_smelter.durability",
-                data.getInt(KEY_DURABILITY), Config.lavaSmelterMaxDurability()));
+        tooltip.add(Component.translatable("gui.ae2pr.high_reactivity_lava_smelter.durability",
+                data.getInt(KEY_DURABILITY), Config.highReactivityLavaSmelterMaxDurability()));
     }
 }

@@ -1,6 +1,5 @@
 package com.murthinext.ae2pr.integration.jei;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +59,6 @@ public class CrystalReactionChamberJeiCategory implements IRecipeCategory<Crysta
             "textures/gui/jei/crystal_reaction_chamber_process.png");
     private static final int COLOR_TEXT = 0x404040;
     private static final int COLOR_HINT = 0x808080;
-    private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
     private final IDrawable icon;
     private final IDrawable fluidSlot;
@@ -164,16 +162,14 @@ public class CrystalReactionChamberJeiCategory implements IRecipeCategory<Crysta
             double mouseX, double mouseY) {
         var font = Minecraft.getInstance().font;
         process.draw(graphics, PROCESS_X, CONTENT_Y);
-        graphics.drawString(font, Component.translatable("jei.ae2pr.crystal_reaction_chamber.duration",
-                recipe.getDuration()), PADDING, INFO_Y, COLOR_TEXT, false);
-        graphics.drawString(font, Component.translatable("jei.ae2pr.crystal_reaction_chamber.energy",
-                NUMBER.format(recipe.getEnergyPerParallel())), PADDING, INFO_Y + INFO_STEP, COLOR_TEXT, false);
+        graphics.drawString(font, JeiRecipeInfo.duration(recipe.getDuration()), PADDING, INFO_Y, COLOR_TEXT, false);
+        graphics.drawString(font, JeiRecipeInfo.energy(recipe.getEnergyPerParallel()), PADDING, INFO_Y + INFO_STEP,
+                COLOR_TEXT, false);
         int hiddenInputs = recipe.getItemInputs().size() - ITEM_SLOT_COUNT;
         int hiddenOutputs = recipe.getItemOutputs().size() - 1;
         if (hiddenInputs > 0 || hiddenOutputs > 0) {
-            graphics.drawString(font, Component.translatable("jei.ae2pr.crystal_reaction_chamber.more_io",
-                    Math.max(0, hiddenInputs), Math.max(0, hiddenOutputs)), PADDING, INFO_Y + 2 * INFO_STEP,
-                    COLOR_HINT, false);
+            graphics.drawString(font, JeiRecipeInfo.moreIo(Math.max(0, hiddenInputs), Math.max(0, hiddenOutputs)),
+                    PADDING, INFO_Y + 2 * INFO_STEP, COLOR_HINT, false);
         }
     }
 }

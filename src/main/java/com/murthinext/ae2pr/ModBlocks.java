@@ -25,7 +25,7 @@ import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineBlock
 import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberBlock;
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationBlock;
 import com.murthinext.ae2pr.block.jig.JigBlock;
-import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
+import com.murthinext.ae2pr.block.high_reactivity_lava_smelter.HighReactivityLavaSmelterBlock;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerBlock;

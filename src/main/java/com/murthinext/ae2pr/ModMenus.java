@@ -9,7 +9,7 @@ import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineMenu;
 import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberMenu;
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationMenu;
 import com.murthinext.ae2pr.block.jig.JigMenu;
-import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterMenu;
+import com.murthinext.ae2pr.block.high_reactivity_lava_smelter.HighReactivityLavaSmelterMenu;
 import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterMenu;
 import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterMenu;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
@@ -35,8 +35,8 @@ public final class ModMenus {
     public static final RegistryObject<MenuType<CrystalAssemblyLineMenu>> CRYSTAL_ASSEMBLY_LINE = MENUS
             .register("crystal_assembly_line", () -> CrystalAssemblyLineMenu.TYPE);
 
-    public static final RegistryObject<MenuType<LavaSmelterMenu>> HIGH_REACTIVITY_LAVA_SMELTER = MENUS
-            .register("high_reactivity_lava_smelter", () -> LavaSmelterMenu.TYPE);
+    public static final RegistryObject<MenuType<HighReactivityLavaSmelterMenu>> HIGH_REACTIVITY_LAVA_SMELTER = MENUS
+            .register("high_reactivity_lava_smelter", () -> HighReactivityLavaSmelterMenu.TYPE);
 
     public static final RegistryObject<MenuType<MatterPhaseTransformerMenu>> MATTER_PHASE_TRANSFORMER = MENUS
             .register("matter_phase_transformer", () -> MatterPhaseTransformerMenu.TYPE);

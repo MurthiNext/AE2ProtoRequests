@@ -12,7 +12,7 @@ public final class ModSounds {
             ForgeRegistries.SOUND_EVENTS, ae2pr.MODID);
 
     public static final RegistryObject<SoundEvent> CRYSTAL_ASSEMBLY_LINE = register("crystal_assembly_line_processing");
-    public static final RegistryObject<SoundEvent> LAVA_SMELTER = register("lava_smelter_processing");
+    public static final RegistryObject<SoundEvent> HIGH_REACTIVITY_LAVA_SMELTER = register("high_reactivity_lava_smelter_processing");
     public static final RegistryObject<SoundEvent> MATTER_PHASE_TRANSFORMER = register("matter_phase_transformer_processing");
     public static final RegistryObject<SoundEvent> CRYSTAL_REACTION = register("crystal_reaction_processing");
     public static final RegistryObject<SoundEvent> CRYSTAL_WORKSTATION_ETCHING = register("crystal_workstation_etching");

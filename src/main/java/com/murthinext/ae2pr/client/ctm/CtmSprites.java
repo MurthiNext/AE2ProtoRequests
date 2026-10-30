@@ -21,7 +21,7 @@ import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
 public final class CtmSprites {
 
     public static final ResourceLocation AEV_PART_CASING = id("block/aev_machine_casing");
-    public static final ResourceLocation LAVA_SMELTER_CONTROLLER_CASING = id("block/lava_smelter/controller_casing");
+    public static final ResourceLocation HIGH_REACTIVITY_LAVA_SMELTER_CONTROLLER_CASING = id("block/high_reactivity_lava_smelter/controller_casing");
     public static final ResourceLocation MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING = id("block/matter_phase_transformer/controller_casing");
     public static final ResourceLocation CRYSTAL_REACTION_CONTROLLER_CASING = id("block/crystal_reaction_chamber/controller_casing");
     public static final ResourceLocation CRYSTAL_ASSEMBLY_LINE_CONTROLLER_CASING = id("block/crystal_assembly_line/controller_casing");
@@ -56,7 +56,7 @@ public final class CtmSprites {
             }
         }
         register("block/meteor_steel_pipe_side");
-        REGISTERED.add(LAVA_SMELTER_CONTROLLER_CASING);
+        REGISTERED.add(HIGH_REACTIVITY_LAVA_SMELTER_CONTROLLER_CASING);
         REGISTERED.add(MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING);
         REGISTERED.add(CRYSTAL_REACTION_CONTROLLER_CASING);
         REGISTERED.add(CRYSTAL_ASSEMBLY_LINE_CONTROLLER_CASING);

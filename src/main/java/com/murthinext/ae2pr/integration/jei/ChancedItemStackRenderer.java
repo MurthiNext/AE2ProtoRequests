@@ -78,7 +78,7 @@ public class ChancedItemStackRenderer implements IIngredientRenderer<ItemStack> 
     }
 
     public static Component chanceTooltip(float chance) {
-        return Component.translatable("jei.ae2pr.chance", percent(chance)).withStyle(ChatFormatting.GRAY);
+        return JeiRecipeInfo.chance(chance).withStyle(ChatFormatting.GRAY);
     }
 
     public static int color(float chance) {

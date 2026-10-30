@@ -15,7 +15,7 @@ import com.murthinext.ae2pr.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.multiblock.StructurePredicate;
 
 // 高反应性熔岩冶炼炉结构定义
-public final class LavaSmelterStructure extends AbstractStructureFacade {
+public final class HighReactivityLavaSmelterStructure extends AbstractStructureFacade {
 
     public static final MultiblockPattern PATTERN = MultiblockPattern
             .builder(RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.BACK)
@@ -32,11 +32,11 @@ public final class LavaSmelterStructure extends AbstractStructureFacade {
             .where('#', StructurePredicate.any())
             .build();
 
-    public static final LavaSmelterStructure INSTANCE = new LavaSmelterStructure();
+    public static final HighReactivityLavaSmelterStructure INSTANCE = new HighReactivityLavaSmelterStructure();
 
     public static final int CAVITY_SIZE = 2;
 
-    private LavaSmelterStructure() {
+    private HighReactivityLavaSmelterStructure() {
         super(PATTERN, MachinePartFacade.ZIRCONIA);
     }
 

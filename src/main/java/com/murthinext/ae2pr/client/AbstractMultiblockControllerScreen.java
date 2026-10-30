@@ -15,6 +15,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlockEntity;
+import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlockEntity;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerMenu;
 
 // 多方块控制器界面的公共基底：信息布局、产物显示与工具提示
@@ -39,21 +40,13 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     // 暂停原因，无暂停返回 null
     @Nullable
     protected Component errorText() {
-        int code = menu.getErrorCode();
-        if (code <= 0) {
-            return null;
-        }
-        if (code == 4) {
-            return Component.translatable("gui.ae2pr.multiblock.error.network");
-        }
-        String key = switch (code) {
-            case 1 -> "power";
-            case 2 -> "output";
-            case 3 -> "durability";
-            default -> null;
-        };
-        return key == null ? null : Component.translatable(
-                "gui.ae2pr." + menu.machineKey() + ".error." + key);
+        AbstractMultiblockControllerBlockEntity.Error error = menu.getError();
+        return error == AbstractMultiblockControllerBlockEntity.Error.NONE ? null : errorText(error);
+    }
+
+    // 机器专有的错误措辞覆盖点，默认使用共享文案
+    protected Component errorText(AbstractMultiblockControllerBlockEntity.Error error) {
+        return Component.translatable("gui.ae2pr.multiblock.error." + error.key());
     }
 
     @Override

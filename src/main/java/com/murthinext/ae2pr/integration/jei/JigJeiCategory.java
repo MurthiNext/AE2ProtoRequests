@@ -140,17 +140,16 @@ public class JigJeiCategory implements IRecipeCategory<JigRecipe> {
     public void draw(JigRecipe recipe, IRecipeSlotsView slots, GuiGraphics graphics, double mouseX, double mouseY) {
         var font = Minecraft.getInstance().font;
         process.draw(graphics, PROCESS_X, PROCESS_Y);
-        graphics.drawString(font, Component.translatable("jei.ae2pr.jig.duration", NUMBER.format(recipe.getDuration())),
-                4, INFO_Y, 0x404040, false);
-        graphics.drawString(font, Component.translatable("jei.ae2pr.jig.energy", NUMBER.format(recipe.getEnergyPerParallel())),
-                4, INFO_Y + 11, 0x404040, false);
+        graphics.drawString(font, JeiRecipeInfo.duration(recipe.getDuration()), 4, INFO_Y, 0x404040, false);
+        graphics.drawString(font, JeiRecipeInfo.energy(recipe.getEnergyPerParallel()), 4, INFO_Y + 11,
+                0x404040, false);
         int hiddenInputs = Math.max(0, recipe.getItemInputs().size() - ITEM_INPUT_SLOTS)
                 + Math.max(0, recipe.getFluidInputs().size() - FLUID_INPUT_SLOTS);
         int hiddenOutputs = Math.max(0, recipe.getItemOutputs().size() - ITEM_OUTPUT_SLOTS)
                 + Math.max(0, recipe.getFluidOutputs().size() - FLUID_OUTPUT_SLOTS);
         if (hiddenInputs > 0 || hiddenOutputs > 0) {
-            graphics.drawString(font, Component.translatable("jei.ae2pr.jig.more_io", hiddenInputs, hiddenOutputs),
-                    4, INFO_Y + 22, 0x808080, false);
+            graphics.drawString(font, JeiRecipeInfo.moreIo(hiddenInputs, hiddenOutputs), 4, INFO_Y + 22,
+                    0x808080, false);
         }
     }
 
@@ -167,7 +166,7 @@ public class JigJeiCategory implements IRecipeCategory<JigRecipe> {
                 if (itemCount <= itemSlots && fluids.size() <= fluidSlots) {
                     continue;
                 }
-                tooltip.add(Component.translatable(input ? "jei.ae2pr.jig.extra_inputs" : "jei.ae2pr.jig.extra_outputs"));
+                tooltip.add(input ? JeiRecipeInfo.extraInputs() : JeiRecipeInfo.extraOutputs());
                 for (int index = itemSlots; index < itemCount; index++) {
                     if (input) {
                         var ingredient = recipe.getItemInputs().get(index);

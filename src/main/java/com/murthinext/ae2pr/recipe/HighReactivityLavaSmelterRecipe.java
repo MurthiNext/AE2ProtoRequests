@@ -10,14 +10,14 @@ import net.minecraft.world.item.crafting.RecipeType;
 
 import com.murthinext.ae2pr.ModRecipes;
 
-public class LavaSmelterRecipe extends AbstractMultiblockRecipe {
+public class HighReactivityLavaSmelterRecipe extends AbstractMultiblockRecipe {
 
     public static final int DEFAULT_DURATION = 100;
     public static final int MAX_RESULTS = 2;
     public static final int MAX_ITEM_INPUTS = 4;
     public static final int MAX_FLUID_INPUTS = 2;
 
-    public LavaSmelterRecipe(ResourceLocation id, RecipeDraft draft) {
+    public HighReactivityLavaSmelterRecipe(ResourceLocation id, RecipeDraft draft) {
         super(id, draft);
     }
 
@@ -29,15 +29,15 @@ public class LavaSmelterRecipe extends AbstractMultiblockRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipes.LAVA_SMELTER.get();
+        return ModRecipes.HIGH_REACTIVITY_LAVA_SMELTER.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return ModRecipes.LAVA_SMELTER_TYPE.get();
+        return ModRecipes.HIGH_REACTIVITY_LAVA_SMELTER_TYPE.get();
     }
 
-    public static class Serializer extends AbstractMultiblockRecipeSerializer<LavaSmelterRecipe> {
+    public static class Serializer extends AbstractMultiblockRecipeSerializer<HighReactivityLavaSmelterRecipe> {
 
         public Serializer() {
             super(DEFAULT_DURATION);
@@ -61,14 +61,14 @@ public class LavaSmelterRecipe extends AbstractMultiblockRecipe {
         }
 
         @Override
-        protected LavaSmelterRecipe create(ResourceLocation id, RecipeDraft draft, JsonObject json) {
-            return new LavaSmelterRecipe(id, draft);
+        protected HighReactivityLavaSmelterRecipe create(ResourceLocation id, RecipeDraft draft, JsonObject json) {
+            return new HighReactivityLavaSmelterRecipe(id, draft);
         }
 
         @Override
-        protected LavaSmelterRecipe createFromNetwork(ResourceLocation id, RecipeDraft draft,
+        protected HighReactivityLavaSmelterRecipe createFromNetwork(ResourceLocation id, RecipeDraft draft,
                 FriendlyByteBuf buffer) {
-            return new LavaSmelterRecipe(id, draft);
+            return new HighReactivityLavaSmelterRecipe(id, draft);
         }
     }
 }

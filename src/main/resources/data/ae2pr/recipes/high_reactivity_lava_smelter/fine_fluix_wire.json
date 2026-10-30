@@ -1,5 +1,5 @@
 {
-  "type": "ae2pr:lava_smelter",
+  "type": "ae2pr:high_reactivity_lava_smelter",
   "duration": 70,
   "item_inputs": [
     {

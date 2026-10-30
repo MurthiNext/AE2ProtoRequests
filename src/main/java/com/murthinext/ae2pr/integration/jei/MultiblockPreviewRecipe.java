@@ -20,7 +20,7 @@ import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.structure.CrystalAssemblyLineStructure;
 import com.murthinext.ae2pr.multiblock.structure.CrystalReactionChamberStructure;
 import com.murthinext.ae2pr.multiblock.structure.CrystalWorkstationStructure;
-import com.murthinext.ae2pr.multiblock.structure.LavaSmelterStructure;
+import com.murthinext.ae2pr.multiblock.structure.HighReactivityLavaSmelterStructure;
 import com.murthinext.ae2pr.multiblock.structure.JigStructure;
 import com.murthinext.ae2pr.multiblock.structure.MatterPhaseTransformerStructure;
 import com.murthinext.ae2pr.multiblock.structure.MultiFactoryStructure;
@@ -38,14 +38,13 @@ public record MultiblockPreviewRecipe(ResourceLocation id, Component title, Bloc
                         CrystalWorkstationStructure.PATTERN::maxSlices),
                 of("jig", ModBlocks.JIG.get(), JigStructure.PATTERN, JigStructure.PATTERN::maxSlices),
                 of("high_reactivity_lava_smelter", ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get(),
-                        LavaSmelterStructure.PATTERN, LavaSmelterStructure.PATTERN::maxSlices),
+                        HighReactivityLavaSmelterStructure.PATTERN, HighReactivityLavaSmelterStructure.PATTERN::maxSlices),
                 of("matter_phase_transformer", ModBlocks.MATTER_PHASE_TRANSFORMER.get(),
                         MatterPhaseTransformerStructure.PATTERN, MatterPhaseTransformerStructure.PATTERN::maxSlices),
                 of("multi_factory", ModBlocks.MULTI_FACTORY.get(), MultiFactoryStructure.PATTERN,
                         MultiFactoryStructure.PATTERN::maxSlices),
-                new MultiblockPreviewRecipe(id("crystal_reactor"),
-                        Component.translatable("jei.ae2pr.multiblock.crystal_reactor"), ModBlocks.HIGH_ENERGY_CORE.get(),
-                        CrystalReactorStructure.PATTERN, CrystalReactorStructure.PATTERN::maxSlices));
+                of("crystal_reactor", ModBlocks.HIGH_ENERGY_CORE.get(), CrystalReactorStructure.PATTERN,
+                        CrystalReactorStructure.PATTERN::maxSlices));
     }
 
     public List<ItemStack> ingredients() {
@@ -67,9 +66,11 @@ public record MultiblockPreviewRecipe(ResourceLocation id, Component title, Bloc
         return totals.entrySet().stream().map(entry -> new ItemStack(entry.getKey(), entry.getValue())).toList();
     }
 
+    // 8 条结构预览统一使用结构名，key 与结构 id 一一对应
     private static MultiblockPreviewRecipe of(String name, Block controller, MultiblockPattern pattern,
             IntSupplier maxSlices) {
-        return new MultiblockPreviewRecipe(id(name), controller.getName(), controller, pattern, maxSlices);
+        return new MultiblockPreviewRecipe(id(name),
+                Component.translatable("jei.ae2pr.multiblock.structure." + name), controller, pattern, maxSlices);
     }
 
     private static ResourceLocation id(String name) {

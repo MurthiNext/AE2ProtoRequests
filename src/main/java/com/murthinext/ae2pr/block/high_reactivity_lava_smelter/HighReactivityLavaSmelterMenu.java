@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.block.lava_smelter;
+package com.murthinext.ae2pr.block.high_reactivity_lava_smelter;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -15,9 +15,9 @@ import appeng.api.upgrades.Upgrades;
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerMenu;
 
-public class LavaSmelterMenu extends AbstractMultiblockControllerMenu<LavaSmelterControllerBlockEntity> {
+public class HighReactivityLavaSmelterMenu extends AbstractMultiblockControllerMenu<HighReactivityLavaSmelterControllerBlockEntity> {
 
-    public static final MenuType<LavaSmelterMenu> TYPE = IForgeMenuType.create(LavaSmelterMenu::new);
+    public static final MenuType<HighReactivityLavaSmelterMenu> TYPE = IForgeMenuType.create(HighReactivityLavaSmelterMenu::new);
 
     private static final int DUST_SLOT_X = 151;
     private static final int DUST_SLOT_Y = 95;
@@ -27,13 +27,13 @@ public class LavaSmelterMenu extends AbstractMultiblockControllerMenu<LavaSmelte
     private static final int DATA_DURABILITY = DATA_COUNT;
     private static final int EXTRA_DATA = 1;
 
-    public LavaSmelterMenu(int id, Inventory playerInventory, LavaSmelterControllerBlockEntity controller) {
+    public HighReactivityLavaSmelterMenu(int id, Inventory playerInventory, HighReactivityLavaSmelterControllerBlockEntity controller) {
         super(TYPE, id, playerInventory, controller, EXTRA_DATA);
     }
 
-    public LavaSmelterMenu(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
+    public HighReactivityLavaSmelterMenu(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
         this(id, playerInventory, readController(playerInventory.player, buffer,
-                LavaSmelterControllerBlockEntity.class));
+                HighReactivityLavaSmelterControllerBlockEntity.class));
     }
 
     @Override
@@ -42,7 +42,7 @@ public class LavaSmelterMenu extends AbstractMultiblockControllerMenu<LavaSmelte
     }
 
     @Override
-    protected void addExtraSlots(LavaSmelterControllerBlockEntity controller) {
+    protected void addExtraSlots(HighReactivityLavaSmelterControllerBlockEntity controller) {
         addSlot(new SlotItemHandler(controller.getDustSlot(), 0, DUST_SLOT_X, DUST_SLOT_Y));
     }
 
@@ -56,7 +56,7 @@ public class LavaSmelterMenu extends AbstractMultiblockControllerMenu<LavaSmelte
     }
 
     public int getMaxDurability() {
-        return Config.lavaSmelterMaxDurability();
+        return Config.highReactivityLavaSmelterMaxDurability();
     }
 
     @Override

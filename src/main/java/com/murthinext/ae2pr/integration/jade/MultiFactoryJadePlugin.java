@@ -49,7 +49,7 @@ public class MultiFactoryJadePlugin extends AbstractMultiblockJadePlugin {
 
     @Override
     protected void appendExtraTooltip(ITooltip tooltip, CompoundTag data) {
-        tooltip.add(Component.translatable("gui.ae2pr.multi_factory.mode",
+        tooltip.add(Component.translatable("gui.ae2pr.multiblock.mode",
                 MultiFactoryMode.byId(data.getString("mode")).displayName()));
     }
 }

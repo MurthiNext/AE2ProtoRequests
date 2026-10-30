@@ -145,8 +145,12 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
         return (data.get(DATA_FLAGS) & FLAG_BUSY) != 0;
     }
 
-    public int getErrorCode() {
-        return data.get(DATA_ERROR);
+    // 客户端侧的错误状态，越界值统一视为 NONE
+    public AbstractMultiblockControllerBlockEntity.Error getError() {
+        var values = AbstractMultiblockControllerBlockEntity.Error.values();
+        int ordinal = data.get(DATA_ERROR);
+        return ordinal >= 0 && ordinal < values.length ? values[ordinal]
+                : AbstractMultiblockControllerBlockEntity.Error.NONE;
     }
 
     public int getJobElapsed() {

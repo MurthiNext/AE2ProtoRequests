@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.client;
 
 import java.text.NumberFormat;
-import java.util.Locale;
 
 import javax.annotation.Nullable;
 
@@ -68,7 +67,7 @@ public final class GeneralMachineInfoLayout {
         graphics.drawString(font, Component.translatable("gui.ae2pr.multiblock.parallel", info.maxParallel()),
                 TEXT_X, PARALLEL_Y, COLOR_INFO, false);
         // 合成状态
-        graphics.drawString(font, Component.translatable(jobKey(info)), TEXT_X, JOB_Y, jobColor(info), false);
+        graphics.drawString(font, Component.translatable(statusKey(info)), TEXT_X, JOB_Y, jobColor(info), false);
         // 暂停原因
         if (info.error() != null) {
             graphics.drawString(font, info.error(), TEXT_X, ERROR_Y, COLOR_FAIL, false);
@@ -95,7 +94,7 @@ public final class GeneralMachineInfoLayout {
         renderFluidIcon(graphics, fluid, JOB_ITEM_X, JOB_ITEM_Y);
         String amount = NumberFormat.getIntegerInstance().format(fluid.getAmount()) + " mB";
         Component tail = Component.literal(amount).append(Component.translatable(
-                "gui.ae2pr.multiblock.job.time", seconds(elapsed), seconds(duration)));
+                "gui.ae2pr.multiblock.job.time", elapsed, duration));
         int tailX = WIDTH - 2 - font.width(tail);
         renderJobName(graphics, font, leftPos, topPos, fluid.getDisplayName().getString(),
                 tailX - JOB_TAIL_GAP - JOB_TEXT_X);
@@ -123,7 +122,7 @@ public final class GeneralMachineInfoLayout {
         String count = "x" + NumberFormat.getIntegerInstance().format(output.getCount());
         Component tail = Component.literal(count).append(Component.translatable(
                 "gui.ae2pr.multiblock.job.time",
-                seconds(info.jobElapsed()), seconds(duration)));
+                info.jobElapsed(), duration));
         int tailX = WIDTH - 2 - font.width(tail);
         renderJobName(graphics, font, leftPos, topPos, output.getHoverName().getString(),
                 tailX - JOB_TAIL_GAP - JOB_TEXT_X);
@@ -154,18 +153,18 @@ public final class GeneralMachineInfoLayout {
 
     private static Component powerText(Info info) {
         if (!info.networkConnected()) {
-            return Component.translatable("gui.ae2pr.multiblock.power.disconnected");
+            return Component.translatable("gui.ae2pr.multiblock.network.disconnected");
         }
         return Component.translatable("gui.ae2pr.multiblock.power.stored",
                 ReadableNumberConverter.format((long) Math.min(Math.max(info.storedPower(), 0),
                         Long.MAX_VALUE), 5) + " AE");
     }
 
-    private static String jobKey(Info info) {
+    private static String statusKey(Info info) {
         if (info.running()) {
-            return "gui.ae2pr.multiblock.job.running";
+            return "gui.ae2pr.multiblock.status.running";
         }
-        return info.paused() ? "gui.ae2pr.multiblock.job.paused" : "gui.ae2pr.multiblock.job.idle";
+        return info.paused() ? "gui.ae2pr.multiblock.status.paused" : "gui.ae2pr.multiblock.status.idle";
     }
 
     private static int jobColor(Info info) {
@@ -173,9 +172,5 @@ public final class GeneralMachineInfoLayout {
             return COLOR_RUNNING;
         }
         return info.paused() ? COLOR_PAUSED : COLOR_GRAY;
-    }
-
-    private static String seconds(int ticks) {
-        return String.format(Locale.ROOT, "%.1f", ticks / 20.0D);
     }
 }

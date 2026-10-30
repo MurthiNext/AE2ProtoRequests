@@ -33,7 +33,7 @@ public final class MachineProcessingSounds {
 
     public enum Type {
         CRYSTAL_ASSEMBLY_LINE(ModSounds.CRYSTAL_ASSEMBLY_LINE, 1.0F, 1.0F, 0),
-        LAVA_SMELTER(() -> SoundEvents.LAVA_AMBIENT, 0.4F, 0.8F, 0, ModSounds.LAVA_SMELTER),
+        HIGH_REACTIVITY_LAVA_SMELTER(() -> SoundEvents.LAVA_AMBIENT, 0.4F, 0.8F, 0, ModSounds.HIGH_REACTIVITY_LAVA_SMELTER),
         MATTER_PHASE_TRANSFORMER(ModSounds.MATTER_PHASE_TRANSFORMER, 0.65F, 1.0F, 0),
         CRYSTAL_REACTION(ModSounds.CRYSTAL_REACTION, 0.7F, 1.0F, 0),
         CRYSTAL_WORKSTATION_ETCHING(ModSounds.CRYSTAL_WORKSTATION_ETCHING, 0.7F, 1.0F, 0),
@@ -93,7 +93,7 @@ public final class MachineProcessingSounds {
             minecraft.getSoundManager().play(sound);
         }
         sound.keepSubtitle(minecraft);
-        if (type == Type.LAVA_SMELTER) {
+        if (type == Type.HIGH_REACTIVITY_LAVA_SMELTER) {
             sound.tickSplashes(minecraft);
         }
     }
@@ -217,7 +217,7 @@ public final class MachineProcessingSounds {
         private int age;
 
         private LavaSplashSound(ProcessingSound owner) {
-            super(ModSounds.LAVA_SMELTER.get(), SoundSource.BLOCKS, SoundInstance.createUnseededRandom());
+            super(ModSounds.HIGH_REACTIVITY_LAVA_SMELTER.get(), SoundSource.BLOCKS, SoundInstance.createUnseededRandom());
             this.owner = owner;
             this.volume = 0.22F + random.nextFloat() * 0.18F;
             this.pitch = 0.6F + random.nextFloat() * 0.55F;

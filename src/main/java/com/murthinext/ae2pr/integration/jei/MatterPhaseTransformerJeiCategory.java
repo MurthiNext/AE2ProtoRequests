@@ -1,6 +1,5 @@
 package com.murthinext.ae2pr.integration.jei;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +53,6 @@ public class MatterPhaseTransformerJeiCategory implements IRecipeCategory<Matter
             "textures/gui/jei/matter_phase_transformer_process.png");
     private static final int COLOR_TEXT = 0x404040;
     private static final int COLOR_HINT = 0x808080;
-    private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
     private final IDrawable icon;
     private final IDrawable fluidSlot;
@@ -129,14 +127,13 @@ public class MatterPhaseTransformerJeiCategory implements IRecipeCategory<Matter
             double mouseY) {
         var font = Minecraft.getInstance().font;
         process.draw(graphics, PROCESS_X, INPUT_Y);
-        graphics.drawString(font, Component.translatable("jei.ae2pr.matter_phase_transformer.duration",
-                recipe.getDuration()), PADDING, INFO_Y, COLOR_TEXT, false);
-        graphics.drawString(font, Component.translatable("jei.ae2pr.matter_phase_transformer.energy",
-                NUMBER.format(recipe.getEnergyPerParallel())), PADDING, INFO_Y + INFO_STEP, COLOR_TEXT, false);
+        graphics.drawString(font, JeiRecipeInfo.duration(recipe.getDuration()), PADDING, INFO_Y, COLOR_TEXT, false);
+        graphics.drawString(font, JeiRecipeInfo.energy(recipe.getEnergyPerParallel()), PADDING, INFO_Y + INFO_STEP,
+                COLOR_TEXT, false);
         int hidden = recipe.getItemInputs().size() - INPUT_COUNT;
         if (hidden > 0) {
-            graphics.drawString(font, Component.translatable("jei.ae2pr.matter_phase_transformer.more_inputs", hidden),
-                    PADDING, INFO_Y + 2 * INFO_STEP, COLOR_HINT, false);
+            graphics.drawString(font, JeiRecipeInfo.moreInputs(hidden), PADDING, INFO_Y + 2 * INFO_STEP,
+                    COLOR_HINT, false);
         }
     }
 }

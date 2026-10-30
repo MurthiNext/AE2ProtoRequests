@@ -97,7 +97,7 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
         drawButton(graphics, LAYER, preview.layer() < 0 ? "L: *" : "L:" + (preview.layer() + 1),
                 true, mouseX, mouseY);
         if (hasVariableLength()) {
-            drawButton(graphics, LENGTH, "E: " + preview.slices(), true, mouseX, mouseY);
+            drawButton(graphics, LENGTH, "LEN: " + preview.slices(), true, mouseX, mouseY);
         }
 
         graphics.fill(VIEW.left() - 1, VIEW.top() - 1, VIEW.right() + 1, VIEW.bottom() + 1, 0xFF8B9AA6);

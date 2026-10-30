@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.block.lava_smelter;
+package com.murthinext.ae2pr.block.high_reactivity_lava_smelter;
 
 import java.util.List;
 
@@ -29,10 +29,10 @@ import com.murthinext.ae2pr.ModBlockEntities;
 import com.murthinext.ae2pr.ModItems;
 import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.multiblock.structure.LavaSmelterStructure;
+import com.murthinext.ae2pr.multiblock.structure.HighReactivityLavaSmelterStructure;
 import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
-public class LavaSmelterControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
+public class HighReactivityLavaSmelterControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
     public static final int DUST_SLOT_CAPACITY = 64;
     private static final float LAVA_DAMAGE = 4.0F;
@@ -62,27 +62,27 @@ public class LavaSmelterControllerBlockEntity extends AbstractMultiblockControll
     };
     private final LazyOptional<IItemHandler> dustCapability = LazyOptional.of(() -> dustSlot);
 
-    public LavaSmelterControllerBlockEntity(BlockPos pos, BlockState state) {
+    public HighReactivityLavaSmelterControllerBlockEntity(BlockPos pos, BlockState state) {
         this(ModBlockEntities.HIGH_REACTIVITY_LAVA_SMELTER.get(), pos, state);
     }
 
-    protected LavaSmelterControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state, LavaSmelterStructure.INSTANCE, ModItems.HIGH_REACTIVITY_LAVA_SMELTER.get());
+    protected HighReactivityLavaSmelterControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state, HighReactivityLavaSmelterStructure.INSTANCE, ModItems.HIGH_REACTIVITY_LAVA_SMELTER.get());
     }
 
     @Override
     public String machineKey() {
-        return "lava_smelter";
+        return "high_reactivity_lava_smelter";
     }
 
     @Override
     protected RecipeType<? extends MultiblockRecipe> recipeType() {
-        return ModRecipes.LAVA_SMELTER_TYPE.get();
+        return ModRecipes.HIGH_REACTIVITY_LAVA_SMELTER_TYPE.get();
     }
 
     @Override
     public int maxParallel() {
-        return Math.max(1, Config.lavaSmelterParallel());
+        return Math.max(1, Config.highReactivityLavaSmelterParallel());
     }
 
     @Override
@@ -130,8 +130,8 @@ public class LavaSmelterControllerBlockEntity extends AbstractMultiblockControll
 
     // 陨石粉转耐久：仅当一批耐久能完整存入时才消耗
     private void absorbDust() {
-        int max = Config.lavaSmelterMaxDurability();
-        int perDust = Math.min(Config.lavaSmelterDurabilityPerDust(), max);
+        int max = Config.highReactivityLavaSmelterMaxDurability();
+        int perDust = Math.min(Config.highReactivityLavaSmelterDurabilityPerDust(), max);
         if (durability > max - perDust) {
             return;
         }
@@ -157,7 +157,7 @@ public class LavaSmelterControllerBlockEntity extends AbstractMultiblockControll
         if (level == null || !isFormed()) {
             return;
         }
-        AABB cavity = LavaSmelterStructure.cavityAabb(worldPosition, getFacing(), mirrorSide, mirrorFront);
+        AABB cavity = HighReactivityLavaSmelterStructure.cavityAabb(worldPosition, getFacing(), mirrorSide, mirrorFront);
         float damage = LAVA_DAMAGE * (durability > 0 ? 4.0F : 2.0F);
         for (Player player : level.getEntitiesOfClass(Player.class, cavity)) {
             if (!player.fireImmune()) {
@@ -172,7 +172,7 @@ public class LavaSmelterControllerBlockEntity extends AbstractMultiblockControll
             powerShortageTicks = 0;
             return;
         }
-        double drain = Config.lavaSmelterPassiveEnergy();
+        double drain = Config.highReactivityLavaSmelterPassiveEnergy();
         if (drain <= 0 || extractNetworkEnergy(drain, false) >= drain) {
             powerShortageTicks = 0;
             return;
@@ -181,7 +181,7 @@ public class LavaSmelterControllerBlockEntity extends AbstractMultiblockControll
             return;
         }
         powerShortageTicks = 0;
-        if (durability > 0 && level.random.nextDouble() < Config.lavaSmelterDurabilityLossChance()) {
+        if (durability > 0 && level.random.nextDouble() < Config.highReactivityLavaSmelterDurabilityLossChance()) {
             durability--;
             markStateChanged();
         }
@@ -241,11 +241,11 @@ public class LavaSmelterControllerBlockEntity extends AbstractMultiblockControll
     }
 
     public int getMaxDurability() {
-        return Config.lavaSmelterMaxDurability();
+        return Config.highReactivityLavaSmelterMaxDurability();
     }
 
     // 结构内输入/输出仓与总线，仅用于渲染与诊断
     public List<BlockPos> poolCells() {
-        return LavaSmelterStructure.poolCells(worldPosition, getFacing(), mirrorSide, mirrorFront);
+        return HighReactivityLavaSmelterStructure.poolCells(worldPosition, getFacing(), mirrorSide, mirrorFront);
     }
 }

@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.client.lava_smelter;
+package com.murthinext.ae2pr.client.high_reactivity_lava_smelter;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -6,13 +6,14 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.ItemLike;
 
 import com.murthinext.ae2pr.ModBlocks;
-import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterMenu;
-import com.murthinext.ae2pr.client.ModGuide;
+import com.murthinext.ae2pr.block.high_reactivity_lava_smelter.HighReactivityLavaSmelterMenu;
 import com.murthinext.ae2pr.client.AbstractMultiblockControllerScreen;
-import com.murthinext.ae2pr.client.GeneralMachineScreen;
 import com.murthinext.ae2pr.client.GeneralMachineInfoLayout;
+import com.murthinext.ae2pr.client.GeneralMachineScreen;
+import com.murthinext.ae2pr.client.ModGuide;
+import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlockEntity;
 
-public class LavaSmelterScreen extends AbstractMultiblockControllerScreen<LavaSmelterMenu> {
+public class HighReactivityLavaSmelterScreen extends AbstractMultiblockControllerScreen<HighReactivityLavaSmelterMenu> {
 
     private static final int COLOR_TITLE = 0xFFC46B;
     private static final int COLOR_FAIL = 0xFF5555;
@@ -21,13 +22,13 @@ public class LavaSmelterScreen extends AbstractMultiblockControllerScreen<LavaSm
     private static final int DUST_SLOT_X = 151;
     private static final int DUST_SLOT_Y = 95;
 
-    public LavaSmelterScreen(LavaSmelterMenu menu, Inventory playerInventory, Component title) {
+    public HighReactivityLavaSmelterScreen(HighReactivityLavaSmelterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
     }
 
     @Override
     protected ResourceLocation guidePage() {
-        return ModGuide.LAVA_SMELTER_PAGE;
+        return ModGuide.HIGH_REACTIVITY_LAVA_SMELTER_PAGE;
     }
 
     @Override
@@ -60,9 +61,17 @@ public class LavaSmelterScreen extends AbstractMultiblockControllerScreen<LavaSm
     @Override
     protected void renderExtraLabels(net.minecraft.client.gui.GuiGraphics graphics, int mouseX, int mouseY) {
         int durability = menu.getDurability();
-        graphics.drawString(font, Component.translatable("gui.ae2pr.lava_smelter.durability",
+        graphics.drawString(font, Component.translatable("gui.ae2pr.high_reactivity_lava_smelter.durability",
                 durability, menu.getMaxDurability()),
                 GeneralMachineInfoLayout.TEXT_X, GeneralMachineInfoLayout.EXTRA_Y,
                 durability > 0 ? COLOR_DURABILITY : COLOR_FAIL, false);
+    }
+
+    @Override
+    protected Component errorText(AbstractMultiblockControllerBlockEntity.Error error) {
+        if (error == AbstractMultiblockControllerBlockEntity.Error.DURABILITY) {
+            return Component.translatable("gui.ae2pr.high_reactivity_lava_smelter.error.durability");
+        }
+        return super.errorText(error);
     }
 }

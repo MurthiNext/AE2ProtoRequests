@@ -23,13 +23,13 @@ public class MultiFactoryModeButton extends AbstractWidget {
     private MultiFactoryMode mode = MultiFactoryMode.INSCRIBING;
 
     public MultiFactoryModeButton(int x, int y, Runnable onPress) {
-        super(x, y, SIZE, SIZE, Component.translatable("gui.ae2pr.multi_factory.mode.switch"));
+        super(x, y, SIZE, SIZE, Component.translatable("gui.ae2pr.multiblock.mode.switch"));
         this.onPress = onPress;
     }
 
     public void setMode(MultiFactoryMode mode) {
         this.mode = mode;
-        setMessage(Component.translatable("gui.ae2pr.multi_factory.mode.current", mode.displayName()));
+        setMessage(Component.translatable("gui.ae2pr.multiblock.mode", mode.displayName()));
     }
 
     @Override

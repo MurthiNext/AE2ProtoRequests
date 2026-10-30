@@ -13,7 +13,7 @@ import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChambe
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationControllerBlockEntity;
 import com.murthinext.ae2pr.block.crystal_reactor.CrystalReactorCoreBlockEntity;
 import com.murthinext.ae2pr.block.jig.JigControllerBlockEntity;
-import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
+import com.murthinext.ae2pr.block.high_reactivity_lava_smelter.HighReactivityLavaSmelterControllerBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.matter_phase_transformer.MatterPhaseTransformerControllerBlockEntity;
@@ -43,9 +43,9 @@ public final class ModBlockEntities {
                     MENetworkAccessHatchBlockEntity::new,
                     ModBlocks.ME_NETWORK_ACCESS_HATCH.get()).build(null));
 
-    public static final RegistryObject<BlockEntityType<LavaSmelterControllerBlockEntity>> HIGH_REACTIVITY_LAVA_SMELTER = BLOCK_ENTITIES
+    public static final RegistryObject<BlockEntityType<HighReactivityLavaSmelterControllerBlockEntity>> HIGH_REACTIVITY_LAVA_SMELTER = BLOCK_ENTITIES
             .register("high_reactivity_lava_smelter", () -> BlockEntityType.Builder.of(
-                    LavaSmelterControllerBlockEntity::new,
+                    HighReactivityLavaSmelterControllerBlockEntity::new,
                     ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<MatterPhaseTransformerControllerBlockEntity>> MATTER_PHASE_TRANSFORMER = BLOCK_ENTITIES

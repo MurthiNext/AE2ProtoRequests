@@ -189,7 +189,7 @@ public final class CtmConfig {
             return CtmSprites.baseSprite(CtmSprites.CRYSTAL_ASSEMBLY_LINE_CONTROLLER_CASING);
         }
         if (block == ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()) {
-            return CtmSprites.baseSprite(CtmSprites.LAVA_SMELTER_CONTROLLER_CASING);
+            return CtmSprites.baseSprite(CtmSprites.HIGH_REACTIVITY_LAVA_SMELTER_CONTROLLER_CASING);
         }
         if (block == ModBlocks.MATTER_PHASE_TRANSFORMER.get()) {
             return CtmSprites.baseSprite(CtmSprites.MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING);

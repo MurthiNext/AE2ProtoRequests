@@ -1,9 +1,9 @@
 {
-  "type": "ae2pr:lava_smelter",
+  "type": "ae2pr:high_reactivity_lava_smelter",
   "duration": 100,
   "item_inputs": [
     {
-      "item": "ae2:fluix_crystal",
+      "item": "minecraft:lapis_lazuli",
       "count": 1
     }
   ],
@@ -15,7 +15,7 @@
   ],
   "item_outputs": [
     {
-      "item": "ae2:fluix_crystal",
+      "item": "minecraft:lapis_lazuli",
       "count": 2
     }
   ]

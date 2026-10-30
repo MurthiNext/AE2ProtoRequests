@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.block.lava_smelter;
+package com.murthinext.ae2pr.block.high_reactivity_lava_smelter;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -12,9 +12,9 @@ import com.murthinext.ae2pr.client.sound.MachineProcessingSounds;
 import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
 
 public class HighReactivityLavaSmelterBlock
-        extends AbstractMultiblockControllerBlock<LavaSmelterControllerBlockEntity> {
+        extends AbstractMultiblockControllerBlock<HighReactivityLavaSmelterControllerBlockEntity> {
 
-    public static final String MACHINE_KEY = "lava_smelter";
+    public static final String MACHINE_KEY = "high_reactivity_lava_smelter";
 
     public HighReactivityLavaSmelterBlock() {
         super(Properties.of()
@@ -25,8 +25,8 @@ public class HighReactivityLavaSmelterBlock
     }
 
     @Override
-    protected LavaSmelterControllerBlockEntity newController(BlockPos pos, BlockState state) {
-        return new LavaSmelterControllerBlockEntity(pos, state);
+    protected HighReactivityLavaSmelterControllerBlockEntity newController(BlockPos pos, BlockState state) {
+        return new HighReactivityLavaSmelterControllerBlockEntity(pos, state);
     }
 
     @Override
@@ -40,14 +40,14 @@ public class HighReactivityLavaSmelterBlock
     }
 
     @Override
-    protected MenuProvider menuProvider(LavaSmelterControllerBlockEntity controller) {
+    protected MenuProvider menuProvider(HighReactivityLavaSmelterControllerBlockEntity controller) {
         return new SimpleMenuProvider(
-                (id, inventory, player) -> new LavaSmelterMenu(id, inventory, controller),
+                (id, inventory, player) -> new HighReactivityLavaSmelterMenu(id, inventory, controller),
                 Component.translatable("block.ae2pr.high_reactivity_lava_smelter"));
     }
 
     @Override
-    protected void clientTick(LavaSmelterControllerBlockEntity controller) {
-        MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.LAVA_SMELTER);
+    protected void clientTick(HighReactivityLavaSmelterControllerBlockEntity controller) {
+        MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.HIGH_REACTIVITY_LAVA_SMELTER);
     }
 }

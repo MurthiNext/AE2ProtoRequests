@@ -1,9 +1,9 @@
 {
-  "type": "ae2pr:lava_smelter",
-  "duration": 100,
+  "type": "ae2pr:high_reactivity_lava_smelter",
+  "duration": 200,
   "item_inputs": [
     {
-      "item": "minecraft:lapis_lazuli",
+      "item": "ae2:singularity",
       "count": 1
     }
   ],
@@ -15,8 +15,8 @@
   ],
   "item_outputs": [
     {
-      "item": "minecraft:lapis_lazuli",
-      "count": 2
+      "item": "ae2pr:crystaline",
+      "count": 1
     }
   ]
 }

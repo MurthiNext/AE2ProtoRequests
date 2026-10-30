@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import com.murthinext.ae2pr.ae2pr;
 
-public final class LavaSmelterJeiFurnace {
+public final class HighReactivityLavaSmelterJeiFurnace {
 
     public static final int ITEM_COLS = 2;
     public static final int ITEM_ROWS = 2;
@@ -13,7 +13,7 @@ public final class LavaSmelterJeiFurnace {
     public static final int FLUID_COUNT = 2;
 
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
-            "textures/gui/jei/lava_smelter_furnace.png");
+            "textures/gui/jei/high_reactivity_lava_smelter_furnace.png");
 
     private static final int X = 7;
     private static final int Y = 4;
@@ -26,7 +26,7 @@ public final class LavaSmelterJeiFurnace {
     // 流体列在炉膛第三列
     private static final int FLUID_COL = 2;
 
-    private LavaSmelterJeiFurnace() {
+    private HighReactivityLavaSmelterJeiFurnace() {
     }
 
     public static int itemSlotX(int index) {

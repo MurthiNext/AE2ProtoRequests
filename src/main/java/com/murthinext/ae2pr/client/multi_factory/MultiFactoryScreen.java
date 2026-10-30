@@ -72,7 +72,7 @@ public class MultiFactoryScreen extends AbstractMultiblockControllerScreen<Multi
     }
 
     private Component currentMode() {
-        return Component.translatable("gui.ae2pr.multi_factory.mode.current", menu.getMode().displayName());
+        return Component.translatable("gui.ae2pr.multiblock.mode", menu.getMode().displayName());
     }
 
     @Override
@@ -86,7 +86,7 @@ public class MultiFactoryScreen extends AbstractMultiblockControllerScreen<Multi
         List<Component> hint = new ArrayList<>();
         hint.add(currentMode());
         hint.add(Component.translatable(menu.isBusy()
-                ? "gui.ae2pr.multi_factory.mode.locked" : "gui.ae2pr.multi_factory.mode.switch"));
+                ? "gui.ae2pr.multiblock.mode.locked" : "gui.ae2pr.multiblock.mode.switch"));
         graphics.renderComponentTooltip(font, hint, mouseX, mouseY);
         return true;
     }

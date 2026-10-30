@@ -122,8 +122,8 @@ public abstract class AbstractMultiblockJadePlugin implements IWailaPlugin {
                 return;
             }
             tooltip.add(Component.translatable(data.getBoolean(KEY_NETWORK_CONNECTED)
-                    ? "jade.ae2pr.multiblock.connected"
-                    : "jade.ae2pr.multiblock.disconnected"));
+                    ? "gui.ae2pr.multiblock.network.connected"
+                    : "gui.ae2pr.multiblock.network.disconnected"));
             tooltip.add(Component.translatable("gui.ae2pr.multiblock.channels",
                     data.getInt(KEY_ALLOCATED_CHANNELS), data.getInt(KEY_REQUIRED_CHANNELS)));
             appendJob(tooltip, data);
@@ -144,7 +144,7 @@ public abstract class AbstractMultiblockJadePlugin implements IWailaPlugin {
             IProgressStyle style = tooltip.getElementHelper().progressStyle().color(progressColor(),
                     PROGRESS_BACKGROUND);
             tooltip.add(tooltip.getElementHelper().progress(progress,
-                    Component.translatable("jade.ae2pr.multiblock.progress", elapsed, duration),
+                    Component.translatable("gui.ae2pr.multiblock.job.progress", elapsed, duration),
                     style, BoxStyle.DEFAULT, false));
         }
 
@@ -157,7 +157,8 @@ public abstract class AbstractMultiblockJadePlugin implements IWailaPlugin {
                     return null;
                 }
                 ItemStack output = new ItemStack(item, data.getInt(KEY_COUNT));
-                return Component.translatable("jade.ae2pr.multiblock.job", output.getHoverName(), output.getCount());
+                return Component.translatable("gui.ae2pr.multiblock.job.output", output.getHoverName(),
+                        output.getCount());
             }
             String fluidId = data.getString(KEY_FLUID);
             Fluid fluid = fluidId.isEmpty() ? null : ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse(fluidId));
@@ -165,7 +166,8 @@ public abstract class AbstractMultiblockJadePlugin implements IWailaPlugin {
                 return null;
             }
             FluidStack output = new FluidStack(fluid, data.getInt(KEY_AMOUNT));
-            return Component.translatable("jade.ae2pr.multiblock.job", output.getDisplayName(), output.getAmount());
+            return Component.translatable("gui.ae2pr.multiblock.job.output", output.getDisplayName(),
+                    output.getAmount());
         }
 
         @Override

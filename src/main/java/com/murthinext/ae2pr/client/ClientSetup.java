@@ -34,8 +34,8 @@ import com.murthinext.ae2pr.client.machine_part.FluidHatchScreen;
 import com.murthinext.ae2pr.client.machine_part.ItemBusScreen;
 import com.murthinext.ae2pr.client.level_emitter.MultiLevelEmitterScreen;
 import com.murthinext.ae2pr.client.level_emitter.MultiThresholdLevelEmitterScreen;
-import com.murthinext.ae2pr.client.lava_smelter.LavaSmelterRenderer;
-import com.murthinext.ae2pr.client.lava_smelter.LavaSmelterScreen;
+import com.murthinext.ae2pr.client.high_reactivity_lava_smelter.HighReactivityLavaSmelterRenderer;
+import com.murthinext.ae2pr.client.high_reactivity_lava_smelter.HighReactivityLavaSmelterScreen;
 import com.murthinext.ae2pr.client.matter_phase_transformer.MatterPhaseTransformerRenderer;
 import com.murthinext.ae2pr.client.matter_phase_transformer.MatterPhaseTransformerScreen;
 import com.murthinext.ae2pr.client.naming_factory.NamingFactoryRenderer;
@@ -56,7 +56,7 @@ public final class ClientSetup {
                 MultiThresholdLevelEmitterScreen::new,
                 "/screens/multi_threshold_level_emitter.json");
         MenuScreens.register(ModMenus.CRYSTAL_ASSEMBLY_LINE.get(), CrystalAssemblyLineScreen::new);
-        MenuScreens.register(ModMenus.HIGH_REACTIVITY_LAVA_SMELTER.get(), LavaSmelterScreen::new);
+        MenuScreens.register(ModMenus.HIGH_REACTIVITY_LAVA_SMELTER.get(), HighReactivityLavaSmelterScreen::new);
         MenuScreens.register(ModMenus.MATTER_PHASE_TRANSFORMER.get(), MatterPhaseTransformerScreen::new);
         MenuScreens.register(ModMenus.CRYSTAL_REACTION_CHAMBER.get(), CrystalReactionChamberScreen::new);
         MenuScreens.register(ModMenus.CRYSTAL_WORKSTATION.get(), CrystalWorkstationScreen::new);
@@ -95,7 +95,7 @@ public final class ClientSetup {
     public static void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.NAMING_FACTORY.get(), NamingFactoryRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.HIGH_REACTIVITY_LAVA_SMELTER.get(),
-                LavaSmelterRenderer::new);
+                HighReactivityLavaSmelterRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.MATTER_PHASE_TRANSFORMER.get(),
                 MatterPhaseTransformerRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_REACTION_CHAMBER.get(),

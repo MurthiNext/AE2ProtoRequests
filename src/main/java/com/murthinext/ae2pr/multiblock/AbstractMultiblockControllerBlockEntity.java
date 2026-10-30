@@ -46,7 +46,18 @@ import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntity {
 
     public enum Error {
-        NONE, POWER, OUTPUT, DURABILITY, NETWORK
+        NONE(null), POWER("power"), OUTPUT("output"), DURABILITY("durability"), NETWORK("network");
+
+        private final String key;
+
+        Error(String key) {
+            this.key = key;
+        }
+
+        // 无错误返回 null，其余返回共享错误文案的 key 后缀
+        public String key() {
+            return key;
+        }
     }
 
     private static final int CHECK_INTERVAL = 20;

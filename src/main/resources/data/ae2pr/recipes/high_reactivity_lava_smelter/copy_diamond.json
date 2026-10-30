@@ -1,9 +1,9 @@
 {
-  "type": "ae2pr:lava_smelter",
-  "duration": 200,
+  "type": "ae2pr:high_reactivity_lava_smelter",
+  "duration": 100,
   "item_inputs": [
     {
-      "item": "ae2:singularity",
+      "item": "minecraft:diamond",
       "count": 1
     }
   ],
@@ -15,8 +15,8 @@
   ],
   "item_outputs": [
     {
-      "item": "ae2pr:crystaline",
-      "count": 1
+      "item": "minecraft:diamond",
+      "count": 2
     }
   ]
 }

@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.client.lava_smelter;
+package com.murthinext.ae2pr.client.high_reactivity_lava_smelter;
 
 import java.util.List;
 
@@ -20,12 +20,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.block.lava_smelter.HighReactivityLavaSmelterBlock;
-import com.murthinext.ae2pr.block.lava_smelter.LavaSmelterControllerBlockEntity;
-import com.murthinext.ae2pr.multiblock.structure.LavaSmelterStructure;
+import com.murthinext.ae2pr.block.high_reactivity_lava_smelter.HighReactivityLavaSmelterBlock;
+import com.murthinext.ae2pr.block.high_reactivity_lava_smelter.HighReactivityLavaSmelterControllerBlockEntity;
+import com.murthinext.ae2pr.multiblock.structure.HighReactivityLavaSmelterStructure;
 
 // 炉膛渲染异星熔岩
-public class LavaSmelterRenderer implements BlockEntityRenderer<LavaSmelterControllerBlockEntity> {
+public class HighReactivityLavaSmelterRenderer implements BlockEntityRenderer<HighReactivityLavaSmelterControllerBlockEntity> {
 
     private static final ResourceLocation ALIEN_LAVA_STILL = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "block/fluid/alien_lava_still");
@@ -35,18 +35,18 @@ public class LavaSmelterRenderer implements BlockEntityRenderer<LavaSmelterContr
     private static final float SURFACE_HEIGHT = 0.875F;
     private static final float INSET = 0.02F;
 
-    public LavaSmelterRenderer(BlockEntityRendererProvider.Context context) {
+    public HighReactivityLavaSmelterRenderer(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
-    public void render(LavaSmelterControllerBlockEntity controller, float partialTick, PoseStack pose,
+    public void render(HighReactivityLavaSmelterControllerBlockEntity controller, float partialTick, PoseStack pose,
             MultiBufferSource buffers, int light, int overlay) {
         if (!controller.isFormed()) {
             return;
         }
         BlockPos pos = controller.getBlockPos();
         Direction facing = controller.getBlockState().getValue(HighReactivityLavaSmelterBlock.FACING);
-        List<BlockPos> cells = LavaSmelterStructure.poolCells(pos, facing, controller.isMirrorSide(),
+        List<BlockPos> cells = HighReactivityLavaSmelterStructure.poolCells(pos, facing, controller.isMirrorSide(),
                 controller.isMirrorFront());
 
         int minX = Integer.MAX_VALUE;

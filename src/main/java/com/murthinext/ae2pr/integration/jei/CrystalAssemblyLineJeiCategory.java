@@ -1,6 +1,5 @@
 package com.murthinext.ae2pr.integration.jei;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -77,7 +76,6 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
     private static final int HEIGHT = INFO_Y + 3 * 10 + 2;
     private static final int COLOR_HINT = 0x808080;
     private static final int COLOR_TEXT = 0x404040;
-    private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
     private static final ResourceLocation PIPE_TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "textures/gui/jei/crystal_assembly_line_pipes.png");
@@ -211,17 +209,15 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
             double mouseX, double mouseY) {
         var font = Minecraft.getInstance().font;
         drawPipeProgress(graphics);
-        graphics.drawString(font, Component.translatable("jei.ae2pr.crystal_assembly_line.duration",
-                recipe.getDuration()), PADDING, INFO_Y, COLOR_TEXT, false);
-        graphics.drawString(font, Component.translatable("jei.ae2pr.crystal_assembly_line.energy",
-                NUMBER.format(recipe.getEnergyPerParallel())), PADDING, INFO_Y + 10, COLOR_TEXT, false);
+        graphics.drawString(font, JeiRecipeInfo.duration(recipe.getDuration()), PADDING, INFO_Y, COLOR_TEXT, false);
+        graphics.drawString(font, JeiRecipeInfo.energy(recipe.getEnergyPerParallel()), PADDING, INFO_Y + 10,
+                COLOR_TEXT, false);
         int hidden = recipe.getItemInputs().size() - MAX_ITEM_INPUTS;
         if (hidden > 0) {
-            graphics.drawString(font, Component.translatable("jei.ae2pr.crystal_assembly_line.more_inputs",
-                    hidden), PADDING, INFO_Y + 20, COLOR_HINT, false);
+            graphics.drawString(font, JeiRecipeInfo.moreInputs(hidden), PADDING, INFO_Y + 20, COLOR_HINT, false);
         } else if (recipe.getItemOutputs().size() > 1) {
-            graphics.drawString(font, Component.translatable("jei.ae2pr.crystal_assembly_line.more_outputs",
-                    recipe.getItemOutputs().size() - 1), PADDING, INFO_Y + 20, COLOR_HINT, false);
+            graphics.drawString(font, JeiRecipeInfo.moreOutputs(recipe.getItemOutputs().size() - 1), PADDING,
+                    INFO_Y + 20, COLOR_HINT, false);
         }
     }
 
@@ -230,7 +226,6 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
                 requirement.minLevel(), Component.translatable(requirement.type().translationKey()))
                 .withStyle(ChatFormatting.GRAY);
     }
-
     private static void drawPipeProgress(GuiGraphics graphics) {
         float progress = (Util.getMillis() % PIPE_CYCLE_MS) / (float) PIPE_CYCLE_MS;
         graphics.blit(PIPE_TEXTURE, PIPE_X, PIPE_Y, 0.0F, 0.0F, PIPE_WIDTH, PIPE_HEIGHT,

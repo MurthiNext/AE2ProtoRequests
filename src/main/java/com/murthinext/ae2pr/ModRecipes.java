@@ -13,7 +13,7 @@ import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
 import com.murthinext.ae2pr.recipe.CrystalReactionChamberRecipe;
 import com.murthinext.ae2pr.recipe.CrystalWorkstationRecipe;
-import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
+import com.murthinext.ae2pr.recipe.HighReactivityLavaSmelterRecipe;
 import com.murthinext.ae2pr.recipe.JigRecipe;
 import com.murthinext.ae2pr.recipe.MatterPhaseTransformerRecipe;
 
@@ -51,16 +51,16 @@ public final class ModRecipes {
     public static final RegistryObject<ComplexWorldInteractionRecipe.Serializer> COMPLEX_WORLD_INTERACTION = SERIALIZERS
             .register("complex_world_interaction", ComplexWorldInteractionRecipe.Serializer::new);
 
-    public static final RegistryObject<RecipeType<LavaSmelterRecipe>> LAVA_SMELTER_TYPE = RECIPE_TYPES
-            .register("lava_smelter", () -> new RecipeType<LavaSmelterRecipe>() {
+    public static final RegistryObject<RecipeType<HighReactivityLavaSmelterRecipe>> HIGH_REACTIVITY_LAVA_SMELTER_TYPE = RECIPE_TYPES
+            .register("high_reactivity_lava_smelter", () -> new RecipeType<HighReactivityLavaSmelterRecipe>() {
                 @Override
                 public String toString() {
-                    return ae2pr.MODID + ":lava_smelter";
+                    return ae2pr.MODID + ":high_reactivity_lava_smelter";
                 }
             });
 
-    public static final RegistryObject<LavaSmelterRecipe.Serializer> LAVA_SMELTER = SERIALIZERS
-            .register("lava_smelter", LavaSmelterRecipe.Serializer::new);
+    public static final RegistryObject<HighReactivityLavaSmelterRecipe.Serializer> HIGH_REACTIVITY_LAVA_SMELTER = SERIALIZERS
+            .register("high_reactivity_lava_smelter", HighReactivityLavaSmelterRecipe.Serializer::new);
 
     public static final RegistryObject<RecipeType<MatterPhaseTransformerRecipe>> MATTER_PHASE_TRANSFORMER_TYPE = RECIPE_TYPES
             .register("matter_phase_transformer", () -> new RecipeType<MatterPhaseTransformerRecipe>() {

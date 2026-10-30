@@ -64,7 +64,7 @@ public class CrystalWorkstationScreen extends AbstractMultiblockControllerScreen
 
     @Override
     protected void renderExtraLabels(net.minecraft.client.gui.GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.drawString(font, Component.translatable("gui.ae2pr.crystal_workstation.mode",
+        graphics.drawString(font, Component.translatable("gui.ae2pr.multiblock.mode",
                 menu.getMode().displayName()), GeneralMachineInfoLayout.TEXT_X, GeneralMachineInfoLayout.EXTRA_Y,
                 COLOR_TITLE, false);
     }
@@ -78,10 +78,9 @@ public class CrystalWorkstationScreen extends AbstractMultiblockControllerScreen
             return false;
         }
         java.util.List<Component> hint = new java.util.ArrayList<>();
-        hint.add(Component.translatable("gui.ae2pr.crystal_workstation.mode", menu.getMode().displayName()));
-        if (menu.isBusy()) {
-            hint.add(Component.translatable("gui.ae2pr.crystal_workstation.mode.busy"));
-        }
+        hint.add(Component.translatable("gui.ae2pr.multiblock.mode", menu.getMode().displayName()));
+        hint.add(Component.translatable(menu.isBusy()
+                ? "gui.ae2pr.multiblock.mode.locked" : "gui.ae2pr.multiblock.mode.switch"));
         graphics.renderComponentTooltip(font, hint, mouseX, mouseY);
         return true;
     }

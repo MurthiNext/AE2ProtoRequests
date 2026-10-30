@@ -1,6 +1,5 @@
 package com.murthinext.ae2pr.integration.jei;
 
-import java.text.NumberFormat;
 import java.util.Arrays;
 
 import net.minecraft.client.Minecraft;
@@ -72,7 +71,7 @@ public class CrystalWorkstationJeiCategory implements IRecipeCategory<CrystalWor
 
     @Override
     public Component getTitle() {
-        return Component.translatable("jei.ae2pr.crystal_workstation." + mode.id());
+        return JeiRecipeInfo.titleWithMode(ModItems.CRYSTAL_WORKSTATION.get().getDescription(), mode.displayName());
     }
 
     @Override
@@ -137,9 +136,7 @@ public class CrystalWorkstationJeiCategory implements IRecipeCategory<CrystalWor
             double mouseX, double mouseY) {
         var font = Minecraft.getInstance().font;
         process.draw(graphics, PROCESS_X, PROCESS_Y);
-        graphics.drawString(font, Component.translatable("jei.ae2pr.crystal_workstation.duration", recipe.getDuration()),
-                4, 62, 0x404040, false);
-        graphics.drawString(font, Component.translatable("jei.ae2pr.crystal_workstation.energy",
-                NumberFormat.getIntegerInstance().format(recipe.getEnergyPerParallel())), 4, 73, 0x404040, false);
+        graphics.drawString(font, JeiRecipeInfo.duration(recipe.getDuration()), 4, 62, 0x404040, false);
+        graphics.drawString(font, JeiRecipeInfo.energy(recipe.getEnergyPerParallel()), 4, 73, 0x404040, false);
     }
 }

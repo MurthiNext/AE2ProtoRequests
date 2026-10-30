@@ -49,7 +49,7 @@ public class CrystalWorkstationJadePlugin extends AbstractMultiblockJadePlugin {
 
     @Override
     protected void appendExtraTooltip(ITooltip tooltip, CompoundTag data) {
-        tooltip.add(Component.translatable("gui.ae2pr.crystal_workstation.mode",
+        tooltip.add(Component.translatable("gui.ae2pr.multiblock.mode",
                 CrystalWorkstationMode.byId(data.getString("mode")).displayName()));
     }
 }

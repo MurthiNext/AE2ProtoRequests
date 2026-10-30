@@ -16,17 +16,17 @@ import com.murthinext.ae2pr.ModRecipes;
 import com.murthinext.ae2pr.ae2pr;
 
 @JeiPlugin
-public class LavaSmelterJeiPlugin implements IModPlugin {
+public class HighReactivityLavaSmelterJeiPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "lava_smelter");
+        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "high_reactivity_lava_smelter");
     }
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(
-                new LavaSmelterJeiCategory(registration.getJeiHelpers().getGuiHelper()));
+                new HighReactivityLavaSmelterJeiCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -35,13 +35,13 @@ public class LavaSmelterJeiPlugin implements IModPlugin {
         if (level == null) {
             return;
         }
-        registration.addRecipes(LavaSmelterJeiCategory.RECIPE_TYPE,
-                List.copyOf(level.getRecipeManager().getAllRecipesFor(ModRecipes.LAVA_SMELTER_TYPE.get())));
+        registration.addRecipes(HighReactivityLavaSmelterJeiCategory.RECIPE_TYPE,
+                List.copyOf(level.getRecipeManager().getAllRecipesFor(ModRecipes.HIGH_REACTIVITY_LAVA_SMELTER_TYPE.get())));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalysts(LavaSmelterJeiCategory.RECIPE_TYPE,
+        registration.addRecipeCatalysts(HighReactivityLavaSmelterJeiCategory.RECIPE_TYPE,
                 ModItems.HIGH_REACTIVITY_LAVA_SMELTER.get());
     }
 }

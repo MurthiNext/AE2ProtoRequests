@@ -26,12 +26,12 @@ import com.murthinext.ae2pr.ModBlocks;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.recipe.ChancedItemStack;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
-import com.murthinext.ae2pr.recipe.LavaSmelterRecipe;
+import com.murthinext.ae2pr.recipe.HighReactivityLavaSmelterRecipe;
 
-public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe> {
+public class HighReactivityLavaSmelterJeiCategory implements IRecipeCategory<HighReactivityLavaSmelterRecipe> {
 
-    public static final RecipeType<LavaSmelterRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID, "lava_smelter",
-            LavaSmelterRecipe.class);
+    public static final RecipeType<HighReactivityLavaSmelterRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID, "high_reactivity_lava_smelter",
+            HighReactivityLavaSmelterRecipe.class);
 
     private static final int WIDTH = 142;
     private static final int HEIGHT = 98;
@@ -42,12 +42,12 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
 
     private final IDrawable icon;
 
-    public LavaSmelterJeiCategory(IGuiHelper guiHelper) {
+    public HighReactivityLavaSmelterJeiCategory(IGuiHelper guiHelper) {
         this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()));
     }
 
     @Override
-    public RecipeType<LavaSmelterRecipe> getRecipeType() {
+    public RecipeType<HighReactivityLavaSmelterRecipe> getRecipeType() {
         return RECIPE_TYPE;
     }
 
@@ -72,17 +72,17 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
     }
 
     @Override
-    public ResourceLocation getRegistryName(LavaSmelterRecipe recipe) {
+    public ResourceLocation getRegistryName(HighReactivityLavaSmelterRecipe recipe) {
         return recipe.getId();
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, LavaSmelterRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, HighReactivityLavaSmelterRecipe recipe, IFocusGroup focuses) {
         // 物品输入
         List<CountedIngredient> ingredients = recipe.getItemInputs();
-        for (int index = 0; index < LavaSmelterJeiFurnace.ITEM_COUNT; index++) {
-            int x = LavaSmelterJeiFurnace.itemSlotX(index);
-            int y = LavaSmelterJeiFurnace.itemSlotY(index);
+        for (int index = 0; index < HighReactivityLavaSmelterJeiFurnace.ITEM_COUNT; index++) {
+            int x = HighReactivityLavaSmelterJeiFurnace.itemSlotX(index);
+            int y = HighReactivityLavaSmelterJeiFurnace.itemSlotY(index);
             IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, x, y);
             if (index < ingredients.size()) {
                 CountedIngredient ingredient = ingredients.get(index);
@@ -97,9 +97,9 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
 
         // 流体输入
         List<FluidStack> fluidInputs = recipe.getFluidInputs();
-        for (int index = 0; index < LavaSmelterJeiFurnace.FLUID_COUNT; index++) {
+        for (int index = 0; index < HighReactivityLavaSmelterJeiFurnace.FLUID_COUNT; index++) {
             IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT,
-                    LavaSmelterJeiFurnace.fluidSlotX(index), LavaSmelterJeiFurnace.fluidSlotY(index));
+                    HighReactivityLavaSmelterJeiFurnace.fluidSlotX(index), HighReactivityLavaSmelterJeiFurnace.fluidSlotY(index));
             if (index >= fluidInputs.size()) {
                 continue;
             }
@@ -110,7 +110,7 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
 
         // 主/副产物槽固定显示并对齐输入槽
         List<ChancedItemStack> results = recipe.getChancedItemOutputs();
-        for (int index = 0; index < LavaSmelterRecipe.MAX_RESULTS; index++) {
+        for (int index = 0; index < HighReactivityLavaSmelterRecipe.MAX_RESULTS; index++) {
             IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT,
                     OUTPUT_X, OUTPUT_Y + index * OUTPUT_GAP);
             outputSlot.setStandardSlotBackground();
@@ -122,13 +122,12 @@ public class LavaSmelterJeiCategory implements IRecipeCategory<LavaSmelterRecipe
     }
 
     @Override
-    public void draw(LavaSmelterRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics graphics, double mouseX,
+    public void draw(HighReactivityLavaSmelterRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics graphics, double mouseX,
             double mouseY) {
         var font = Minecraft.getInstance().font;
-        LavaSmelterJeiFurnace.draw(graphics);
-        graphics.drawString(font, Component.translatable("jei.ae2pr.lava_smelter.durability",
-                1), 4, 67, COLOR_TEXT, false);
-        graphics.drawString(font, Component.translatable("jei.ae2pr.lava_smelter.duration",
-                recipe.getDuration()), 4, 77, COLOR_TEXT, false);
+        HighReactivityLavaSmelterJeiFurnace.draw(graphics);
+        graphics.drawString(font, Component.translatable(
+                "jei.ae2pr.high_reactivity_lava_smelter.durability_cost", 1), 4, 67, COLOR_TEXT, false);
+        graphics.drawString(font, JeiRecipeInfo.duration(recipe.getDuration()), 4, 77, COLOR_TEXT, false);
     }
 }

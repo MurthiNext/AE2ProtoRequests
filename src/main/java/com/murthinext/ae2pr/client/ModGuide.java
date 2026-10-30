@@ -17,7 +17,7 @@ public final class ModGuide {
             "devices/multi_level_emitter.md");
     public static final ResourceLocation CRYSTAL_ASSEMBLY_LINE_PAGE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "multiblocks/crystal_assembly_line.md");
-    public static final ResourceLocation LAVA_SMELTER_PAGE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    public static final ResourceLocation HIGH_REACTIVITY_LAVA_SMELTER_PAGE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
             "multiblocks/high_reactivity_lava_smelter.md");
     public static final ResourceLocation MATTER_PHASE_TRANSFORMER_PAGE = ResourceLocation.fromNamespaceAndPath(
             ae2pr.MODID, "multiblocks/matter_phase_transformer.md");

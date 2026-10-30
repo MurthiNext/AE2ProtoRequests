@@ -30,11 +30,11 @@ public final class Config {
     private static final ForgeConfigSpec.DoubleValue NAMING_FACTORY_MAX_POWER;
     private static final ForgeConfigSpec.DoubleValue NAMING_FACTORY_ENERGY_PER_ITEM;
 
-    private static final ForgeConfigSpec.IntValue LAVA_SMELTER_PARALLEL;
-    private static final ForgeConfigSpec.DoubleValue LAVA_SMELTER_PASSIVE_ENERGY;
-    private static final ForgeConfigSpec.DoubleValue LAVA_SMELTER_DURABILITY_LOSS_CHANCE;
-    private static final ForgeConfigSpec.IntValue LAVA_SMELTER_MAX_DURABILITY;
-    private static final ForgeConfigSpec.IntValue LAVA_SMELTER_DURABILITY_PER_DUST;
+    private static final ForgeConfigSpec.IntValue HIGH_REACTIVITY_LAVA_SMELTER_PARALLEL;
+    private static final ForgeConfigSpec.DoubleValue HIGH_REACTIVITY_LAVA_SMELTER_PASSIVE_ENERGY;
+    private static final ForgeConfigSpec.DoubleValue HIGH_REACTIVITY_LAVA_SMELTER_DURABILITY_LOSS_CHANCE;
+    private static final ForgeConfigSpec.IntValue HIGH_REACTIVITY_LAVA_SMELTER_MAX_DURABILITY;
+    private static final ForgeConfigSpec.IntValue HIGH_REACTIVITY_LAVA_SMELTER_DURABILITY_PER_DUST;
 
     private static final ForgeConfigSpec.IntValue MATTER_PHASE_TRANSFORMER_PARALLEL;
     private static final ForgeConfigSpec.DoubleValue MATTER_PHASE_TRANSFORMER_ENERGY_PER_PARALLEL;
@@ -140,20 +140,20 @@ public final class Config {
                 .defineInRange("energyPerItem", 250.0, 0.0, Double.MAX_VALUE);
         BUILDER.pop();
 
-        BUILDER.push("lavaSmelter");
-        LAVA_SMELTER_PARALLEL = BUILDER
+        BUILDER.push("highReactivityLavaSmelter");
+        HIGH_REACTIVITY_LAVA_SMELTER_PARALLEL = BUILDER
                 .comment("熔岩冶炼炉并行上限")
                 .defineInRange("parallel", 64, 1, 1_000_000);
-        LAVA_SMELTER_PASSIVE_ENERGY = BUILDER
+        HIGH_REACTIVITY_LAVA_SMELTER_PASSIVE_ENERGY = BUILDER
                 .comment("熔岩冶炼炉被动耗电量（AE/tick）")
                 .defineInRange("passiveEnergyPerTick", 1000.0, 0.0, Double.MAX_VALUE);
-        LAVA_SMELTER_DURABILITY_LOSS_CHANCE = BUILDER
+        HIGH_REACTIVITY_LAVA_SMELTER_DURABILITY_LOSS_CHANCE = BUILDER
                 .comment("熔岩冶炼炉电力供给不足时每秒扣除 1 点配方耐久的概率")
                 .defineInRange("durabilityLossChancePerSecond", 0.5, 0.0, 1.0);
-        LAVA_SMELTER_MAX_DURABILITY = BUILDER
+        HIGH_REACTIVITY_LAVA_SMELTER_MAX_DURABILITY = BUILDER
                 .comment("熔岩冶炼炉的配方耐久上限")
                 .defineInRange("maxDurability", 128, 1, Integer.MAX_VALUE);
-        LAVA_SMELTER_DURABILITY_PER_DUST = BUILDER
+        HIGH_REACTIVITY_LAVA_SMELTER_DURABILITY_PER_DUST = BUILDER
                 .comment("每份陨石粉补充的配方耐久")
                 .defineInRange("durabilityPerDust", 32, 1, Integer.MAX_VALUE);
         BUILDER.pop();
@@ -340,24 +340,24 @@ public final class Config {
         return NAMING_FACTORY_ENERGY_PER_ITEM.get();
     }
 
-    public static int lavaSmelterParallel() {
-        return LAVA_SMELTER_PARALLEL.get();
+    public static int highReactivityLavaSmelterParallel() {
+        return HIGH_REACTIVITY_LAVA_SMELTER_PARALLEL.get();
     }
 
-    public static double lavaSmelterPassiveEnergy() {
-        return LAVA_SMELTER_PASSIVE_ENERGY.get();
+    public static double highReactivityLavaSmelterPassiveEnergy() {
+        return HIGH_REACTIVITY_LAVA_SMELTER_PASSIVE_ENERGY.get();
     }
 
-    public static double lavaSmelterDurabilityLossChance() {
-        return LAVA_SMELTER_DURABILITY_LOSS_CHANCE.get();
+    public static double highReactivityLavaSmelterDurabilityLossChance() {
+        return HIGH_REACTIVITY_LAVA_SMELTER_DURABILITY_LOSS_CHANCE.get();
     }
 
-    public static int lavaSmelterMaxDurability() {
-        return LAVA_SMELTER_MAX_DURABILITY.get();
+    public static int highReactivityLavaSmelterMaxDurability() {
+        return HIGH_REACTIVITY_LAVA_SMELTER_MAX_DURABILITY.get();
     }
 
-    public static int lavaSmelterDurabilityPerDust() {
-        return LAVA_SMELTER_DURABILITY_PER_DUST.get();
+    public static int highReactivityLavaSmelterDurabilityPerDust() {
+        return HIGH_REACTIVITY_LAVA_SMELTER_DURABILITY_PER_DUST.get();
     }
 
     public static int matterPhaseTransformerParallel() {

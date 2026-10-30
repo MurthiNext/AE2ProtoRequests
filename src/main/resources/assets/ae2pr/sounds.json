@@ -11,8 +11,8 @@
       "ae2pr:machine/assembly"
     ]
   },
-  "lava_smelter_processing": {
-    "subtitle": "subtitle.ae2pr.lava_smelter_processing",
+  "high_reactivity_lava_smelter_processing": {
+    "subtitle": "subtitle.ae2pr.high_reactivity_lava_smelter_processing",
     "sounds": [
       {
         "name": "minecraft:block.lava.pop",
