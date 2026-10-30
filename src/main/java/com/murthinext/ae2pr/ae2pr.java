@@ -8,7 +8,7 @@ import com.mojang.logging.LogUtils;
 import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterPart;
 import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterPart;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOres;
-import com.murthinext.ae2pr.logic.repeat.GenericRepeatOrders;
+import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
 import com.murthinext.ae2pr.logic.wrench.WrenchInteractions;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -47,8 +47,8 @@ public class ae2pr {
         PartModels.registerModels(PartModelsHelper.createModels(MultiThresholdLevelEmitterPart.class));
         ModNetwork.register();
         // 通用重复订单：由服务端 tick 驱动
-        MinecraftForge.EVENT_BUS.addListener(GenericRepeatOrders::onServerTick);
-        MinecraftForge.EVENT_BUS.addListener(GenericRepeatOrders::onServerStopped);
+        MinecraftForge.EVENT_BUS.addListener(GeneralRepeatOrders::onServerTick);
+        MinecraftForge.EVENT_BUS.addListener(GeneralRepeatOrders::onServerStopped);
         // 扳手交互：右键旋转，Shift+右键拆除
         MinecraftForge.EVENT_BUS.addListener(WrenchInteractions::onRightClickBlock);
         // 陨石矿石：铁镐以上挖掘速度同天空石

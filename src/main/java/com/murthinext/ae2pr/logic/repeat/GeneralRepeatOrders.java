@@ -26,14 +26,14 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 
 // 通用重复订单管理器，接管 VCPU 型 CPU
-public final class GenericRepeatOrders {
-    private static final List<GenericRepeatOrder> ORDERS = new ArrayList<>();
-    private static final Map<ICraftingCPU, GenericRepeatOrder> BY_CPU = new IdentityHashMap<>();
+public final class GeneralRepeatOrders {
+    private static final List<GeneralRepeatOrder> ORDERS = new ArrayList<>();
+    private static final Map<ICraftingCPU, GeneralRepeatOrder> BY_CPU = new IdentityHashMap<>();
     private static final ThreadLocal<PendingStatus> PENDING_STATUS = new ThreadLocal<>();
 
     private static boolean observerFailureLogged;
 
-    private GenericRepeatOrders() {
+    private GeneralRepeatOrders() {
     }
 
     // 状态包构造时暂存参数（Mixin 调用）
@@ -57,7 +57,7 @@ public final class GenericRepeatOrders {
         }
     }
 
-    public static void register(GenericRepeatOrder order) {
+    public static void register(GeneralRepeatOrder order) {
         ORDERS.add(order);
         if (order.displayCpu != null) {
             BY_CPU.put(order.displayCpu, order);
@@ -146,7 +146,7 @@ public final class GenericRepeatOrders {
         RepeatOrderNotifier.sendRound(order.ownerPlayerId, order.level, order.what, order.totalRounds, 0);
     }
 
-    private static boolean tick(GenericRepeatOrder order) {
+    private static boolean tick(GeneralRepeatOrder order) {
         if (order.level.getServer() == null || !order.level.getServer().isRunning() || order.what == null) {
             return false;
         }
@@ -183,7 +183,7 @@ public final class GenericRepeatOrders {
         return true;
     }
 
-    private static void beginRecalc(GenericRepeatOrder order) {
+    private static void beginRecalc(GeneralRepeatOrder order) {
         if (order.source == null) {
             retryOrFail(order, FailureReason.UNKNOWN);
             return;
@@ -199,7 +199,7 @@ public final class GenericRepeatOrders {
         }
     }
 
-    private static void pollRecalc(GenericRepeatOrder order) {
+    private static void pollRecalc(GeneralRepeatOrder order) {
         var future = order.recalc;
         if (future == null) {
             order.state = RepeatOrderState.PENDING_NEXT;
@@ -225,7 +225,7 @@ public final class GenericRepeatOrders {
         submit(order, plan);
     }
 
-    private static void submit(GenericRepeatOrder order, ICraftingPlan plan) {
+    private static void submit(GeneralRepeatOrder order, ICraftingPlan plan) {
         var service = order.grid.getCraftingService();
         var busyBefore = busyCpus(order.grid);
         ICraftingSubmitResult result;
@@ -254,7 +254,7 @@ public final class GenericRepeatOrders {
         }
     }
 
-    private static void retryOrFail(GenericRepeatOrder order, FailureReason reason) {
+    private static void retryOrFail(GeneralRepeatOrder order, FailureReason reason) {
         order.recalc = null;
         if (++order.retryCount > Config.retryCount()) {
             ae2pr.LOGGER.info("Generic repeat order failed: {}x{} after {} retries (reason: {})",
@@ -270,8 +270,8 @@ public final class GenericRepeatOrders {
     }
 
     @Nullable
-    private static GenericRepeatOrder findRunning(int playerId, UUID jobId, AEKey what, long requestedAmount) {
-        GenericRepeatOrder fallback = null;
+    private static GeneralRepeatOrder findRunning(int playerId, UUID jobId, AEKey what, long requestedAmount) {
+        GeneralRepeatOrder fallback = null;
         for (var order : ORDERS) {
             if (order.state != RepeatOrderState.RUNNING
                     || order.ownerPlayerId == null || order.ownerPlayerId != playerId) {
@@ -304,7 +304,7 @@ public final class GenericRepeatOrders {
     }
 
     // 刷新展示用 CPU，取新进入忙碌者；提交目标不变
-    private static void updateDisplayCpu(GenericRepeatOrder order, Set<ICraftingCPU> busyBefore) {
+    private static void updateDisplayCpu(GeneralRepeatOrder order, Set<ICraftingCPU> busyBefore) {
         ICraftingCPU newlyBusy = null;
         for (var cpu : order.grid.getCraftingService().getCpus()) {
             if (cpu.isBusy() && !busyBefore.contains(cpu)) {
@@ -317,7 +317,7 @@ public final class GenericRepeatOrders {
         }
     }
 
-    private static void attachDisplayCpu(GenericRepeatOrder order, @Nullable ICraftingCPU cpu) {
+    private static void attachDisplayCpu(GeneralRepeatOrder order, @Nullable ICraftingCPU cpu) {
         if (order.displayCpu == cpu) {
             return;
         }
@@ -328,7 +328,7 @@ public final class GenericRepeatOrders {
         }
     }
 
-    private static void detachDisplayCpu(GenericRepeatOrder order) {
+    private static void detachDisplayCpu(GeneralRepeatOrder order) {
         if (order.displayCpu != null && BY_CPU.get(order.displayCpu) == order) {
             BY_CPU.remove(order.displayCpu);
         }

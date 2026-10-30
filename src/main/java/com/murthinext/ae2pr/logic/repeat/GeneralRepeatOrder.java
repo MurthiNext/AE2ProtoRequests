@@ -13,7 +13,7 @@ import appeng.api.stacks.AEKey;
 import net.minecraft.server.level.ServerLevel;
 
 // 通用重复订单上下文，适用于 VCPU 型 CPU
-public final class GenericRepeatOrder {
+public final class GeneralRepeatOrder {
     public IGrid grid;
     public ServerLevel level;
     public IActionSource source;

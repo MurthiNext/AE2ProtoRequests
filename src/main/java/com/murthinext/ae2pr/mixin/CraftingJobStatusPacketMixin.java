@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.logic.repeat.GenericRepeatOrders;
+import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
 
 import appeng.api.stacks.AEKey;
 import appeng.core.sync.packets.CraftingJobStatusPacket;
@@ -20,6 +20,6 @@ public abstract class CraftingJobStatusPacketMixin {
             at = @At("TAIL"), remap = false)
     private void ae2pr$captureStatus(UUID jobId, AEKey what, long requestedAmount, long remainingAmount,
             CraftingJobStatusPacket.Status status, CallbackInfo ci) {
-        GenericRepeatOrders.observeConstruction(jobId, what, requestedAmount, status);
+        GeneralRepeatOrders.observeConstruction(jobId, what, requestedAmount, status);
     }
 }

@@ -33,7 +33,7 @@ public final class WrenchInteractions {
     // 扳手右键路由
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         if (event.getUseBlock() == Event.Result.DENY
-                || event.getEntity().isSpectator() || !event.getItemStack().is(ModTags.WRENCHES)) {
+                || event.getEntity().isSpectator() || !event.getItemStack().is(ModTags.WRENCH)) {
             return;
         }
         BlockState state = event.getLevel().getBlockState(event.getPos());

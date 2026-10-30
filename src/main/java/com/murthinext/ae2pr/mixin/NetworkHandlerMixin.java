@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.logic.repeat.GenericRepeatOrders;
+import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
 
 import appeng.core.sync.BasePacket;
 import appeng.core.sync.network.NetworkHandler;
@@ -21,15 +21,15 @@ public abstract class NetworkHandlerMixin {
         if (!(message instanceof CraftingJobStatusPacket)) {
             return;
         }
-        var pending = GenericRepeatOrders.pollConstruction();
+        var pending = GeneralRepeatOrders.pollConstruction();
         if (pending == null) {
             return;
         }
         try {
-            GenericRepeatOrders.onJobStatus(player, pending.jobId(), pending.what(), pending.requestedAmount(),
+            GeneralRepeatOrders.onJobStatus(player, pending.jobId(), pending.what(), pending.requestedAmount(),
                     pending.status());
         } catch (Throwable t) {
-            GenericRepeatOrders.logObserverFailure(t);
+            GeneralRepeatOrders.logObserverFailure(t);
         }
     }
 }

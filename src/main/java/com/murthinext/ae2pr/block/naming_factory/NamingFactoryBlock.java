@@ -79,7 +79,7 @@ public class NamingFactoryBlock extends AEBaseEntityBlock<NamingFactoryBlockEnti
             BlockHitResult hit) {
         // 扳手交互
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.is(ModTags.WRENCHES)) {
+        if (stack.is(ModTags.WRENCH)) {
             return InteractionResult.PASS;
         }
         if (stack.is(ModTags.KNIVES)) {

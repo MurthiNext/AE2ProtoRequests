@@ -310,7 +310,7 @@
   "gui.ae2pr.multi_factory.mode": "工作模式：%s",
   "gui.ae2pr.multi_factory.mode.inscribing": "压印",
   "gui.ae2pr.multi_factory.mode.charging": "充能",
-  "gui.ae2pr.multi_factory.mode.current": "当前模式：%s",
+  "gui.ae2pr.multi_factory.mode.current": "工作模式：%s",
   "gui.ae2pr.multi_factory.mode.switch": "点击切换工作模式",
   "gui.ae2pr.multi_factory.mode.locked": "加工期间无法切换模式",
   "gui.ae2pr.multi_factory.error.power": "电力不足",

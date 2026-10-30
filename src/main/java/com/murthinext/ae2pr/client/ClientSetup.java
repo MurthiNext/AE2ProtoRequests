@@ -29,6 +29,7 @@ import com.murthinext.ae2pr.client.crystal_workstation.CrystalWorkstationScreen;
 import com.murthinext.ae2pr.client.jig.JigRenderer;
 import com.murthinext.ae2pr.client.jig.JigScreen;
 import com.murthinext.ae2pr.client.multi_factory.MultiFactoryScreen;
+import com.murthinext.ae2pr.client.multi_factory.MultiFactoryRenderer;
 import com.murthinext.ae2pr.client.machine_part.FluidHatchScreen;
 import com.murthinext.ae2pr.client.machine_part.ItemBusScreen;
 import com.murthinext.ae2pr.client.level_emitter.MultiLevelEmitterScreen;
@@ -102,6 +103,7 @@ public final class ClientSetup {
         event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_WORKSTATION.get(),
                 CrystalWorkstationRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.JIG.get(), JigRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.MULTI_FACTORY.get(), MultiFactoryRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.MOLECULAR_ASSEMBLY_CORE.get(),
                 MolecularAssemblyCoreRenderer::new);
     }

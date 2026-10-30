@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.murthinext.ae2pr.ModNetwork;
 import com.murthinext.ae2pr.network.CpuRoundInfo;
 import com.murthinext.ae2pr.network.RepeatOrderStatusPacket;
-import com.murthinext.ae2pr.logic.repeat.GenericRepeatOrders;
+import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
 import com.murthinext.ae2pr.logic.repeat.IRepeatOrderHost;
 
 import appeng.me.cluster.implementations.CraftingCPUCluster;
@@ -49,7 +49,7 @@ public abstract class CraftingStatusMenuBroadcastMixin {
                 }
             } else {
                 // 通用（VCPU）订单按 CPU 实例查询轮次
-                var info = GenericRepeatOrders.getRoundInfo(cpu);
+                var info = GeneralRepeatOrders.getRoundInfo(cpu);
                 if (info != null) {
                     round = info.round();
                     total = info.total();

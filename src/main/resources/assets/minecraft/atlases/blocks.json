@@ -87,6 +87,11 @@
     {
       "type": "single",
       "resource": "ae2pr:block/naming_factory_glass"
+    },
+    {
+      "type": "directory",
+      "source": "block/multi_factory",
+      "prefix": "block/multi_factory/"
     }
   ]
 }

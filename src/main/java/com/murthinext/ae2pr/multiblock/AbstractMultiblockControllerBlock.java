@@ -143,7 +143,7 @@ public abstract class AbstractMultiblockControllerBlock<T extends AbstractMultib
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
             BlockHitResult hit) {
         // 扳手交互
-        if (player.getItemInHand(hand).is(ModTags.WRENCHES)) {
+        if (player.getItemInHand(hand).is(ModTags.WRENCH)) {
             return InteractionResult.PASS;
         }
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer

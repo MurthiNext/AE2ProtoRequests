@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.logic.repeat.GenericRepeatOrder;
-import com.murthinext.ae2pr.logic.repeat.GenericRepeatOrders;
+import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrder;
+import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderBinding;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderNotifier;
 import com.murthinext.ae2pr.logic.repeat.ServerRepeatRegistry;
@@ -69,7 +69,7 @@ public abstract class CraftConfirmMenuMixin {
             }
         } catch (Throwable t) {
             this.ae2pr$busyBefore = null;
-            GenericRepeatOrders.logObserverFailure(t);
+            GeneralRepeatOrders.logObserverFailure(t);
         }
     }
 
@@ -84,7 +84,7 @@ public abstract class CraftConfirmMenuMixin {
         try {
             ae2pr$registerGenericOrder(leftover, busyBefore);
         } catch (Throwable t) {
-            GenericRepeatOrders.logObserverFailure(t);
+            GeneralRepeatOrders.logObserverFailure(t);
         }
     }
 
@@ -116,7 +116,7 @@ public abstract class CraftConfirmMenuMixin {
             return;
         }
 
-        var order = new GenericRepeatOrder();
+        var order = new GeneralRepeatOrder();
         order.grid = grid;
         order.level = serverPlayer.serverLevel();
         order.source = this.getActionSrc();
@@ -129,7 +129,7 @@ public abstract class CraftConfirmMenuMixin {
         // 提交目标保留玩家选择/自动选择；展示目标取实际开始执行的 CPU
         order.cpu = this.selectedCpu;
         order.displayCpu = newlyBusy != null ? newlyBusy : target;
-        GenericRepeatOrders.register(order);
+        GeneralRepeatOrders.register(order);
         RepeatOrderNotifier.sendRound(order.ownerPlayerId, order.level, order.what, order.totalRounds,
                 order.totalRounds);
         order.notifyCooldownTicks = 20;

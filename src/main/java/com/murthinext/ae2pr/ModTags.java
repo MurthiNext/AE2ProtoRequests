@@ -12,8 +12,8 @@ public final class ModTags {
     private ModTags() {
     }
 
-    public static final TagKey<Item> WRENCHES = ItemTags.create(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "wrenches"));
+    public static final TagKey<Item> WRENCH = ItemTags.create(
+            ResourceLocation.fromNamespaceAndPath("forge", "tools/wrench"));
 
     public static final TagKey<Item> KNIVES = ItemTags.create(ResourceLocation.fromNamespaceAndPath("ae2", "knife"));
 
