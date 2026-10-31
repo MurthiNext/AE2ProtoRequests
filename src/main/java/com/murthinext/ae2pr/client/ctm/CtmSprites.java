@@ -47,7 +47,7 @@ public final class CtmSprites {
         register("block/crystal_glass");
         register("block/fireproof_crystal_glass");
         register("block/aev_machine_casing");
-        register("block/reinforced_high_power_casing");
+        register("block/crystal_energy_casing");
         register("block/zirconia_corundum_bricks");
         registerQuadrant("block/zirconium_iron_alloy_machine_casing");
         for (String casing : List.of("me_computer_casing", "me_advanced_computer_casing")) {

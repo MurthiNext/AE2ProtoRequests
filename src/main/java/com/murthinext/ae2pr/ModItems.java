@@ -114,9 +114,9 @@ public final class ModItems {
     public static final RegistryObject<BlockItem> AEV_MACHINE_CASING = ITEMS.register("aev_machine_casing",
             () -> new BlockItem(ModBlocks.AEV_MACHINE_CASING.get(), new Item.Properties()));
 
-    public static final RegistryObject<BlockItem> REINFORCED_HIGH_POWER_CASING = ITEMS.register(
-            "reinforced_high_power_casing",
-            () -> new BlockItem(ModBlocks.REINFORCED_HIGH_POWER_CASING.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> CRYSTAL_ENERGY_CASING = ITEMS.register(
+            "crystal_energy_casing",
+            () -> new BlockItem(ModBlocks.CRYSTAL_ENERGY_CASING.get(), new Item.Properties()));
 
     public static final RegistryObject<BlockItem> HIGH_ENERGY_STABILITY_CASING = ITEMS.register(
             "high_energy_stability_casing",

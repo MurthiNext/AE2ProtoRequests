@@ -47,7 +47,7 @@ public final class CrystalWorkstationCtm {
         }
         CrystalWorkstationShell.Look look = CrystalWorkstationShell.look(pos);
         // 与面板或成型主机相邻的机壳并入工作站外观
-        boolean shell = look == null && state.is(ModBlocks.REINFORCED_HIGH_POWER_CASING.get())
+        boolean shell = look == null && state.is(ModBlocks.CRYSTAL_ENERGY_CASING.get())
                 && (CrystalWorkstationShell.bordersStability(pos) || bordersController(level, pos));
         if (look == null && !shell) {
             return null;
@@ -64,7 +64,7 @@ public final class CrystalWorkstationCtm {
         }
         boolean panel = look != null && look.role() == CrystalWorkstationStructure.PartRole.STABILITY;
         boolean outer = side == null || (look != null && side == look.outward());
-        // 面板外侧换成强化高能外壳，内侧换成独立的 3x3 面板纹理
+        // 面板外侧换成晶能外壳，内侧换成独立的 3x3 面板纹理
         if (panel) {
             quads = retargetPanel(quads, outer, look);
         }
@@ -95,7 +95,7 @@ public final class CrystalWorkstationCtm {
 
     private static List<BakedQuad> controller(List<BakedQuad> quads, BlockAndTintGetter level, BlockPos pos) {
         TextureAtlasSprite base = CtmSprites.baseSprite(CtmSprites.CRYSTAL_WORKSTATION_CONTROLLER_CASING);
-        TextureAtlasSprite facade = CtmSprites.baseSprite(MachinePartFacade.HIGH_POWER.texture());
+        TextureAtlasSprite facade = CtmSprites.baseSprite(MachinePartFacade.CRYSTAL_ENERGY.texture());
         if (base != null && facade != null && base != facade) {
             quads = retarget(quads, base, facade);
         }
@@ -129,7 +129,7 @@ public final class CrystalWorkstationCtm {
     private static List<BakedQuad> retargetPanel(List<BakedQuad> quads, boolean outer,
             CrystalWorkstationShell.Look look) {
         TextureAtlasSprite target = CtmSprites
-                .baseSprite(outer ? MachinePartFacade.HIGH_POWER.texture() : CtmSprites.WORKSTATION_PANEL_INNER);
+                .baseSprite(outer ? MachinePartFacade.CRYSTAL_ENERGY.texture() : CtmSprites.WORKSTATION_PANEL_INNER);
         if (target == null) {
             return quads;
         }
@@ -203,6 +203,6 @@ public final class CrystalWorkstationCtm {
         if (neighborState.is(ModBlocks.CRYSTAL_WORKSTATION.get())) {
             return neighborState.getValue(AbstractMultiblockControllerBlock.FORMED);
         }
-        return CtmConfig.connects(neighborState, ModBlocks.REINFORCED_HIGH_POWER_CASING.get().defaultBlockState());
+        return CtmConfig.connects(neighborState, ModBlocks.CRYSTAL_ENERGY_CASING.get().defaultBlockState());
     }
 }

@@ -28,7 +28,7 @@ public final class CrystalWorkstationStructure extends AbstractStructureFacade {
             .slice("AAAAAAAAA", "CDDDDDDDC", "CDDDDDDDC", "CDDDDDDDC", "AAAAAAAAA")
             .slice("AAAAAAAAA", "B#######B", "B#######B", "B#######B", "AAAAAAAAA")
             .where('K', StructurePredicate.blocks(ModBlocks.CRYSTAL_WORKSTATION.get()))
-            .where('A', StructurePredicate.casingWithParts(ModBlocks.REINFORCED_HIGH_POWER_CASING.get()))
+            .where('A', StructurePredicate.casingWithParts(ModBlocks.CRYSTAL_ENERGY_CASING.get()))
             .where('B', StructurePredicate.blocks(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()))
             .where('C', StructurePredicate.blocks(ModBlocks.HIGH_ENERGY_STABILITY_CASING.get()))
             .where('D', StructurePredicate.blocks(ModBlocks.CRYSTAL_GLASS.get()))
@@ -49,7 +49,7 @@ public final class CrystalWorkstationStructure extends AbstractStructureFacade {
     }
 
     private CrystalWorkstationStructure() {
-        super(PATTERN, MachinePartFacade.HIGH_POWER);
+        super(PATTERN, MachinePartFacade.CRYSTAL_ENERGY);
     }
 
     // 结构深度轴

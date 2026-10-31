@@ -19,14 +19,14 @@ public final class MultiFactoryStructure extends AbstractStructureFacade {
             .slice("###", "#G#", "###")
             .slice("###", "###", "###")
             .where('K', StructurePredicate.blocks(ModBlocks.MULTI_FACTORY.get()))
-            .where('#', StructurePredicate.casingWithParts(ModBlocks.REINFORCED_HIGH_POWER_CASING.get()))
+            .where('#', StructurePredicate.casingWithParts(ModBlocks.CRYSTAL_ENERGY_CASING.get()))
             .where('G', StructurePredicate.blocks(ModBlocks.MOLECULAR_ASSEMBLY_CORE.get()))
             .build();
 
     public static final MultiFactoryStructure INSTANCE = new MultiFactoryStructure();
 
     private MultiFactoryStructure() {
-        super(PATTERN, MachinePartFacade.HIGH_POWER);
+        super(PATTERN, MachinePartFacade.CRYSTAL_ENERGY);
     }
 
     public static BlockPos corePos(BlockPos controllerPos, Direction facing, boolean mirrorFront) {

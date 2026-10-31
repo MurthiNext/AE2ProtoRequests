@@ -1,7 +1,7 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "ae2pr:block/reinforced_high_power_casing"
+    "all": "ae2pr:block/crystal_energy_casing"
   },
   "ambientocclusion": true
 }

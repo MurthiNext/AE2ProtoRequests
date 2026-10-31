@@ -86,7 +86,7 @@ public final class CtmConfig {
         if (block == ModBlocks.AEV_MACHINE_CASING.get()) {
             return 9;
         }
-        if (block == ModBlocks.REINFORCED_HIGH_POWER_CASING.get()) {
+        if (block == ModBlocks.CRYSTAL_ENERGY_CASING.get()) {
             return 10;
         }
         if (MachinePartBlock.isAevPart(block)) {
@@ -140,7 +140,7 @@ public final class CtmConfig {
         }
         if ((state.is(ModBlocks.CRYSTAL_WORKSTATION.get()) || state.is(ModBlocks.MULTI_FACTORY.get()))
                 && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
-            return MachinePartFacade.HIGH_POWER;
+            return MachinePartFacade.CRYSTAL_ENERGY;
         }
         if (state.is(ModBlocks.CRYSTAL_ASSEMBLY_LINE.get())
                 && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {

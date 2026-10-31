@@ -87,7 +87,7 @@ public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFact
                 boolean port = state.getBlock() instanceof MachinePartBlock
                         || state.getBlock() instanceof MENetworkAccessHatchBlock;
                 boolean shell = host
-                        || state.is(ModBlocks.REINFORCED_HIGH_POWER_CASING.get())
+                        || state.is(ModBlocks.CRYSTAL_ENERGY_CASING.get())
                         || port;
                 // 成型外观统一覆盖机壳和仓室的外表面。
                 if (!shell || !Block.shouldRenderFace(state, level, cell, normal, cell.relative(normal))) {

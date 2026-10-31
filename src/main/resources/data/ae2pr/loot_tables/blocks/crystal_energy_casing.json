@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "ae2pr:reinforced_high_power_casing"
+          "name": "ae2pr:crystal_energy_casing"
         }
       ],
       "conditions": [

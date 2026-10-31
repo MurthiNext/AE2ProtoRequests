@@ -20,8 +20,8 @@ public final class MachinePartFacade {
     public static final MachinePartFacade ZIRCONIA = register(2,
             "block/zirconia_corundum_bricks", 4);
 
-    public static final MachinePartFacade HIGH_POWER = register(3,
-            "block/reinforced_high_power_casing", 10);
+    public static final MachinePartFacade CRYSTAL_ENERGY = register(3,
+            "block/crystal_energy_casing", 10);
 
     public static final MachinePartFacade ZIRCONIUM_IRON = register(4,
             "block/zirconium_iron_alloy_machine_casing", 11);
