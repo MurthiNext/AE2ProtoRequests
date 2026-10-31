@@ -137,6 +137,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_GRATING.get());
                         output.accept(ModItems.LOGISTICS_CONTROL_CASING.get());
                         output.accept(ModItems.METEOR_STEEL_PIPE_BLOCK.get());
+                        output.accept(ModItems.FILTER_PRESS_PLATE.get());
                         output.accept(ModItems.HIGH_ENERGY_CORE.get());
                         output.accept(ModItems.MOLECULAR_ASSEMBLY_CORE.get());
 

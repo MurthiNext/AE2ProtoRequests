@@ -163,6 +163,9 @@ public final class ModItems {
             "logistics_control_casing",
             () -> new BlockItem(ModBlocks.LOGISTICS_CONTROL_CASING.get(), new Item.Properties()));
 
+    public static final RegistryObject<BlockItem> FILTER_PRESS_PLATE = ITEMS.register("filter_press_plate",
+            () -> new BlockItem(ModBlocks.FILTER_PRESS_PLATE.get(), new Item.Properties()));
+
     public static final RegistryObject<Item> METEOR_STEEL_INGOT = ITEMS.register("meteor_steel_ingot",
             () -> new Item(new Item.Properties()));
 

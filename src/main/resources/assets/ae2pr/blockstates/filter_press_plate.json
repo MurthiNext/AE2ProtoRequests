@@ -1,0 +1,116 @@
+{
+    "variants": {
+        "axis=z,left=false,right=false,down=false,up=false": {
+            "model": "ae2pr:block/filter_press_plate"
+        },
+        "axis=x,left=false,right=false,down=false,up=false": {
+            "model": "ae2pr:block/filter_press_plate",
+            "y": 90
+        },
+        "axis=z,left=true,right=false,down=false,up=false": {
+            "model": "ae2pr:block/filter_press_plate/connected_1"
+        },
+        "axis=x,left=true,right=false,down=false,up=false": {
+            "model": "ae2pr:block/filter_press_plate/connected_1",
+            "y": 90
+        },
+        "axis=z,left=false,right=true,down=false,up=false": {
+            "model": "ae2pr:block/filter_press_plate/connected_2"
+        },
+        "axis=x,left=false,right=true,down=false,up=false": {
+            "model": "ae2pr:block/filter_press_plate/connected_2",
+            "y": 90
+        },
+        "axis=z,left=true,right=true,down=false,up=false": {
+            "model": "ae2pr:block/filter_press_plate/connected_3"
+        },
+        "axis=x,left=true,right=true,down=false,up=false": {
+            "model": "ae2pr:block/filter_press_plate/connected_3",
+            "y": 90
+        },
+        "axis=z,left=false,right=false,down=true,up=false": {
+            "model": "ae2pr:block/filter_press_plate/connected_4"
+        },
+        "axis=x,left=false,right=false,down=true,up=false": {
+            "model": "ae2pr:block/filter_press_plate/connected_4",
+            "y": 90
+        },
+        "axis=z,left=true,right=false,down=true,up=false": {
+            "model": "ae2pr:block/filter_press_plate/connected_5"
+        },
+        "axis=x,left=true,right=false,down=true,up=false": {
+            "model": "ae2pr:block/filter_press_plate/connected_5",
+            "y": 90
+        },
+        "axis=z,left=false,right=true,down=true,up=false": {
+            "model": "ae2pr:block/filter_press_plate/connected_6"
+        },
+        "axis=x,left=false,right=true,down=true,up=false": {
+            "model": "ae2pr:block/filter_press_plate/connected_6",
+            "y": 90
+        },
+        "axis=z,left=true,right=true,down=true,up=false": {
+            "model": "ae2pr:block/filter_press_plate/connected_7"
+        },
+        "axis=x,left=true,right=true,down=true,up=false": {
+            "model": "ae2pr:block/filter_press_plate/connected_7",
+            "y": 90
+        },
+        "axis=z,left=false,right=false,down=false,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_8"
+        },
+        "axis=x,left=false,right=false,down=false,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_8",
+            "y": 90
+        },
+        "axis=z,left=true,right=false,down=false,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_9"
+        },
+        "axis=x,left=true,right=false,down=false,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_9",
+            "y": 90
+        },
+        "axis=z,left=false,right=true,down=false,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_10"
+        },
+        "axis=x,left=false,right=true,down=false,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_10",
+            "y": 90
+        },
+        "axis=z,left=true,right=true,down=false,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_11"
+        },
+        "axis=x,left=true,right=true,down=false,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_11",
+            "y": 90
+        },
+        "axis=z,left=false,right=false,down=true,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_12"
+        },
+        "axis=x,left=false,right=false,down=true,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_12",
+            "y": 90
+        },
+        "axis=z,left=true,right=false,down=true,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_13"
+        },
+        "axis=x,left=true,right=false,down=true,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_13",
+            "y": 90
+        },
+        "axis=z,left=false,right=true,down=true,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_14"
+        },
+        "axis=x,left=false,right=true,down=true,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_14",
+            "y": 90
+        },
+        "axis=z,left=true,right=true,down=true,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_15"
+        },
+        "axis=x,left=true,right=true,down=true,up=true": {
+            "model": "ae2pr:block/filter_press_plate/connected_15",
+            "y": 90
+        }
+    }
+}

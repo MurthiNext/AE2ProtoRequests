@@ -81,6 +81,7 @@
   "block.ae2pr.crystal_reaction_chamber": "水晶反应仓",
   "block.ae2pr.crystal_reinforced_composite_machine_casing": "水晶强化复合机械方块",
   "block.ae2pr.dense_sky_stone_block": "致密陨石块",
+  "block.ae2pr.filter_press_plate": "压滤机滤板",
   "block.ae2pr.fireproof_crystal_glass": "耐火水晶玻璃",
   "block.ae2pr.me_network_access_hatch": "ME网络接入仓",
   "tooltip.ae2pr.me_network_access_hatch": "§9提供：§r\n- 允许接入网络\n- 允许使用AE能量\n- 提供至多8频道",

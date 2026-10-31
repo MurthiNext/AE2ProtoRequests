@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.logic.wrench;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
@@ -10,8 +9,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -23,9 +20,6 @@ import com.murthinext.ae2pr.ModTags;
 
 // 扳手交互统一入口
 public final class WrenchInteractions {
-
-    private static final Direction[] ROTATION_ORDER = { Direction.DOWN, Direction.UP, Direction.NORTH,
-            Direction.SOUTH, Direction.WEST, Direction.EAST };
 
     private WrenchInteractions() {
     }
@@ -49,24 +43,20 @@ public final class WrenchInteractions {
                     event.getHitVec(), event.getItemStack()));
             return;
         }
-        DirectionProperty facing = wrenchable.wrenchFacing();
-        if (facing == null) {
-            // 无朝向：交给方块自身处理
+        BlockState rotated = wrenchable.rotateWithWrench(state);
+        if (rotated == state) {
             return;
         }
         event.setCanceled(true);
         event.setCancellationResult(wrenchable.canRotateWithWrench(state)
-                ? rotate(event.getLevel(), event.getPos(), state, wrenchable, facing)
+                ? rotate(event.getLevel(), event.getPos(), rotated, wrenchable)
                 : InteractionResult.PASS);
     }
 
-    // 旋转朝向：水平顺时针，其余按固定顺序循环
-    private static InteractionResult rotate(Level level, BlockPos pos, BlockState state, Wrenchable wrenchable,
-            DirectionProperty facing) {
+    private static InteractionResult rotate(Level level, BlockPos pos, BlockState rotated, Wrenchable wrenchable) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         }
-        BlockState rotated = state.setValue(facing, nextFacing(facing, state.getValue(facing)));
         level.setBlock(pos, rotated, Block.UPDATE_ALL);
         level.playSound(null, pos, SoundEvents.ITEM_FRAME_ROTATE_ITEM, SoundSource.BLOCKS, 0.8F, 1.0F);
         wrenchable.onWrenchRotated(level, pos, rotated);
@@ -88,17 +78,5 @@ public final class WrenchInteractions {
         ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(state.getBlock()));
         level.playSound(null, pos, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.BLOCKS, 0.8F, 1.0F);
         return InteractionResult.sidedSuccess(false);
-    }
-
-    private static Direction nextFacing(DirectionProperty facing, Direction current) {
-        if (facing == BlockStateProperties.HORIZONTAL_FACING) {
-            return current.getClockWise();
-        }
-        for (int i = 0; i < ROTATION_ORDER.length; i++) {
-            if (ROTATION_ORDER[i] == current) {
-                return ROTATION_ORDER[(i + 1) % ROTATION_ORDER.length];
-            }
-        }
-        return Direction.NORTH;
     }
 }

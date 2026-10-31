@@ -81,6 +81,7 @@
   "block.ae2pr.crystal_reaction_chamber": "Crystal Reaction Chamber",
   "block.ae2pr.crystal_reinforced_composite_machine_casing": "Crystal Reinforced Composite Casing",
   "block.ae2pr.dense_sky_stone_block": "Dense Sky Stone Block",
+  "block.ae2pr.filter_press_plate": "Filter Press Plate",
   "block.ae2pr.fireproof_crystal_glass": "Fireproof Crystal Glass",
   "block.ae2pr.me_network_access_hatch": "ME Network Access Hatch",
   "tooltip.ae2pr.me_network_access_hatch": "§9 Provides:\n§r- Allow network access\n- Allow the use of AE energy\n- Provide up to 8 channels",

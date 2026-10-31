@@ -16,6 +16,7 @@ import net.minecraftforge.registries.RegistryObject;
 import com.murthinext.ae2pr.block.ComputerCasingBlock;
 import com.murthinext.ae2pr.block.DisassemblableBlock;
 import com.murthinext.ae2pr.block.DisassemblableGlassBlock;
+import com.murthinext.ae2pr.block.FilterPressPlateBlock;
 import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
 import com.murthinext.ae2pr.block.AlienLavaBlock;
 import com.murthinext.ae2pr.block.molecular_assembly_core.MolecularAssemblyCoreBlock;
@@ -227,6 +228,9 @@ public final class ModBlocks {
             "crystal_workstation", CrystalWorkstationBlock::new);
 
     public static final RegistryObject<JigBlock> JIG = BLOCKS.register("jig", JigBlock::new);
+
+    public static final RegistryObject<FilterPressPlateBlock> FILTER_PRESS_PLATE = BLOCKS.register(
+            "filter_press_plate", () -> new FilterPressPlateBlock(casingProperties()));
 
     public static final RegistryObject<MultiFactoryBlock> MULTI_FACTORY = BLOCKS.register(
             "multi_factory", MultiFactoryBlock::new);
