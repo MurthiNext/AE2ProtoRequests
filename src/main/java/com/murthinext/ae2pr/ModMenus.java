@@ -8,6 +8,7 @@ import net.minecraftforge.registries.RegistryObject;
 import com.murthinext.ae2pr.block.crystal_assembly_line.CrystalAssemblyLineMenu;
 import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberMenu;
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationMenu;
+import com.murthinext.ae2pr.block.filter_press.FilterPressMenu;
 import com.murthinext.ae2pr.block.jig.JigMenu;
 import com.murthinext.ae2pr.block.high_reactivity_lava_smelter.HighReactivityLavaSmelterMenu;
 import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterMenu;
@@ -48,6 +49,9 @@ public final class ModMenus {
             .register("crystal_workstation", () -> CrystalWorkstationMenu.TYPE);
 
     public static final RegistryObject<MenuType<JigMenu>> JIG = MENUS.register("jig", () -> JigMenu.TYPE);
+
+    public static final RegistryObject<MenuType<FilterPressMenu>> FILTER_PRESS = MENUS
+            .register("filter_press", () -> FilterPressMenu.TYPE);
 
     public static final RegistryObject<MenuType<MultiFactoryMenu>> MULTI_FACTORY = MENUS
             .register("multi_factory", () -> MultiFactoryMenu.TYPE);

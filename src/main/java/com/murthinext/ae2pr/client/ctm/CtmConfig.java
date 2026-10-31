@@ -104,6 +104,7 @@ public final class CtmConfig {
                 || block == ModBlocks.CRYSTAL_REACTION_CHAMBER.get()
                 || block == ModBlocks.CRYSTAL_WORKSTATION.get()
                 || block == ModBlocks.JIG.get()
+                || block == ModBlocks.FILTER_PRESS.get()
                 || block == ModBlocks.MULTI_FACTORY.get()
                 || block == ModBlocks.CRYSTAL_ASSEMBLY_LINE.get()) {
             MachinePartFacade facade = facade(state);
@@ -136,6 +137,9 @@ public final class CtmConfig {
     @Nullable
     public static MachinePartFacade facade(BlockState state) {
         if (state.is(ModBlocks.JIG.get()) && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
+            return MachinePartFacade.ZIRCONIUM_IRON;
+        }
+        if (state.is(ModBlocks.FILTER_PRESS.get()) && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIUM_IRON;
         }
         if ((state.is(ModBlocks.CRYSTAL_WORKSTATION.get()) || state.is(ModBlocks.MULTI_FACTORY.get()))
@@ -181,6 +185,9 @@ public final class CtmConfig {
         }
         if (block == ModBlocks.JIG.get()) {
             return CtmSprites.baseSprite(CtmSprites.JIG_CONTROLLER_CASING);
+        }
+        if (block == ModBlocks.FILTER_PRESS.get()) {
+            return CtmSprites.baseSprite(CtmSprites.FILTER_PRESS_CONTROLLER_CASING);
         }
         if (block == ModBlocks.CRYSTAL_WORKSTATION.get()) {
             return CtmSprites.baseSprite(CtmSprites.CRYSTAL_WORKSTATION_CONTROLLER_CASING);

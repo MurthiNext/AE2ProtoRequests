@@ -12,6 +12,7 @@ import com.murthinext.ae2pr.block.molecular_assembly_core.MolecularAssemblyCoreB
 import com.murthinext.ae2pr.block.crystal_reaction_chamber.CrystalReactionChamberControllerBlockEntity;
 import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationControllerBlockEntity;
 import com.murthinext.ae2pr.block.crystal_reactor.CrystalReactorCoreBlockEntity;
+import com.murthinext.ae2pr.block.filter_press.FilterPressControllerBlockEntity;
 import com.murthinext.ae2pr.block.jig.JigControllerBlockEntity;
 import com.murthinext.ae2pr.block.high_reactivity_lava_smelter.HighReactivityLavaSmelterControllerBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlockEntity;
@@ -75,6 +76,10 @@ public final class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<JigControllerBlockEntity>> JIG = BLOCK_ENTITIES
             .register("jig", () -> BlockEntityType.Builder.of(JigControllerBlockEntity::new,
                     ModBlocks.JIG.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<FilterPressControllerBlockEntity>> FILTER_PRESS = BLOCK_ENTITIES
+            .register("filter_press", () -> BlockEntityType.Builder.of(FilterPressControllerBlockEntity::new,
+                    ModBlocks.FILTER_PRESS.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<MultiFactoryControllerBlockEntity>> MULTI_FACTORY = BLOCK_ENTITIES
             .register("multi_factory", () -> BlockEntityType.Builder.of(

@@ -13,6 +13,7 @@ import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
 import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
 import com.murthinext.ae2pr.recipe.CrystalReactionChamberRecipe;
 import com.murthinext.ae2pr.recipe.CrystalWorkstationRecipe;
+import com.murthinext.ae2pr.recipe.FilterPressRecipe;
 import com.murthinext.ae2pr.recipe.HighReactivityLavaSmelterRecipe;
 import com.murthinext.ae2pr.recipe.JigRecipe;
 import com.murthinext.ae2pr.recipe.MatterPhaseTransformerRecipe;
@@ -32,6 +33,12 @@ public final class ModRecipes {
             () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "jig")));
 
     public static final RegistryObject<JigRecipe.Serializer> JIG = SERIALIZERS.register("jig", JigRecipe.Serializer::new);
+
+    public static final RegistryObject<RecipeType<FilterPressRecipe>> FILTER_PRESS_TYPE = RECIPE_TYPES.register(
+            "filter_press", () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "filter_press")));
+
+    public static final RegistryObject<FilterPressRecipe.Serializer> FILTER_PRESS = SERIALIZERS.register(
+            "filter_press", FilterPressRecipe.Serializer::new);
 
     public static final RegistryObject<RecipeType<CrystalAssemblyLineRecipe>> CRYSTAL_ASSEMBLY_LINE_TYPE = RECIPE_TYPES
             .register("crystal_assembly_line", () -> new RecipeType<CrystalAssemblyLineRecipe>() {

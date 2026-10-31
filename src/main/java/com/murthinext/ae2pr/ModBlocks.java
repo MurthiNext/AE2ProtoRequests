@@ -17,6 +17,7 @@ import com.murthinext.ae2pr.block.ComputerCasingBlock;
 import com.murthinext.ae2pr.block.DisassemblableBlock;
 import com.murthinext.ae2pr.block.DisassemblableGlassBlock;
 import com.murthinext.ae2pr.block.FilterPressPlateBlock;
+import com.murthinext.ae2pr.block.filter_press.FilterPressBlock;
 import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
 import com.murthinext.ae2pr.block.AlienLavaBlock;
 import com.murthinext.ae2pr.block.molecular_assembly_core.MolecularAssemblyCoreBlock;
@@ -231,6 +232,9 @@ public final class ModBlocks {
 
     public static final RegistryObject<FilterPressPlateBlock> FILTER_PRESS_PLATE = BLOCKS.register(
             "filter_press_plate", () -> new FilterPressPlateBlock(casingProperties()));
+
+    public static final RegistryObject<FilterPressBlock> FILTER_PRESS = BLOCKS.register(
+            "filter_press", FilterPressBlock::new);
 
     public static final RegistryObject<MultiFactoryBlock> MULTI_FACTORY = BLOCKS.register(
             "multi_factory", MultiFactoryBlock::new);

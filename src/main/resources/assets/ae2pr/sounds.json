@@ -5,6 +5,12 @@
       "ae2pr:machine/bath"
     ]
   },
+  "filter_press_processing": {
+    "subtitle": "subtitle.ae2pr.filter_press_processing",
+    "sounds": [
+      "ae2pr:machine/compressor"
+    ]
+  },
   "crystal_assembly_line_processing": {
     "subtitle": "subtitle.ae2pr.crystal_assembly_line_processing",
     "sounds": [

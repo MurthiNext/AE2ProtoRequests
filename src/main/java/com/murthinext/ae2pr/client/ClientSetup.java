@@ -28,6 +28,7 @@ import com.murthinext.ae2pr.client.crystal_workstation.CrystalWorkstationRendere
 import com.murthinext.ae2pr.client.crystal_workstation.CrystalWorkstationScreen;
 import com.murthinext.ae2pr.client.jig.JigRenderer;
 import com.murthinext.ae2pr.client.jig.JigScreen;
+import com.murthinext.ae2pr.client.filter_press.FilterPressScreen;
 import com.murthinext.ae2pr.client.multi_factory.MultiFactoryScreen;
 import com.murthinext.ae2pr.client.multi_factory.MultiFactoryRenderer;
 import com.murthinext.ae2pr.client.machine_part.FluidHatchScreen;
@@ -61,6 +62,7 @@ public final class ClientSetup {
         MenuScreens.register(ModMenus.CRYSTAL_REACTION_CHAMBER.get(), CrystalReactionChamberScreen::new);
         MenuScreens.register(ModMenus.CRYSTAL_WORKSTATION.get(), CrystalWorkstationScreen::new);
         MenuScreens.register(ModMenus.JIG.get(), JigScreen::new);
+        MenuScreens.register(ModMenus.FILTER_PRESS.get(), FilterPressScreen::new);
         MenuScreens.register(ModMenus.MULTI_FACTORY.get(), MultiFactoryScreen::new);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_ITEM_BUS.get(), ItemBusScreen::new);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), FluidHatchScreen::new);

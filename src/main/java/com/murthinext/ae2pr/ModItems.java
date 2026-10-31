@@ -339,6 +339,9 @@ public final class ModItems {
     public static final RegistryObject<BlockItem> JIG = ITEMS.register("jig",
             () -> new BlockItem(ModBlocks.JIG.get(), new Item.Properties()));
 
+    public static final RegistryObject<BlockItem> FILTER_PRESS = ITEMS.register("filter_press",
+            () -> new BlockItem(ModBlocks.FILTER_PRESS.get(), new Item.Properties()));
+
     public static final RegistryObject<BlockItem> MULTI_FACTORY = ITEMS.register("multi_factory",
             () -> new BlockItem(ModBlocks.MULTI_FACTORY.get(), new Item.Properties()));
 

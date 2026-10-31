@@ -1,0 +1,40 @@
+{
+  "type": "ae2pr:filter_press",
+  "item_inputs": [],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:coarse_meteorite_slurry",
+      "amount": 1000
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:zircon_dust",
+      "count": 1,
+      "chance": 0.35
+    },
+    {
+      "item": "ae2pr:iron_oxide_dust",
+      "count": 1,
+      "chance": 0.3
+    },
+    {
+      "item": "ae2pr:copper_oxide_dust",
+      "count": 1,
+      "chance": 0.2
+    },
+    {
+      "item": "ae2pr:gold_oxide_dust",
+      "count": 1,
+      "chance": 0.08
+    }
+  ],
+  "fluid_outputs": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 400
+    }
+  ],
+  "duration": 120,
+  "energy": 2000
+}

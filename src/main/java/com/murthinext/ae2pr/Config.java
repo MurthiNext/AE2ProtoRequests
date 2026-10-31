@@ -46,6 +46,9 @@ public final class Config {
     private static final ForgeConfigSpec.IntValue JIG_PARALLEL;
     private static final ForgeConfigSpec.DoubleValue JIG_ENERGY_PER_PARALLEL;
 
+    private static final ForgeConfigSpec.IntValue FILTER_PRESS_PARALLEL;
+    private static final ForgeConfigSpec.DoubleValue FILTER_PRESS_ENERGY_PER_PARALLEL;
+
     private static final ForgeConfigSpec.IntValue MULTI_FACTORY_PARALLEL;
     private static final ForgeConfigSpec.IntValue MULTI_FACTORY_INSCRIBING_DURATION;
     private static final ForgeConfigSpec.IntValue MULTI_FACTORY_CHARGING_DURATION;
@@ -189,6 +192,15 @@ public final class Config {
         JIG_ENERGY_PER_PARALLEL = BUILDER
                 .comment("跳汰机默认扣除的能量（AE）")
                 .defineInRange("energyPerParallel", 1000.0, 0.0, Double.MAX_VALUE);
+        BUILDER.pop();
+
+        BUILDER.push("filterPress");
+        FILTER_PRESS_PARALLEL = BUILDER
+                .comment("压滤机并行上限")
+                .defineInRange("parallel", 32, 1, 1_000_000);
+        FILTER_PRESS_ENERGY_PER_PARALLEL = BUILDER
+                .comment("压滤机默认扣除的能量（AE）")
+                .defineInRange("energyPerParallel", 2000.0, 0.0, Double.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("multiFactory");
@@ -386,6 +398,14 @@ public final class Config {
 
     public static double jigEnergyPerParallel() {
         return JIG_ENERGY_PER_PARALLEL.get();
+    }
+
+    public static int filterPressParallel() {
+        return FILTER_PRESS_PARALLEL.get();
+    }
+
+    public static double filterPressEnergyPerParallel() {
+        return FILTER_PRESS_ENERGY_PER_PARALLEL.get();
     }
 
     public static int multiFactoryParallel() {

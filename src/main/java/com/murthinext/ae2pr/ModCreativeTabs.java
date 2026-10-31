@@ -112,6 +112,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CRYSTAL_REACTION_CHAMBER.get());
                         output.accept(ModItems.CRYSTAL_WORKSTATION.get());
                         output.accept(ModItems.JIG.get());
+                        output.accept(ModItems.FILTER_PRESS.get());
                         output.accept(ModItems.MULTI_FACTORY.get());
                         output.accept(ModItems.MULTI_FACTORY.get());
 

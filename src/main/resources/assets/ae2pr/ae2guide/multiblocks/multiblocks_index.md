@@ -36,6 +36,8 @@ navigation:
 
 [跳汰机](jig.md)，为了更好的材料……
 
+[压滤机](filter_press.md)，第二步。
+
 ## 支线内容
 
 [通式加工厂](multi_factory.md)，批量处理压印与充能配方。

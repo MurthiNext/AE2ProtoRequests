@@ -20,6 +20,7 @@ import com.murthinext.ae2pr.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.multiblock.structure.CrystalAssemblyLineStructure;
 import com.murthinext.ae2pr.multiblock.structure.CrystalReactionChamberStructure;
 import com.murthinext.ae2pr.multiblock.structure.CrystalWorkstationStructure;
+import com.murthinext.ae2pr.multiblock.structure.FilterPressStructure;
 import com.murthinext.ae2pr.multiblock.structure.HighReactivityLavaSmelterStructure;
 import com.murthinext.ae2pr.multiblock.structure.JigStructure;
 import com.murthinext.ae2pr.multiblock.structure.MatterPhaseTransformerStructure;
@@ -37,6 +38,8 @@ public record MultiblockPreviewRecipe(ResourceLocation id, Component title, Bloc
                 of("crystal_workstation", ModBlocks.CRYSTAL_WORKSTATION.get(), CrystalWorkstationStructure.PATTERN,
                         CrystalWorkstationStructure.PATTERN::maxSlices),
                 of("jig", ModBlocks.JIG.get(), JigStructure.PATTERN, JigStructure.PATTERN::maxSlices),
+                of("filter_press", ModBlocks.FILTER_PRESS.get(), FilterPressStructure.PATTERN,
+                        FilterPressStructure.PATTERN::maxSlices),
                 of("high_reactivity_lava_smelter", ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get(),
                         HighReactivityLavaSmelterStructure.PATTERN, HighReactivityLavaSmelterStructure.PATTERN::maxSlices),
                 of("matter_phase_transformer", ModBlocks.MATTER_PHASE_TRANSFORMER.get(),
@@ -66,7 +69,7 @@ public record MultiblockPreviewRecipe(ResourceLocation id, Component title, Bloc
         return totals.entrySet().stream().map(entry -> new ItemStack(entry.getKey(), entry.getValue())).toList();
     }
 
-    // 8 条结构预览统一使用结构名，key 与结构 id 一一对应
+    // 结构预览统一使用结构名，key 与结构 id 一一对应
     private static MultiblockPreviewRecipe of(String name, Block controller, MultiblockPattern pattern,
             IntSupplier maxSlices) {
         return new MultiblockPreviewRecipe(id(name),
