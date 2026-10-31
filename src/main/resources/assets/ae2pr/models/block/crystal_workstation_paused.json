@@ -1,7 +1,7 @@
 {
   "parent": "ae2pr:block/crystal_workstation",
   "textures": {
-    "overlay_front": "ae2pr:block/crystal_workstation/front_paused",
-    "overlay_front_emissive": "ae2pr:block/crystal_workstation/front_paused_emissive"
+    "overlay_front": "ae2pr:block/controller_front/certus_process_paused",
+    "overlay_front_emissive": "ae2pr:block/controller_front/certus_process_paused_emissive"
   }
 }

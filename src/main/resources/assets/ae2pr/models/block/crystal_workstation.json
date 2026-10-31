@@ -4,8 +4,8 @@
   "textures": {
     "particle": "#all",
     "all": "ae2pr:block/crystal_workstation/controller_casing",
-    "overlay_front": "ae2pr:block/crystal_workstation/front",
-    "overlay_front_emissive": "ae2pr:block/crystal_workstation/front_emissive"
+    "overlay_front": "ae2pr:block/controller_front/certus_process",
+    "overlay_front_emissive": "ae2pr:block/controller_front/certus_process_emissive"
   },
   "elements": [
     {

@@ -115,7 +115,7 @@ public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFact
                         ResourceLocation texture = quad.getSprite().contents().name();
                         if (texture.getNamespace().equals(ae2pr.MODID)
                                 && (texture.getPath().startsWith("block/overlay/")
-                                        || host && texture.getPath().startsWith("block/multi_factory/front"))) {
+                                        || host && texture.getPath().startsWith("block/controller_front/"))) {
                             float brightness = quad.isShade() ? shade : 1.0F;
                             buffer.putBulkData(poseStack.last(), quad, brightness, brightness, brightness,
                                     light, overlay);

@@ -4,8 +4,8 @@
   "textures": {
     "particle": "#all",
     "all": "ae2pr:block/jig/controller_casing",
-    "overlay_front": "ae2pr:block/jig/front",
-    "overlay_front_emissive": "ae2pr:block/jig/front_emissive"
+    "overlay_front": "ae2pr:block/controller_front/certus_process",
+    "overlay_front_emissive": "ae2pr:block/controller_front/certus_process_emissive"
   },
   "elements": [
     {
