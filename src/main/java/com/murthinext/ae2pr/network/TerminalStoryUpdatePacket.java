@@ -3,7 +3,7 @@ package com.murthinext.ae2pr.network;
 import java.io.IOException;
 import java.util.function.Supplier;
 
-import com.murthinext.ae2pr.ModNetwork;
+import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress;
 import com.murthinext.ae2pr.logic.terminal.TerminalStorySavedData;

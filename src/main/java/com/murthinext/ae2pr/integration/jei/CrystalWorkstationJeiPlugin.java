@@ -9,9 +9,9 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 
-import com.murthinext.ae2pr.ModItems;
+import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationMode;
+import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationMode;
 
 @JeiPlugin
 public class CrystalWorkstationJeiPlugin implements IModPlugin {
@@ -41,7 +41,7 @@ public class CrystalWorkstationJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalysts(CrystalWorkstationJeiCategory.ETCHING, ModItems.CRYSTAL_WORKSTATION.get());
-        registration.addRecipeCatalysts(CrystalWorkstationJeiCategory.CUTTING, ModItems.CRYSTAL_WORKSTATION.get());
+        registration.addRecipeCatalysts(CrystalWorkstationJeiCategory.ETCHING, ModMachines.CRYSTAL_WORKSTATION.item());
+        registration.addRecipeCatalysts(CrystalWorkstationJeiCategory.CUTTING, ModMachines.CRYSTAL_WORKSTATION.item());
     }
 }

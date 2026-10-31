@@ -13,40 +13,40 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
-import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.multiblock.structure.CrystalReactorStructure;
-import com.murthinext.ae2pr.multiblock.MultiblockPattern;
-import com.murthinext.ae2pr.multiblock.structure.CrystalAssemblyLineStructure;
-import com.murthinext.ae2pr.multiblock.structure.CrystalReactionChamberStructure;
-import com.murthinext.ae2pr.multiblock.structure.CrystalWorkstationStructure;
-import com.murthinext.ae2pr.multiblock.structure.FilterPressStructure;
-import com.murthinext.ae2pr.multiblock.structure.HighReactivityLavaSmelterStructure;
-import com.murthinext.ae2pr.multiblock.structure.JigStructure;
-import com.murthinext.ae2pr.multiblock.structure.MatterPhaseTransformerStructure;
-import com.murthinext.ae2pr.multiblock.structure.MultiFactoryStructure;
+import com.murthinext.ae2pr.machine.crystal_reactor.CrystalReactorStructure;
+import com.murthinext.ae2pr.logic.multiblock.MultiblockPattern;
+import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineStructure;
+import com.murthinext.ae2pr.machine.crystal_reaction_chamber.CrystalReactionChamberStructure;
+import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationStructure;
+import com.murthinext.ae2pr.machine.filter_press.FilterPressStructure;
+import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterStructure;
+import com.murthinext.ae2pr.machine.jig.JigStructure;
+import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerStructure;
+import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryStructure;
 
 public record MultiblockPreviewRecipe(ResourceLocation id, Component title, Block controller,
         MultiblockPattern pattern, IntSupplier maxSlices) {
 
     public static List<MultiblockPreviewRecipe> recipes() {
         return List.of(
-                of("crystal_assembly_line", ModBlocks.CRYSTAL_ASSEMBLY_LINE.get(), CrystalAssemblyLineStructure.PATTERN,
+                of("crystal_assembly_line", ModMachines.CRYSTAL_ASSEMBLY_LINE.block(), CrystalAssemblyLineStructure.PATTERN,
                         CrystalAssemblyLineStructure.INSTANCE::maxSlices),
-                of("crystal_reaction_chamber", ModBlocks.CRYSTAL_REACTION_CHAMBER.get(),
+                of("crystal_reaction_chamber", ModMachines.CRYSTAL_REACTION_CHAMBER.block(),
                         CrystalReactionChamberStructure.PATTERN, CrystalReactionChamberStructure.PATTERN::maxSlices),
-                of("crystal_workstation", ModBlocks.CRYSTAL_WORKSTATION.get(), CrystalWorkstationStructure.PATTERN,
+                of("crystal_workstation", ModMachines.CRYSTAL_WORKSTATION.block(), CrystalWorkstationStructure.PATTERN,
                         CrystalWorkstationStructure.PATTERN::maxSlices),
-                of("jig", ModBlocks.JIG.get(), JigStructure.PATTERN, JigStructure.PATTERN::maxSlices),
-                of("filter_press", ModBlocks.FILTER_PRESS.get(), FilterPressStructure.PATTERN,
+                of("jig", ModMachines.JIG.block(), JigStructure.PATTERN, JigStructure.PATTERN::maxSlices),
+                of("filter_press", ModMachines.FILTER_PRESS.block(), FilterPressStructure.PATTERN,
                         FilterPressStructure.PATTERN::maxSlices),
-                of("high_reactivity_lava_smelter", ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get(),
+                of("high_reactivity_lava_smelter", ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.block(),
                         HighReactivityLavaSmelterStructure.PATTERN, HighReactivityLavaSmelterStructure.PATTERN::maxSlices),
-                of("matter_phase_transformer", ModBlocks.MATTER_PHASE_TRANSFORMER.get(),
+                of("matter_phase_transformer", ModMachines.MATTER_PHASE_TRANSFORMER.block(),
                         MatterPhaseTransformerStructure.PATTERN, MatterPhaseTransformerStructure.PATTERN::maxSlices),
-                of("multi_factory", ModBlocks.MULTI_FACTORY.get(), MultiFactoryStructure.PATTERN,
+                of("multi_factory", ModMachines.MULTI_FACTORY.block(), MultiFactoryStructure.PATTERN,
                         MultiFactoryStructure.PATTERN::maxSlices),
-                of("crystal_reactor", ModBlocks.HIGH_ENERGY_CORE.get(), CrystalReactorStructure.PATTERN,
+                of("crystal_reactor", ModMachines.CRYSTAL_REACTOR.block(), CrystalReactorStructure.PATTERN,
                         CrystalReactorStructure.PATTERN::maxSlices));
     }
 

@@ -10,7 +10,7 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 
-import com.murthinext.ae2pr.ModRecipes;
+import com.murthinext.ae2pr.registry.ModRecipes;
 import com.murthinext.ae2pr.ae2pr;
 
 @JeiPlugin

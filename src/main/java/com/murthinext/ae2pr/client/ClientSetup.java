@@ -14,33 +14,18 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import appeng.init.client.InitScreens;
 
-import com.murthinext.ae2pr.ModBlockEntities;
-import com.murthinext.ae2pr.ModMenus;
+import com.murthinext.ae2pr.registry.ModBlockEntities;
+import com.murthinext.ae2pr.registry.ModMenus;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.client.ctm.CtmBakedModel;
 import com.murthinext.ae2pr.client.molecular_assembly_core.MolecularAssemblyCoreRenderer;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectClientTooltip;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectLine;
-import com.murthinext.ae2pr.client.crystal_assembly_line.CrystalAssemblyLineScreen;
-import com.murthinext.ae2pr.client.crystal_reaction_chamber.CrystalReactionChamberRenderer;
-import com.murthinext.ae2pr.client.crystal_reaction_chamber.CrystalReactionChamberScreen;
-import com.murthinext.ae2pr.client.crystal_workstation.CrystalWorkstationRenderer;
-import com.murthinext.ae2pr.client.crystal_workstation.CrystalWorkstationScreen;
-import com.murthinext.ae2pr.client.jig.JigRenderer;
-import com.murthinext.ae2pr.client.jig.JigScreen;
-import com.murthinext.ae2pr.client.filter_press.FilterPressScreen;
-import com.murthinext.ae2pr.client.multi_factory.MultiFactoryScreen;
-import com.murthinext.ae2pr.client.multi_factory.MultiFactoryRenderer;
 import com.murthinext.ae2pr.client.machine_part.FluidHatchScreen;
 import com.murthinext.ae2pr.client.machine_part.ItemBusScreen;
 import com.murthinext.ae2pr.client.level_emitter.MultiLevelEmitterScreen;
 import com.murthinext.ae2pr.client.level_emitter.MultiThresholdLevelEmitterScreen;
-import com.murthinext.ae2pr.client.high_reactivity_lava_smelter.HighReactivityLavaSmelterRenderer;
-import com.murthinext.ae2pr.client.high_reactivity_lava_smelter.HighReactivityLavaSmelterScreen;
-import com.murthinext.ae2pr.client.matter_phase_transformer.MatterPhaseTransformerRenderer;
-import com.murthinext.ae2pr.client.matter_phase_transformer.MatterPhaseTransformerScreen;
-import com.murthinext.ae2pr.client.naming_factory.NamingFactoryRenderer;
-import com.murthinext.ae2pr.client.naming_factory.NamingFactoryScreen;
+import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryRenderer;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientSetup {
@@ -56,17 +41,9 @@ public final class ClientSetup {
         InitScreens.register(ModMenus.MULTI_THRESHOLD_LEVEL_EMITTER.get(),
                 MultiThresholdLevelEmitterScreen::new,
                 "/screens/multi_threshold_level_emitter.json");
-        MenuScreens.register(ModMenus.CRYSTAL_ASSEMBLY_LINE.get(), CrystalAssemblyLineScreen::new);
-        MenuScreens.register(ModMenus.HIGH_REACTIVITY_LAVA_SMELTER.get(), HighReactivityLavaSmelterScreen::new);
-        MenuScreens.register(ModMenus.MATTER_PHASE_TRANSFORMER.get(), MatterPhaseTransformerScreen::new);
-        MenuScreens.register(ModMenus.CRYSTAL_REACTION_CHAMBER.get(), CrystalReactionChamberScreen::new);
-        MenuScreens.register(ModMenus.CRYSTAL_WORKSTATION.get(), CrystalWorkstationScreen::new);
-        MenuScreens.register(ModMenus.JIG.get(), JigScreen::new);
-        MenuScreens.register(ModMenus.FILTER_PRESS.get(), FilterPressScreen::new);
-        MenuScreens.register(ModMenus.MULTI_FACTORY.get(), MultiFactoryScreen::new);
+        event.enqueueWork(MachineClients::registerScreens);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_ITEM_BUS.get(), ItemBusScreen::new);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), FluidHatchScreen::new);
-        MenuScreens.register(ModMenus.NAMING_FACTORY.get(), NamingFactoryScreen::new);
     }
 
     @SubscribeEvent
@@ -95,17 +72,7 @@ public final class ClientSetup {
 
     @SubscribeEvent
     public static void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(ModBlockEntities.NAMING_FACTORY.get(), NamingFactoryRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.HIGH_REACTIVITY_LAVA_SMELTER.get(),
-                HighReactivityLavaSmelterRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.MATTER_PHASE_TRANSFORMER.get(),
-                MatterPhaseTransformerRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_REACTION_CHAMBER.get(),
-                CrystalReactionChamberRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.CRYSTAL_WORKSTATION.get(),
-                CrystalWorkstationRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.JIG.get(), JigRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.MULTI_FACTORY.get(), MultiFactoryRenderer::new);
+        MachineClients.registerRenderers(event);
         event.registerBlockEntityRenderer(ModBlockEntities.MOLECULAR_ASSEMBLY_CORE.get(),
                 MolecularAssemblyCoreRenderer::new);
     }

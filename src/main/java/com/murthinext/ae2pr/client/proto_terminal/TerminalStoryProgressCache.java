@@ -6,7 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.murthinext.ae2pr.ModNetwork;
+import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress;
 import com.murthinext.ae2pr.network.TerminalStoryRequestPacket;

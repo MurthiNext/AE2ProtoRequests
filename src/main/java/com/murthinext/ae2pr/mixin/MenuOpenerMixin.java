@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.murthinext.ae2pr.logic.repeat.IRepeatRoundsHolder;
+import com.murthinext.ae2pr.logic.repeat.RepeatRoundsHolder;
 import com.murthinext.ae2pr.logic.repeat.ServerRepeatRegistry;
 
 import appeng.menu.MenuOpener;
@@ -31,7 +31,7 @@ public abstract class MenuOpenerMixin {
         ServerRepeatRegistry.clearRestore(playerId);
         // 仅从数量选择界面进入确认界面时登记，避免误用残留轮数
         if (player.containerMenu instanceof CraftAmountMenu
-                && player.containerMenu instanceof IRepeatRoundsHolder holder) {
+                && player.containerMenu instanceof RepeatRoundsHolder holder) {
             var rounds = Math.max(1, holder.ae2pr$getRepeatRounds());
             if (rounds > 1) {
                 ServerRepeatRegistry.put(playerId, rounds);

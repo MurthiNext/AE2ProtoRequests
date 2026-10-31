@@ -11,8 +11,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 
-import com.murthinext.ae2pr.ModItems;
-import com.murthinext.ae2pr.ModRecipes;
+import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
 
 @JeiPlugin
@@ -36,12 +35,12 @@ public class HighReactivityLavaSmelterJeiPlugin implements IModPlugin {
             return;
         }
         registration.addRecipes(HighReactivityLavaSmelterJeiCategory.RECIPE_TYPE,
-                List.copyOf(level.getRecipeManager().getAllRecipesFor(ModRecipes.HIGH_REACTIVITY_LAVA_SMELTER_TYPE.get())));
+                List.copyOf(level.getRecipeManager().getAllRecipesFor(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER_RECIPE.type())));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalysts(HighReactivityLavaSmelterJeiCategory.RECIPE_TYPE,
-                ModItems.HIGH_REACTIVITY_LAVA_SMELTER.get());
+                ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.item());
     }
 }

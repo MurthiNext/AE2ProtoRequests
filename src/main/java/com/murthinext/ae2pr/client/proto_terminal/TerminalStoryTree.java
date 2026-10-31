@@ -31,8 +31,8 @@ record TerminalStoryTree(List<Node> nodes, String program) {
     private static final int STEP_Y = 70;
 
     record Node(String id, String entry, int position, List<String> links, int x, int y, Component title,
-            TerminalStoryCondition visibleWhen, TerminalStoryCondition availableWhen, String tip,
-            ResourceLocation image, int imageWidth, int imageHeight) {
+                TerminalStoryCondition visibleWhen, TerminalStoryCondition availableWhen, String tip,
+                ResourceLocation image, int imageWidth, int imageHeight) {
     }
 
     private record Layout(Integer x, Integer y, String relativeTo, int dx, int dy) {

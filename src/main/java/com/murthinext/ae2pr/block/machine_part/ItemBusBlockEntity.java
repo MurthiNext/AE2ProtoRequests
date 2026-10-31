@@ -20,8 +20,8 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
-import com.murthinext.ae2pr.ModBlockEntities;
-import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.registry.ModBlockEntities;
+import com.murthinext.ae2pr.registry.ModBlocks;
 
 public class ItemBusBlockEntity extends BlockEntity {
 

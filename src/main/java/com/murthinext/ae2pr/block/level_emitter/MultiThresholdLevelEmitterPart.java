@@ -44,7 +44,7 @@ import appeng.util.inv.InternalInventoryHost;
 import appeng.util.inv.filter.IAEItemFilter;
 import appeng.util.prioritylist.IPartitionList;
 
-import com.murthinext.ae2pr.ModMenus;
+import com.murthinext.ae2pr.registry.ModMenus;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;

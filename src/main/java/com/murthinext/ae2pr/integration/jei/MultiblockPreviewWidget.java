@@ -24,7 +24,7 @@ import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.inputs.IJeiGuiEventListener;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
 
-import com.murthinext.ae2pr.client.GeneralMachineScreen;
+import com.murthinext.ae2pr.machine.AbstractMachineScreen;
 import com.murthinext.ae2pr.client.multiblock.MultiblockPreview;
 import com.murthinext.ae2pr.client.multiblock.MultiblockPreviewRenderer;
 
@@ -47,7 +47,7 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
     private static final int SLOT = 18;
     private static final int TEXT = 0xFF404850;
     private static final int MUTED = 0xFF687987;
-    private static final int ACCENT = GeneralMachineScreen.ACCENT_CRYSTAL;
+    private static final int ACCENT = AbstractMachineScreen.ACCENT_CRYSTAL;
 
     private static final Map<ResourceLocation, WeakReference<MultiblockPreviewWidget>> OPEN_WIDGETS = new HashMap<>();
 
@@ -137,7 +137,8 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
             }
             ItemStack stack = materials.get(index);
             int x = MATERIAL_X + i * SLOT;
-            GeneralMachineScreen.drawSlot(graphics, x, MATERIAL_Y);
+            graphics.blit(AbstractMachineScreen.SLOT_TEXTURE, x - 1, MATERIAL_Y - 1,
+                    0, 0.0F, 0.0F, SLOT, SLOT, SLOT, SLOT);
             ItemStackAmountRenderer.INSTANCE.render(graphics, stack, x, MATERIAL_Y);
         }
         drawButton(graphics, MATERIAL_PREV, "<", materialOffset > 0, mouseX, mouseY);

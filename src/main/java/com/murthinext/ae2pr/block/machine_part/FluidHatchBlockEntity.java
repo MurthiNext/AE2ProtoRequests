@@ -15,8 +15,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-import com.murthinext.ae2pr.ModBlockEntities;
-import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.registry.ModBlockEntities;
+import com.murthinext.ae2pr.registry.ModBlocks;
 
 public class FluidHatchBlockEntity extends BlockEntity {
 

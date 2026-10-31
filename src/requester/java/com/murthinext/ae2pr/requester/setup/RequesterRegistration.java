@@ -9,10 +9,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.registries.RegistryObject;
 
-import com.murthinext.ae2pr.ModBlockEntities;
-import com.murthinext.ae2pr.ModBlocks;
-import com.murthinext.ae2pr.ModItems;
-import com.murthinext.ae2pr.ModMenus;
+import com.murthinext.ae2pr.registry.ModBlockEntities;
+import com.murthinext.ae2pr.registry.ModBlocks;
+import com.murthinext.ae2pr.registry.ModItems;
+import com.murthinext.ae2pr.registry.ModMenus;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.requester.RedstoneRequesterBlock;
 import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;

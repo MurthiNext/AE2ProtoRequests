@@ -11,8 +11,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 
-import com.murthinext.ae2pr.ModTags;
-import com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity;
+import com.murthinext.ae2pr.registry.ModTags;
+import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryBlockEntity;
 
 // 客户端 -> 服务端：写入名称压印工厂的自定义名称
 public record NamingFactoryRenamePacket(BlockPos pos, String name) {

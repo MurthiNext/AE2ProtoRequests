@@ -7,7 +7,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import appeng.blockentity.AEBaseBlockEntity;
 
-import com.murthinext.ae2pr.ModCreativeTabs;
+import com.murthinext.ae2pr.registry.ModCreativeTabs;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
 import com.murthinext.ae2pr.requester.network.RequesterNetwork;

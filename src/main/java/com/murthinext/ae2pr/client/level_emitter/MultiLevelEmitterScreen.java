@@ -18,7 +18,7 @@ import appeng.client.gui.widgets.SettingToggleButton;
 import appeng.client.guidebook.PageAnchor;
 import appeng.core.definitions.AEItems;
 
-import com.murthinext.ae2pr.client.ModGuide;
+import com.murthinext.ae2pr.registry.ModGuide;
 import com.murthinext.ae2pr.block.level_emitter.EmitterConfigSlot;
 import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterMenu;
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;

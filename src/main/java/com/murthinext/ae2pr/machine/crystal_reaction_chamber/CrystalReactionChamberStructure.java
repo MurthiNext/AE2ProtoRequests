@@ -1,0 +1,49 @@
+package com.murthinext.ae2pr.machine.crystal_reaction_chamber;
+
+import com.murthinext.ae2pr.registry.ModMachines;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+
+import appeng.core.definitions.AEBlocks;
+
+import com.murthinext.ae2pr.registry.ModBlocks;
+import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
+import com.murthinext.ae2pr.logic.multiblock.AbstractStructureFacade;
+import com.murthinext.ae2pr.logic.multiblock.MultiblockPattern;
+import com.murthinext.ae2pr.logic.multiblock.RelativeDirection;
+import com.murthinext.ae2pr.logic.multiblock.StructurePredicate;
+
+// 水晶反应仓结构定义
+public final class CrystalReactionChamberStructure extends AbstractStructureFacade {
+
+    public static final MultiblockPattern PATTERN = MultiblockPattern
+            .builder(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.RIGHT)
+            .origin(1, 0)
+            .slice("S###S", "KBBBS", "SBBBS", "SBBBS", "#SSS#", "#####")
+            .slice("#SSS#", "B###B", "B###B", "B###B", "SDDDS", "#BBB#")
+            .slice("#SSS#", "B###B", "B#F#B", "B###B", "SEGES", "#BBB#")
+            .slice("#SSS#", "B###B", "B###B", "B###B", "SDDDS", "#BBB#")
+            .slice("S###S", "SBBBS", "SBBBS", "SBBBS", "#SSS#", "#####")
+            .where('K', StructurePredicate.blocks(ModMachines.CRYSTAL_REACTION_CHAMBER.block()))
+            .where('S', StructurePredicate.casingWithParts(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()))
+            .where('B', StructurePredicate.blocks(ModBlocks.CRYSTAL_GLASS.get()))
+            .where('D', StructurePredicate.blocks(ModBlocks.METEOR_STEEL_BLOCK.get()))
+            .where('E', StructurePredicate.blocks(ModBlocks.LOGISTICS_CONTROL_CASING.get()))
+            .where('F', StructurePredicate.blocks(AEBlocks.FLAWLESS_BUDDING_QUARTZ.block()))
+            .where('G', StructurePredicate.blocks(ModMachines.CRYSTAL_REACTOR.block()))
+            .where('#', StructurePredicate.any())
+            .build();
+
+    public static final CrystalReactionChamberStructure INSTANCE = new CrystalReactionChamberStructure();
+
+    private CrystalReactionChamberStructure() {
+        super(PATTERN, MachinePartFacade.CRYSTAL);
+    }
+
+    public static BlockPos buddingQuartzPos(BlockPos controllerPos, Direction facing, boolean mirrorSide,
+            boolean mirrorFront) {
+        Direction back = RelativeDirection.BACK.getFacing(facing, Direction.UP, mirrorSide, mirrorFront);
+        Direction right = RelativeDirection.RIGHT.getFacing(facing, Direction.UP, mirrorSide, mirrorFront);
+        return controllerPos.relative(back, 2).relative(right, 2).above();
+    }
+}

@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.logic.repeat.IRepeatRoundsHolder;
+import com.murthinext.ae2pr.logic.repeat.RepeatRoundsHolder;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderConstants;
 import com.murthinext.ae2pr.logic.repeat.ServerRepeatRegistry;
 
@@ -20,7 +20,7 @@ import net.minecraft.world.inventory.MenuType;
 
 // 数量选择菜单：轮数同步与回填，登记移至 {@code MenuOpenerMixin} 以兼容 GTLCore
 @Mixin(value = CraftAmountMenu.class, remap = false)
-public abstract class CraftAmountMenuMixin extends AEBaseMenu implements IRepeatRoundsHolder {
+public abstract class CraftAmountMenuMixin extends AEBaseMenu implements RepeatRoundsHolder {
 
     @Unique
     @GuiSync(30)

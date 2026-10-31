@@ -23,7 +23,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
 
-import com.murthinext.ae2pr.ModNetwork;
+import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 
 public class FluidHatchMenu extends AbstractContainerMenu {

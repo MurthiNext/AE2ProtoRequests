@@ -8,7 +8,7 @@ package com.murthinext.ae2pr.requester.client;
 
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.guidebook.PageAnchor;
-import com.murthinext.ae2pr.client.ModGuide;
+import com.murthinext.ae2pr.registry.ModGuide;
 import com.murthinext.ae2pr.requester.RequesterConstants;
 import com.murthinext.ae2pr.requester.RequesterUtils;
 import com.murthinext.ae2pr.requester.client.abstraction.AbstractRedstoneRequesterScreen;

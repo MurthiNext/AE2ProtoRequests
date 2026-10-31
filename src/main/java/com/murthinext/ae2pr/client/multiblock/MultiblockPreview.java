@@ -26,11 +26,11 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 
 import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
-import com.murthinext.ae2pr.multiblock.MultiblockPattern;
-import com.murthinext.ae2pr.multiblock.StructurePredicate;
-import com.murthinext.ae2pr.multiblock.module.ModuleInstance;
-import com.murthinext.ae2pr.multiblock.module.ModuleProvider;
-import com.murthinext.ae2pr.multiblock.module.ModuleSnapshot;
+import com.murthinext.ae2pr.logic.multiblock.MultiblockPattern;
+import com.murthinext.ae2pr.logic.multiblock.StructurePredicate;
+import com.murthinext.ae2pr.logic.multiblock.module.ModuleInstance;
+import com.murthinext.ae2pr.logic.multiblock.module.ModuleProvider;
+import com.murthinext.ae2pr.logic.multiblock.module.ModuleSnapshot;
 
 // 只读预览世界，保留完整材料并按层提供渲染邻居
 public final class MultiblockPreview implements BlockAndTintGetter {

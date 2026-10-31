@@ -10,6 +10,8 @@ import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterPart;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOres;
 import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
 import com.murthinext.ae2pr.logic.wrench.WrenchInteractions;
+import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryBlockEntity;
+import com.murthinext.ae2pr.registry.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -31,6 +33,7 @@ public class ae2pr {
     public ae2pr(FMLJavaModLoadingContext context) {
         var modEventBus = context.getModEventBus();
         modEventBus.addListener(this::commonSetup);
+        ModMachines.init();
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
@@ -55,7 +58,7 @@ public class ae2pr {
         MinecraftForge.EVENT_BUS.addListener(MeteoriteOres::onBreakSpeed);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
-            com.murthinext.ae2pr.client.ModGuide.init();
+            ModGuide.init();
         }
     }
 
@@ -74,15 +77,11 @@ public class ae2pr {
             Upgrades.add(AEItems.CRAFTING_CARD, thresholdEmitterItem, 1);
 
             // 多方块机器升级
-            Upgrades.add(AEItems.SPEED_CARD, ModBlocks.NAMING_FACTORY.get(), 4);
-            Upgrades.add(AEItems.SPEED_CARD, ModBlocks.CRYSTAL_ASSEMBLY_LINE.get(), 4);
-            Upgrades.add(AEItems.SPEED_CARD, ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get(), 4);
-            Upgrades.add(AEItems.SPEED_CARD, ModBlocks.MATTER_PHASE_TRANSFORMER.get(), 4);
-            Upgrades.add(AEItems.SPEED_CARD, ModBlocks.CRYSTAL_REACTION_CHAMBER.get(), 4);
-            Upgrades.add(AEItems.SPEED_CARD, ModBlocks.CRYSTAL_WORKSTATION.get(), 4);
-            Upgrades.add(AEItems.SPEED_CARD, ModBlocks.JIG.get(), 4);
-            Upgrades.add(AEItems.SPEED_CARD, ModBlocks.FILTER_PRESS.get(), 4);
-            Upgrades.add(AEItems.SPEED_CARD, ModBlocks.MULTI_FACTORY.get(), 4);
+            for (var machine : ModMachines.ALL) {
+                if (machine.speedUpgrades() > 0) {
+                    Upgrades.add(AEItems.SPEED_CARD, machine.block(), machine.speedUpgrades());
+                }
+            }
 
             // 绑定方块实体类型并登记代表物品
             var networkAccessHatchType = ModBlockEntities.ME_NETWORK_ACCESS_HATCH.get();
@@ -92,12 +91,12 @@ public class ae2pr {
             appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(networkAccessHatchType,
                     ModItems.ME_NETWORK_ACCESS_HATCH.get());
 
-            var namingFactoryType = ModBlockEntities.NAMING_FACTORY.get();
-            ModBlocks.NAMING_FACTORY.get().setBlockEntity(
-                    com.murthinext.ae2pr.block.naming_factory.NamingFactoryBlockEntity.class,
+            var namingFactoryType = ModMachines.NAMING_FACTORY.blockEntityType();
+            ModMachines.NAMING_FACTORY.block().setBlockEntity(
+                    NamingFactoryBlockEntity.class,
                     namingFactoryType, null, null);
             appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(namingFactoryType,
-                    ModItems.NAMING_FACTORY.get());
+                    ModMachines.NAMING_FACTORY.item());
         });
     }
 }

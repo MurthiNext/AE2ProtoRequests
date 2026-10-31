@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.client.repeat.RepeatOrderButton;
-import com.murthinext.ae2pr.logic.repeat.IRepeatRoundsHolder;
+import com.murthinext.ae2pr.logic.repeat.RepeatRoundsHolder;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderConstants;
 
 import appeng.client.gui.AEBaseScreen;
@@ -90,7 +90,7 @@ public abstract class CraftAmountScreenMixin extends AEBaseScreen<CraftAmountMen
         if (input == null) {
             return;
         }
-        var remote = ((IRepeatRoundsHolder) this.menu).ae2pr$getRepeatRounds();
+        var remote = ((RepeatRoundsHolder) this.menu).ae2pr$getRepeatRounds();
         if (remote < 1) {
             remote = 1;
         }

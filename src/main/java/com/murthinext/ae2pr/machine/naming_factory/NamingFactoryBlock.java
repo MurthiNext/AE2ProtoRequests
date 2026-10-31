@@ -1,0 +1,124 @@
+package com.murthinext.ae2pr.machine.naming_factory;
+
+import org.jetbrains.annotations.Nullable;
+
+import appeng.block.AEBaseEntityBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.network.NetworkHooks;
+
+import com.murthinext.ae2pr.registry.ModTags;
+import com.murthinext.ae2pr.logic.wrench.Wrenchable;
+
+// 名称压印工厂方块
+public class NamingFactoryBlock extends AEBaseEntityBlock<NamingFactoryBlockEntity> implements Wrenchable {
+
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+
+    public NamingFactoryBlock() {
+        super(Properties.of()
+                .mapColor(MapColor.METAL)
+                .strength(3.5F)
+                .sound(SoundType.METAL)
+                .noOcclusion()
+                .requiresCorrectToolForDrops());
+        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
+            BlockEntityType<T> type) {
+        if (level.isClientSide) {
+            return null;
+        }
+        return (tickLevel, pos, tickState, blockEntity) -> {
+            if (blockEntity instanceof NamingFactoryBlockEntity factory) {
+                factory.serverTick();
+            }
+        };
+    }
+
+    @Override
+    public DirectionProperty wrenchFacing() {
+        return FACING;
+    }
+
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+            BlockHitResult hit) {
+        // 扳手交互
+        ItemStack stack = player.getItemInHand(hand);
+        if (stack.is(ModTags.WRENCH)) {
+            return InteractionResult.PASS;
+        }
+        if (stack.is(ModTags.KNIVES)) {
+            if (player.isShiftKeyDown()) {
+                // 潜行时交给切割刀自身界面处理
+                return InteractionResult.PASS;
+            }
+            if (level.isClientSide) {
+                openRenameScreen(level, pos);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer
+                && level.getBlockEntity(pos) instanceof NamingFactoryBlockEntity factory) {
+            NetworkHooks.openScreen(serverPlayer,
+                    new SimpleMenuProvider(
+                            (id, inventory, p) -> new NamingFactoryMenu(id, inventory, factory),
+                            factory.getDisplayName()),
+                    buffer -> buffer.writeBlockPos(pos));
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    private static void openRenameScreen(Level level, BlockPos pos) {
+        String currentName = level.getBlockEntity(pos) instanceof NamingFactoryBlockEntity factory
+                && factory.getCustomName() != null ? factory.getCustomName().getString() : "";
+        NamingFactoryRenameScreen.open(pos, currentName);
+    }
+
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock()) && !level.isClientSide
+                && level.getBlockEntity(pos) instanceof NamingFactoryBlockEntity factory) {
+            for (int slot = 0; slot < NamingFactoryBlockEntity.SLOT_COUNT; slot++) {
+                ItemStack stack = factory.getInventory().getItem(slot);
+                if (!stack.isEmpty()) {
+                    Block.popResource(level, pos, stack);
+                }
+            }
+        }
+        super.onRemove(state, level, pos, newState, isMoving);
+    }
+}

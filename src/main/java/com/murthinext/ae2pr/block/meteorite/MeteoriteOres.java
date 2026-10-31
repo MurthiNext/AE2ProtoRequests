@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.block.meteorite;
 
 import java.util.List;
 
-import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.registry.ModBlocks;
 
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;

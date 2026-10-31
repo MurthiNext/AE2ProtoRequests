@@ -11,8 +11,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 
-import com.murthinext.ae2pr.ModItems;
-import com.murthinext.ae2pr.ModRecipes;
+import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
 
 @JeiPlugin
@@ -36,12 +35,12 @@ public class MatterPhaseTransformerJeiPlugin implements IModPlugin {
             return;
         }
         registration.addRecipes(MatterPhaseTransformerJeiCategory.RECIPE_TYPE,
-                List.copyOf(level.getRecipeManager().getAllRecipesFor(ModRecipes.MATTER_PHASE_TRANSFORMER_TYPE.get())));
+                List.copyOf(level.getRecipeManager().getAllRecipesFor(ModMachines.MATTER_PHASE_TRANSFORMER_RECIPE.type())));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalysts(MatterPhaseTransformerJeiCategory.RECIPE_TYPE,
-                ModItems.MATTER_PHASE_TRANSFORMER.get());
+                ModMachines.MATTER_PHASE_TRANSFORMER.item());
     }
 }

@@ -25,8 +25,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 
-import com.murthinext.ae2pr.block.crystal_reactor.CrystalReactorCoreBlockEntity;
-import com.murthinext.ae2pr.multiblock.structure.CrystalReactorStructure;
+import com.murthinext.ae2pr.machine.crystal_reactor.CrystalReactorCoreBlockEntity;
+import com.murthinext.ae2pr.machine.crystal_reactor.CrystalReactorStructure;
 
 // 高能核心，可作为结构方块/水晶反应器触发器
 public class HighEnergyCoreBlock extends DisassemblableBlock implements EntityBlock {

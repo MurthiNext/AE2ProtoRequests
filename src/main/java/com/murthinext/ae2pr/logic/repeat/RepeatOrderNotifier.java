@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.logic.repeat;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.murthinext.ae2pr.ModNetwork;
+import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.ae2pr.network.RepeatOrderFailedPacket;
 import com.murthinext.ae2pr.network.RepeatOrderFinishedPacket;
 import com.murthinext.ae2pr.network.RepeatOrderRoundPacket;

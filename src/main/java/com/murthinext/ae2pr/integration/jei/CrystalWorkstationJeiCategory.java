@@ -19,22 +19,22 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 
-import com.murthinext.ae2pr.ModItems;
+import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.block.crystal_workstation.CrystalWorkstationMode;
-import com.murthinext.ae2pr.recipe.CrystalWorkstationRecipe;
+import com.murthinext.ae2pr.machine.MachineRecipe;
+import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationMode;
 
-public class CrystalWorkstationJeiCategory implements IRecipeCategory<CrystalWorkstationRecipe> {
+public class CrystalWorkstationJeiCategory implements IRecipeCategory<MachineRecipe> {
 
-    public static final RecipeType<CrystalWorkstationRecipe> ETCHING = RecipeType.create(ae2pr.MODID,
-            "crystal_workstation_etching", CrystalWorkstationRecipe.class);
-    public static final RecipeType<CrystalWorkstationRecipe> CUTTING = RecipeType.create(ae2pr.MODID,
-            "crystal_workstation_cutting", CrystalWorkstationRecipe.class);
+    public static final RecipeType<MachineRecipe> ETCHING = RecipeType.create(ae2pr.MODID,
+            "crystal_workstation_etching", MachineRecipe.class);
+    public static final RecipeType<MachineRecipe> CUTTING = RecipeType.create(ae2pr.MODID,
+            "crystal_workstation_cutting", MachineRecipe.class);
 
-    private static final int WIDTH = 174;
-    private static final int HEIGHT = 96;
+    private static final int MAX_ITEM_INPUTS = 6;
+    private static final int MAX_ITEM_OUTPUTS = 6;
+    private static final int MAX_FLUIDS = 3;
 
-    // 中间工艺动画：正好填满流体输入列与产物列之间的空隙（62..112）
     private static final int PROCESS_X = 62;
     private static final int PROCESS_Y = 4;
     private static final int PROCESS_W = 50;
@@ -49,7 +49,7 @@ public class CrystalWorkstationJeiCategory implements IRecipeCategory<CrystalWor
 
     public CrystalWorkstationJeiCategory(IGuiHelper guiHelper, CrystalWorkstationMode mode) {
         this.mode = mode;
-        this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModItems.CRYSTAL_WORKSTATION.get()));
+        this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModMachines.CRYSTAL_WORKSTATION.item()));
         this.fluidSlot = FluidSlotBackground.create(guiHelper);
         this.process = new AnimatedTextureDrawable(processTexture(mode), PROCESS_W, PROCESS_H,
                 PROCESS_FRAMES, PROCESS_FRAME_MS);
@@ -60,18 +60,18 @@ public class CrystalWorkstationJeiCategory implements IRecipeCategory<CrystalWor
                 "textures/gui/jei/crystal_workstation_" + mode.id() + "_process.png");
     }
 
-    public static RecipeType<CrystalWorkstationRecipe> recipeType(CrystalWorkstationMode mode) {
+    public static RecipeType<MachineRecipe> recipeType(CrystalWorkstationMode mode) {
         return mode == CrystalWorkstationMode.ETCHING ? ETCHING : CUTTING;
     }
 
     @Override
-    public RecipeType<CrystalWorkstationRecipe> getRecipeType() {
+    public RecipeType<MachineRecipe> getRecipeType() {
         return recipeType(mode);
     }
 
     @Override
     public Component getTitle() {
-        return JeiRecipeInfo.titleWithMode(ModItems.CRYSTAL_WORKSTATION.get().getDescription(), mode.displayName());
+        return JeiRecipeInfo.titleWithMode(ModMachines.CRYSTAL_WORKSTATION.item().getDescription(), mode.displayName());
     }
 
     @Override
@@ -90,13 +90,13 @@ public class CrystalWorkstationJeiCategory implements IRecipeCategory<CrystalWor
     }
 
     @Override
-    public ResourceLocation getRegistryName(CrystalWorkstationRecipe recipe) {
+    public ResourceLocation getRegistryName(MachineRecipe recipe) {
         return recipe.getId();
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, CrystalWorkstationRecipe recipe, IFocusGroup focuses) {
-        for (int i = 0; i < CrystalWorkstationRecipe.MAX_ITEM_INPUTS; i++) {
+    public void setRecipe(IRecipeLayoutBuilder builder, MachineRecipe recipe, IFocusGroup focuses) {
+        for (int i = 0; i < MAX_ITEM_INPUTS; i++) {
             var slot = builder.addSlot(RecipeIngredientRole.INPUT, 4 + i % 2 * 18, 4 + i / 2 * 18)
                     .setStandardSlotBackground();
             if (i < recipe.getItemInputs().size()) {
@@ -106,7 +106,7 @@ public class CrystalWorkstationJeiCategory implements IRecipeCategory<CrystalWor
                 slot.setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
             }
         }
-        for (int i = 0; i < CrystalWorkstationRecipe.MAX_ITEM_OUTPUTS; i++) {
+        for (int i = 0; i < MAX_ITEM_OUTPUTS; i++) {
             var slot = builder.addSlot(RecipeIngredientRole.OUTPUT, 112 + i % 2 * 18, 4 + i / 2 * 18)
                     .setStandardSlotBackground();
             slot.setCustomRenderer(VanillaTypes.ITEM_STACK,
@@ -115,7 +115,7 @@ public class CrystalWorkstationJeiCategory implements IRecipeCategory<CrystalWor
                 slot.addItemStack(recipe.getChancedItemOutputs().get(i).stack());
             }
         }
-        for (int i = 0; i < CrystalWorkstationRecipe.MAX_FLUIDS; i++) {
+        for (int i = 0; i < MAX_FLUIDS; i++) {
             var input = builder.addSlot(RecipeIngredientRole.INPUT, 44, 4 + i * 18)
                     .setBackground(fluidSlot, -1, -1);
             if (i < recipe.getFluidInputs().size()) {
@@ -132,7 +132,7 @@ public class CrystalWorkstationJeiCategory implements IRecipeCategory<CrystalWor
     }
 
     @Override
-    public void draw(CrystalWorkstationRecipe recipe, IRecipeSlotsView slots, GuiGraphics graphics,
+    public void draw(MachineRecipe recipe, IRecipeSlotsView slots, GuiGraphics graphics,
             double mouseX, double mouseY) {
         var font = Minecraft.getInstance().font;
         process.draw(graphics, PROCESS_X, PROCESS_Y);

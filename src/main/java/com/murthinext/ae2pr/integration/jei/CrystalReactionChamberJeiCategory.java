@@ -22,16 +22,16 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 
-import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.recipe.ChancedItemStack;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
-import com.murthinext.ae2pr.recipe.CrystalReactionChamberRecipe;
+import com.murthinext.ae2pr.machine.MachineRecipe;
 
-public class CrystalReactionChamberJeiCategory implements IRecipeCategory<CrystalReactionChamberRecipe> {
+public class CrystalReactionChamberJeiCategory implements IRecipeCategory<MachineRecipe> {
 
-    public static final RecipeType<CrystalReactionChamberRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID,
-            "crystal_reaction_chamber", CrystalReactionChamberRecipe.class);
+    public static final RecipeType<MachineRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID,
+            "crystal_reaction_chamber", MachineRecipe.class);
 
     private static final int SLOT = 18;
     private static final int PADDING = 4;
@@ -65,13 +65,13 @@ public class CrystalReactionChamberJeiCategory implements IRecipeCategory<Crysta
     private final IDrawable process;
 
     public CrystalReactionChamberJeiCategory(IGuiHelper guiHelper) {
-        this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModBlocks.CRYSTAL_REACTION_CHAMBER.get()));
+        this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModMachines.CRYSTAL_REACTION_CHAMBER.block()));
         this.fluidSlot = FluidSlotBackground.create(guiHelper);
         this.process = new AnimatedTextureDrawable(PROCESS_TEXTURE, PROCESS_W, PROCESS_H, 40, 50);
     }
 
     @Override
-    public RecipeType<CrystalReactionChamberRecipe> getRecipeType() {
+    public RecipeType<MachineRecipe> getRecipeType() {
         return RECIPE_TYPE;
     }
 
@@ -96,12 +96,12 @@ public class CrystalReactionChamberJeiCategory implements IRecipeCategory<Crysta
     }
 
     @Override
-    public ResourceLocation getRegistryName(CrystalReactionChamberRecipe recipe) {
+    public ResourceLocation getRegistryName(MachineRecipe recipe) {
         return recipe.getId();
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, CrystalReactionChamberRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, MachineRecipe recipe, IFocusGroup focuses) {
         // 物品输入：固定槽位，消耗数量写入 ItemStack
         List<CountedIngredient> itemInputs = recipe.getItemInputs();
         for (int index = 0; index < ITEM_SLOT_COUNT; index++) {
@@ -158,7 +158,7 @@ public class CrystalReactionChamberJeiCategory implements IRecipeCategory<Crysta
     }
 
     @Override
-    public void draw(CrystalReactionChamberRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics graphics,
+    public void draw(MachineRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics graphics,
             double mouseX, double mouseY) {
         var font = Minecraft.getInstance().font;
         process.draw(graphics, PROCESS_X, CONTENT_Y);

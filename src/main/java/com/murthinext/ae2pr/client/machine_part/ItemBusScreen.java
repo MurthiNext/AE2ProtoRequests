@@ -4,7 +4,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.murthinext.ae2pr.client.AbstractMachinePartScreen;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.Minecraft;
@@ -18,13 +17,12 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.murthinext.ae2pr.ModNetwork;
+import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFluidStorage;
 import com.murthinext.ae2pr.block.machine_part.MachinePartLayout;
 import com.murthinext.ae2pr.client.CustomIngredientSource;
-import com.murthinext.ae2pr.client.GeneralMachineScreen;
 import com.murthinext.ae2pr.client.DisplaySlot;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
@@ -73,8 +71,8 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
             if (fluid.isEmpty()) {
                 continue;
             }
-            areas.add(Area.ofFluid(fluid, new Rect2i(leftPos + DUAL_TANK_X + tank * GeneralMachineScreen.TANK_STEP,
-                    topPos + TANK_Y, GeneralMachineScreen.TANK_WIDTH, GeneralMachineScreen.TANK_HEIGHT)));
+            areas.add(Area.ofFluid(fluid, new Rect2i(leftPos + DUAL_TANK_X + tank * TANK_STEP,
+                    topPos + TANK_Y, TANK_WIDTH, TANK_HEIGHT)));
         }
         return areas;
     }
@@ -93,22 +91,21 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        renderPanel(graphics);
-        renderToolbar(graphics);
+        super.renderBg(graphics, partialTick, mouseX, mouseY);
         for (int slot = 0; slot < menu.getSlotCount(); slot++) {
-            GeneralMachineScreen.drawSlot(graphics, slotX(slot), slotY(slot));
+            drawSlot(graphics, slotX(slot), slotY(slot));
         }
         MachinePartFluidStorage storage = menu.getFluidStorage();
-        GeneralMachineScreen.drawArrow(graphics, leftPos + (storage != null ? DUAL_SLOT_X + 12 : ARROW_X),
+        drawArrow(graphics, leftPos + (storage != null ? DUAL_SLOT_X + 12 : ARROW_X),
                 topPos + ARROW_Y, !menu.isOutputBus(), true);
         if (storage != null) {
             for (int tank = 0; tank < storage.getTankCount(); tank++) {
-                int x = leftPos + DUAL_TANK_X + tank * GeneralMachineScreen.TANK_STEP;
+                int x = leftPos + DUAL_TANK_X + tank * TANK_STEP;
                 int y = topPos + TANK_Y;
-                GeneralMachineScreen.drawTank(graphics, x, y);
-                GeneralMachineScreen.drawTankArrow(graphics, x, y, !menu.isOutputBus());
-                GeneralMachineScreen.drawFluid(graphics, storage.getTank(tank).getFluid(), x + 2, y + 2,
-                        GeneralMachineScreen.TANK_INNER_WIDTH, GeneralMachineScreen.TANK_INNER_HEIGHT, storage.getCapacityPerTank());
+                drawTank(graphics, x, y);
+                drawTankArrow(graphics, x, y, !menu.isOutputBus());
+                drawFluid(graphics, storage.getTank(tank).getFluid(), x + 2, y + 2,
+                        TANK_INNER_WIDTH, TANK_INNER_HEIGHT, storage.getCapacityPerTank());
             }
         }
     }
@@ -194,10 +191,10 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
         MachinePartFluidStorage storage = menu.getFluidStorage();
         if (storage != null) {
             for (int tank = 0; tank < storage.getTankCount(); tank++) {
-                int x = leftPos + DUAL_TANK_X + tank * GeneralMachineScreen.TANK_STEP;
+                int x = leftPos + DUAL_TANK_X + tank * TANK_STEP;
                 int y = topPos + TANK_Y;
-                if (mouseX >= x && mouseX < x + GeneralMachineScreen.TANK_WIDTH
-                        && mouseY >= y && mouseY < y + GeneralMachineScreen.TANK_HEIGHT) {
+                if (mouseX >= x && mouseX < x + TANK_WIDTH
+                        && mouseY >= y && mouseY < y + TANK_HEIGHT) {
                     return tank;
                 }
             }

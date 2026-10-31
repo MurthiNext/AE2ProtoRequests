@@ -21,8 +21,8 @@ import appeng.api.networking.IManagedGridNode;
 import appeng.api.orientation.BlockOrientation;
 import appeng.blockentity.grid.AENetworkBlockEntity;
 
-import com.murthinext.ae2pr.ModBlockEntities;
-import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.registry.ModBlockEntities;
+import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlockEntity;
 
 public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity {
 

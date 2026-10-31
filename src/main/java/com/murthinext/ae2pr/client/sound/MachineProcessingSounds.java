@@ -20,9 +20,9 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import com.murthinext.ae2pr.ModSounds;
+import com.murthinext.ae2pr.registry.ModSounds;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
+import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlock;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT)
 public final class MachineProcessingSounds {

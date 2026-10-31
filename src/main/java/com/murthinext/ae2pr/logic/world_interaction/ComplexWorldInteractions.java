@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 
-import com.murthinext.ae2pr.ModRecipes;
+import com.murthinext.ae2pr.registry.ModRecipes;
 import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 

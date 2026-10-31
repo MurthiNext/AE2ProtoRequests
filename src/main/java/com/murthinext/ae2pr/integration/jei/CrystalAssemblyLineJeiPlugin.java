@@ -12,8 +12,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
 
-import com.murthinext.ae2pr.ModBlocks;
-import com.murthinext.ae2pr.ModRecipes;
+import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
 
 @JeiPlugin
@@ -37,13 +36,13 @@ public class CrystalAssemblyLineJeiPlugin implements IModPlugin {
             return;
         }
         registration.addRecipes(CrystalAssemblyLineJeiCategory.RECIPE_TYPE,
-                List.copyOf(level.getRecipeManager().getAllRecipesFor(ModRecipes.CRYSTAL_ASSEMBLY_LINE_TYPE.get())));
+                List.copyOf(level.getRecipeManager().getAllRecipesFor(ModMachines.CRYSTAL_ASSEMBLY_LINE_RECIPE.type())));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalysts(CrystalAssemblyLineJeiCategory.RECIPE_TYPE,
-                ModBlocks.CRYSTAL_ASSEMBLY_LINE.get());
+                ModMachines.CRYSTAL_ASSEMBLY_LINE.block());
     }
 
     @Override

@@ -11,11 +11,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.ModNetwork;
+import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.ae2pr.network.CpuRoundInfo;
 import com.murthinext.ae2pr.network.RepeatOrderStatusPacket;
 import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
-import com.murthinext.ae2pr.logic.repeat.IRepeatOrderHost;
+import com.murthinext.ae2pr.logic.repeat.RepeatOrderHost;
 
 import appeng.me.cluster.implementations.CraftingCPUCluster;
 import appeng.menu.me.crafting.CraftingStatusMenu;
@@ -42,7 +42,7 @@ public abstract class CraftingStatusMenuBroadcastMixin {
             Integer round = null;
             Integer total = null;
             if (cpu instanceof CraftingCPUCluster cluster) {
-                var context = ((IRepeatOrderHost) cluster.craftingLogic).ae2pr$getContext();
+                var context = ((RepeatOrderHost) cluster.craftingLogic).ae2pr$getContext();
                 if (context != null) {
                     round = context.currentRound();
                     total = context.totalRounds;

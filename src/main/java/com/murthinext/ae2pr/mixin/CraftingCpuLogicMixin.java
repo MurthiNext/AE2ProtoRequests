@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.logic.repeat.FailureReason;
-import com.murthinext.ae2pr.logic.repeat.IRepeatOrderHost;
+import com.murthinext.ae2pr.logic.repeat.RepeatOrderHost;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderBinding;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderContext;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderNotifier;
@@ -37,7 +37,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 // 重复订单核心状态机：轮次推进、异步重算与失败重试
 @Mixin(value = CraftingCpuLogic.class, remap = false)
-public abstract class CraftingCpuLogicMixin implements IRepeatOrderHost {
+public abstract class CraftingCpuLogicMixin implements RepeatOrderHost {
 
     @Shadow
     @Final

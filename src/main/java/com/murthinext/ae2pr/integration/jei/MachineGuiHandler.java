@@ -1,5 +1,6 @@
 package com.murthinext.ae2pr.integration.jei;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,12 +12,42 @@ import net.minecraftforge.fluids.FluidStack;
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IClickableIngredientFactory;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
+import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.runtime.IClickableIngredient;
 
+import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.client.CustomIngredientSource;
 import com.murthinext.ae2pr.client.GuiExtraAreas;
+import com.murthinext.ae2pr.machine.MachineDefinition;
+import com.murthinext.ae2pr.machine.ModeMachineMenu;
+import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryMode;
+import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerScreen;
 
 public class MachineGuiHandler implements IGuiContainerHandler<AbstractContainerScreen<?>> {
+
+    @Override
+    public Collection<IGuiClickableArea> getGuiClickableAreas(AbstractContainerScreen<?> screen,
+            double mouseX, double mouseY) {
+        if (!(screen instanceof AbstractMultiblockControllerScreen<?> machineScreen)) {
+            return List.of();
+        }
+        MachineDefinition<?, ?, ?> definition = machineScreen.getMenu().definition();
+        Rect2i area = machineScreen.jobStatusArea();
+        if (definition == ModMachines.FILTER_PRESS) {
+            return List.of(IGuiClickableArea.createBasic(area.getX(), area.getY(), area.getWidth(), area.getHeight(),
+                    FilterPressJeiCategory.RECIPE_TYPE));
+        }
+        if (definition == ModMachines.JIG) {
+            return List.of(IGuiClickableArea.createBasic(area.getX(), area.getY(), area.getWidth(), area.getHeight(),
+                    JigJeiCategory.RECIPE_TYPE));
+        }
+        if (definition == ModMachines.MULTI_FACTORY && machineScreen.getMenu() instanceof ModeMachineMenu<?, ?> modeMenu
+                && modeMenu.getMode() instanceof MultiFactoryMode mode) {
+            return List.of(IGuiClickableArea.createBasic(area.getX(), area.getY(), area.getWidth(), area.getHeight(),
+                    MultiFactoryJeiPlugin.recipeType(mode)));
+        }
+        return List.of();
+    }
 
     @Override
     public List<Rect2i> getGuiExtraAreas(AbstractContainerScreen<?> screen) {

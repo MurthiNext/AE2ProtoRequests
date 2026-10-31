@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.network;
 
 import java.util.function.Supplier;
 
-import com.murthinext.ae2pr.ModNetwork;
+import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.ae2pr.logic.terminal.TerminalStorySavedData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

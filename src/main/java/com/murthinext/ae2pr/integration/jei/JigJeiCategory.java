@@ -24,14 +24,14 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 
-import com.murthinext.ae2pr.ModItems;
+import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.recipe.ChancedItemStack;
-import com.murthinext.ae2pr.recipe.JigRecipe;
+import com.murthinext.ae2pr.machine.MachineRecipe;
 
-public class JigJeiCategory implements IRecipeCategory<JigRecipe> {
+public class JigJeiCategory implements IRecipeCategory<MachineRecipe> {
 
-    public static final RecipeType<JigRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID, "jig", JigRecipe.class);
+    public static final RecipeType<MachineRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID, "jig", MachineRecipe.class);
 
     private static final int WIDTH = 160;
     private static final int HEIGHT = 106;
@@ -53,13 +53,13 @@ public class JigJeiCategory implements IRecipeCategory<JigRecipe> {
     private final IDrawable process;
 
     public JigJeiCategory(IGuiHelper guiHelper) {
-        icon = guiHelper.createDrawableItemStack(new ItemStack(ModItems.JIG.get()));
+        icon = guiHelper.createDrawableItemStack(new ItemStack(ModMachines.JIG.item()));
         fluidSlot = FluidSlotBackground.create(guiHelper);
         process = new AnimatedTextureDrawable(PROCESS_TEXTURE, PROCESS_W, PROCESS_H, 40, 50);
     }
 
     @Override
-    public RecipeType<JigRecipe> getRecipeType() {
+    public RecipeType<MachineRecipe> getRecipeType() {
         return RECIPE_TYPE;
     }
 
@@ -84,7 +84,7 @@ public class JigJeiCategory implements IRecipeCategory<JigRecipe> {
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, JigRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, MachineRecipe recipe, IFocusGroup focuses) {
         for (RecipeIngredientRole role : List.of(RecipeIngredientRole.INPUT, RecipeIngredientRole.OUTPUT)) {
             boolean input = role == RecipeIngredientRole.INPUT;
             int itemSlots = input ? ITEM_INPUT_SLOTS : ITEM_OUTPUT_SLOTS;
@@ -137,7 +137,7 @@ public class JigJeiCategory implements IRecipeCategory<JigRecipe> {
     }
 
     @Override
-    public void draw(JigRecipe recipe, IRecipeSlotsView slots, GuiGraphics graphics, double mouseX, double mouseY) {
+    public void draw(MachineRecipe recipe, IRecipeSlotsView slots, GuiGraphics graphics, double mouseX, double mouseY) {
         var font = Minecraft.getInstance().font;
         process.draw(graphics, PROCESS_X, PROCESS_Y);
         graphics.drawString(font, JeiRecipeInfo.duration(recipe.getDuration()), 4, INFO_Y, 0x404040, false);
@@ -154,7 +154,7 @@ public class JigJeiCategory implements IRecipeCategory<JigRecipe> {
     }
 
     @Override
-    public void getTooltip(ITooltipBuilder tooltip, JigRecipe recipe, IRecipeSlotsView slots,
+    public void getTooltip(ITooltipBuilder tooltip, MachineRecipe recipe, IRecipeSlotsView slots,
             double mouseX, double mouseY) {
         if (mouseX >= 4 && mouseX < WIDTH - 4 && mouseY >= INFO_Y + 22 && mouseY < INFO_Y + 32) {
             for (RecipeIngredientRole role : List.of(RecipeIngredientRole.INPUT, RecipeIngredientRole.OUTPUT)) {

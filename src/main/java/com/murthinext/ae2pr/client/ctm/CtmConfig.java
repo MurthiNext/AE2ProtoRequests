@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.client.ctm;
 
+import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.machine.MachineBlock;
 import java.util.Arrays;
 import java.util.function.BiPredicate;
 
@@ -12,11 +14,11 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
-import com.murthinext.ae2pr.multiblock.AbstractMultiblockControllerBlock;
+import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlock;
 import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
 
 // 连接纹理的逐方块配置
@@ -99,14 +101,7 @@ public final class CtmConfig {
         if (block == ModBlocks.FIREPROOF_CRYSTAL_GLASS.get()) {
             return 8;
         }
-        if (block == ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()
-                || block == ModBlocks.MATTER_PHASE_TRANSFORMER.get()
-                || block == ModBlocks.CRYSTAL_REACTION_CHAMBER.get()
-                || block == ModBlocks.CRYSTAL_WORKSTATION.get()
-                || block == ModBlocks.JIG.get()
-                || block == ModBlocks.FILTER_PRESS.get()
-                || block == ModBlocks.MULTI_FACTORY.get()
-                || block == ModBlocks.CRYSTAL_ASSEMBLY_LINE.get()) {
+        if (block instanceof MachineBlock<?>) {
             MachinePartFacade facade = facade(state);
             return facade != null ? facade.ctmFamily() : 0;
         }
@@ -136,28 +131,28 @@ public final class CtmConfig {
 
     @Nullable
     public static MachinePartFacade facade(BlockState state) {
-        if (state.is(ModBlocks.JIG.get()) && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
+        if (state.is(ModMachines.JIG.block()) && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIUM_IRON;
         }
-        if (state.is(ModBlocks.FILTER_PRESS.get()) && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
+        if (state.is(ModMachines.FILTER_PRESS.block()) && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIUM_IRON;
         }
-        if ((state.is(ModBlocks.CRYSTAL_WORKSTATION.get()) || state.is(ModBlocks.MULTI_FACTORY.get()))
+        if ((state.is(ModMachines.CRYSTAL_WORKSTATION.block()) || state.is(ModMachines.MULTI_FACTORY.block()))
                 && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
             return MachinePartFacade.CRYSTAL_ENERGY;
         }
-        if (state.is(ModBlocks.CRYSTAL_ASSEMBLY_LINE.get())
+        if (state.is(ModMachines.CRYSTAL_ASSEMBLY_LINE.block())
                 && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
             return MachinePartFacade.CRYSTAL;
         }
-        if (state.is(ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get())
+        if (state.is(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.block())
                 && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIA;
         }
-        if (state.is(ModBlocks.MATTER_PHASE_TRANSFORMER.get()) && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
+        if (state.is(ModMachines.MATTER_PHASE_TRANSFORMER.block()) && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIA;
         }
-        if (state.is(ModBlocks.CRYSTAL_REACTION_CHAMBER.get())
+        if (state.is(ModMachines.CRYSTAL_REACTION_CHAMBER.block())
                 && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
             return MachinePartFacade.CRYSTAL;
         }
@@ -180,28 +175,28 @@ public final class CtmConfig {
     @Nullable
     public static TextureAtlasSprite facadeBaseSprite(BlockState state) {
         Block block = state.getBlock();
-        if (block == ModBlocks.MULTI_FACTORY.get()) {
+        if (block == ModMachines.MULTI_FACTORY.block()) {
             return CtmSprites.baseSprite(CtmSprites.MULTI_FACTORY_CONTROLLER_CASING);
         }
-        if (block == ModBlocks.JIG.get()) {
+        if (block == ModMachines.JIG.block()) {
             return CtmSprites.baseSprite(CtmSprites.JIG_CONTROLLER_CASING);
         }
-        if (block == ModBlocks.FILTER_PRESS.get()) {
+        if (block == ModMachines.FILTER_PRESS.block()) {
             return CtmSprites.baseSprite(CtmSprites.FILTER_PRESS_CONTROLLER_CASING);
         }
-        if (block == ModBlocks.CRYSTAL_WORKSTATION.get()) {
+        if (block == ModMachines.CRYSTAL_WORKSTATION.block()) {
             return CtmSprites.baseSprite(CtmSprites.CRYSTAL_WORKSTATION_CONTROLLER_CASING);
         }
-        if (block == ModBlocks.CRYSTAL_ASSEMBLY_LINE.get()) {
+        if (block == ModMachines.CRYSTAL_ASSEMBLY_LINE.block()) {
             return CtmSprites.baseSprite(CtmSprites.CRYSTAL_ASSEMBLY_LINE_CONTROLLER_CASING);
         }
-        if (block == ModBlocks.HIGH_REACTIVITY_LAVA_SMELTER.get()) {
+        if (block == ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.block()) {
             return CtmSprites.baseSprite(CtmSprites.HIGH_REACTIVITY_LAVA_SMELTER_CONTROLLER_CASING);
         }
-        if (block == ModBlocks.MATTER_PHASE_TRANSFORMER.get()) {
+        if (block == ModMachines.MATTER_PHASE_TRANSFORMER.block()) {
             return CtmSprites.baseSprite(CtmSprites.MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING);
         }
-        if (block == ModBlocks.CRYSTAL_REACTION_CHAMBER.get()) {
+        if (block == ModMachines.CRYSTAL_REACTION_CHAMBER.block()) {
             return CtmSprites.baseSprite(CtmSprites.CRYSTAL_REACTION_CONTROLLER_CASING);
         }
         if (block == ModBlocks.ME_NETWORK_ACCESS_HATCH.get()) {

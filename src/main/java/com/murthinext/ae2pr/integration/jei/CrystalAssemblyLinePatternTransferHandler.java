@@ -22,7 +22,7 @@ import appeng.integration.modules.jeirei.EncodingHelper;
 import appeng.menu.me.items.PatternEncodingTermMenu;
 
 import com.murthinext.ae2pr.recipe.CountedIngredient;
-import com.murthinext.ae2pr.recipe.CrystalAssemblyLineRecipe;
+import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineRecipe;
 
 @SuppressWarnings("removal")
 public class CrystalAssemblyLinePatternTransferHandler

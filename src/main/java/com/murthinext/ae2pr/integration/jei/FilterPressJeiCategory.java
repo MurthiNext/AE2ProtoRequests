@@ -24,15 +24,15 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 
-import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.recipe.ChancedItemStack;
-import com.murthinext.ae2pr.recipe.FilterPressRecipe;
+import com.murthinext.ae2pr.machine.MachineRecipe;
 
-public class FilterPressJeiCategory implements IRecipeCategory<FilterPressRecipe> {
+public class FilterPressJeiCategory implements IRecipeCategory<MachineRecipe> {
 
-    public static final RecipeType<FilterPressRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID, "filter_press",
-            FilterPressRecipe.class);
+    public static final RecipeType<MachineRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID, "filter_press",
+            MachineRecipe.class);
 
     private static final int WIDTH = 160;
     private static final int HEIGHT = 106;
@@ -54,13 +54,13 @@ public class FilterPressJeiCategory implements IRecipeCategory<FilterPressRecipe
     private final IDrawable process;
 
     public FilterPressJeiCategory(IGuiHelper guiHelper) {
-        icon = guiHelper.createDrawableItemStack(new ItemStack(ModBlocks.FILTER_PRESS.get()));
+        icon = guiHelper.createDrawableItemStack(new ItemStack(ModMachines.FILTER_PRESS.block()));
         fluidSlot = FluidSlotBackground.create(guiHelper);
         process = new AnimatedTextureDrawable(PROCESS_TEXTURE, PROCESS_W, PROCESS_H, 40, 50);
     }
 
     @Override
-    public RecipeType<FilterPressRecipe> getRecipeType() {
+    public RecipeType<MachineRecipe> getRecipeType() {
         return RECIPE_TYPE;
     }
 
@@ -85,12 +85,12 @@ public class FilterPressJeiCategory implements IRecipeCategory<FilterPressRecipe
     }
 
     @Override
-    public ResourceLocation getRegistryName(FilterPressRecipe recipe) {
+    public ResourceLocation getRegistryName(MachineRecipe recipe) {
         return recipe.getId();
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, FilterPressRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, MachineRecipe recipe, IFocusGroup focuses) {
         for (RecipeIngredientRole role : List.of(RecipeIngredientRole.INPUT, RecipeIngredientRole.OUTPUT)) {
             boolean input = role == RecipeIngredientRole.INPUT;
             int itemSlots = input ? ITEM_INPUT_SLOTS : ITEM_OUTPUT_SLOTS;
@@ -143,7 +143,7 @@ public class FilterPressJeiCategory implements IRecipeCategory<FilterPressRecipe
     }
 
     @Override
-    public void draw(FilterPressRecipe recipe, IRecipeSlotsView slots, GuiGraphics graphics, double mouseX,
+    public void draw(MachineRecipe recipe, IRecipeSlotsView slots, GuiGraphics graphics, double mouseX,
             double mouseY) {
         var font = Minecraft.getInstance().font;
         process.draw(graphics, PROCESS_X, PROCESS_Y);
@@ -161,7 +161,7 @@ public class FilterPressJeiCategory implements IRecipeCategory<FilterPressRecipe
     }
 
     @Override
-    public void getTooltip(ITooltipBuilder tooltip, FilterPressRecipe recipe, IRecipeSlotsView slots,
+    public void getTooltip(ITooltipBuilder tooltip, MachineRecipe recipe, IRecipeSlotsView slots,
             double mouseX, double mouseY) {
         if (mouseX < 4 || mouseX >= WIDTH - 4 || mouseY < INFO_Y + 22 || mouseY >= INFO_Y + 32) {
             return;

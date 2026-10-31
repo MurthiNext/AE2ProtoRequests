@@ -22,15 +22,15 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 
-import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
-import com.murthinext.ae2pr.recipe.MatterPhaseTransformerRecipe;
+import com.murthinext.ae2pr.machine.MachineRecipe;
 
-public class MatterPhaseTransformerJeiCategory implements IRecipeCategory<MatterPhaseTransformerRecipe> {
+public class MatterPhaseTransformerJeiCategory implements IRecipeCategory<MachineRecipe> {
 
-    public static final RecipeType<MatterPhaseTransformerRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID, "matter_phase_transformer",
-            MatterPhaseTransformerRecipe.class);
+    public static final RecipeType<MachineRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID, "matter_phase_transformer",
+            MachineRecipe.class);
 
     private static final int SLOT = 18;
     private static final int PADDING = 4;
@@ -59,13 +59,13 @@ public class MatterPhaseTransformerJeiCategory implements IRecipeCategory<Matter
     private final IDrawable process;
 
     public MatterPhaseTransformerJeiCategory(IGuiHelper guiHelper) {
-        this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModBlocks.MATTER_PHASE_TRANSFORMER.get()));
+        this.icon = guiHelper.createDrawableItemStack(new ItemStack(ModMachines.MATTER_PHASE_TRANSFORMER.block()));
         this.fluidSlot = FluidSlotBackground.create(guiHelper);
         this.process = new AnimatedTextureDrawable(PROCESS_TEXTURE, PROCESS_W, PROCESS_H, 40, 50);
     }
 
     @Override
-    public RecipeType<MatterPhaseTransformerRecipe> getRecipeType() {
+    public RecipeType<MachineRecipe> getRecipeType() {
         return RECIPE_TYPE;
     }
 
@@ -90,12 +90,12 @@ public class MatterPhaseTransformerJeiCategory implements IRecipeCategory<Matter
     }
 
     @Override
-    public ResourceLocation getRegistryName(MatterPhaseTransformerRecipe recipe) {
+    public ResourceLocation getRegistryName(MachineRecipe recipe) {
         return recipe.getId();
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, MatterPhaseTransformerRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, MachineRecipe recipe, IFocusGroup focuses) {
         // 物品输入：固定槽位，消耗数量写入 ItemStack
         List<CountedIngredient> ingredients = recipe.getItemInputs();
         for (int index = 0; index < INPUT_COUNT; index++) {
@@ -115,7 +115,7 @@ public class MatterPhaseTransformerJeiCategory implements IRecipeCategory<Matter
         }
 
         // 产物：箭头右侧的流体槽
-        FluidStack output = recipe.getFluidOutput();
+        FluidStack output = recipe.getFluidOutputs().get(0);
         IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_X, OUTPUT_Y);
         outputSlot.setBackground(fluidSlot, -1, -1);
         outputSlot.addFluidStack(output.getFluid(), output.getAmount());
@@ -123,7 +123,7 @@ public class MatterPhaseTransformerJeiCategory implements IRecipeCategory<Matter
     }
 
     @Override
-    public void draw(MatterPhaseTransformerRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics graphics, double mouseX,
+    public void draw(MachineRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics graphics, double mouseX,
             double mouseY) {
         var font = Minecraft.getInstance().font;
         process.draw(graphics, PROCESS_X, INPUT_Y);

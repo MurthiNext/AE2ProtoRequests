@@ -11,8 +11,7 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 
-import com.murthinext.ae2pr.ModItems;
-import com.murthinext.ae2pr.ModRecipes;
+import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
 
 @JeiPlugin
@@ -36,12 +35,12 @@ public class CrystalReactionChamberJeiPlugin implements IModPlugin {
             return;
         }
         registration.addRecipes(CrystalReactionChamberJeiCategory.RECIPE_TYPE,
-                List.copyOf(level.getRecipeManager().getAllRecipesFor(ModRecipes.CRYSTAL_REACTION_CHAMBER_TYPE.get())));
+                List.copyOf(level.getRecipeManager().getAllRecipesFor(ModMachines.CRYSTAL_REACTION_CHAMBER_RECIPE.type())));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalysts(CrystalReactionChamberJeiCategory.RECIPE_TYPE,
-                ModItems.CRYSTAL_REACTION_CHAMBER.get());
+                ModMachines.CRYSTAL_REACTION_CHAMBER.item());
     }
 }

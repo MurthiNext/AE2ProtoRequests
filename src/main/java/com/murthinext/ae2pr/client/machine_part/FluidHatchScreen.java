@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.murthinext.ae2pr.client.AbstractMachinePartScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
@@ -15,19 +14,17 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.murthinext.ae2pr.ModNetwork;
+import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.ae2pr.block.machine_part.DualHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
 import com.murthinext.ae2pr.client.CustomIngredientSource;
-import com.murthinext.ae2pr.client.GeneralMachineScreen;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 
 public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> implements CustomIngredientSource {
 
     private static final int TANK_X0 = 20;
     private static final int TANK_Y = 34;
-    private static final int TANK_STEP = GeneralMachineScreen.TANK_STEP;
 
     private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
@@ -70,7 +67,7 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
                 continue;
             }
             areas.add(Area.ofFluid(fluid, new Rect2i(leftPos + TANK_X0 + tank * TANK_STEP, topPos + TANK_Y,
-                    GeneralMachineScreen.TANK_WIDTH, GeneralMachineScreen.TANK_HEIGHT)));
+                    TANK_WIDTH, TANK_HEIGHT)));
         }
         return areas;
     }
@@ -89,11 +86,10 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        renderPanel(graphics);
-        renderToolbar(graphics);
+        super.renderBg(graphics, partialTick, mouseX, mouseY);
         for (int tank = 0; tank < menu.getTankCount(); tank++) {
-            GeneralMachineScreen.drawTank(graphics, leftPos + TANK_X0 + tank * TANK_STEP, topPos + TANK_Y);
-            GeneralMachineScreen.drawTankArrow(graphics, leftPos + TANK_X0 + tank * TANK_STEP, topPos + TANK_Y,
+            drawTank(graphics, leftPos + TANK_X0 + tank * TANK_STEP, topPos + TANK_Y);
+            drawTankArrow(graphics, leftPos + TANK_X0 + tank * TANK_STEP, topPos + TANK_Y,
                     !menu.isOutputHatch());
             renderFluid(graphics, tank);
         }
@@ -132,8 +128,8 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
         for (int tank = 0; tank < menu.getTankCount(); tank++) {
             int x = leftPos + TANK_X0 + tank * TANK_STEP;
             int y = topPos + TANK_Y;
-            if (mouseX >= x && mouseX < x + GeneralMachineScreen.TANK_WIDTH
-                    && mouseY >= y && mouseY < y + GeneralMachineScreen.TANK_HEIGHT) {
+            if (mouseX >= x && mouseX < x + TANK_WIDTH
+                    && mouseY >= y && mouseY < y + TANK_HEIGHT) {
                 return tank;
             }
         }
@@ -141,9 +137,9 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
     }
 
     private void renderFluid(GuiGraphics graphics, int tank) {
-        GeneralMachineScreen.drawFluid(graphics, clientFluid(tank),
+        drawFluid(graphics, clientFluid(tank),
                 leftPos + TANK_X0 + 2 + tank * TANK_STEP, topPos + TANK_Y + 2,
-                GeneralMachineScreen.TANK_INNER_WIDTH, GeneralMachineScreen.TANK_INNER_HEIGHT, menu.getCapacityPerTank());
+                TANK_INNER_WIDTH, TANK_INNER_HEIGHT, menu.getCapacityPerTank());
     }
 
     private FluidStack clientFluid(int tank) {

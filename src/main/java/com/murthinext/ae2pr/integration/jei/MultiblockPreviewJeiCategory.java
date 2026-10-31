@@ -13,7 +13,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 
-import com.murthinext.ae2pr.ModBlocks;
+import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
 
 public class MultiblockPreviewJeiCategory implements IRecipeCategory<MultiblockPreviewRecipe> {
@@ -26,7 +26,7 @@ public class MultiblockPreviewJeiCategory implements IRecipeCategory<MultiblockP
     private final IDrawable icon;
 
     public MultiblockPreviewJeiCategory(IGuiHelper guiHelper) {
-        icon = guiHelper.createDrawableItemStack(new ItemStack(ModBlocks.CRYSTAL_ASSEMBLY_LINE.get()));
+        icon = guiHelper.createDrawableItemStack(new ItemStack(ModMachines.CRYSTAL_ASSEMBLY_LINE.block()));
     }
 
     @Override
