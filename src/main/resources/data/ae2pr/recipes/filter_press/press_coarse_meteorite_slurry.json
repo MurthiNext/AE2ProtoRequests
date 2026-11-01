@@ -1,0 +1,34 @@
+{
+  "type": "ae2pr:filter_press",
+  "item_inputs": [],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:coarse_meteorite_slurry",
+      "amount": 10000
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:pseudo_strontianite_dust",
+      "count": 24
+    },
+    {
+      "item": "ae2pr:pseudo_strontianite_dust",
+      "count": 12,
+      "chance": 0.3
+    },
+    {
+      "item": "ae2pr:pseudo_strontianite_dust",
+      "count": 8,
+      "chance": 0.05
+    }
+  ],
+  "fluid_outputs": [
+    {
+      "fluid": "ae2pr:coarse_meteorite_solution",
+      "amount": 3000
+    }
+  ],
+  "duration": 120,
+  "energy": 2000
+}

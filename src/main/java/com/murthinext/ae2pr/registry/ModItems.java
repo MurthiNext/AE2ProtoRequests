@@ -10,9 +10,6 @@ import com.murthinext.ae2pr.item.level_emitter.MultiThresholdLevelEmitterPartIte
 import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
 import com.murthinext.ae2pr.item.filter_cell.FilterCellItem;
 import com.murthinext.ae2pr.item.ProtoTerminalItem;
-import com.murthinext.ae2pr.material.MaterialItems;
-import com.murthinext.ae2pr.material.Materials;
-import com.murthinext.ae2pr.material.TagPrefix;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
@@ -163,26 +160,6 @@ public final class ModItems {
     public static final RegistryObject<BlockItem> FILTER_PRESS_PLATE = ITEMS.register("filter_press_plate",
             () -> new BlockItem(ModBlocks.FILTER_PRESS_PLATE.get(), new Item.Properties()));
 
-    // 材料物品：由 MaterialItems 按“材质 × 形态”统一生成
-    public static final RegistryObject<Item> METEOR_STEEL_INGOT = MaterialItems.get(TagPrefix.INGOT, Materials.METEOR_STEEL);
-
-    public static final RegistryObject<Item> ZIRCONIUM_INGOT = MaterialItems.get(TagPrefix.INGOT, Materials.ZIRCONIUM);
-
-    public static final RegistryObject<Item> ZIRCONIUM_IRON_ALLOY_INGOT = MaterialItems.get(TagPrefix.INGOT,
-            Materials.ZIRCONIUM_IRON_ALLOY);
-
-    public static final RegistryObject<Item> STRONTIUM_INGOT = MaterialItems.get(TagPrefix.INGOT, Materials.STRONTIUM);
-
-    public static final RegistryObject<Item> BARIUM_INGOT = MaterialItems.get(TagPrefix.INGOT, Materials.BARIUM);
-
-    public static final RegistryObject<Item> METEOR_STEEL_PLATE = MaterialItems.get(TagPrefix.PLATE, Materials.METEOR_STEEL);
-
-    public static final RegistryObject<Item> ZIRCONIUM_PLATE = MaterialItems.get(TagPrefix.PLATE, Materials.ZIRCONIUM);
-
-    public static final RegistryObject<Item> STRONTIUM_PLATE = MaterialItems.get(TagPrefix.PLATE, Materials.STRONTIUM);
-
-    public static final RegistryObject<Item> BARIUM_PLATE = MaterialItems.get(TagPrefix.PLATE, Materials.BARIUM);
-
     public static final RegistryObject<Item> FINE_FLUIX_WIRE = ITEMS.register("fine_fluix_wire",
             () -> new Item(new Item.Properties()));
 
@@ -296,39 +273,6 @@ public final class ModItems {
 
     public static final RegistryObject<BlockItem> DENSE_SKY_STONE_BLOCK = ITEMS.register("dense_sky_stone_block",
             () -> new BlockItem(ModBlocks.DENSE_SKY_STONE_BLOCK.get(), new Item.Properties()));
-
-    public static final RegistryObject<Item> METEOR_STEEL_DUST = MaterialItems.get(TagPrefix.DUST,
-            Materials.METEOR_STEEL);
-
-    public static final RegistryObject<Item> COAL_DUST = MaterialItems.get(TagPrefix.DUST, Materials.COAL);
-
-    public static final RegistryObject<Item> CARBON_DUST = MaterialItems.get(TagPrefix.DUST, Materials.CARBON);
-
-    public static final RegistryObject<Item> ZIRCONIUM_DUST = MaterialItems.get(TagPrefix.DUST, Materials.ZIRCONIUM);
-
-    public static final RegistryObject<Item> CARBON_ZIRCONIUM_MIXTURE_DUST = MaterialItems.get(TagPrefix.DUST,
-            Materials.CARBON_ZIRCONIUM_MIXTURE);
-
-    public static final RegistryObject<Item> ZIRCON_DUST = MaterialItems.get(TagPrefix.DUST, Materials.ZIRCON);
-
-    public static final RegistryObject<Item> COPPER_OXIDE_DUST = MaterialItems.get(TagPrefix.DUST, Materials.COPPER_OXIDE);
-
-    public static final RegistryObject<Item> IRON_OXIDE_DUST = MaterialItems.get(TagPrefix.DUST, Materials.IRON_OXIDE);
-
-    public static final RegistryObject<Item> GOLD_OXIDE_DUST = MaterialItems.get(TagPrefix.DUST, Materials.GOLD_OXIDE);
-
-    public static final RegistryObject<Item> PSEUDO_STRONTIANITE_DUST = MaterialItems.get(TagPrefix.DUST,
-            Materials.PSEUDO_STRONTIANITE);
-
-    public static final RegistryObject<Item> STRONTIUM_CARBONATE_DUST = MaterialItems.get(TagPrefix.DUST,
-            Materials.STRONTIUM_CARBONATE);
-
-    public static final RegistryObject<Item> BARIUM_SULFATE_DUST = MaterialItems.get(TagPrefix.DUST,
-            Materials.BARIUM_SULFATE);
-
-    public static final RegistryObject<Item> STRONTIUM_DUST = MaterialItems.get(TagPrefix.DUST, Materials.STRONTIUM);
-
-    public static final RegistryObject<Item> BARIUM_DUST = MaterialItems.get(TagPrefix.DUST, Materials.BARIUM);
 
     public static final RegistryObject<Item> ZIRCON_BRICK = ITEMS.register("zircon_brick",
             () -> new Item(new Item.Properties()));

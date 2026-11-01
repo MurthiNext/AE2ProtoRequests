@@ -3,10 +3,13 @@
   "ingredients": {
     "middle": {
       "tag": "forge:ingots/zirconium"
+    },
+    "top": {
+      "item": "ae2pr:single_plate_press"
     }
   },
   "mode": "inscribe",
   "result": {
-    "item": "ae2pr:zirconium_dust"
+    "item": "ae2pr:zirconium_plate"
   }
 }

@@ -1,0 +1,20 @@
+{
+  "type": "ae2pr:high_reactivity_lava_smelter",
+  "duration": 300,
+  "item_inputs": [
+    {
+      "tag": "forge:dusts/strontium_carbonate",
+      "count": 8
+    },
+    {
+      "tag": "forge:dusts/carbon",
+      "count": 4
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:strontium_ingot",
+      "count": 8
+    }
+  ]
+}

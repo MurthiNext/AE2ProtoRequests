@@ -51,11 +51,11 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.HIGH_ENERGY_SINGULARITY.get());
 
                         // 锭 & 宝石
-                        output.accept(ModItems.METEOR_STEEL_INGOT.get());
-                        output.accept(ModItems.ZIRCONIUM_INGOT.get());
-                        output.accept(ModItems.ZIRCONIUM_IRON_ALLOY_INGOT.get());
-                        output.accept(ModItems.STRONTIUM_INGOT.get());
-                        output.accept(ModItems.BARIUM_INGOT.get());
+                        output.accept(ModMaterials.METEOR_STEEL_INGOT.get());
+                        output.accept(ModMaterials.ZIRCONIUM_INGOT.get());
+                        output.accept(ModMaterials.ZIRCONIUM_IRON_ALLOY_INGOT.get());
+                        output.accept(ModMaterials.STRONTIUM_INGOT.get());
+                        output.accept(ModMaterials.BARIUM_INGOT.get());
                         output.accept(ModItems.ZIRCON_BRICK.get());
                         output.accept(ModItems.ZIRCON.get());
 
@@ -63,26 +63,26 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CRYSTALINE.get());
 
                         // 粉末
-                        output.accept(ModItems.METEOR_STEEL_DUST.get());
-                        output.accept(ModItems.COAL_DUST.get());
-                        output.accept(ModItems.CARBON_DUST.get());
-                        output.accept(ModItems.ZIRCONIUM_DUST.get());
-                        output.accept(ModItems.CARBON_ZIRCONIUM_MIXTURE_DUST.get());
-                        output.accept(ModItems.ZIRCON_DUST.get());
-                        output.accept(ModItems.COPPER_OXIDE_DUST.get());
-                        output.accept(ModItems.IRON_OXIDE_DUST.get());
-                        output.accept(ModItems.GOLD_OXIDE_DUST.get());
-                        output.accept(ModItems.PSEUDO_STRONTIANITE_DUST.get());
-                        output.accept(ModItems.STRONTIUM_CARBONATE_DUST.get());
-                        output.accept(ModItems.BARIUM_SULFATE_DUST.get());
-                        output.accept(ModItems.STRONTIUM_DUST.get());
-                        output.accept(ModItems.BARIUM_DUST.get());
+                        output.accept(ModMaterials.METEOR_STEEL_DUST.get());
+                        output.accept(ModMaterials.COAL_DUST.get());
+                        output.accept(ModMaterials.CARBON_DUST.get());
+                        output.accept(ModMaterials.ZIRCONIUM_DUST.get());
+                        output.accept(ModMaterials.CARBON_ZIRCONIUM_MIXTURE_DUST.get());
+                        output.accept(ModMaterials.ZIRCON_DUST.get());
+                        output.accept(ModMaterials.COPPER_OXIDE_DUST.get());
+                        output.accept(ModMaterials.IRON_OXIDE_DUST.get());
+                        output.accept(ModMaterials.GOLD_OXIDE_DUST.get());
+                        output.accept(ModMaterials.PSEUDO_STRONTIANITE_DUST.get());
+                        output.accept(ModMaterials.STRONTIUM_CARBONATE_DUST.get());
+                        output.accept(ModMaterials.BARIUM_SULFATE_DUST.get());
+                        output.accept(ModMaterials.STRONTIUM_DUST.get());
+                        output.accept(ModMaterials.BARIUM_DUST.get());
 
                         // 单层板
-                        output.accept(ModItems.METEOR_STEEL_PLATE.get());
-                        output.accept(ModItems.ZIRCONIUM_PLATE.get());
-                        output.accept(ModItems.STRONTIUM_PLATE.get());
-                        output.accept(ModItems.BARIUM_PLATE.get());
+                        output.accept(ModMaterials.METEOR_STEEL_PLATE.get());
+                        output.accept(ModMaterials.ZIRCONIUM_PLATE.get());
+                        output.accept(ModMaterials.STRONTIUM_PLATE.get());
+                        output.accept(ModMaterials.BARIUM_PLATE.get());
 
                         // 桶
                         output.accept(ModItems.ALIEN_LAVA_BUCKET.get());

@@ -1,15 +1,15 @@
 {
   "type": "ae2:inscriber",
   "ingredients": {
+    "middle": {
+      "tag": "forge:ingots/strontium"
+    },
     "top": {
       "item": "ae2pr:single_plate_press"
-    },
-    "middle": {
-      "tag": "forge:ingots/zirconium"
     }
   },
   "mode": "inscribe",
   "result": {
-    "item": "ae2pr:zirconium_plate"
+    "item": "ae2pr:strontium_plate"
   }
 }

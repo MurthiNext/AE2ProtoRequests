@@ -164,7 +164,7 @@ public final class Config {
         BUILDER.push("matterPhaseTransformer");
         MATTER_PHASE_TRANSFORMER_PARALLEL = BUILDER
                 .comment("物质相变仪并行上限")
-                .defineInRange("parallel", 32, 1, 1_000_000);
+                .defineInRange("parallel", 64, 1, 1_000_000);
         MATTER_PHASE_TRANSFORMER_ENERGY_PER_PARALLEL = BUILDER
                 .comment("物质相变仪默认扣除的能量（AE）")
                 .defineInRange("energyPerParallel", 50000.0, 0.0, Double.MAX_VALUE);
@@ -173,7 +173,7 @@ public final class Config {
         BUILDER.push("crystalReactionChamber");
         CRYSTAL_REACTION_PARALLEL = BUILDER
                 .comment("水晶反应仓并行上限")
-                .defineInRange("parallel", 32, 1, 1_000_000);
+                .defineInRange("parallel", 64, 1, 1_000_000);
         CRYSTAL_REACTION_ENERGY_PER_PARALLEL = BUILDER
                 .comment("水晶反应仓默认扣除的能量（AE）")
                 .defineInRange("energyPerParallel", 20000.0, 0.0, Double.MAX_VALUE);
@@ -182,13 +182,13 @@ public final class Config {
         BUILDER.push("crystalWorkstation");
         CRYSTAL_WORKSTATION_PARALLEL = BUILDER
                 .comment("晶能工作站并行上限")
-                .defineInRange("parallel", 32, 1, 1_000_000);
+                .defineInRange("parallel", 64, 1, 1_000_000);
         BUILDER.pop();
 
         BUILDER.push("jig");
         JIG_PARALLEL = BUILDER
                 .comment("跳汰机并行上限")
-                .defineInRange("parallel", 32, 1, 1_000_000);
+                .defineInRange("parallel", 64, 1, 1_000_000);
         JIG_ENERGY_PER_PARALLEL = BUILDER
                 .comment("跳汰机默认扣除的能量（AE）")
                 .defineInRange("energyPerParallel", 1000.0, 0.0, Double.MAX_VALUE);

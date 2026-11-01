@@ -1,0 +1,33 @@
+{
+  "type": "ae2pr:jig",
+  "item_inputs": [
+    {
+      "tag": "forge:dusts/pseudo_strontianite",
+      "count": 32
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 32000
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:strontium_carbonate_dust",
+      "count": 16,
+      "chance": 0.9
+    },
+    {
+      "item": "ae2pr:barium_sulfate_dust",
+      "count": 4,
+      "chance": 0.8
+    }
+  ],
+  "fluid_outputs": [
+    {
+      "fluid": "ae2pr:coarse_meteorite_solution",
+      "amount": 100
+    }
+  ]
+}
