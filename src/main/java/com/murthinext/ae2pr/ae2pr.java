@@ -11,6 +11,7 @@ import com.murthinext.ae2pr.block.meteorite.MeteoriteOres;
 import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
 import com.murthinext.ae2pr.logic.wrench.WrenchInteractions;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryBlockEntity;
+import com.murthinext.ae2pr.material.MaterialItems;
 import com.murthinext.ae2pr.registry.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -37,6 +38,7 @@ public class ae2pr {
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
+        MaterialItems.ITEMS.register(modEventBus);
         ModMenus.MENUS.register(modEventBus);
         ModFluids.FLUID_TYPES.register(modEventBus);
         ModFluids.FLUIDS.register(modEventBus);

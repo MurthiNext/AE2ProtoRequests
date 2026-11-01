@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "ae2pr:meteor_steel_ingot",
-    "ae2pr:zirconium_ingot"
+    "ae2pr:zirconium_ingot",
+    "ae2pr:strontium_ingot",
+    "ae2pr:barium_ingot"
   ]
 }

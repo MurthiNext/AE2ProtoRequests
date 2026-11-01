@@ -4,13 +4,16 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.registries.RegistryObject;
 
 import appeng.init.client.InitScreens;
 
@@ -26,6 +29,8 @@ import com.murthinext.ae2pr.client.machine_part.ItemBusScreen;
 import com.murthinext.ae2pr.client.level_emitter.MultiLevelEmitterScreen;
 import com.murthinext.ae2pr.client.level_emitter.MultiThresholdLevelEmitterScreen;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryRenderer;
+import com.murthinext.ae2pr.material.MaterialItem;
+import com.murthinext.ae2pr.material.MaterialItems;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientSetup {
@@ -49,6 +54,14 @@ public final class ClientSetup {
     @SubscribeEvent
     public static void registerTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
         event.register(ColorEffectLine.class, ColorEffectClientTooltip::new);
+    }
+
+    @SubscribeEvent
+    public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
+        ItemLike[] items = MaterialItems.all().stream().map(RegistryObject::get).toArray(ItemLike[]::new);
+        event.register((stack, layer) -> stack.getItem() instanceof MaterialItem item
+                ? item.material().argb(layer)
+                : -1, items);
     }
 
     @SubscribeEvent

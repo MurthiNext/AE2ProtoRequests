@@ -4,6 +4,7 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.fluid.AlienLavaFluid;
 import com.murthinext.ae2pr.fluid.AlienLavaFluidType;
 import com.murthinext.ae2pr.fluid.CoarseMeteoriteSlurryFluidType;
+import com.murthinext.ae2pr.fluid.CoarseMeteoriteSolutionFluidType;
 import com.murthinext.ae2pr.fluid.CrystalAdhesiveFluidType;
 import com.murthinext.ae2pr.fluid.LiquidAmethystFluidType;
 import com.murthinext.ae2pr.fluid.LiquidCertusQuartzFluidType;
@@ -151,5 +152,21 @@ public final class ModFluids {
         return new ForgeFlowingFluid.Properties(COARSE_METEORITE_SLURRY_TYPE, COARSE_METEORITE_SLURRY,
                 FLOWING_COARSE_METEORITE_SLURRY)
                 .bucket(ModItems.COARSE_METEORITE_SLURRY_BUCKET);
+    }
+
+    public static final RegistryObject<FluidType> COARSE_METEORITE_SOLUTION_TYPE = FLUID_TYPES.register(
+            "coarse_meteorite_solution", CoarseMeteoriteSolutionFluidType::new);
+
+    public static final RegistryObject<ForgeFlowingFluid> COARSE_METEORITE_SOLUTION = FLUIDS.register(
+            "coarse_meteorite_solution", () -> new ForgeFlowingFluid.Source(coarseMeteoriteSolutionProperties()));
+
+    public static final RegistryObject<ForgeFlowingFluid> FLOWING_COARSE_METEORITE_SOLUTION = FLUIDS.register(
+            "flowing_coarse_meteorite_solution",
+            () -> new ForgeFlowingFluid.Flowing(coarseMeteoriteSolutionProperties()));
+
+    private static ForgeFlowingFluid.Properties coarseMeteoriteSolutionProperties() {
+        return new ForgeFlowingFluid.Properties(COARSE_METEORITE_SOLUTION_TYPE, COARSE_METEORITE_SOLUTION,
+                FLOWING_COARSE_METEORITE_SOLUTION)
+                .bucket(ModItems.COARSE_METEORITE_SOLUTION_BUCKET);
     }
 }

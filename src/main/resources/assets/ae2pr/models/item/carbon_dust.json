@@ -1,6 +1,3 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "ae2pr:item/carbon_dust"
-  }
+  "parent": "ae2pr:item/material_sets/metallic/dust"
 }

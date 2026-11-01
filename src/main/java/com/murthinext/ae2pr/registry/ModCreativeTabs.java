@@ -54,6 +54,8 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.METEOR_STEEL_INGOT.get());
                         output.accept(ModItems.ZIRCONIUM_INGOT.get());
                         output.accept(ModItems.ZIRCONIUM_IRON_ALLOY_INGOT.get());
+                        output.accept(ModItems.STRONTIUM_INGOT.get());
+                        output.accept(ModItems.BARIUM_INGOT.get());
                         output.accept(ModItems.ZIRCON_BRICK.get());
                         output.accept(ModItems.ZIRCON.get());
 
@@ -70,10 +72,17 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.COPPER_OXIDE_DUST.get());
                         output.accept(ModItems.IRON_OXIDE_DUST.get());
                         output.accept(ModItems.GOLD_OXIDE_DUST.get());
+                        output.accept(ModItems.PSEUDO_STRONTIANITE_DUST.get());
+                        output.accept(ModItems.STRONTIUM_CARBONATE_DUST.get());
+                        output.accept(ModItems.BARIUM_SULFATE_DUST.get());
+                        output.accept(ModItems.STRONTIUM_DUST.get());
+                        output.accept(ModItems.BARIUM_DUST.get());
 
                         // 单层板
                         output.accept(ModItems.METEOR_STEEL_PLATE.get());
                         output.accept(ModItems.ZIRCONIUM_PLATE.get());
+                        output.accept(ModItems.STRONTIUM_PLATE.get());
+                        output.accept(ModItems.BARIUM_PLATE.get());
 
                         // 桶
                         output.accept(ModItems.ALIEN_LAVA_BUCKET.get());
@@ -84,6 +93,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CRYSTAL_ADHESIVE_BUCKET.get());
                         output.accept(ModItems.LIQUID_ZIRCONIUM_BUCKET.get());
                         output.accept(ModItems.COARSE_METEORITE_SLURRY_BUCKET.get());
+                        output.accept(ModItems.COARSE_METEORITE_SOLUTION_BUCKET.get());
 
                         // 储存方块
                         output.accept(ModItems.METEOR_STEEL_BLOCK.get());
