@@ -3,7 +3,7 @@ package com.murthinext.ae2pr.machine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 
 public final class MachineControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 

@@ -22,7 +22,7 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.client.GuiExtraAreas;
 import com.murthinext.ae2pr.client.GuideButton;
 import com.murthinext.ae2pr.registry.ModGuide;
-import com.murthinext.ae2pr.client.machine_part.AutoTransferButton;
+import com.murthinext.ae2pr.block.machine_part.AutoTransferButton;
 
 public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> extends AbstractContainerScreen<M>
         implements GuiExtraAreas {
@@ -261,10 +261,15 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
 
     @Override
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
-        if (renderToolbarTooltip(graphics, mouseX, mouseY) || renderUpgradeTooltip(graphics, mouseX, mouseY)) {
+        if (renderCustomTooltip(graphics, mouseX, mouseY)) {
             return;
         }
         super.renderTooltip(graphics, mouseX, mouseY);
+    }
+
+    // 供子类追加自定义提示，返回 true 表示已处理
+    protected boolean renderCustomTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+        return renderToolbarTooltip(graphics, mouseX, mouseY) || renderUpgradeTooltip(graphics, mouseX, mouseY);
     }
 
     private boolean isHoveringUpgradePanel(int mouseX, int mouseY) {

@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import com.murthinext.ae2pr.registry.ModSounds;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlock;
+import com.murthinext.ae2pr.machine.MachineBlock;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT)
 public final class MachineProcessingSounds {
@@ -64,10 +64,10 @@ public final class MachineProcessingSounds {
 
         private boolean isRunning(BlockEntity controller) {
             BlockState state = controller.getBlockState();
-            return state.hasProperty(AbstractMultiblockControllerBlock.FORMED)
-                    && state.hasProperty(AbstractMultiblockControllerBlock.RUNNING)
-                    && state.getValue(AbstractMultiblockControllerBlock.FORMED)
-                    && state.getValue(AbstractMultiblockControllerBlock.RUNNING);
+            return state.hasProperty(MachineBlock.FORMED)
+                    && state.hasProperty(MachineBlock.RUNNING)
+                    && state.getValue(MachineBlock.FORMED)
+                    && state.getValue(MachineBlock.RUNNING);
         }
     }
 

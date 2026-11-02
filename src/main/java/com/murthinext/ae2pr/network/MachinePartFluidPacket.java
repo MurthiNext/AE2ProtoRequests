@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import com.murthinext.ae2pr.block.machine_part.FluidHatchScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
@@ -50,7 +51,7 @@ public class MachinePartFluidPacket {
     public static void handle(MachinePartFluidPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> com.murthinext.ae2pr.client.machine_part.FluidHatchScreen
+                () -> () -> FluidHatchScreen
                         .applyFluidSync(packet.pos, packet.fluids, packet.autoTransfer, packet.recipeIsolated)));
         context.setPacketHandled(true);
     }

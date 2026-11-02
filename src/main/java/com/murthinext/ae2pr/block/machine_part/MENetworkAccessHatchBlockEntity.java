@@ -22,7 +22,7 @@ import appeng.api.orientation.BlockOrientation;
 import appeng.blockentity.grid.AENetworkBlockEntity;
 
 import com.murthinext.ae2pr.registry.ModBlockEntities;
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 
 public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity {
 

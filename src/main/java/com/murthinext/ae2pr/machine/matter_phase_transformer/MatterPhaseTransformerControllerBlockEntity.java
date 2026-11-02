@@ -5,7 +5,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
 import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 
 public class MatterPhaseTransformerControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 

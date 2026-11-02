@@ -8,10 +8,10 @@ import appeng.core.definitions.AEBlocks;
 
 import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
-import com.murthinext.ae2pr.logic.multiblock.AbstractStructureFacade;
-import com.murthinext.ae2pr.logic.multiblock.MultiblockPattern;
-import com.murthinext.ae2pr.logic.multiblock.RelativeDirection;
-import com.murthinext.ae2pr.logic.multiblock.StructurePredicate;
+import com.murthinext.ae2pr.machine.multiblock.AbstractStructureFacade;
+import com.murthinext.ae2pr.machine.multiblock.MultiblockPattern;
+import com.murthinext.ae2pr.machine.multiblock.RelativeDirection;
+import com.murthinext.ae2pr.machine.multiblock.StructurePredicate;
 
 // 水晶反应仓结构定义
 public final class CrystalReactionChamberStructure extends AbstractStructureFacade {

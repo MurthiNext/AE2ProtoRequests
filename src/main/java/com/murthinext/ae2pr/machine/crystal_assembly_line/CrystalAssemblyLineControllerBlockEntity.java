@@ -18,11 +18,10 @@ import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.registry.ModModules;
 import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFluidStorage;
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.logic.multiblock.InputGroup;
-import com.murthinext.ae2pr.logic.multiblock.StructureResult;
-import com.murthinext.ae2pr.logic.multiblock.module.ModuleSnapshot;
-import com.murthinext.ae2pr.logic.multiblock.module.ModuleType;
+import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.machine.multiblock.InputGroup;
+import com.murthinext.ae2pr.machine.multiblock.StructureResult;
+import com.murthinext.ae2pr.machine.multiblock.module.ModuleSnapshot;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
@@ -31,12 +30,6 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
     private static final BooleanProperty ACTIVE = CrystalAssemblyLineUnitBlock.ACTIVE;
 
     private int lastSlices;
-    private int lastMismatches;
-    @Nullable
-    private BlockPos lastMismatchPos;
-    private char lastExpected = ' ';
-    @Nullable
-    private Block lastFound;
 
     private ModuleSnapshot modules = ModuleSnapshot.EMPTY;
     private final List<UnitCell> unitCells = new ArrayList<>();
@@ -64,15 +57,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
     @Override
     public double getSpeedMultiplier() {
         double multiplier = 1.0 + modules.count(ModModules.SPEED) * Config.assemblyModuleSpeedPerUnit();
-        return Math.min(multiplier, Config.assemblyMaxSpeedMultiplier()) * speedCardMultiplier();
-    }
-
-    public double speedCardMultiplier() {
-        return 1.0 + getSpeedCardCount() * Config.lossySpeedPerCard();
-    }
-
-    public int getModuleLevel(ModuleType type) {
-        return modules.level(type);
+        return Math.min(multiplier, Config.assemblyMaxSpeedMultiplier()) * super.getSpeedMultiplier();
     }
 
     // 配方匹配
@@ -225,10 +210,6 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
     @Override
     protected void onStructureChanged(StructureResult result) {
         lastSlices = result.slices();
-        lastMismatches = result.mismatches();
-        lastMismatchPos = result.mismatchPos();
-        lastExpected = result.expected();
-        lastFound = result.found();
 
         ModuleSnapshot snapshot = result.formed() ? result.modules() : ModuleSnapshot.EMPTY;
         MultiblockRecipe recipe = currentRecipe();
@@ -283,29 +264,5 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
     }
 
     private record UnitCell(BlockPos pos, Block block) {
-    }
-
-    // 状态查询
-
-    public int getLastSlices() {
-        return lastSlices;
-    }
-
-    public int getLastMismatches() {
-        return lastMismatches;
-    }
-
-    @Nullable
-    public BlockPos getLastMismatchPos() {
-        return lastMismatchPos;
-    }
-
-    public char getLastExpected() {
-        return lastExpected;
-    }
-
-    @Nullable
-    public Block getLastFound() {
-        return lastFound;
     }
 }

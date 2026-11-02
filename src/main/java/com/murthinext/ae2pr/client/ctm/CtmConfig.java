@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.client.ctm;
 
 import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.machine.MachineBlock;
 import java.util.Arrays;
 import java.util.function.BiPredicate;
 
@@ -18,7 +17,7 @@ import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlock;
+import com.murthinext.ae2pr.machine.MachineBlock;
 import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
 
 // 连接纹理的逐方块配置
@@ -131,29 +130,29 @@ public final class CtmConfig {
 
     @Nullable
     public static MachinePartFacade facade(BlockState state) {
-        if (state.is(ModMachines.JIG.block()) && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
+        if (state.is(ModMachines.JIG.block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIUM_IRON;
         }
-        if (state.is(ModMachines.FILTER_PRESS.block()) && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
+        if (state.is(ModMachines.FILTER_PRESS.block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIUM_IRON;
         }
         if ((state.is(ModMachines.CRYSTAL_WORKSTATION.block()) || state.is(ModMachines.MULTI_FACTORY.block()))
-                && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
+                && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.CRYSTAL_ENERGY;
         }
         if (state.is(ModMachines.CRYSTAL_ASSEMBLY_LINE.block())
-                && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
+                && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.CRYSTAL;
         }
         if (state.is(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.block())
-                && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
+                && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIA;
         }
-        if (state.is(ModMachines.MATTER_PHASE_TRANSFORMER.block()) && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
+        if (state.is(ModMachines.MATTER_PHASE_TRANSFORMER.block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIA;
         }
         if (state.is(ModMachines.CRYSTAL_REACTION_CHAMBER.block())
-                && state.getValue(AbstractMultiblockControllerBlock.FORMED)) {
+                && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.CRYSTAL;
         }
         if (state.getBlock() instanceof MachinePartBlock && state.getValue(MachinePartBlock.FORMED)) {

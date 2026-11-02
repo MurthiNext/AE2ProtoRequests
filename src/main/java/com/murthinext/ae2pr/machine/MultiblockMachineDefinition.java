@@ -14,9 +14,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerMenu;
-import com.murthinext.ae2pr.logic.multiblock.AbstractStructureFacade;
+import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerMenu;
+import com.murthinext.ae2pr.machine.multiblock.AbstractStructureFacade;
 
 public final class MultiblockMachineDefinition<E extends AbstractMultiblockControllerBlockEntity,
         M extends AbstractMultiblockControllerMenu<E>> extends MachineDefinition<MachineBlock<E>, E, M> {
@@ -30,10 +30,10 @@ public final class MultiblockMachineDefinition<E extends AbstractMultiblockContr
 
     private MultiblockMachineDefinition(String id, Class<E> entityClass, ControllerFactory<E> controllerFactory,
             Supplier<Block.Properties> properties, Supplier<? extends AbstractStructureFacade> structure,
-            IntSupplier parallel, Supplier<? extends RecipeType<?>> recipeType,
+            IntSupplier parallel, Supplier<? extends RecipeType<?>> recipeType, List<Mode> modes,
             Function<MachineDefinition<MachineBlock<E>, E, M>, MenuType<M>> menuTypeFactory,
             MenuFactory<E, M> menuFactory) {
-        super(id, id, entityClass, menuTypeFactory, menuFactory, 4);
+        super(id, id, entityClass, menuTypeFactory, menuFactory, 4, modes);
         this.controllerFactory = controllerFactory;
         this.properties = properties;
         this.structure = structure;
@@ -45,10 +45,9 @@ public final class MultiblockMachineDefinition<E extends AbstractMultiblockContr
             standard(String id, Supplier<Block.Properties> properties,
                     Supplier<? extends AbstractStructureFacade> structure, IntSupplier parallel,
                     Supplier<? extends RecipeType<?>> recipeType) {
-        return new MultiblockMachineDefinition<>(id, MachineControllerBlockEntity.class,
-                MachineControllerBlockEntity::new, properties, structure, parallel, recipeType,
-                definition -> IForgeMenuType.create((menuId, inventory, buffer) ->
-                        new MachineMenu<>(definition, menuId, inventory, buffer)), MachineMenu::new);
+        return build(id, MachineControllerBlockEntity.class,
+                (definition, pos, state) -> new MachineControllerBlockEntity(definition, pos, state),
+                properties, structure, parallel, recipeType, List.of());
     }
 
     public static <E extends AbstractMultiblockControllerBlockEntity>
@@ -56,11 +55,25 @@ public final class MultiblockMachineDefinition<E extends AbstractMultiblockContr
                     BiFunction<BlockPos, BlockState, E> controllerFactory, Supplier<Block.Properties> properties,
                     Supplier<? extends AbstractStructureFacade> structure, IntSupplier parallel,
                     Supplier<? extends RecipeType<?>> recipeType) {
-        return new MultiblockMachineDefinition<>(id, entityClass,
-                (definition, pos, state) -> controllerFactory.apply(pos, state),
-                properties, structure, parallel, recipeType,
-                definition -> IForgeMenuType.create((menuId, inventory, buffer) ->
-                        new MachineMenu<>(definition, menuId, inventory, buffer)), MachineMenu::new);
+        return build(id, entityClass, (definition, pos, state) -> controllerFactory.apply(pos, state),
+                properties, structure, parallel, recipeType, List.of());
+    }
+
+    public static <T extends Enum<T> & Mode, E extends AbstractMultiblockControllerBlockEntity>
+            MultiblockMachineDefinition<E, MachineMenu<E>> withModes(String id, Class<E> entityClass,
+                    BiFunction<BlockPos, BlockState, E> controllerFactory, Supplier<Block.Properties> properties,
+                    Supplier<? extends AbstractStructureFacade> structure, IntSupplier parallel,
+                    Supplier<? extends RecipeType<?>> recipeType, List<T> modes) {
+        if (modes.isEmpty()) {
+            throw new IllegalArgumentException("Machine must have at least one mode: " + id);
+        }
+        for (int index = 0; index < modes.size(); index++) {
+            if (modes.get(index).ordinal() != index) {
+                throw new IllegalArgumentException("Machine modes must follow enum order: " + id);
+            }
+        }
+        return build(id, entityClass, (definition, pos, state) -> controllerFactory.apply(pos, state),
+                properties, structure, parallel, recipeType, List.copyOf(modes));
     }
 
     public static <E extends AbstractMultiblockControllerBlockEntity, M extends AbstractMultiblockControllerMenu<E>>
@@ -71,29 +84,20 @@ public final class MultiblockMachineDefinition<E extends AbstractMultiblockContr
                     MenuFactory<E, M> menuFactory) {
         return new MultiblockMachineDefinition<>(id, entityClass,
                 (definition, pos, state) -> controllerFactory.apply(pos, state),
-                properties, structure, parallel, recipeType, definition -> menuTypeFactory.get(), menuFactory);
+                properties, structure, parallel, recipeType, List.of(), definition -> menuTypeFactory.get(),
+                menuFactory);
     }
 
-    public static <T extends Enum<T> & Mode, E extends AbstractMultiblockControllerBlockEntity & ModeMachine<T>>
-            MultiblockMachineDefinition<E, ModeMachineMenu<E, T>> withModes(String id, Class<E> entityClass,
-                    BiFunction<BlockPos, BlockState, E> controllerFactory, Supplier<Block.Properties> properties,
+    private static <E extends AbstractMultiblockControllerBlockEntity>
+            MultiblockMachineDefinition<E, MachineMenu<E>> build(String id, Class<E> entityClass,
+                    ControllerFactory<E> controllerFactory, Supplier<Block.Properties> properties,
                     Supplier<? extends AbstractStructureFacade> structure, IntSupplier parallel,
-                    Supplier<? extends RecipeType<?>> recipeType, List<T> modes) {
-        List<T> orderedModes = List.copyOf(modes);
-        if (orderedModes.isEmpty()) {
-            throw new IllegalArgumentException("Machine must have at least one mode: " + id);
-        }
-        for (int index = 0; index < orderedModes.size(); index++) {
-            if (orderedModes.get(index).ordinal() != index) {
-                throw new IllegalArgumentException("Machine modes must follow enum order: " + id);
-            }
-        }
-        return new MultiblockMachineDefinition<>(id, entityClass,
-                (definition, pos, state) -> controllerFactory.apply(pos, state), properties, structure, parallel,
-                recipeType, definition -> IForgeMenuType.create((menuId, inventory, buffer) ->
-                        new ModeMachineMenu<>(definition, menuId, inventory, buffer, orderedModes)),
-                (definition, menuId, inventory, controller) ->
-                        new ModeMachineMenu<>(definition, menuId, inventory, controller, orderedModes));
+                    Supplier<? extends RecipeType<?>> recipeType, List<Mode> modes) {
+        return new MultiblockMachineDefinition<>(id, entityClass, controllerFactory, properties, structure, parallel,
+                recipeType, modes,
+                definition -> IForgeMenuType.create((menuId, inventory, buffer) ->
+                        new MachineMenu<>(definition, menuId, inventory, buffer)),
+                MachineMenu::new);
     }
 
     @Override

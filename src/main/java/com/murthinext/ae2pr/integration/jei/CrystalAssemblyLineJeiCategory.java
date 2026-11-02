@@ -31,9 +31,9 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.logic.multiblock.module.ModuleDefinition;
-import com.murthinext.ae2pr.logic.multiblock.module.ModuleProvider;
-import com.murthinext.ae2pr.logic.multiblock.module.ModuleRequirement;
+import com.murthinext.ae2pr.machine.multiblock.module.ModuleDefinition;
+import com.murthinext.ae2pr.machine.multiblock.module.ModuleProvider;
+import com.murthinext.ae2pr.machine.multiblock.module.ModuleRequirement;
 import com.murthinext.ae2pr.recipe.CountedIngredient;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineRecipe;
 

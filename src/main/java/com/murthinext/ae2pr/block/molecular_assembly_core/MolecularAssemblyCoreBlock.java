@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 
 import com.murthinext.ae2pr.block.DisassemblableBlock;
-import com.murthinext.ae2pr.client.molecular_assembly_core.MolecularAssemblyCoreParticles;
 
 public class MolecularAssemblyCoreBlock extends DisassemblableBlock implements EntityBlock {
 

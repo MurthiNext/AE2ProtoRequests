@@ -16,7 +16,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlock;
+import com.murthinext.ae2pr.machine.MachineBlock;
 
 // 晶能工作站成型外观的客户端缓存
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT)
@@ -114,11 +114,11 @@ public final class CrystalWorkstationShell {
         if (controller.isMirrorFront()) {
             signature |= 4;
         }
-        return signature | controller.getBlockState().getValue(AbstractMultiblockControllerBlock.FACING).ordinal() << 3;
+        return signature | controller.getBlockState().getValue(MachineBlock.FACING).ordinal() << 3;
     }
 
     private static Map<BlockPos, Look> collect(CrystalWorkstationControllerBlockEntity controller) {
-        Direction facing = controller.getBlockState().getValue(AbstractMultiblockControllerBlock.FACING);
+        Direction facing = controller.getBlockState().getValue(MachineBlock.FACING);
         Map<BlockPos, Look> looks = new HashMap<>();
         for (CrystalWorkstationStructure.Part part : CrystalWorkstationStructure.effectParts(
                 controller.getBlockPos(), facing, controller.isMirrorSide(), controller.isMirrorFront())) {

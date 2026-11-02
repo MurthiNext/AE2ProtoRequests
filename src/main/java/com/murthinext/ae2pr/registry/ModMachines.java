@@ -13,7 +13,6 @@ import com.murthinext.ae2pr.machine.MachineControllerBlockEntity;
 import com.murthinext.ae2pr.machine.MachineDefinition;
 import com.murthinext.ae2pr.machine.MachineMenu;
 import com.murthinext.ae2pr.machine.MachineRecipe;
-import com.murthinext.ae2pr.machine.ModeMachineMenu;
 import com.murthinext.ae2pr.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.machine.RecipeConstraints;
 import com.murthinext.ae2pr.machine.RecipeDefinition;
@@ -94,13 +93,13 @@ public final class ModMachines {
                     HIGH_REACTIVITY_LAVA_SMELTER_RECIPE::type, () -> HighReactivityLavaSmelterMenu.TYPE,
                     (definition, id, inventory, controller) -> new HighReactivityLavaSmelterMenu(id, inventory, controller));
 
-    public static final MultiblockMachineDefinition<CrystalWorkstationControllerBlockEntity, ModeMachineMenu<CrystalWorkstationControllerBlockEntity, CrystalWorkstationMode>> CRYSTAL_WORKSTATION =
+    public static final MultiblockMachineDefinition<CrystalWorkstationControllerBlockEntity, MachineMenu<CrystalWorkstationControllerBlockEntity>> CRYSTAL_WORKSTATION =
             MultiblockMachineDefinition.withModes("crystal_workstation", CrystalWorkstationControllerBlockEntity.class,
                     CrystalWorkstationControllerBlockEntity::new, ModMachines::crystalProperties,
                     () -> CrystalWorkstationStructure.INSTANCE, () -> Math.max(1, Config.crystalWorkstationParallel()),
                     () -> CrystalWorkstationMode.ETCHING.recipeType(), List.of(CrystalWorkstationMode.values()));
 
-    public static final MultiblockMachineDefinition<MultiFactoryControllerBlockEntity, ModeMachineMenu<MultiFactoryControllerBlockEntity, MultiFactoryMode>> MULTI_FACTORY =
+    public static final MultiblockMachineDefinition<MultiFactoryControllerBlockEntity, MachineMenu<MultiFactoryControllerBlockEntity>> MULTI_FACTORY =
             MultiblockMachineDefinition.withModes("multi_factory", MultiFactoryControllerBlockEntity.class,
                     MultiFactoryControllerBlockEntity::new, ModMachines::crystalProperties,
                     () -> MultiFactoryStructure.INSTANCE, () -> Math.max(1, Config.multiFactoryParallel()),

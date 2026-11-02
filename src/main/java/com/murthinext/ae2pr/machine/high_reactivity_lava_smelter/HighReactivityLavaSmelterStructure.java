@@ -10,10 +10,10 @@ import net.minecraft.world.phys.AABB;
 
 import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
-import com.murthinext.ae2pr.logic.multiblock.AbstractStructureFacade;
-import com.murthinext.ae2pr.logic.multiblock.MultiblockPattern;
-import com.murthinext.ae2pr.logic.multiblock.RelativeDirection;
-import com.murthinext.ae2pr.logic.multiblock.StructurePredicate;
+import com.murthinext.ae2pr.machine.multiblock.AbstractStructureFacade;
+import com.murthinext.ae2pr.machine.multiblock.MultiblockPattern;
+import com.murthinext.ae2pr.machine.multiblock.RelativeDirection;
+import com.murthinext.ae2pr.machine.multiblock.StructurePredicate;
 
 // 高反应性熔岩冶炼炉结构定义
 public final class HighReactivityLavaSmelterStructure extends AbstractStructureFacade {

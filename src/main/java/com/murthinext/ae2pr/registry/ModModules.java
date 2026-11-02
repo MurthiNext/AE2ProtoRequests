@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.resources.ResourceLocation;
 
-import com.murthinext.ae2pr.logic.multiblock.module.ModuleType;
+import com.murthinext.ae2pr.machine.multiblock.module.ModuleType;
 
 public final class ModModules {
 

@@ -10,10 +10,10 @@ import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.registry.ModModules;
 import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
-import com.murthinext.ae2pr.logic.multiblock.AbstractStructureFacade;
-import com.murthinext.ae2pr.logic.multiblock.MultiblockPattern;
-import com.murthinext.ae2pr.logic.multiblock.RelativeDirection;
-import com.murthinext.ae2pr.logic.multiblock.StructurePredicate;
+import com.murthinext.ae2pr.machine.multiblock.AbstractStructureFacade;
+import com.murthinext.ae2pr.machine.multiblock.MultiblockPattern;
+import com.murthinext.ae2pr.machine.multiblock.RelativeDirection;
+import com.murthinext.ae2pr.machine.multiblock.StructurePredicate;
 
 // 水晶装配线结构定义与外观同步
 public final class CrystalAssemblyLineStructure extends AbstractStructureFacade {

@@ -27,10 +27,12 @@ public final class InkStoryCompiler {
         Path nodes = Path.of(args[2]);
         List<Path> languages;
         try (var directories = Files.list(source)) {
-            languages = directories.filter(Files::isDirectory).sorted().toList();
+            languages = directories.filter(Files::isDirectory)
+                    .filter(directory -> Files.isRegularFile(directory.resolve("main.ink")))
+                    .sorted().toList();
         }
         if (languages.isEmpty()) {
-            throw new IllegalArgumentException("At least one story language directory is required");
+            throw new IllegalArgumentException("At least one story language directory is required: " + source);
         }
         Set<Path> targets = new HashSet<>();
         for (Path language : languages) {

@@ -1,6 +1,6 @@
 package com.murthinext.ae2pr.machine.high_reactivity_lava_smelter;
 
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlock;
+import com.murthinext.ae2pr.machine.MachineBlock;
 import java.util.List;
 
 import org.joml.Matrix4f;
@@ -43,7 +43,7 @@ public class HighReactivityLavaSmelterRenderer implements BlockEntityRenderer<Hi
             return;
         }
         BlockPos pos = controller.getBlockPos();
-        Direction facing = controller.getBlockState().getValue(AbstractMultiblockControllerBlock.FACING);
+        Direction facing = controller.getBlockState().getValue(MachineBlock.FACING);
         List<BlockPos> cells = HighReactivityLavaSmelterStructure.poolCells(pos, facing, controller.isMirrorSide(),
                 controller.isMirrorFront());
 

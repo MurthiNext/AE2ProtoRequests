@@ -149,22 +149,24 @@ dependencies {
 
 }
 
+def storySource = file('src/main/resources/assets/ae2pr/story/source')
+def storyNodes = file('src/main/resources/assets/ae2pr/story/nodes')
 def storyResources = layout.buildDirectory.dir('generated/storyResources')
 def compileStories = tasks.register('compileStories', JavaExec) {
     group = 'build'
     description = 'compile and check Ink story'
     classpath = sourceSets.storyCompiler.runtimeClasspath
     mainClass = 'com.murthinext.ae2pr.tools.InkStoryCompiler'
-    inputs.dir('src/main/ink')
-    inputs.dir('src/main/resources/assets/ae2pr/story/nodes')
+    inputs.dir(storySource)
+    inputs.dir(storyNodes)
     outputs.dir(storyResources)
-    args file('src/main/ink').absolutePath, storyResources.get().asFile.absolutePath,
-            file('src/main/resources/assets/ae2pr/story/nodes').absolutePath
+    args storySource.absolutePath, storyResources.get().asFile.absolutePath, storyNodes.absolutePath
 }
 sourceSets.main.resources.srcDir(storyResources)
 
 tasks.named('processResources', ProcessResources).configure {
     dependsOn compileStories
+    exclude 'assets/ae2pr/story/source/**'
     var replaceProperties = [minecraft_version: minecraft_version,
                              minecraft_version_range: minecraft_version_range,
                              forge_version: forge_version,

@@ -30,12 +30,9 @@ import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.machine.MachineBlock;
-import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationControllerBlockEntity;
-import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationMode;
+import com.murthinext.ae2pr.machine.ModeMachineBlockEntity;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterControllerBlockEntity;
-import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryControllerBlockEntity;
-import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryMode;
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 
 @WailaPlugin(ae2pr.MODID)
 public final class MultiblockJadePlugin implements IWailaPlugin {
@@ -88,10 +85,8 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
     protected void appendExtraServerData(CompoundTag data, BlockEntity controller) {
         if (controller instanceof HighReactivityLavaSmelterControllerBlockEntity smelter) {
             data.putInt(KEY_DURABILITY, smelter.getDurability());
-        } else if (controller instanceof CrystalWorkstationControllerBlockEntity workstation) {
-            data.putString(KEY_MODE, workstation.getMode().id());
-        } else if (controller instanceof MultiFactoryControllerBlockEntity factory) {
-            data.putString(KEY_MODE, factory.getMode().id());
+        } else if (controller instanceof ModeMachineBlockEntity<?> machine) {
+            data.putString(KEY_MODE, machine.getMode().translationKey());
         }
     }
 
@@ -100,11 +95,9 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
             tooltip.add(Component.translatable("gui.ae2pr.high_reactivity_lava_smelter.durability",
                     data.getInt(KEY_DURABILITY), Config.highReactivityLavaSmelterMaxDurability()));
         }
-        if (data.contains(KEY_MODE)) {
-            Component mode = data.getString(KEY_MACHINE).equals(ModMachines.CRYSTAL_WORKSTATION.id())
-                    ? CrystalWorkstationMode.byId(data.getString(KEY_MODE)).displayName()
-                    : MultiFactoryMode.byId(data.getString(KEY_MODE)).displayName();
-            tooltip.add(Component.translatable("gui.ae2pr.multiblock.mode", mode));
+        String mode = data.getString(KEY_MODE);
+        if (!mode.isEmpty()) {
+            tooltip.add(Component.translatable("gui.ae2pr.multiblock.mode", Component.translatable(mode)));
         }
     }
 

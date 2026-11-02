@@ -29,7 +29,7 @@ import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlock;
+import com.murthinext.ae2pr.machine.MachineBlock;
 
 public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFactoryControllerBlockEntity> {
 
@@ -52,7 +52,7 @@ public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFact
         }
         BlockState state = controller.getBlockState();
         BlockPos core = controller.getCorePos();
-        Direction front = state.getValue(AbstractMultiblockControllerBlock.FACING);
+        Direction front = state.getValue(MachineBlock.FACING);
         if (controller.isMirrorFront()) {
             front = front.getOpposite();
         }
@@ -61,8 +61,8 @@ public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFact
             Surface surface = surface(front, normal);
             TextureAtlasSprite base = atlas.apply(surface.panel().base);
             ResourceLocation glowTexture = surface.panel().glow(
-                    state.getValue(AbstractMultiblockControllerBlock.RUNNING),
-                    state.getValue(AbstractMultiblockControllerBlock.PAUSED));
+                    state.getValue(MachineBlock.RUNNING),
+                    state.getValue(MachineBlock.PAUSED));
             TextureAtlasSprite glow = glowTexture == null ? null : atlas.apply(glowTexture);
             renderSurface(level, controller.getBlockPos(), core, surface, base, glow, poseStack, buffer,
                     combinedOverlay);
@@ -105,7 +105,7 @@ public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFact
                             -0.5 + normal.getStepY() * LIGHT_OFFSET,
                             -0.5 + normal.getStepZ() * LIGHT_OFFSET);
                     BlockState overlayState = host
-                            ? state.setValue(AbstractMultiblockControllerBlock.FACING, normal) : state;
+                            ? state.setValue(MachineBlock.FACING, normal) : state;
                     var model = Minecraft.getInstance().getBlockRenderer().getBlockModel(overlayState);
                     random.setSeed(overlayState.getSeed(cell));
                     int light = LevelRenderer.getLightColor(level, cell.relative(normal));

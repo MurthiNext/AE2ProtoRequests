@@ -36,8 +36,8 @@ import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryMode;
 import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryRenderer;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryRenderer;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryScreen;
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerMenu;
+import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerMenu;
 
 public final class MachineClients {
 

@@ -26,7 +26,7 @@ import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOreBlock;
-import com.murthinext.ae2pr.logic.multiblock.module.ModuleDefinition;
+import com.murthinext.ae2pr.machine.multiblock.module.ModuleDefinition;
 
 public final class ModBlocks {
 

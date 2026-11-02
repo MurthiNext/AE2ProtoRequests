@@ -1,5 +1,6 @@
 package com.murthinext.ae2pr.machine;
 
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -35,10 +36,11 @@ public abstract class MachineDefinition<B extends Block, E extends BlockEntity, 
     @Nullable
     private final MenuFactory<E, M> menuFactory;
     private final int speedUpgrades;
+    private final List<Mode> modes;
 
     protected MachineDefinition(String id, String entityId, Class<E> entityClass,
             @Nullable Function<MachineDefinition<B, E, M>, MenuType<M>> menuTypeFactory,
-            @Nullable MenuFactory<E, M> menuFactory, int speedUpgrades) {
+            @Nullable MenuFactory<E, M> menuFactory, int speedUpgrades, List<Mode> modes) {
         if ((menuTypeFactory == null) != (menuFactory == null)) {
             throw new IllegalArgumentException("Menu type and factory must be configured together: " + id);
         }
@@ -46,6 +48,7 @@ public abstract class MachineDefinition<B extends Block, E extends BlockEntity, 
         this.entityClass = entityClass;
         this.menuFactory = menuFactory;
         this.speedUpgrades = speedUpgrades;
+        this.modes = modes;
         this.block = ModBlocks.BLOCKS.register(id, this::createBlock);
         this.item = ModItems.ITEMS.register(id, () -> new BlockItem(block(), new Item.Properties()));
         this.blockEntityType = ModBlockEntities.BLOCK_ENTITIES.register(entityId,
@@ -60,7 +63,8 @@ public abstract class MachineDefinition<B extends Block, E extends BlockEntity, 
                     @Nullable Supplier<MenuType<M>> menuTypeFactory, @Nullable MenuFactory<E, M> menuFactory,
                     int speedUpgrades) {
         return new MachineDefinition<>(id, entityId, entityClass,
-                menuTypeFactory == null ? null : definition -> menuTypeFactory.get(), menuFactory, speedUpgrades) {
+                menuTypeFactory == null ? null : definition -> menuTypeFactory.get(), menuFactory, speedUpgrades,
+                List.of()) {
             @Override
             protected B createBlock() {
                 return blockFactory.get();
@@ -102,6 +106,10 @@ public abstract class MachineDefinition<B extends Block, E extends BlockEntity, 
 
     public final int speedUpgrades() {
         return speedUpgrades;
+    }
+
+    public final List<Mode> modes() {
+        return modes;
     }
 
     @Nullable

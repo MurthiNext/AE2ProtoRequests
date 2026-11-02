@@ -1,7 +1,5 @@
 package com.murthinext.ae2pr.machine.high_reactivity_lava_smelter;
 
-import java.util.List;
-
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -24,7 +22,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 import com.murthinext.ae2pr.recipe.MultiblockRecipe;
 
 public class HighReactivityLavaSmelterControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
@@ -202,14 +200,5 @@ public class HighReactivityLavaSmelterControllerBlockEntity extends AbstractMult
 
     public int getDurability() {
         return durability;
-    }
-
-    public int getMaxDurability() {
-        return Config.highReactivityLavaSmelterMaxDurability();
-    }
-
-    // 结构内输入/输出仓与总线，仅用于渲染与诊断
-    public List<BlockPos> poolCells() {
-        return HighReactivityLavaSmelterStructure.poolCells(worldPosition, getFacing(), mirrorSide, mirrorFront);
     }
 }

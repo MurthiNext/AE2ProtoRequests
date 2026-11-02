@@ -1,6 +1,5 @@
 package com.murthinext.ae2pr.machine.multi_factory;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.RecipeType;
 
 import appeng.recipes.handlers.ChargerRecipe;
@@ -11,9 +10,7 @@ import com.murthinext.ae2pr.machine.Mode;
 // 通式加工厂工作模式，直接对应 AE2 原生配方类型
 public enum MultiFactoryMode implements Mode {
 
-    INSCRIBING("inscribing", InscriberRecipe.TYPE),
-
-    CHARGING("charging", ChargerRecipe.TYPE);
+    INSCRIBING("inscribing", InscriberRecipe.TYPE), CHARGING("charging", ChargerRecipe.TYPE);
 
     private final String id;
     private final RecipeType<?> recipeType;
@@ -23,14 +20,17 @@ public enum MultiFactoryMode implements Mode {
         this.recipeType = recipeType;
     }
 
+    @Override
     public String id() {
         return id;
     }
 
-    public Component displayName() {
-        return Component.translatable("gui.ae2pr.multi_factory.mode." + id);
+    @Override
+    public String translationKey() {
+        return "gui.ae2pr.multi_factory.mode." + id;
     }
 
+    @Override
     public RecipeType<?> recipeType() {
         return recipeType;
     }
@@ -42,13 +42,5 @@ public enum MultiFactoryMode implements Mode {
     public double energyPerParallel() {
         return this == INSCRIBING ? Config.multiFactoryInscribingEnergyPerParallel()
                 : Config.multiFactoryChargingEnergyPerParallel();
-    }
-
-    public MultiFactoryMode next() {
-        return this == INSCRIBING ? CHARGING : INSCRIBING;
-    }
-
-    public static MultiFactoryMode byId(String id) {
-        return CHARGING.id.equals(id) ? CHARGING : INSCRIBING;
     }
 }

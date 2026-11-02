@@ -20,7 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlock;
+import com.murthinext.ae2pr.machine.MachineBlock;
 
 // 晶能工作站成型特效
 public class CrystalWorkstationRenderer
@@ -71,7 +71,7 @@ public class CrystalWorkstationRenderer
         if (!CrystalWorkstationShell.isCore(core)) {
             return;
         }
-        Direction facing = controller.getBlockState().getValue(AbstractMultiblockControllerBlock.FACING);
+        Direction facing = controller.getBlockState().getValue(MachineBlock.FACING);
         Direction sideAxis = CrystalWorkstationStructure.sideAxis(facing, controller.isMirrorSide(),
                 controller.isMirrorFront());
         Direction depthAxis = CrystalWorkstationStructure.depthAxis(facing, controller.isMirrorSide(),

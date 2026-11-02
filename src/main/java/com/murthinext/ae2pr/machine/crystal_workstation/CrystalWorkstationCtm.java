@@ -21,7 +21,7 @@ import com.murthinext.ae2pr.client.ctm.CtmConfig;
 import com.murthinext.ae2pr.client.ctm.CtmMeshBuilder;
 import com.murthinext.ae2pr.client.ctm.CtmSprites;
 import com.murthinext.ae2pr.client.ctm.QuadrantCtmMeshBuilder;
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerBlock;
+import com.murthinext.ae2pr.machine.MachineBlock;
 
 // 晶能工作站成型外观：主机换装、隐藏核心、玻璃单面化与两侧 3x3 面板换装连纹
 public final class CrystalWorkstationCtm {
@@ -43,7 +43,7 @@ public final class CrystalWorkstationCtm {
             BlockAndTintGetter level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
         if (state.is(ModMachines.CRYSTAL_WORKSTATION.block())) {
-            return state.getValue(AbstractMultiblockControllerBlock.FORMED) ? controller(quads, level, pos) : null;
+            return state.getValue(MachineBlock.FORMED) ? controller(quads, level, pos) : null;
         }
         CrystalWorkstationShell.Look look = CrystalWorkstationShell.look(pos);
         // 与面板或成型主机相邻的机壳并入工作站外观
@@ -189,7 +189,7 @@ public final class CrystalWorkstationCtm {
         for (Direction direction : Direction.values()) {
             BlockState neighbor = level.getBlockState(pos.relative(direction));
             if (neighbor.is(ModMachines.CRYSTAL_WORKSTATION.block())
-                    && neighbor.getValue(AbstractMultiblockControllerBlock.FORMED)) {
+                    && neighbor.getValue(MachineBlock.FORMED)) {
                 return true;
             }
         }
@@ -201,7 +201,7 @@ public final class CrystalWorkstationCtm {
             return true;
         }
         if (neighborState.is(ModMachines.CRYSTAL_WORKSTATION.block())) {
-            return neighborState.getValue(AbstractMultiblockControllerBlock.FORMED);
+            return neighborState.getValue(MachineBlock.FORMED);
         }
         return CtmConfig.connects(neighborState, ModBlocks.CRYSTAL_ENERGY_CASING.get().defaultBlockState());
     }

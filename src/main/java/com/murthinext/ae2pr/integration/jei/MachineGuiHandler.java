@@ -19,9 +19,9 @@ import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.client.CustomIngredientSource;
 import com.murthinext.ae2pr.client.GuiExtraAreas;
 import com.murthinext.ae2pr.machine.MachineDefinition;
-import com.murthinext.ae2pr.machine.ModeMachineMenu;
+import com.murthinext.ae2pr.machine.MachineMenu;
 import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryMode;
-import com.murthinext.ae2pr.logic.multiblock.AbstractMultiblockControllerScreen;
+import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerScreen;
 
 public class MachineGuiHandler implements IGuiContainerHandler<AbstractContainerScreen<?>> {
 
@@ -41,8 +41,8 @@ public class MachineGuiHandler implements IGuiContainerHandler<AbstractContainer
             return List.of(IGuiClickableArea.createBasic(area.getX(), area.getY(), area.getWidth(), area.getHeight(),
                     JigJeiCategory.RECIPE_TYPE));
         }
-        if (definition == ModMachines.MULTI_FACTORY && machineScreen.getMenu() instanceof ModeMachineMenu<?, ?> modeMenu
-                && modeMenu.getMode() instanceof MultiFactoryMode mode) {
+        if (definition == ModMachines.MULTI_FACTORY && machineScreen.getMenu() instanceof MachineMenu<?> machineMenu
+                && machineMenu.getMode() instanceof MultiFactoryMode mode) {
             return List.of(IGuiClickableArea.createBasic(area.getX(), area.getY(), area.getWidth(), area.getHeight(),
                     MultiFactoryJeiPlugin.recipeType(mode)));
         }
