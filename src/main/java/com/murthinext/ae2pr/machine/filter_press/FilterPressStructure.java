@@ -4,11 +4,11 @@ import com.murthinext.ae2pr.registry.ModMachines;
 import net.minecraft.world.level.block.Blocks;
 
 import com.murthinext.ae2pr.registry.ModBlocks;
-import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
-import com.murthinext.ae2pr.machine.multiblock.AbstractStructureFacade;
-import com.murthinext.ae2pr.machine.multiblock.MultiblockPattern;
-import com.murthinext.ae2pr.machine.multiblock.RelativeDirection;
-import com.murthinext.ae2pr.machine.multiblock.StructurePredicate;
+import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
+import com.murthinext.ae2pr.api.multiblock.AbstractStructureFacade;
+import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
+import com.murthinext.ae2pr.api.multiblock.RelativeDirection;
+import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
 
 public final class FilterPressStructure extends AbstractStructureFacade {
 

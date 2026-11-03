@@ -24,9 +24,9 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.recipe.ChancedItemStack;
-import com.murthinext.ae2pr.recipe.CountedIngredient;
-import com.murthinext.ae2pr.machine.MachineRecipe;
+import com.murthinext.ae2pr.api.recipe.ChancedItemStack;
+import com.murthinext.ae2pr.api.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.machine.MachineRecipe;
 
 public class HighReactivityLavaSmelterJeiCategory implements IRecipeCategory<MachineRecipe> {
 

@@ -24,7 +24,7 @@ import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.inputs.IJeiGuiEventListener;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
 
-import com.murthinext.ae2pr.machine.AbstractMachineScreen;
+import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 import com.murthinext.ae2pr.client.multiblock.MultiblockPreview;
 import com.murthinext.ae2pr.client.multiblock.MultiblockPreviewRenderer;
 

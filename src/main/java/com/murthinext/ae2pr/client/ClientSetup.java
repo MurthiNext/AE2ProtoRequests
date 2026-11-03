@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.client;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +19,8 @@ import net.minecraftforge.registries.RegistryObject;
 
 import appeng.init.client.InitScreens;
 
+import com.murthinext.ae2pr.api.material.MaterialItem;
+import com.murthinext.ae2pr.api.material.MaterialItems;
 import com.murthinext.ae2pr.registry.ModBlockEntities;
 import com.murthinext.ae2pr.registry.ModMenus;
 import com.murthinext.ae2pr.ae2pr;
@@ -29,8 +33,6 @@ import com.murthinext.ae2pr.block.machine_part.ItemBusScreen;
 import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterScreen;
 import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterScreen;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryRenderer;
-import com.murthinext.ae2pr.material.MaterialItem;
-import com.murthinext.ae2pr.material.MaterialItems;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientSetup {
@@ -78,7 +80,7 @@ public final class ClientSetup {
     private static void logNamingFactorySprites(ModelManager modelManager) {
         var atlas = modelManager.getAtlas(InventoryMenu.BLOCK_ATLAS);
         for (String path : new String[] { "naming_factory", "naming_factory_rod", "naming_factory_glass" }) {
-            var sprite = atlas.getSprite(ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "block/" + path));
+            var sprite = atlas.getSprite(Ids.of( "block/" + path));
             ae2pr.LOGGER.info("atlas sprite {} -> {}", path, sprite.contents().name());
         }
     }

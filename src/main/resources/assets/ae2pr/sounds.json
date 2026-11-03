@@ -41,7 +41,7 @@
   "crystal_workstation_etching": {
     "subtitle": "subtitle.ae2pr.crystal_workstation_etching",
     "sounds": [
-      "ae2pr:machine/electorlyzer"
+      "ae2pr:machine/electrolyzer"
     ]
   },
   "crystal_workstation_cutting": {

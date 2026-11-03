@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.MapColor;
 
-import com.murthinext.ae2pr.logic.wrench.Wrenchable;
+import com.murthinext.ae2pr.api.wrench.Wrenchable;
 
 public class MeteorSteelPipeBlock extends Block implements Wrenchable {
 

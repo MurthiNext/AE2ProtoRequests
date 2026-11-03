@@ -11,7 +11,8 @@ import com.murthinext.ae2pr.block.meteorite.MeteoriteOres;
 import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
 import com.murthinext.ae2pr.logic.wrench.WrenchInteractions;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryBlockEntity;
-import com.murthinext.ae2pr.material.MaterialItems;
+import com.murthinext.ae2pr.api.machine.MachineRegistries;
+import com.murthinext.ae2pr.api.machine.MachineTuning;
 import com.murthinext.ae2pr.registry.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -34,11 +35,16 @@ public class ae2pr {
     public ae2pr(FMLJavaModLoadingContext context) {
         var modEventBus = context.getModEventBus();
         modEventBus.addListener(this::commonSetup);
+        // 机器模板的注册表需在 ModMachines 静态初始化前注入
+        MachineRegistries.install(ModBlocks.BLOCKS, ModItems.ITEMS, ModBlockEntities.BLOCK_ENTITIES,
+                ModMenus.MENUS, ModRecipes.RECIPE_TYPES, ModRecipes.SERIALIZERS);
+        MachineTuning.install(Config::lossySpeedPerCard, Config::lossyEnergyMultiplierPerCard);
+        ModMaterials.init();
         ModMachines.init();
+        ModBlocks.installStructureHooks();
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
-        MaterialItems.ITEMS.register(modEventBus);
         ModMenus.MENUS.register(modEventBus);
         ModFluids.FLUID_TYPES.register(modEventBus);
         ModFluids.FLUIDS.register(modEventBus);

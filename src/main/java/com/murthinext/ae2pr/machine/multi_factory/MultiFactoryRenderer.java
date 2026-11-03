@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.machine.multi_factory;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +31,7 @@ import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
-import com.murthinext.ae2pr.machine.MachineBlock;
+import com.murthinext.ae2pr.api.machine.MachineBlock;
 
 public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFactoryControllerBlockEntity> {
 
@@ -212,10 +214,10 @@ public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFact
 
         Panel(String face) {
             String path = "block/multi_factory/formed_" + face;
-            base = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, path);
-            idle = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, path + "_emissive");
-            active = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, path + "_active_emissive");
-            paused = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, path + "_paused_emissive");
+            base = Ids.of( path);
+            idle = Ids.of( path + "_emissive");
+            active = Ids.of( path + "_active_emissive");
+            paused = Ids.of( path + "_paused_emissive");
         }
 
         @Nullable

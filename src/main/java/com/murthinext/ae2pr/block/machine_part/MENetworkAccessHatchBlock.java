@@ -24,7 +24,7 @@ import net.minecraft.world.level.material.MapColor;
 
 import appeng.block.AEBaseEntityBlock;
 
-import com.murthinext.ae2pr.logic.wrench.Wrenchable;
+import com.murthinext.ae2pr.api.wrench.Wrenchable;
 
 public class MENetworkAccessHatchBlock extends AEBaseEntityBlock<MENetworkAccessHatchBlockEntity>
         implements Wrenchable {

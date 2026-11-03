@@ -8,7 +8,7 @@ import net.minecraft.world.level.ItemLike;
 
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.registry.ModGuide;
-import com.murthinext.ae2pr.machine.AbstractMachineScreen;
+import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 
 public class NamingFactoryScreen extends AbstractMachineScreen<NamingFactoryMenu> {
 

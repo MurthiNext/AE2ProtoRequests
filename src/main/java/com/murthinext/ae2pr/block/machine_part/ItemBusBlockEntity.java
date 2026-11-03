@@ -16,14 +16,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
+import com.murthinext.ae2pr.api.machine.part.MachinePart;
 import com.murthinext.ae2pr.registry.ModBlockEntities;
 import com.murthinext.ae2pr.registry.ModBlocks;
 
-public class ItemBusBlockEntity extends BlockEntity {
+public class ItemBusBlockEntity extends BlockEntity implements MachinePart {
 
     public static final int CAPACITY = 32 * 1024;
     public static final int AEV_CAPACITY = 2048;
@@ -131,6 +133,53 @@ public class ItemBusBlockEntity extends BlockEntity {
         };
         this.exposedStorage = isOutputBus() ? externalStorage : storage;
         this.storageCapability = LazyOptional.of(() -> exposedStorage);
+    }
+
+    @Override
+    public BlockPos getPartPos() {
+        return worldPosition;
+    }
+
+    @Override
+    public ItemPart items() {
+        return new ItemPart() {
+            @Override
+            public BlockPos getPartPos() {
+                return worldPosition;
+            }
+
+            @Override
+            public IItemHandlerModifiable storage() {
+                return storage;
+            }
+
+            @Override
+            public int slotCount() {
+                return storage.getSlots();
+            }
+
+            @Override
+            public boolean isOutput() {
+                return isOutputBus();
+            }
+
+            @Override
+            public boolean isRecipeIsolated() {
+                return recipeIsolated;
+            }
+        };
+    }
+
+    @Nullable
+    @Override
+    public FluidPart fluids() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public NetworkPart network() {
+        return null;
     }
 
     public ItemStackHandler getStorage() {

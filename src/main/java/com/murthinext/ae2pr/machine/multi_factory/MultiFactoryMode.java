@@ -5,7 +5,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import appeng.recipes.handlers.ChargerRecipe;
 import appeng.recipes.handlers.InscriberRecipe;
 import com.murthinext.ae2pr.Config;
-import com.murthinext.ae2pr.machine.Mode;
+import com.murthinext.ae2pr.api.machine.Mode;
 
 // 通式加工厂工作模式，直接对应 AE2 原生配方类型
 public enum MultiFactoryMode implements Mode {

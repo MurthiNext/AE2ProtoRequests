@@ -16,8 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
-import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
-import com.murthinext.ae2pr.machine.MachineBlock;
+import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
+import com.murthinext.ae2pr.api.machine.MachineBlock;
 import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
 
 // 连接纹理的逐方块配置

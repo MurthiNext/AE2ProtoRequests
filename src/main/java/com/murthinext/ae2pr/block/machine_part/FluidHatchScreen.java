@@ -15,7 +15,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.murthinext.ae2pr.registry.ModNetwork;
-import com.murthinext.ae2pr.client.CustomIngredientSource;
+import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 
 public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> implements CustomIngredientSource {

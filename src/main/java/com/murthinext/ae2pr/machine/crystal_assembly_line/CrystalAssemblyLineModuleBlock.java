@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.machine.crystal_assembly_line;
 
-import com.murthinext.ae2pr.machine.multiblock.module.ModuleDefinition;
-import com.murthinext.ae2pr.machine.multiblock.module.ModuleProvider;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleDefinition;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
 
 public class CrystalAssemblyLineModuleBlock extends CrystalAssemblyLineUnitBlock implements ModuleProvider {
 

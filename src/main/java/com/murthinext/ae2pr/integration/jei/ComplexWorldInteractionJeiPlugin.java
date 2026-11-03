@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.integration.jei;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -18,7 +20,7 @@ public class ComplexWorldInteractionJeiPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "complex_world_interaction");
+        return Ids.of( "complex_world_interaction");
     }
 
     @Override

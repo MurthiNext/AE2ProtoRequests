@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.integration.jei;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.util.Arrays;
 
 import net.minecraft.client.Minecraft;
@@ -21,7 +23,9 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.machine.MachineRecipe;
+import com.murthinext.ae2pr.api.machine.Mode;
+import com.murthinext.ae2pr.api.machine.MachineRecipe;
+import com.murthinext.ae2pr.api.machine.Mode;
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationMode;
 
 public class CrystalWorkstationJeiCategory implements IRecipeCategory<MachineRecipe> {
@@ -56,7 +60,7 @@ public class CrystalWorkstationJeiCategory implements IRecipeCategory<MachineRec
     }
 
     private static ResourceLocation processTexture(CrystalWorkstationMode mode) {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+        return Ids.of(
                 "textures/gui/jei/crystal_workstation_" + mode.id() + "_process.png");
     }
 

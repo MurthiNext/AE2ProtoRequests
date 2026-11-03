@@ -27,7 +27,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 
 import com.murthinext.ae2pr.registry.ModTags;
-import com.murthinext.ae2pr.logic.wrench.Wrenchable;
+import com.murthinext.ae2pr.api.wrench.Wrenchable;
 
 // 名称压印工厂方块
 public class NamingFactoryBlock extends AEBaseEntityBlock<NamingFactoryBlockEntity> implements Wrenchable {

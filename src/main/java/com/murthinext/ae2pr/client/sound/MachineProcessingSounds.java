@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.Mod;
 
 import com.murthinext.ae2pr.registry.ModSounds;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.machine.MachineBlock;
+import com.murthinext.ae2pr.api.machine.MachineBlock;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT)
 public final class MachineProcessingSounds {

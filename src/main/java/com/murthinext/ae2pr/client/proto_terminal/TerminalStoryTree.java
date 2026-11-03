@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.client.proto_terminal;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -48,7 +50,7 @@ record TerminalStoryTree(List<Node> nodes, String program) {
             throws IOException {
         String program = null;
         for (String language : List.of(selectedLanguage, "en_us", "zh_cn")) {
-            var resource = resources.getResource(ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+            var resource = resources.getResource(Ids.of(
                     "story/" + language + "/main.ink.json"));
             if (resource.isPresent()) {
                 try (Reader reader = resource.get().openAsReader()) {

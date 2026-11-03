@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.integration.jei;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import net.minecraft.resources.ResourceLocation;
 
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -12,7 +14,7 @@ public final class FluidSlotBackground {
 
     public static final int SIZE = 18;
 
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    private static final ResourceLocation TEXTURE = Ids.of(
             "textures/gui/jei/fluid_slot.png");
 
     private FluidSlotBackground() {

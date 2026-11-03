@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.integration.jei;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -19,7 +21,7 @@ public class MatterPhaseTransformerJeiPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "matter_phase_transformer");
+        return Ids.of( "matter_phase_transformer");
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.integration.jei;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -31,10 +33,10 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.machine.multiblock.module.ModuleDefinition;
-import com.murthinext.ae2pr.machine.multiblock.module.ModuleProvider;
-import com.murthinext.ae2pr.machine.multiblock.module.ModuleRequirement;
-import com.murthinext.ae2pr.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleDefinition;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleRequirement;
+import com.murthinext.ae2pr.api.recipe.CountedIngredient;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineRecipe;
 
 public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAssemblyLineRecipe> {
@@ -77,7 +79,7 @@ public class CrystalAssemblyLineJeiCategory implements IRecipeCategory<CrystalAs
     private static final int COLOR_HINT = 0x808080;
     private static final int COLOR_TEXT = 0x404040;
 
-    private static final ResourceLocation PIPE_TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    private static final ResourceLocation PIPE_TEXTURE = Ids.of(
             "textures/gui/jei/crystal_assembly_line_pipes.png");
 
     private final IDrawable icon;

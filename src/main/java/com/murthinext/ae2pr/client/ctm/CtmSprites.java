@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.client.ctm;
 
+import com.murthinext.ae2pr.ae2pr;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -14,22 +16,22 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
+import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
 
 // 连接纹理图集登记表：基础贴图 → CTM 图集，并缓存基础 sprite
 public final class CtmSprites {
 
-    public static final ResourceLocation AEV_PART_CASING = id("block/aev_machine_casing");
-    public static final ResourceLocation HIGH_REACTIVITY_LAVA_SMELTER_CONTROLLER_CASING = id("block/high_reactivity_lava_smelter/controller_casing");
-    public static final ResourceLocation MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING = id("block/matter_phase_transformer/controller_casing");
-    public static final ResourceLocation CRYSTAL_REACTION_CONTROLLER_CASING = id("block/crystal_reaction_chamber/controller_casing");
-    public static final ResourceLocation CRYSTAL_ASSEMBLY_LINE_CONTROLLER_CASING = id("block/crystal_assembly_line/controller_casing");
-    public static final ResourceLocation CRYSTAL_WORKSTATION_CONTROLLER_CASING = id("block/crystal_workstation/controller_casing");
-    public static final ResourceLocation JIG_CONTROLLER_CASING = id("block/jig/controller_casing");
-    public static final ResourceLocation MULTI_FACTORY_CONTROLLER_CASING = id("block/multi_factory/controller_casing");
-    public static final ResourceLocation FILTER_PRESS_CONTROLLER_CASING = id("block/filter_press/controller_casing");
-    public static final ResourceLocation WORKSTATION_PANEL_INNER = id("block/crystal_workstation/panel_face");
+    public static final ResourceLocation AEV_PART_CASING = Ids.of("block/aev_machine_casing");
+    public static final ResourceLocation HIGH_REACTIVITY_LAVA_SMELTER_CONTROLLER_CASING = Ids.of("block/high_reactivity_lava_smelter/controller_casing");
+    public static final ResourceLocation MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING = Ids.of("block/matter_phase_transformer/controller_casing");
+    public static final ResourceLocation CRYSTAL_REACTION_CONTROLLER_CASING = Ids.of("block/crystal_reaction_chamber/controller_casing");
+    public static final ResourceLocation CRYSTAL_ASSEMBLY_LINE_CONTROLLER_CASING = Ids.of("block/crystal_assembly_line/controller_casing");
+    public static final ResourceLocation CRYSTAL_WORKSTATION_CONTROLLER_CASING = Ids.of("block/crystal_workstation/controller_casing");
+    public static final ResourceLocation JIG_CONTROLLER_CASING = Ids.of("block/jig/controller_casing");
+    public static final ResourceLocation MULTI_FACTORY_CONTROLLER_CASING = Ids.of("block/multi_factory/controller_casing");
+    public static final ResourceLocation FILTER_PRESS_CONTROLLER_CASING = Ids.of("block/filter_press/controller_casing");
+    public static final ResourceLocation WORKSTATION_PANEL_INNER = Ids.of("block/crystal_workstation/panel_face");
 
     private static final Map<ResourceLocation, ResourceLocation> ATLASES = new HashMap<>();
 
@@ -77,15 +79,15 @@ public final class CtmSprites {
 
     // 登记底图：沿用 47-tile 图集
     private static void register(String basePath) {
-        ResourceLocation base = id(basePath);
-        ATLASES.put(base, id(basePath + "_ctm"));
+        ResourceLocation base = Ids.of(basePath);
+        ATLASES.put(base, Ids.of(basePath + "_ctm"));
         REGISTERED.add(base);
     }
 
     // 登记底图：使用 GT 式 4×4 象限图集
     private static void registerQuadrant(String basePath) {
-        ResourceLocation base = id(basePath);
-        ATLASES.put(base, id(basePath + "_ctm"));
+        ResourceLocation base = Ids.of(basePath);
+        ATLASES.put(base, Ids.of(basePath + "_ctm"));
         REGISTERED.add(base);
         QUADRANTS.add(base);
     }
@@ -106,13 +108,8 @@ public final class CtmSprites {
     }
 
     public static void registerBase(String basePath) {
-        REGISTERED.add(id(basePath));
+        REGISTERED.add(Ids.of(basePath));
     }
-
-    private static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, path);
-    }
-
     // 图集拼接完成后缓存基础与图集 sprite
     public static void stitch(TextureAtlas atlas) {
         BASES.clear();

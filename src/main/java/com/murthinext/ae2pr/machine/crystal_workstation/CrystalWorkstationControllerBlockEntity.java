@@ -6,7 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-import com.murthinext.ae2pr.machine.ModeMachineBlockEntity;
+import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
 import com.murthinext.ae2pr.registry.ModMachines;
 
 public class CrystalWorkstationControllerBlockEntity

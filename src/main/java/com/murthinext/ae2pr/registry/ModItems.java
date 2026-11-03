@@ -14,6 +14,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -24,6 +25,10 @@ public final class ModItems {
     }
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ae2pr.MODID);
+
+    private static RegistryObject<BlockItem> blockItem(RegistryObject<? extends Block> block) {
+        return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), new Item.Properties()));
+    }
 
     public static final RegistryObject<FilterCellItem> FILTER_CELL = ITEMS.register("filter_cell",
             () -> new FilterCellItem(new Item.Properties().stacksTo(1)));
@@ -57,108 +62,63 @@ public final class ModItems {
     public static final RegistryObject<MultiThresholdLevelEmitterPartItem> MULTI_THRESHOLD_LEVEL_EMITTER = ITEMS.register(
             "multi_threshold_level_emitter", () -> new MultiThresholdLevelEmitterPartItem(new Item.Properties()));
 
-    public static final RegistryObject<BlockItem> CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING = ITEMS.register(
-            "crystal_reinforced_composite_machine_casing",
-            () -> new BlockItem(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING = blockItem(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING);
 
-    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_CASING = ITEMS.register(
-            "crystal_assembly_line_casing",
-            () -> new BlockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_CASING.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_CASING = blockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_CASING);
 
-    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_UNIT = ITEMS.register(
-            "crystal_assembly_line_unit",
-            () -> new BlockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_UNIT.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_UNIT = blockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_UNIT);
 
-    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT = ITEMS.register(
-            "crystal_assembly_line_charging_unit",
-            () -> new BlockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT = blockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT);
 
-    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT = ITEMS.register(
-            "crystal_assembly_line_advanced_charging_unit",
-            () -> new BlockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT = blockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT);
 
-    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT = ITEMS.register(
-            "crystal_assembly_line_parallel_unit",
-            () -> new BlockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT = blockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT);
 
-    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT = ITEMS.register(
-            "crystal_assembly_line_speed_unit",
-            () -> new BlockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT = blockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT);
 
-    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_GRATING = ITEMS.register(
-            "crystal_assembly_line_grating",
-            () -> new BlockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_GRATING = blockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING);
 
-    public static final RegistryObject<BlockItem> CRYSTAL_GLASS = ITEMS.register("crystal_glass",
-            () -> new BlockItem(ModBlocks.CRYSTAL_GLASS.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> CRYSTAL_GLASS = blockItem(ModBlocks.CRYSTAL_GLASS);
 
-    public static final RegistryObject<BlockItem> FIREPROOF_CRYSTAL_GLASS = ITEMS.register("fireproof_crystal_glass",
-            () -> new BlockItem(ModBlocks.FIREPROOF_CRYSTAL_GLASS.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> FIREPROOF_CRYSTAL_GLASS = blockItem(ModBlocks.FIREPROOF_CRYSTAL_GLASS);
 
-    public static final RegistryObject<BlockItem> CERTUS_QUARTZ_CRYSTAL_INPUT_BUS = ITEMS.register("certus_quartz_crystal_input_bus",
-            () -> new BlockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> CERTUS_QUARTZ_CRYSTAL_INPUT_BUS = blockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS);
 
-    public static final RegistryObject<BlockItem> CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH = ITEMS.register(
-            "certus_quartz_crystal_input_hatch",
-            () -> new BlockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH = blockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH);
 
-    public static final RegistryObject<BlockItem> CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS = ITEMS.register("certus_quartz_crystal_output_bus",
-            () -> new BlockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS = blockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS);
 
-    public static final RegistryObject<BlockItem> CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH = ITEMS.register(
-            "certus_quartz_crystal_output_hatch",
-            () -> new BlockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH = blockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH);
 
-    public static final RegistryObject<BlockItem> AEV_MACHINE_CASING = ITEMS.register("aev_machine_casing",
-            () -> new BlockItem(ModBlocks.AEV_MACHINE_CASING.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> AEV_MACHINE_CASING = blockItem(ModBlocks.AEV_MACHINE_CASING);
 
-    public static final RegistryObject<BlockItem> CRYSTAL_ENERGY_CASING = ITEMS.register(
-            "crystal_energy_casing",
-            () -> new BlockItem(ModBlocks.CRYSTAL_ENERGY_CASING.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> CRYSTAL_ENERGY_CASING = blockItem(ModBlocks.CRYSTAL_ENERGY_CASING);
 
-    public static final RegistryObject<BlockItem> HIGH_ENERGY_STABILITY_CASING = ITEMS.register(
-            "high_energy_stability_casing",
-            () -> new BlockItem(ModBlocks.HIGH_ENERGY_STABILITY_CASING.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> HIGH_ENERGY_STABILITY_CASING = blockItem(ModBlocks.HIGH_ENERGY_STABILITY_CASING);
 
-    public static final RegistryObject<BlockItem> ZIRCONIUM_IRON_ALLOY_MACHINE_CASING = ITEMS.register(
-            "zirconium_iron_alloy_machine_casing",
-            () -> new BlockItem(ModBlocks.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> ZIRCONIUM_IRON_ALLOY_MACHINE_CASING = blockItem(ModBlocks.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING);
 
-    public static final RegistryObject<BlockItem> ME_COMPUTER_CASING = ITEMS.register("me_computer_casing",
-            () -> new BlockItem(ModBlocks.ME_COMPUTER_CASING.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> ME_COMPUTER_CASING = blockItem(ModBlocks.ME_COMPUTER_CASING);
 
-    public static final RegistryObject<BlockItem> ME_ADVANCED_COMPUTER_CASING = ITEMS.register(
-            "me_advanced_computer_casing",
-            () -> new BlockItem(ModBlocks.ME_ADVANCED_COMPUTER_CASING.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> ME_ADVANCED_COMPUTER_CASING = blockItem(ModBlocks.ME_ADVANCED_COMPUTER_CASING);
 
-    public static final RegistryObject<BlockItem> AEV_INPUT_BUS = ITEMS.register("aev_input_bus",
-            () -> new BlockItem(ModBlocks.AEV_INPUT_BUS.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> AEV_INPUT_BUS = blockItem(ModBlocks.AEV_INPUT_BUS);
 
-    public static final RegistryObject<BlockItem> AEV_OUTPUT_BUS = ITEMS.register("aev_output_bus",
-            () -> new BlockItem(ModBlocks.AEV_OUTPUT_BUS.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> AEV_OUTPUT_BUS = blockItem(ModBlocks.AEV_OUTPUT_BUS);
 
-    public static final RegistryObject<BlockItem> AEV_INPUT_HATCH = ITEMS.register("aev_input_hatch",
-            () -> new BlockItem(ModBlocks.AEV_INPUT_HATCH.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> AEV_INPUT_HATCH = blockItem(ModBlocks.AEV_INPUT_HATCH);
 
-    public static final RegistryObject<BlockItem> AEV_OUTPUT_HATCH = ITEMS.register("aev_output_hatch",
-            () -> new BlockItem(ModBlocks.AEV_OUTPUT_HATCH.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> AEV_OUTPUT_HATCH = blockItem(ModBlocks.AEV_OUTPUT_HATCH);
 
-    public static final RegistryObject<BlockItem> AEV_DUAL_INPUT_HATCH = ITEMS.register("aev_dual_input_hatch",
-            () -> new BlockItem(ModBlocks.AEV_DUAL_INPUT_HATCH.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> AEV_DUAL_INPUT_HATCH = blockItem(ModBlocks.AEV_DUAL_INPUT_HATCH);
 
-    public static final RegistryObject<BlockItem> AEV_DUAL_OUTPUT_HATCH = ITEMS.register("aev_dual_output_hatch",
-            () -> new BlockItem(ModBlocks.AEV_DUAL_OUTPUT_HATCH.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> AEV_DUAL_OUTPUT_HATCH = blockItem(ModBlocks.AEV_DUAL_OUTPUT_HATCH);
 
-    public static final RegistryObject<BlockItem> ME_NETWORK_ACCESS_HATCH = ITEMS.register(
-            "me_network_access_hatch",
-            () -> new BlockItem(ModBlocks.ME_NETWORK_ACCESS_HATCH.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> ME_NETWORK_ACCESS_HATCH = blockItem(ModBlocks.ME_NETWORK_ACCESS_HATCH);
 
-    public static final RegistryObject<BlockItem> LOGISTICS_CONTROL_CASING = ITEMS.register(
-            "logistics_control_casing",
-            () -> new BlockItem(ModBlocks.LOGISTICS_CONTROL_CASING.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> LOGISTICS_CONTROL_CASING = blockItem(ModBlocks.LOGISTICS_CONTROL_CASING);
 
-    public static final RegistryObject<BlockItem> FILTER_PRESS_PLATE = ITEMS.register("filter_press_plate",
-            () -> new BlockItem(ModBlocks.FILTER_PRESS_PLATE.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> FILTER_PRESS_PLATE = blockItem(ModBlocks.FILTER_PRESS_PLATE);
 
     public static final RegistryObject<Item> FINE_FLUIX_WIRE = ITEMS.register("fine_fluix_wire",
             () -> new Item(new Item.Properties()));
@@ -236,50 +196,37 @@ public final class ModItems {
             "coarse_meteorite_solution_bucket", () -> new NoBlockFluidBucketItem(ModFluids.COARSE_METEORITE_SOLUTION,
                     new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
-    public static final RegistryObject<BlockItem> METEORITE_IRON_ORE = ITEMS.register("meteorite_iron_ore",
-            () -> new BlockItem(ModBlocks.METEORITE_IRON_ORE.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> METEORITE_IRON_ORE = blockItem(ModBlocks.METEORITE_IRON_ORE);
 
-    public static final RegistryObject<BlockItem> METEORITE_COPPER_ORE = ITEMS.register("meteorite_copper_ore",
-            () -> new BlockItem(ModBlocks.METEORITE_COPPER_ORE.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> METEORITE_COPPER_ORE = blockItem(ModBlocks.METEORITE_COPPER_ORE);
 
-    public static final RegistryObject<BlockItem> METEORITE_GOLD_ORE = ITEMS.register("meteorite_gold_ore",
-            () -> new BlockItem(ModBlocks.METEORITE_GOLD_ORE.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> METEORITE_GOLD_ORE = blockItem(ModBlocks.METEORITE_GOLD_ORE);
 
-    public static final RegistryObject<BlockItem> METEORITE_LAPIS_ORE = ITEMS.register("meteorite_lapis_ore",
-            () -> new BlockItem(ModBlocks.METEORITE_LAPIS_ORE.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> METEORITE_LAPIS_ORE = blockItem(ModBlocks.METEORITE_LAPIS_ORE);
 
-    public static final RegistryObject<BlockItem> METEORITE_DIAMOND_ORE = ITEMS.register("meteorite_diamond_ore",
-            () -> new BlockItem(ModBlocks.METEORITE_DIAMOND_ORE.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> METEORITE_DIAMOND_ORE = blockItem(ModBlocks.METEORITE_DIAMOND_ORE);
 
-    public static final RegistryObject<BlockItem> METEORITE_EMERALD_ORE = ITEMS.register("meteorite_emerald_ore",
-            () -> new BlockItem(ModBlocks.METEORITE_EMERALD_ORE.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> METEORITE_EMERALD_ORE = blockItem(ModBlocks.METEORITE_EMERALD_ORE);
 
-    public static final RegistryObject<BlockItem> METEORITE_ZIRCON_ORE = ITEMS.register("meteorite_zircon_ore",
-            () -> new BlockItem(ModBlocks.METEORITE_ZIRCON_ORE.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> METEORITE_ZIRCON_ORE = blockItem(ModBlocks.METEORITE_ZIRCON_ORE);
 
     public static final RegistryObject<Item> ZIRCON = ITEMS.register("zircon", () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<CrystalineItem> CRYSTALINE = ITEMS.register("crystaline",
             () -> new CrystalineItem(new Item.Properties()));
 
-    public static final RegistryObject<BlockItem> METEOR_STEEL_BLOCK = ITEMS.register("meteor_steel_block",
-            () -> new BlockItem(ModBlocks.METEOR_STEEL_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> METEOR_STEEL_BLOCK = blockItem(ModBlocks.METEOR_STEEL_BLOCK);
 
-    public static final RegistryObject<BlockItem> METEOR_STEEL_PIPE_BLOCK = ITEMS.register("meteor_steel_pipe_block",
-            () -> new BlockItem(ModBlocks.METEOR_STEEL_PIPE_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> METEOR_STEEL_PIPE_BLOCK = blockItem(ModBlocks.METEOR_STEEL_PIPE_BLOCK);
 
-    public static final RegistryObject<BlockItem> ZIRCON_BLOCK = ITEMS.register("zircon_block",
-            () -> new BlockItem(ModBlocks.ZIRCON_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> ZIRCON_BLOCK = blockItem(ModBlocks.ZIRCON_BLOCK);
 
-    public static final RegistryObject<BlockItem> DENSE_SKY_STONE_BLOCK = ITEMS.register("dense_sky_stone_block",
-            () -> new BlockItem(ModBlocks.DENSE_SKY_STONE_BLOCK.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> DENSE_SKY_STONE_BLOCK = blockItem(ModBlocks.DENSE_SKY_STONE_BLOCK);
 
     public static final RegistryObject<Item> ZIRCON_BRICK = ITEMS.register("zircon_brick",
             () -> new Item(new Item.Properties()));
 
-    public static final RegistryObject<BlockItem> MOLECULAR_ASSEMBLY_CORE = ITEMS.register("molecular_assembly_core",
-            () -> new BlockItem(ModBlocks.MOLECULAR_ASSEMBLY_CORE.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> MOLECULAR_ASSEMBLY_CORE = blockItem(ModBlocks.MOLECULAR_ASSEMBLY_CORE);
 
-    public static final RegistryObject<BlockItem> ZIRCONIA_CORUNDUM_BRICKS = ITEMS.register("zirconia_corundum_bricks",
-            () -> new BlockItem(ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get(), new Item.Properties()));
+    public static final RegistryObject<BlockItem> ZIRCONIA_CORUNDUM_BRICKS = blockItem(ModBlocks.ZIRCONIA_CORUNDUM_BRICKS);
 }

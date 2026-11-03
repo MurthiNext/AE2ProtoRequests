@@ -3,8 +3,8 @@ package com.murthinext.ae2pr.machine.high_reactivity_lava_smelter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerScreen;
-import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerScreen;
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 
 public class HighReactivityLavaSmelterScreen extends AbstractMultiblockControllerScreen<HighReactivityLavaSmelterMenu> {
 

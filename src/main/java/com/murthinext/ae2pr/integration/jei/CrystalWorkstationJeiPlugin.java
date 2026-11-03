@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.integration.jei;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 
@@ -11,6 +13,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.machine.Mode;
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationMode;
 
 @JeiPlugin
@@ -18,7 +21,7 @@ public class CrystalWorkstationJeiPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "crystal_workstation");
+        return Ids.of( "crystal_workstation");
     }
 
     @Override

@@ -19,6 +19,11 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import com.murthinext.ae2pr.api.recipe.AbstractRecipe;
+import com.murthinext.ae2pr.api.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.recipe.RecipeJson;
+import com.murthinext.ae2pr.api.recipe.RecipeNetwork;
+import com.murthinext.ae2pr.api.recipe.WorldInteractionCircumstance;
 import com.murthinext.ae2pr.registry.ModRecipes;
 
 // 支持带数量原料、多产物和流体源替换的复杂世界交互配方

@@ -3,6 +3,7 @@ package com.murthinext.ae2pr.block.machine_part;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,6 +22,41 @@ public class DualHatchBlockEntity extends ItemBusBlockEntity {
 
     public MachinePartFluidStorage getFluidStorage() {
         return fluidStorage;
+    }
+
+    @Override
+    public FluidPart fluids() {
+        return new FluidPart() {
+            @Override
+            public BlockPos getPartPos() {
+                return worldPosition;
+            }
+
+            @Override
+            public int tankCount() {
+                return fluidStorage.getTankCount();
+            }
+
+            @Override
+            public FluidTank tank(int index) {
+                return fluidStorage.getTank(index);
+            }
+
+            @Override
+            public boolean isOutput() {
+                return fluidStorage.isOutputHatch();
+            }
+
+            @Override
+            public boolean isRecipeIsolated() {
+                return DualHatchBlockEntity.this.isRecipeIsolated();
+            }
+
+            @Override
+            public void markChanged() {
+                DualHatchBlockEntity.this.setChanged();
+            }
+        };
     }
 
     @Override

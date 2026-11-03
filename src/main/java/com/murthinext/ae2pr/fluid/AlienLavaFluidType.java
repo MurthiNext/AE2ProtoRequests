@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.fluid;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.util.function.Consumer;
 
 import net.minecraft.resources.ResourceLocation;
@@ -46,12 +48,12 @@ public class AlienLavaFluidType extends FluidType {
         consumer.accept(new IClientFluidTypeExtensions() {
             @Override
             public ResourceLocation getStillTexture() {
-                return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "block/fluid/alien_lava_still");
+                return Ids.of( "block/fluid/alien_lava_still");
             }
 
             @Override
             public ResourceLocation getFlowingTexture() {
-                return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "block/fluid/alien_lava_flow");
+                return Ids.of( "block/fluid/alien_lava_flow");
             }
         });
     }

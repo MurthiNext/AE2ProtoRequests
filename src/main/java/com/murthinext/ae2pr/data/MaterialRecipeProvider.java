@@ -2,12 +2,12 @@ package com.murthinext.ae2pr.data;
 
 import appeng.recipes.handlers.InscriberProcessType;
 import appeng.recipes.handlers.InscriberRecipeBuilder;
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.material.Material;
-import com.murthinext.ae2pr.material.MaterialItems;
-import com.murthinext.ae2pr.material.Materials;
-import com.murthinext.ae2pr.material.TagPrefix;
+import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.api.material.Material;
+import com.murthinext.ae2pr.api.material.MaterialItems;
+import com.murthinext.ae2pr.api.material.TagPrefix;
 import com.murthinext.ae2pr.registry.ModItems;
+import com.murthinext.ae2pr.registry.ModMaterials;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
@@ -35,7 +35,7 @@ public class MaterialRecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> writer) {
-        for (Material material : Materials.all()) {
+        for (Material material : ModMaterials.ALL) {
             if (!material.has(TagPrefix.INGOT)) {
                 continue;
             }
@@ -49,14 +49,14 @@ public class MaterialRecipeProvider extends RecipeProvider {
 
                 SimpleCookingRecipeBuilder.smelting(Ingredient.of(dustTag), RecipeCategory.MISC, ingot, 0.7F, 200)
                         .unlockedBy("has_dust", has(dustTag))
-                        .save(writer, id("smelting/" + material.id() + "_dust"));
+                        .save(writer, Ids.of("smelting/" + material.id() + "_dust"));
                 SimpleCookingRecipeBuilder.blasting(Ingredient.of(dustTag), RecipeCategory.MISC, ingot, 0.7F, 100)
                         .unlockedBy("has_dust", has(dustTag))
-                        .save(writer, id("blasting/" + material.id() + "_dust"));
+                        .save(writer, Ids.of("blasting/" + material.id() + "_dust"));
 
                 InscriberRecipeBuilder.inscribe(ingotTag, dust, 1)
                         .setMode(InscriberProcessType.INSCRIBE)
-                        .save(writer, id("inscriber/" + material.id() + "_dust"));
+                        .save(writer, Ids.of("inscriber/" + material.id() + "_dust"));
             }
 
             if (material.has(TagPrefix.PLATE)) {
@@ -65,15 +65,10 @@ public class MaterialRecipeProvider extends RecipeProvider {
                 InscriberRecipeBuilder.inscribe(ingotTag, plate, 1)
                         .setTop(Ingredient.of(ModItems.SINGLE_PLATE_PRESS.get()))
                         .setMode(InscriberProcessType.INSCRIBE)
-                        .save(writer, id("inscriber/" + material.id() + "_plate"));
+                        .save(writer, Ids.of("inscriber/" + material.id() + "_plate"));
             }
         }
     }
-
-    private static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, path);
-    }
-
     private static TagKey<Item> forgeTag(String path) {
         return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", path));
     }

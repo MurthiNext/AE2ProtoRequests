@@ -45,7 +45,7 @@ import appeng.util.inv.filter.IAEItemFilter;
 import appeng.util.prioritylist.IPartitionList;
 
 import com.murthinext.ae2pr.registry.ModMenus;
-import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 import com.murthinext.ae2pr.item.filter_cell.FilterCellItem;
@@ -54,15 +54,15 @@ public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
         implements IConfigInvHost, ICraftingProvider, InternalInventoryHost {
 
     @PartModels
-    public static final ResourceLocation MODEL_BASE_OFF = makeId("part/multi_threshold_level_emitter_base_off");
+    public static final ResourceLocation MODEL_BASE_OFF = Ids.of("part/multi_threshold_level_emitter_base_off");
     @PartModels
-    public static final ResourceLocation MODEL_BASE_ON = makeId("part/multi_threshold_level_emitter_base_on");
+    public static final ResourceLocation MODEL_BASE_ON = Ids.of("part/multi_threshold_level_emitter_base_on");
     @PartModels
-    public static final ResourceLocation MODEL_STATUS_OFF = makeId("part/multi_threshold_level_emitter_status_off");
+    public static final ResourceLocation MODEL_STATUS_OFF = Ids.of("part/multi_threshold_level_emitter_status_off");
     @PartModels
-    public static final ResourceLocation MODEL_STATUS_ON = makeId("part/multi_threshold_level_emitter_status_on");
+    public static final ResourceLocation MODEL_STATUS_ON = Ids.of("part/multi_threshold_level_emitter_status_on");
     @PartModels
-    public static final ResourceLocation MODEL_STATUS_HAS_CHANNEL = makeId(
+    public static final ResourceLocation MODEL_STATUS_HAS_CHANNEL = Ids.of(
             "part/multi_threshold_level_emitter_status_has_channel");
 
     public static final PartModel MODEL_OFF_OFF = new PartModel(MODEL_BASE_OFF, MODEL_STATUS_OFF);
@@ -136,11 +136,6 @@ public class MultiThresholdLevelEmitterPart extends AbstractLevelEmitterPart
 
         filterCell.setFilter(new FilterCellItemFilter());
     }
-
-    private static ResourceLocation makeId(String path) {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, path);
-    }
-
     @Override
     protected int getUpgradeSlots() {
         // 模糊卡 + 合成卡

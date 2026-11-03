@@ -10,9 +10,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import com.murthinext.ae2pr.recipe.AbstractMultiblockRecipe;
-import com.murthinext.ae2pr.recipe.AbstractMultiblockRecipeSerializer;
-import com.murthinext.ae2pr.recipe.RecipeDraft;
+import com.murthinext.ae2pr.api.recipe.AbstractMultiblockRecipe;
+import com.murthinext.ae2pr.api.recipe.AbstractMultiblockRecipeSerializer;
+import com.murthinext.ae2pr.api.recipe.RecipeDraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -22,8 +22,8 @@ import net.minecraft.world.item.crafting.RecipeType;
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.registry.ModModules;
 import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.machine.multiblock.module.ModuleRequirement;
-import com.murthinext.ae2pr.machine.multiblock.module.ModuleType;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleRequirement;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleType;
 
 public class CrystalAssemblyLineRecipe extends AbstractMultiblockRecipe {
 

@@ -14,9 +14,9 @@ import appeng.core.definitions.AEBlocks;
 
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.machine.multiblock.MultiblockPattern;
-import com.murthinext.ae2pr.machine.multiblock.RelativeDirection;
-import com.murthinext.ae2pr.machine.multiblock.StructurePredicate;
+import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
+import com.murthinext.ae2pr.api.multiblock.RelativeDirection;
+import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
 
 public final class CrystalReactorStructure {
 

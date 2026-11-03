@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.registry;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.util.Optional;
 
 import com.murthinext.ae2pr.ae2pr;
@@ -28,7 +30,7 @@ public final class ModNetwork {
     private static final String PROTOCOL_VERSION = "1";
 
     public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
-            .named(ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "main"))
+            .named(Ids.of( "main"))
             .networkProtocolVersion(() -> PROTOCOL_VERSION)
             .clientAcceptedVersions(PROTOCOL_VERSION::equals)
             .serverAcceptedVersions(PROTOCOL_VERSION::equals)
@@ -125,59 +127,11 @@ public final class ModNetwork {
                 TerminalStoryUnlockPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
-    public static void sendToPlayer(ServerPlayer player, RepeatOrderStatusPacket packet) {
+    public static void sendToPlayer(ServerPlayer player, Object packet) {
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
     }
 
-    public static void sendToPlayer(ServerPlayer player, TerminalStorySyncPacket packet) {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
-    }
-
-    public static void sendToPlayer(ServerPlayer player, TerminalStoryUnlockPacket packet) {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
-    }
-
-    public static void sendToPlayer(ServerPlayer player, RepeatOrderFailedPacket packet) {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
-    }
-
-    public static void sendToPlayer(ServerPlayer player, RepeatOrderRoundPacket packet) {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
-    }
-
-    public static void sendToPlayer(ServerPlayer player, RepeatOrderFinishedPacket packet) {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
-    }
-
-    public static void sendToPlayer(ServerPlayer player, MachinePartFluidPacket packet) {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
-    }
-
-    public static void sendToPlayer(ServerPlayer player, MachinePartStackPacket packet) {
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), packet);
-    }
-
-    public static void sendToServer(BusSlotClickPacket packet) {
-        CHANNEL.sendToServer(packet);
-    }
-
-    public static void sendToServer(HatchTankClickPacket packet) {
-        CHANNEL.sendToServer(packet);
-    }
-
-    public static void sendToServer(NamingFactoryRenamePacket packet) {
-        CHANNEL.sendToServer(packet);
-    }
-
-    public static void sendToServer(TerminalStoryRequestPacket packet) {
-        CHANNEL.sendToServer(packet);
-    }
-
-    public static void sendToServer(TerminalStoryUpdatePacket packet) {
-        CHANNEL.sendToServer(packet);
-    }
-
-    public static void sendToServer(TerminalStoryWatchPacket packet) {
+    public static void sendToServer(Object packet) {
         CHANNEL.sendToServer(packet);
     }
 }

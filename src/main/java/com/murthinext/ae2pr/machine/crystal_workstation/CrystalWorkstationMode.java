@@ -2,8 +2,8 @@ package com.murthinext.ae2pr.machine.crystal_workstation;
 
 import net.minecraft.world.item.crafting.RecipeType;
 
-import com.murthinext.ae2pr.machine.MachineRecipe;
-import com.murthinext.ae2pr.machine.Mode;
+import com.murthinext.ae2pr.api.machine.MachineRecipe;
+import com.murthinext.ae2pr.api.machine.Mode;
 import com.murthinext.ae2pr.registry.ModMachines;
 
 public enum CrystalWorkstationMode implements Mode {

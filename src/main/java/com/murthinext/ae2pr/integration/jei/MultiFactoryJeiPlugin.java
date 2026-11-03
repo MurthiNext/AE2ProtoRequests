@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.integration.jei;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import net.minecraft.resources.ResourceLocation;
 
 import mezz.jei.api.IModPlugin;
@@ -12,6 +14,7 @@ import appeng.recipes.handlers.InscriberRecipe;
 
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.machine.Mode;
 import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryMode;
 
 // 复用 AE2 原生压印与充能分类，仅把主机注册为催化剂并提供加工状态入口
@@ -25,7 +28,7 @@ public class MultiFactoryJeiPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "multi_factory");
+        return Ids.of( "multi_factory");
     }
 
     @Override

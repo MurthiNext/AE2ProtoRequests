@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.network;
 
+import com.murthinext.ae2pr.api.ClientHooks;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -8,8 +10,6 @@ import com.murthinext.ae2pr.block.machine_part.ItemBusScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 // 服务端 -> 客户端：同步总线存储与搬运开关
@@ -56,7 +56,7 @@ public class MachinePartStackPacket {
 
     public static void handle(MachinePartStackPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
-        context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+        context.enqueueWork(() -> ClientHooks.run(
                 () -> () -> ItemBusScreen
                         .applyStackSync(packet.pos, packet.stacks, packet.autoTransfer, packet.recipeIsolated)));
         context.setPacketHandled(true);

@@ -16,7 +16,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.machine.MachineBlock;
+import com.murthinext.ae2pr.api.machine.MachineBlock;
 
 // 晶能工作站成型外观的客户端缓存
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT)

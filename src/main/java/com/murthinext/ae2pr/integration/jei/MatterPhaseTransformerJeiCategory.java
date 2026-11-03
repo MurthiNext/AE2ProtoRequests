@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.integration.jei;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +26,8 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.recipe.CountedIngredient;
-import com.murthinext.ae2pr.machine.MachineRecipe;
+import com.murthinext.ae2pr.api.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.machine.MachineRecipe;
 
 public class MatterPhaseTransformerJeiCategory implements IRecipeCategory<MachineRecipe> {
 
@@ -49,7 +51,7 @@ public class MatterPhaseTransformerJeiCategory implements IRecipeCategory<Machin
     private static final int WIDTH = OUTPUT_X + SLOT + PADDING;
     private static final int HEIGHT = INFO_Y + 3 * INFO_STEP + 2;
 
-    private static final ResourceLocation PROCESS_TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    private static final ResourceLocation PROCESS_TEXTURE = Ids.of(
             "textures/gui/jei/matter_phase_transformer_process.png");
     private static final int COLOR_TEXT = 0x404040;
     private static final int COLOR_HINT = 0x808080;

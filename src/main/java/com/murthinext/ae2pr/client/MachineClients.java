@@ -18,12 +18,15 @@ import appeng.core.definitions.AEBlocks;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.client.sound.MachineProcessingSounds;
-import com.murthinext.ae2pr.machine.AbstractMachineScreen;
-import com.murthinext.ae2pr.machine.MachineDefinition;
-import com.murthinext.ae2pr.machine.Mode;
-import com.murthinext.ae2pr.machine.MachineModeButton;
-import com.murthinext.ae2pr.machine.MachineScreen;
-import com.murthinext.ae2pr.machine.MultiblockMachineDefinition;
+import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
+import com.murthinext.ae2pr.api.machine.MachineDefinition;
+import com.murthinext.ae2pr.api.machine.Mode;
+import com.murthinext.ae2pr.api.machine.client.MachineStyle;
+import com.murthinext.ae2pr.api.machine.client.MachineStyles;
+import com.murthinext.ae2pr.api.machine.client.GuideOpener;
+import com.murthinext.ae2pr.api.machine.client.MachineModeButton;
+import com.murthinext.ae2pr.api.machine.client.MachineScreen;
+import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.machine.crystal_reaction_chamber.CrystalReactionChamberRenderer;
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationMode;
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationRenderer;
@@ -36,8 +39,8 @@ import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryMode;
 import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryRenderer;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryRenderer;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryScreen;
-import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerMenu;
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
 
 public final class MachineClients {
 
@@ -47,6 +50,8 @@ public final class MachineClients {
     }
 
     public static void registerScreens() {
+        MachineStyles.install(definition -> STYLES.get(definition));
+        GuideOpener.install(ModGuide::openAt);
         register(ModMachines.FILTER_PRESS, Style.crystal(ModGuide.FILTER_PRESS_PAGE, 0x9CD3FF), MachineScreen::new,
                 controller -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.FILTER_PRESS));
         register(ModMachines.JIG, Style.crystal(ModGuide.JIG_PAGE, 0x9CD3FF), MachineScreen::new,
@@ -111,7 +116,7 @@ public final class MachineClients {
     }
 
     public record Style(ResourceLocation guidePage, int titleColor, int accent, int accentDark,
-            Map<Mode, MachineModeButton.Icon> modeIcons) {
+            Map<Mode, MachineModeButton.Icon> modeIcons) implements MachineStyle {
         public Style {
             modeIcons = Map.copyOf(modeIcons);
         }

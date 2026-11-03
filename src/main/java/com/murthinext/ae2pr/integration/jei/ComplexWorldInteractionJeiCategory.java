@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.integration.jei;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,7 @@ import appeng.core.definitions.AEItems;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.logic.world_interaction.WorldInteractionCatalyst;
 import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
-import com.murthinext.ae2pr.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.recipe.CountedIngredient;
 
 public class ComplexWorldInteractionJeiCategory implements IRecipeCategory<ComplexWorldInteractionRecipe> {
 
@@ -44,7 +46,7 @@ public class ComplexWorldInteractionJeiCategory implements IRecipeCategory<Compl
     private static final int OUTPUT_X = 106;
     private static final int INTERACTION_Y = 24;
     private static final int COLOR_TEXT = 0x404040;
-    private static final ResourceLocation ARROW = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    private static final ResourceLocation ARROW = Ids.of(
             "textures/gui/jei/recipe_arrow.png");
 
     private final IDrawable icon;

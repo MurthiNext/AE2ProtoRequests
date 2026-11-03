@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.machine.naming_factory;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.util.Map;
 import java.util.function.Function;
 
@@ -26,10 +28,10 @@ import com.murthinext.ae2pr.ae2pr;
 
 public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryBlockEntity> {
 
-    public static final ResourceLocation FORGE_MODEL = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    public static final ResourceLocation FORGE_MODEL = Ids.of(
             "block/naming_factory_forge");
 
-    private static final ResourceLocation ROD_TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    private static final ResourceLocation ROD_TEXTURE = Ids.of(
             "block/naming_factory_rod");
 
     private static final float ROD_MIN = 4.0F;

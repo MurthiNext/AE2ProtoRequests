@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.network;
 
+import com.murthinext.ae2pr.api.ClientHooks;
+
 import java.util.function.Supplier;
 
 import com.murthinext.ae2pr.logic.repeat.FailureReason;
@@ -7,8 +9,6 @@ import com.murthinext.ae2pr.logic.repeat.FailureReason;
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.GenericStack;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 // 服务端 -> 客户端：重复订单失败通知
@@ -47,7 +47,7 @@ public class RepeatOrderFailedPacket {
 
     public static void handle(RepeatOrderFailedPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
-        context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+        context.enqueueWork(() -> ClientHooks.run(
                 () -> () -> com.murthinext.ae2pr.client.repeat.ClientRepeatOrderFailures.onFailure(
                         packet.what, packet.amountPerRound, packet.totalRounds, packet.completedRounds,
                         packet.reason)));

@@ -18,8 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.murthinext.ae2pr.registry.ModNetwork;
-import com.murthinext.ae2pr.client.CustomIngredientSource;
-import com.murthinext.ae2pr.client.DisplaySlot;
+import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
+import com.murthinext.ae2pr.api.machine.client.DisplaySlot;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 

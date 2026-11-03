@@ -21,10 +21,11 @@ import appeng.api.networking.IManagedGridNode;
 import appeng.api.orientation.BlockOrientation;
 import appeng.blockentity.grid.AENetworkBlockEntity;
 
+import com.murthinext.ae2pr.api.machine.ControllerHost;
+import com.murthinext.ae2pr.api.machine.part.MachinePart;
 import com.murthinext.ae2pr.registry.ModBlockEntities;
-import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 
-public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity {
+public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity implements MachinePart {
 
     public static final int MAX_CHANNELS = 8;
 
@@ -32,8 +33,44 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity {
             (hatch, node) -> hatch.setChanged();
 
     private final List<IManagedGridNode> channelNodes = new ArrayList<>();
+    private final NetworkPart networkView = new NetworkPart() {
+        @Override
+        public void updateController(ControllerHost host) {
+            MENetworkAccessHatchBlockEntity.this.updateController(host);
+        }
+
+        @Override
+        public void detachController(ControllerHost host) {
+            MENetworkAccessHatchBlockEntity.this.detachController(host);
+        }
+
+        @Override
+        public int getAllocatedChannels() {
+            return MENetworkAccessHatchBlockEntity.this.getAllocatedChannels();
+        }
+
+        @Override
+        public boolean isNetworkConnected(ControllerHost host) {
+            return MENetworkAccessHatchBlockEntity.this.isNetworkConnected(host);
+        }
+
+        @Override
+        public double extractAEPower(double amount, boolean simulate) {
+            return MENetworkAccessHatchBlockEntity.this.extractAEPower(amount, simulate);
+        }
+
+        @Override
+        public double getAvailableAEPower() {
+            return MENetworkAccessHatchBlockEntity.this.getAvailableAEPower();
+        }
+
+        @Override
+        public boolean isHatchRemoved() {
+            return MENetworkAccessHatchBlockEntity.this.isRemoved();
+        }
+    };
     @Nullable
-    private AbstractMultiblockControllerBlockEntity controller;
+    private ControllerHost controller;
 
     public MENetworkAccessHatchBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ME_NETWORK_ACCESS_HATCH.get(), pos, state);
@@ -49,8 +86,8 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity {
         onGridConnectableSidesChanged();
     }
 
-    public void updateController(AbstractMultiblockControllerBlockEntity controller) {
-        if (this.controller != null && this.controller != controller && !this.controller.isRemoved()
+    public void updateController(ControllerHost controller) {
+        if (this.controller != null && this.controller != controller && !this.controller.isControllerRemoved()
                 && this.controller.isFormed()) {
             return;
         }
@@ -58,7 +95,7 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity {
         updateChannelNodes();
     }
 
-    public void detachController(AbstractMultiblockControllerBlockEntity controller) {
+    public void detachController(ControllerHost controller) {
         if (this.controller == controller) {
             this.controller = null;
             clearChannelNodes();
@@ -70,8 +107,7 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity {
         if (mainNode == null || level == null || level.isClientSide) {
             return;
         }
-        int requested = Math.min(MAX_CHANNELS, getRequiredChannels());
-        while (channelNodes.size() > requested) {
+        int requested = Math.min(MAX_CHANNELS, getRequiredChannels());        while (channelNodes.size() > requested) {
             channelNodes.remove(channelNodes.size() - 1).destroy();
         }
         // 每个内部节点向 AE2 实际申请一个频道
@@ -88,7 +124,7 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity {
     }
 
     public int getRequiredChannels() {
-        return controller != null && !controller.isRemoved() && controller.isFormed()
+        return controller != null && !controller.isControllerRemoved() && controller.isFormed()
                 ? controller.getRequiredChannels() : 0;
     }
 
@@ -106,7 +142,7 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity {
         return allocated;
     }
 
-    public boolean isNetworkConnected(AbstractMultiblockControllerBlockEntity controller) {
+    public boolean isNetworkConnected(ControllerHost controller) {
         int required = getRequiredChannels();
         return this.controller == controller && getMainNode().isActive()
                 && required > 0 && required <= MAX_CHANNELS
@@ -124,6 +160,33 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity {
     public double getAvailableAEPower() {
         return controller != null && isNetworkConnected(controller)
                 ? getMainNode().getGrid().getEnergyService().getStoredPower() : 0;
+    }
+
+    @Override
+    public BlockPos getPartPos() {
+        return worldPosition;
+    }
+
+    @Nullable
+    @Override
+    public ItemPart items() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public FluidPart fluids() {
+        return null;
+    }
+
+    @Override
+    public NetworkPart network() {
+        return networkView;
+    }
+
+    @Override
+    public boolean isRecipeIsolated() {
+        return false;
     }
 
     @Override

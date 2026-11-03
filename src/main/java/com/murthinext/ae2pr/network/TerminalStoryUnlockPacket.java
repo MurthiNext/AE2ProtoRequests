@@ -1,12 +1,12 @@
 package com.murthinext.ae2pr.network;
 
+import com.murthinext.ae2pr.api.ClientHooks;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 // 服务端 -> 客户端：本玩家当前已满足的剧情块解锁条件
@@ -40,7 +40,7 @@ public class TerminalStoryUnlockPacket {
 
     public static void handle(TerminalStoryUnlockPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
-        context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+        context.enqueueWork(() -> ClientHooks.run(
                 () -> () -> com.murthinext.ae2pr.client.proto_terminal.TerminalStoryProgressCache
                         .applyUnlocks(packet.conditions)));
         context.setPacketHandled(true);

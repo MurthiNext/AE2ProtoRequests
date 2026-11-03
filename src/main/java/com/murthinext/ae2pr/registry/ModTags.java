@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.registry;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import com.murthinext.ae2pr.ae2pr;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -19,28 +21,28 @@ public final class ModTags {
     public static final TagKey<Item> KNIVES = ItemTags.create(ResourceLocation.fromNamespaceAndPath("ae2", "knife"));
 
     public static final TagKey<Fluid> ALIEN_LAVA = TagKey.create(Registries.FLUID,
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "alien_lava"));
+            Ids.of( "alien_lava"));
 
     // 电路板
 
     public static final TagKey<Item> CIRCUITS = ItemTags.create(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "circuits"));
+            Ids.of( "circuits"));
 
     public static final TagKey<Item> CIRCUIT_AEV = ItemTags.create(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "circuits/aev"));
+            Ids.of( "circuits/aev"));
 
     public static final TagKey<Item> CIRCUIT_AEV_D1 = ItemTags.create(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "circuits/aev_d1"));
+            Ids.of( "circuits/aev_d1"));
 
     public static final TagKey<Item> CIRCUIT_AEV_D2 = ItemTags.create(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "circuits/aev_d2"));
+            Ids.of( "circuits/aev_d2"));
 
     public static final TagKey<Item> CIRCUIT_AEV_D3 = ItemTags.create(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "circuits/aev_d3"));
+            Ids.of( "circuits/aev_d3"));
 
     public static final TagKey<Item> CIRCUIT_AEV_D4 = ItemTags.create(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "circuits/aev_d4"));
+            Ids.of( "circuits/aev_d4"));
 
     public static final TagKey<Item> CIRCUIT_XPV = ItemTags.create(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "circuits/xpv"));
+            Ids.of( "circuits/xpv"));
 }

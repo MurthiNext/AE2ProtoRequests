@@ -14,9 +14,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
 import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.machine.crystal_reactor.CrystalReactorStructure;
-import com.murthinext.ae2pr.machine.multiblock.MultiblockPattern;
+import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineStructure;
 import com.murthinext.ae2pr.machine.crystal_reaction_chamber.CrystalReactionChamberStructure;
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationStructure;
@@ -72,11 +72,7 @@ public record MultiblockPreviewRecipe(ResourceLocation id, Component title, Bloc
     // 结构预览统一使用结构名，key 与结构 id 一一对应
     private static MultiblockPreviewRecipe of(String name, Block controller, MultiblockPattern pattern,
             IntSupplier maxSlices) {
-        return new MultiblockPreviewRecipe(id(name),
+        return new MultiblockPreviewRecipe(Ids.of("multiblock/" + name),
                 Component.translatable("jei.ae2pr.multiblock.structure." + name), controller, pattern, maxSlices);
-    }
-
-    private static ResourceLocation id(String name) {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "multiblock/" + name);
     }
 }

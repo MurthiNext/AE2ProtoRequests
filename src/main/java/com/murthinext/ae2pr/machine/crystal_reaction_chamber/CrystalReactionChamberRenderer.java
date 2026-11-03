@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.machine.crystal_reaction_chamber;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
@@ -25,7 +27,7 @@ public class CrystalReactionChamberRenderer
         implements BlockEntityRenderer<CrystalReactionChamberControllerBlockEntity> {
 
     private static final RenderType CORE = RenderType.beaconBeam(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "textures/block/high_energy_core_glow.png"), true);
+            Ids.of( "textures/block/high_energy_core_glow.png"), true);
     private static final int ARC_COUNT = 12;
     private static final int SEGMENTS = 7;
     private static final double ARC_REACH = 1.42;

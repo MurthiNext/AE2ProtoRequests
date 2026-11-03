@@ -15,7 +15,7 @@ import net.minecraft.world.phys.AABB;
 
 import com.murthinext.ae2pr.registry.ModRecipes;
 import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
-import com.murthinext.ae2pr.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.recipe.CountedIngredient;
 
 public final class ComplexWorldInteractions {
 

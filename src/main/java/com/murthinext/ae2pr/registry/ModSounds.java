@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.registry;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import com.murthinext.ae2pr.ae2pr;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -28,6 +30,6 @@ public final class ModSounds {
 
     private static RegistryObject<SoundEvent> register(String name) {
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(
-                ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, name)));
+                Ids.of( name)));
     }
 }

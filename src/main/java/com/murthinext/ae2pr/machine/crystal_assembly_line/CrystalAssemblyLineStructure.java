@@ -9,11 +9,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.registry.ModModules;
-import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
-import com.murthinext.ae2pr.machine.multiblock.AbstractStructureFacade;
-import com.murthinext.ae2pr.machine.multiblock.MultiblockPattern;
-import com.murthinext.ae2pr.machine.multiblock.RelativeDirection;
-import com.murthinext.ae2pr.machine.multiblock.StructurePredicate;
+import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
+import com.murthinext.ae2pr.api.multiblock.AbstractStructureFacade;
+import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
+import com.murthinext.ae2pr.api.multiblock.RelativeDirection;
+import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
 
 // 水晶装配线结构定义与外观同步
 public final class CrystalAssemblyLineStructure extends AbstractStructureFacade {

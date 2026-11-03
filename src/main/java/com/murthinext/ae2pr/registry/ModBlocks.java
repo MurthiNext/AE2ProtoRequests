@@ -3,6 +3,7 @@ package com.murthinext.ae2pr.registry;
 import java.util.List;
 
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.BlockProperties;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
@@ -26,7 +27,7 @@ import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOreBlock;
-import com.murthinext.ae2pr.machine.multiblock.module.ModuleDefinition;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleDefinition;
 
 public final class ModBlocks {
 
@@ -65,19 +66,11 @@ public final class ModBlocks {
 
     public static final RegistryObject<GlassBlock> CRYSTAL_GLASS = BLOCKS.register(
             "crystal_glass",
-            () -> new DisassemblableGlassBlock(Block.Properties.of()
-                    .mapColor(MapColor.COLOR_LIGHT_BLUE)
-                    .strength(0.8F)
-                    .sound(SoundType.GLASS)
-                    .noOcclusion()));
+            () -> new DisassemblableGlassBlock(BlockProperties.glass(MapColor.COLOR_LIGHT_BLUE)));
 
     public static final RegistryObject<GlassBlock> FIREPROOF_CRYSTAL_GLASS = BLOCKS.register(
             "fireproof_crystal_glass",
-            () -> new DisassemblableGlassBlock(Block.Properties.of()
-                    .mapColor(MapColor.COLOR_ORANGE)
-                    .strength(0.8F)
-                    .sound(SoundType.GLASS)
-                    .noOcclusion()));
+            () -> new DisassemblableGlassBlock(BlockProperties.glass(MapColor.COLOR_ORANGE)));
 
     public static final RegistryObject<MachinePartBlock> CERTUS_QUARTZ_CRYSTAL_INPUT_BUS = BLOCKS.register(
             "certus_quartz_crystal_input_bus", MachinePartBlock::new);
@@ -144,11 +137,7 @@ public final class ModBlocks {
             AEV_DUAL_OUTPUT_HATCH);
 
     public static final RegistryObject<Block> LOGISTICS_CONTROL_CASING = BLOCKS.register(
-            "logistics_control_casing", () -> new DisassemblableBlock(Block.Properties.of()
-                    .mapColor(MapColor.COLOR_PURPLE)
-                    .strength(3.5F)
-                    .sound(SoundType.METAL)
-                    .requiresCorrectToolForDrops()));
+            "logistics_control_casing", () -> new DisassemblableBlock(BlockProperties.metal(MapColor.COLOR_PURPLE)));
 
     public static final RegistryObject<AlienLavaBlock> ALIEN_LAVA = BLOCKS.register("alien_lava",
             () -> new AlienLavaBlock(ModFluids.ALIEN_LAVA, Block.Properties.of()
@@ -205,18 +194,15 @@ public final class ModBlocks {
             "molecular_assembly_core", MolecularAssemblyCoreBlock::new);
 
     public static final RegistryObject<Block> ZIRCONIA_CORUNDUM_BRICKS = BLOCKS.register(
-            "zirconia_corundum_bricks", () -> new DisassemblableBlock(Block.Properties.of()
-                    .mapColor(MapColor.COLOR_YELLOW)
-                    .strength(3.5F)
-                    .sound(SoundType.STONE)
-                    .requiresCorrectToolForDrops()));
+            "zirconia_corundum_bricks", () -> new DisassemblableBlock(BlockProperties.stone()));
+
+    // 结构模板无法静态引用具体仓室，初始化时注入
+    public static void installStructureHooks() {
+        MachinePartAppearance.install();
+    }
 
     private static Block.Properties storageBlockProperties(MapColor mapColor) {
-        return Block.Properties.of()
-                .mapColor(mapColor)
-                .strength(5.0F, 6.0F)
-                .sound(SoundType.METAL)
-                .requiresCorrectToolForDrops();
+        return BlockProperties.storageBlock(mapColor);
     }
 
     private static Block.Properties meteoriteOreProperties() {
@@ -229,10 +215,6 @@ public final class ModBlocks {
     }
 
     private static Block.Properties casingProperties() {
-        return Block.Properties.of()
-                .mapColor(MapColor.METAL)
-                .strength(3.5F)
-                .sound(SoundType.METAL)
-                .requiresCorrectToolForDrops();
+        return BlockProperties.metal();
     }
 }

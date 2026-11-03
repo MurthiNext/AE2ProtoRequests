@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.integration.jei;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import net.minecraft.resources.ResourceLocation;
 
 import mezz.jei.api.IModPlugin;
@@ -7,14 +9,14 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.machine.AbstractMachineScreen;
+import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 
 @JeiPlugin
 public class MachineGuiJeiPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "machine_gui");
+        return Ids.of( "machine_gui");
     }
 
     @Override

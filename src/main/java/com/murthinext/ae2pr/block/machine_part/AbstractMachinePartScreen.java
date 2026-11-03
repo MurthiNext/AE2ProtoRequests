@@ -16,7 +16,8 @@ import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.murthinext.ae2pr.registry.ModGuide;
-import com.murthinext.ae2pr.machine.AbstractMachineScreen;
+import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
+import com.murthinext.ae2pr.api.machine.client.AutoTransferButton;
 
 public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu> extends AbstractMachineScreen<M> {
 

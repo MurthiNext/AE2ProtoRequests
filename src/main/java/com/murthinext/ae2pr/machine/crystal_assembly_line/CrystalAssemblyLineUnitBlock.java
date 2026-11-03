@@ -18,10 +18,10 @@ import net.minecraft.world.level.material.MapColor;
 
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.registry.ModModules;
-import com.murthinext.ae2pr.logic.wrench.Wrenchable;
-import com.murthinext.ae2pr.machine.multiblock.module.ModuleDefinition;
-import com.murthinext.ae2pr.machine.multiblock.module.ModuleProvider;
-import com.murthinext.ae2pr.machine.multiblock.module.ModuleType;
+import com.murthinext.ae2pr.api.wrench.Wrenchable;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleDefinition;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleType;
 
 public class CrystalAssemblyLineUnitBlock extends Block implements Wrenchable {
 

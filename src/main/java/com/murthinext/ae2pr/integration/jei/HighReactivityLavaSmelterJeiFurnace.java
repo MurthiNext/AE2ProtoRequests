@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.integration.jei;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
@@ -12,7 +14,7 @@ public final class HighReactivityLavaSmelterJeiFurnace {
     public static final int ITEM_COUNT = ITEM_COLS * ITEM_ROWS;
     public static final int FLUID_COUNT = 2;
 
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    private static final ResourceLocation TEXTURE = Ids.of(
             "textures/gui/jei/high_reactivity_lava_smelter_furnace.png");
 
     private static final int X = 7;

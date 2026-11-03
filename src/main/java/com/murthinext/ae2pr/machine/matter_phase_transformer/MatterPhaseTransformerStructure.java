@@ -5,11 +5,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 
 import com.murthinext.ae2pr.registry.ModBlocks;
-import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
-import com.murthinext.ae2pr.machine.multiblock.AbstractStructureFacade;
-import com.murthinext.ae2pr.machine.multiblock.MultiblockPattern;
-import com.murthinext.ae2pr.machine.multiblock.RelativeDirection;
-import com.murthinext.ae2pr.machine.multiblock.StructurePredicate;
+import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
+import com.murthinext.ae2pr.api.multiblock.AbstractStructureFacade;
+import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
+import com.murthinext.ae2pr.api.multiblock.RelativeDirection;
+import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
 
 // 物质相变仪结构定义
 public final class MatterPhaseTransformerStructure extends AbstractStructureFacade {

@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.network;
 
+import com.murthinext.ae2pr.api.ClientHooks;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -7,9 +9,7 @@ import java.util.function.Supplier;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 // 服务端 -> 客户端：同步流体仓流体与搬运开关
@@ -50,7 +50,7 @@ public class MachinePartFluidPacket {
 
     public static void handle(MachinePartFluidPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
-        context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+        context.enqueueWork(() -> ClientHooks.run(
                 () -> () -> FluidHatchScreen
                         .applyFluidSync(packet.pos, packet.fluids, packet.autoTransfer, packet.recipeIsolated)));
         context.setPacketHandled(true);

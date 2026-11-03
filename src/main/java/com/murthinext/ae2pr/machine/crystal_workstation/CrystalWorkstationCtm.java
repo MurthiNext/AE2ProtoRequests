@@ -15,28 +15,23 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.registry.ModBlocks;
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.block.machine_part.MachinePartFacade;
+import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
 import com.murthinext.ae2pr.client.ctm.CtmConfig;
 import com.murthinext.ae2pr.client.ctm.CtmMeshBuilder;
 import com.murthinext.ae2pr.client.ctm.CtmSprites;
 import com.murthinext.ae2pr.client.ctm.QuadrantCtmMeshBuilder;
-import com.murthinext.ae2pr.machine.MachineBlock;
+import com.murthinext.ae2pr.api.machine.MachineBlock;
 
 // 晶能工作站成型外观：主机换装、隐藏核心、玻璃单面化与两侧 3x3 面板换装连纹
 public final class CrystalWorkstationCtm {
 
-    private static final ResourceLocation STABILITY_SKIN = id("block/high_energy_stability_casing");
+    private static final ResourceLocation STABILITY_SKIN = Ids.of("block/high_energy_stability_casing");
     private static final int STRIDE = 8;
     private static final int UV_OFFSET = 4;
 
     private CrystalWorkstationCtm() {
     }
-
-    private static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, path);
-    }
-
     // 工作站成型外观的完整面重写
     @Nullable
     public static List<BakedQuad> appearance(List<BakedQuad> quads, @Nullable Direction side,

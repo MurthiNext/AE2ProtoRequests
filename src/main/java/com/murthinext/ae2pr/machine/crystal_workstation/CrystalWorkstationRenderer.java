@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.machine.crystal_workstation;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -20,20 +22,20 @@ import net.minecraft.resources.ResourceLocation;
 
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.machine.MachineBlock;
+import com.murthinext.ae2pr.api.machine.MachineBlock;
 
 // 晶能工作站成型特效
 public class CrystalWorkstationRenderer
         implements BlockEntityRenderer<CrystalWorkstationControllerBlockEntity> {
 
     private static final RenderType CORE = RenderType.entityTranslucentEmissive(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "textures/block/crystal_workstation/core_cube.png"),
+            Ids.of( "textures/block/crystal_workstation/core_cube.png"),
             false);
     private static final RenderType FLUID = RenderType.entityTranslucentEmissive(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "textures/block/crystal_workstation/portal_liquid.png"),
+            Ids.of( "textures/block/crystal_workstation/portal_liquid.png"),
             false);
     private static final RenderType MOTES = RenderType.entityTranslucentEmissive(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "textures/particle/workstation_mote.png"), false);
+            Ids.of( "textures/particle/workstation_mote.png"), false);
 
     // 内腔半深
     private static final float CAVITY_HALF = 1.49F;

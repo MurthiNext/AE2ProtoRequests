@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.machine.matter_phase_transformer;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
@@ -27,11 +29,11 @@ public class MatterPhaseTransformerRenderer
     // 自发光体不会因视角变化发灰；光影包也把它映射到 gbuffers_beaconbeam
     // Forge 的 unlit 层不在光影管线里，会被 DepthColorStorage 关掉写色导致整片不可见
     private static final RenderType PARTICLE = RenderType.beaconBeam(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "textures/particle/matter_particle.png"), true);
+            Ids.of( "textures/particle/matter_particle.png"), true);
     private static final RenderType CORE = RenderType.beaconBeam(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "textures/block/high_energy_core_glow.png"), true);
+            Ids.of( "textures/block/high_energy_core_glow.png"), true);
     private static final RenderType BEAM = RenderType.beaconBeam(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "textures/entity/matter_beam.png"), true);
+            Ids.of( "textures/entity/matter_beam.png"), true);
     private static final int PARTICLES_PER_CHAMBER = 20;
     private static final float[] WHITE = { 1.0F, 1.0F, 1.0F };
 

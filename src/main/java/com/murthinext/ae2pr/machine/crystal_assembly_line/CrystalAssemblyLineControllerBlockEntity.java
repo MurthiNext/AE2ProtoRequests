@@ -16,14 +16,13 @@ import net.minecraftforge.fluids.FluidStack;
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.registry.ModModules;
-import com.murthinext.ae2pr.block.machine_part.ItemBusBlockEntity;
-import com.murthinext.ae2pr.block.machine_part.MachinePartFluidStorage;
-import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.machine.multiblock.InputGroup;
-import com.murthinext.ae2pr.machine.multiblock.StructureResult;
-import com.murthinext.ae2pr.machine.multiblock.module.ModuleSnapshot;
-import com.murthinext.ae2pr.recipe.CountedIngredient;
-import com.murthinext.ae2pr.recipe.MultiblockRecipe;
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.api.machine.part.MachinePart;
+import com.murthinext.ae2pr.api.machine.part.InputGroup;
+import com.murthinext.ae2pr.api.multiblock.StructureResult;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleSnapshot;
+import com.murthinext.ae2pr.api.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 
 public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
@@ -76,11 +75,11 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
             int bestParallel = 0;
             // 隔离件各自成组，同一配方只能取自完全匹配的单个组
             for (InputGroup group : inputGroups()) {
-                List<ItemBusBlockEntity> buses = matchItems(lineRecipe, group);
+                List<MachinePart.ItemPart> buses = matchItems(lineRecipe, group);
                 if (buses == null) {
                     continue;
                 }
-                List<MachinePartFluidStorage> hatches = matchFluids(lineRecipe, group);
+                List<MachinePart.FluidPart> hatches = matchFluids(lineRecipe, group);
                 if (hatches == null) {
                     continue;
                 }
@@ -102,10 +101,10 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
 
     // 物品输入匹配，一仓一种原料，返回选中的总线
     @Nullable
-    private List<ItemBusBlockEntity> matchItems(CrystalAssemblyLineRecipe recipe, InputGroup group) {
+    private List<MachinePart.ItemPart> matchItems(CrystalAssemblyLineRecipe recipe, InputGroup group) {
         List<CountedIngredient> inputs = recipe.getItemInputs();
-        List<ItemBusBlockEntity> buses = group.buses();
-        List<ItemBusBlockEntity> matched = new ArrayList<>(inputs.size());
+        List<MachinePart.ItemPart> buses = group.buses();
+        List<MachinePart.ItemPart> matched = new ArrayList<>(inputs.size());
         if (inputs.isEmpty()) {
             return matched;
         }
@@ -115,7 +114,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
                 return null;
             }
             for (int i = 0; i < inputs.size(); i++) {
-                ItemBusBlockEntity bus = inputBuses.get(i);
+                MachinePart.ItemPart bus = inputBuses.get(i);
                 if (!buses.contains(bus) || !hasItems(bus, inputs.get(i))) {
                     return null;
                 }
@@ -141,16 +140,16 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
         return matched;
     }
 
-    private static boolean hasItems(ItemBusBlockEntity bus, CountedIngredient input) {
-        return input.test(bus.getStorage().getStackInSlot(0));
+    private static boolean hasItems(MachinePart.ItemPart bus, CountedIngredient input) {
+        return input.test(bus.storage().getStackInSlot(0));
     }
 
     // 流体输入匹配，一仓一种原料，返回选中的仓
     @Nullable
-    private List<MachinePartFluidStorage> matchFluids(CrystalAssemblyLineRecipe recipe, InputGroup group) {
+    private List<MachinePart.FluidPart> matchFluids(CrystalAssemblyLineRecipe recipe, InputGroup group) {
         List<FluidStack> inputs = recipe.getFluidInputs();
-        List<MachinePartFluidStorage> hatches = group.hatches();
-        List<MachinePartFluidStorage> matched = new ArrayList<>(inputs.size());
+        List<MachinePart.FluidPart> hatches = group.hatches();
+        List<MachinePart.FluidPart> matched = new ArrayList<>(inputs.size());
         if (inputs.isEmpty()) {
             return matched;
         }
@@ -159,7 +158,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
                 return null;
             }
             for (int i = 0; i < inputs.size(); i++) {
-                MachinePartFluidStorage hatch = inputHatches.get(i);
+                MachinePart.FluidPart hatch = inputHatches.get(i);
                 if (!hatches.contains(hatch) || !hasFluid(hatch, inputs.get(i))) {
                     return null;
                 }
@@ -185,8 +184,8 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
         return matched;
     }
 
-    private static boolean hasFluid(MachinePartFluidStorage hatch, FluidStack input) {
-        FluidStack stored = hatch.getTank().getFluid();
+    private static boolean hasFluid(MachinePart.FluidPart hatch, FluidStack input) {
+        FluidStack stored = hatch.tank(0).getFluid();
         return stored.isFluidEqual(input) && stored.getAmount() > 0;
     }
 

@@ -19,7 +19,7 @@ import net.minecraft.world.item.TooltipFlag;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 
-import com.murthinext.ae2pr.recipe.ChancedItemStack;
+import com.murthinext.ae2pr.api.recipe.ChancedItemStack;
 
 public class ChancedItemStackRenderer implements IIngredientRenderer<ItemStack> {
 

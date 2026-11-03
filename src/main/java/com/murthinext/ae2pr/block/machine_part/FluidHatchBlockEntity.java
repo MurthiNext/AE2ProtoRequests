@@ -15,10 +15,11 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
+import com.murthinext.ae2pr.api.machine.part.MachinePart;
 import com.murthinext.ae2pr.registry.ModBlockEntities;
 import com.murthinext.ae2pr.registry.ModBlocks;
 
-public class FluidHatchBlockEntity extends BlockEntity {
+public class FluidHatchBlockEntity extends BlockEntity implements MachinePart {
 
     public static final int CAPACITY = 16 * 1024 * 1000;
     public static final int AEV_CAPACITY = 1024 * 1000;
@@ -37,6 +38,58 @@ public class FluidHatchBlockEntity extends BlockEntity {
 
     public MachinePartFluidStorage getFluidStorage() {
         return fluidStorage;
+    }
+
+    @Override
+    public BlockPos getPartPos() {
+        return worldPosition;
+    }
+
+    @Nullable
+    @Override
+    public ItemPart items() {
+        return null;
+    }
+
+    @Override
+    public FluidPart fluids() {
+        return new FluidPart() {
+            @Override
+            public BlockPos getPartPos() {
+                return worldPosition;
+            }
+
+            @Override
+            public int tankCount() {
+                return fluidStorage.getTankCount();
+            }
+
+            @Override
+            public FluidTank tank(int index) {
+                return fluidStorage.getTank(index);
+            }
+
+            @Override
+            public boolean isOutput() {
+                return isOutputHatch();
+            }
+
+            @Override
+            public boolean isRecipeIsolated() {
+                return recipeIsolated;
+            }
+
+            @Override
+            public void markChanged() {
+                FluidHatchBlockEntity.this.setChanged();
+            }
+        };
+    }
+
+    @Nullable
+    @Override
+    public NetworkPart network() {
+        return null;
     }
 
     public int getTankCount() {

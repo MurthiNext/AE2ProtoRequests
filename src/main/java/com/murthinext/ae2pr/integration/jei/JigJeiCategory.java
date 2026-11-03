@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.integration.jei;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -26,8 +28,8 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.recipe.ChancedItemStack;
-import com.murthinext.ae2pr.machine.MachineRecipe;
+import com.murthinext.ae2pr.api.recipe.ChancedItemStack;
+import com.murthinext.ae2pr.api.machine.MachineRecipe;
 
 public class JigJeiCategory implements IRecipeCategory<MachineRecipe> {
 
@@ -45,7 +47,7 @@ public class JigJeiCategory implements IRecipeCategory<MachineRecipe> {
     private static final int PROCESS_W = 60;
     private static final int PROCESS_H = 64;
     private static final NumberFormat NUMBER = NumberFormat.getNumberInstance();
-    private static final ResourceLocation PROCESS_TEXTURE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    private static final ResourceLocation PROCESS_TEXTURE = Ids.of(
             "textures/gui/jei/jig_process.png");
 
     private final IDrawable icon;

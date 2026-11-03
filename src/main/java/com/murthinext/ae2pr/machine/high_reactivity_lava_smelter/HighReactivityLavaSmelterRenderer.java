@@ -1,6 +1,8 @@
 package com.murthinext.ae2pr.machine.high_reactivity_lava_smelter;
 
-import com.murthinext.ae2pr.machine.MachineBlock;
+import com.murthinext.ae2pr.api.Ids;
+
+import com.murthinext.ae2pr.api.machine.MachineBlock;
 import java.util.List;
 
 import org.joml.Matrix4f;
@@ -25,7 +27,7 @@ import com.murthinext.ae2pr.ae2pr;
 // 炉膛渲染异星熔岩
 public class HighReactivityLavaSmelterRenderer implements BlockEntityRenderer<HighReactivityLavaSmelterControllerBlockEntity> {
 
-    private static final ResourceLocation ALIEN_LAVA_STILL = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    private static final ResourceLocation ALIEN_LAVA_STILL = Ids.of(
             "block/fluid/alien_lava_still");
     private static final ResourceLocation LAVA_STILL = ResourceLocation.fromNamespaceAndPath("minecraft",
             "block/lava_still");

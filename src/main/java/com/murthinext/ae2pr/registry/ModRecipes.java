@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.registry;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import com.murthinext.ae2pr.ae2pr;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +26,7 @@ public final class ModRecipes {
 
     public static final RegistryObject<RecipeType<ComplexWorldInteractionRecipe>> COMPLEX_WORLD_INTERACTION_TYPE = RECIPE_TYPES
             .register("complex_world_interaction", () -> RecipeType.simple(
-                    ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "complex_world_interaction")));
+                    Ids.of( "complex_world_interaction")));
 
     public static final RegistryObject<ComplexWorldInteractionRecipe.Serializer> COMPLEX_WORLD_INTERACTION = SERIALIZERS
             .register("complex_world_interaction", ComplexWorldInteractionRecipe.Serializer::new);

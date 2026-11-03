@@ -16,6 +16,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import appeng.blockentity.AEBaseBlockEntity;
 
+import com.murthinext.ae2pr.api.wrench.Wrenchable;
 import com.murthinext.ae2pr.registry.ModTags;
 
 // 扳手交互统一入口

@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.block.machine_part;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
@@ -19,9 +21,9 @@ public class RecipeIsolationButton extends AbstractWidget {
     private static final int COLOR_BORDER = 0xFF39424E;
     private static final int COLOR_BORDER_HOVER = 0xFF5A7A9A;
 
-    private static final ResourceLocation ICON_ON = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    private static final ResourceLocation ICON_ON = Ids.of(
             "textures/guis/chamber_isolation_on.png");
-    private static final ResourceLocation ICON_OFF = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    private static final ResourceLocation ICON_OFF = Ids.of(
             "textures/guis/chamber_isolation_off.png");
 
     private final BooleanSupplier state;

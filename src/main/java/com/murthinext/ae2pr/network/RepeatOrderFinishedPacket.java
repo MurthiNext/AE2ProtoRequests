@@ -1,12 +1,12 @@
 package com.murthinext.ae2pr.network;
 
+import com.murthinext.ae2pr.api.ClientHooks;
+
 import java.util.function.Supplier;
 
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.GenericStack;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 // 服务端 -> 客户端：重复订单全部完成提示
@@ -36,7 +36,7 @@ public class RepeatOrderFinishedPacket {
 
     public static void handle(RepeatOrderFinishedPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
-        context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+        context.enqueueWork(() -> ClientHooks.run(
                 () -> () -> com.murthinext.ae2pr.client.repeat.ClientRepeatOrderRounds.onFinished(
                         packet.what, packet.amountPerRound, packet.totalRounds)));
         context.setPacketHandled(true);

@@ -22,8 +22,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.recipe.MultiblockRecipe;
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 
 public class HighReactivityLavaSmelterControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 

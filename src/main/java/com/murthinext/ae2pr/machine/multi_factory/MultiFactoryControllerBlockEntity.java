@@ -12,9 +12,11 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-import com.murthinext.ae2pr.machine.ModeMachineBlockEntity;
-import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.recipe.MultiblockRecipe;
+import com.murthinext.ae2pr.api.machine.Mode;
+import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
+import com.murthinext.ae2pr.api.machine.Mode;
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 import com.murthinext.ae2pr.registry.ModMachines;
 
 public class MultiFactoryControllerBlockEntity extends ModeMachineBlockEntity<MultiFactoryMode> {

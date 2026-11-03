@@ -3,19 +3,21 @@ package com.murthinext.ae2pr.registry;
 import java.util.List;
 
 import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.api.BlockProperties;
+import com.murthinext.ae2pr.api.machine.CoreLight;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
 
 import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
-import com.murthinext.ae2pr.machine.MachineControllerBlockEntity;
-import com.murthinext.ae2pr.machine.MachineDefinition;
-import com.murthinext.ae2pr.machine.MachineMenu;
-import com.murthinext.ae2pr.machine.MachineRecipe;
-import com.murthinext.ae2pr.machine.MultiblockMachineDefinition;
-import com.murthinext.ae2pr.machine.RecipeConstraints;
-import com.murthinext.ae2pr.machine.RecipeDefinition;
+import com.murthinext.ae2pr.api.machine.MachineControllerBlockEntity;
+import com.murthinext.ae2pr.api.machine.MachineDefinition;
+import com.murthinext.ae2pr.api.machine.MachineMenu;
+import com.murthinext.ae2pr.api.machine.MachineRecipe;
+import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
+import com.murthinext.ae2pr.api.machine.RecipeConstraints;
+import com.murthinext.ae2pr.api.machine.RecipeDefinition;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineControllerBlockEntity;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineRecipe;
 import com.murthinext.ae2pr.machine.crystal_reaction_chamber.CrystalReactionChamberControllerBlockEntity;
@@ -41,6 +43,23 @@ import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransfor
 import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryStructure;
 
 public final class ModMachines {
+
+    // 核心方块为水晶反应器时同步运行指示灯
+    private static final CoreLight CRYSTAL_REACTOR_CORE = new CoreLight() {
+        @Override
+        public boolean matches(BlockState state) {
+            return state.is(CRYSTAL_REACTOR.block());
+        }
+
+        @Override
+        public void apply(net.minecraft.world.level.Level level, net.minecraft.core.BlockPos pos, BlockState state,
+                boolean lit) {
+            if (state.getValue(HighEnergyCoreBlock.LIT) != lit) {
+                level.setBlock(pos, state.setValue(HighEnergyCoreBlock.LIT, lit),
+                        net.minecraft.world.level.block.Block.UPDATE_ALL);
+            }
+        }
+    };
 
     public static final RecipeDefinition<MachineRecipe> FILTER_PRESS_RECIPE = RecipeDefinition.simple(
             "filter_press", 200, Config::filterPressEnergyPerParallel);
@@ -73,7 +92,7 @@ public final class ModMachines {
             MultiblockMachineDefinition.standard("crystal_reaction_chamber", CrystalReactionChamberControllerBlockEntity.class,
                     CrystalReactionChamberControllerBlockEntity::new, ModMachines::crystalProperties,
                     () -> CrystalReactionChamberStructure.INSTANCE, () -> Math.max(1, Config.crystalReactionParallel()),
-                    CRYSTAL_REACTION_CHAMBER_RECIPE::type);
+                    CRYSTAL_REACTION_CHAMBER_RECIPE::type).coreLight(ModMachines.CRYSTAL_REACTOR_CORE);
 
     public static final MultiblockMachineDefinition<CrystalAssemblyLineControllerBlockEntity, MachineMenu<CrystalAssemblyLineControllerBlockEntity>> CRYSTAL_ASSEMBLY_LINE =
             MultiblockMachineDefinition.standard("crystal_assembly_line", CrystalAssemblyLineControllerBlockEntity.class,
@@ -84,7 +103,7 @@ public final class ModMachines {
             MultiblockMachineDefinition.standard("matter_phase_transformer", MatterPhaseTransformerControllerBlockEntity.class,
                     MatterPhaseTransformerControllerBlockEntity::new, ModMachines::stoneProperties,
                     () -> MatterPhaseTransformerStructure.INSTANCE, () -> Math.max(1, Config.matterPhaseTransformerParallel()),
-                    MATTER_PHASE_TRANSFORMER_RECIPE::type);
+                    MATTER_PHASE_TRANSFORMER_RECIPE::type).coreLight(ModMachines.CRYSTAL_REACTOR_CORE);
 
     public static final MultiblockMachineDefinition<HighReactivityLavaSmelterControllerBlockEntity, HighReactivityLavaSmelterMenu> HIGH_REACTIVITY_LAVA_SMELTER =
             MultiblockMachineDefinition.customMenu("high_reactivity_lava_smelter", HighReactivityLavaSmelterControllerBlockEntity.class,
@@ -97,7 +116,8 @@ public final class ModMachines {
             MultiblockMachineDefinition.withModes("crystal_workstation", CrystalWorkstationControllerBlockEntity.class,
                     CrystalWorkstationControllerBlockEntity::new, ModMachines::crystalProperties,
                     () -> CrystalWorkstationStructure.INSTANCE, () -> Math.max(1, Config.crystalWorkstationParallel()),
-                    () -> CrystalWorkstationMode.ETCHING.recipeType(), List.of(CrystalWorkstationMode.values()));
+                    () -> CrystalWorkstationMode.ETCHING.recipeType(), List.of(CrystalWorkstationMode.values()))
+                    .coreLight(ModMachines.CRYSTAL_REACTOR_CORE);
 
     public static final MultiblockMachineDefinition<MultiFactoryControllerBlockEntity, MachineMenu<MultiFactoryControllerBlockEntity>> MULTI_FACTORY =
             MultiblockMachineDefinition.withModes("multi_factory", MultiFactoryControllerBlockEntity.class,
@@ -130,16 +150,14 @@ public final class ModMachines {
     }
 
     private static Block.Properties metalProperties() {
-        return Block.Properties.of().mapColor(MapColor.METAL).strength(3.5F)
-                .sound(SoundType.METAL).requiresCorrectToolForDrops();
+        return BlockProperties.metal();
     }
 
     private static Block.Properties crystalProperties() {
-        return metalProperties().mapColor(MapColor.COLOR_LIGHT_BLUE);
+        return BlockProperties.metal(MapColor.COLOR_LIGHT_BLUE);
     }
 
     private static Block.Properties stoneProperties() {
-        return Block.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(3.5F)
-                .sound(SoundType.STONE).requiresCorrectToolForDrops();
+        return BlockProperties.stone();
     }
 }

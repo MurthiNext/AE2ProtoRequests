@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.integration.jei;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
@@ -20,7 +22,7 @@ public class CrystalAssemblyLineJeiPlugin implements IModPlugin {
 
     @Override
     public ResourceLocation getPluginUid() {
-        return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "crystal_assembly_line");
+        return Ids.of( "crystal_assembly_line");
     }
 
     @Override

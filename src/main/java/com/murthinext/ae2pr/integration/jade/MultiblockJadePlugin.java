@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.integration.jade;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
@@ -29,10 +31,14 @@ import snownee.jade.api.ui.IProgressStyle;
 import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.machine.MachineBlock;
-import com.murthinext.ae2pr.machine.ModeMachineBlockEntity;
+import com.murthinext.ae2pr.api.machine.Mode;
+import com.murthinext.ae2pr.api.machine.MachineBlock;
+import com.murthinext.ae2pr.api.machine.Mode;
+import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
+import com.murthinext.ae2pr.api.machine.Mode;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterControllerBlockEntity;
-import com.murthinext.ae2pr.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.api.machine.Mode;
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 
 @WailaPlugin(ae2pr.MODID)
 public final class MultiblockJadePlugin implements IWailaPlugin {
@@ -135,7 +141,7 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
 
         @Override
         public ResourceLocation getUid() {
-            return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "multiblock_data");
+            return Ids.of( "multiblock_data");
         }
     }
 
@@ -199,7 +205,7 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
 
         @Override
         public ResourceLocation getUid() {
-            return ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "multiblock");
+            return Ids.of( "multiblock");
         }
     }
 }

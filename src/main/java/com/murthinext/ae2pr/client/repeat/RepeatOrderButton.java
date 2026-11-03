@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.client.repeat;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.murthinext.ae2pr.ae2pr;
 
@@ -12,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 public class RepeatOrderButton extends IconButton {
 
     private static final Blitter ICON = Blitter.texture(
-            ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "textures/guis/repeat_order.png"), 16, 16);
+            Ids.of( "textures/guis/repeat_order.png"), 16, 16);
 
     public RepeatOrderButton(OnPress onPress) {
         super(onPress);

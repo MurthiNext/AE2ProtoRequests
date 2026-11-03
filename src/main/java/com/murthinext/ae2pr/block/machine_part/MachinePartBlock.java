@@ -36,9 +36,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.NetworkHooks;
 
+import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
 import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.registry.ModTags;
-import com.murthinext.ae2pr.logic.wrench.Wrenchable;
+import com.murthinext.ae2pr.api.wrench.Wrenchable;
 
 public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
 

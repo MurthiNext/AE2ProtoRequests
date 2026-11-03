@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.registry;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 
@@ -11,13 +13,13 @@ import com.murthinext.ae2pr.ae2pr;
 
 public final class ModGuide {
 
-    public static final ResourceLocation GUIDE_ID = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "guide");
-    public static final ResourceLocation INDEX_PAGE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID, "index.md");
-    public static final ResourceLocation EMITTER_PAGE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    public static final ResourceLocation GUIDE_ID = Ids.of( "guide");
+    public static final ResourceLocation INDEX_PAGE = Ids.of( "index.md");
+    public static final ResourceLocation EMITTER_PAGE = Ids.of(
             "devices/multi_level_emitter.md");
-    public static final ResourceLocation CRYSTAL_ASSEMBLY_LINE_PAGE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    public static final ResourceLocation CRYSTAL_ASSEMBLY_LINE_PAGE = Ids.of(
             "multiblocks/crystal_assembly_line.md");
-    public static final ResourceLocation HIGH_REACTIVITY_LAVA_SMELTER_PAGE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    public static final ResourceLocation HIGH_REACTIVITY_LAVA_SMELTER_PAGE = Ids.of(
             "multiblocks/high_reactivity_lava_smelter.md");
     public static final ResourceLocation MATTER_PHASE_TRANSFORMER_PAGE = ResourceLocation.fromNamespaceAndPath(
             ae2pr.MODID, "multiblocks/matter_phase_transformer.md");
@@ -33,9 +35,9 @@ public final class ModGuide {
             ae2pr.MODID, "multiblocks/filter_press.md");
     public static final ResourceLocation MULTI_FACTORY_PAGE = ResourceLocation.fromNamespaceAndPath(
             ae2pr.MODID, "multiblocks/multi_factory.md");
-    public static final ResourceLocation NAMING_FACTORY_PAGE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    public static final ResourceLocation NAMING_FACTORY_PAGE = Ids.of(
             "machines/naming_factory.md");
-    public static final ResourceLocation CHAMBERS_PAGE = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    public static final ResourceLocation CHAMBERS_PAGE = Ids.of(
             "multiblocks/chambers.md");
 
     private static Guide guide;

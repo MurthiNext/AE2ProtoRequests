@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.block.level_emitter;
 
+import com.murthinext.ae2pr.api.Ids;
+
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -14,9 +16,9 @@ import com.murthinext.ae2pr.ae2pr;
 
 public class CombineModeButton extends IconButton {
 
-    private static final ResourceLocation AND_ICON = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    private static final ResourceLocation AND_ICON = Ids.of(
             "textures/guis/combine_and.png");
-    private static final ResourceLocation OR_ICON = ResourceLocation.fromNamespaceAndPath(ae2pr.MODID,
+    private static final ResourceLocation OR_ICON = Ids.of(
             "textures/guis/combine_or.png");
 
     private final Consumer<CombineMode> onToggle;

@@ -3,9 +3,9 @@ package com.murthinext.ae2pr.machine.multi_factory;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.murthinext.ae2pr.recipe.ChancedItemStack;
-import com.murthinext.ae2pr.recipe.CountedIngredient;
-import com.murthinext.ae2pr.recipe.MultiblockRecipe;
+import com.murthinext.ae2pr.api.recipe.ChancedItemStack;
+import com.murthinext.ae2pr.api.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.resources.ResourceLocation;
