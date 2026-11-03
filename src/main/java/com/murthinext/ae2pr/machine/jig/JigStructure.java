@@ -6,7 +6,6 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.Blocks;
 
 import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
@@ -29,7 +28,7 @@ public final class JigStructure extends AbstractStructureFacade {
             .where('S', StructurePredicate.casingWithParts(ModBlocks.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING.get()))
             .where('L', StructurePredicate.blocks(ModBlocks.LOGISTICS_CONTROL_CASING.get()))
             .where('G', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get()))
-            .where('#', StructurePredicate.blocks(Blocks.AIR, Blocks.CAVE_AIR, Blocks.VOID_AIR))
+            .where('#', StructurePredicate.any())
             .build();
 
     public static final JigStructure INSTANCE = new JigStructure();

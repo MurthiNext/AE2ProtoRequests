@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.machine.filter_press;
 
 import com.murthinext.ae2pr.registry.ModMachines;
-import net.minecraft.world.level.block.Blocks;
 
 import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
@@ -24,7 +23,7 @@ public final class FilterPressStructure extends AbstractStructureFacade {
             .where('S', StructurePredicate.casingWithParts(ModBlocks.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING.get()))
             .where('L', StructurePredicate.blocks(ModBlocks.LOGISTICS_CONTROL_CASING.get()))
             .where('P', StructurePredicate.blocks(ModBlocks.FILTER_PRESS_PLATE.get()))
-            .where('A', StructurePredicate.blocks(Blocks.AIR, Blocks.CAVE_AIR, Blocks.VOID_AIR))
+            .where('A', StructurePredicate.any())
             .where('#', StructurePredicate.any())
             .build();
 

@@ -8,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.Blocks;
 
 import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
@@ -34,7 +33,7 @@ public final class CrystalWorkstationStructure extends AbstractStructureFacade {
             .where('C', StructurePredicate.blocks(ModBlocks.HIGH_ENERGY_STABILITY_CASING.get()))
             .where('D', StructurePredicate.blocks(ModBlocks.CRYSTAL_GLASS.get()))
             .where('G', StructurePredicate.blocks(ModMachines.CRYSTAL_REACTOR.block()))
-            .where('#', StructurePredicate.blocks(Blocks.AIR, Blocks.CAVE_AIR, Blocks.VOID_AIR))
+            .where('#', StructurePredicate.any())
             .build();
 
     public static final CrystalWorkstationStructure INSTANCE = new CrystalWorkstationStructure();

@@ -46,6 +46,8 @@ public class CrystalWorkstationRenderer
     private static final float CUBE_MIN_HALF = 0.5F;
     private static final float CUBE_MAX_HALF = 1.0F;
     private static final double CUBE_PERIOD = 320.0;
+    // 尺寸判据的平滑柔度：绝对值、取大与封顶的硬拐角会让逐帧的缩放速度突变，观感上就是旋转时的轻微抽搐
+    private static final float FIT_SOFTNESS = 0.04F;
 
     private static final int SEA_GRID = 8;
     private static final int SEA_LAYERS = 3;
@@ -148,11 +150,21 @@ public class CrystalWorkstationRenderer
         Vector3f axisX = rotation.transform(new Vector3f(1, 0, 0));
         Vector3f axisY = rotation.transform(new Vector3f(0, 1, 0));
         Vector3f axisZ = rotation.transform(new Vector3f(0, 0, 1));
-        float depth = half * (Math.abs(axisX.x * x + axisX.y * y + axisX.z * z)
-                + Math.abs(axisY.x * x + axisY.y * y + axisY.z * z)
-                + Math.abs(axisZ.x * x + axisZ.y * y + axisZ.z * z));
-        float vertical = half * (Math.abs(axisX.y) + Math.abs(axisY.y) + Math.abs(axisZ.y));
-        return Math.min(1.0F, CAVITY_HALF / Math.max(0.0001F, Math.max(depth, vertical)));
+        float depth = softAbs(half * (axisX.x * x + axisX.y * y + axisX.z * z))
+                + softAbs(half * (axisY.x * x + axisY.y * y + axisY.z * z))
+                + softAbs(half * (axisZ.x * x + axisZ.y * y + axisZ.z * z));
+        float vertical = softAbs(half * axisX.y) + softAbs(half * axisY.y) + softAbs(half * axisZ.y);
+        float margin = CAVITY_HALF / softMax(depth, vertical) - 1.0F;
+        return 1.0F + 0.5F * (margin - (float) Math.sqrt(margin * margin + FIT_SOFTNESS * FIT_SOFTNESS));
+    }
+
+    private static float softAbs(float value) {
+        return (float) Math.sqrt(value * value + FIT_SOFTNESS * FIT_SOFTNESS);
+    }
+
+    private static float softMax(float a, float b) {
+        float diff = a - b;
+        return 0.5F * (a + b + (float) Math.sqrt(diff * diff + FIT_SOFTNESS * FIT_SOFTNESS));
     }
 
     private static void renderFluid(PoseStack pose, VertexConsumer consumer, double time, float activity,
