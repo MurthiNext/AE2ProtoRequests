@@ -13,12 +13,14 @@ public final class Material {
     private final Set<TagPrefix> prefixes;
     private final int color;
     private final String modelSet;
+    private final FluidSpec fluid;
 
-    private Material(String id, Set<TagPrefix> prefixes, int color, String modelSet) {
+    private Material(String id, Set<TagPrefix> prefixes, int color, String modelSet, FluidSpec fluid) {
         this.id = id;
         this.prefixes = Set.copyOf(prefixes);
         this.color = color;
         this.modelSet = modelSet;
+        this.fluid = fluid;
     }
 
     public String id() {
@@ -31,6 +33,18 @@ public final class Material {
 
     public String modelSet() {
         return modelSet;
+    }
+
+    public int color() {
+        return color;
+    }
+
+    public FluidSpec fluid() {
+        return fluid;
+    }
+
+    public boolean hasFluid() {
+        return fluid != null;
     }
 
     /**
@@ -64,6 +78,7 @@ public final class Material {
         private final Set<TagPrefix> prefixes = new LinkedHashSet<>();
         private int color = 0xFFFFFF;
         private String modelSet = "metallic";
+        private FluidSpec fluid;
 
         private Builder(String id) {
             this.id = id;
@@ -94,8 +109,13 @@ public final class Material {
             return this;
         }
 
+        public Builder fluid(FluidSpec fluid) {
+            this.fluid = fluid;
+            return this;
+        }
+
         public Material build() {
-            return new Material(id, prefixes, color, modelSet);
+            return new Material(id, prefixes, color, modelSet, fluid);
         }
     }
 }

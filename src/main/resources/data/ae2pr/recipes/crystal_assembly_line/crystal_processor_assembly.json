@@ -1,0 +1,43 @@
+{
+  "type": "ae2pr:crystal_assembly_line",
+  "duration": 100,
+  "energy": 200000,
+  "item_inputs": [
+    {
+      "item": "ae2pr:zircon_printed_circuit_board",
+      "count": 1
+    },
+    {
+      "item": "ae2pr:crystal_processor",
+      "count": 2
+    },
+    {
+      "item": "ae2:cell_component_4k",
+      "count": 12
+    },
+    {
+      "item": "ae2:spatial_cell_component_16",
+      "count": 1
+    },
+    {
+      "item": "ae2pr:fine_fluix_wire",
+      "count": 16
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:crystal_adhesive",
+      "amount": 144
+    },
+    {
+      "fluid": "ae2pr:liquid_zirconium",
+      "amount": 36
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:crystal_processor_assembly",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "type": "ae2pr:crystal_assembly_line",
+  "duration": 100,
+  "energy": 5000000,
+  "item_inputs": [
+    {
+      "item": "ae2pr:crystal_energy_casing",
+      "count": 2
+    },
+    {
+      "item": "ae2pr:crystal_processor_computer",
+      "count": 2
+    },
+    {
+      "item": "ae2pr:computation_cell_component_4tops",
+      "count": 4
+    },
+    {
+      "item": "ae2:cell_component_16k",
+      "count": 4
+    },
+    {
+      "item": "ae2:spatial_cell_component_16",
+      "count": 6
+    },
+    {
+      "item": "ae2:fluix_glass_cable",
+      "count": 8
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:crystal_adhesive",
+      "amount": 720
+    },
+    {
+      "fluid": "ae2pr:liquid_zirconium",
+      "amount": 360
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:crystal_processor_mainframe",
+      "count": 1
+    }
+  ]
+}

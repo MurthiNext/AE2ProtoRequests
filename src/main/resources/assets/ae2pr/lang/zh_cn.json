@@ -312,5 +312,6 @@
   "tooltip.ae2pr.multi_factory.desc": "集中处理压印与充能配方。",
   "gui.ae2pr.multi_factory.mode.inscribing": "压印",
   "gui.ae2pr.multi_factory.mode.charging": "充能",
-  "config.jade.plugin_ae2pr.multi_factory": "通式加工厂"
+  "config.jade.plugin_ae2pr.multi_factory": "通式加工厂",
+  "config.jade.plugin_ae2pr.multiblock": "多方块结构"
 }

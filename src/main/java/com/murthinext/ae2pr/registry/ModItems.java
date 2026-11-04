@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.registry;
 
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.item.NoBlockFluidBucketItem;
 import com.murthinext.ae2pr.item.ComputationCellComponentItem;
 import com.murthinext.ae2pr.item.CrystalProcessorItem;
 import com.murthinext.ae2pr.item.crystaline.CrystalineItem;
@@ -162,38 +161,6 @@ public final class ModItems {
 
     public static final RegistryObject<BucketItem> ALIEN_LAVA_BUCKET = ITEMS.register("alien_lava_bucket",
             () -> new BucketItem(ModFluids.ALIEN_LAVA,
-                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-
-    public static final RegistryObject<BucketItem> LIQUID_CERTUS_QUARTZ_BUCKET = ITEMS.register(
-            "liquid_certus_quartz_bucket", () -> new NoBlockFluidBucketItem(ModFluids.LIQUID_CERTUS_QUARTZ,
-                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-
-    public static final RegistryObject<BucketItem> LIQUID_FLUIX_CRYSTAL_BUCKET = ITEMS.register(
-            "liquid_fluix_crystal_bucket", () -> new NoBlockFluidBucketItem(ModFluids.LIQUID_FLUIX_CRYSTAL,
-                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-
-    public static final RegistryObject<BucketItem> LIQUID_AMETHYST_BUCKET = ITEMS.register(
-            "liquid_amethyst_bucket", () -> new NoBlockFluidBucketItem(ModFluids.LIQUID_AMETHYST,
-                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-
-    public static final RegistryObject<BucketItem> LIQUID_CRYSTALINE_BUCKET = ITEMS.register(
-            "liquid_crystaline_bucket", () -> new NoBlockFluidBucketItem(ModFluids.LIQUID_CRYSTALINE,
-                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-
-    public static final RegistryObject<BucketItem> CRYSTAL_ADHESIVE_BUCKET = ITEMS.register(
-            "crystal_adhesive_bucket", () -> new NoBlockFluidBucketItem(ModFluids.CRYSTAL_ADHESIVE,
-                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-
-    public static final RegistryObject<BucketItem> LIQUID_ZIRCONIUM_BUCKET = ITEMS.register(
-            "liquid_zirconium_bucket", () -> new NoBlockFluidBucketItem(ModFluids.LIQUID_ZIRCONIUM,
-                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-
-    public static final RegistryObject<BucketItem> COARSE_METEORITE_SLURRY_BUCKET = ITEMS.register(
-            "coarse_meteorite_slurry_bucket", () -> new NoBlockFluidBucketItem(ModFluids.COARSE_METEORITE_SLURRY,
-                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
-
-    public static final RegistryObject<BucketItem> COARSE_METEORITE_SOLUTION_BUCKET = ITEMS.register(
-            "coarse_meteorite_solution_bucket", () -> new NoBlockFluidBucketItem(ModFluids.COARSE_METEORITE_SOLUTION,
                     new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
     public static final RegistryObject<BlockItem> METEORITE_IRON_ORE = blockItem(ModBlocks.METEORITE_IRON_ORE);

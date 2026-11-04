@@ -312,5 +312,6 @@
   "tooltip.ae2pr.multi_factory.desc": "Batch-process inscriber and charger recipes.",
   "gui.ae2pr.multi_factory.mode.inscribing": "Inscribing",
   "gui.ae2pr.multi_factory.mode.charging": "Charging",
-  "config.jade.plugin_ae2pr.multi_factory": "Multi Factory"
+  "config.jade.plugin_ae2pr.multi_factory": "Multi Factory",
+  "config.jade.plugin_ae2pr.multiblock": "Multiblock"
 }

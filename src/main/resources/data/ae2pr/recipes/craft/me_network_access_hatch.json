@@ -1,16 +1,21 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "ae2pr:crystal_reinforced_composite_machine_casing"
-    },
-    {
-      "tag": "ae2:all_fluix"
-    },
-    {
-      "item": "ae2:energy_acceptor"
-    }
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PCP",
+    "CHC",
+    "PCP"
   ],
+  "key": {
+    "C": {
+      "item": "ae2:energy_acceptor"
+    },
+    "P": {
+      "tag": "ae2pr:circuits/aev_d2"
+    },
+    "H": {
+      "item": "ae2pr:crystal_reinforced_composite_machine_casing"
+    }
+  },
   "result": {
     "item": "ae2pr:me_network_access_hatch",
     "count": 1

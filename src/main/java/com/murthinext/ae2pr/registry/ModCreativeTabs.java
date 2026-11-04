@@ -1,6 +1,7 @@
 package com.murthinext.ae2pr.registry;
 
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.material.MaterialFluids;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -86,14 +87,14 @@ public final class ModCreativeTabs {
 
                         // 桶
                         output.accept(ModItems.ALIEN_LAVA_BUCKET.get());
-                        output.accept(ModItems.LIQUID_CERTUS_QUARTZ_BUCKET.get());
-                        output.accept(ModItems.LIQUID_FLUIX_CRYSTAL_BUCKET.get());
-                        output.accept(ModItems.LIQUID_AMETHYST_BUCKET.get());
-                        output.accept(ModItems.LIQUID_CRYSTALINE_BUCKET.get());
-                        output.accept(ModItems.CRYSTAL_ADHESIVE_BUCKET.get());
-                        output.accept(ModItems.LIQUID_ZIRCONIUM_BUCKET.get());
-                        output.accept(ModItems.COARSE_METEORITE_SLURRY_BUCKET.get());
-                        output.accept(ModItems.COARSE_METEORITE_SOLUTION_BUCKET.get());
+                        output.accept(MaterialFluids.get(ModMaterials.LIQUID_CERTUS_QUARTZ).bucket().get());
+                        output.accept(MaterialFluids.get(ModMaterials.LIQUID_FLUIX_CRYSTAL).bucket().get());
+                        output.accept(MaterialFluids.get(ModMaterials.LIQUID_AMETHYST).bucket().get());
+                        output.accept(MaterialFluids.get(ModMaterials.LIQUID_CRYSTALINE).bucket().get());
+                        output.accept(MaterialFluids.get(ModMaterials.CRYSTAL_ADHESIVE).bucket().get());
+                        output.accept(MaterialFluids.get(ModMaterials.ZIRCONIUM).bucket().get());
+                        output.accept(ModFluids.COARSE_METEORITE_SLURRY.bucket().get());
+                        output.accept(ModFluids.COARSE_METEORITE_SOLUTION.bucket().get());
 
                         // 储存方块
                         output.accept(ModItems.METEOR_STEEL_BLOCK.get());
