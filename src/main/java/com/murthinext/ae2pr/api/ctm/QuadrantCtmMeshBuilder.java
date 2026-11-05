@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.client.ctm;
+package com.murthinext.ae2pr.api.ctm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,6 @@ import net.minecraft.core.Direction;
 
 /**
  * 象限连接纹理：把一个面拆成 4 个象限，各自从 4×4 格（32×32）象限图集里取一块。
- *
- * <p>图集语义与 GregTech Modern 的 {@code *_ctm.png} 一致：
  * <ul>
  * <li>(0..1, 0..1) 未连接 —— 直接取基础贴图的对应象限，保留外框、铆钉与槽纹</li>
  * <li>(0..1, 0..1) 图集 四邻接 + 对角全连接 —— 无缝面板</li>
@@ -24,7 +22,7 @@ import net.minecraft.core.Direction;
 public final class QuadrantCtmMeshBuilder {
 
     // 图集每边的格数
-    public static final int GRID = 4;
+    public static final int GRID = CtmTextures.QUADRANT_GRID;
 
     private static final int STRIDE = 8;
     private static final int UV_OFFSET = 4;
@@ -73,18 +71,18 @@ public final class QuadrantCtmMeshBuilder {
     private static int edgeMask(@Nullable Direction uAxis, @Nullable Direction vAxis, int worldMask) {
         int mask = 0;
         if (uAxis != null) {
-            if (CtmConfig.connected(worldMask, uAxis.getOpposite())) {
+            if (CtmMask.connected(worldMask, uAxis.getOpposite())) {
                 mask |= 1;
             }
-            if (CtmConfig.connected(worldMask, uAxis)) {
+            if (CtmMask.connected(worldMask, uAxis)) {
                 mask |= 2;
             }
         }
         if (vAxis != null) {
-            if (CtmConfig.connected(worldMask, vAxis.getOpposite())) {
+            if (CtmMask.connected(worldMask, vAxis.getOpposite())) {
                 mask |= 4;
             }
-            if (CtmConfig.connected(worldMask, vAxis)) {
+            if (CtmMask.connected(worldMask, vAxis)) {
                 mask |= 8;
             }
         }
@@ -100,10 +98,10 @@ public final class QuadrantCtmMeshBuilder {
         Direction minU = uAxis.getOpposite();
         Direction minV = vAxis.getOpposite();
         return switch (cornerBit) {
-            case 1 -> (edgeMask & 0b0101) == 0b0101 && CtmConfig.connected(worldMask, minU, minV);
-            case 2 -> (edgeMask & 0b0110) == 0b0110 && CtmConfig.connected(worldMask, uAxis, minV);
-            case 4 -> (edgeMask & 0b1001) == 0b1001 && CtmConfig.connected(worldMask, minU, vAxis);
-            default -> (edgeMask & 0b1010) == 0b1010 && CtmConfig.connected(worldMask, uAxis, vAxis);
+            case 1 -> (edgeMask & 0b0101) == 0b0101 && CtmMask.connected(worldMask, minU, minV);
+            case 2 -> (edgeMask & 0b0110) == 0b0110 && CtmMask.connected(worldMask, uAxis, minV);
+            case 4 -> (edgeMask & 0b1001) == 0b1001 && CtmMask.connected(worldMask, minU, vAxis);
+            default -> (edgeMask & 0b1010) == 0b1010 && CtmMask.connected(worldMask, uAxis, vAxis);
         };
     }
 

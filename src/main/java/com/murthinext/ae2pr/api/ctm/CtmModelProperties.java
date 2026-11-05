@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.client.ctm;
+package com.murthinext.ae2pr.api.ctm;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockAndTintGetter;

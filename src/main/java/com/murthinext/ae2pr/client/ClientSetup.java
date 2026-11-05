@@ -26,7 +26,6 @@ import com.murthinext.ae2pr.api.material.MaterialItems;
 import com.murthinext.ae2pr.registry.ModBlockEntities;
 import com.murthinext.ae2pr.registry.ModMenus;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.client.ctm.CtmBakedModel;
 import com.murthinext.ae2pr.block.molecular_assembly_core.MolecularAssemblyCoreRenderer;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectClientTooltip;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectLine;
@@ -98,16 +97,5 @@ public final class ClientSetup {
         MachineClients.registerRenderers(event);
         event.registerBlockEntityRenderer(ModBlockEntities.MOLECULAR_ASSEMBLY_CORE.get(),
                 MolecularAssemblyCoreRenderer::new);
-    }
-
-    @SubscribeEvent
-    public static void onModifyBakingResult(ModelEvent.ModifyBakingResult event) {
-        for (var entry : event.getModels().entrySet()) {
-            if (entry.getKey() instanceof net.minecraft.client.resources.model.ModelResourceLocation mrl
-                    && ae2pr.MODID.equals(mrl.getNamespace())
-                    && !(entry.getValue() instanceof CtmBakedModel)) {
-                entry.setValue(new CtmBakedModel(entry.getValue()));
-            }
-        }
     }
 }

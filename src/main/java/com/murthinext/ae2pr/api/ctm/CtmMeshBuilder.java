@@ -1,4 +1,7 @@
-package com.murthinext.ae2pr.client.ctm;
+package com.murthinext.ae2pr.api.ctm;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -25,8 +28,29 @@ public final class CtmMeshBuilder {
     private CtmMeshBuilder() {
     }
 
-    // 把四边形 UV 重写到 CTM 图集中对应图块
-    public static BakedQuad rewrite(BakedQuad quad, TextureAtlasSprite base, TextureAtlasSprite atlas, int worldMask) {
+    // 按底图所用的连接方式重写整组面，未登记连接图集的面原样保留
+    public static List<BakedQuad> rewrite(List<BakedQuad> quads, int worldMask) {
+        List<BakedQuad> result = new ArrayList<>(quads.size());
+        for (BakedQuad quad : quads) {
+            TextureAtlasSprite base = quad.getSprite();
+            result.addAll(rewrite(quad, base, worldMask));
+        }
+        return result;
+    }
+
+    public static List<BakedQuad> rewrite(BakedQuad quad, TextureAtlasSprite base, int worldMask) {
+        TextureAtlasSprite atlas = CtmTextures.atlasFor(base);
+        if (atlas == null) {
+            return List.of(quad);
+        }
+        return CtmTextures.isQuadrant(base)
+                ? QuadrantCtmMeshBuilder.build(quad, base, atlas, worldMask)
+                : List.of(rewriteTile(quad, base, atlas, worldMask));
+    }
+
+    // 把四边形 UV 重写到 47-tile 图集中对应图块
+    public static BakedQuad rewriteTile(BakedQuad quad, TextureAtlasSprite base, TextureAtlasSprite atlas,
+            int worldMask) {
         int[] src = quad.getVertices();
         int[] out = src.clone();
 
@@ -74,6 +98,18 @@ public final class CtmMeshBuilder {
         return new BakedQuad(out, quad.getTintIndex(), quad.getDirection(), to, quad.isShade());
     }
 
+    // 把指定贴图的面整组换成另一张贴图
+    public static List<BakedQuad> retarget(List<BakedQuad> quads, TextureAtlasSprite from, TextureAtlasSprite to) {
+        if (from == null || to == null || from == to) {
+            return quads;
+        }
+        List<BakedQuad> result = new ArrayList<>(quads.size());
+        for (BakedQuad quad : quads) {
+            result.add(quad.getSprite() == from ? retarget(quad, from, to) : quad);
+        }
+        return result;
+    }
+
     @Nullable
     public static Direction uAxis(BakedQuad quad) {
         return axisFromUvs(quad.getVertices(), true);
@@ -90,18 +126,18 @@ public final class CtmMeshBuilder {
         Direction vAxis = axisFromUvs(vertices, false);
         int edgeMask = 0;
         if (uAxis != null) {
-            if (CtmConfig.connected(worldMask, uAxis.getOpposite())) {
+            if (CtmMask.connected(worldMask, uAxis.getOpposite())) {
                 edgeMask |= 1;
             }
-            if (CtmConfig.connected(worldMask, uAxis)) {
+            if (CtmMask.connected(worldMask, uAxis)) {
                 edgeMask |= 2;
             }
         }
         if (vAxis != null) {
-            if (CtmConfig.connected(worldMask, vAxis.getOpposite())) {
+            if (CtmMask.connected(worldMask, vAxis.getOpposite())) {
                 edgeMask |= 4;
             }
-            if (CtmConfig.connected(worldMask, vAxis)) {
+            if (CtmMask.connected(worldMask, vAxis)) {
                 edgeMask |= 8;
             }
         }
@@ -110,16 +146,16 @@ public final class CtmMeshBuilder {
         if (uAxis != null && vAxis != null) {
             Direction minU = uAxis.getOpposite();
             Direction minV = vAxis.getOpposite();
-            if ((edgeMask & 0b0101) == 0b0101 && CtmConfig.connected(worldMask, minU, minV)) {
+            if ((edgeMask & 0b0101) == 0b0101 && CtmMask.connected(worldMask, minU, minV)) {
                 cornerMask |= 1;
             }
-            if ((edgeMask & 0b0110) == 0b0110 && CtmConfig.connected(worldMask, uAxis, minV)) {
+            if ((edgeMask & 0b0110) == 0b0110 && CtmMask.connected(worldMask, uAxis, minV)) {
                 cornerMask |= 2;
             }
-            if ((edgeMask & 0b1001) == 0b1001 && CtmConfig.connected(worldMask, minU, vAxis)) {
+            if ((edgeMask & 0b1001) == 0b1001 && CtmMask.connected(worldMask, minU, vAxis)) {
                 cornerMask |= 4;
             }
-            if ((edgeMask & 0b1010) == 0b1010 && CtmConfig.connected(worldMask, uAxis, vAxis)) {
+            if ((edgeMask & 0b1010) == 0b1010 && CtmMask.connected(worldMask, uAxis, vAxis)) {
                 cornerMask |= 8;
             }
         }

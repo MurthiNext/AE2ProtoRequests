@@ -1,6 +1,5 @@
 package com.murthinext.ae2pr.machine.crystal_workstation;
 
-import com.murthinext.ae2pr.registry.ModMachines;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,14 +13,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
-import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
-import com.murthinext.ae2pr.client.ctm.CtmConfig;
-import com.murthinext.ae2pr.client.ctm.CtmMeshBuilder;
-import com.murthinext.ae2pr.client.ctm.CtmSprites;
-import com.murthinext.ae2pr.client.ctm.QuadrantCtmMeshBuilder;
+import com.murthinext.ae2pr.api.ctm.CtmMeshBuilder;
+import com.murthinext.ae2pr.api.ctm.CtmTextures;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
+import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
+import com.murthinext.ae2pr.client.ctm.MachineCtm;
+import com.murthinext.ae2pr.registry.ModBlocks;
+import com.murthinext.ae2pr.registry.ModMachines;
 
 // 晶能工作站成型外观：主机换装、隐藏核心、玻璃单面化与两侧 3x3 面板换装连纹
 public final class CrystalWorkstationCtm {
@@ -32,6 +31,7 @@ public final class CrystalWorkstationCtm {
 
     private CrystalWorkstationCtm() {
     }
+
     // 工作站成型外观的完整面重写
     @Nullable
     public static List<BakedQuad> appearance(List<BakedQuad> quads, @Nullable Direction side,
@@ -67,15 +67,15 @@ public final class CrystalWorkstationCtm {
         int worldMask;
         if (panel) {
             // 外侧与机壳连成一片，内侧只在 3x3 面板内部相连
-            worldMask = outer ? CtmConfig.mask(level, pos, CrystalWorkstationCtm::connectsShell)
-                    : CtmConfig.mask(level, pos,
+            worldMask = outer ? MachineCtm.mask(level, pos, CrystalWorkstationCtm::connectsShell)
+                    : MachineCtm.mask(level, pos,
                             (neighbor, neighborState) -> CrystalWorkstationShell.isStability(neighbor));
         } else if (shell) {
-            worldMask = CtmConfig.mask(level, pos, CrystalWorkstationCtm::connectsShell);
+            worldMask = MachineCtm.mask(level, pos, CrystalWorkstationCtm::connectsShell);
         } else {
-            worldMask = CtmConfig.worldMask(level, pos, state);
+            worldMask = MachineCtm.INSTANCE.mask(level, pos, state);
         }
-        List<BakedQuad> result = rewrite(quads, worldMask);
+        List<BakedQuad> result = CtmMeshBuilder.rewrite(quads, worldMask);
         if (!pane) {
             return result;
         }
@@ -89,42 +89,18 @@ public final class CrystalWorkstationCtm {
     }
 
     private static List<BakedQuad> controller(List<BakedQuad> quads, BlockAndTintGetter level, BlockPos pos) {
-        TextureAtlasSprite base = CtmSprites.baseSprite(CtmSprites.CRYSTAL_WORKSTATION_CONTROLLER_CASING);
-        TextureAtlasSprite facade = CtmSprites.baseSprite(MachinePartFacade.CRYSTAL_ENERGY.texture());
+        TextureAtlasSprite base = CtmTextures.baseSprite(MachineCtm.CRYSTAL_WORKSTATION_CONTROLLER_CASING);
+        TextureAtlasSprite facade = CtmTextures.baseSprite(MachinePartFacade.CRYSTAL_ENERGY.texture());
         if (base != null && facade != null && base != facade) {
-            quads = retarget(quads, base, facade);
+            quads = CtmMeshBuilder.retarget(quads, base, facade);
         }
-        return rewrite(quads, CtmConfig.mask(level, pos, CrystalWorkstationCtm::connectsShell));
-    }
-
-    private static List<BakedQuad> rewrite(List<BakedQuad> quads, int worldMask) {
-        List<BakedQuad> result = new ArrayList<>(quads.size());
-        for (BakedQuad quad : quads) {
-            TextureAtlasSprite base = quad.getSprite();
-            TextureAtlasSprite atlas = CtmSprites.atlasFor(base);
-            if (atlas == null) {
-                result.add(quad);
-            } else if (CtmSprites.isQuadrant(base)) {
-                result.addAll(QuadrantCtmMeshBuilder.build(quad, base, atlas, worldMask));
-            } else {
-                result.add(CtmMeshBuilder.rewrite(quad, base, atlas, worldMask));
-            }
-        }
-        return result;
-    }
-
-    private static List<BakedQuad> retarget(List<BakedQuad> quads, TextureAtlasSprite from, TextureAtlasSprite to) {
-        List<BakedQuad> result = new ArrayList<>(quads.size());
-        for (BakedQuad quad : quads) {
-            result.add(quad.getSprite() == from ? CtmMeshBuilder.retarget(quad, from, to) : quad);
-        }
-        return result;
+        return CtmMeshBuilder.rewrite(quads, MachineCtm.mask(level, pos, CrystalWorkstationCtm::connectsShell));
     }
 
     private static List<BakedQuad> retargetPanel(List<BakedQuad> quads, boolean outer,
             CrystalWorkstationShell.Look look) {
-        TextureAtlasSprite target = CtmSprites
-                .baseSprite(outer ? MachinePartFacade.CRYSTAL_ENERGY.texture() : CtmSprites.WORKSTATION_PANEL_INNER);
+        TextureAtlasSprite target = CtmTextures
+                .baseSprite(outer ? MachinePartFacade.CRYSTAL_ENERGY.texture() : MachineCtm.WORKSTATION_PANEL_INNER);
         if (target == null) {
             return quads;
         }
@@ -198,6 +174,6 @@ public final class CrystalWorkstationCtm {
         if (neighborState.is(ModMachines.CRYSTAL_WORKSTATION.block())) {
             return neighborState.getValue(MachineBlock.FORMED);
         }
-        return CtmConfig.connects(neighborState, ModBlocks.CRYSTAL_ENERGY_CASING.get().defaultBlockState());
+        return MachineCtm.connects(neighborState, ModBlocks.CRYSTAL_ENERGY_CASING.get().defaultBlockState());
     }
 }
