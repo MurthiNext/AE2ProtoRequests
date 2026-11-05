@@ -9,6 +9,7 @@ import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterPart;
 import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterPart;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOres;
 import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
+import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 import com.murthinext.ae2pr.logic.wrench.WrenchInteractions;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryBlockEntity;
 import com.murthinext.ae2pr.api.machine.MachineRegistries;
@@ -75,6 +76,9 @@ public class ae2pr {
         event.enqueueWork(() -> {
             // 过滤元件升级
             Upgrades.add(AEItems.FUZZY_CARD, ModItems.FILTER_CELL.get(), 1);
+
+            // 超级堆叠卡：接口与样板供应器
+            SuperStackSupport.registerUpgrades();
 
             // 通式标准发信器升级
             var emitterItem = ModItems.MULTI_LEVEL_EMITTER.get();

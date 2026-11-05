@@ -138,6 +138,8 @@ dependencies {
 
     // ME Requester
     compileOnly fg.deobf("maven.modrinth:merequester:${merequester_version}")
+    // AdvancedAE
+    compileOnly fg.deobf("maven.modrinth:advancedae:${advancedae_version}")
     // Jade
     compileOnly fg.deobf("maven.modrinth:jade:${jade_version}")
     runtimeOnly fg.deobf("maven.modrinth:jade:${jade_version}")

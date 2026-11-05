@@ -9,6 +9,7 @@ import com.murthinext.ae2pr.item.level_emitter.MultiThresholdLevelEmitterPartIte
 import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
 import com.murthinext.ae2pr.item.filter_cell.FilterCellItem;
 import com.murthinext.ae2pr.item.ProtoTerminalItem;
+import com.murthinext.ae2pr.item.upgrade.SuperStackCardItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
@@ -37,6 +38,9 @@ public final class ModItems {
 
     public static final RegistryObject<Item> PROTO_TERMINAL = ITEMS.register("proto_terminal",
             () -> new ProtoTerminalItem(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<SuperStackCardItem> SUPER_STACK_CARD = ITEMS.register("super_stack_card",
+            () -> new SuperStackCardItem(new Item.Properties()));
 
     public static final RegistryObject<ComputationCellComponentItem> COMPUTATION_CELL_COMPONENT_1TOPS = ITEMS.register(
             "computation_cell_component_1tops", () -> new ComputationCellComponentItem(new Item.Properties(), 4));

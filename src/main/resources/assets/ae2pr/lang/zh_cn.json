@@ -52,6 +52,7 @@
   "item.ae2pr.proto_terminal": "源始终端 (WIP)",
   "item.ae2pr.pseudo_strontianite_dust": "类菱锶矿粉",
   "item.ae2pr.single_plate_press": "单层板压印模板",
+  "item.ae2pr.super_stack_card": "超级堆叠卡",
   "item.ae2pr.strontium_carbonate_dust": "碳酸锶粉",
   "item.ae2pr.strontium_dust": "锶粉",
   "item.ae2pr.strontium_ingot": "锶锭",
@@ -313,5 +314,8 @@
   "gui.ae2pr.multi_factory.mode.inscribing": "压印",
   "gui.ae2pr.multi_factory.mode.charging": "充能",
   "config.jade.plugin_ae2pr.multi_factory": "通式加工厂",
-  "config.jade.plugin_ae2pr.multiblock": "多方块结构"
+  "config.jade.plugin_ae2pr.multiblock": "多方块结构",
+  "tooltip.ae2pr.super_stack_card.desc": "提升堆叠上限至 2,147,483,647",
+  "group.ae2pr.interface.name": "ME接口",
+  "group.ae2pr.pattern_provider.name": "ME样板供应器"
 }

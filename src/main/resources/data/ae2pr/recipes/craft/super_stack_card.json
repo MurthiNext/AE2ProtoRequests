@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PCP",
+    "CAC",
+    "PCP"
+  ],
+  "key": {
+    "P": {
+      "item": "ae2:calculation_processor"
+    },
+    "C": {
+      "tag": "ae2:all_fluix"
+    },
+    "A": {
+      "item": "ae2:advanced_card"
+    }
+  },
+  "result": {
+    "item": "ae2pr:super_stack_card"
+  }
+}

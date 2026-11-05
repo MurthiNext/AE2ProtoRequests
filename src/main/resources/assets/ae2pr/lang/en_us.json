@@ -52,6 +52,7 @@
   "item.ae2pr.proto_terminal": "Proto Terminal (WIP)",
   "item.ae2pr.pseudo_strontianite_dust": "Pseudo-Strontianite Dust",
   "item.ae2pr.single_plate_press": "Single Plate Press",
+  "item.ae2pr.super_stack_card": "Super Stack Card",
   "item.ae2pr.strontium_carbonate_dust": "Strontium Carbonate Dust",
   "item.ae2pr.strontium_dust": "Strontium Dust",
   "item.ae2pr.strontium_ingot": "Strontium Ingot",
@@ -313,5 +314,8 @@
   "gui.ae2pr.multi_factory.mode.inscribing": "Inscribing",
   "gui.ae2pr.multi_factory.mode.charging": "Charging",
   "config.jade.plugin_ae2pr.multi_factory": "Multi Factory",
-  "config.jade.plugin_ae2pr.multiblock": "Multiblock"
+  "config.jade.plugin_ae2pr.multiblock": "Multiblock",
+  "tooltip.ae2pr.super_stack_card.desc": "Increase the stack limit to 2,147,483,647",
+  "group.ae2pr.interface.name": "ME Interface",
+  "group.ae2pr.pattern_provider.name": "ME Pattern Provider"
 }
