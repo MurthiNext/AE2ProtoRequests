@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -70,8 +69,7 @@ public class RedstoneRequesterBlock extends AEBaseEntityBlock<RedstoneRequesterB
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.literal(" "));
             tooltip.add(RequesterUtils.translate("tooltip",
-                    RequesterUtils.f("{}_desc", RequesterConstants.REQUESTER_ID))
-                    .withStyle(ChatFormatting.AQUA));
+                    RequesterUtils.f("{}_desc", RequesterConstants.REQUESTER_ID)));
         } else {
             RequesterUtils.addShiftInfoTooltip(tooltip);
         }

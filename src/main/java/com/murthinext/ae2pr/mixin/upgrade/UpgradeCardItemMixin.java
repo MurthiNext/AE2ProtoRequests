@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import appeng.items.materials.UpgradeCardItem;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -25,8 +24,7 @@ public abstract class UpgradeCardItemMixin {
     private void ae2pr$collapseSupportedBy(ItemStack stack, Level level, List<Component> lines,
             TooltipFlag tooltipFlag, CallbackInfo ci) {
         if (!Screen.hasShiftDown()) {
-            lines.add(Component.translatable("tooltip.ae2pr.upgrade_card.shift_for_supported")
-                    .withStyle(ChatFormatting.GRAY));
+            lines.add(Component.translatable("tooltip.ae2pr.upgrade_card.shift_for_supported"));
             ci.cancel();
         }
     }

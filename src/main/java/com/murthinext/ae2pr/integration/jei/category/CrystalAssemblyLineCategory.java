@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -173,16 +172,13 @@ public class CrystalAssemblyLineCategory extends AbstractMachineCategory<Crystal
 
     private static Component requirementHint(ModuleRequirement requirement) {
         return Component.translatable("jei.ae2pr.crystal_assembly_line.module_requirement.hint",
-                requirement.minLevel(), Component.translatable(requirement.type().translationKey()))
-                .withStyle(ChatFormatting.GRAY);
+                requirement.minLevel(), Component.translatable(requirement.type().translationKey()));
     }
 
     private static Component orderTooltip(int index, boolean ordered) {
         if (!ordered) {
-            return Component.translatable("jei.ae2pr.crystal_assembly_line.slot.unordered")
-                    .withStyle(ChatFormatting.GRAY);
+            return Component.translatable("jei.ae2pr.crystal_assembly_line.slot.unordered");
         }
-        return Component.translatable("jei.ae2pr.crystal_assembly_line.slot.index", index + 1)
-                .withStyle(ChatFormatting.GRAY);
+        return Component.translatable("jei.ae2pr.crystal_assembly_line.slot.index", index + 1);
     }
 }

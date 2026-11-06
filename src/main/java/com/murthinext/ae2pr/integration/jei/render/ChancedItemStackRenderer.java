@@ -6,7 +6,6 @@ import java.util.Locale;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -79,7 +78,7 @@ public class ChancedItemStackRenderer implements IIngredientRenderer<ItemStack> 
     }
 
     public static Component chanceTooltip(float chance) {
-        return JeiRecipeInfo.chance(chance).withStyle(ChatFormatting.GRAY);
+        return JeiRecipeInfo.chance(chance);
     }
 
     public static int color(float chance) {

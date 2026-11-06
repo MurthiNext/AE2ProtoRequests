@@ -50,8 +50,7 @@ public abstract class CPUSelectionListMixin {
         }
 
         var lines = new ArrayList<>(tooltip.getContent());
-        lines.add(Component.translatable("gui.ae2pr.repeat_order.tooltip.round", info.round(), info.total())
-                .withStyle(ChatFormatting.GRAY));
+        lines.add(Component.translatable("gui.ae2pr.repeat_order.tooltip.round", info.round(), info.total()));
 
         cir.setReturnValue(new Tooltip(lines));
     }

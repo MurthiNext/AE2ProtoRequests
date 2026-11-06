@@ -62,8 +62,7 @@ public final class RequesterUtils {
                 .append(translate(
                         "tooltip",
                         "shift_for_more",
-                        InputConstants.getKey("key.keyboard.left.shift").getDisplayName())
-                        .withStyle(ChatFormatting.GRAY)));
+                        InputConstants.getKey("key.keyboard.left.shift").getDisplayName())));
     }
 
     public static <T> T cast(Object o, Class<T> clazz) {

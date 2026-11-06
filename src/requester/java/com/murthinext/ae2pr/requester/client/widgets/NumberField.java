@@ -242,7 +242,7 @@ public class NumberField extends EditBox implements ITooltip {
                 "tooltip",
                 "enter_to_submit",
                 InputConstants.getKey("key.keyboard.enter").getDisplayName()
-            ).withStyle(ChatFormatting.GRAY)));
+            )));
     }
 
     @Override

@@ -5,7 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 import appeng.items.materials.UpgradeCardItem;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,7 +19,7 @@ public class SuperStackCardItem extends UpgradeCardItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lines, TooltipFlag flag) {
-        lines.add(Component.translatable("tooltip.ae2pr.super_stack_card.desc").withStyle(ChatFormatting.GRAY));
+        lines.add(Component.translatable("tooltip.ae2pr.super_stack_card.desc"));
         super.appendHoverText(stack, level, lines, flag);
     }
 }

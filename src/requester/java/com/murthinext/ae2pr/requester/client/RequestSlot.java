@@ -12,7 +12,6 @@ import com.murthinext.ae2pr.requester.client.abstraction.RequestDisplay;
 import com.murthinext.ae2pr.requester.client.abstraction.RequesterReference;
 import com.murthinext.ae2pr.requester.mixin.SlotMixin;
 import com.murthinext.ae2pr.requester.platform.RequesterPlatform;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
@@ -53,7 +52,7 @@ public class RequestSlot extends FakeSlot {
     @Override
     public List<Component> getCustomTooltip(ItemStack carried) {
         if (isLocked) {
-            return Collections.singletonList(RequesterUtils.translate("tooltip", "locked").withStyle(ChatFormatting.RED));
+            return Collections.singletonList(RequesterUtils.translate("tooltip", "locked"));
         }
         // custom tooltip for fluid containers
         var emptyingTooltip = host.getEmptyingTooltip(this, carried);
