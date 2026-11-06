@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -37,6 +38,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.NetworkHooks;
 
 import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
+import com.murthinext.ae2pr.logic.collapse.CollapseHandler;
 import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.registry.ModTags;
 import com.murthinext.ae2pr.api.wrench.Wrenchable;
@@ -191,13 +193,19 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
         // 破坏时掉落物品存储（成型切换不触发），流体不回收
         if (!state.is(newState.getBlock()) && !level.isClientSide) {
             if (level.getBlockEntity(pos) instanceof ItemBusBlockEntity bus) {
-                dropContents(level, pos, bus.getStorage());
+                dropContents(level, pos, state, bus.getStorage());
             }
         }
         super.onRemove(state, level, pos, newState, isMoving);
     }
 
-    private static void dropContents(Level level, BlockPos pos, IItemHandler handler) {
+    // 物品总量超量时整仓压成一个坍缩元件，否则逐个掉落
+    private static void dropContents(Level level, BlockPos pos, BlockState state, IItemHandler handler) {
+        ItemStack collapsed = CollapseHandler.tryCollapse(BuiltInRegistries.BLOCK.getKey(state.getBlock()), handler);
+        if (collapsed != null) {
+            Block.popResource(level, pos, collapsed);
+            return;
+        }
         for (int slot = 0; slot < handler.getSlots(); slot++) {
             ItemStack stack = handler.getStackInSlot(slot);
             while (!stack.isEmpty()) {

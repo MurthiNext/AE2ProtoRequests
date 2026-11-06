@@ -18,6 +18,7 @@
     "repeat.CraftingStatusMenuBroadcastMixin",
     "repeat.MenuOpenerMixin",
     "repeat.NetworkHandlerMixin",
+    "collapse.AEBaseBlockEntityDropsMixin",
     "upgrade.AEBaseMenuSuperStackMixin",
     "upgrade.AEBaseMenuUpgradesMixin",
     "upgrade.AppEngInternalInventoryUpgradesMixin",

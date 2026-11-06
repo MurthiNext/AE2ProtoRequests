@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr;
 
+import java.util.List;
+
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import appeng.blockentity.misc.ChargerBlockEntity;
@@ -70,6 +72,10 @@ public final class Config {
 
     private static final ForgeConfigSpec.DoubleValue LOSSY_SPEED_PER_CARD;
     private static final ForgeConfigSpec.DoubleValue LOSSY_ENERGY_MULTIPLIER_PER_CARD;
+
+    private static final ForgeConfigSpec.BooleanValue COLLAPSE_ENABLED;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> COLLAPSE_EXTRA_BLOCKS;
+    private static final ForgeConfigSpec.LongValue COLLAPSE_THRESHOLD;
 
     static final ForgeConfigSpec SPEC;
 
@@ -270,6 +276,21 @@ public final class Config {
                 .defineInRange("lossyEnergyMultiplierPerCard", 4.0, 1.0, 1000.0);
         BUILDER.pop();
 
+        BUILDER.push("collapse");
+        COLLAPSE_ENABLED = BUILDER
+                .comment("是否允许机器被破坏时把超量内容压成坍缩物品元件",
+                        "开启后默认兼容本模组仓室与 AE 系列（接口、样板供应器等使用 AE2 通用库存的机器）")
+                .define("enableCollapse", true);
+        COLLAPSE_EXTRA_BLOCKS = BUILDER
+                .comment("额外允许坍缩的方块，格式为 modid:itemid 或 modid:*",
+                        "为这些方块读取 Forge 物品能力中的内容；modid:* 表示该模组全部方块")
+                .defineListAllowEmpty("extraEnableCollapse", List.of(),
+                        entry -> entry instanceof String text && !text.isBlank());
+        COLLAPSE_THRESHOLD = BUILDER
+                .comment("触发坍缩的物品总量下限，达到即坍缩")
+                .defineInRange("threshold", 32768L, 1L, Long.MAX_VALUE);
+        BUILDER.pop();
+
         SPEC = BUILDER.build();
     }
 
@@ -460,5 +481,20 @@ public final class Config {
 
     public static double lossyEnergyMultiplierPerCard() {
         return LOSSY_ENERGY_MULTIPLIER_PER_CARD.get();
+    }
+
+    public static boolean collapseEnabled() {
+        return COLLAPSE_ENABLED.get();
+    }
+
+    public static List<String> collapseExtraBlocks() {
+        return COLLAPSE_EXTRA_BLOCKS.get().stream()
+                .filter(String.class::isInstance)
+                .map(String.class::cast)
+                .toList();
+    }
+
+    public static long collapseThreshold() {
+        return COLLAPSE_THRESHOLD.get();
     }
 }

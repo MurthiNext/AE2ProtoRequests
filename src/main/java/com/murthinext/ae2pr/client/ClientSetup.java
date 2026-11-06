@@ -38,6 +38,8 @@ import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryRenderer;
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientSetup {
 
+    private static final ResourceLocation COLLAPSED_ITEM_CELL_MODEL = Ids.of("block/drive/collapsed_item_cell");
+
     private ClientSetup() {
     }
 
@@ -76,6 +78,7 @@ public final class ClientSetup {
     @SubscribeEvent
     public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
         event.register(NamingFactoryRenderer.FORGE_MODEL);
+        event.register(COLLAPSED_ITEM_CELL_MODEL);
     }
 
     @SubscribeEvent

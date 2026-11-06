@@ -27,6 +27,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.ADVANCED_FILTER_CELL.get());
                         output.accept(ModItems.PROTO_TERMINAL.get());
                         output.accept(ModItems.SUPER_STACK_CARD.get());
+                        output.accept(ModItems.COLLAPSED_ITEM_CELL.get());
 
                         // 材料 / 中间产物
                         output.accept(ModItems.SINGLE_PLATE_PRESS.get());

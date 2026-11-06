@@ -1,13 +1,19 @@
 package com.murthinext.ae2pr;
 
 import appeng.api.parts.PartModels;
+import appeng.api.client.StorageCellModels;
+import appeng.api.storage.StorageCells;
 import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.items.parts.PartModelsHelper;
 import com.mojang.logging.LogUtils;
+import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterPart;
 import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterPart;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOres;
+import com.murthinext.ae2pr.item.collapsed_cell.CollapsedItemCellGuiHandler;
+import com.murthinext.ae2pr.item.collapsed_cell.CollapsedItemCellHandler;
+import com.murthinext.ae2pr.logic.collapse.CollapseEvents;
 import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
 import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 import com.murthinext.ae2pr.logic.wrench.WrenchInteractions;
@@ -65,6 +71,8 @@ public class ae2pr {
         MinecraftForge.EVENT_BUS.addListener(WrenchInteractions::onRightClickBlock);
         // 陨石矿石：铁镐以上挖掘速度同天空石
         MinecraftForge.EVENT_BUS.addListener(MeteoriteOres::onBreakSpeed);
+        // 坍缩物品元件：第三方机器的通用破坏入口
+        MinecraftForge.EVENT_BUS.addListener(CollapseEvents::onBlockBreak);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             ModGuide.init();
@@ -79,6 +87,12 @@ public class ae2pr {
 
             // 超级堆叠卡：接口与样板供应器
             SuperStackSupport.registerUpgrades();
+
+            // 坍缩物品元件：作为只读存储元件接入 ME 网络
+            StorageCells.addCellHandler(new CollapsedItemCellHandler());
+            StorageCells.addCellGuiHandler(new CollapsedItemCellGuiHandler());
+            StorageCellModels.registerModel(ModItems.COLLAPSED_ITEM_CELL.get(),
+                    Ids.of("block/drive/collapsed_item_cell"));
 
             // 通式标准发信器升级
             var emitterItem = ModItems.MULTI_LEVEL_EMITTER.get();
