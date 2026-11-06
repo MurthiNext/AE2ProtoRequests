@@ -18,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
 
-import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.ModConfig;
 import com.murthinext.ae2pr.item.collapsed_cell.CollapsedItemCellItem;
 
 public final class CollapseHandler {
@@ -73,7 +73,7 @@ public final class CollapseHandler {
 
     @Nullable
     private static ItemStack collapse(List<CollapseSource> sources) {
-        if (!Config.collapseEnabled() || sources.isEmpty()) {
+        if (!ModConfig.collapseEnabled() || sources.isEmpty()) {
             return null;
         }
         var stacks = new ArrayList<GenericStack>();
@@ -101,7 +101,7 @@ public final class CollapseHandler {
         for (var stack : merged) {
             total += stack.amount();
         }
-        return total >= Config.collapseThreshold() ? CollapsedItemCellItem.create(merged) : null;
+        return total >= ModConfig.collapseThreshold() ? CollapsedItemCellItem.create(merged) : null;
     }
 
     private static List<GenericStack> mergeItems(List<GenericStack> stacks) {

@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.registry;
 
 import java.util.List;
 
-import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.ModConfig;
 import com.murthinext.ae2pr.api.BlockProperties;
 import com.murthinext.ae2pr.api.machine.CoreLight;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -62,67 +62,70 @@ public final class ModMachines {
     };
 
     public static final RecipeDefinition<MachineRecipe> FILTER_PRESS_RECIPE = RecipeDefinition.simple(
-            "filter_press", 200, Config::filterPressEnergyPerParallel);
+            "filter_press", 200, RecipeConstraints.builder().requireEnergy().build());
     public static final RecipeDefinition<MachineRecipe> JIG_RECIPE = RecipeDefinition.simple(
-            "jig", 200, Config::jigEnergyPerParallel);
+            "jig", 200, RecipeConstraints.builder().requireEnergy().build());
     public static final RecipeDefinition<MachineRecipe> CRYSTAL_REACTION_CHAMBER_RECIPE = RecipeDefinition.simple(
-            "crystal_reaction_chamber", 200, Config::crystalReactionEnergyPerParallel);
+            "crystal_reaction_chamber", 200, RecipeConstraints.builder().requireEnergy().build());
     public static final RecipeDefinition<MachineRecipe> HIGH_REACTIVITY_LAVA_SMELTER_RECIPE = RecipeDefinition.simple(
-            "high_reactivity_lava_smelter", 100, () -> 0.0D,
+            "high_reactivity_lava_smelter", 100,
             RecipeConstraints.builder().itemInputs(0, 4).fluidInputs(0, 2).itemOutputs(1, 2).fluidOutputs(0, 0).build());
     public static final RecipeDefinition<MachineRecipe> MATTER_PHASE_TRANSFORMER_RECIPE = RecipeDefinition.simple(
-            "matter_phase_transformer", 200, Config::matterPhaseTransformerEnergyPerParallel,
-            RecipeConstraints.builder().itemInputs(1, -1).fluidInputs(0, 0).fluidOutputs(1, 1).build());
+            "matter_phase_transformer", 200,
+            RecipeConstraints.builder().itemInputs(1, -1).fluidInputs(0, 0).fluidOutputs(1, 1).requireEnergy().build());
     public static final RecipeDefinition<MachineRecipe> CRYSTAL_WORKSTATION_ETCHING_RECIPE = RecipeDefinition.simple(
-            "crystal_workstation_etching", 200, () -> 0.0D, workstationConstraints());
+            "crystal_workstation_etching", 200, workstationConstraints());
     public static final RecipeDefinition<MachineRecipe> CRYSTAL_WORKSTATION_CUTTING_RECIPE = RecipeDefinition.simple(
-            "crystal_workstation_cutting", 200, () -> 0.0D, workstationConstraints());
+            "crystal_workstation_cutting", 200, workstationConstraints());
+
     public static final RecipeDefinition<CrystalAssemblyLineRecipe> CRYSTAL_ASSEMBLY_LINE_RECIPE = RecipeDefinition.custom(
             "crystal_assembly_line", CrystalAssemblyLineRecipe.Serializer::new);
 
     public static final MultiblockMachineDefinition<MachineControllerBlockEntity, MachineMenu<MachineControllerBlockEntity>> FILTER_PRESS =
             MultiblockMachineDefinition.standard("filter_press", ModMachines::metalProperties,
-                    () -> FilterPressStructure.INSTANCE, Config::filterPressParallel, FILTER_PRESS_RECIPE::type);
+                    () -> FilterPressStructure.INSTANCE, ModConfig::filterPressBaseParallel, FILTER_PRESS_RECIPE::type);
 
     public static final MultiblockMachineDefinition<JigControllerBlockEntity, MachineMenu<JigControllerBlockEntity>> JIG =
             MultiblockMachineDefinition.standard("jig", JigControllerBlockEntity.class, JigControllerBlockEntity::new,
-                    ModMachines::crystalProperties, () -> JigStructure.INSTANCE, Config::jigParallel, JIG_RECIPE::type);
+                    ModMachines::crystalProperties, () -> JigStructure.INSTANCE, ModConfig::jigBaseParallel,
+                    JIG_RECIPE::type);
 
     public static final MultiblockMachineDefinition<CrystalReactionChamberControllerBlockEntity, MachineMenu<CrystalReactionChamberControllerBlockEntity>> CRYSTAL_REACTION_CHAMBER =
             MultiblockMachineDefinition.standard("crystal_reaction_chamber", CrystalReactionChamberControllerBlockEntity.class,
                     CrystalReactionChamberControllerBlockEntity::new, ModMachines::crystalProperties,
-                    () -> CrystalReactionChamberStructure.INSTANCE, () -> Math.max(1, Config.crystalReactionParallel()),
+                    () -> CrystalReactionChamberStructure.INSTANCE, ModConfig::crystalReactionBaseParallel,
                     CRYSTAL_REACTION_CHAMBER_RECIPE::type).coreLight(ModMachines.CRYSTAL_REACTOR_CORE);
 
     public static final MultiblockMachineDefinition<CrystalAssemblyLineControllerBlockEntity, MachineMenu<CrystalAssemblyLineControllerBlockEntity>> CRYSTAL_ASSEMBLY_LINE =
             MultiblockMachineDefinition.standard("crystal_assembly_line", CrystalAssemblyLineControllerBlockEntity.class,
                     CrystalAssemblyLineControllerBlockEntity::new, ModMachines::metalProperties,
-                    () -> CrystalAssemblyLineStructure.INSTANCE, Config::assemblyBaseParallel, CRYSTAL_ASSEMBLY_LINE_RECIPE::type);
+                    () -> CrystalAssemblyLineStructure.INSTANCE, ModConfig::assemblyBaseParallel,
+                    CRYSTAL_ASSEMBLY_LINE_RECIPE::type);
 
     public static final MultiblockMachineDefinition<MatterPhaseTransformerControllerBlockEntity, MachineMenu<MatterPhaseTransformerControllerBlockEntity>> MATTER_PHASE_TRANSFORMER =
             MultiblockMachineDefinition.standard("matter_phase_transformer", MatterPhaseTransformerControllerBlockEntity.class,
                     MatterPhaseTransformerControllerBlockEntity::new, ModMachines::stoneProperties,
-                    () -> MatterPhaseTransformerStructure.INSTANCE, () -> Math.max(1, Config.matterPhaseTransformerParallel()),
+                    () -> MatterPhaseTransformerStructure.INSTANCE, ModConfig::matterPhaseTransformerBaseParallel,
                     MATTER_PHASE_TRANSFORMER_RECIPE::type).coreLight(ModMachines.CRYSTAL_REACTOR_CORE);
 
     public static final MultiblockMachineDefinition<HighReactivityLavaSmelterControllerBlockEntity, HighReactivityLavaSmelterMenu> HIGH_REACTIVITY_LAVA_SMELTER =
             MultiblockMachineDefinition.customMenu("high_reactivity_lava_smelter", HighReactivityLavaSmelterControllerBlockEntity.class,
                     HighReactivityLavaSmelterControllerBlockEntity::new, ModMachines::stoneProperties,
-                    () -> HighReactivityLavaSmelterStructure.INSTANCE, () -> Math.max(1, Config.highReactivityLavaSmelterParallel()),
+                    () -> HighReactivityLavaSmelterStructure.INSTANCE, ModConfig::highReactivityLavaSmelterBaseParallel,
                     HIGH_REACTIVITY_LAVA_SMELTER_RECIPE::type, () -> HighReactivityLavaSmelterMenu.TYPE,
                     (definition, id, inventory, controller) -> new HighReactivityLavaSmelterMenu(id, inventory, controller));
 
     public static final MultiblockMachineDefinition<CrystalWorkstationControllerBlockEntity, MachineMenu<CrystalWorkstationControllerBlockEntity>> CRYSTAL_WORKSTATION =
             MultiblockMachineDefinition.withModes("crystal_workstation", CrystalWorkstationControllerBlockEntity.class,
                     CrystalWorkstationControllerBlockEntity::new, ModMachines::crystalProperties,
-                    () -> CrystalWorkstationStructure.INSTANCE, () -> Math.max(1, Config.crystalWorkstationParallel()),
+                    () -> CrystalWorkstationStructure.INSTANCE, ModConfig::crystalWorkstationBaseParallel,
                     () -> CrystalWorkstationMode.ETCHING.recipeType(), List.of(CrystalWorkstationMode.values()))
                     .coreLight(ModMachines.CRYSTAL_REACTOR_CORE);
 
     public static final MultiblockMachineDefinition<MultiFactoryControllerBlockEntity, MachineMenu<MultiFactoryControllerBlockEntity>> MULTI_FACTORY =
             MultiblockMachineDefinition.withModes("multi_factory", MultiFactoryControllerBlockEntity.class,
                     MultiFactoryControllerBlockEntity::new, ModMachines::crystalProperties,
-                    () -> MultiFactoryStructure.INSTANCE, () -> Math.max(1, Config.multiFactoryParallel()),
+                    () -> MultiFactoryStructure.INSTANCE, ModConfig::multiFactoryBaseParallel,
                     () -> MultiFactoryMode.INSCRIBING.recipeType(), List.of(MultiFactoryMode.values()));
 
     public static final MachineDefinition<NamingFactoryBlock, NamingFactoryBlockEntity, NamingFactoryMenu> NAMING_FACTORY =

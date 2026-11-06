@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 
 import appeng.core.definitions.AEBlocks;
 
-import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.ModConfig;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.api.multiblock.RelativeDirection;
@@ -49,8 +49,8 @@ public final class CrystalReactorStructure {
     }
 
     public static List<BlockPos> expansionOffsets() {
-        int radius = Config.crystalReactorRadius();
-        int depth = Config.crystalReactorDepth();
+        int radius = ModConfig.crystalReactorRadius();
+        int depth = ModConfig.crystalReactorDepth();
         long key = ((long) radius << 32) | (depth & 0xFFFFFFFFL);
         return EXPANSION_CACHE.computeIfAbsent(key, ignored -> buildExpansion(radius, depth));
     }

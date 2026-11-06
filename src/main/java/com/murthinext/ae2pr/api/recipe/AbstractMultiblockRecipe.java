@@ -59,8 +59,6 @@ public abstract class AbstractMultiblockRecipe extends AbstractRecipe implements
 
     @Override
     public final double getEnergyPerParallel() {
-        return energy != null ? energy : defaultEnergyPerParallel();
+        return energy != null ? energy : 0.0D;
     }
-
-    protected abstract double defaultEnergyPerParallel();
 }

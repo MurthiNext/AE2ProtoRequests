@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.ModConfig;
 import com.murthinext.ae2pr.logic.repeat.FailureReason;
 
 import appeng.api.stacks.AEKey;
@@ -40,7 +40,7 @@ public final class ClientRepeatOrderFailures {
         MARKS.put(what, new FailedMark(-1));
 
         var minecraft = Minecraft.getInstance();
-        if (Config.notifyOnFailure()
+        if (ModConfig.notifyOnFailure()
                 && !(minecraft.screen instanceof MEStorageScreen<?>)
                 && minecraft.player != null
                 && hasNotificationEnablingItem(minecraft.player)) {

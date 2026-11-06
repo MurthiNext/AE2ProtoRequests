@@ -6,7 +6,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.ModConfig;
 import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.registry.ModModules;
 import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
@@ -50,7 +50,7 @@ public final class CrystalAssemblyLineStructure extends AbstractStructureFacade 
 
     @Override
     public int maxSlices() {
-        return Math.max(MIN_SLICES, Config.crystalAssemblyLineMaxSlices());
+        return Math.max(MIN_SLICES, ModConfig.crystalAssemblyLineMaxSlices());
     }
 
     @Override

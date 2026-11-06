@@ -10,7 +10,7 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.ModConfig;
 import com.murthinext.ae2pr.ae2pr;
 
 import appeng.api.features.IPlayerRegistry;
@@ -256,7 +256,7 @@ public final class GeneralRepeatOrders {
 
     private static void retryOrFail(GeneralRepeatOrder order, FailureReason reason) {
         order.recalc = null;
-        if (++order.retryCount > Config.retryCount()) {
+        if (++order.retryCount > ModConfig.retryCount()) {
             ae2pr.LOGGER.info("Generic repeat order failed: {}x{} after {} retries (reason: {})",
                     order.amountPerRound, order.what, order.retryCount - 1, reason);
             order.state = RepeatOrderState.FAILED;
@@ -265,7 +265,7 @@ public final class GeneralRepeatOrders {
                     order.totalRounds, order.completedRounds, reason);
             return;
         }
-        order.retryCooldownTicks = Config.retryIntervalTicks();
+        order.retryCooldownTicks = ModConfig.retryIntervalTicks();
         order.state = RepeatOrderState.RETRY_WAIT;
     }
 

@@ -31,6 +31,7 @@ import appeng.api.upgrades.UpgradeInventories;
 import appeng.core.definitions.AEItems;
 
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.EnergyAmount;
 import com.murthinext.ae2pr.api.machine.ControllerHost;
 import com.murthinext.ae2pr.api.machine.CoreLight;
 import com.murthinext.ae2pr.api.machine.MachineBlockStates;
@@ -130,7 +131,12 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     public int maxParallel() {
-        return definition.maxParallel();
+        long total = (long) definition.maxParallel() + parallelBonus();
+        return (int) Math.min(total, Integer.MAX_VALUE);
+    }
+
+    protected long parallelBonus() {
+        return 0L;
     }
 
     @Nullable
@@ -336,7 +342,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     protected double energyCost(Match match) {
-        return match.recipe().getEnergyPerParallel() * match.parallel() * lossyEnergyMultiplier();
+        return EnergyAmount.clamp(match.recipe().getEnergyPerParallel() * match.parallel() * lossyEnergyMultiplier());
     }
 
     private void finishJob() {
@@ -562,8 +568,10 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return Math.pow(MachineTuning.energyMultiplierPerCard(), getSpeedCardCount());
     }
 
+    // 速度倍率封顶 INT MAX，单次作业至少 1 tick
     protected int scaledDuration(int baseTicks) {
-        return Math.max(1, (int) Math.ceil(baseTicks / getSpeedMultiplier()));
+        double speed = Math.min(getSpeedMultiplier(), Integer.MAX_VALUE);
+        return (int) Math.max(1L, Math.min((long) Math.ceil(baseTicks / speed), Integer.MAX_VALUE));
     }
 
     public IUpgradeInventory getUpgrades() {
@@ -571,7 +579,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     protected double extractNetworkEnergy(double amount, boolean simulate) {
-        return isNetworkConnected() ? networkAccessHatch.extractAEPower(amount, simulate) : 0;
+        return isNetworkConnected() ? networkAccessHatch.extractAEPower(EnergyAmount.clamp(amount), simulate) : 0;
     }
 
     public int getRequiredChannels() {

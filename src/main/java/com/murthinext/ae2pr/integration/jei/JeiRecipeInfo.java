@@ -3,6 +3,7 @@ package com.murthinext.ae2pr.integration.jei;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
+import com.murthinext.ae2pr.api.EnergyAmount;
 import com.murthinext.ae2pr.integration.jei.render.ChancedItemStackRenderer;
 
 // JEI 配方信息行的统一构建：时间、能耗与未显示槽位的提示
@@ -16,7 +17,8 @@ public final class JeiRecipeInfo {
     }
 
     public static Component energy(double energy) {
-        return Component.translatable("jei.ae2pr.recipe.energy", JeiAmountFormat.exact((int) Math.round(energy)));
+        return Component.translatable("jei.ae2pr.recipe.energy",
+                JeiAmountFormat.energy(EnergyAmount.toLong(energy)));
     }
 
     public static MutableComponent chance(float chance) {

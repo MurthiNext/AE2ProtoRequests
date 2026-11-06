@@ -1,5 +1,6 @@
 {
   "type": "ae2pr:jig",
+  "energy": 1000,
   "item_inputs": [
     {
       "item": "ae2:sky_dust",

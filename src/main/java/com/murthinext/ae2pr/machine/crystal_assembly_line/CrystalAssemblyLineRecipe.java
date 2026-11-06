@@ -19,7 +19,6 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 
-import com.murthinext.ae2pr.Config;
 import com.murthinext.ae2pr.registry.ModModules;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleRequirement;
@@ -42,11 +41,6 @@ public class CrystalAssemblyLineRecipe extends AbstractMultiblockRecipe {
     }
 
     @Override
-    protected double defaultEnergyPerParallel() {
-        return Config.assemblyEnergyPerParallel();
-    }
-
-    @Override
     public RecipeSerializer<?> getSerializer() {
         return ModMachines.CRYSTAL_ASSEMBLY_LINE_RECIPE.serializer();
     }
@@ -60,6 +54,11 @@ public class CrystalAssemblyLineRecipe extends AbstractMultiblockRecipe {
 
         public Serializer() {
             super(DEFAULT_DURATION);
+        }
+
+        @Override
+        protected boolean energyRequired() {
+            return true;
         }
 
         @Override

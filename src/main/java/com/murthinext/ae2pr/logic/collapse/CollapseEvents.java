@@ -8,7 +8,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import appeng.blockentity.AEBaseBlockEntity;
 
-import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.ModConfig;
 
 /**
  * 第三方机器的通用坍缩入口：玩家破坏方块时，若该方块在 {@code collapse.extraEnableCollapse} 内
@@ -23,7 +23,7 @@ public final class CollapseEvents {
 
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
-        if (!Config.collapseEnabled() || event.isCanceled()) {
+        if (!ModConfig.collapseEnabled() || event.isCanceled()) {
             return;
         }
         var player = event.getPlayer();

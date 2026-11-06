@@ -4,7 +4,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 
 import appeng.recipes.handlers.ChargerRecipe;
 import appeng.recipes.handlers.InscriberRecipe;
-import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.ModConfig;
 import com.murthinext.ae2pr.api.machine.Mode;
 
 // 通式加工厂工作模式，直接对应 AE2 原生配方类型
@@ -36,11 +36,11 @@ public enum MultiFactoryMode implements Mode {
     }
 
     public int durationTicks() {
-        return this == INSCRIBING ? Config.multiFactoryInscribingDuration() : Config.multiFactoryChargingDuration();
+        return this == INSCRIBING ? ModConfig.multiFactoryInscribingDuration() : ModConfig.multiFactoryChargingDuration();
     }
 
     public double energyPerParallel() {
-        return this == INSCRIBING ? Config.multiFactoryInscribingEnergyPerParallel()
-                : Config.multiFactoryChargingEnergyPerParallel();
+        return this == INSCRIBING ? ModConfig.multiFactoryInscribingEnergyPerParallel()
+                : ModConfig.multiFactoryChargingEnergyPerParallel();
     }
 }

@@ -25,11 +25,6 @@ public final class MachineRecipe extends AbstractMultiblockRecipe {
     }
 
     @Override
-    protected double defaultEnergyPerParallel() {
-        return definition.defaultEnergy();
-    }
-
-    @Override
     public RecipeSerializer<?> getSerializer() {
         return definition.serializer();
     }

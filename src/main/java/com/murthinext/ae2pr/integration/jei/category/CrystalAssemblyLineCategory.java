@@ -20,7 +20,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 
-import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.ModConfig;
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleDefinition;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
@@ -97,13 +97,13 @@ public class CrystalAssemblyLineCategory extends AbstractMachineCategory<Crystal
     @Override
     protected void configureItemInputSlot(IRecipeSlotBuilder slot, int index,
             CrystalAssemblyLineRecipe recipe) {
-        slot.addRichTooltipCallback((view, tooltip) -> tooltip.add(orderTooltip(index, Config.assemblyItemsOrdered())));
+        slot.addRichTooltipCallback((view, tooltip) -> tooltip.add(orderTooltip(index, ModConfig.assemblyItemsOrdered())));
     }
 
     @Override
     protected void configureFluidInputSlot(IRecipeSlotBuilder slot, int index,
             CrystalAssemblyLineRecipe recipe) {
-        slot.addRichTooltipCallback((view, tooltip) -> tooltip.add(orderTooltip(index, Config.assemblyFluidsOrdered())));
+        slot.addRichTooltipCallback((view, tooltip) -> tooltip.add(orderTooltip(index, ModConfig.assemblyFluidsOrdered())));
     }
 
     @Override

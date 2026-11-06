@@ -1,6 +1,7 @@
 {
   "type": "ae2pr:crystal_assembly_line",
   "duration": 50,
+  "energy": 51200,
   "item_inputs": [
     {
       "tag": "forge:plates/silicon",

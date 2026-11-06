@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.MapColor;
 
-import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.ModConfig;
 import com.murthinext.ae2pr.registry.ModModules;
 import com.murthinext.ae2pr.api.wrench.Wrenchable;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleDefinition;
@@ -55,11 +55,11 @@ public class CrystalAssemblyLineUnitBlock extends Block implements Wrenchable {
         ModuleType type = definition.type();
         if (type == ModModules.PARALLEL) {
             return Component.translatable("tooltip.ae2pr.crystal_assembly_line_module.parallel",
-                    NUMBER.format(Config.assemblyModuleParallelPerUnit()));
+                    NUMBER.format(ModConfig.assemblyModuleParallelPerUnit()));
         }
         if (type == ModModules.SPEED) {
             return Component.translatable("tooltip.ae2pr.crystal_assembly_line_module.speed",
-                    NUMBER.format(Config.assemblyModuleSpeedPerUnit() * 100.0) + "%");
+                    NUMBER.format(ModConfig.assemblyModuleSpeedPerUnit() * 100.0) + "%");
         }
         return Component.translatable("tooltip.ae2pr.crystal_assembly_line_module",
                 Component.translatable(type.translationKey()), definition.level());

@@ -21,6 +21,7 @@ import appeng.api.networking.IManagedGridNode;
 import appeng.api.orientation.BlockOrientation;
 import appeng.blockentity.grid.AENetworkBlockEntity;
 
+import com.murthinext.ae2pr.api.EnergyAmount;
 import com.murthinext.ae2pr.api.machine.ControllerHost;
 import com.murthinext.ae2pr.api.machine.part.MachinePart;
 import com.murthinext.ae2pr.registry.ModBlockEntities;
@@ -150,10 +151,14 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity implem
     }
 
     public double extractAEPower(double amount, boolean simulate) {
-        if (amount <= 0 || controller == null || !isNetworkConnected(controller)) {
+        if (controller == null || !isNetworkConnected(controller)) {
             return 0;
         }
-        return getMainNode().getGrid().getEnergyService().extractAEPower(amount,
+        double clamped = EnergyAmount.clamp(amount);
+        if (clamped <= 0) {
+            return 0;
+        }
+        return getMainNode().getGrid().getEnergyService().extractAEPower(clamped,
                 simulate ? Actionable.SIMULATE : Actionable.MODULATE, PowerMultiplier.CONFIG);
     }
 

@@ -3,7 +3,6 @@ package com.murthinext.ae2pr.api.machine;
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.MachineRegistries;
 
-import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import net.minecraft.resources.ResourceLocation;
@@ -18,28 +17,25 @@ public final class RecipeDefinition<R extends AbstractMultiblockRecipe> {
 
     private final RegistryObject<RecipeType<R>> type;
     private final RegistryObject<RecipeSerializer<R>> serializer;
-    private final DoubleSupplier defaultEnergy;
 
-    private RecipeDefinition(String id, DoubleSupplier defaultEnergy,
-            Factory<R> serializerFactory) {
-        this.defaultEnergy = defaultEnergy;
+    private RecipeDefinition(String id, Factory<R> serializerFactory) {
         type = registerType(id);
         serializer = registerSerializer(id, serializerFactory);
     }
 
-    public static RecipeDefinition<MachineRecipe> simple(String id, int defaultDuration, DoubleSupplier defaultEnergy) {
-        return simple(id, defaultDuration, defaultEnergy, RecipeConstraints.NONE);
+    public static RecipeDefinition<MachineRecipe> simple(String id, int defaultDuration) {
+        return simple(id, defaultDuration, RecipeConstraints.NONE);
     }
 
-    public static RecipeDefinition<MachineRecipe> simple(String id, int defaultDuration, DoubleSupplier defaultEnergy,
+    public static RecipeDefinition<MachineRecipe> simple(String id, int defaultDuration,
             RecipeConstraints constraints) {
-        return new RecipeDefinition<>(id, defaultEnergy,
+        return new RecipeDefinition<>(id,
                 definition -> new MachineRecipe.Serializer(definition, defaultDuration, constraints));
     }
 
     public static <R extends AbstractMultiblockRecipe> RecipeDefinition<R> custom(String id,
             Supplier<RecipeSerializer<R>> serializerFactory) {
-        return new RecipeDefinition<>(id, () -> 0.0D, definition -> serializerFactory.get());
+        return new RecipeDefinition<>(id, definition -> serializerFactory.get());
     }
 
     @SuppressWarnings("unchecked")
@@ -63,10 +59,6 @@ public final class RecipeDefinition<R extends AbstractMultiblockRecipe> {
 
     public RecipeSerializer<R> serializer() {
         return serializer.get();
-    }
-
-    public double defaultEnergy() {
-        return defaultEnergy.getAsDouble();
     }
 
     @FunctionalInterface

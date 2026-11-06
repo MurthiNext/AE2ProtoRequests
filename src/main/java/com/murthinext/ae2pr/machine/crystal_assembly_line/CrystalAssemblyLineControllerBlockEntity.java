@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.ModConfig;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.registry.ModModules;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
@@ -43,20 +43,14 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
     }
 
     @Override
-    public int maxParallel() {
-        int base = Config.assemblyBaseParallel()
-                + Math.max(0, lastSlices - CrystalAssemblyLineStructure.MIN_SLICES) * Config.assemblyParallelPerSlice();
-        return Math.min(base + moduleParallelBonus(), Config.assemblyMaxParallel());
-    }
-
-    private int moduleParallelBonus() {
-        return modules.count(ModModules.PARALLEL) * Config.assemblyModuleParallelPerUnit();
+    protected long parallelBonus() {
+        return (long) Math.max(0, lastSlices - CrystalAssemblyLineStructure.MIN_SLICES) * ModConfig.assemblyParallelPerSlice()
+                + (long) modules.count(ModModules.PARALLEL) * ModConfig.assemblyModuleParallelPerUnit();
     }
 
     @Override
     public double getSpeedMultiplier() {
-        double multiplier = 1.0 + modules.count(ModModules.SPEED) * Config.assemblyModuleSpeedPerUnit();
-        return Math.min(multiplier, Config.assemblyMaxSpeedMultiplier()) * super.getSpeedMultiplier();
+        return (1.0 + modules.count(ModModules.SPEED) * ModConfig.assemblyModuleSpeedPerUnit()) * super.getSpeedMultiplier();
     }
 
     // 配方匹配
@@ -108,7 +102,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
         if (inputs.isEmpty()) {
             return matched;
         }
-        if (Config.assemblyItemsOrdered()) {
+        if (ModConfig.assemblyItemsOrdered()) {
             // 有序模式沿用绝对索引，并要求该部件属于候选组
             if (inputBuses.size() < inputs.size()) {
                 return null;
@@ -153,7 +147,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
         if (inputs.isEmpty()) {
             return matched;
         }
-        if (Config.assemblyFluidsOrdered()) {
+        if (ModConfig.assemblyFluidsOrdered()) {
             if (inputHatches.size() < inputs.size()) {
                 return null;
             }

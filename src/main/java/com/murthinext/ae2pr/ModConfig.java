@@ -5,8 +5,9 @@ import java.util.List;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import appeng.blockentity.misc.ChargerBlockEntity;
+import com.murthinext.ae2pr.api.EnergyAmount;
 
-public final class Config {
+public final class ModConfig {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
     private static final ForgeConfigSpec.IntValue MAX_ROUNDS;
@@ -23,35 +24,28 @@ public final class Config {
     private static final ForgeConfigSpec.IntValue ASSEMBLY_BASE_PARALLEL;
     private static final ForgeConfigSpec.IntValue ASSEMBLY_PARALLEL_PER_SLICE;
     private static final ForgeConfigSpec.IntValue ASSEMBLY_MAX_SLICES;
-    private static final ForgeConfigSpec.DoubleValue ASSEMBLY_ENERGY_PER_PARALLEL;
     private static final ForgeConfigSpec.IntValue ASSEMBLY_MODULE_PARALLEL_PER_UNIT;
     private static final ForgeConfigSpec.DoubleValue ASSEMBLY_MODULE_SPEED_PER_UNIT;
-    private static final ForgeConfigSpec.IntValue ASSEMBLY_MAX_PARALLEL;
-    private static final ForgeConfigSpec.DoubleValue ASSEMBLY_MAX_SPEED_MULTIPLIER;
 
     private static final ForgeConfigSpec.DoubleValue NAMING_FACTORY_MAX_POWER;
     private static final ForgeConfigSpec.DoubleValue NAMING_FACTORY_ENERGY_PER_ITEM;
 
-    private static final ForgeConfigSpec.IntValue HIGH_REACTIVITY_LAVA_SMELTER_PARALLEL;
+    private static final ForgeConfigSpec.IntValue HIGH_REACTIVITY_LAVA_SMELTER_BASE_PARALLEL;
     private static final ForgeConfigSpec.DoubleValue HIGH_REACTIVITY_LAVA_SMELTER_PASSIVE_ENERGY;
     private static final ForgeConfigSpec.DoubleValue HIGH_REACTIVITY_LAVA_SMELTER_DURABILITY_LOSS_CHANCE;
     private static final ForgeConfigSpec.IntValue HIGH_REACTIVITY_LAVA_SMELTER_MAX_DURABILITY;
     private static final ForgeConfigSpec.IntValue HIGH_REACTIVITY_LAVA_SMELTER_DURABILITY_PER_DUST;
 
-    private static final ForgeConfigSpec.IntValue MATTER_PHASE_TRANSFORMER_PARALLEL;
-    private static final ForgeConfigSpec.DoubleValue MATTER_PHASE_TRANSFORMER_ENERGY_PER_PARALLEL;
+    private static final ForgeConfigSpec.IntValue MATTER_PHASE_TRANSFORMER_BASE_PARALLEL;
 
-    private static final ForgeConfigSpec.IntValue CRYSTAL_REACTION_PARALLEL;
-    private static final ForgeConfigSpec.IntValue CRYSTAL_WORKSTATION_PARALLEL;
-    private static final ForgeConfigSpec.DoubleValue CRYSTAL_REACTION_ENERGY_PER_PARALLEL;
+    private static final ForgeConfigSpec.IntValue CRYSTAL_REACTION_BASE_PARALLEL;
+    private static final ForgeConfigSpec.IntValue CRYSTAL_WORKSTATION_BASE_PARALLEL;
 
-    private static final ForgeConfigSpec.IntValue JIG_PARALLEL;
-    private static final ForgeConfigSpec.DoubleValue JIG_ENERGY_PER_PARALLEL;
+    private static final ForgeConfigSpec.IntValue JIG_BASE_PARALLEL;
 
-    private static final ForgeConfigSpec.IntValue FILTER_PRESS_PARALLEL;
-    private static final ForgeConfigSpec.DoubleValue FILTER_PRESS_ENERGY_PER_PARALLEL;
+    private static final ForgeConfigSpec.IntValue FILTER_PRESS_BASE_PARALLEL;
 
-    private static final ForgeConfigSpec.IntValue MULTI_FACTORY_PARALLEL;
+    private static final ForgeConfigSpec.IntValue MULTI_FACTORY_BASE_PARALLEL;
     private static final ForgeConfigSpec.IntValue MULTI_FACTORY_INSCRIBING_DURATION;
     private static final ForgeConfigSpec.IntValue MULTI_FACTORY_CHARGING_DURATION;
     private static final ForgeConfigSpec.DoubleValue MULTI_FACTORY_INSCRIBING_ENERGY;
@@ -101,7 +95,7 @@ public final class Config {
                 .defineInRange("slots", 5, 1, 63);
         REQUESTER_IDLE_ENERGY = BUILDER
                 .comment("ME 红石请求器空闲时从网络抽取的能量（AE）")
-                .defineInRange("idleEnergy", 5.0, 0.0, Double.MAX_VALUE);
+                .defineInRange("idleEnergy", 5.0, 0.0, EnergyAmount.MAX);
         REQUESTER_REQUIRE_CHANNEL = BUILDER
                 .comment("ME 红石请求器是否需要占用一个网络频道")
                 .define("requireChannel", true);
@@ -115,47 +109,38 @@ public final class Config {
                 .comment("水晶装配线流体输入是否有序")
                 .define("fluidInputsOrdered", false);
         ASSEMBLY_BASE_PARALLEL = BUILDER
-                .comment("水晶装配线最短结构的并行上限")
-                .defineInRange("baseParallel", 16, 1, 1_000_000);
+                .comment("水晶装配线最短结构的默认并行数")
+                .defineInRange("baseParallel", 16, 1, Integer.MAX_VALUE);
         ASSEMBLY_PARALLEL_PER_SLICE = BUILDER
-                .comment("结构每超出最短长度1片增加的并行上限")
-                .defineInRange("parallelPerSlice", 8, 0, 1_000_000);
-        ASSEMBLY_MAX_PARALLEL = BUILDER
-                .comment("水晶装配线最大并行上限")
-                .defineInRange("maxParallel", Integer.MAX_VALUE, 1, Integer.MAX_VALUE);
+                .comment("结构每超出最短长度1片增加的并行数")
+                .defineInRange("parallelPerSlice", 8, 0, Integer.MAX_VALUE);
         ASSEMBLY_MAX_SLICES = BUILDER
                 .comment("水晶装配线结构允许的最大片数")
                 .defineInRange("maxSlices", 31, 5, 1024);
-        ASSEMBLY_ENERGY_PER_PARALLEL = BUILDER
-                .comment("水晶装配线默认扣除的能量（AE）")
-                .defineInRange("energyPerParallel", 50000.0, 0.0, Double.MAX_VALUE);
         ASSEMBLY_MODULE_PARALLEL_PER_UNIT = BUILDER
-                .comment("水晶装配线每个并行控制外壳增加的并行上限")
-                .defineInRange("moduleParallelPerUnit", 16, 0, 1_000_000);
+                .comment("水晶装配线每个并行控制外壳增加的并行数")
+                .defineInRange("moduleParallelPerUnit", 16, 0, Integer.MAX_VALUE);
         ASSEMBLY_MODULE_SPEED_PER_UNIT = BUILDER
                 .comment("水晶装配线每个速度控制外壳增加的速度比例")
                 .defineInRange("moduleSpeedPerUnit", 0.5, 0.0, 100.0);
-        ASSEMBLY_MAX_SPEED_MULTIPLIER = BUILDER
-                .comment("水晶装配线速度倍率上限")
-                .defineInRange("maxSpeedMultiplier", 64.0, 1.0, Double.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("namingFactory");
         NAMING_FACTORY_MAX_POWER = BUILDER
                 .comment("名称压印工厂的内部能量缓存上限（AE）")
-                .defineInRange("maxPower", 16000.0, 0.0, Double.MAX_VALUE);
+                .defineInRange("maxPower", 16000.0, 0.0, EnergyAmount.MAX);
         NAMING_FACTORY_ENERGY_PER_ITEM = BUILDER
                 .comment("名称压印工厂每重命名一个物品消耗的能量（AE）")
-                .defineInRange("energyPerItem", 250.0, 0.0, Double.MAX_VALUE);
+                .defineInRange("energyPerItem", 250.0, 0.0, EnergyAmount.MAX);
         BUILDER.pop();
 
         BUILDER.push("highReactivityLavaSmelter");
-        HIGH_REACTIVITY_LAVA_SMELTER_PARALLEL = BUILDER
-                .comment("熔岩冶炼炉并行上限")
-                .defineInRange("parallel", 64, 1, 1_000_000);
+        HIGH_REACTIVITY_LAVA_SMELTER_BASE_PARALLEL = BUILDER
+                .comment("熔岩冶炼炉默认并行数")
+                .defineInRange("baseParallel", 64, 1, Integer.MAX_VALUE);
         HIGH_REACTIVITY_LAVA_SMELTER_PASSIVE_ENERGY = BUILDER
                 .comment("熔岩冶炼炉被动耗电量（AE/tick）")
-                .defineInRange("passiveEnergyPerTick", 1000.0, 0.0, Double.MAX_VALUE);
+                .defineInRange("passiveEnergyPerTick", 1000.0, 0.0, EnergyAmount.MAX);
         HIGH_REACTIVITY_LAVA_SMELTER_DURABILITY_LOSS_CHANCE = BUILDER
                 .comment("熔岩冶炼炉电力供给不足时每秒扣除 1 点配方耐久的概率")
                 .defineInRange("durabilityLossChancePerSecond", 0.5, 0.0, 1.0);
@@ -168,64 +153,52 @@ public final class Config {
         BUILDER.pop();
 
         BUILDER.push("matterPhaseTransformer");
-        MATTER_PHASE_TRANSFORMER_PARALLEL = BUILDER
-                .comment("物质相变仪并行上限")
-                .defineInRange("parallel", 64, 1, 1_000_000);
-        MATTER_PHASE_TRANSFORMER_ENERGY_PER_PARALLEL = BUILDER
-                .comment("物质相变仪默认扣除的能量（AE）")
-                .defineInRange("energyPerParallel", 50000.0, 0.0, Double.MAX_VALUE);
+        MATTER_PHASE_TRANSFORMER_BASE_PARALLEL = BUILDER
+                .comment("物质相变仪默认并行数")
+                .defineInRange("baseParallel", 64, 1, Integer.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("crystalReactionChamber");
-        CRYSTAL_REACTION_PARALLEL = BUILDER
-                .comment("水晶反应仓并行上限")
-                .defineInRange("parallel", 64, 1, 1_000_000);
-        CRYSTAL_REACTION_ENERGY_PER_PARALLEL = BUILDER
-                .comment("水晶反应仓默认扣除的能量（AE）")
-                .defineInRange("energyPerParallel", 20000.0, 0.0, Double.MAX_VALUE);
+        CRYSTAL_REACTION_BASE_PARALLEL = BUILDER
+                .comment("水晶反应仓默认并行数")
+                .defineInRange("baseParallel", 64, 1, Integer.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("crystalWorkstation");
-        CRYSTAL_WORKSTATION_PARALLEL = BUILDER
-                .comment("晶能工作站并行上限")
-                .defineInRange("parallel", 64, 1, 1_000_000);
+        CRYSTAL_WORKSTATION_BASE_PARALLEL = BUILDER
+                .comment("晶能工作站默认并行数")
+                .defineInRange("baseParallel", 64, 1, Integer.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("jig");
-        JIG_PARALLEL = BUILDER
-                .comment("跳汰机并行上限")
-                .defineInRange("parallel", 64, 1, 1_000_000);
-        JIG_ENERGY_PER_PARALLEL = BUILDER
-                .comment("跳汰机默认扣除的能量（AE）")
-                .defineInRange("energyPerParallel", 1000.0, 0.0, Double.MAX_VALUE);
+        JIG_BASE_PARALLEL = BUILDER
+                .comment("跳汰机默认并行数")
+                .defineInRange("baseParallel", 64, 1, Integer.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("filterPress");
-        FILTER_PRESS_PARALLEL = BUILDER
-                .comment("压滤机并行上限")
-                .defineInRange("parallel", 32, 1, 1_000_000);
-        FILTER_PRESS_ENERGY_PER_PARALLEL = BUILDER
-                .comment("压滤机默认扣除的能量（AE）")
-                .defineInRange("energyPerParallel", 2000.0, 0.0, Double.MAX_VALUE);
+        FILTER_PRESS_BASE_PARALLEL = BUILDER
+                .comment("压滤机默认并行数")
+                .defineInRange("baseParallel", 64, 1, Integer.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("multiFactory");
-        MULTI_FACTORY_PARALLEL = BUILDER
-                .comment("通式加工厂并行上限")
-                .defineInRange("parallel", 64, 1, 1_000_000);
+        MULTI_FACTORY_BASE_PARALLEL = BUILDER
+                .comment("通式加工厂默认并行数")
+                .defineInRange("baseParallel", 64, 1, Integer.MAX_VALUE);
         MULTI_FACTORY_INSCRIBING_DURATION = BUILDER
-                .comment("通式加工厂压印模式单次作业时长（ticks），默认 100 为 AE2 压印器的加工步数折算")
+                .comment("通式加工厂压印模式单次作业时长（ticks）")
                 .defineInRange("inscribingDuration", 100, 1, 72000);
         MULTI_FACTORY_CHARGING_DURATION = BUILDER
-                .comment("通式加工厂充能模式单次作业时长（ticks），默认对齐 AE2 充能器")
+                .comment("通式加工厂充能模式单次作业时长（ticks）")
                 .defineInRange("chargingDuration", 50, 1, 72000);
         MULTI_FACTORY_INSCRIBING_ENERGY = BUILDER
                 .comment("通式加工厂压印模式每个并行默认扣除的能量（AE）")
-                .defineInRange("inscribingEnergyPerParallel", 2000.0, 0.0, Double.MAX_VALUE);
+                .defineInRange("inscribingEnergyPerParallel", 2000.0, 0.0, EnergyAmount.MAX);
         MULTI_FACTORY_CHARGING_ENERGY = BUILDER
                 .comment("通式加工厂充能模式每个并行默认扣除的能量（AE）")
                 .defineInRange("chargingEnergyPerParallel",
-                        (double) ChargerBlockEntity.POWER_MAXIMUM_AMOUNT, 0.0, Double.MAX_VALUE);
+                        (double) ChargerBlockEntity.POWER_MAXIMUM_AMOUNT, 0.0, EnergyAmount.MAX);
         BUILDER.pop();
 
         BUILDER.push("crystalReactor");
@@ -287,14 +260,14 @@ public final class Config {
                 .defineListAllowEmpty("extraEnableCollapse", List.of(),
                         entry -> entry instanceof String text && !text.isBlank());
         COLLAPSE_THRESHOLD = BUILDER
-                .comment("触发坍缩的物品总量下限，达到即坍缩")
+                .comment("触发坍缩的物品数量阈值")
                 .defineInRange("threshold", 32768L, 1L, Long.MAX_VALUE);
         BUILDER.pop();
 
         SPEC = BUILDER.build();
     }
 
-    private Config() {
+    private ModConfig() {
     }
 
     public static int maxRounds() {
@@ -345,24 +318,12 @@ public final class Config {
         return ASSEMBLY_MAX_SLICES.get();
     }
 
-    public static double assemblyEnergyPerParallel() {
-        return ASSEMBLY_ENERGY_PER_PARALLEL.get();
-    }
-
     public static int assemblyModuleParallelPerUnit() {
         return ASSEMBLY_MODULE_PARALLEL_PER_UNIT.get();
     }
 
     public static double assemblyModuleSpeedPerUnit() {
         return ASSEMBLY_MODULE_SPEED_PER_UNIT.get();
-    }
-
-    public static int assemblyMaxParallel() {
-        return ASSEMBLY_MAX_PARALLEL.get();
-    }
-
-    public static double assemblyMaxSpeedMultiplier() {
-        return ASSEMBLY_MAX_SPEED_MULTIPLIER.get();
     }
 
     public static double namingFactoryMaxPower() {
@@ -373,8 +334,8 @@ public final class Config {
         return NAMING_FACTORY_ENERGY_PER_ITEM.get();
     }
 
-    public static int highReactivityLavaSmelterParallel() {
-        return HIGH_REACTIVITY_LAVA_SMELTER_PARALLEL.get();
+    public static int highReactivityLavaSmelterBaseParallel() {
+        return HIGH_REACTIVITY_LAVA_SMELTER_BASE_PARALLEL.get();
     }
 
     public static double highReactivityLavaSmelterPassiveEnergy() {
@@ -393,44 +354,28 @@ public final class Config {
         return HIGH_REACTIVITY_LAVA_SMELTER_DURABILITY_PER_DUST.get();
     }
 
-    public static int matterPhaseTransformerParallel() {
-        return MATTER_PHASE_TRANSFORMER_PARALLEL.get();
+    public static int matterPhaseTransformerBaseParallel() {
+        return MATTER_PHASE_TRANSFORMER_BASE_PARALLEL.get();
     }
 
-    public static double matterPhaseTransformerEnergyPerParallel() {
-        return MATTER_PHASE_TRANSFORMER_ENERGY_PER_PARALLEL.get();
+    public static int crystalReactionBaseParallel() {
+        return CRYSTAL_REACTION_BASE_PARALLEL.get();
     }
 
-    public static int crystalReactionParallel() {
-        return CRYSTAL_REACTION_PARALLEL.get();
+    public static int crystalWorkstationBaseParallel() {
+        return CRYSTAL_WORKSTATION_BASE_PARALLEL.get();
     }
 
-    public static int crystalWorkstationParallel() {
-        return CRYSTAL_WORKSTATION_PARALLEL.get();
+    public static int jigBaseParallel() {
+        return JIG_BASE_PARALLEL.get();
     }
 
-    public static double crystalReactionEnergyPerParallel() {
-        return CRYSTAL_REACTION_ENERGY_PER_PARALLEL.get();
+    public static int filterPressBaseParallel() {
+        return FILTER_PRESS_BASE_PARALLEL.get();
     }
 
-    public static int jigParallel() {
-        return JIG_PARALLEL.get();
-    }
-
-    public static double jigEnergyPerParallel() {
-        return JIG_ENERGY_PER_PARALLEL.get();
-    }
-
-    public static int filterPressParallel() {
-        return FILTER_PRESS_PARALLEL.get();
-    }
-
-    public static double filterPressEnergyPerParallel() {
-        return FILTER_PRESS_ENERGY_PER_PARALLEL.get();
-    }
-
-    public static int multiFactoryParallel() {
-        return MULTI_FACTORY_PARALLEL.get();
+    public static int multiFactoryBaseParallel() {
+        return MULTI_FACTORY_BASE_PARALLEL.get();
     }
 
     public static int multiFactoryInscribingDuration() {

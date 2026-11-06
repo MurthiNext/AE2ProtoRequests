@@ -7,7 +7,7 @@ import java.util.Set;
 
 import net.minecraft.resources.ResourceLocation;
 
-import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.ModConfig;
 import com.murthinext.ae2pr.ae2pr;
 
 public final class CollapseMatcher {
@@ -44,7 +44,7 @@ public final class CollapseMatcher {
     }
 
     private static void refresh() {
-        List<String> raw = Config.collapseExtraBlocks();
+        List<String> raw = ModConfig.collapseExtraBlocks();
         if (raw.equals(cachedRaw)) {
             return;
         }

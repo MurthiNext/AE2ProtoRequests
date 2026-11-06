@@ -33,7 +33,8 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 
-import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.ModConfig;
+import com.murthinext.ae2pr.api.EnergyAmount;
 import com.murthinext.ae2pr.registry.ModMachines;
 
 // 名称压印工厂方块实体
@@ -153,7 +154,7 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         super(ModMachines.NAMING_FACTORY.blockEntityType(), pos, state);
         // 不耗待机电力；缓存 16k AE 仅允许充电、禁止抽取
         getMainNode().setIdlePowerUsage(0);
-        setInternalMaxPower(Config.namingFactoryMaxPower());
+        setInternalMaxPower(ModConfig.namingFactoryMaxPower());
         setInternalPublicPowerStorage(true);
         setInternalPowerFlow(AccessRestriction.WRITE);
         this.unsidedHandler = LazyOptional.of(() -> new SidedItemHandler(null));
@@ -314,7 +315,7 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
 
     // 支付压印能量：优先扣本机缓存，不足再抽 ME 网络；耗能按整组输入物品数计
     private boolean consumeEnergy(int parallel) {
-        double cost = Config.namingFactoryEnergyPerItem() * parallel;
+        double cost = EnergyAmount.clamp(ModConfig.namingFactoryEnergyPerItem() * parallel);
         if (cost <= 0) {
             return true;
         }

@@ -28,16 +28,12 @@ import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.BoxStyle;
 import snownee.jade.api.ui.IProgressStyle;
 
-import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.ModConfig;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.api.machine.Mode;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
-import com.murthinext.ae2pr.api.machine.Mode;
 import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
-import com.murthinext.ae2pr.api.machine.Mode;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterControllerBlockEntity;
-import com.murthinext.ae2pr.api.machine.Mode;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 
 @WailaPlugin(ae2pr.MODID)
@@ -99,7 +95,7 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
     protected void appendExtraTooltip(ITooltip tooltip, CompoundTag data) {
         if (data.contains(KEY_DURABILITY)) {
             tooltip.add(Component.translatable("gui.ae2pr.high_reactivity_lava_smelter.durability",
-                    data.getInt(KEY_DURABILITY), Config.highReactivityLavaSmelterMaxDurability()));
+                    data.getInt(KEY_DURABILITY), ModConfig.highReactivityLavaSmelterMaxDurability()));
         }
         String mode = data.getString(KEY_MODE);
         if (!mode.isEmpty()) {

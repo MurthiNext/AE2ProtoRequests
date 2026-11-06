@@ -8,6 +8,9 @@ public final class JeiAmountFormat {
     private static final long KILO = 1_000L;
     private static final long MEGA = 1_000_000L;
     private static final long GIGA = 1_000_000_000L;
+    private static final long TERA = 1_000_000_000_000L;
+    private static final long PETA = 1_000_000_000_000_000L;
+    private static final long EXA = 1_000_000_000_000_000_000L;
 
     private JeiAmountFormat() {
     }
@@ -24,6 +27,28 @@ public final class JeiAmountFormat {
             return oneDecimal(count, KILO) + "K";
         }
         return Integer.toString(count);
+    }
+
+    public static String energy(long amount) {
+        if (amount >= EXA) {
+            return oneDecimal(amount, EXA) + "E";
+        }
+        if (amount >= PETA) {
+            return oneDecimal(amount, PETA) + "P";
+        }
+        if (amount >= TERA) {
+            return oneDecimal(amount, TERA) + "T";
+        }
+        if (amount >= GIGA) {
+            return oneDecimal(amount, GIGA) + "G";
+        }
+        if (amount >= MEGA) {
+            return oneDecimal(amount, MEGA) + "M";
+        }
+        if (amount >= KILO) {
+            return oneDecimal(amount, KILO) + "K";
+        }
+        return Long.toString(amount);
     }
 
     public static String fluid(int milliBuckets) {

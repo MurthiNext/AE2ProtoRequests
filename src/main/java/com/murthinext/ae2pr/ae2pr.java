@@ -24,7 +24,6 @@ import com.murthinext.ae2pr.registry.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -45,7 +44,7 @@ public class ae2pr {
         // 机器模板的注册表需在 ModMachines 静态初始化前注入
         MachineRegistries.install(ModBlocks.BLOCKS, ModItems.ITEMS, ModBlockEntities.BLOCK_ENTITIES,
                 ModMenus.MENUS, ModRecipes.RECIPE_TYPES, ModRecipes.SERIALIZERS);
-        MachineTuning.install(Config::lossySpeedPerCard, Config::lossyEnergyMultiplierPerCard);
+        MachineTuning.install(ModConfig::lossySpeedPerCard, ModConfig::lossyEnergyMultiplierPerCard);
         ModMaterials.init();
         ModMachines.init();
         ModBlocks.installStructureHooks();
@@ -59,7 +58,7 @@ public class ae2pr {
         ModRecipes.SERIALIZERS.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
         ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
-        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.SPEC);
         // 部件模型必须在预初始化阶段注册
         PartModels.registerModels(PartModelsHelper.createModels(MultiLevelEmitterPart.class));
         PartModels.registerModels(PartModelsHelper.createModels(MultiThresholdLevelEmitterPart.class));

@@ -20,6 +20,8 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import com.murthinext.ae2pr.api.EnergyAmount;
+
 public final class RecipeJson {
 
     private RecipeJson() {
@@ -105,8 +107,8 @@ public final class RecipeJson {
             return null;
         }
         double energy = GsonHelper.getAsDouble(json, "energy");
-        if (!Double.isFinite(energy) || energy < 0) {
-            throw new JsonSyntaxException("energy must be a finite non-negative number");
+        if (!Double.isFinite(energy) || energy < 0 || energy > EnergyAmount.MAX) {
+            throw new JsonSyntaxException("energy must be a finite number in [0, Long.MAX_VALUE]");
         }
         return energy;
     }

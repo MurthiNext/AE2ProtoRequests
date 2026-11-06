@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
 
-import com.murthinext.ae2pr.Config;
+import com.murthinext.ae2pr.ModConfig;
 import com.murthinext.ae2pr.item.collapsed_cell.CollapsedItemCellItem;
 import com.murthinext.ae2pr.logic.collapse.CollapseHandler;
 
@@ -31,11 +31,11 @@ public final class Collapses {
     }
 
     public static boolean isEnabled() {
-        return Config.collapseEnabled();
+        return ModConfig.collapseEnabled();
     }
 
     public static long threshold() {
-        return Config.collapseThreshold();
+        return ModConfig.collapseThreshold();
     }
 
     public static ItemStack createCell(List<GenericStack> contents) {
