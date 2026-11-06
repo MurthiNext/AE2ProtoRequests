@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "ingredient": {
+    "tag": "forge:dusts/zirconium_iron_alloy"
+  },
+  "result": "ae2pr:zirconium_iron_alloy_ingot"
+}

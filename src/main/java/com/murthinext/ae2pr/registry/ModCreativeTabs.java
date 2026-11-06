@@ -1,7 +1,10 @@
 package com.murthinext.ae2pr.registry;
 
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.material.Material;
 import com.murthinext.ae2pr.api.material.MaterialFluids;
+import com.murthinext.ae2pr.api.material.MaterialItems;
+import com.murthinext.ae2pr.api.material.TagPrefix;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -53,12 +56,8 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.UNCHARGED_SINGULARITY.get());
                         output.accept(ModItems.HIGH_ENERGY_SINGULARITY.get());
 
-                        // 锭 & 宝石
-                        output.accept(ModMaterials.METEOR_STEEL_INGOT.get());
-                        output.accept(ModMaterials.ZIRCONIUM_INGOT.get());
-                        output.accept(ModMaterials.ZIRCONIUM_IRON_ALLOY_INGOT.get());
-                        output.accept(ModMaterials.STRONTIUM_INGOT.get());
-                        output.accept(ModMaterials.BARIUM_INGOT.get());
+                        // 锭
+                        acceptMaterials(output, TagPrefix.INGOT);
                         output.accept(ModItems.ZIRCON_BRICK.get());
                         output.accept(ModItems.ZIRCON.get());
 
@@ -66,26 +65,10 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CRYSTALINE.get());
 
                         // 粉末
-                        output.accept(ModMaterials.METEOR_STEEL_DUST.get());
-                        output.accept(ModMaterials.COAL_DUST.get());
-                        output.accept(ModMaterials.CARBON_DUST.get());
-                        output.accept(ModMaterials.ZIRCONIUM_DUST.get());
-                        output.accept(ModMaterials.CARBON_ZIRCONIUM_MIXTURE_DUST.get());
-                        output.accept(ModMaterials.ZIRCON_DUST.get());
-                        output.accept(ModMaterials.COPPER_OXIDE_DUST.get());
-                        output.accept(ModMaterials.IRON_OXIDE_DUST.get());
-                        output.accept(ModMaterials.GOLD_OXIDE_DUST.get());
-                        output.accept(ModMaterials.PSEUDO_STRONTIANITE_DUST.get());
-                        output.accept(ModMaterials.STRONTIUM_CARBONATE_DUST.get());
-                        output.accept(ModMaterials.BARIUM_SULFATE_DUST.get());
-                        output.accept(ModMaterials.STRONTIUM_DUST.get());
-                        output.accept(ModMaterials.BARIUM_DUST.get());
+                        acceptMaterials(output, TagPrefix.DUST);
 
                         // 单层板
-                        output.accept(ModMaterials.METEOR_STEEL_PLATE.get());
-                        output.accept(ModMaterials.ZIRCONIUM_PLATE.get());
-                        output.accept(ModMaterials.STRONTIUM_PLATE.get());
-                        output.accept(ModMaterials.BARIUM_PLATE.get());
+                        acceptMaterials(output, TagPrefix.PLATE);
 
                         // 桶
                         output.accept(ModItems.ALIEN_LAVA_BUCKET.get());
@@ -169,4 +152,12 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.AEV_DUAL_OUTPUT_HATCH.get());
                     })
                     .build());
+
+    private static void acceptMaterials(CreativeModeTab.Output output, TagPrefix prefix) {
+        for (Material material : ModMaterials.ALL) {
+            if (material.has(prefix)) {
+                output.accept(MaterialItems.get(prefix, material).get());
+            }
+        }
+    }
 }

@@ -18,6 +18,7 @@ import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.function.Consumer;
@@ -68,7 +69,14 @@ public class MaterialRecipeProvider extends RecipeProvider {
                         .save(writer, Ids.of("inscriber/" + material.id() + "_plate"));
             }
         }
+
+        // 紫水晶碎片研磨成粉
+        InscriberRecipeBuilder.inscribe(Ingredient.of(Items.AMETHYST_SHARD),
+                MaterialItems.get(TagPrefix.DUST, ModMaterials.AMETHYST).get(), 1)
+                .setMode(InscriberProcessType.INSCRIBE)
+                .save(writer, Ids.of("inscriber/amethyst_dust"));
     }
+
     private static TagKey<Item> forgeTag(String path) {
         return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", path));
     }

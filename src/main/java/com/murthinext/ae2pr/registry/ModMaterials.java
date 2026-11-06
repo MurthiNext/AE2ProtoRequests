@@ -4,9 +4,6 @@ import com.murthinext.ae2pr.api.material.FluidSpec;
 import com.murthinext.ae2pr.api.material.Material;
 import com.murthinext.ae2pr.api.material.MaterialFluids;
 import com.murthinext.ae2pr.api.material.MaterialItems;
-import com.murthinext.ae2pr.api.material.TagPrefix;
-import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
 
@@ -24,7 +21,13 @@ public final class ModMaterials {
             .fluid(FluidSpec.lava("liquid_zirconium", 8, 2600, 5000, 400)));
 
     public static final Material ZIRCONIUM_IRON_ALLOY = MaterialItems.register(ModItems.ITEMS,
-            Material.builder("zirconium_iron_alloy").ingot().color(0x6B7BB5).build());
+            Material.builder("zirconium_iron_alloy").ingot().plate().dust().color(0x6B7BB5).build());
+
+    public static final Material AMETHYST = MaterialItems.register(ModItems.ITEMS,
+            Material.builder("amethyst").dust().color(0xC78DF3).build());
+
+    public static final Material AMETHYST_STEEL = MaterialItems.register(ModItems.ITEMS,
+            Material.builder("amethyst_steel").ingot().plate().dust().color(0x9C93C8).build());
 
     public static final Material STRONTIUM = MaterialItems.register(ModItems.ITEMS, Material.builder("strontium")
             .ingot().plate().dust().color(0xFDFAE0).build());
@@ -77,59 +80,10 @@ public final class ModMaterials {
     public static final Material CRYSTAL_ADHESIVE = fluid(Material.builder("crystal_adhesive")
             .color(0xFACD8E).fluid(FluidSpec.water("crystal_adhesive", 6, 2400, 6000, 360)));
 
-    public static final List<Material> ALL = List.of(METEOR_STEEL, ZIRCONIUM, ZIRCONIUM_IRON_ALLOY, STRONTIUM, BARIUM,
-            COAL, CARBON, CARBON_ZIRCONIUM_MIXTURE, ZIRCON, COPPER_OXIDE, IRON_OXIDE, GOLD_OXIDE, PSEUDO_STRONTIANITE,
-            STRONTIUM_CARBONATE, BARIUM_SULFATE);
-
-    public static final RegistryObject<Item> METEOR_STEEL_INGOT = MaterialItems.get(TagPrefix.INGOT, METEOR_STEEL);
-
-    public static final RegistryObject<Item> ZIRCONIUM_INGOT = MaterialItems.get(TagPrefix.INGOT, ZIRCONIUM);
-
-    public static final RegistryObject<Item> ZIRCONIUM_IRON_ALLOY_INGOT = MaterialItems.get(TagPrefix.INGOT,
-            ZIRCONIUM_IRON_ALLOY);
-
-    public static final RegistryObject<Item> STRONTIUM_INGOT = MaterialItems.get(TagPrefix.INGOT, STRONTIUM);
-
-    public static final RegistryObject<Item> BARIUM_INGOT = MaterialItems.get(TagPrefix.INGOT, BARIUM);
-
-    public static final RegistryObject<Item> METEOR_STEEL_PLATE = MaterialItems.get(TagPrefix.PLATE, METEOR_STEEL);
-
-    public static final RegistryObject<Item> ZIRCONIUM_PLATE = MaterialItems.get(TagPrefix.PLATE, ZIRCONIUM);
-
-    public static final RegistryObject<Item> STRONTIUM_PLATE = MaterialItems.get(TagPrefix.PLATE, STRONTIUM);
-
-    public static final RegistryObject<Item> BARIUM_PLATE = MaterialItems.get(TagPrefix.PLATE, BARIUM);
-
-    public static final RegistryObject<Item> METEOR_STEEL_DUST = MaterialItems.get(TagPrefix.DUST, METEOR_STEEL);
-
-    public static final RegistryObject<Item> COAL_DUST = MaterialItems.get(TagPrefix.DUST, COAL);
-
-    public static final RegistryObject<Item> CARBON_DUST = MaterialItems.get(TagPrefix.DUST, CARBON);
-
-    public static final RegistryObject<Item> ZIRCONIUM_DUST = MaterialItems.get(TagPrefix.DUST, ZIRCONIUM);
-
-    public static final RegistryObject<Item> CARBON_ZIRCONIUM_MIXTURE_DUST = MaterialItems.get(TagPrefix.DUST,
-            CARBON_ZIRCONIUM_MIXTURE);
-
-    public static final RegistryObject<Item> ZIRCON_DUST = MaterialItems.get(TagPrefix.DUST, ZIRCON);
-
-    public static final RegistryObject<Item> COPPER_OXIDE_DUST = MaterialItems.get(TagPrefix.DUST, COPPER_OXIDE);
-
-    public static final RegistryObject<Item> IRON_OXIDE_DUST = MaterialItems.get(TagPrefix.DUST, IRON_OXIDE);
-
-    public static final RegistryObject<Item> GOLD_OXIDE_DUST = MaterialItems.get(TagPrefix.DUST, GOLD_OXIDE);
-
-    public static final RegistryObject<Item> PSEUDO_STRONTIANITE_DUST = MaterialItems.get(TagPrefix.DUST,
-            PSEUDO_STRONTIANITE);
-
-    public static final RegistryObject<Item> STRONTIUM_CARBONATE_DUST = MaterialItems.get(TagPrefix.DUST,
-            STRONTIUM_CARBONATE);
-
-    public static final RegistryObject<Item> BARIUM_SULFATE_DUST = MaterialItems.get(TagPrefix.DUST, BARIUM_SULFATE);
-
-    public static final RegistryObject<Item> STRONTIUM_DUST = MaterialItems.get(TagPrefix.DUST, STRONTIUM);
-
-    public static final RegistryObject<Item> BARIUM_DUST = MaterialItems.get(TagPrefix.DUST, BARIUM);
+    // 金属优先，其后是化合物与中间产物；标签页与配方生成共用此顺序
+    public static final List<Material> ALL = List.of(METEOR_STEEL, ZIRCONIUM, ZIRCONIUM_IRON_ALLOY, AMETHYST_STEEL,
+            STRONTIUM, BARIUM, AMETHYST, COAL, CARBON, CARBON_ZIRCONIUM_MIXTURE, ZIRCON, COPPER_OXIDE, IRON_OXIDE,
+            GOLD_OXIDE, PSEUDO_STRONTIANITE, STRONTIUM_CARBONATE, BARIUM_SULFATE);
 
     private static Material both(Material.Builder builder) {
         return MaterialFluids.register(ModItems.ITEMS, ModFluids.FLUID_TYPES, ModFluids.FLUIDS,
