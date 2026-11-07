@@ -26,15 +26,19 @@ import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import com.murthinext.ae2pr.ModConfig;
 import com.murthinext.ae2pr.api.EnergyAmount;
+import com.murthinext.ae2pr.api.machine.side.SideConfig;
+import com.murthinext.ae2pr.api.machine.side.SideMode;
 import com.murthinext.ae2pr.registry.ModMachines;
 
 // 名称压印工厂方块实体
@@ -67,6 +71,10 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
     private static final String TAG_CHARGE_TICKS = "chargeTicks";
     private static final String TAG_PRESS_TICKS = "pressTicks";
     private static final String TAG_RETRACT_TICKS = "retractTicks";
+    private static final String TAG_SIDE_CONFIG = "sideConfig";
+
+    // 每个面每 tick 的自动搬运上限
+    private static final int AUTO_TRANSFER_LIMIT = 64;
 
     private final IUpgradeInventory upgrades = UpgradeInventories.forMachine(ModMachines.NAMING_FACTORY.item(), 4,
             this::onUpgradesChanged);
@@ -144,6 +152,8 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
     private final Map<Direction, LazyOptional<IItemHandler>> sidedHandlers = new EnumMap<>(Direction.class);
     private final LazyOptional<IItemHandler> unsidedHandler;
 
+    private final SideConfig sideConfig = new SideConfig();
+
     private WorkState state = WorkState.IDLE;
     private long workStart;
     private int chargeTicks = CHARGE_TICKS;
@@ -154,6 +164,8 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         super(ModMachines.NAMING_FACTORY.blockEntityType(), pos, state);
         // 不耗待机电力；缓存 16k AE 仅允许充电、禁止抽取
         getMainNode().setIdlePowerUsage(0);
+        // 不消耗频道：清空节点标记，仅作为网络上的用电/储物节点
+        getMainNode().setFlags();
         setInternalMaxPower(ModConfig.namingFactoryMaxPower());
         setInternalPublicPowerStorage(true);
         setInternalPowerFlow(AccessRestriction.WRITE);
@@ -161,6 +173,20 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         for (Direction direction : Direction.values()) {
             this.sidedHandlers.put(direction, LazyOptional.of(() -> new SidedItemHandler(direction)));
         }
+    }
+
+    public SideConfig getSideConfig() {
+        return sideConfig;
+    }
+
+    // 由菜单按钮触发的配置变更
+    public boolean applySideConfigButton(int id) {
+        if (!sideConfig.pressButton(id)) {
+            return false;
+        }
+        setChanged();
+        markForUpdate();
+        return true;
     }
 
     public Container getInventory() {
@@ -268,17 +294,23 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         if (level == null || level.isClientSide) {
             return;
         }
+        tickAutoTransfer();
         long elapsed = level.getGameTime() - workStart;
         switch (state) {
             case IDLE -> {
-                if (canWork() && consumeEnergy(getInputStack().getCount())) {
+                if (canWork() && hasEnergy(getInputStack().getCount())) {
                     updatePhaseDurations();
                     beginState(WorkState.CHARGING);
                 }
             }
             case CHARGING -> {
+                // 蓄力期间仍可继续收货，时长不重置；压印前按当时数量一次性结算
                 if (elapsed >= chargeTicks) {
-                    beginState(WorkState.PRESSING);
+                    if (canWork() && consumeEnergy(getInputStack().getCount())) {
+                        beginState(WorkState.PRESSING);
+                    } else {
+                        beginState(WorkState.IDLE);
+                    }
                 }
             }
             case PRESSING -> {
@@ -293,6 +325,100 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
                 }
             }
         }
+    }
+
+    // 压印阶段输入已被整体结算，禁止再放入；其余阶段都可继续收货
+    public boolean acceptsInputs() {
+        return state != WorkState.PRESSING;
+    }
+
+    // 按面配置自动搬运：先向允许抽出的面推出输出，空闲时才从允许插入的面拉取
+    private void tickAutoTransfer() {
+        boolean push = sideConfig.isAutoPush();
+        boolean pull = sideConfig.isAutoPull() && acceptsInputs();
+        if (!pull && !push) {
+            return;
+        }
+        for (Direction dir : Direction.values()) {
+            SideMode mode = sideConfig.get(dir);
+            boolean doPush = push && mode.allowsExtract();
+            boolean doPull = pull && mode.allowsInsert();
+            if (!doPush && !doPull) {
+                continue;
+            }
+            BlockEntity neighbour = level.getBlockEntity(worldPosition.relative(dir));
+            if (neighbour == null) {
+                continue;
+            }
+            IItemHandler handler = neighbour.getCapability(ForgeCapabilities.ITEM_HANDLER, dir.getOpposite())
+                    .orElse(null);
+            if (handler == null) {
+                continue;
+            }
+            boolean pushed = doPush && pushOutput(handler);
+            if (doPull && !pushed) {
+                pullInput(handler);
+            }
+        }
+    }
+
+    private boolean pushOutput(IItemHandler target) {
+        ItemStack output = getOutputStack();
+        if (output.isEmpty()) {
+            return false;
+        }
+        ItemStack toPush = output.copyWithCount(Math.min(output.getCount(), AUTO_TRANSFER_LIMIT));
+        int requested = toPush.getCount();
+        int leftover = ItemHandlerHelper.insertItemStacked(target, toPush, false).getCount();
+        int moved = requested - leftover;
+        if (moved <= 0) {
+            return false;
+        }
+        int remaining = output.getCount() - moved;
+        inventory.setItem(SLOT_OUTPUT, remaining > 0 ? output.copyWithCount(remaining) : ItemStack.EMPTY);
+        return true;
+    }
+
+    private void pullInput(IItemHandler source) {
+        int budget = AUTO_TRANSFER_LIMIT;
+        for (int slot = 0; slot < source.getSlots() && budget > 0; slot++) {
+            ItemStack available = source.extractItem(slot, budget, true);
+            if (available.isEmpty()) {
+                continue;
+            }
+            int accepted = available.getCount() - insertSlot(SLOT_INPUT, available, true).getCount();
+            if (accepted <= 0) {
+                continue;
+            }
+            ItemStack taken = source.extractItem(slot, accepted, false);
+            if (!taken.isEmpty()) {
+                ItemStack leftover = insertSlot(SLOT_INPUT, taken, false);
+                if (!leftover.isEmpty()) {
+                    ItemHandlerHelper.insertItemStacked(source, leftover, false);
+                }
+                budget -= taken.getCount() - leftover.getCount();
+            }
+        }
+    }
+
+    private ItemStack insertSlot(int slot, ItemStack stack, boolean simulate) {
+        ItemStack current = items.get(slot);
+        int limit = Math.min(inventory.getMaxStackSize(), stack.getMaxStackSize());
+        int moved;
+        if (current.isEmpty()) {
+            moved = Math.min(limit, stack.getCount());
+            if (!simulate && moved > 0) {
+                inventory.setItem(slot, stack.copyWithCount(moved));
+            }
+        } else if (ItemStack.isSameItemSameTags(current, stack) && current.getCount() < limit) {
+            moved = Math.min(limit - current.getCount(), stack.getCount());
+            if (!simulate && moved > 0) {
+                inventory.setItem(slot, current.copyWithCount(current.getCount() + moved));
+            }
+        } else {
+            return stack;
+        }
+        return stack.copyWithCount(stack.getCount() - moved);
     }
 
     private boolean canWork() {
@@ -311,6 +437,25 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         ItemStack result = renamed(input, name);
         return ItemStack.isSameItemSameTags(output, result)
                 && output.getCount() + input.getCount() <= output.getMaxStackSize();
+    }
+
+    // 仅模拟结算所需能量，真正扣除放到压印开始时
+    private boolean hasEnergy(int parallel) {
+        double cost = EnergyAmount.clamp(ModConfig.namingFactoryEnergyPerItem() * parallel);
+        if (cost <= 0) {
+            return true;
+        }
+        double fromSelf = extractAEPower(cost, Actionable.SIMULATE, PowerMultiplier.CONFIG);
+        if (cost - fromSelf <= ENERGY_EPSILON) {
+            return true;
+        }
+        IGrid grid = getMainNode().getGrid();
+        if (grid == null) {
+            return false;
+        }
+        double fromGrid = grid.getEnergyService().extractAEPower(cost - fromSelf,
+                Actionable.SIMULATE, PowerMultiplier.CONFIG);
+        return fromSelf + fromGrid >= cost - ENERGY_EPSILON;
     }
 
     // 支付压印能量：优先扣本机缓存，不足再抽 ME 网络；耗能按整组输入物品数计
@@ -409,6 +554,9 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         tag.putInt(TAG_CHARGE_TICKS, chargeTicks);
         tag.putInt(TAG_PRESS_TICKS, pressTicks);
         tag.putInt(TAG_RETRACT_TICKS, retractTicks);
+        CompoundTag configTag = new CompoundTag();
+        sideConfig.save(configTag);
+        tag.put(TAG_SIDE_CONFIG, configTag);
         upgrades.writeToNBT(tag, TAG_UPGRADES);
     }
 
@@ -431,6 +579,7 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         chargeTicks = tag.contains(TAG_CHARGE_TICKS) ? tag.getInt(TAG_CHARGE_TICKS) : CHARGE_TICKS;
         pressTicks = tag.contains(TAG_PRESS_TICKS) ? tag.getInt(TAG_PRESS_TICKS) : PRESS_TICKS;
         retractTicks = tag.contains(TAG_RETRACT_TICKS) ? tag.getInt(TAG_RETRACT_TICKS) : RETRACT_TICKS;
+        sideConfig.load(tag.contains(TAG_SIDE_CONFIG) ? tag.getCompound(TAG_SIDE_CONFIG) : new CompoundTag());
         upgrades.readFromNBT(tag, TAG_UPGRADES);
     }
 
@@ -445,6 +594,7 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         for (ItemStack stack : items) {
             data.writeItem(stack);
         }
+        sideConfig.writeToStream(data);
         Component customName = getCustomName();
         data.writeUtf(customName != null ? customName.getString() : "");
     }
@@ -460,6 +610,7 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         for (int slot = 0; slot < SLOT_COUNT; slot++) {
             items.set(slot, data.readItem());
         }
+        sideConfig.readFromStream(data);
         setName(data.readUtf());
         return changed;
     }
@@ -481,6 +632,9 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
 
     private final class SidedItemHandler implements IItemHandler {
 
+        private static final int SLOT_INDEX_INPUT = 0;
+        private static final int SLOT_INDEX_OUTPUT = 1;
+
         @Nullable
         private final Direction side;
 
@@ -488,38 +642,48 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
             this.side = side;
         }
 
-        private boolean isSingleSlot() {
-            return side != null;
-        }
-
-        private int machineSlot(int slot) {
-            if (!isSingleSlot()) {
-                return slot;
-            }
-            if (side == Direction.UP) {
-                return SLOT_INPUT;
-            }
-            if (side == Direction.DOWN) {
-                return SLOT_OUTPUT;
-            }
-
-            return SLOT_TEMPLATE;
+        private SideMode mode() {
+            return side == null ? SideMode.BOTH : sideConfig.get(side);
         }
 
         @Override
         public int getSlots() {
-            return isSingleSlot() ? 1 : SLOT_COUNT;
+            SideMode mode = mode();
+            if (mode == SideMode.NONE) {
+                return 0;
+            }
+            return mode == SideMode.BOTH ? 2 : 1;
+        }
+
+        // 输入面只暴露输入槽，输出面只暴露输出槽，模板槽不参与物流
+        private int machineSlot(int slot) {
+            SideMode mode = mode();
+            if (mode == SideMode.NONE) {
+                return -1;
+            }
+            if (mode == SideMode.INPUT) {
+                return slot == 0 ? SLOT_INPUT : -1;
+            }
+            if (mode == SideMode.OUTPUT) {
+                return slot == 0 ? SLOT_OUTPUT : -1;
+            }
+            return switch (slot) {
+                case SLOT_INDEX_INPUT -> SLOT_INPUT;
+                case SLOT_INDEX_OUTPUT -> SLOT_OUTPUT;
+                default -> -1;
+            };
         }
 
         @Override
         public ItemStack getStackInSlot(int slot) {
-            return inventory.getItem(machineSlot(slot));
+            int target = machineSlot(slot);
+            return target < 0 ? ItemStack.EMPTY : inventory.getItem(target);
         }
 
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
             int target = machineSlot(slot);
-            if (!inventory.canPlaceItem(target, stack)) {
+            if (target != SLOT_INPUT || !acceptsInputs() || !inventory.canPlaceItem(target, stack)) {
                 return stack;
             }
             ItemStack current = inventory.getItem(target);
@@ -547,6 +711,9 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
             int target = machineSlot(slot);
+            if (target != SLOT_OUTPUT) {
+                return ItemStack.EMPTY;
+            }
             ItemStack current = inventory.getItem(target);
             if (current.isEmpty() || amount <= 0) {
                 return ItemStack.EMPTY;
@@ -568,7 +735,8 @@ public class NamingFactoryBlockEntity extends AENetworkPowerBlockEntity {
 
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
-            return inventory.canPlaceItem(machineSlot(slot), stack);
+            int target = machineSlot(slot);
+            return target == SLOT_INPUT && acceptsInputs() && inventory.canPlaceItem(target, stack);
         }
     }
 }

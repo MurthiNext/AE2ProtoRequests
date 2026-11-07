@@ -53,7 +53,12 @@ public class NamingFactoryMenu extends AbstractContainerMenu {
                 return AEItems.NAME_PRESS.isSameAs(stack);
             }
         });
-        addSlot(new Slot(inventory, NamingFactoryBlockEntity.SLOT_INPUT, 80, 26));
+        addSlot(new Slot(inventory, NamingFactoryBlockEntity.SLOT_INPUT, 80, 26) {
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return blockEntity == null || blockEntity.acceptsInputs();
+            }
+        });
         addSlot(new Slot(inventory, NamingFactoryBlockEntity.SLOT_OUTPUT, 80, 74) {
             @Override
             public boolean mayPlace(ItemStack stack) {
@@ -137,5 +142,11 @@ public class NamingFactoryMenu extends AbstractContainerMenu {
     public boolean stillValid(Player player) {
         return blockEntity != null && !blockEntity.isRemoved()
                 && player.distanceToSqr(Vec3.atCenterOf(pos)) <= 64.0;
+    }
+
+    // id 0-5 切换面配置，6/7 自动拉取/推出，8 清空全部面
+    @Override
+    public boolean clickMenuButton(Player player, int id) {
+        return blockEntity != null && stillValid(player) && blockEntity.applySideConfigButton(id);
     }
 }

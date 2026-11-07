@@ -15,10 +15,7 @@ import net.minecraft.world.item.ItemStack;
 
 public final class MachineModeButton extends AbstractWidget {
 
-    private static final int SIZE = 18;
-    private static final int COLOR_BACKGROUND = 0xFF101418;
-    private static final int COLOR_BORDER = 0xFF39424E;
-    private static final int COLOR_BORDER_HOVER = 0xFF5A7A9A;
+    private static final int SIZE = GuiTextures.SIZE;
 
     private final Map<Mode, Icon> icons;
     private final Runnable onPress;
@@ -43,9 +40,8 @@ public final class MachineModeButton extends AbstractWidget {
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.fill(getX(), getY(), getX() + width, getY() + height,
-                isHovered() && active ? COLOR_BORDER_HOVER : COLOR_BORDER);
-        graphics.fill(getX() + 1, getY() + 1, getX() + width - 1, getY() + height - 1, COLOR_BACKGROUND);
+        GuiTextures.frame(graphics,
+                isHovered() && active ? GuiTextures.BUTTON_HOVER : GuiTextures.BUTTON, getX(), getY());
         icon.render(graphics, getX() + 1, getY() + 1, active);
     }
 

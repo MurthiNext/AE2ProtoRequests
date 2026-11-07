@@ -17,9 +17,9 @@ import com.murthinext.ae2pr.ae2pr;
 public class CombineModeButton extends IconButton {
 
     private static final ResourceLocation AND_ICON = Ids.of(
-            "textures/guis/combine_and.png");
+            "textures/gui/combine_and.png");
     private static final ResourceLocation OR_ICON = Ids.of(
-            "textures/guis/combine_or.png");
+            "textures/gui/combine_or.png");
 
     private final Consumer<CombineMode> onToggle;
     private CombineMode mode = CombineMode.OR;

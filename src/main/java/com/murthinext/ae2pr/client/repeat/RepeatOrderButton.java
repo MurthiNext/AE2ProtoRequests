@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 public class RepeatOrderButton extends IconButton {
 
     private static final Blitter ICON = Blitter.texture(
-            Ids.of( "textures/guis/repeat_order.png"), 16, 16);
+            Ids.of( "textures/gui/repeat_order.png"), 16, 16);
 
     public RepeatOrderButton(OnPress onPress) {
         super(onPress);

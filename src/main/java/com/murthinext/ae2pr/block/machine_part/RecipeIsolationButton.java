@@ -1,7 +1,5 @@
 package com.murthinext.ae2pr.block.machine_part;
 
-import com.murthinext.ae2pr.api.Ids;
-
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
@@ -12,19 +10,14 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.machine.client.GuiTextures;
 
 public class RecipeIsolationButton extends AbstractWidget {
 
-    private static final int SIZE = 18;
-    private static final int COLOR_BACKGROUND = 0xFF101418;
-    private static final int COLOR_BORDER = 0xFF39424E;
-    private static final int COLOR_BORDER_HOVER = 0xFF5A7A9A;
+    private static final int SIZE = GuiTextures.SIZE;
 
-    private static final ResourceLocation ICON_ON = Ids.of(
-            "textures/guis/chamber_isolation_on.png");
-    private static final ResourceLocation ICON_OFF = Ids.of(
-            "textures/guis/chamber_isolation_off.png");
+    private static final ResourceLocation ICON_ON = GuiTextures.ISOLATION_ON;
+    private static final ResourceLocation ICON_OFF = GuiTextures.ISOLATION_OFF;
 
     private final BooleanSupplier state;
     private final Runnable onPress;
@@ -48,12 +41,10 @@ public class RecipeIsolationButton extends AbstractWidget {
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        boolean enabled = state.getAsBoolean();
         // 边框只看鼠标悬停，避免点击后焦点残留高亮
-        graphics.fill(getX(), getY(), getX() + width, getY() + height,
-                isHovered() ? COLOR_BORDER_HOVER : COLOR_BORDER);
-        graphics.fill(getX() + 1, getY() + 1, getX() + width - 1, getY() + height - 1, COLOR_BACKGROUND);
-        graphics.blit(enabled ? ICON_ON : ICON_OFF, getX(), getY(), 0, 0, width, height, SIZE, SIZE);
+        GuiTextures.frame(graphics,
+                isHovered() ? GuiTextures.BUTTON_HOVER : GuiTextures.BUTTON, getX(), getY());
+        GuiTextures.frame(graphics, state.getAsBoolean() ? ICON_ON : ICON_OFF, getX(), getY());
     }
 
     @Override

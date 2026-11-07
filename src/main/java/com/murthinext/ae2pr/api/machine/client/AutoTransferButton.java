@@ -1,7 +1,5 @@
 package com.murthinext.ae2pr.api.machine.client;
 
-import com.murthinext.ae2pr.api.Ids;
-
 import java.util.function.BooleanSupplier;
 
 import net.minecraft.client.gui.GuiGraphics;
@@ -10,28 +8,15 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import com.murthinext.ae2pr.ae2pr;
-
 public class AutoTransferButton extends AbstractWidget {
 
     public enum Type {
         PULL, PUSH
     }
 
-    private static final int SIZE = 18;
-    private static final int COLOR_BACKGROUND = 0xFF101418;
-    private static final int COLOR_BORDER = 0xFF39424E;
-    private static final int COLOR_BORDER_HOVER = 0xFF5A7A9A;
-    private static final int COLOR_DISABLED_LINE = 0xFF5A7A9A;
-
-    private static final ResourceLocation ICON_PULL_ON = Ids.of(
-            "textures/guis/auto_transfer_pull_on.png");
-    private static final ResourceLocation ICON_PULL_OFF = Ids.of(
-            "textures/guis/auto_transfer_pull_off.png");
-    private static final ResourceLocation ICON_PUSH_ON = Ids.of(
-            "textures/guis/auto_transfer_push_on.png");
-    private static final ResourceLocation ICON_PUSH_OFF = Ids.of(
-            "textures/guis/auto_transfer_push_off.png");
+    private static final int SIZE = GuiTextures.SIZE;
+    private static final int COLOR_TOOLBAR_BACKGROUND = 0xFF101418;
+    private static final int COLOR_TOOLBAR_BORDER = 0xFF39424E;
 
     private final Type type;
     private final BooleanSupplier state;
@@ -46,33 +31,27 @@ public class AutoTransferButton extends AbstractWidget {
 
     public static void renderToolbar(GuiGraphics graphics, int x, int y, int buttons) {
         int height = buttons * (SIZE + 2) + 2;
-        graphics.fill(x, y, x + SIZE + 2, y + height, COLOR_BACKGROUND);
-        graphics.fill(x, y, x + SIZE + 2, y + 1, COLOR_BORDER);
-        graphics.fill(x, y + height - 1, x + SIZE + 2, y + height, COLOR_BORDER);
-        graphics.fill(x, y, x + 1, y + height, COLOR_BORDER);
-        graphics.fill(x + SIZE + 1, y, x + SIZE + 2, y + height, COLOR_BORDER);
+        graphics.fill(x, y, x + SIZE + 2, y + height, COLOR_TOOLBAR_BACKGROUND);
+        graphics.fill(x, y, x + SIZE + 2, y + 1, COLOR_TOOLBAR_BORDER);
+        graphics.fill(x, y + height - 1, x + SIZE + 2, y + height, COLOR_TOOLBAR_BORDER);
+        graphics.fill(x, y, x + 1, y + height, COLOR_TOOLBAR_BORDER);
+        graphics.fill(x + SIZE + 1, y, x + SIZE + 2, y + height, COLOR_TOOLBAR_BORDER);
     }
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        boolean enabled = state.getAsBoolean();
-        graphics.fill(getX(), getY(), getX() + width, getY() + height,
-                isHovered() ? COLOR_BORDER_HOVER : COLOR_BORDER);
-        graphics.fill(getX() + 1, getY() + 1, getX() + width - 1, getY() + height - 1, COLOR_BACKGROUND);
-        graphics.blit(getIcon(enabled), getX(), getY(), 0, 0, width, height, SIZE, SIZE);
-        if (!enabled) {
-            for (int i = 0; i < 12; i++) {
-                graphics.fill(getX() + 3 + i, getY() + 14 - i, getX() + 4 + i, getY() + 15 - i,
-                        COLOR_DISABLED_LINE);
-            }
-        }
+        GuiTextures.frame(graphics,
+                isHovered() ? GuiTextures.BUTTON_HOVER : GuiTextures.BUTTON, getX(), getY());
+        GuiTextures.frame(graphics, icon(), getX(), getY());
     }
 
-    private ResourceLocation getIcon(boolean enabled) {
+    // 禁用态的斜线烘焙在 _off 材质里，这里只按状态选图
+    private ResourceLocation icon() {
+        boolean enabled = state.getAsBoolean();
         if (type == Type.PULL) {
-            return enabled ? ICON_PULL_ON : ICON_PULL_OFF;
+            return enabled ? GuiTextures.PULL_ON : GuiTextures.PULL_OFF;
         }
-        return enabled ? ICON_PUSH_ON : ICON_PUSH_OFF;
+        return enabled ? GuiTextures.PUSH_ON : GuiTextures.PUSH_OFF;
     }
 
     @Override

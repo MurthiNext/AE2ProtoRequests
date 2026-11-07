@@ -4,25 +4,14 @@ import java.util.List;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.network.chat.Component;
 
-import appeng.client.gui.Icon;
 import appeng.core.localization.ButtonToolTips;
 
-public class GuideButton extends AbstractWidget {
-
-    private static final int SIZE = 18;
-    private static final int COLOR_BACKGROUND = 0xFF101418;
-    private static final int COLOR_BORDER = 0xFF39424E;
-    private static final int COLOR_BORDER_HOVER = 0xFF5A7A9A;
-
-    private final Runnable onPress;
+public class GuideButton extends ToolbarButton {
 
     public GuideButton(int x, int y, Runnable onPress) {
-        super(x, y, SIZE, SIZE, Component.empty());
-        this.onPress = onPress;
+        super(x, y, GuiTextures.GUIDE, () -> false, onPress);
+        setMessage(ButtonToolTips.OpenGuide.text());
     }
 
     public boolean renderTooltipIfHovered(GuiGraphics graphics, Font font, int mouseX, int mouseY) {
@@ -33,24 +22,5 @@ public class GuideButton extends AbstractWidget {
                 ButtonToolTips.OpenGuide.text(),
                 ButtonToolTips.OpenGuideDetail.text()), mouseX, mouseY);
         return true;
-    }
-
-    @Override
-    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        graphics.fill(getX(), getY(), getX() + width, getY() + height,
-                isHovered() ? COLOR_BORDER_HOVER : COLOR_BORDER);
-        graphics.fill(getX() + 1, getY() + 1, getX() + width - 1, getY() + height - 1, COLOR_BACKGROUND);
-        // 复制 Blitter，避免与 AE2 界面共享状态互相影响
-        Icon.HELP.getBlitter().copy().opacity(1.0F).dest(getX() + 1, getY() + 1).blit(graphics);
-    }
-
-    @Override
-    public void onClick(double mouseX, double mouseY) {
-        onPress.run();
-    }
-
-    @Override
-    protected void updateWidgetNarration(NarrationElementOutput narration) {
-        defaultButtonNarrationText(narration);
     }
 }

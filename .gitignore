@@ -21,5 +21,6 @@ hs_err_pid*
 run
 run-data
 
-# 本地编译依赖
-libs/
+.settings/
+.factorypath
+.project
