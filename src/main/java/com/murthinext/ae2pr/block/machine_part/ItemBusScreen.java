@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
 import com.murthinext.ae2pr.api.machine.client.DisplaySlot;
+import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 
@@ -172,7 +173,7 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
         MachinePartFluidStorage storage = menu.getFluidStorage();
         if (tank >= 0 && storage != null) {
             var fluid = storage.getTank(tank).getFluid();
-            graphics.renderComponentTooltip(font, List.of(
+            GuiTooltips.render(graphics, font, List.of(
                     fluid.isEmpty() ? Component.translatable("gui.ae2pr.machine_part.tank.empty")
                             : fluid.getDisplayName(),
                     Component.translatable("gui.ae2pr.machine_part.tank.mb", NUMBER.format(fluid.getAmount()))),

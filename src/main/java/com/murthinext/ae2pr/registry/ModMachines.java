@@ -18,6 +18,7 @@ import com.murthinext.ae2pr.api.machine.MachineRecipe;
 import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.RecipeConstraints;
 import com.murthinext.ae2pr.api.machine.RecipeDefinition;
+import com.murthinext.ae2pr.api.machine.singleblock.SingleblockMachineDefinition;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineControllerBlockEntity;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineRecipe;
 import com.murthinext.ae2pr.machine.crystal_reaction_chamber.CrystalReactionChamberControllerBlockEntity;
@@ -119,19 +120,21 @@ public final class ModMachines {
             MultiblockMachineDefinition.withModes("crystal_workstation", CrystalWorkstationControllerBlockEntity.class,
                     CrystalWorkstationControllerBlockEntity::new, ModMachines::crystalProperties,
                     () -> CrystalWorkstationStructure.INSTANCE, ModConfig::crystalWorkstationBaseParallel,
-                    () -> CrystalWorkstationMode.ETCHING.recipeType(), List.of(CrystalWorkstationMode.values()))
+                            CrystalWorkstationMode.ETCHING::recipeType, List.of(CrystalWorkstationMode.values()))
                     .coreLight(ModMachines.CRYSTAL_REACTOR_CORE);
 
     public static final MultiblockMachineDefinition<MultiFactoryControllerBlockEntity, MachineMenu<MultiFactoryControllerBlockEntity>> MULTI_FACTORY =
             MultiblockMachineDefinition.withModes("multi_factory", MultiFactoryControllerBlockEntity.class,
                     MultiFactoryControllerBlockEntity::new, ModMachines::crystalProperties,
                     () -> MultiFactoryStructure.INSTANCE, ModConfig::multiFactoryBaseParallel,
-                    () -> MultiFactoryMode.INSCRIBING.recipeType(), List.of(MultiFactoryMode.values()));
+                    MultiFactoryMode.INSCRIBING::recipeType, List.of(MultiFactoryMode.values()));
 
-    public static final MachineDefinition<NamingFactoryBlock, NamingFactoryBlockEntity, NamingFactoryMenu> NAMING_FACTORY =
-            MachineDefinition.custom("naming_factory", "naming_factory", NamingFactoryBlockEntity.class,
-                    NamingFactoryBlock::new, NamingFactoryBlockEntity::new, () -> NamingFactoryMenu.TYPE,
-                    (definition, id, inventory, controller) -> new NamingFactoryMenu(id, inventory, controller), 4);
+    public static final SingleblockMachineDefinition<NamingFactoryBlock, NamingFactoryBlockEntity, NamingFactoryMenu> NAMING_FACTORY =
+            SingleblockMachineDefinition.create("naming_factory", NamingFactoryBlockEntity.class,
+                    ModMachines::namingFactoryProperties, NamingFactoryBlock::new,
+                    NamingFactoryBlockEntity::new, () -> NamingFactoryMenu.TYPE,
+                    (definition, id, inventory, machine) -> new NamingFactoryMenu(definition, id, inventory, machine),
+                    4, NamingFactoryBlockEntity.SLOT_COUNT, ModConfig::namingFactoryMaxPower);
 
     public static final MachineDefinition<HighEnergyCoreBlock, CrystalReactorCoreBlockEntity, AbstractContainerMenu> CRYSTAL_REACTOR =
             MachineDefinition.custom("high_energy_core", "crystal_reactor_core", CrystalReactorCoreBlockEntity.class,
@@ -154,6 +157,11 @@ public final class ModMachines {
 
     private static Block.Properties metalProperties() {
         return BlockProperties.metal();
+    }
+
+    // 单方块机器多为无遮挡模型
+    private static Block.Properties namingFactoryProperties() {
+        return BlockProperties.metal().noOcclusion();
     }
 
     private static Block.Properties crystalProperties() {

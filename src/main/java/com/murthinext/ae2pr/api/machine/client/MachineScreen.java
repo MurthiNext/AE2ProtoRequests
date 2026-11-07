@@ -67,7 +67,7 @@ public final class MachineScreen<M extends AbstractMultiblockControllerMenu<?>> 
         if (modeButton == null || !modeButton.isHovered() || modeLabel() == null) {
             return false;
         }
-        graphics.renderComponentTooltip(font, List.of(modeLabel(),
+        GuiTooltips.render(graphics, font, List.of(modeLabel(),
                 Component.translatable(menu.isBusy() ? "gui.ae2pr.multiblock.mode.locked"
                         : "gui.ae2pr.multiblock.mode.switch")),
                 mouseX, mouseY);

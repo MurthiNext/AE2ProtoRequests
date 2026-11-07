@@ -19,6 +19,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.level.ItemLike;
 
 import appeng.api.upgrades.Upgrades;
+import appeng.core.localization.GuiText;
 
 public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> extends AbstractContainerScreen<M>
         implements GuiExtraAreas {
@@ -247,11 +248,12 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
         if (slot != null && !slot.getItem().isEmpty()) {
             return false;
         }
-        List<Component> lines = Upgrades.getTooltipLinesForMachine(machine);
+        List<Component> lines = new ArrayList<>(Upgrades.getTooltipLinesForMachine(machine));
         if (lines.isEmpty()) {
             return false;
         }
-        graphics.renderComponentTooltip(font, lines, mouseX, mouseY);
+        lines.add(0, GuiText.CompatibleUpgrades.text());
+        GuiTooltips.render(graphics, font, lines, mouseX, mouseY);
         return true;
     }
 

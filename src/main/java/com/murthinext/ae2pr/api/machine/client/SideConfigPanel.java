@@ -140,26 +140,26 @@ public final class SideConfigPanel {
                 continue;
             }
             Direction dir = orderedDirection(index);
-            graphics.renderComponentTooltip(font, List.of(
+            GuiTooltips.render(graphics, font, List.of(
                     Component.translatable("gui.ae2pr.side_config.face." + faceKey(dir)),
                     config.get(dir).displayName()), mouseX, mouseY);
             return;
         }
         int toggleX = x + toggleX();
         if (isInside(mouseX, mouseY, toggleX, y + rowY(0))) {
-            graphics.renderComponentTooltip(font, List.of(
+            GuiTooltips.render(graphics, font, List.of(
                     Component.translatable("gui.ae2pr.side_config.auto_pull"),
                     stateLine(config.isAutoPull())), mouseX, mouseY);
             return;
         }
         if (isInside(mouseX, mouseY, toggleX, y + rowY(1))) {
-            graphics.renderComponentTooltip(font, List.of(
+            GuiTooltips.render(graphics, font, List.of(
                     Component.translatable("gui.ae2pr.side_config.auto_push"),
                     stateLine(config.isAutoPush())), mouseX, mouseY);
             return;
         }
         if (isInside(mouseX, mouseY, toggleX, y + rowY(2))) {
-            graphics.renderComponentTooltip(font,
+            GuiTooltips.render(graphics, font,
                     List.of(Component.translatable("gui.ae2pr.side_config.clear")), mouseX, mouseY);
         }
     }

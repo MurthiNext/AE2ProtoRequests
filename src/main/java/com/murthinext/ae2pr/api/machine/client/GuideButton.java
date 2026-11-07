@@ -18,7 +18,7 @@ public class GuideButton extends ToolbarButton {
         if (!isHovered()) {
             return false;
         }
-        graphics.renderComponentTooltip(font, List.of(
+        GuiTooltips.render(graphics, font, List.of(
                 ButtonToolTips.OpenGuide.text(),
                 ButtonToolTips.OpenGuideDetail.text()), mouseX, mouseY);
         return true;

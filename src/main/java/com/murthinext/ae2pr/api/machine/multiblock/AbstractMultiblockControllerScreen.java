@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.FluidStack;
 import appeng.util.ReadableNumberConverter;
 
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
+import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
 import com.murthinext.ae2pr.api.machine.part.MachinePart;
 import com.murthinext.ae2pr.api.machine.client.MachineStyles;
 import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
@@ -202,7 +203,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
         }
         if (mouseX >= leftPos + TEXT_X && mouseX < leftPos + 174
                 && mouseY >= topPos + POWER_Y && mouseY < topPos + POWER_Y + font.lineHeight) {
-            graphics.renderComponentTooltip(font, List.of(
+            GuiTooltips.render(graphics, font, List.of(
                     Component.translatable("gui.ae2pr.multiblock.channels", menu.getAllocatedChannels(),
                             menu.getRequiredChannels()),
                     Component.translatable("gui.ae2pr.multiblock.channels.limit",
@@ -218,7 +219,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
             }
             FluidStack fluid = menu.getJobFluid();
             if (!fluid.isEmpty()) {
-                graphics.renderComponentTooltip(font, List.of(fluid.getDisplayName(),
+                GuiTooltips.render(graphics, font, List.of(fluid.getDisplayName(),
                         Component.translatable("gui.ae2pr.machine_part.tank.mb",
                                 String.format(java.util.Locale.ROOT, "%,d", fluid.getAmount()))),
                         mouseX, mouseY);

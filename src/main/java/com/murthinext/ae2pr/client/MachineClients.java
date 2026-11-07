@@ -87,6 +87,7 @@ public final class MachineClients {
                 controller -> MachineProcessingSounds.tick(controller, controller.getMode() == MultiFactoryMode.INSCRIBING
                         ? MachineProcessingSounds.Type.MULTI_FACTORY_INSCRIBING : MachineProcessingSounds.Type.MULTI_FACTORY_CHARGING));
         MenuScreens.register(ModMachines.NAMING_FACTORY.menuType(), NamingFactoryScreen::new);
+        STYLES.put(ModMachines.NAMING_FACTORY, Style.crystal(ModGuide.NAMING_FACTORY_PAGE, 0x55FFFF));
     }
 
     private static <E extends AbstractMultiblockControllerBlockEntity, M extends AbstractMultiblockControllerMenu<E>>

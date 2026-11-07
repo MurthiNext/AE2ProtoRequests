@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.murthinext.ae2pr.registry.ModGuide;
 import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 import com.murthinext.ae2pr.api.machine.client.AutoTransferButton;
+import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
 
 public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu> extends AbstractMachineScreen<M> {
 
@@ -85,7 +86,7 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
         if (autoTransferButton == null || !autoTransferButton.isHovered()) {
             return false;
         }
-        graphics.renderComponentTooltip(font, List.of(
+        GuiTooltips.render(graphics, font, List.of(
                 Component.translatable(isOutput() ? "gui.ae2pr.machine_part.auto.push"
                         : "gui.ae2pr.machine_part.auto.pull"),
                 Component.translatable(autoTransferEnabled() ? "gui.ae2pr.machine_part.auto.enabled"

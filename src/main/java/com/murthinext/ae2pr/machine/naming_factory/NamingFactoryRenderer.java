@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -68,7 +69,15 @@ public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryB
             return;
         }
         float offset = blockEntity.getPressOffset(partialTicks);
+        Direction facing = blockEntity.getBlockState().getValue(NamingFactoryBlock.FACING);
         VertexConsumer buffer = buffers.getBuffer(RenderType.cutout());
+
+        // forge 与连杆由方块实体单独绘制，不在 blockstate 模型内，需自行复现模型的 y 旋转才能跟随朝向：
+        // blockstate 的 y 角等于 facing.toYRot()，烘焙时按 -y 施加并绕方块中心旋转
+        poseStack.pushPose();
+        poseStack.translate(0.5F, 0.0F, 0.5F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(-facing.toYRot()));
+        poseStack.translate(-0.5F, 0.0F, -0.5F);
 
         if (forgeModel != null) {
             poseStack.pushPose();
@@ -80,7 +89,9 @@ public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryB
         if (offset > 0.01F) {
             renderRod(poseStack, buffer, atlas.apply(ROD_TEXTURE), offset, combinedLight, combinedOverlay);
         }
+        poseStack.popPose();
 
+        // 平台上的物品保持轴对齐，不受朝向影响
         renderPlatformItem(blockEntity, poseStack, buffers, combinedLight, combinedOverlay);
     }
 
