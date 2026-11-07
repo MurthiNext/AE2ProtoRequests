@@ -1,0 +1,44 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "advanced_ae"
+        }
+      ],
+      "recipe": {
+        "type": "ae2pr:crystal_reaction_chamber",
+        "duration": 100,
+        "energy": 1000000,
+        "fluid_inputs": [
+          {
+            "amount": 1000,
+            "fluid": "advanced_ae:quantum_infusion_source"
+          }
+        ],
+        "item_inputs": [
+          {
+            "count": 8,
+            "item": "advanced_ae:quantum_alloy"
+          },
+          {
+            "count": 2,
+            "item": "minecraft:netherite_ingot"
+          },
+          {
+            "count": 1,
+            "item": "minecraft:nether_star"
+          }
+        ],
+        "item_outputs": [
+          {
+            "count": 1,
+            "item": "advanced_ae:quantum_alloy_plate"
+          }
+        ]
+      }
+    }
+  ]
+}

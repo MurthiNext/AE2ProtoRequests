@@ -1,0 +1,31 @@
+{
+  "type": "ae2pr:crystal_reaction_chamber",
+  "duration": 100,
+  "energy": 20000,
+  "fluid_inputs": [
+    {
+      "amount": 100,
+      "fluid": "minecraft:water"
+    }
+  ],
+  "item_inputs": [
+    {
+      "count": 4,
+      "item": "ae2:printed_logic_processor"
+    },
+    {
+      "count": 4,
+      "item": "ae2:printed_silicon"
+    },
+    {
+      "count": 4,
+      "tag": "forge:dusts/redstone"
+    }
+  ],
+  "item_outputs": [
+    {
+      "count": 4,
+      "item": "ae2:logic_processor"
+    }
+  ]
+}

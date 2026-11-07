@@ -11,23 +11,23 @@
       "recipe": {
         "type": "ae2pr:crystal_reaction_chamber",
         "duration": 100,
-        "energy": 700000,
-        "item_inputs": [
-          {
-            "item": "appflux:redstone_crystal",
-            "count": 64
-          }
-        ],
+        "energy": 1300000,
         "fluid_inputs": [
           {
-            "fluid": "minecraft:water",
-            "amount": 1000
+            "amount": 1000,
+            "fluid": "minecraft:water"
+          }
+        ],
+        "item_inputs": [
+          {
+            "count": 64,
+            "item": "appflux:redstone_crystal"
           }
         ],
         "item_outputs": [
           {
-            "item": "appflux:charged_redstone",
-            "count": 64
+            "count": 64,
+            "item": "appflux:charged_redstone"
           }
         ]
       }

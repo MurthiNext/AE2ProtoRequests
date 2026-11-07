@@ -21,6 +21,9 @@ hs_err_pid*
 run
 run-data
 
+# Data generator hash cache
+src/generated/resources/.cache/
+
 .settings/
 .factorypath
 .project

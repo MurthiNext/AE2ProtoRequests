@@ -11,31 +11,31 @@
       "recipe": {
         "type": "ae2pr:crystal_reaction_chamber",
         "duration": 100,
-        "energy": 100000,
-        "item_inputs": [
-          {
-            "item": "ae2:singularity",
-            "count": 1
-          },
-          {
-            "tag": "forge:dusts/ender_pearl",
-            "count": 2
-          },
-          {
-            "item": "ae2:sky_dust",
-            "count": 2
-          }
-        ],
+        "energy": 200000,
         "fluid_inputs": [
           {
-            "fluid": "minecraft:lava",
-            "amount": 100
+            "amount": 100,
+            "fluid": "minecraft:lava"
+          }
+        ],
+        "item_inputs": [
+          {
+            "count": 1,
+            "item": "ae2:singularity"
+          },
+          {
+            "count": 2,
+            "tag": "forge:dusts/ender_pearl"
+          },
+          {
+            "count": 2,
+            "item": "ae2:sky_dust"
           }
         ],
         "item_outputs": [
           {
-            "item": "advanced_ae:shattered_singularity",
-            "count": 2
+            "count": 2,
+            "item": "advanced_ae:shattered_singularity"
           }
         ]
       }

@@ -1,0 +1,44 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "advanced_ae"
+        }
+      ],
+      "recipe": {
+        "type": "ae2pr:crystal_reaction_chamber",
+        "duration": 100,
+        "energy": 200000,
+        "fluid_inputs": [
+          {
+            "amount": 1000,
+            "fluid": "advanced_ae:quantum_infusion_source"
+          }
+        ],
+        "item_inputs": [
+          {
+            "count": 4,
+            "item": "minecraft:copper_ingot"
+          },
+          {
+            "count": 4,
+            "item": "advanced_ae:shattered_singularity"
+          },
+          {
+            "count": 4,
+            "item": "ae2:singularity"
+          }
+        ],
+        "item_outputs": [
+          {
+            "count": 1,
+            "item": "advanced_ae:quantum_alloy"
+          }
+        ]
+      }
+    }
+  ]
+}

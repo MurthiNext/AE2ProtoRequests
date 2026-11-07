@@ -12,8 +12,9 @@ public final class ModDataGen {
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
         if (event.includeServer()) {
-            event.getGenerator().addProvider(true,
-                    new MaterialRecipeProvider(event.getGenerator().getPackOutput()));
+            var generator = event.getGenerator();
+            generator.addProvider(true, new MaterialRecipeProvider(generator.getPackOutput()));
+            generator.addProvider(true, new AaeReactionRecipeProvider(generator.getPackOutput()));
         }
     }
 

@@ -36,6 +36,13 @@ sourceSets {
 }
 sourceSets.main.runtimeClasspath += sourceSets.requester.output
 
+configurations {
+    recipeSource {
+        canBeConsumed = false
+        transitive = false
+    }
+}
+
 jarJar.enable()
 
 minecraft {
@@ -67,6 +74,9 @@ minecraft {
         data {
             workingDirectory project.file('run-data')
 
+            // 反应仓配方的转写源
+            lazyToken 'recipeSources', { configurations.recipeSource.asPath }
+            property 'ae2pr.recipeSources', '{recipeSources}'
             args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
         }
     }
@@ -125,28 +135,26 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    // Ink
+    implementation fg.deobf("appeng:appliedenergistics2-forge:${ae2_version}")
     implementation "com.bladecoder.ink:blade-ink:${ink_version}"
+
     jarJar("com.bladecoder.ink:blade-ink:[$ink_version]")
     storyCompilerImplementation "com.bladecoder.ink:blade-ink-compiler:${ink_version}"
     storyCompilerImplementation "com.bladecoder.ink:blade-ink:${ink_version}"
 
-    // AE2 and Guide ME
-    implementation fg.deobf("appeng:appliedenergistics2-forge:${ae2_version}")
     compileOnly "org.appliedenergistics:guideme:${guideme_version}:api"
-    runtimeOnly fg.deobf("org.appliedenergistics:guideme:${guideme_version}")
-
-    // ME Requester
     compileOnly fg.deobf("maven.modrinth:merequester:${merequester_version}")
-    // AdvancedAE
     compileOnly fg.deobf("maven.modrinth:advancedae:${advancedae_version}")
-    // Jade
     compileOnly fg.deobf("maven.modrinth:jade:${jade_version}")
-    runtimeOnly fg.deobf("maven.modrinth:jade:${jade_version}")
-    // JEI
     compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge:${jei_version}")
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
+    runtimeOnly fg.deobf("org.appliedenergistics:guideme:${guideme_version}")
+    runtimeOnly fg.deobf("maven.modrinth:jade:${jade_version}")
+
+    recipeSource "maven.modrinth:advancedae:${advancedae_version}"
+    recipeSource "maven.modrinth:extendedae-plus:${extendedae_plus_version}"
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     requesterAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 }

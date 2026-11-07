@@ -11,23 +11,23 @@
       "recipe": {
         "type": "ae2pr:crystal_reaction_chamber",
         "duration": 100,
-        "energy": 10000,
-        "item_inputs": [
-          {
-            "item": "advanced_ae:quantum_infused_dust",
-            "count": 1
-          }
-        ],
+        "energy": 20000,
         "fluid_inputs": [
           {
-            "fluid": "minecraft:water",
-            "amount": 4000
+            "amount": 4000,
+            "fluid": "minecraft:water"
           }
         ],
         "fluid_outputs": [
           {
-            "fluid": "advanced_ae:quantum_infusion_source",
-            "amount": 1000
+            "amount": 1000,
+            "fluid": "advanced_ae:quantum_infusion_source"
+          }
+        ],
+        "item_inputs": [
+          {
+            "count": 1,
+            "item": "advanced_ae:quantum_infused_dust"
           }
         ]
       }
