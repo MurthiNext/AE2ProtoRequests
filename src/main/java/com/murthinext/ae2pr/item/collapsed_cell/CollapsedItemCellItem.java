@@ -6,27 +6,101 @@ import java.util.Optional;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.murthinext.ae2pr.registry.ModEffects;
 import com.murthinext.ae2pr.registry.ModItems;
 
 import appeng.api.stacks.GenericStack;
+import appeng.core.localization.PlayerMessages;
 import appeng.items.AEBaseItem;
 import appeng.items.storage.StorageCellTooltipComponent;
-import net.minecraft.ChatFormatting;
+import appeng.util.InteractionUtil;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
 public class CollapsedItemCellItem extends AEBaseItem {
 
     private static final String CONTENT_TAG = "content";
+    private static final String DISASSEMBLY_TAG = "disassembly";
+    private static final int DISASSEMBLY_TIMEOUT = 20 * 10;
+    private static final float EXPLOSION_POWER = 1.5F;
     private static final int TOOLTIP_LINES = 6;
 
     public CollapsedItemCellItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        var result = tryDisassemble(player.getItemInHand(hand), level, player, hand);
+        return new InteractionResultHolder<>(result, player.getItemInHand(hand));
+    }
+
+    @Override
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+        return tryDisassemble(stack, context.getLevel(), context.getPlayer(), context.getHand());
+    }
+
+    private InteractionResult tryDisassemble(ItemStack stack, Level level, @Nullable Player player,
+            InteractionHand hand) {
+        if (player == null || hand != InteractionHand.MAIN_HAND || !InteractionUtil.isInAlternateUseMode(player)) {
+            return InteractionResult.PASS;
+        }
+        if (level.isClientSide()) {
+            return InteractionResult.SUCCESS;
+        }
+        if (readContents(stack).stream().anyMatch(entry -> entry.amount() > 0)) {
+            player.displayClientMessage(PlayerMessages.OnlyEmptyCellsCanBeDisassembled.text(), true);
+            return InteractionResult.CONSUME;
+        }
+
+        long now = level.getServer().overworld().getGameTime();
+        int attempt = getDisassemblyAttempts(stack, now) + 1;
+        if (attempt < 4) {
+            var progress = stack.getOrCreateTagElement(DISASSEMBLY_TAG);
+            progress.putInt("attempts", attempt);
+            progress.putLong("lastAttempt", now);
+            player.displayClientMessage(Component.translatable("message.ae2pr.collapsed_item_cell.disassemble." + attempt),
+                    false);
+        } else {
+            stack.shrink(1);
+            var effect = ModEffects.SCREEN_CORRUPTION.get();
+            var previous = player.getEffect(effect);
+            int amplifier = previous == null ? 0 : Math.min(Byte.MAX_VALUE, previous.getAmplifier() + 1);
+            player.addEffect(new MobEffectInstance(effect, MobEffectInstance.INFINITE_DURATION, amplifier,
+                    false, false, true));
+            level.explode(null, player.getX(), player.getY() + 0.5, player.getZ(), EXPLOSION_POWER,
+                    Level.ExplosionInteraction.TNT);
+        }
+        return InteractionResult.CONSUME;
+    }
+
+    private static int getDisassemblyAttempts(ItemStack stack, long now) {
+        var progress = stack.getTagElement(DISASSEMBLY_TAG);
+        if (progress == null) {
+            return 0;
+        }
+        long elapsed = now - progress.getLong("lastAttempt");
+        return elapsed < 0 || elapsed >= DISASSEMBLY_TIMEOUT ? 0 : Math.max(0, Math.min(3, progress.getInt("attempts")));
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+        if (!level.isClientSide() && stack.getTagElement(DISASSEMBLY_TAG) != null
+                && getDisassemblyAttempts(stack, level.getServer().overworld().getGameTime()) == 0) {
+            stack.removeTagKey(DISASSEMBLY_TAG);
+        }
     }
 
     public static ItemStack create(List<GenericStack> contents) {

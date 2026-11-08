@@ -57,6 +57,7 @@ public class ae2pr {
         ModRecipes.RECIPE_TYPES.register(modEventBus);
         ModRecipes.SERIALIZERS.register(modEventBus);
         ModSounds.SOUNDS.register(modEventBus);
+        ModEffects.EFFECTS.register(modEventBus);
         ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
         context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.SPEC);
         // 部件模型必须在预初始化阶段注册

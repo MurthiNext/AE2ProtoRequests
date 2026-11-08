@@ -27,3 +27,4 @@ src/generated/resources/.cache/
 .settings/
 .factorypath
 .project
+.classpath

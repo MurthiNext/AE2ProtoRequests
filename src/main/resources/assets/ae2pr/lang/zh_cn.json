@@ -342,6 +342,10 @@
   "config.jade.plugin_ae2pr.multiblock": "多方块结构",
   "tooltip.ae2pr.super_stack_card.desc": "§7提升堆叠上限至 2,147,483,647",
   "tooltip.ae2pr.collapsed_item_cell.desc": "§7§o这是生产事故！",
+  "message.ae2pr.collapsed_item_cell.disassemble.1": "这不像个好主意……",
+  "message.ae2pr.collapsed_item_cell.disassemble.2": "至少不要在家里尝试吧？",
+  "message.ae2pr.collapsed_item_cell.disassemble.3": "愿一切安好……",
+  "effect.ae2pr.screen_corruption": "数据损坏",
   "group.ae2pr.interface.name": "ME接口",
   "group.ae2pr.pattern_provider.name": "ME样板供应器"
 }
