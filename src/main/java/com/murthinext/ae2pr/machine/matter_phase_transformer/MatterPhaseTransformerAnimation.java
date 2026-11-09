@@ -1,11 +1,11 @@
 package com.murthinext.ae2pr.machine.matter_phase_transformer;
 
-// 相变仪特效的快速蓄能与缓慢衰减
+// 相变仪特效的渐进汇聚与缓慢衰减
 public final class MatterPhaseTransformerAnimation {
 
-    private static final float CHARGE_STEP = 1.0F / 20;
+    private static final float CHARGE_STEP = 1.0F / 60;
     private static final float RELEASE_STEP = 1.0F / 80;
-    private static final double MAX_SPEED = 24.0;
+    private static final double MAX_SPEED = 4.0;
 
     private float activity;
     private float previousActivity;
@@ -24,7 +24,8 @@ public final class MatterPhaseTransformerAnimation {
         previousParticleTime = particleTime;
         activity = running ? Math.min(1.0F, activity + CHARGE_STEP)
                 : Math.max(0.0F, activity - RELEASE_STEP);
-        particleTime += 1.0 + (MAX_SPEED - 1.0) * activity;
+        double acceleration = activity * activity * (3.0 - 2.0 * activity);
+        particleTime += 1.0 + (MAX_SPEED - 1.0) * acceleration;
     }
 
     public float getActivity(float partialTick) {
