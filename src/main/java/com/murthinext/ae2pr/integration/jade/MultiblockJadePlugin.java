@@ -39,16 +39,16 @@ import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerB
 @WailaPlugin(ae2pr.MODID)
 public final class MultiblockJadePlugin implements IWailaPlugin {
 
-    protected static final String KEY_FORMED = "formed";
-    protected static final String KEY_NETWORK_CONNECTED = "networkConnected";
-    protected static final String KEY_ALLOCATED_CHANNELS = "allocatedChannels";
-    protected static final String KEY_REQUIRED_CHANNELS = "requiredChannels";
-    protected static final String KEY_ELAPSED = "elapsed";
-    protected static final String KEY_DURATION = "duration";
-    protected static final String KEY_ITEM = "item";
-    protected static final String KEY_COUNT = "count";
-    protected static final String KEY_FLUID = "fluid";
-    protected static final String KEY_AMOUNT = "amount";
+    private static final String KEY_FORMED = "formed";
+    private static final String KEY_NETWORK_CONNECTED = "networkConnected";
+    private static final String KEY_ALLOCATED_CHANNELS = "allocatedChannels";
+    private static final String KEY_REQUIRED_CHANNELS = "requiredChannels";
+    private static final String KEY_ELAPSED = "elapsed";
+    private static final String KEY_DURATION = "duration";
+    private static final String KEY_ITEM = "item";
+    private static final String KEY_COUNT = "count";
+    private static final String KEY_FLUID = "fluid";
+    private static final String KEY_AMOUNT = "amount";
 
     private static final int PROGRESS_BACKGROUND = 0xFF1B222B;
     private static final String KEY_MACHINE = "machine";
@@ -78,13 +78,13 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
     }
 
     // 作业状态，默认从控制器基类读取
-    protected JobState jobState(BlockEntity controller) {
+    private JobState jobState(BlockEntity controller) {
         AbstractMultiblockControllerBlockEntity base = (AbstractMultiblockControllerBlockEntity) controller;
         return new JobState(base.isFormed(), base.isNetworkConnected(), base.getJobElapsed(), base.getJobDuration(),
                 base.getJobItem(), base.getJobFluid());
     }
 
-    protected void appendExtraServerData(CompoundTag data, BlockEntity controller) {
+    private void appendExtraServerData(CompoundTag data, BlockEntity controller) {
         if (controller instanceof HighReactivityLavaSmelterControllerBlockEntity smelter) {
             data.putInt(KEY_DURABILITY, smelter.getDurability());
         } else if (controller instanceof ModeMachineBlockEntity<?> machine) {
@@ -92,7 +92,7 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
         }
     }
 
-    protected void appendExtraTooltip(ITooltip tooltip, CompoundTag data) {
+    private void appendExtraTooltip(ITooltip tooltip, CompoundTag data) {
         if (data.contains(KEY_DURABILITY)) {
             tooltip.add(Component.translatable("gui.ae2pr.high_reactivity_lava_smelter.durability",
                     data.getInt(KEY_DURABILITY), ModConfig.highReactivityLavaSmelterMaxDurability()));
@@ -103,7 +103,7 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
         }
     }
 
-    protected record JobState(boolean formed, boolean networkConnected, int elapsed, int duration, ItemStack item,
+    private record JobState(boolean formed, boolean networkConnected, int elapsed, int duration, ItemStack item,
                               FluidStack fluid) {
     }
 

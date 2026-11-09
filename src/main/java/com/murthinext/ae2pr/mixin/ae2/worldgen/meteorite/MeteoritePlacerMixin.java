@@ -3,6 +3,7 @@ package com.murthinext.ae2pr.mixin.ae2.worldgen.meteorite;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -29,16 +30,22 @@ public abstract class MeteoritePlacerMixin {
     private static final float ORE_FRACTION = 0.1F;
 
     @Shadow
+    @Final
     private RandomSource random;
     @Shadow
+    @Final
     private double meteoriteSize;
     @Shadow
+    @Final
     private int x;
     @Shadow
+    @Final
     private int y;
     @Shadow
+    @Final
     private int z;
     @Shadow
+    @Final
     private BoundingBox boundingBox;
 
     @Unique

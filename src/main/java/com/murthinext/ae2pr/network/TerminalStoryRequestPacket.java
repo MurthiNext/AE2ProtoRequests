@@ -9,13 +9,19 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
 // 客户端 -> 服务端：请求本玩家在当前存档里的源始终端阅读进度
-public class TerminalStoryRequestPacket {
+public final class TerminalStoryRequestPacket {
+
+    public static final TerminalStoryRequestPacket INSTANCE = new TerminalStoryRequestPacket();
+
+    private TerminalStoryRequestPacket() {
+    }
 
     public static void encode(TerminalStoryRequestPacket packet, FriendlyByteBuf buffer) {
+        // 无载荷
     }
 
     public static TerminalStoryRequestPacket decode(FriendlyByteBuf buffer) {
-        return new TerminalStoryRequestPacket();
+        return INSTANCE;
     }
 
     public static void handle(TerminalStoryRequestPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {

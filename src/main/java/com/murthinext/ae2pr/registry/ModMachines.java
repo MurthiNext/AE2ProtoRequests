@@ -146,10 +146,6 @@ public final class ModMachines {
 
     private ModMachines() {
     }
-
-    public static void init() {
-    }
-
     private static RecipeConstraints workstationConstraints() {
         return RecipeConstraints.builder().itemInputs(0, 6).fluidInputs(0, 3).itemOutputs(0, 6).fluidOutputs(0, 3)
                 .requireEnergy().build();

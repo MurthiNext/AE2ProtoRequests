@@ -18,10 +18,8 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 
 import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
 
 // 晶能工作站成型特效
@@ -100,7 +98,7 @@ public class CrystalWorkstationRenderer
             Direction depthAxis) {
         double wave = Math.sin(time * (Math.PI * 2.0 / CUBE_PERIOD));
         float first = (float) (CUBE_MIN_HALF + (CUBE_MAX_HALF - CUBE_MIN_HALF) * (0.5 + 0.5 * wave));
-        float second = (float) (CUBE_MAX_HALF - (first - CUBE_MIN_HALF));
+        float second = CUBE_MAX_HALF - (first - CUBE_MIN_HALF);
         // 绕三轴以互不相关的速度旋转，姿态可覆盖任意方向；尺寸互补所以内外位置会互换
         renderCube(pose, consumer, first, spin(time * 0.011), spin(time * 0.0073), spin(time * 0.0046), depthAxis,
                 (int) ((96 + 26 * Math.sin(time * 0.055)) * activity), 0.72F, 0.95F, 1.0F);

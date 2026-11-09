@@ -3,13 +3,11 @@ package com.murthinext.ae2pr.client.repeat;
 import com.murthinext.ae2pr.api.Ids;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.murthinext.ae2pr.ae2pr;
 
 import appeng.client.gui.Icon;
 import appeng.client.gui.style.Blitter;
 import appeng.client.gui.widgets.IconButton;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
 
 public class RepeatOrderButton extends IconButton {
 

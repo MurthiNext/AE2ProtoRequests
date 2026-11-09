@@ -93,7 +93,4 @@ public final class ModMaterials {
     private static Material fluid(Material.Builder builder) {
         return MaterialFluids.register(ModItems.ITEMS, ModFluids.FLUID_TYPES, ModFluids.FLUIDS, builder.build());
     }
-
-    public static void init() {
-    }
 }

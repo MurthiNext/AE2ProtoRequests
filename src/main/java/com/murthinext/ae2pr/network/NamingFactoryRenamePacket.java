@@ -11,7 +11,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 
-import com.murthinext.ae2pr.registry.ModTags;
+import com.murthinext.ae2pr.api.wrench.WrenchTags;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryBlockEntity;
 
 // 客户端 -> 服务端：写入名称压印工厂的自定义名称
@@ -49,7 +49,7 @@ public record NamingFactoryRenamePacket(BlockPos pos, String name) {
     }
 
     private static boolean holdsKnife(ServerPlayer player) {
-        return player.getItemInHand(InteractionHand.MAIN_HAND).is(ModTags.KNIVES)
-                || player.getItemInHand(InteractionHand.OFF_HAND).is(ModTags.KNIVES);
+        return player.getItemInHand(InteractionHand.MAIN_HAND).is(WrenchTags.KNIFE)
+                || player.getItemInHand(InteractionHand.OFF_HAND).is(WrenchTags.KNIFE);
     }
 }

@@ -4,8 +4,6 @@ import com.murthinext.ae2pr.api.Ids;
 
 import net.minecraft.resources.ResourceLocation;
 
-import com.murthinext.ae2pr.ae2pr;
-
 public record ModuleType(ResourceLocation id, int maxCount) {
 
     public ModuleType {

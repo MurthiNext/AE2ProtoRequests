@@ -18,7 +18,6 @@ public final class RepeatOrderFailedToast extends AbstractRepeatOrderToast {
         Minecraft.getInstance().getToasts()
                 .addToast(new RepeatOrderFailedToast(what, amount, totalRounds, completedRounds, reason));
     }
-
     RepeatOrderFailedToast(AEKey what, long amount, int totalRounds, int completedRounds, FailureReason reason) {
         super(what, Component.translatable("gui.ae2pr.repeat_order.failed.title"), TITLE_COLOR, List.of(
                 Component.translatable("gui.ae2pr.repeat_order.failed.text",

@@ -8,7 +8,6 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import com.murthinext.ae2pr.api.machine.MachineDefinition;
 import com.murthinext.ae2pr.api.machine.Mode;
 
 import net.minecraft.world.item.ItemStack;

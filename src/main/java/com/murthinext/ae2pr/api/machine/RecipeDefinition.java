@@ -5,7 +5,6 @@ import com.murthinext.ae2pr.api.machine.MachineRegistries;
 
 import java.util.function.Supplier;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.DeferredRegister;

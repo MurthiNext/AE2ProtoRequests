@@ -17,7 +17,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import appeng.blockentity.AEBaseBlockEntity;
 
 import com.murthinext.ae2pr.api.wrench.Wrenchable;
-import com.murthinext.ae2pr.registry.ModTags;
+import com.murthinext.ae2pr.api.wrench.WrenchTags;
 
 // 扳手交互统一入口
 public final class WrenchInteractions {
@@ -28,7 +28,7 @@ public final class WrenchInteractions {
     // 扳手右键路由
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         if (event.getUseBlock() == Event.Result.DENY
-                || event.getEntity().isSpectator() || !event.getItemStack().is(ModTags.WRENCH)) {
+                || event.getEntity().isSpectator() || !event.getItemStack().is(WrenchTags.WRENCH)) {
             return;
         }
         BlockState state = event.getLevel().getBlockState(event.getPos());

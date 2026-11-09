@@ -3,7 +3,6 @@ package com.murthinext.ae2pr.registry;
 import com.murthinext.ae2pr.api.Ids;
 
 import com.murthinext.ae2pr.ae2pr;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

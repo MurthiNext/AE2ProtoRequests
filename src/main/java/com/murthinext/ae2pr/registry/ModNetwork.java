@@ -4,7 +4,6 @@ import com.murthinext.ae2pr.api.Ids;
 
 import java.util.Optional;
 
-import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
@@ -19,7 +18,6 @@ import com.murthinext.ae2pr.network.TerminalStorySyncPacket;
 import com.murthinext.ae2pr.network.TerminalStoryUnlockPacket;
 import com.murthinext.ae2pr.network.TerminalStoryUpdatePacket;
 import com.murthinext.ae2pr.network.TerminalStoryWatchPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.NetworkDirection;

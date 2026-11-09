@@ -29,12 +29,7 @@ java {
 
 sourceSets {
     storyCompiler
-    requester {
-        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
-        runtimeClasspath += sourceSets.main.output + sourceSets.main.runtimeClasspath
-    }
 }
-sourceSets.main.runtimeClasspath += sourceSets.requester.output
 
 configurations {
     recipeSource {
@@ -57,7 +52,6 @@ minecraft {
             mods {
                 "${mod_id}" {
                     source sourceSets.main
-                    source sourceSets.requester
                 }
             }
         }
@@ -84,7 +78,6 @@ minecraft {
 
 mixin {
     add sourceSets.main, "${mod_id}.refmap.json"
-    add sourceSets.requester, "${mod_id}.requester.refmap.json"
 
     config "${mod_id}.mixins.json"
     config "${mod_id}.merequester.mixins.json"
@@ -95,10 +88,6 @@ mixin {
 tasks.named('compileJava', JavaCompile).configure {
     options.incremental = false
     outputs.file(layout.buildDirectory.file("tmp/${name}/${mod_id}.refmap.json"))
-}
-tasks.named('compileRequesterJava', JavaCompile).configure {
-    options.incremental = false
-    outputs.file(layout.buildDirectory.file("tmp/${name}/${mod_id}.requester.refmap.json"))
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
@@ -142,6 +131,8 @@ dependencies {
     storyCompilerImplementation "com.bladecoder.ink:blade-ink-compiler:${ink_version}"
     storyCompilerImplementation "com.bladecoder.ink:blade-ink:${ink_version}"
 
+    compileOnly "com.google.code.findbugs:jsr305:3.0.2"
+    compileOnly "com.mojang:logging:1.1.1"
     compileOnly "org.appliedenergistics:guideme:${guideme_version}:api"
     compileOnly fg.deobf("maven.modrinth:merequester:${merequester_version}")
     compileOnly fg.deobf("maven.modrinth:advancedae:${advancedae_version}")
@@ -155,7 +146,6 @@ dependencies {
     recipeSource "maven.modrinth:extendedae-plus:${extendedae_plus_version}"
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    requesterAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 }
 
@@ -222,14 +212,11 @@ tasks.withType(Jar).matching { it.name in ['jar', 'jarJar'] }.configureEach {
                     "Implementation-Vendor"   : mod_authors,
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")])
     }
-    from sourceSets.requester.output
     // check refmap
     doFirst {
-        ['compileJava', 'compileRequesterJava'].each { compileTaskName ->
-            def refmap = compileTaskName == 'compileJava' ? "${mod_id}.refmap.json" : "${mod_id}.requester.refmap.json"
-            if (!layout.buildDirectory.file("tmp/${compileTaskName}/${refmap}").get().asFile.exists()) {
-                throw new GradleException("Mixin refmap lost: ${refmap}")
-            }
+        def refmap = "${mod_id}.refmap.json"
+        if (!layout.buildDirectory.file("tmp/compileJava/${refmap}").get().asFile.exists()) {
+            throw new GradleException("Mixin refmap lost: ${refmap}")
         }
     }
     finalizedBy name == 'jarJar' ? 'reobfJarJar' : 'reobfJar'

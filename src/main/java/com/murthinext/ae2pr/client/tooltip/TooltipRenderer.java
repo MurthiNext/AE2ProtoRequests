@@ -6,29 +6,18 @@ import java.util.List;
 import com.mojang.datafixers.util.Either;
 
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.StringDecomposer;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
-import net.minecraft.world.item.ItemStack;
 
 import com.murthinext.ae2pr.client.tooltip.ColorEffectLine.Segment;
 
 // 统一物品 Tooltip 文本处理与渲染入口
 public final class TooltipRenderer {
     private TooltipRenderer() {
-    }
-
-    // 渐变文字
-    public static MutableComponent gradient(String text, int... colors) {
-        return gradient(text, TooltipColorEffect.DEFAULT_SPEED, colors);
-    }
-
-    public static MutableComponent gradient(String text, float speed, int[] colors) {
-        return MutableComponent.create(new TooltipColorEffect(text, colors, speed, false));
     }
 
     // 流动
@@ -38,17 +27,6 @@ public final class TooltipRenderer {
 
     public static MutableComponent flow(String text, float speed, int[] colors) {
         return MutableComponent.create(new TooltipColorEffect(text, colors, speed, true));
-    }
-
-    public static void renderItem(GuiGraphics graphics, Font font, ItemStack stack, int mouseX, int mouseY) {
-        graphics.renderTooltip(font, stack, mouseX, mouseY);
-    }
-
-    // 富文本和图片组件沿用 Forge 的折行、定位及渲染事件
-    public static void renderElements(GuiGraphics graphics, Font font,
-            List<Either<FormattedText, TooltipComponent>> elements, ItemStack stack, int mouseX, int mouseY) {
-        graphics.renderComponentTooltipFromElements(font, new ArrayList<>(prepareElements(elements)), mouseX, mouseY,
-                stack);
     }
 
     // 元素列表中是否包含特效文本
@@ -62,14 +40,6 @@ public final class TooltipRenderer {
             }
         }
         return false;
-    }
-
-    public static List<Component> format(List<? extends FormattedText> lines) {
-        List<Component> result = new ArrayList<>(lines.size());
-        for (FormattedText line : lines) {
-            result.addAll(splitLines(line));
-        }
-        return result;
     }
 
     public static List<Either<FormattedText, TooltipComponent>> prepareElements(

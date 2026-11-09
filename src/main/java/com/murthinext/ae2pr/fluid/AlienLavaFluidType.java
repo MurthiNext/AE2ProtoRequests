@@ -14,8 +14,6 @@ import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.fluids.FluidType;
 
-import com.murthinext.ae2pr.ae2pr;
-
 public class AlienLavaFluidType extends FluidType {
 
     public AlienLavaFluidType() {

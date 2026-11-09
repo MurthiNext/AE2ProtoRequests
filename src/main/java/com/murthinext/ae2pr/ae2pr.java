@@ -45,8 +45,6 @@ public class ae2pr {
         MachineRegistries.install(ModBlocks.BLOCKS, ModItems.ITEMS, ModBlockEntities.BLOCK_ENTITIES,
                 ModMenus.MENUS, ModRecipes.RECIPE_TYPES, ModRecipes.SERIALIZERS);
         MachineTuning.install(ModConfig::lossySpeedPerCard, ModConfig::lossyEnergyMultiplierPerCard);
-        ModMaterials.init();
-        ModMachines.init();
         ModBlocks.installStructureHooks();
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);

@@ -77,7 +77,7 @@ public abstract class UpgradePanelScreenMixin {
 
     @Unique
     private boolean ae2pr$hasWidget(String id) {
-        var accessor = (WidgetContainerAccessor) (Object) this.widgets;
+        var accessor = (WidgetContainerAccessor) this.widgets;
         return accessor.ae2pr$getWidgets().containsKey(id) || accessor.ae2pr$getCompositeWidgets().containsKey(id);
     }
 

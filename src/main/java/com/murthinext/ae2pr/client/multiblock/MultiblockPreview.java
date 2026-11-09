@@ -149,13 +149,12 @@ public final class MultiblockPreview implements BlockAndTintGetter {
         return ModuleSnapshot.firstConflict(modules) == null;
     }
 
-    public boolean replace(Cell selected, Block block) {
+    public void replace(Cell selected, Block block) {
         if (!canReplace(selected, block)) {
-            return false;
+            return;
         }
         states.put(selected.pos(), stateFor(selected, block));
         updateMaterials();
-        return true;
     }
 
     // 把玩家替换过的方块恢复为默认方块

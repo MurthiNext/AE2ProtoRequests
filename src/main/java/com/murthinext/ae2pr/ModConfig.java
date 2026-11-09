@@ -198,7 +198,7 @@ public final class ModConfig {
         MULTI_FACTORY_CHARGING_ENERGY = BUILDER
                 .comment("通式加工厂充能模式每个并行默认扣除的能量（AE）")
                 .defineInRange("chargingEnergyPerParallel",
-                        (double) ChargerBlockEntity.POWER_MAXIMUM_AMOUNT, 0.0, EnergyAmount.MAX);
+                        ChargerBlockEntity.POWER_MAXIMUM_AMOUNT, 0.0, EnergyAmount.MAX);
         BUILDER.pop();
 
         BUILDER.push("crystalReactor");

@@ -50,8 +50,4 @@ public final class CollapseEvents {
             Block.popResource(world, event.getPos(), cell);
         }
     }
-
-    public static boolean collapseInto(BlockEntity blockEntity, java.util.List<ItemStack> drops) {
-        return CollapseHandler.collapseInto(blockEntity, drops);
-    }
 }

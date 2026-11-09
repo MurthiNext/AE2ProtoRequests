@@ -34,14 +34,12 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.EnergyAmount;
 import com.murthinext.ae2pr.api.machine.ControllerHost;
 import com.murthinext.ae2pr.api.machine.CoreLight;
-import com.murthinext.ae2pr.api.machine.MachineBlockStates;
+import com.murthinext.ae2pr.api.machine.MachineBlock;
 import com.murthinext.ae2pr.api.machine.MachineTuning;
 import com.murthinext.ae2pr.api.machine.part.InputGroup;
 import com.murthinext.ae2pr.api.machine.part.MachinePart;
 import com.murthinext.ae2pr.api.machine.part.PartInventory;
 import com.murthinext.ae2pr.api.multiblock.AbstractStructureFacade;
-import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
-import com.murthinext.ae2pr.api.multiblock.MultiblockChannelConsumer;
 import com.murthinext.ae2pr.api.multiblock.StructureResult;
 import com.murthinext.ae2pr.api.multiblock.StructureValidator;
 import com.murthinext.ae2pr.api.recipe.ChancedItemStack;
@@ -83,13 +81,12 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     private final IUpgradeInventory upgrades;
     // 核心方块的运行指示灯谓词，未配置表示不需要
     @Nullable
-    private CoreLight coreLight;
+    private final CoreLight coreLight;
 
     protected final List<MachinePart.ItemPart> inputBuses = new ArrayList<>();
     protected final List<MachinePart.ItemPart> outputBuses = new ArrayList<>();
     protected final List<MachinePart.FluidPart> inputHatches = new ArrayList<>();
     protected final List<MachinePart.FluidPart> outputHatches = new ArrayList<>();
-    private final List<MultiblockChannelConsumer> channelConsumers = new ArrayList<>();
     @Nullable
     private MachinePart.NetworkPart networkAccessHatch;
 
@@ -120,7 +117,8 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         this.structureFacade = definition.structure();
         this.structure = new StructureValidator(structureFacade.pattern());
         this.upgrades = UpgradeInventories.forMachine(definition.item(), UPGRADE_SLOTS, this::setChanged);
-        this.coreLight = definition.coreLight();    }
+        this.coreLight = definition.coreLight();
+    }
 
     public String machineKey() {
         return definition.id();
@@ -579,36 +577,35 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     protected double extractNetworkEnergy(double amount, boolean simulate) {
-        return isNetworkConnected() ? networkAccessHatch.extractAEPower(EnergyAmount.clamp(amount), simulate) : 0;
+        var hatch = networkAccessHatch;
+        return hatch != null && hatch.isNetworkConnected(this)
+                ? hatch.extractAEPower(EnergyAmount.clamp(amount), simulate)
+                : 0;
     }
 
     public int getRequiredChannels() {
-        long required = 1;
-        for (MultiblockChannelConsumer consumer : channelConsumers) {
-            required += Math.max(0, consumer.getRequiredChannels());
-        }
-        return (int) Math.min(Integer.MAX_VALUE, required);
+        return 1;
     }
 
     public int getAllocatedChannels() {
-        return hasNetworkAccess() ? networkAccessHatch.getAllocatedChannels() : 0;
+        var hatch = networkAccessHatch;
+        return hatch != null ? hatch.getAllocatedChannels() : 0;
     }
 
     public boolean isNetworkConnected() {
-        return hasNetworkAccess() && networkAccessHatch.isNetworkConnected(this);
+        var hatch = networkAccessHatch;
+        return hatch != null && hatch.isNetworkConnected(this);
     }
 
     public double getNetworkStoredPower() {
-        return isNetworkConnected() ? networkAccessHatch.getAvailableAEPower() : 0;
-    }
-
-    private boolean hasNetworkAccess() {
-        return isFormed() && networkAccessHatch != null && !networkAccessHatch.isHatchRemoved();
+        var hatch = networkAccessHatch;
+        return hatch != null && hatch.isNetworkConnected(this) ? hatch.getAvailableAEPower() : 0;
     }
 
     private void updateNetworkAccess() {
-        if (hasNetworkAccess()) {
-            networkAccessHatch.updateController(this);
+        var hatch = networkAccessHatch;
+        if (isFormed() && hatch != null && !hatch.isHatchRemoved()) {
+            hatch.updateController(this);
         }
     }
 
@@ -676,7 +673,6 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         outputHatches.clear();
         MachinePart.NetworkPart previousAccessHatch = networkAccessHatch;
         networkAccessHatch = null;
-        channelConsumers.clear();
         onPartsCleared();
         if (!result.formed() || level == null) {
             if (previousAccessHatch != null) {
@@ -706,9 +702,6 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             if (network != null) {
                 networkAccessHatch = network;
             }
-            if (entity != this && entity instanceof MultiblockChannelConsumer consumer) {
-                channelConsumers.add(consumer);
-            }
             collectExtraPart(pos, entity);
         }
         if (previousAccessHatch != null && previousAccessHatch != networkAccessHatch) {
@@ -723,7 +716,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     protected Direction getFacing() {
-        return getBlockState().getValue(MachineBlockStates.FACING);
+        return getBlockState().getValue(MachineBlock.FACING);
     }
 
     // 核心方块位置，没有核心的机器返回 null
@@ -744,9 +737,9 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         boolean showPaused = formed && paused;
         BlockState state = getBlockState();
         BlockState updated = state
-                .setValue(MachineBlockStates.FORMED, formed)
-                .setValue(MachineBlockStates.RUNNING, showRunning)
-                .setValue(MachineBlockStates.PAUSED, showPaused);
+                .setValue(MachineBlock.FORMED, formed)
+                .setValue(MachineBlock.RUNNING, showRunning)
+                .setValue(MachineBlock.PAUSED, showPaused);
         if (updated != state) {
             level.setBlock(worldPosition, updated, Block.UPDATE_ALL);
         }
@@ -880,7 +873,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     // 状态查询
 
     public boolean isFormed() {
-        return getBlockState().getValue(MachineBlockStates.FORMED);
+        return getBlockState().getValue(MachineBlock.FORMED);
     }
 
     @Override

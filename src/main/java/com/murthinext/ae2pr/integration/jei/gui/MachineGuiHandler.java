@@ -24,7 +24,7 @@ import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerM
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerScreen;
 import com.murthinext.ae2pr.integration.jei.category.FilterPressCategory;
 import com.murthinext.ae2pr.integration.jei.category.JigCategory;
-import com.murthinext.ae2pr.integration.jei.plugin.MultiFactoryPlugin;
+import com.murthinext.ae2pr.integration.jei.plugin.Ae2prJeiPlugin;
 import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryMode;
 import com.murthinext.ae2pr.registry.ModMachines;
 
@@ -55,7 +55,7 @@ public class MachineGuiHandler implements IGuiContainerHandler<AbstractContainer
         }
         if (definition == ModMachines.MULTI_FACTORY && menu instanceof MachineMenu<?> machineMenu
                 && machineMenu.getMode() instanceof MultiFactoryMode mode) {
-            return MultiFactoryPlugin.recipeType(mode);
+            return Ae2prJeiPlugin.multiFactoryRecipeType(mode);
         }
         return null;
     }

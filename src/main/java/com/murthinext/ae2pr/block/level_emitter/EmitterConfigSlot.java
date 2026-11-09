@@ -64,11 +64,6 @@ public class EmitterConfigSlot extends FakeSlot {
     }
 
     @Override
-    public boolean mayPlace(ItemStack stack) {
-        return false;
-    }
-
-    @Override
     public boolean mayPickup(Player player) {
         return !getFilterCell().isEmpty() || super.mayPickup(player);
     }

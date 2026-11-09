@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
-import appeng.api.behaviors.GenericInternalInventory;
 import appeng.api.parts.IPart;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.AEKey;
@@ -36,23 +35,8 @@ public final class CollapseHandler {
         return CollapseMatcher.allows(id) ? collapse(List.of(CollapseSource.of(id, handler))) : null;
     }
 
-
-    @Nullable
-    public static ItemStack tryCollapse(ResourceLocation id, GenericInternalInventory inventory) {
-        return CollapseMatcher.allows(id) ? collapse(List.of(CollapseSource.of(id, inventory))) : null;
-    }
-
     public static boolean collapseInto(BlockEntity blockEntity, List<ItemStack> drops) {
         var cell = tryCollapse(blockEntity);
-        if (cell == null) {
-            return false;
-        }
-        drops.add(cell);
-        return true;
-    }
-
-    public static boolean collapseInto(ResourceLocation id, IItemHandler handler, List<ItemStack> drops) {
-        var cell = tryCollapse(id, handler);
         if (cell == null) {
             return false;
         }

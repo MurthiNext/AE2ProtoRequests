@@ -135,10 +135,6 @@ public final class MachinePartFluidStorage {
         return tanks[tank];
     }
 
-    public FluidTank getTank() {
-        return tanks[0];
-    }
-
     public int getCapacityPerTank() {
         return tanks[0].getTankCapacity(0);
     }
@@ -173,10 +169,6 @@ public final class MachinePartFluidStorage {
 
     public BlockPos getBlockPos() {
         return owner.getBlockPos();
-    }
-
-    public BlockEntity getOwner() {
-        return owner;
     }
 
     public void setChanged() {

@@ -1,6 +1,5 @@
 package com.murthinext.ae2pr.api.machine;
 
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -62,10 +61,5 @@ public final class MachineRegistries {
             throw new IllegalStateException("Machine registries not installed: " + name);
         }
         return registry;
-    }
-
-    // 供抽象菜单声明类型
-    public static Class<AbstractContainerMenu> menuBaseType() {
-        return AbstractContainerMenu.class;
     }
 }

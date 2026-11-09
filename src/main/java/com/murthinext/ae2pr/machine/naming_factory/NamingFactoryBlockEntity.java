@@ -90,10 +90,6 @@ public class NamingFactoryBlockEntity extends AbstractSingleblockMachineBlockEnt
         return getInventory().getItem(SLOT_OUTPUT);
     }
 
-    public WorkState getWorkState() {
-        return state;
-    }
-
     @Nullable
     public String getImprintName() {
         ItemStack template = getTemplateStack();

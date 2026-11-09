@@ -105,7 +105,7 @@ public class AlienLavaBlock extends LiquidBlock implements WorldInteractionCatal
         int conversions = Math.min(AlienLavaFluid.MAX_CONVERSIONS,
                 state.getValue(AlienLavaFluid.CONVERSIONS) + count);
         level.setBlockAndUpdate(pos, state.setValue(AlienLavaFluid.CONVERSIONS, conversions));
-        if (conversions >= AlienLavaFluid.MAX_CONVERSIONS) {
+        if (conversions == AlienLavaFluid.MAX_CONVERSIONS) {
             level.scheduleTick(pos, this, 20);
         }
     }

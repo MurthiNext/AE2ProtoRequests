@@ -12,8 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 import appeng.client.gui.Icon;
 import appeng.client.gui.widgets.IconButton;
 
-import com.murthinext.ae2pr.ae2pr;
-
 public class CombineModeButton extends IconButton {
 
     private static final ResourceLocation AND_ICON = Ids.of(

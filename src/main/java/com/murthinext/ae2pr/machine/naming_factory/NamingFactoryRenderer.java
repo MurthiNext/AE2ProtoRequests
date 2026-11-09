@@ -25,8 +25,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.model.data.ModelData;
 
-import com.murthinext.ae2pr.ae2pr;
-
 public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryBlockEntity> {
 
     public static final ResourceLocation FORGE_MODEL = Ids.of(

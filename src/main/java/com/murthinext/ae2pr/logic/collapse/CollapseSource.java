@@ -18,23 +18,16 @@ import com.murthinext.ae2pr.api.collapse.Collapsible;
 public final class CollapseSource {
 
     private final ResourceLocation id;
-    private final boolean authorized;
     private final Collapsible content;
 
-    private CollapseSource(ResourceLocation id, boolean authorized, Collapsible content) {
+    private CollapseSource(ResourceLocation id, Collapsible content) {
         this.id = id;
-        this.authorized = authorized;
         this.content = content;
     }
 
     @Nullable
     public ResourceLocation id() {
         return id;
-    }
-
-    // 第三方主动注册的来源视为已授权
-    public boolean isAuthorized() {
-        return authorized;
     }
 
     public List<GenericStack> read() {
@@ -46,11 +39,7 @@ public final class CollapseSource {
     }
 
     public static CollapseSource of(ResourceLocation id, Collapsible content) {
-        return new CollapseSource(id, false, content);
-    }
-
-    public static CollapseSource authorized(ResourceLocation id, Collapsible content) {
-        return new CollapseSource(id, true, content);
+        return new CollapseSource(id, content);
     }
 
     public static CollapseSource of(ResourceLocation id, GenericInternalInventory inventory) {

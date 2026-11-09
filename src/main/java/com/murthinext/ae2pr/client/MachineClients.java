@@ -50,7 +50,7 @@ public final class MachineClients {
     }
 
     public static void registerScreens() {
-        MachineStyles.install(definition -> STYLES.get(definition));
+        MachineStyles.install(STYLES::get);
         GuideOpener.install(ModGuide::openAt);
         register(ModMachines.FILTER_PRESS, Style.crystal(ModGuide.FILTER_PRESS_PAGE, 0x9CD3FF), MachineScreen::new,
                 controller -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.FILTER_PRESS));

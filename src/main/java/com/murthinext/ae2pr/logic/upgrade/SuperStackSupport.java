@@ -256,11 +256,10 @@ public final class SuperStackSupport {
         return inventory;
     }
 
-    public static IUpgradeInventory appendUpgradeSlot(IUpgradeInventory inventory) {
+    public static void appendUpgradeSlot(IUpgradeInventory inventory) {
         if (inventory instanceof AppendableUpgrades appendable) {
             appendable.ae2pr$appendUpgradeSlot();
         }
-        return inventory;
     }
 
     private static boolean ownsStorage(Object owner, GenericStackInv inventory) {

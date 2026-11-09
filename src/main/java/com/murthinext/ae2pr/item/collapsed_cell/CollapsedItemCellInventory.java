@@ -33,11 +33,6 @@ public class CollapsedItemCellInventory implements StorageCell {
     }
 
     @Override
-    public long insert(AEKey what, long amount, Actionable mode, IActionSource source) {
-        return 0;
-    }
-
-    @Override
     public long extract(AEKey what, long amount, Actionable mode, IActionSource source) {
         for (int i = 0; i < contents.size(); i++) {
             var stack = contents.get(i);

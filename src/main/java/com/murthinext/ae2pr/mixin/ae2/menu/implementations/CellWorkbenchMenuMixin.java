@@ -19,7 +19,9 @@ import net.minecraft.world.item.ItemStack;
 @Mixin(value = CellWorkbenchMenu.class, remap = false)
 public abstract class CellWorkbenchMenuMixin extends UpgradeableMenu<CellWorkbenchBlockEntity> {
 
+    @Unique
     private static final String ae2pr$ACTION_SET_WHITELIST = AdvancedFilterCellItem.ACTION_SET_WHITELIST;
+    @Unique
     private static final String ae2pr$ACTION_SET_BLACKLIST = AdvancedFilterCellItem.ACTION_SET_BLACKLIST;
 
     public CellWorkbenchMenuMixin(MenuType<?> menuType, int id, Inventory playerInventory,

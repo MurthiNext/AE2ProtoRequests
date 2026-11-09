@@ -25,9 +25,13 @@ import net.minecraft.world.item.ItemStack;
 @Mixin(value = CellWorkbenchScreen.class, remap = false)
 public abstract class CellWorkbenchScreenMixin extends UpgradeableScreen<CellWorkbenchMenu> {
 
+    @Unique
     private static final int ae2pr$FIELD_WIDTH = 128;
+    @Unique
     private static final int ae2pr$FIELD_X = 10;
+    @Unique
     private static final int ae2pr$WHITELIST_Y = 44;
+    @Unique
     private static final int ae2pr$BLACKLIST_Y = 82;
 
     @Unique

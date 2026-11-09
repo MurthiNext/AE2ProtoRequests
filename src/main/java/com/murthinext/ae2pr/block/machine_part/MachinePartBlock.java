@@ -40,7 +40,7 @@ import net.minecraftforge.network.NetworkHooks;
 import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
 import com.murthinext.ae2pr.logic.collapse.CollapseHandler;
 import com.murthinext.ae2pr.registry.ModBlocks;
-import com.murthinext.ae2pr.registry.ModTags;
+import com.murthinext.ae2pr.api.wrench.WrenchTags;
 import com.murthinext.ae2pr.api.wrench.Wrenchable;
 
 public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
@@ -88,15 +88,6 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
             return new DualHatchBlockEntity(pos, state);
         }
         return isFluidPart(state) ? new FluidHatchBlockEntity(pos, state) : new ItemBusBlockEntity(pos, state);
-    }
-
-    // 全部仓室方块（不含 ME 接入仓）
-    public static List<Block> allParts() {
-        return ModBlocks.MACHINE_PARTS.stream().map(entry -> (Block) entry.get()).toList();
-    }
-
-    public static boolean isCommonPart(Block block) {
-        return block instanceof MachinePartBlock;
     }
 
     public static boolean isDualPart(Block block) {
@@ -164,7 +155,7 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
             BlockHitResult hit) {
         // 扳手交互
-        if (player.getItemInHand(hand).is(ModTags.WRENCH)) {
+        if (player.getItemInHand(hand).is(WrenchTags.WRENCH)) {
             return InteractionResult.PASS;
         }
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {

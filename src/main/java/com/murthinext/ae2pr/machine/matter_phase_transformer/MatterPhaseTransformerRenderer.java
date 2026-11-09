@@ -13,11 +13,9 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
 import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.client.effect.EmissiveCubeRenderer;
 import com.murthinext.ae2pr.client.effect.RoundedBeamRenderer;
 

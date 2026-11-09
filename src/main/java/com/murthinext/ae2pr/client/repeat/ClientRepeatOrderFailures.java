@@ -44,8 +44,7 @@ public final class ClientRepeatOrderFailures {
                 && !(minecraft.screen instanceof MEStorageScreen<?>)
                 && minecraft.player != null
                 && hasNotificationEnablingItem(minecraft.player)) {
-            minecraft.getToasts().addToast(
-                    new RepeatOrderFailedToast(what, amountPerRound, totalRounds, completedRounds, reason));
+            RepeatOrderFailedToast.show(what, amountPerRound, totalRounds, completedRounds, reason);
         }
     }
 

@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
@@ -19,7 +18,6 @@ import net.minecraft.world.phys.Vec3;
 import appeng.core.definitions.AEBlocks;
 
 import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.client.effect.EmissiveCubeRenderer;
 
 // 水晶母岩放射电弧与高能核心自发光

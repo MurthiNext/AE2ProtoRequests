@@ -22,8 +22,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 
-import com.murthinext.ae2pr.ae2pr;
-
 // 炉膛渲染异星熔岩
 public class HighReactivityLavaSmelterRenderer implements BlockEntityRenderer<HighReactivityLavaSmelterControllerBlockEntity> {
 

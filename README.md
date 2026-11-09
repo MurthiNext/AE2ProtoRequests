@@ -6,8 +6,10 @@ Working still...
 - Original: [MIT License](LICENSE)
 - Ink Runtime：[MIT License](licenses/ink)
 - blade-ink-java: [MIT License](licenses/blade-ink-java)
-- ME Requester: [LGPL-3.0](licenses/me-requester), includes codes under `src/requester/`
-- GregTech Modern: [LGPL-3.0](licenses/gregtech-modern), includes the design of multiblocks, some textures and sounds
+- ME Requester: [LGPL-3.0](licenses/me-requester)
+  - includes codes under `com.murthinext.ae2pr.requester`
+- GregTech Modern: [LGPL-3.0](licenses/gregtech-modern)
+  - includes the design of multiblocks, some textures and sounds
 - Applied Energistics 2
   - Textures and Models 
     - (c) 2020, Ridanisaurus Rid, (c) 2013 - 2020 AlgorithmX2 et al

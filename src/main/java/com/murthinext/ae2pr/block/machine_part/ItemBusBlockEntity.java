@@ -190,10 +190,6 @@ public class ItemBusBlockEntity extends BlockEntity implements MachinePart {
         return storage.getSlots();
     }
 
-    public int getCapacityPerSlot() {
-        return storage.getSlotLimit(0);
-    }
-
     public List<ItemStack> getStorageSnapshots() {
         List<ItemStack> stacks = new ArrayList<>(storage.getSlots());
         for (int slot = 0; slot < storage.getSlots(); slot++) {

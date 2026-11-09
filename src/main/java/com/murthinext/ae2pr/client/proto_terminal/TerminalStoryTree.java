@@ -15,7 +15,6 @@ import java.util.Set;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.logic.terminal.TerminalStoryCondition;
 import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress;
 import com.murthinext.ae2pr.logic.terminal.TerminalStoryRunner;

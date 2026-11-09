@@ -10,8 +10,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-import com.murthinext.ae2pr.api.machine.MachineDefinition;
-import com.murthinext.ae2pr.api.machine.Mode;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerScreen;
 

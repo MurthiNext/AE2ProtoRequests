@@ -39,10 +39,6 @@ public final class CollapseMatcher {
         return isBuiltIn(id) || isExtra(id);
     }
 
-    public static boolean allows(CollapseSource source) {
-        return source.isAuthorized() || allows(source.id());
-    }
-
     private static void refresh() {
         List<String> raw = ModConfig.collapseExtraBlocks();
         if (raw.equals(cachedRaw)) {

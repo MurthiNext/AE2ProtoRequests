@@ -120,8 +120,7 @@ public abstract class AEBaseMenuSuperStackMixin {
         if (!(slot instanceof AppEngSlot aeSlot) || !aeSlot.isActive()) {
             return null;
         }
-        if (slot instanceof FakeSlot || slot instanceof CraftingMatrixSlot || slot instanceof DisabledSlot
-                || slot instanceof InaccessibleSlot) {
+        if (slot instanceof FakeSlot || slot instanceof CraftingMatrixSlot || slot instanceof InaccessibleSlot) {
             return null;
         }
         if (!(aeSlot.getInventory() instanceof ConfigMenuInventory wrapper)) {
@@ -368,7 +367,7 @@ public abstract class AEBaseMenuSuperStackMixin {
                 continue;
             }
             var inv = ae2pr$managedInv(dest);
-            if (managedOnly != (inv != null)) {
+            if (managedOnly == (inv == null)) {
                 continue;
             }
             if (inv != null) {

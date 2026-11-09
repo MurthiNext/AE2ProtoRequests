@@ -56,7 +56,7 @@ public final class TerminalStoryProgressCache {
         unlocksSynced = conditions.isEmpty();
         satisfiedUnlocks.clear();
         if (Minecraft.getInstance().getConnection() != null) {
-            ModNetwork.sendToServer(new TerminalStoryRequestPacket());
+            ModNetwork.sendToServer(TerminalStoryRequestPacket.INSTANCE);
             ModNetwork.sendToServer(new TerminalStoryWatchPacket(List.copyOf(conditions)));
         }
     }
