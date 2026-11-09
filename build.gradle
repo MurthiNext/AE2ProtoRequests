@@ -12,6 +12,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id 'com.diffplug.eclipse.apt' version '4.4.1'
 }
 
 apply plugin: 'org.spongepowered.mixin'
@@ -94,7 +95,6 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     mavenCentral()
-    // AE2
     maven {
         name = 'Modmaven'
         url = 'https://modmaven.dev/'
@@ -103,7 +103,6 @@ repositories {
             includeGroup 'mezz.jei'
         }
     }
-    // ME Requester
     maven {
         name = 'Modrinth'
         url = 'https://api.modrinth.com/maven'
@@ -111,7 +110,6 @@ repositories {
             includeGroup 'maven.modrinth'
         }
     }
-    // JEI
     maven {
         name = 'BlameJared'
         url = 'https://maven.blamejared.com'

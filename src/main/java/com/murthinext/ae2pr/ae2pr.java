@@ -41,10 +41,13 @@ public class ae2pr {
     public ae2pr(FMLJavaModLoadingContext context) {
         var modEventBus = context.getModEventBus();
         modEventBus.addListener(this::commonSetup);
-        // 机器模板的注册表需在 ModMachines 静态初始化前注入
+        // 机器模板的注册表需在 ModMachines.register 前注入
         MachineRegistries.install(ModBlocks.BLOCKS, ModItems.ITEMS, ModBlockEntities.BLOCK_ENTITIES,
                 ModMenus.MENUS, ModRecipes.RECIPE_TYPES, ModRecipes.SERIALIZERS);
         MachineTuning.install(ModConfig::lossySpeedPerCard, ModConfig::lossyEnergyMultiplierPerCard);
+        // 材质与机器的延迟注册项必须在注册事件触发前全部提交
+        ModMaterials.register();
+        ModMachines.register();
         ModBlocks.installStructureHooks();
         ModBlocks.BLOCKS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
