@@ -2,6 +2,6 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "ae2pr:item/material_sets/metallic/dust",
-    "layer1": "ae2pr:item/material_sets/metallic/dust_outline"
+    "layer1": "ae2pr:item/material_sets/metallic/dust_secondary"
   }
 }

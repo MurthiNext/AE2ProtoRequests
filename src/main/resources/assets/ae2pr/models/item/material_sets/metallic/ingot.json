@@ -2,6 +2,7 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "ae2pr:item/material_sets/metallic/ingot",
-    "layer1": "ae2pr:item/material_sets/metallic/ingot_outline"
+    "layer1": "ae2pr:item/material_sets/metallic/ingot_secondary",
+    "layer2": "ae2pr:item/material_sets/metallic/ingot_overlay"
   }
 }

@@ -2,7 +2,8 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "ae2pr:item/material_sets/metallic/ingot",
-    "layer1": "ae2pr:item/material_sets/metallic/ingot_outline",
-    "layer2": "ae2pr:item/material_sets/meteor/ingot_specks"
+    "layer1": "ae2pr:item/material_sets/metallic/ingot_secondary",
+    "layer2": "ae2pr:item/material_sets/metallic/ingot_overlay",
+    "layer3": "ae2pr:item/material_sets/meteor/ingot_specks"
   }
 }

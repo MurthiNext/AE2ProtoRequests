@@ -48,7 +48,7 @@ public final class Material {
     }
 
     /**
-     * layer 0：材料主色；layer 1：包边色；layer 2+：不染色（彩点等预烘焙图层）。
+     * layer 0：材料主色；layer 1：副色（包边与暗部）；layer 2+：不染色（高光、彩点等预烘焙图层）。
      */
     public int argb(int layer) {
         if (layer >= 2) {
@@ -57,14 +57,14 @@ public final class Material {
         return 0xFF000000 | (layer == 1 ? secondaryColor() : color);
     }
 
-    // 包边色
+    // 包边色：与 GTM 的 secondaryColor 同一量级，约为主色的一半并略微提亮
     private int secondaryColor() {
         int r = (color >> 16) & 0xFF;
         int g = (color >> 8) & 0xFF;
         int b = color & 0xFF;
-        int sr = Math.min(255, (int) (r * 0.22) + 12);
-        int sg = Math.min(255, (int) (g * 0.23) + 14);
-        int sb = Math.min(255, (int) (b * 0.28) + 18);
+        int sr = Math.min(255, (int) (r * 0.55) + 8);
+        int sg = Math.min(255, (int) (g * 0.55) + 9);
+        int sb = Math.min(255, (int) (b * 0.55) + 10);
         return (sr << 16) | (sg << 8) | sb;
     }
 
