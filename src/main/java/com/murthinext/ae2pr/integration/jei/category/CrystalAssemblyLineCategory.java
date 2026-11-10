@@ -15,12 +15,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 
-import com.murthinext.ae2pr.ModConfig;
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleDefinition;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
@@ -95,18 +93,6 @@ public class CrystalAssemblyLineCategory extends AbstractMachineCategory<Crystal
     }
 
     @Override
-    protected void configureItemInputSlot(IRecipeSlotBuilder slot, int index,
-            CrystalAssemblyLineRecipe recipe) {
-        slot.addRichTooltipCallback((view, tooltip) -> tooltip.add(orderTooltip(index, ModConfig.assemblyItemsOrdered())));
-    }
-
-    @Override
-    protected void configureFluidInputSlot(IRecipeSlotBuilder slot, int index,
-            CrystalAssemblyLineRecipe recipe) {
-        slot.addRichTooltipCallback((view, tooltip) -> tooltip.add(orderTooltip(index, ModConfig.assemblyFluidsOrdered())));
-    }
-
-    @Override
     protected void addExtraSlots(IRecipeLayoutBuilder builder, CrystalAssemblyLineRecipe recipe) {
         List<ModuleRequirement> requirements = recipe.getModuleRequirements();
         for (int index = 0; index < requirements.size() && index < MODULE_SLOT_COUNT; index++) {
@@ -173,12 +159,5 @@ public class CrystalAssemblyLineCategory extends AbstractMachineCategory<Crystal
     private static Component requirementHint(ModuleRequirement requirement) {
         return Component.translatable("jei.ae2pr.crystal_assembly_line.module_requirement.hint",
                 requirement.minLevel(), Component.translatable(requirement.type().translationKey()));
-    }
-
-    private static Component orderTooltip(int index, boolean ordered) {
-        if (!ordered) {
-            return Component.translatable("jei.ae2pr.crystal_assembly_line.slot.unordered");
-        }
-        return Component.translatable("jei.ae2pr.crystal_assembly_line.slot.index", index + 1);
     }
 }

@@ -18,7 +18,7 @@ public final class JeiRecipeInfo {
 
     public static Component energy(double energy) {
         return Component.translatable("jei.ae2pr.recipe.energy",
-                JeiAmountFormat.energy(EnergyAmount.toLong(energy)));
+                JeiAmountFormat.exact(EnergyAmount.toLong(energy)));
     }
 
     public static MutableComponent chance(float chance) {

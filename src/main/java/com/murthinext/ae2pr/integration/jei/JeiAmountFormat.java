@@ -1,16 +1,12 @@
 package com.murthinext.ae2pr.integration.jei;
 
-import java.text.NumberFormat;
+import java.util.Locale;
 
 public final class JeiAmountFormat {
 
-    private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
     private static final long KILO = 1_000L;
     private static final long MEGA = 1_000_000L;
     private static final long GIGA = 1_000_000_000L;
-    private static final long TERA = 1_000_000_000_000L;
-    private static final long PETA = 1_000_000_000_000_000L;
-    private static final long EXA = 1_000_000_000_000_000_000L;
 
     private JeiAmountFormat() {
     }
@@ -29,28 +25,6 @@ public final class JeiAmountFormat {
         return Integer.toString(count);
     }
 
-    public static String energy(long amount) {
-        if (amount >= EXA) {
-            return oneDecimal(amount, EXA) + "E";
-        }
-        if (amount >= PETA) {
-            return oneDecimal(amount, PETA) + "P";
-        }
-        if (amount >= TERA) {
-            return oneDecimal(amount, TERA) + "T";
-        }
-        if (amount >= GIGA) {
-            return oneDecimal(amount, GIGA) + "G";
-        }
-        if (amount >= MEGA) {
-            return oneDecimal(amount, MEGA) + "M";
-        }
-        if (amount >= KILO) {
-            return oneDecimal(amount, KILO) + "K";
-        }
-        return Long.toString(amount);
-    }
-
     public static String fluid(int milliBuckets) {
         if (milliBuckets >= GIGA) {
             return twoDecimals(milliBuckets, GIGA) + "MB";
@@ -65,7 +39,11 @@ public final class JeiAmountFormat {
     }
 
     public static String exact(int value) {
-        return NUMBER.format(value);
+        return exact((long) value);
+    }
+
+    public static String exact(long value) {
+        return String.format(Locale.ROOT, "%,d", value);
     }
 
     private static String oneDecimal(long value, long step) {

@@ -308,8 +308,6 @@
   "jei.ae2pr.complex_world_interaction.source_only": "Requires a fluid source block",
   "jei.ae2pr.complex_world_interaction.uses": "Up to %s interactions per source block",
   "jei.ae2pr.crystal_assembly_line.module_requirement.hint": "§7Requires %1$s Lv.%2$s",
-  "jei.ae2pr.crystal_assembly_line.slot.index": "§7Input order: #%s",
-  "jei.ae2pr.crystal_assembly_line.slot.unordered": "§7Unordered input",
   "jei.ae2pr.high_reactivity_lava_smelter.durability_cost": "Durability consumed: %s",
   "config.jade.plugin_ae2pr.crystal_assembly_line": "Crystal Assembly Line",
   "config.jade.plugin_ae2pr.crystal_reaction_chamber": "Crystal Reaction Chamber",
