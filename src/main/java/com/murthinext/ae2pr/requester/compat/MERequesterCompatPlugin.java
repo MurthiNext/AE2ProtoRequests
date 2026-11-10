@@ -13,12 +13,15 @@ import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.LoadingModList;
 
 /**
  * 仅当安装了 ME Requester 时才应用本配置下的兼容 mixin，
  * 避免在未安装时加载引用了其类的 mixin 而导致 NoClassDefFoundError。
  */
 public class MERequesterCompatPlugin implements IMixinConfigPlugin {
+
+    private static final String TARGET_MOD_ID = "merequester";
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -32,7 +35,12 @@ public class MERequesterCompatPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         var modList = ModList.get();
-        return modList != null && modList.isLoaded("merequester");
+        if (modList != null) {
+            return modList.isLoaded(TARGET_MOD_ID);
+        }
+        // mixin 的筛选早于 ModList 构建，此时只能查加载阶段的模组文件列表
+        var loadingModList = LoadingModList.get();
+        return loadingModList != null && loadingModList.getModFileById(TARGET_MOD_ID) != null;
     }
 
     @Override

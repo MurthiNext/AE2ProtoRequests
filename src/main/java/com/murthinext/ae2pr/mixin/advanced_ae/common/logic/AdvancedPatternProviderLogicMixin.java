@@ -58,14 +58,14 @@ public abstract class AdvancedPatternProviderLogicMixin implements SuperStackSup
     private void ae2pr$loadUpgrades(CompoundTag tag, CallbackInfo ci) {
         // 先解析生效库存，确保本模组的兜底库存已按追加规则就位
         SuperStackSupport.providerUpgrades(this);
-        if (this.ae2pr$upgrades.size() > 0) {
+        if (!this.ae2pr$upgrades.isEmpty()) {
             this.ae2pr$upgrades.readFromNBT(tag, SuperStackSupport.NBT_PROVIDER_UPGRADES);
         }
     }
 
     @Inject(method = "writeToNBT", at = @At("TAIL"), remap = false)
     private void ae2pr$saveUpgrades(CompoundTag tag, CallbackInfo ci) {
-        if (this.ae2pr$upgrades.size() > 0) {
+        if (!this.ae2pr$upgrades.isEmpty()) {
             this.ae2pr$upgrades.writeToNBT(tag, SuperStackSupport.NBT_PROVIDER_UPGRADES);
         }
     }

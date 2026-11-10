@@ -3,8 +3,9 @@
  * ME Requester（LGPL-3.0）兼容层，纳入本仓库 LGPL-3.0 声明范围。
  * See licenses/me-requester in this repository.
  */
-package com.murthinext.ae2pr.requester.compat;
+package com.murthinext.ae2pr.requester.compat.mixin;
 
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.almostreliable.merequester.requester.abstraction.AbstractRequesterMenu;
 import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
+import com.murthinext.ae2pr.requester.compat.IOurRequesterTerminalHost;
 
 import appeng.api.behaviors.ContainerItemStrategies;
 import appeng.api.stacks.GenericStack;
@@ -66,6 +68,7 @@ public class AbstractRequesterMenuMixin {
         ci.cancel();
     }
 
+    @Nullable
     @Unique
     private static RedstoneRequesterBlockEntity ae2pr$our(Object self, long id) {
         if (self instanceof IOurRequesterTerminalHost host) {
