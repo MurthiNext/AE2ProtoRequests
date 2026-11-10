@@ -56,15 +56,44 @@ public abstract class AEBaseMenuSuperStackMixin {
             return;
         }
         if (clickType == ClickType.QUICK_MOVE) {
-            // 返回槽对自动化禁止抽出，这里直接走库存搬运，绕开原版 mayPickup
+            // 返回槽对自动化禁止抽出
             if (!menu.isClientSide()) {
                 menu.quickMoveStack(player, slotId);
             }
             ci.cancel();
             return;
         }
+        if (clickType == ClickType.CLONE) {
+            // 创造模式中键复制
+            if (!menu.isClientSide()) {
+                ae2pr$clone(menu, slot, inv, player);
+            }
+            ci.cancel();
+            return;
+        }
+        if (clickType == ClickType.SWAP) {
+            if (!menu.isClientSide()) {
+                ae2pr$swapWithHotbar(menu, slot, inv, button, player);
+            }
+            ci.cancel();
+            return;
+        }
+        if (clickType == ClickType.THROW) {
+            if (!menu.isClientSide()) {
+                ae2pr$throwStack(menu, slot, inv, button, player);
+            }
+            ci.cancel();
+            return;
+        }
+        if (clickType == ClickType.PICKUP_ALL) {
+            // 双击合并：与左键同语义，只搬一个常规堆叠
+            if (!menu.isClientSide()) {
+                ae2pr$pickup(menu, slot, inv, false);
+            }
+            ci.cancel();
+            return;
+        }
         if (clickType != ClickType.PICKUP || (button != 0 && button != 1)) {
-            // 拖拽、数字键、双击等操作尚未适配，统一拒绝
             ci.cancel();
             return;
         }
@@ -101,6 +130,85 @@ public abstract class AEBaseMenuSuperStackMixin {
         if (!stack.isEmpty()) {
             ae2pr$playerToMenu(menu, source, stack, cir);
         }
+    }
+
+    /**
+     * 玩家背包 -> 菜单。非存储槽永远先于返回/存储槽。
+     */
+    @Unique
+    private void ae2pr$playerToMenu(AEBaseMenu menu, Slot source, ItemStack stack,
+            CallbackInfoReturnable<ItemStack> cir) {
+        var key = AEItemKey.of(stack);
+        if (key == null || GenericStack.isWrapped(stack)) {
+            return;
+        }
+        // 只接管真正带超级堆叠槽的菜单
+        if (!ae2pr$hasSuperStackStorage(menu)) {
+            return;
+        }
+        boolean pattern = PatternDetailsHelper.isEncodedPattern(stack);
+        boolean storageLike = !(Upgrades.isUpgradeCardItem(stack) || pattern);
+        // 没有任何返回/存储槽可写时，普通物品交回原版完整流程
+        if (storageLike && !ae2pr$hasManagedTarget(menu, key)) {
+            return;
+        }
+        int remaining = stack.getCount();
+        // 第一遍：升级卡槽、样板槽等非存储槽
+        remaining = ae2pr$mergeIntoMenu(menu, stack, key, remaining, false);
+        remaining = ae2pr$fillMenuEmpty(menu, stack, key, remaining, false);
+        // 第二遍：返回/存储槽兜底；样板例外
+        if (!pattern) {
+            remaining = ae2pr$mergeIntoMenu(menu, stack, key, remaining, true);
+            remaining = ae2pr$fillMenuEmpty(menu, stack, key, remaining, true);
+        }
+        if (remaining >= stack.getCount()) {
+            // 普通物品、或还有别的槽能用原版语义接收（如 FakeSlot 样板槽）时交回原版
+            if (storageLike || ae2pr$hasNonStorageDestination(menu, stack)) {
+                return;
+            }
+            // 升级卡/样板无处可放时留在玩家背包里
+            cir.setReturnValue(ItemStack.EMPTY);
+            return;
+        }
+        var rest = stack.copy();
+        rest.setCount(remaining);
+        source.set(remaining > 0 ? rest : ItemStack.EMPTY);
+        source.setChanged();
+        menu.broadcastChanges();
+        cir.setReturnValue(ItemStack.EMPTY);
+    }
+
+    /**
+     * 其它槽能否用原版语义接收该物品（样板槽、FakeSlot 等）。
+     */
+    @Unique
+    private boolean ae2pr$hasNonStorageDestination(AEBaseMenu menu, ItemStack stack) {
+        for (Slot dest : menu.slots) {
+            if (isPlayerSideSlot(dest) || ae2pr$isStorageSlot(dest)) {
+                continue;
+            }
+            if (dest.mayPlace(stack)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Unique
+    private boolean ae2pr$hasSuperStackStorage(AEBaseMenu menu) {
+        for (Slot slot : menu.slots) {
+            if (ae2pr$isStorageSlot(slot)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Unique
+    private boolean ae2pr$isStorageSlot(Slot slot) {
+        return slot instanceof AppEngSlot aeSlot
+                && aeSlot.getInventory() instanceof ConfigMenuInventory wrapper
+                && wrapper.getDelegate().getMode() == GenericStackInv.Mode.STORAGE;
     }
 
     @Inject(method = "canDragTo", at = @At("HEAD"), cancellable = true, remap = true)
@@ -162,9 +270,80 @@ public abstract class AEBaseMenuSuperStackMixin {
     }
 
     /**
-     * 手上物品放进返回槽，或从返回槽取出一个普通堆叠。取出直接改写槽位，
-     * 供应器返回库存禁止自动化抽出，人工取出需直接保留剩余存量。
+     * 创造模式中键复制：复制一个常规堆叠到光标。
      */
+    @Unique
+    private void ae2pr$clone(AEBaseMenu menu, Slot slot, GenericStackInv inv, Player player) {
+        if (!player.getAbilities().instabuild || !menu.getCarried().isEmpty()) {
+            return;
+        }
+        var stack = inv.getStack(((AppEngSlot) slot).getContainerSlot());
+        if (stack == null || !(stack.what() instanceof AEItemKey key)) {
+            return;
+        }
+        menu.setCarried(key.toStack(key.getMaxStackSize()));
+    }
+
+    /**
+     * 数字键交换：把快捷栏物品换进槽位。放不下或存量超过一组时整体不交换。
+     */
+    @Unique
+    private void ae2pr$swapWithHotbar(AEBaseMenu menu, Slot slot, GenericStackInv inv, int hotbarSlot,
+            Player player) {
+        if (hotbarSlot < 0 || hotbarSlot >= 9) {
+            return;
+        }
+        int invSlot = ((AppEngSlot) slot).getContainerSlot();
+        var existing = inv.getStack(invSlot);
+        var hotbar = player.getInventory().getItem(hotbarSlot);
+        if (existing == null && hotbar.isEmpty()) {
+            return;
+        }
+        // 槽内超量存量无法完整放进快捷栏，拒绝交换
+        if (existing != null && !(existing.what() instanceof AEItemKey existingKey
+                && existing.amount() <= existingKey.getMaxStackSize())) {
+            return;
+        }
+        if (!hotbar.isEmpty()) {
+            var key = AEItemKey.of(hotbar);
+            if (key == null || !ae2pr$accepts(slot, hotbar)) {
+                return;
+            }
+            // 放不下就整体不交换，避免物品被吞
+            if (inv.insert(invSlot, key, hotbar.getCount(), Actionable.SIMULATE) < hotbar.getCount()) {
+                return;
+            }
+            inv.setStack(invSlot, null);
+            hotbar.shrink((int) inv.insert(invSlot, key, hotbar.getCount(), Actionable.MODULATE));
+        } else {
+            inv.setStack(invSlot, null);
+        }
+        var intoHotbar = existing != null ? ((AEItemKey) existing.what()).toStack((int) existing.amount()) : hotbar;
+        player.getInventory().setItem(hotbarSlot, intoHotbar);
+        menu.broadcastChanges();
+    }
+
+    /**
+     * 丢弃键：只丢出一个常规堆叠，超量存量留在槽内。
+     */
+    @Unique
+    private void ae2pr$throwStack(AEBaseMenu menu, Slot slot, GenericStackInv inv, int button, Player player) {
+        int invSlot = ((AppEngSlot) slot).getContainerSlot();
+        var stack = inv.getStack(invSlot);
+        if (stack == null || !(stack.what() instanceof AEItemKey key)) {
+            return;
+        }
+        int limit = key.getMaxStackSize();
+        long drop = button == 0 ? Math.min(1, stack.amount()) : Math.min(limit, stack.amount());
+        if (drop <= 0) {
+            return;
+        }
+        long remaining = stack.amount() - drop;
+        inv.setStack(invSlot, remaining > 0 ? new GenericStack(key, remaining) : null);
+        player.drop(key.toStack((int) drop), true);
+        menu.broadcastChanges();
+    }
+
     @Unique
     private void ae2pr$pickup(AEBaseMenu menu, Slot slot, GenericStackInv inv, boolean single) {
         int invSlot = ((AppEngSlot) slot).getContainerSlot();
@@ -281,46 +460,9 @@ public abstract class AEBaseMenuSuperStackMixin {
         return moved;
     }
 
-    /**
-     * 玩家背包 -> 本菜单：接管槽直接写真实库存，其余目的槽保留原版判定。
-     * 普通槽（升级卡槽、样板槽等）始终排在返回槽之前，升级卡绝不进返回槽。
-     */
-    @Unique
-    private void ae2pr$playerToMenu(AEBaseMenu menu, Slot source, ItemStack stack,
-            CallbackInfoReturnable<ItemStack> cir) {
-        var key = AEItemKey.of(stack);
-        if (key == null || GenericStack.isWrapped(stack) || !ae2pr$hasManagedTarget(menu, key)) {
-            return;
-        }
-        boolean allowManaged = !(Upgrades.isUpgradeCardItem(stack)
-                || PatternDetailsHelper.isEncodedPattern(stack));
-        int remaining = stack.getCount();
-        remaining = ae2pr$mergeIntoMenu(menu, stack, key, remaining, allowManaged);
-        // 空槽分两遍：普通槽（升级卡槽、样板槽等）在前，返回槽在后
-        remaining = ae2pr$fillMenuEmpty(menu, stack, key, remaining, false);
-        if (allowManaged) {
-            remaining = ae2pr$fillMenuEmpty(menu, stack, key, remaining, true);
-        }
-        if (remaining >= stack.getCount()) {
-            if (allowManaged) {
-                // 普通物品没有内容被接管，交回原版完整流程
-                return;
-            }
-            // 升级卡/样板留在玩家背包里，绝不能被返回槽吞掉
-            cir.setReturnValue(ItemStack.EMPTY);
-            return;
-        }
-        var rest = stack.copy();
-        rest.setCount(remaining);
-        source.set(remaining > 0 ? rest : ItemStack.EMPTY);
-        source.setChanged();
-        menu.broadcastChanges();
-        cir.setReturnValue(ItemStack.EMPTY);
-    }
-
     @Unique
     private int ae2pr$mergeIntoMenu(AEBaseMenu menu, ItemStack stack, AEItemKey key, int remaining,
-            boolean allowManaged) {
+            boolean allowStorage) {
         for (Slot dest : menu.slots) {
             if (remaining <= 0) {
                 break;
@@ -328,10 +470,13 @@ public abstract class AEBaseMenuSuperStackMixin {
             if (!ae2pr$isMenuDestination(dest)) {
                 continue;
             }
+            if (!allowStorage && ae2pr$isStorageSlot(dest)) {
+                continue;
+            }
             var inv = ae2pr$managedInv(dest);
             if (inv != null) {
                 int invSlot = ((AppEngSlot) dest).getContainerSlot();
-                if (!allowManaged || !key.equals(inv.getKey(invSlot))) {
+                if (!key.equals(inv.getKey(invSlot))) {
                     continue;
                 }
                 // 直接写真实库存，绕过包装层按物品上限做的放置判定
@@ -358,7 +503,7 @@ public abstract class AEBaseMenuSuperStackMixin {
 
     @Unique
     private int ae2pr$fillMenuEmpty(AEBaseMenu menu, ItemStack stack, AEItemKey key, int remaining,
-            boolean managedOnly) {
+            boolean storagePass) {
         for (Slot dest : menu.slots) {
             if (remaining <= 0) {
                 break;
@@ -366,10 +511,10 @@ public abstract class AEBaseMenuSuperStackMixin {
             if (!ae2pr$isMenuDestination(dest) || !dest.getItem().isEmpty()) {
                 continue;
             }
-            var inv = ae2pr$managedInv(dest);
-            if (managedOnly == (inv == null)) {
+            if (ae2pr$isStorageSlot(dest) != storagePass) {
                 continue;
             }
+            var inv = ae2pr$managedInv(dest);
             if (inv != null) {
                 if (!ae2pr$accepts(dest, stack)) {
                     continue;
