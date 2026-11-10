@@ -103,21 +103,21 @@ final class TerminalOpeningPixelRenderer {
         firstRow = Math.max(0, Mth.floor(centerY - halfHeight - reach - originY));
         lastRow = Math.min(rows.length - 1, Mth.ceil(centerY + halfHeight + reach - originY));
         for (int row = firstRow; row <= lastRow; row++) {
-            float py = originY + row + 0.5F + ((row / CELL * CELL + CELL / 2.0F) - row - 0.5F) * pixelate;
+            float py = originY + row + 0.5F + (((float) row / CELL * CELL + CELL / 2.0F) - row - 0.5F) * pixelate;
             float dy = Math.abs(py - centerY) - halfHeight;
             float middle = centerX - (py - centerY) * TerminalGraphicsRenderer.EDGE_SLOPE - originX;
             int left = Math.max(0, Mth.floor(middle - halfSpan - reach));
             int right = Math.min(width + MARGIN * 2, Mth.ceil(middle + halfSpan + reach));
             int coreLeft = Math.max(left, Mth.ceil(middle - halfSpan + reach));
             int coreRight = Math.min(right, Mth.floor(middle + halfSpan - reach));
-            float ripple = Mth.sin(seconds * 7 + row / CELL * 0.31F) * 0.12F;
+            float ripple = Mth.sin(seconds * 7 + (float) row / CELL * 0.31F) * 0.12F;
             for (int column = left; column < right; column++) {
                 if (dy < -reach && column >= coreLeft && column < coreRight) {
                     rows[row].set(column, coreRight);
                     column = coreRight - 1;
                     continue;
                 }
-                float px = column + 0.5F + ((column / CELL * CELL + CELL / 2.0F) - column - 0.5F) * pixelate;
+                float px = column + 0.5F + (((float) column / CELL * CELL + CELL / 2.0F) - column - 0.5F) * pixelate;
                 float distance = Math.max(Math.abs(px - middle) - halfSpan, dy);
                 float displacement = (noise[row / CELL][column / CELL] + ripple) * roughness;
                 if (distance <= displacement) {

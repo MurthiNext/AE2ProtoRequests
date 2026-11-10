@@ -19,9 +19,7 @@ public class MultiThresholdLevelEmitterMenu extends AbstractMultiLevelEmitterMen
                 GenericStack.writeBuffer(host.getConfig().getStack(0), buffer);
                 buffer.writeVarLong(host.getReportingValue());
                 buffer.writeVarLong(host.getLowerThreshold());
-            }, (host, menu, buffer) -> {
-                menu.loadValues(GenericStack.readBuffer(buffer), buffer.readVarLong(), buffer.readVarLong());
-            })
+            }, (host, menu, buffer) -> menu.loadValues(GenericStack.readBuffer(buffer), buffer.readVarLong(), buffer.readVarLong()))
             .build("multi_threshold_level_emitter");
 
     private long currentUpper;

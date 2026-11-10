@@ -56,7 +56,7 @@ final class TerminalTitleRenderer {
                         if ((glyph.rows()[row] & 1 << (glyph.width() - 1 - column)) == 0) {
                             continue;
                         }
-                        long delay = ((row * 3 + column * 5) % 7) * 7L;
+                        long delay = ((row * 3 + column * 5L) % 7) * 7L;
                         float reveal = TerminalGraphicsRenderer.ease((age - delay) / (float) PIXEL_DURATION);
                         if (opacity * reveal < 1.0F / 255) {
                             continue;

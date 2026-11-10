@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.registry.ModItems;
 
 import appeng.api.stacks.AEKeyType;
@@ -21,7 +22,6 @@ import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEParts;
 import appeng.helpers.InterfaceLogic;
 import appeng.helpers.externalstorage.GenericStackInv;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
@@ -143,7 +143,7 @@ public final class SuperStackSupport {
     }
 
     private static void registerModItem(ItemLike card, String modId, String path, String group) {
-        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(modId, path));
+        Item item = ForgeRegistries.ITEMS.getValue(Ids.of(path));
         if (item != null && item != Items.AIR) {
             registerSupported(card, item, group);
         }

@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.api.machine.client;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.world.item.ItemStack;

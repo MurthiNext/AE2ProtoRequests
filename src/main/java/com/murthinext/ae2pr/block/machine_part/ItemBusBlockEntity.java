@@ -39,38 +39,6 @@ public class ItemBusBlockEntity extends BlockEntity implements MachinePart {
 
     private final ItemStackHandler storage;
 
-    private final IItemHandler externalStorage = new IItemHandler() {
-        @Override
-        public int getSlots() {
-            return storage.getSlots();
-        }
-
-        @Override
-        public ItemStack getStackInSlot(int slot) {
-            return storage.getStackInSlot(slot);
-        }
-
-        @Override
-        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-            return stack;
-        }
-
-        @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return storage.extractItem(slot, amount, simulate);
-        }
-
-        @Override
-        public int getSlotLimit(int slot) {
-            return storage.getSlotLimit(slot);
-        }
-
-        @Override
-        public boolean isItemValid(int slot, ItemStack stack) {
-            return false;
-        }
-    };
-
     private final IItemHandler exposedStorage;
     private LazyOptional<IItemHandler> storageCapability;
 
@@ -129,6 +97,37 @@ public class ItemBusBlockEntity extends BlockEntity implements MachinePart {
                         setStackInSlot(slot, stack);
                     }
                 }
+            }
+        };
+        IItemHandler externalStorage = new IItemHandler() {
+            @Override
+            public int getSlots() {
+                return storage.getSlots();
+            }
+
+            @Override
+            public ItemStack getStackInSlot(int slot) {
+                return storage.getStackInSlot(slot);
+            }
+
+            @Override
+            public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+                return stack;
+            }
+
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                return storage.extractItem(slot, amount, simulate);
+            }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return storage.getSlotLimit(slot);
+            }
+
+            @Override
+            public boolean isItemValid(int slot, ItemStack stack) {
+                return false;
             }
         };
         this.exposedStorage = isOutputBus() ? externalStorage : storage;

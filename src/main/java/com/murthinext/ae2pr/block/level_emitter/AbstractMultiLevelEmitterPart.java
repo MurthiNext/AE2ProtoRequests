@@ -57,48 +57,47 @@ public abstract class AbstractMultiLevelEmitterPart extends AbstractLevelEmitter
     private IStackWatcher craftingWatcher;
     private long lastUpdateTick = -1;
 
-    private final IStorageWatcherNode stackWatcherNode = new IStorageWatcherNode() {
-        @Override
-        public void updateWatcher(IStackWatcher newWatcher) {
-            storageWatcher = newWatcher;
-            configureWatchers();
-        }
-
-        @Override
-        public void onStackChange(AEKey what, long amount) {
-            if (usesFilterCell()) {
-                // 过滤元件模式下统一节流重算
-                throttleUpdate();
-            } else if (what.equals(getConfiguredKey()) && !isUpgradedWith(AEItems.FUZZY_CARD)) {
-                applySingleKeyAmount(amount);
-                updateState();
-            } else {
-                throttleUpdate();
-            }
-        }
-    };
-
-    private final ICraftingWatcherNode craftingWatcherNode = new ICraftingWatcherNode() {
-        @Override
-        public void updateWatcher(IStackWatcher newWatcher) {
-            craftingWatcher = newWatcher;
-            configureWatchers();
-        }
-
-        @Override
-        public void onRequestChange(AEKey what) {
-            updateState();
-        }
-
-        @Override
-        public void onCraftableChange(AEKey what) {
-        }
-    };
-
     protected AbstractMultiLevelEmitterPart(IPartItem<?> partItem) {
         super(partItem);
 
+        // 过滤元件模式下统一节流重算
+        IStorageWatcherNode stackWatcherNode = new IStorageWatcherNode() {
+            @Override
+            public void updateWatcher(IStackWatcher newWatcher) {
+                storageWatcher = newWatcher;
+                configureWatchers();
+            }
+
+            @Override
+            public void onStackChange(AEKey what, long amount) {
+                if (usesFilterCell()) {
+                    // 过滤元件模式下统一节流重算
+                    throttleUpdate();
+                } else if (what.equals(getConfiguredKey()) && !isUpgradedWith(AEItems.FUZZY_CARD)) {
+                    applySingleKeyAmount(amount);
+                    updateState();
+                } else {
+                    throttleUpdate();
+                }
+            }
+        };
         getMainNode().addService(IStorageWatcherNode.class, stackWatcherNode);
+        ICraftingWatcherNode craftingWatcherNode = new ICraftingWatcherNode() {
+            @Override
+            public void updateWatcher(IStackWatcher newWatcher) {
+                craftingWatcher = newWatcher;
+                configureWatchers();
+            }
+
+            @Override
+            public void onRequestChange(AEKey what) {
+                updateState();
+            }
+
+            @Override
+            public void onCraftableChange(AEKey what) {
+            }
+        };
         getMainNode().addService(ICraftingWatcherNode.class, craftingWatcherNode);
         getMainNode().addService(ICraftingProvider.class, this);
 

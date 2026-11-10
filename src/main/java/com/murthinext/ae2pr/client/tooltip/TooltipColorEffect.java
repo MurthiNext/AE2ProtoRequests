@@ -7,14 +7,9 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 
 // 携带特殊取色规则的文本内容
-public final class TooltipColorEffect implements ComponentContents {
+public record TooltipColorEffect(String text, int[] colors, float speed, boolean flow) implements ComponentContents {
 
     public static final float DEFAULT_SPEED = 1.0F;
-
-    private final String text;
-    private final int[] colors;
-    private final float speed;
-    private final boolean flow;
 
     public TooltipColorEffect(String text, int[] colors, float speed, boolean flow) {
         this.text = text;
@@ -26,29 +21,13 @@ public final class TooltipColorEffect implements ComponentContents {
     // 颜色统一按 RGB 处理
     private static int[] normalize(int[] colors) {
         if (colors == null || colors.length == 0) {
-            return new int[] { 0xFFFFFF };
+            return new int[]{0xFFFFFF};
         }
         int[] normalized = new int[colors.length];
         for (int i = 0; i < colors.length; i++) {
             normalized[i] = colors[i] & 0xFFFFFF;
         }
         return normalized;
-    }
-
-    public String text() {
-        return text;
-    }
-
-    public int[] colors() {
-        return colors;
-    }
-
-    public float speed() {
-        return speed;
-    }
-
-    public boolean flow() {
-        return flow;
     }
 
     // 按顺序取色，索引自动循环

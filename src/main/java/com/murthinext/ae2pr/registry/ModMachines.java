@@ -146,7 +146,7 @@ public final class ModMachines {
         NAMING_FACTORY = SingleblockMachineDefinition.create("naming_factory", NamingFactoryBlockEntity.class,
                 ModMachines::namingFactoryProperties, NamingFactoryBlock::new,
                 NamingFactoryBlockEntity::new, () -> NamingFactoryMenu.TYPE,
-                (definition, id, inventory, machine) -> new NamingFactoryMenu(definition, id, inventory, machine),
+                NamingFactoryMenu::new,
                 4, NamingFactoryBlockEntity.SLOT_COUNT, ModConfig::namingFactoryMaxPower);
         CRYSTAL_REACTOR = MachineDefinition.custom("high_energy_core", "crystal_reactor_core",
                 CrystalReactorCoreBlockEntity.class, () -> new HighEnergyCoreBlock(metalProperties()),

@@ -17,9 +17,7 @@ public class MultiLevelEmitterMenu extends AbstractMultiLevelEmitterMenu<MultiLe
             .withInitialData((host, buffer) -> {
                 GenericStack.writeBuffer(host.getConfig().getStack(0), buffer);
                 buffer.writeVarLong(host.getReportingValue());
-            }, (host, menu, buffer) -> {
-                menu.loadValues(GenericStack.readBuffer(buffer), buffer.readVarLong());
-            })
+            }, (host, menu, buffer) -> menu.loadValues(GenericStack.readBuffer(buffer), buffer.readVarLong()))
             .build("multi_level_emitter");
 
     private long currentValue;

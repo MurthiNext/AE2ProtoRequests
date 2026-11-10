@@ -3,7 +3,7 @@ package com.murthinext.ae2pr.integration.jei.render;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
@@ -15,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
-import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 
 import com.murthinext.ae2pr.integration.jei.JeiAmountFormat;
@@ -40,17 +39,7 @@ public class ItemStackAmountRenderer implements IIngredientRenderer<ItemStack> {
     }
 
     @Override
-    public List<Component> getTooltip(ItemStack ingredient, TooltipFlag tooltipFlag) {
-        return tooltip(ingredient, null, tooltipFlag);
-    }
-
-    @Override
-    public void getTooltip(ITooltipBuilder tooltip, ItemStack ingredient, @Nullable Player player,
-            TooltipFlag tooltipFlag) {
-        tooltip.addAll(tooltip(ingredient, player, tooltipFlag));
-    }
-
-    static List<Component> tooltip(ItemStack ingredient, @Nullable Player player, TooltipFlag tooltipFlag) {
+    public List<Component> getTooltip(ItemStack ingredient, @Nullable Player player, TooltipFlag tooltipFlag) {
         List<Component> lines = ingredient.getTooltipLines(player, tooltipFlag);
         int count = ingredient.getCount();
         if (!JeiAmountFormat.abbreviated(count)) {
@@ -60,5 +49,11 @@ public class ItemStackAmountRenderer implements IIngredientRenderer<ItemStack> {
         exact.add(Component.literal("x" + JeiAmountFormat.exact(count)).withStyle(ChatFormatting.GRAY));
         return exact;
     }
-}
 
+    @Override
+    @Deprecated(since = "15.54.0", forRemoval = true)
+    @SuppressWarnings("removal")
+    public List<Component> getTooltip(ItemStack ingredient, TooltipFlag tooltipFlag) {
+        return getTooltip(ingredient, Minecraft.getInstance().player, tooltipFlag);
+    }
+}

@@ -1,0 +1,43 @@
+{
+  "type": "ae2pr:crystal_assembly_line",
+  "duration": 100,
+  "energy": 3250000,
+  "item_inputs": [
+    {
+      "item": "ae2pr:molecular_assembly_core",
+      "count": 1
+    },
+    {
+      "tag": "ae2pr:circuits/aev",
+      "count": 4
+    },
+    {
+      "item": "ae2:inscriber",
+      "count": 64
+    },
+    {
+      "item": "ae2:charger",
+      "count": 64
+    },
+    {
+      "tag": "ae2:interface",
+      "count": 16
+    },
+    {
+      "item": "ae2pr:fine_fluix_wire",
+      "count": 64
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:crystal_adhesive",
+      "amount": 720
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:multi_factory",
+      "count": 1
+    }
+  ]
+}

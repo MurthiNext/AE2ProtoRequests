@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.mixin.ae2.items.materials;
 
 import java.util.List;
 
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,7 +21,7 @@ public abstract class UpgradeCardItemMixin {
 
     @Inject(method = "appendHoverText", at = @At(value = "FIELD",
             target = "Lappeng/core/localization/ButtonToolTips;SupportedBy:Lappeng/core/localization/ButtonToolTips;",
-            remap = false), cancellable = true)
+            remap = false, opcode = Opcodes.GETSTATIC), cancellable = true)
     private void ae2pr$collapseSupportedBy(ItemStack stack, Level level, List<Component> lines,
             TooltipFlag tooltipFlag, CallbackInfo ci) {
         if (!Screen.hasShiftDown()) {

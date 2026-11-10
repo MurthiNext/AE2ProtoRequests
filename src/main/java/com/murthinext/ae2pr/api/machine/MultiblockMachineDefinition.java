@@ -54,7 +54,7 @@ public final class MultiblockMachineDefinition<E extends AbstractMultiblockContr
                     Supplier<? extends AbstractStructureFacade> structure, IntSupplier parallel,
                     Supplier<? extends RecipeType<?>> recipeType) {
         return build(id, MachineControllerBlockEntity.class,
-                (definition, pos, state) -> new MachineControllerBlockEntity(definition, pos, state),
+                MachineControllerBlockEntity::new,
                 properties, structure, parallel, recipeType, List.of());
     }
 

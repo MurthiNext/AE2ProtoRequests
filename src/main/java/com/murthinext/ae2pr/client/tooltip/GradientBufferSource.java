@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
-
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
 // 按字形顶点的行内横向位置重写颜色，得到子字符级平滑渐变
@@ -58,7 +58,7 @@ final class GradientBufferSource implements MultiBufferSource {
         return Math.round(channel * brightness);
     }
 
-    private final class VertexColorizer implements VertexConsumer {
+    private static final class VertexColorizer implements VertexConsumer {
 
         private final GradientBufferSource owner;
         private MultiBufferSource.BufferSource delegate;
@@ -70,6 +70,7 @@ final class GradientBufferSource implements MultiBufferSource {
         }
 
         @Override
+        @NotNull
         public VertexConsumer vertex(Matrix4f pose, float x, float y, float z) {
             this.localX = x;
             this.target.vertex(pose, x, y, z);

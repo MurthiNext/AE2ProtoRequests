@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -15,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
-import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 
 import com.murthinext.ae2pr.api.recipe.ChancedItemStack;
@@ -60,8 +59,9 @@ public class ChancedItemStackRenderer implements IIngredientRenderer<ItemStack> 
     }
 
     @Override
-    public List<Component> getTooltip(ItemStack ingredient, TooltipFlag tooltipFlag) {
-        List<Component> lines = new ArrayList<>(ItemStackAmountRenderer.tooltip(ingredient, null, tooltipFlag));
+    public List<Component> getTooltip(ItemStack ingredient, @Nullable Player player, TooltipFlag tooltipFlag) {
+        List<Component> lines = new ArrayList<>(
+                ItemStackAmountRenderer.INSTANCE.getTooltip(ingredient, player, tooltipFlag));
         if (chance < 1.0F) {
             lines.add(chanceTooltip(chance));
         }
@@ -69,12 +69,10 @@ public class ChancedItemStackRenderer implements IIngredientRenderer<ItemStack> 
     }
 
     @Override
-    public void getTooltip(ITooltipBuilder tooltip, ItemStack ingredient, @Nullable Player player,
-            TooltipFlag tooltipFlag) {
-        tooltip.addAll(ItemStackAmountRenderer.tooltip(ingredient, player, tooltipFlag));
-        if (chance < 1.0F) {
-            tooltip.add(chanceTooltip(chance));
-        }
+    @Deprecated(since = "15.54.0", forRemoval = true)
+    @SuppressWarnings("removal")
+    public List<Component> getTooltip(ItemStack ingredient, TooltipFlag tooltipFlag) {
+        return getTooltip(ingredient, Minecraft.getInstance().player, tooltipFlag);
     }
 
     public static Component chanceTooltip(float chance) {

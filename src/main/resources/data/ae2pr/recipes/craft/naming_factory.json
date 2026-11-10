@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "PCP",
-    "CHC",
+    "DHD",
     "PCP"
   ],
   "key": {
@@ -12,8 +12,11 @@
     "P": {
       "item": "ae2:inscriber"
     },
-    "H": {
+    "D": {
       "tag": "ae2pr:circuits/aev_d1"
+    },
+    "H": {
+      "item": "ae2pr:aev_machine_casing"
     }
   },
   "result": {

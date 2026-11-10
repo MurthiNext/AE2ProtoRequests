@@ -3,7 +3,7 @@ package com.murthinext.ae2pr.integration.jei.render;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -20,7 +20,6 @@ import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 
 import com.murthinext.ae2pr.integration.jei.JeiAmountFormat;
@@ -50,14 +49,25 @@ public class FluidStackAmountRenderer implements IIngredientRenderer<FluidStack>
     }
 
     @Override
-    public List<Component> getTooltip(FluidStack ingredient, TooltipFlag tooltipFlag) {
-        return tooltipLines(ingredient, tooltipFlag);
+    public List<Component> getTooltip(FluidStack ingredient, @Nullable Player player, TooltipFlag tooltipFlag) {
+        List<Component> lines = new ArrayList<>(3);
+        lines.add(displayName(ingredient));
+        if (tooltipFlag.isAdvanced()) {
+            ResourceLocation id = ForgeRegistries.FLUIDS.getKey(ingredient.getFluid());
+            if (id != null) {
+                lines.add(Component.literal(id.toString()).withStyle(ChatFormatting.DARK_GRAY));
+            }
+        }
+        lines.add(Component.translatable("jei.tooltip.liquid.amount", JeiAmountFormat.exact(ingredient.getAmount()))
+                .withStyle(ChatFormatting.GRAY));
+        return lines;
     }
 
     @Override
-    public void getTooltip(ITooltipBuilder tooltip, FluidStack ingredient, @Nullable Player player,
-            TooltipFlag tooltipFlag) {
-        tooltip.addAll(tooltipLines(ingredient, tooltipFlag));
+    @Deprecated(since = "15.54.0", forRemoval = true)
+    @SuppressWarnings("removal")
+    public List<Component> getTooltip(FluidStack ingredient, TooltipFlag tooltipFlag) {
+        return getTooltip(ingredient, Minecraft.getInstance().player, tooltipFlag);
     }
 
     private static void drawFluid(GuiGraphics graphics, FluidStack fluid, int posX, int posY) {
@@ -69,20 +79,6 @@ public class FluidStackAmountRenderer implements IIngredientRenderer<FluidStack>
                 (color & 0xFF) / 255.0F, ((color >>> 24) & 0xFF) / 255.0F);
         graphics.blit(posX, posY, 0, 16, 16, sprite);
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-    }
-
-    private static List<Component> tooltipLines(FluidStack fluid, TooltipFlag tooltipFlag) {
-        List<Component> lines = new ArrayList<>(3);
-        lines.add(displayName(fluid));
-        if (tooltipFlag.isAdvanced()) {
-            ResourceLocation id = ForgeRegistries.FLUIDS.getKey(fluid.getFluid());
-            if (id != null) {
-                lines.add(Component.literal(id.toString()).withStyle(ChatFormatting.DARK_GRAY));
-            }
-        }
-        lines.add(Component.translatable("jei.tooltip.liquid.amount", JeiAmountFormat.exact(fluid.getAmount()))
-                .withStyle(ChatFormatting.GRAY));
-        return lines;
     }
 
     private static Component displayName(FluidStack fluid) {

@@ -492,19 +492,7 @@ public final class TerminalScreen extends Screen {
 
     private void renderTree(GuiGraphics graphics, int mouseX, int mouseY, float partialTick, long elapsed) {
         double guiScale = minecraft.getWindow().getGuiScale();
-        List<TerminalParallelogramClip.Band> clipBands = treeClipBands;
-        if (elapsed < TerminalAnimation.OPEN_DURATION) {
-            clipBands = new ArrayList<>();
-            for (TerminalOpeningPixelRenderer.Band band : openingPixels.bands()) {
-                int left = (int) Math.ceil((canvasLeft + band.left() * canvasScale) * guiScale - 0.5);
-                int top = (int) Math.ceil((canvasTop + band.top() * canvasScale) * guiScale - 0.5);
-                int right = (int) Math.ceil((canvasLeft + band.right() * canvasScale) * guiScale - 0.5);
-                int bottom = (int) Math.ceil((canvasTop + band.bottom() * canvasScale) * guiScale - 0.5);
-                if (right > left && bottom > top) {
-                    clipBands.add(new TerminalParallelogramClip.Band(left, top, right, bottom));
-                }
-            }
-        }
+        List<TerminalParallelogramClip.Band> clipBands = getClipBands(elapsed, guiScale);
         boolean wasScissored = GL11.glIsEnabled(GL11.GL_SCISSOR_TEST);
         int[] previousScissor = new int[4];
         GL11.glGetIntegerv(GL11.GL_SCISSOR_BOX, previousScissor);
@@ -527,6 +515,23 @@ public final class TerminalScreen extends Screen {
                 RenderSystem.disableScissor();
             }
         }
+    }
+
+    private List<TerminalParallelogramClip.Band> getClipBands(long elapsed, double guiScale) {
+        List<TerminalParallelogramClip.Band> clipBands = treeClipBands;
+        if (elapsed < TerminalAnimation.OPEN_DURATION) {
+            clipBands = new ArrayList<>();
+            for (TerminalOpeningPixelRenderer.Band band : openingPixels.bands()) {
+                int left = (int) Math.ceil((canvasLeft + band.left() * canvasScale) * guiScale - 0.5);
+                int top = (int) Math.ceil((canvasTop + band.top() * canvasScale) * guiScale - 0.5);
+                int right = (int) Math.ceil((canvasLeft + band.right() * canvasScale) * guiScale - 0.5);
+                int bottom = (int) Math.ceil((canvasTop + band.bottom() * canvasScale) * guiScale - 0.5);
+                if (right > left && bottom > top) {
+                    clipBands.add(new TerminalParallelogramClip.Band(left, top, right, bottom));
+                }
+            }
+        }
+        return clipBands;
     }
 
     private void renderTreeBand(GuiGraphics graphics, int mouseX, int mouseY, float partialTick,

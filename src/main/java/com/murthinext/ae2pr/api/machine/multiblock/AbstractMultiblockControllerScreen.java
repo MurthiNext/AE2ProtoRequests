@@ -3,7 +3,7 @@ package com.murthinext.ae2pr.api.machine.multiblock;
 import java.text.NumberFormat;
 import java.util.List;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;

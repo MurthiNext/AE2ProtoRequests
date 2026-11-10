@@ -11,16 +11,10 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 
-public final class ColorEffectLine implements TooltipComponent {
-
-    private final List<Segment> segments;
+public record ColorEffectLine(List<Segment> segments) implements TooltipComponent {
 
     public ColorEffectLine(List<Segment> segments) {
         this.segments = List.copyOf(segments);
-    }
-
-    public List<Segment> segments() {
-        return segments;
     }
 
     // 行内片段

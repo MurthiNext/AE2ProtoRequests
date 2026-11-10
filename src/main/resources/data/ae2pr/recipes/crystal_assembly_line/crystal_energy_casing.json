@@ -1,18 +1,18 @@
 {
   "type": "ae2pr:crystal_assembly_line",
   "duration": 100,
-  "energy": 1000000,
+  "energy": 320000,
   "item_inputs": [
     {
-      "item": "ae2pr:high_energy_core",
+      "item": "ae2pr:aev_machine_casing",
       "count": 1
     },
     {
       "tag": "forge:plates/zirconium",
-      "count": 8
+      "count": 4
     },
     {
-      "tag": "ae2pr:circuits/aev_d2",
+      "tag": "forge:plates/amethyst_steel",
       "count": 2
     }
   ],
@@ -20,6 +20,10 @@
     {
       "fluid": "ae2pr:liquid_certus_quartz",
       "amount": 1440
+    },
+    {
+      "fluid": "ae2pr:liquid_fluix_crystal",
+      "amount": 5760
     }
   ],
   "item_outputs": [
