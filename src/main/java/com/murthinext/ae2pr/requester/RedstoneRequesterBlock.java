@@ -1,9 +1,3 @@
-/*
- * SPDX-License-Identifier: LGPL-3.0-only
- * Derived from ME Requester (https://github.com/AlmostReliable/merequester),
- * Copyright (c) AlmostReliable, licensed under LGPL-3.0.
- * See licenses/me-requester in this repository.
- */
 package com.murthinext.ae2pr.requester;
 
 import java.util.List;
@@ -29,11 +23,6 @@ import appeng.menu.MenuOpener;
 import appeng.menu.locator.MenuLocators;
 import appeng.util.InteractionUtil;
 
-/**
- * ME 红石请求器方块。
- * <p>
- * 结构参考 ME Requester（https://github.com/AlmostReliable/merequester，LGPL-3.0）的 {@code RequesterBlock}。
- */
 public class RedstoneRequesterBlock extends AEBaseEntityBlock<RedstoneRequesterBlockEntity> {
 
     public RedstoneRequesterBlock() {

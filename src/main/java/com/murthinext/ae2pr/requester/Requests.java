@@ -1,9 +1,3 @@
-/*
- * SPDX-License-Identifier: LGPL-3.0-only
- * Derived from ME Requester (https://github.com/AlmostReliable/merequester),
- * Copyright (c) AlmostReliable, licensed under LGPL-3.0.
- * See licenses/me-requester in this repository.
- */
 package com.murthinext.ae2pr.requester;
 
 import appeng.api.behaviors.GenericInternalInventory;
@@ -40,15 +34,13 @@ import static com.murthinext.ae2pr.requester.RequesterUtils.f;
 @SuppressWarnings("UnstableApiUsage")
 public class Requests implements MEStorage, GenericInternalInventory, InternalInventory, TagSerializable<CompoundTag> {
 
-    // if null, the inventory is client-side and doesn't need saving
+    // 无宿主的副本仅用于菜单同步，不需要保存。
     @Nullable private final RequestHost host;
     private final Request[] requests;
-    private final int size;
 
     public Requests(@Nullable RequestHost host) {
         this.host = host;
-        this.size = RequesterPlatform.getRequestLimit();
-        requests = new Request[size];
+        requests = new Request[RequesterPlatform.getRequestLimit()];
         for (var i = 0; i < requests.length; i++) {
             requests[i] = new Request(i);
         }
@@ -62,9 +54,13 @@ public class Requests implements MEStorage, GenericInternalInventory, InternalIn
         return requests[index];
     }
 
+    public boolean isValidIndex(int index) {
+        return index >= 0 && index < requests.length;
+    }
+
     @Override
     public int size() {
-        return size;
+        return requests.length;
     }
 
     @Nullable
@@ -267,7 +263,7 @@ public class Requests implements MEStorage, GenericInternalInventory, InternalIn
         public void updateState(boolean state) {
             if (this.state != state) {
                 this.state = state;
-                if (host != null) host.saveChanges();
+                onChange();
             }
         }
 
@@ -278,7 +274,7 @@ public class Requests implements MEStorage, GenericInternalInventory, InternalIn
             }
             if (this.amount != amount) {
                 this.amount = amount;
-                if (host != null) host.saveChanges();
+                onChange();
             }
         }
 

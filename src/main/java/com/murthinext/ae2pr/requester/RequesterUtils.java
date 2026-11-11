@@ -1,9 +1,3 @@
-/*
- * SPDX-License-Identifier: LGPL-3.0-only
- * Derived from ME Requester (https://github.com/AlmostReliable/merequester),
- * Copyright (c) AlmostReliable, licensed under LGPL-3.0.
- * See licenses/me-requester in this repository.
- */
 package com.murthinext.ae2pr.requester;
 
 import java.util.List;
@@ -17,11 +11,6 @@ import com.mojang.blaze3d.platform.InputConstants;
 
 import com.murthinext.ae2pr.ae2pr;
 
-/**
- * 红石请求器相关工具方法。
- * <p>
- * 移植自 ME Requester（https://github.com/AlmostReliable/merequester，LGPL-3.0）的 {@code Utils}。
- */
 public final class RequesterUtils {
 
     private static final Pattern PLACEHOLDER = Pattern.compile("\\{}");

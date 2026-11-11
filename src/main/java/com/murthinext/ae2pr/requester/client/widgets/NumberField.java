@@ -1,13 +1,3 @@
-/*
- * SPDX-License-Identifier: LGPL-3.0-only
- * Derived from ME Requester (https://github.com/AlmostReliable/merequester),
- * Copyright (c) AlmostReliable, licensed under LGPL-3.0.
- * See licenses/me-requester in this repository.
- *
- * 输入框骨架改编自 AE2 的 appeng.client.gui.widgets.AETextField（LGPL-3.0）：
- * AE2 1.20.1 自带的输入框底图是旧版灰调，这里改为按 1.21.1 风格自绘
- * （亮描边 + 蓝灰底 + 上沿暗线），以便与新版请求器界面统一。
- */
 package com.murthinext.ae2pr.requester.client.widgets;
 
 import appeng.api.stacks.AEFluidKey;

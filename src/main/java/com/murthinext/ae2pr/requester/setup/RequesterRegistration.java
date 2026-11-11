@@ -17,24 +17,25 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.requester.RedstoneRequesterBlock;
 import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
 import com.murthinext.ae2pr.requester.RedstoneRequesterMenu;
+import com.murthinext.ae2pr.requester.RequesterConstants;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class RequesterRegistration {
 
     public static final RegistryObject<RedstoneRequesterBlock> REDSTONE_REQUESTER_BLOCK = ModBlocks.BLOCKS.register(
-            "redstone_requester", RedstoneRequesterBlock::new);
+            RequesterConstants.REQUESTER_ID, RedstoneRequesterBlock::new);
 
     public static final RegistryObject<BlockItem> REDSTONE_REQUESTER_ITEM = ModItems.ITEMS.register(
-            "redstone_requester", () -> new BlockItem(REDSTONE_REQUESTER_BLOCK.get(), new Item.Properties()));
+            RequesterConstants.REQUESTER_ID, () -> new BlockItem(REDSTONE_REQUESTER_BLOCK.get(), new Item.Properties()));
 
     public static final RegistryObject<BlockEntityType<RedstoneRequesterBlockEntity>> REDSTONE_REQUESTER_BLOCK_ENTITY = ModBlockEntities.BLOCK_ENTITIES
-            .register("redstone_requester", () -> BlockEntityType.Builder.of(
+            .register(RequesterConstants.REQUESTER_ID, () -> BlockEntityType.Builder.of(
                     (pos, state) -> new RedstoneRequesterBlockEntity(
                             RequesterRegistration.REDSTONE_REQUESTER_BLOCK_ENTITY.get(), pos, state),
                     REDSTONE_REQUESTER_BLOCK.get()).build(null));
 
     public static final RegistryObject<MenuType<RedstoneRequesterMenu>> REDSTONE_REQUESTER_MENU = ModMenus.MENUS
-            .register("redstone_requester", () -> RedstoneRequesterMenu.TYPE);
+            .register(RequesterConstants.REQUESTER_ID, () -> RedstoneRequesterMenu.TYPE);
 
     private RequesterRegistration() {
     }

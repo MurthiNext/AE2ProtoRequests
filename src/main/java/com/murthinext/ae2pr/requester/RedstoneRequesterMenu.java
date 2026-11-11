@@ -1,14 +1,7 @@
-/*
- * SPDX-License-Identifier: LGPL-3.0-only
- * Derived from ME Requester (https://github.com/AlmostReliable/merequester),
- * Copyright (c) AlmostReliable, licensed under LGPL-3.0.
- * See licenses/me-requester in this repository.
- */
 package com.murthinext.ae2pr.requester;
 
 import appeng.api.networking.IGrid;
 import appeng.menu.implementations.MenuTypeBuilder;
-import com.murthinext.ae2pr.requester.RequesterConstants;
 import com.murthinext.ae2pr.requester.platform.RequesterPlatform;
 import com.murthinext.ae2pr.requester.abstraction.AbstractRedstoneRequesterMenu;
 import com.murthinext.ae2pr.requester.abstraction.RequestTracker;
@@ -67,6 +60,6 @@ public final class RedstoneRequesterMenu extends AbstractRedstoneRequesterMenu {
     @Nullable
     @Override
     protected RequestTracker getRequestTracker(long id) {
-        return requestTracker;
+        return requestTracker != null && requestTracker.getId() == id ? requestTracker : null;
     }
 }

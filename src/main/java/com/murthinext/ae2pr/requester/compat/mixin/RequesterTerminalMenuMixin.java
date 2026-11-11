@@ -1,8 +1,3 @@
-/*
- * SPDX-License-Identifier: LGPL-3.0-only
- * ME Requester（LGPL-3.0）兼容层，纳入本仓库 LGPL-3.0 声明范围。
- * See licenses/me-requester in this repository.
- */
 package com.murthinext.ae2pr.requester.compat.mixin;
 
 import java.util.HashMap;

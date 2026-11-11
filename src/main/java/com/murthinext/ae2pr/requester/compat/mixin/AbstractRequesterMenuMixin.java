@@ -1,8 +1,3 @@
-/*
- * SPDX-License-Identifier: LGPL-3.0-only
- * ME Requester（LGPL-3.0）兼容层，纳入本仓库 LGPL-3.0 声明范围。
- * See licenses/me-requester in this repository.
- */
 package com.murthinext.ae2pr.requester.compat.mixin;
 
 import org.jetbrains.annotations.Nullable;
@@ -14,14 +9,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.almostreliable.merequester.requester.abstraction.AbstractRequesterMenu;
 import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
+import com.murthinext.ae2pr.requester.abstraction.RequesterMenuActions;
 import com.murthinext.ae2pr.requester.compat.IOurRequesterTerminalHost;
 
-import appeng.api.behaviors.ContainerItemStrategies;
-import appeng.api.stacks.GenericStack;
 import appeng.helpers.InventoryAction;
 import appeng.menu.AEBaseMenu;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
 
 /**
  * 让 ME Requester 终端的服务端菜单能够处理本模组红石请求器的条目修改请求
@@ -37,7 +30,7 @@ public class AbstractRequesterMenuMixin {
             return;
         }
         var list = be.getRequests();
-        if (requestIndex >= 0 && requestIndex < list.size()) {
+        if (list.isValidIndex(requestIndex)) {
             // 本模组的请求器不再支持重复下单，ME Requester 终端的 batch 字段在此忽略
             list.get(requestIndex).updateAmount(amount);
         }
@@ -51,7 +44,7 @@ public class AbstractRequesterMenuMixin {
             return;
         }
         var list = be.getRequests();
-        if (requestIndex >= 0 && requestIndex < list.size()) {
+        if (list.isValidIndex(requestIndex)) {
             list.get(requestIndex).updateState(state);
         }
         ci.cancel();
@@ -64,7 +57,7 @@ public class AbstractRequesterMenuMixin {
         if (be == null) {
             return;
         }
-        ae2pr$handleAction((AEBaseMenu) (Object) this, be, action, slot);
+        RequesterMenuActions.apply((AEBaseMenu) (Object) this, be.getRequests(), action, slot);
         ci.cancel();
     }
 
@@ -75,52 +68,5 @@ public class AbstractRequesterMenuMixin {
             return host.ae2pr$getOurRequester(id);
         }
         return null;
-    }
-
-    @Unique
-    private static void ae2pr$handleAction(AEBaseMenu menu, RedstoneRequesterBlockEntity be,
-            InventoryAction action, int slot) {
-        var list = be.getRequests();
-        if (slot < 0 || slot >= list.size()) {
-            return;
-        }
-        var requestSlot = list.getSlotInv(slot);
-        var carried = menu.getCarried();
-
-        switch (action) {
-            case PICKUP_OR_SET_DOWN ->
-                requestSlot.setItemDirect(0, carried.isEmpty() ? ItemStack.EMPTY : carried.copy());
-            case SPLIT_OR_PLACE_SINGLE -> {
-                if (carried.isEmpty()) {
-                    requestSlot.setItemDirect(0, ItemStack.EMPTY);
-                } else {
-                    var copy = carried.copy();
-                    copy.setCount(1);
-                    requestSlot.setItemDirect(0, copy);
-                }
-            }
-            case SHIFT_CLICK -> requestSlot.setItemDirect(0, ItemStack.EMPTY);
-            case EMPTY_ITEM -> {
-                var emptyingAction = ContainerItemStrategies.getEmptyingAction(carried);
-                if (emptyingAction != null) {
-                    requestSlot.insertItem(0,
-                            GenericStack.wrapInItemStack(emptyingAction.what(), emptyingAction.maxAmount()), false);
-                }
-            }
-            case CREATIVE_DUPLICATE -> {
-                if (menu.getPlayer().getAbilities().instabuild && carried.isEmpty()) {
-                    var current = requestSlot.getStackInSlot(0);
-                    if (current.isEmpty()) {
-                        menu.setCarried(ItemStack.EMPTY);
-                    } else {
-                        var stack = current.copy();
-                        stack.setCount(stack.getMaxStackSize());
-                        menu.setCarried(stack);
-                    }
-                }
-            }
-            default -> {
-            }
-        }
     }
 }

@@ -1,9 +1,3 @@
-/*
- * SPDX-License-Identifier: LGPL-3.0-only
- * Derived from ME Requester (https://github.com/AlmostReliable/merequester),
- * Copyright (c) AlmostReliable, licensed under LGPL-3.0.
- * See licenses/me-requester in this repository.
- */
 package com.murthinext.ae2pr.requester.client.abstraction;
 
 import appeng.api.behaviors.ContainerItemStrategies;
@@ -26,6 +20,7 @@ import com.murthinext.ae2pr.requester.client.widgets.RequestWidget;
 import com.murthinext.ae2pr.mixin.ae2.accessor.WidgetContainerAccessor;
 import com.murthinext.ae2pr.requester.Requests.Request;
 import com.murthinext.ae2pr.requester.abstraction.AbstractRedstoneRequesterMenu;
+import com.murthinext.ae2pr.requester.abstraction.RequestTracker;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -102,8 +97,9 @@ public abstract class AbstractRedstoneRequesterScreen<M extends AbstractRedstone
     @Nullable
     @Override
     public Request getTargetRequest(int listIndex) {
-        if (listIndex >= lines.size()) return null;
-        var lineElement = lines.get(scrollbar.getCurrentScroll() + listIndex);
+        var lineIndex = scrollbar.getCurrentScroll() + listIndex;
+        if (listIndex < 0 || lineIndex < 0 || lineIndex >= lines.size()) return null;
+        var lineElement = lines.get(lineIndex);
         return lineElement instanceof Request request ? request : null;
     }
 
@@ -122,8 +118,8 @@ public abstract class AbstractRedstoneRequesterScreen<M extends AbstractRedstone
             return;
         }
 
-        var name = data.getString(AbstractRedstoneRequesterMenu.UNIQUE_NAME_ID);
-        var sortBy = data.getLong(AbstractRedstoneRequesterMenu.SORT_BY_ID);
+        var name = data.getString(RequestTracker.UNIQUE_NAME_ID);
+        var sortBy = data.getLong(RequestTracker.SORT_BY_ID);
         var requests = getById(requesterId, name, sortBy).getRequests();
 
         for (var i = 0; i < requests.size(); i++) {

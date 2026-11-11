@@ -1,9 +1,3 @@
-/*
- * SPDX-License-Identifier: LGPL-3.0-only
- * Derived from ME Requester (https://github.com/AlmostReliable/merequester),
- * Copyright (c) AlmostReliable, licensed under LGPL-3.0.
- * See licenses/me-requester in this repository.
- */
 package com.murthinext.ae2pr.requester.platform;
 
 import net.minecraft.nbt.CompoundTag;
@@ -18,12 +12,6 @@ import com.murthinext.ae2pr.requester.network.RequestUpdatePacket;
 import com.murthinext.ae2pr.requester.network.RequesterNetwork;
 import com.murthinext.ae2pr.requester.network.RequesterSyncPacket;
 
-/**
- * 红石请求器的平台/网络辅助方法。
- * <p>
- * 移植自 ME Requester（https://github.com/AlmostReliable/merequester，LGPL-3.0）的 {@code Platform}，
- * 改为使用本模组的网络通道与配置。
- */
 public final class RequesterPlatform {
 
     private RequesterPlatform() {
