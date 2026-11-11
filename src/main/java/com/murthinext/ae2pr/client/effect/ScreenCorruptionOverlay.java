@@ -38,6 +38,8 @@ public final class ScreenCorruptionOverlay {
     @SubscribeEvent
     public static void onLogout(ClientPlayerNetworkEvent.LoggingOut event) {
         STATE.clear();
+        ScreenCorruptionImpact.clear();
+        ScreenCorruptionShader.clear();
         level = null;
     }
 
@@ -91,6 +93,8 @@ public final class ScreenCorruptionOverlay {
             RenderSystem.disableBlend();
             RenderSystem.disableScissor();
             ScreenCorruptionShader.render(graphics, STATE.regions(), width, height, STATE.time());
+            ScreenCorruptionShader.renderImpact(graphics, width, height, ScreenCorruptionImpact.progress(),
+                    ScreenCorruptionImpact.strength(), ScreenCorruptionImpact.seed());
         } finally {
             modelView.popPose();
             RenderSystem.applyModelViewMatrix();

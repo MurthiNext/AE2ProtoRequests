@@ -13,6 +13,7 @@ import com.murthinext.ae2pr.network.RepeatOrderFailedPacket;
 import com.murthinext.ae2pr.network.RepeatOrderFinishedPacket;
 import com.murthinext.ae2pr.network.RepeatOrderRoundPacket;
 import com.murthinext.ae2pr.network.RepeatOrderStatusPacket;
+import com.murthinext.ae2pr.network.ScreenCorruptionImpactPacket;
 import com.murthinext.ae2pr.network.TerminalStoryRequestPacket;
 import com.murthinext.ae2pr.network.TerminalStorySyncPacket;
 import com.murthinext.ae2pr.network.TerminalStoryUnlockPacket;
@@ -123,6 +124,12 @@ public final class ModNetwork {
                 TerminalStoryUnlockPacket::encode,
                 TerminalStoryUnlockPacket::decode,
                 TerminalStoryUnlockPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        CHANNEL.registerMessage(nextMessageId++,
+                ScreenCorruptionImpactPacket.class,
+                ScreenCorruptionImpactPacket::encode,
+                ScreenCorruptionImpactPacket::decode,
+                ScreenCorruptionImpactPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToPlayer(ServerPlayer player, Object packet) {

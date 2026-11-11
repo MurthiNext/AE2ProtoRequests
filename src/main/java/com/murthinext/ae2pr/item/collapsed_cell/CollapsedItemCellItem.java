@@ -6,8 +6,10 @@ import java.util.Optional;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.murthinext.ae2pr.network.ScreenCorruptionImpactPacket;
 import com.murthinext.ae2pr.registry.ModEffects;
 import com.murthinext.ae2pr.registry.ModItems;
+import com.murthinext.ae2pr.registry.ModNetwork;
 
 import appeng.api.stacks.GenericStack;
 import appeng.core.localization.PlayerMessages;
@@ -17,6 +19,7 @@ import appeng.util.InteractionUtil;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -80,6 +83,9 @@ public class CollapsedItemCellItem extends AEBaseItem {
             int amplifier = previous == null ? 0 : Math.min(Byte.MAX_VALUE, previous.getAmplifier() + 1);
             player.addEffect(new MobEffectInstance(effect, MobEffectInstance.INFINITE_DURATION, amplifier,
                     false, false, true));
+            if (player instanceof ServerPlayer serverPlayer) {
+                ModNetwork.sendToPlayer(serverPlayer, new ScreenCorruptionImpactPacket());
+            }
             level.explode(null, player.getX(), player.getY() + 0.5, player.getZ(), EXPLOSION_POWER,
                     Level.ExplosionInteraction.TNT);
         }
