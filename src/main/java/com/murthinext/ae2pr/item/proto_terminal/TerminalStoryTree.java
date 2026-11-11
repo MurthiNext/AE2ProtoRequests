@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.client.proto_terminal;
+package com.murthinext.ae2pr.item.proto_terminal;
 
 import com.murthinext.ae2pr.api.Ids;
 
@@ -15,9 +15,6 @@ import java.util.Set;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.murthinext.ae2pr.logic.terminal.TerminalStoryCondition;
-import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress;
-import com.murthinext.ae2pr.logic.terminal.TerminalStoryRunner;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

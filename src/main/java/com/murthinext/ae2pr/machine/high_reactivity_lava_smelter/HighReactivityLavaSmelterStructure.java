@@ -28,7 +28,8 @@ public final class HighReactivityLavaSmelterStructure extends AbstractStructureF
             .where('C', StructurePredicate.blocks(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.block()))
             .where('B', StructurePredicate.casingWithParts(ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get()))
             .where('G', StructurePredicate.blocks(ModBlocks.FIREPROOF_CRYSTAL_GLASS.get()))
-            .where('P', StructurePredicate.blocks(ModBlocks.METEOR_STEEL_PIPE_BLOCK.get()))
+            .where('P', StructurePredicate.blocks(ModBlocks.METEOR_STEEL_PIPE_BLOCK.get())
+                    .axis(RelativeDirection.UP))
             .where('L', StructurePredicate.blocks(ModBlocks.LOGISTICS_CONTROL_CASING.get()))
             .where('#', StructurePredicate.any())
             .build();

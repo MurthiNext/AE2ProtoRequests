@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import com.murthinext.ae2pr.logic.terminal.TerminalUnlockCondition;
-import com.murthinext.ae2pr.logic.terminal.TerminalUnlockTracker;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalUnlockCondition;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalUnlockTracker;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;

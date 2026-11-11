@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.client.proto_terminal;
+package com.murthinext.ae2pr.item.proto_terminal;
 
 import org.joml.Matrix4f;
 

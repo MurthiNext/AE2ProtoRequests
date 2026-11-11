@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgressCache;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -41,7 +42,7 @@ public class TerminalStoryUnlockPacket {
     public static void handle(TerminalStoryUnlockPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> ClientHooks.run(
-                () -> () -> com.murthinext.ae2pr.client.proto_terminal.TerminalStoryProgressCache
+                () -> () -> TerminalStoryProgressCache
                         .applyUnlocks(packet.conditions)));
         context.setPacketHandled(true);
     }

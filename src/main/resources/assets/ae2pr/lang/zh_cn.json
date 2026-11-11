@@ -338,6 +338,12 @@
   "message.ae2pr.collapsed_item_cell.disassemble.1": "这不像个好主意……",
   "message.ae2pr.collapsed_item_cell.disassemble.2": "至少不要在家里尝试吧？",
   "message.ae2pr.collapsed_item_cell.disassemble.3": "愿一切安好……",
+  "message.ae2pr.multiblock.assemble.complete": "%s 结构已完整",
+  "message.ae2pr.multiblock.assemble.placed": "%s：已搭建 %s 个方块",
+  "message.ae2pr.multiblock.assemble.missing": "材料不足：%s",
+  "message.ae2pr.multiblock.assemble.blocked": "%s 个位置被其他方块或实体占据，未能搭建",
+  "message.ae2pr.multiblock.assemble.misoriented": "%s 个方块朝向不符，请手动摆正",
+  "jei.ae2pr.multiblock.orientation": "此格方块需按结构排布摆放朝向",
   "effect.ae2pr.screen_corruption": "数据损坏",
   "group.ae2pr.interface.name": "ME接口",
   "group.ae2pr.pattern_provider.name": "ME样板供应器"

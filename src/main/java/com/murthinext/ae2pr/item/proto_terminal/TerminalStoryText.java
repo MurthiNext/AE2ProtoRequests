@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.client.proto_terminal;
+package com.murthinext.ae2pr.item.proto_terminal;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

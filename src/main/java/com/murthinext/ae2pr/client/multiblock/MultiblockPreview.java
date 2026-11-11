@@ -14,6 +14,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ColorResolver;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
@@ -25,8 +26,9 @@ import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 
-import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
+import com.murthinext.ae2pr.block.FilterPressPlateBlock;
 import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
+import com.murthinext.ae2pr.api.multiblock.StructureOrientation;
 import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleInstance;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
@@ -35,6 +37,9 @@ import com.murthinext.ae2pr.api.multiblock.module.ModuleSnapshot;
 // 只读预览世界，保留完整材料并按层提供渲染邻居
 public final class MultiblockPreview implements BlockAndTintGetter {
 
+    // 预览统一按未镜像、朝向北方的可成型姿态摆放
+    private static final StructureOrientation ORIENTATION = new StructureOrientation(Direction.NORTH, Direction.UP,
+            false, false);
     public record Cell(BlockPos pos, StructurePredicate predicate, List<Block> candidates) {
     }
 
@@ -88,8 +93,56 @@ public final class MultiblockPreview implements BlockAndTintGetter {
                     ? old.getBlock() : cell.candidates().get(0);
             states.put(cell.pos(), stateFor(cell, block));
         }
+        applyShapes();
         setLayer(layer);
         updateMaterials();
+    }
+
+    // 按最终排布补一次连接状态，让滤板等方块在预览里也显示成正确的外形
+    private void applyShapes() {
+        View view = new View(states, bounds);
+        for (Cell cell : cells) {
+            states.put(cell.pos(), FilterPressPlateBlock.connectedShape(states.get(cell.pos()), view, cell.pos()));
+        }
+    }
+
+    // 忽略分层可见性的完整方块视图，供形状推导读取邻居
+    private static final class View implements BlockGetter {
+
+        private final Map<BlockPos, BlockState> states;
+        private final AABB bounds;
+
+        private View(Map<BlockPos, BlockState> states, AABB bounds) {
+            this.states = states;
+            this.bounds = bounds;
+        }
+
+        @Override
+        public BlockState getBlockState(BlockPos pos) {
+            BlockState state = states.get(pos);
+            return state == null ? Blocks.AIR.defaultBlockState() : state;
+        }
+
+        @Override
+        public FluidState getFluidState(BlockPos pos) {
+            return getBlockState(pos).getFluidState();
+        }
+
+        @Nullable
+        @Override
+        public BlockEntity getBlockEntity(BlockPos pos) {
+            return null;
+        }
+
+        @Override
+        public int getHeight() {
+            return (int) bounds.getYsize();
+        }
+
+        @Override
+        public int getMinBuildHeight() {
+            return (int) bounds.minY;
+        }
     }
 
     public List<Cell> cells() {
@@ -154,6 +207,7 @@ public final class MultiblockPreview implements BlockAndTintGetter {
             return;
         }
         states.put(selected.pos(), stateFor(selected, block));
+        applyShapes();
         updateMaterials();
     }
 
@@ -162,15 +216,15 @@ public final class MultiblockPreview implements BlockAndTintGetter {
         for (Cell cell : cells) {
             states.put(cell.pos(), stateFor(cell, cell.candidates().get(0)));
         }
+        applyShapes();
         updateMaterials();
     }
 
+    // 先按几何给出自然朝向，再让谓词的朝向要求覆盖成可成型姿态
     private BlockState stateFor(Cell cell, Block block) {
         BlockState state = block.defaultBlockState();
         Direction facing = Direction.NORTH;
-        if (block instanceof MeteorSteelPipeBlock) {
-            facing = Direction.UP;
-        } else if (!cell.pos().equals(BlockPos.ZERO)) {
+        if (!cell.pos().equals(BlockPos.ZERO)) {
             double x = cell.pos().getX() + 0.5 - bounds.getCenter().x;
             double z = cell.pos().getZ() + 0.5 - bounds.getCenter().z;
             facing = Math.abs(x) > Math.abs(z) ? (x < 0 ? Direction.WEST : Direction.EAST)
@@ -182,7 +236,7 @@ public final class MultiblockPreview implements BlockAndTintGetter {
         if (state.hasProperty(BlockStateProperties.FACING)) {
             state = state.setValue(BlockStateProperties.FACING, facing);
         }
-        return state;
+        return cell.predicate().orient(state, ORIENTATION);
     }
 
     private void updateMaterials() {

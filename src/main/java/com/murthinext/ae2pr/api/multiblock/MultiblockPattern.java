@@ -123,14 +123,12 @@ public final class MultiblockPattern {
         return result;
     }
 
+    // 成型判定：命中即返回成型结果，否则返回差异最少的一组尝试
     public StructureResult match(Level level, BlockPos controllerPos, Direction front, Direction up, int maxSlices) {
         Attempt attempt = new Attempt();
         for (boolean[] mirror : MIRRORS) {
-            Direction sliceFacing = sliceDir.getFacing(front, up, mirror[0], mirror[1]);
-            Direction stringFacing = stringDir.getFacing(front, up, mirror[0], mirror[1]);
-            Direction charFacing = charDir.getFacing(front, up, mirror[0], mirror[1]);
-            expand(level, controllerPos, sliceFacing, stringFacing, charFacing, 0, 0, maxSlices,
-                    new int[slices.size()], mirror[0], mirror[1], attempt);
+            StructureOrientation orientation = new StructureOrientation(front, up, mirror[0], mirror[1]);
+            expand(level, controllerPos, orientation, 0, 0, maxSlices, new int[slices.size()], attempt);
             if (attempt.formed != null) {
                 return attempt.formed;
             }
@@ -138,15 +136,45 @@ public final class MultiblockPattern {
         return attempt.best != null ? attempt.best : StructureResult.EMPTY;
     }
 
-    private void expand(Level level, BlockPos controllerPos, Direction sliceFacing, Direction stringFacing,
-            Direction charFacing, int index, int count, int maxSlices, int[] repeats, boolean mirrorSide,
-            boolean mirrorFront, Attempt attempt) {
+    // 单次尝试的命中最多方块数，用于在多个镜像方案中挑选最接近成型的一组
+    public int score(Level level, BlockPos controllerPos, Direction front, Direction up, boolean mirrorSide,
+            boolean mirrorFront, int totalSlices) {
+        StructureOrientation orientation = new StructureOrientation(front, up, mirrorSide, mirrorFront);
+        Direction sliceFacing = sliceDir.getFacing(front, up, mirrorSide, mirrorFront);
+        Direction stringFacing = stringDir.getFacing(front, up, mirrorSide, mirrorFront);
+        Direction charFacing = charDir.getFacing(front, up, mirrorSide, mirrorFront);
+        int[] repeats = expandCounts(totalSlices);
+        int matched = 0;
+        int sliceIndex = 0;
+        for (int i = 0; i < slices.size(); i++) {
+            Slice slice = slices.get(i);
+            for (int rep = 0; rep < repeats[i]; rep++, sliceIndex++) {
+                for (int r = 0; r < rows; r++) {
+                    String row = slice.rows()[r];
+                    for (int c = 0; c < cols; c++) {
+                        char symbol = row.charAt(c);
+                        StructurePredicate predicate = predicates.get(symbol);
+                        if (predicate.isAny()) {
+                            continue;
+                        }
+                        BlockPos pos = cell(controllerPos, sliceFacing, stringFacing, charFacing, sliceIndex, r, c);
+                        if (predicate.test(level, pos, level.getBlockState(pos), orientation) != null) {
+                            matched++;
+                        }
+                    }
+                }
+            }
+        }
+        return matched;
+    }
+
+    private void expand(Level level, BlockPos controllerPos, StructureOrientation orientation, int index, int count,
+            int maxSlices, int[] repeats, Attempt attempt) {
         if (attempt.formed != null) {
             return;
         }
         if (index == slices.size()) {
-            checkCombination(level, controllerPos, sliceFacing, stringFacing, charFacing, repeats, mirrorSide,
-                    mirrorFront, attempt);
+            checkCombination(level, controllerPos, orientation, repeats, attempt);
             return;
         }
         Slice slice = slices.get(index);
@@ -157,19 +185,24 @@ public final class MultiblockPattern {
         int maxRepeats = Math.min(slice.maxRepeats(), maxSlices - count - remainingMin);
         for (int rep = maxRepeats; rep >= slice.minRepeats(); rep--) {
             repeats[index] = rep;
-            expand(level, controllerPos, sliceFacing, stringFacing, charFacing, index + 1, count + rep, maxSlices,
-                    repeats, mirrorSide, mirrorFront, attempt);
+            expand(level, controllerPos, orientation, index + 1, count + rep, maxSlices, repeats, attempt);
             if (attempt.formed != null) {
                 return;
             }
         }
     }
 
-    private void checkCombination(Level level, BlockPos controllerPos, Direction sliceFacing, Direction stringFacing,
-            Direction charFacing, int[] repeats, boolean mirrorSide, boolean mirrorFront, Attempt attempt) {
+    private void checkCombination(Level level, BlockPos controllerPos, StructureOrientation orientation,
+            int[] repeats, Attempt attempt) {
         for (StructurePredicate leaf : leaves) {
             leaf.resetCount();
         }
+        Direction sliceFacing = sliceDir.getFacing(orientation.front(), orientation.up(), orientation.mirrorSide(),
+                orientation.mirrorFront());
+        Direction stringFacing = stringDir.getFacing(orientation.front(), orientation.up(), orientation.mirrorSide(),
+                orientation.mirrorFront());
+        Direction charFacing = charDir.getFacing(orientation.front(), orientation.up(), orientation.mirrorSide(),
+                orientation.mirrorFront());
         List<BlockPos> cells = new ArrayList<>();
         List<ModuleInstance> modules = new ArrayList<>();
         int mismatches = 0;
@@ -190,7 +223,7 @@ public final class MultiblockPattern {
                         }
                         BlockPos pos = cell(controllerPos, sliceFacing, stringFacing, charFacing, sliceIndex, r, c);
                         BlockState state = level.getBlockState(pos);
-                        StructurePredicate matched = predicate.test(level, pos, state);
+                        StructurePredicate matched = predicate.test(level, pos, state, orientation);
                         if (matched != null) {
                             matched.incrementCount();
                             if (matched.maxCount() >= 0 && matched.count() > matched.maxCount()) {
@@ -237,11 +270,12 @@ public final class MultiblockPattern {
             totalSlices += repeat;
         }
         if (mismatches == 0) {
-            attempt.formed = new StructureResult(true, totalSlices, mirrorSide, mirrorFront, 0, null, ' ', null,
-                    List.copyOf(cells), ModuleSnapshot.of(modules), false);
+            attempt.formed = new StructureResult(true, totalSlices, orientation.mirrorSide(),
+                    orientation.mirrorFront(), 0, null, ' ', null, List.copyOf(cells), ModuleSnapshot.of(modules),
+                    false);
         } else if (attempt.best == null || mismatches < attempt.best.mismatches()) {
-            attempt.best = new StructureResult(false, 0, mirrorSide, mirrorFront, mismatches, firstPos, firstExpected,
-                    firstFound, List.of(), ModuleSnapshot.EMPTY, false);
+            attempt.best = new StructureResult(false, 0, orientation.mirrorSide(), orientation.mirrorFront(),
+                    mismatches, firstPos, firstExpected, firstFound, List.of(), ModuleSnapshot.EMPTY, false);
         }
     }
 

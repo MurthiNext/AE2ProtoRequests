@@ -43,6 +43,12 @@ public class FilterPressPlateBlock extends DisassemblableBlock {
                 .setValue(DOWN, connectsTo(state, level.getBlockState(pos.below())));
     }
 
+    // 按给定方块视图推导连接状态
+    public static BlockState connectedShape(BlockState state, BlockGetter level, BlockPos pos) {
+        return state.getBlock() instanceof FilterPressPlateBlock plate ? plate.updateConnections(state, level, pos)
+                : state;
+    }
+
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(AXIS, LEFT, RIGHT, UP, DOWN);

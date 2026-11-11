@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.logic.terminal;
+package com.murthinext.ae2pr.item.proto_terminal;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -9,8 +9,8 @@ import java.util.List;
 import com.bladecoder.ink.runtime.Story;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress.Line;
-import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress.NodeProgress;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress.Line;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress.NodeProgress;
 
 public final class TerminalStoryRunner {
 

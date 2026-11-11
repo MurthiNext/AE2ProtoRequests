@@ -338,6 +338,12 @@
   "message.ae2pr.collapsed_item_cell.disassemble.1": "This doesn't seem like a good idea...",
   "message.ae2pr.collapsed_item_cell.disassemble.2": "At least don't try this at home?",
   "message.ae2pr.collapsed_item_cell.disassemble.3": "May all be well...",
+  "message.ae2pr.multiblock.assemble.complete": "%s is already complete",
+  "message.ae2pr.multiblock.assemble.placed": "%s: placed %s blocks",
+  "message.ae2pr.multiblock.assemble.missing": "Not enough materials: %s",
+  "message.ae2pr.multiblock.assemble.blocked": "%s positions blocked by other blocks or entities, skipped",
+  "message.ae2pr.multiblock.assemble.misoriented": "%s blocks face the wrong way, rotate them manually",
+  "jei.ae2pr.multiblock.orientation": "This cell requires a specific block orientation",
   "effect.ae2pr.screen_corruption": "Data Corruption",
   "group.ae2pr.interface.name": "ME Interface",
   "group.ae2pr.pattern_provider.name": "ME Pattern Provider"

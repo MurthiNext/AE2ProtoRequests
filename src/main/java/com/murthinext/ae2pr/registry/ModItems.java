@@ -9,7 +9,7 @@ import com.murthinext.ae2pr.item.level_emitter.MultiThresholdLevelEmitterPartIte
 import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
 import com.murthinext.ae2pr.item.filter_cell.FilterCellItem;
 import com.murthinext.ae2pr.item.collapsed_cell.CollapsedItemCellItem;
-import com.murthinext.ae2pr.item.ProtoTerminalItem;
+import com.murthinext.ae2pr.item.proto_terminal.ProtoTerminalItem;
 import com.murthinext.ae2pr.item.upgrade.SuperStackCardItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;

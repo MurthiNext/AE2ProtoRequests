@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.logic.terminal;
+package com.murthinext.ae2pr.item.proto_terminal;
 
 import java.io.IOException;
 import java.util.HashMap;

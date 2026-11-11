@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.client.proto_terminal;
+package com.murthinext.ae2pr.item.proto_terminal;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,13 +11,9 @@ import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.logic.terminal.TerminalStoryCondition;
-import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress;
-import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress.Line;
-import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress.NodeProgress;
-import com.murthinext.ae2pr.logic.terminal.TerminalStoryRunner;
-import com.murthinext.ae2pr.logic.terminal.TerminalStoryRunner.Choice;
-import com.murthinext.ae2pr.logic.terminal.TerminalUnlockCondition;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress.Line;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress.NodeProgress;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryRunner.Choice;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;

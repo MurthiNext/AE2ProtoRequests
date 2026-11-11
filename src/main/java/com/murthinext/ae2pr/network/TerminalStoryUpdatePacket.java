@@ -5,8 +5,8 @@ import java.util.function.Supplier;
 
 import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress;
-import com.murthinext.ae2pr.logic.terminal.TerminalStorySavedData;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStorySavedData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;

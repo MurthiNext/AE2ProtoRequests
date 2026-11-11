@@ -5,7 +5,8 @@ import com.murthinext.ae2pr.api.ClientHooks;
 import java.io.IOException;
 import java.util.function.Supplier;
 
-import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgressCache;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -37,7 +38,7 @@ public class TerminalStorySyncPacket {
     public static void handle(TerminalStorySyncPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> ClientHooks.run(
-                () -> () -> com.murthinext.ae2pr.client.proto_terminal.TerminalStoryProgressCache.apply(packet.snapshot)));
+                () -> () -> TerminalStoryProgressCache.apply(packet.snapshot)));
         context.setPacketHandled(true);
     }
 }

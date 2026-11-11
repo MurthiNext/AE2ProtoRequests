@@ -17,3 +17,5 @@ AE2 Proto Requests 添加了许多基于原版 AE2 或其他附属模组，功�
 [ME 通式标准发信器](multi_level_emitter.md)
 
 [ME 通式阈值发信器](multi_threshold_level_emitter.md)
+
+[源始终端](proto_terminal.md)

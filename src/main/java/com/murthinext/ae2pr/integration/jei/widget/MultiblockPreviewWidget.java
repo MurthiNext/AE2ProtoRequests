@@ -188,6 +188,9 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
         MultiblockPreview.Cell hovered = renderer.pick(mouseX, mouseY);
         if (hovered != null) {
             addItemTooltip(tooltip, new ItemStack(preview.getBlockState(hovered.pos()).getBlock()));
+            if (hovered.predicate().hasOrientation()) {
+                tooltip.add(text("orientation"));
+            }
         }
     }
 

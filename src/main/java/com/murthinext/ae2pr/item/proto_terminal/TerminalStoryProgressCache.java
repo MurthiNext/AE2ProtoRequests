@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.client.proto_terminal;
+package com.murthinext.ae2pr.item.proto_terminal;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -8,7 +8,6 @@ import java.util.Set;
 
 import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.logic.terminal.TerminalStoryProgress;
 import com.murthinext.ae2pr.network.TerminalStoryRequestPacket;
 import com.murthinext.ae2pr.network.TerminalStoryUpdatePacket;
 import com.murthinext.ae2pr.network.TerminalStoryWatchPacket;

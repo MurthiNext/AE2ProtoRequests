@@ -20,6 +20,8 @@ navigation:
 
 多方块机器采用**有损超频**：每张加速卡使速度 **+50%**，但单次作业的耗能变为 **×4**。
 
+手持[源始终端](../devices/proto_terminal.md)，对着主机 **Shift + 右键** 可以按结构模板把整台机器补齐。
+
 ## AEV 阶段
 
 [水晶装配线](crystal_assembly_line.md)，AE2 Proto Requests 科技树的起点，利用子网与优先级驾驭这台精密机器吧！
