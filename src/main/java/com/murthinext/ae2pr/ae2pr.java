@@ -13,6 +13,7 @@ import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterPart;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOres;
 import com.murthinext.ae2pr.item.collapsed_cell.CollapsedItemCellGuiHandler;
 import com.murthinext.ae2pr.item.collapsed_cell.CollapsedItemCellHandler;
+import com.murthinext.ae2pr.fluid.AlienLavaInteractions;
 import com.murthinext.ae2pr.logic.collapse.CollapseEvents;
 import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
 import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
@@ -109,6 +110,9 @@ public class ae2pr {
                     Upgrades.add(AEItems.SPEED_CARD, machine.block(), machine.speedUpgrades());
                 }
             }
+
+            // 异星熔岩遇水凝结为陨石
+            AlienLavaInteractions.register();
 
             // 绑定方块实体类型并登记代表物品
             var networkAccessHatchType = ModBlockEntities.ME_NETWORK_ACCESS_HATCH.get();

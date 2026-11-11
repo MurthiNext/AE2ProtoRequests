@@ -10,14 +10,17 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
+import appeng.core.definitions.AEBlocks;
 import com.murthinext.ae2pr.registry.ModBlocks;
 
 public abstract class AlienLavaFluid extends ForgeFlowingFluid {
@@ -54,6 +57,21 @@ public abstract class AlienLavaFluid extends ForgeFlowingFluid {
     @Override
     protected void beforeDestroyingBlock(LevelAccessor level, BlockPos pos, BlockState state) {
         level.levelEvent(1501, pos, 0);
+    }
+
+    @Override
+    protected void spreadTo(LevelAccessor level, BlockPos pos, BlockState state, Direction direction,
+            FluidState fluidState) {
+        if (direction == Direction.DOWN && level.getFluidState(pos).is(FluidTags.WATER)) {
+            if (state.getBlock() instanceof LiquidBlock) {
+                BlockState meteorite = ForgeEventFactory.fireFluidPlaceBlockEvent(level, pos, pos,
+                        AEBlocks.SKY_STONE_BLOCK.block().defaultBlockState());
+                level.setBlock(pos, meteorite, Block.UPDATE_ALL);
+            }
+            level.levelEvent(1501, pos, 0);
+            return;
+        }
+        super.spreadTo(level, pos, state, direction, fluidState);
     }
 
     @Override
