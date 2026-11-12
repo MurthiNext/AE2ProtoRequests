@@ -1,6 +1,6 @@
 {
   "parent": "ae2:block/drive/drive_cell",
   "textures": {
-    "cell": "ae2pr:block/drive/collapsed_item_cell"
+    "cell": "ae2pr:block/drive/collapsed_item_storage_cell"
   }
 }

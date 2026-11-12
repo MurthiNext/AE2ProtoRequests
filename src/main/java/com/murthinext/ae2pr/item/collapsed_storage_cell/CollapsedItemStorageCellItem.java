@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.item.collapsed_cell;
+package com.murthinext.ae2pr.item.collapsed_storage_cell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
-public class CollapsedItemCellItem extends AEBaseItem {
+public class CollapsedItemStorageCellItem extends AEBaseItem {
 
     private static final String CONTENT_TAG = "content";
     private static final String DISASSEMBLY_TAG = "disassembly";
@@ -40,7 +40,7 @@ public class CollapsedItemCellItem extends AEBaseItem {
     private static final float EXPLOSION_POWER = 1.5F;
     private static final int TOOLTIP_LINES = 6;
 
-    public CollapsedItemCellItem(Properties properties) {
+    public CollapsedItemStorageCellItem(Properties properties) {
         super(properties);
     }
 
@@ -74,7 +74,7 @@ public class CollapsedItemCellItem extends AEBaseItem {
             var progress = stack.getOrCreateTagElement(DISASSEMBLY_TAG);
             progress.putInt("attempts", attempt);
             progress.putLong("lastAttempt", now);
-            player.displayClientMessage(Component.translatable("message.ae2pr.collapsed_item_cell.disassemble." + attempt),
+            player.displayClientMessage(Component.translatable("message.ae2pr.collapsed_item_storage_cell.disassemble." + attempt),
                     false);
         } else {
             stack.shrink(1);
@@ -110,7 +110,7 @@ public class CollapsedItemCellItem extends AEBaseItem {
     }
 
     public static ItemStack create(List<GenericStack> contents) {
-        var cell = new ItemStack(ModItems.COLLAPSED_ITEM_CELL.get());
+        var cell = new ItemStack(ModItems.COLLAPSED_ITEM_STORAGE_CELL.get());
         writeContents(cell, contents);
         return cell;
     }
@@ -158,6 +158,6 @@ public class CollapsedItemCellItem extends AEBaseItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("tooltip.ae2pr.collapsed_item_cell.desc"));
+        tooltip.add(Component.translatable("tooltip.ae2pr.collapsed_item_storage_cell.desc"));
     }
 }

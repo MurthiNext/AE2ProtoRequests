@@ -251,7 +251,7 @@ public final class ModConfig {
 
         BUILDER.push("collapse");
         COLLAPSE_ENABLED = BUILDER
-                .comment("是否允许机器被破坏时把超量内容压成坍缩物品元件",
+                .comment("是否允许机器被破坏时把超量内容压成坍缩物品存储元件",
                         "开启后默认兼容本模组仓室与 AE 系列（接口、样板供应器等使用 AE2 通用库存的机器）")
                 .define("enableCollapse", true);
         COLLAPSE_EXTRA_BLOCKS = BUILDER

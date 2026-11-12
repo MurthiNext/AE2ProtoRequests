@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.item.collapsed_cell;
+package com.murthinext.ae2pr.item.collapsed_storage_cell;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -9,16 +9,16 @@ import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
 import net.minecraft.world.item.ItemStack;
 
-public class CollapsedItemCellHandler implements ICellHandler {
+public class CollapsedItemStorageCellHandler implements ICellHandler {
 
     @Override
     public boolean isCell(ItemStack is) {
-        return is.getItem() == ModItems.COLLAPSED_ITEM_CELL.get();
+        return is.getItem() == ModItems.COLLAPSED_ITEM_STORAGE_CELL.get();
     }
 
     @Nullable
     @Override
     public StorageCell getCellInventory(ItemStack is, @Nullable ISaveProvider host) {
-        return isCell(is) ? new CollapsedItemCellInventory(is, host) : null;
+        return isCell(is) ? new CollapsedItemStorageCellInventory(is, host) : null;
     }
 }

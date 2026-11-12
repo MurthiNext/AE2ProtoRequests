@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.item.collapsed_cell;
+package com.murthinext.ae2pr.item.collapsed_storage_cell;
 
 import com.murthinext.ae2pr.registry.ModItems;
 
@@ -12,11 +12,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class CollapsedItemCellGuiHandler implements ICellGuiHandler {
+public class CollapsedItemStorageCellGuiHandler implements ICellGuiHandler {
 
     @Override
     public boolean isSpecializedFor(ItemStack cell) {
-        return cell.getItem() == ModItems.COLLAPSED_ITEM_CELL.get();
+        return cell.getItem() == ModItems.COLLAPSED_ITEM_STORAGE_CELL.get();
     }
 
     @Override

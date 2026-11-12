@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.item.collapsed_cell;
+package com.murthinext.ae2pr.item.collapsed_storage_cell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,18 +17,18 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * 坍缩元件的内容视图：网络只能读取与抽取，存入一律拒绝。
+ * 坍缩物品存储元件的内容视图：网络只能读取与抽取，存入一律拒绝。
  */
-public class CollapsedItemCellInventory implements StorageCell {
+public class CollapsedItemStorageCellInventory implements StorageCell {
 
     private final ItemStack cell;
     private final List<GenericStack> contents;
     @Nullable
     private final ISaveProvider host;
 
-    public CollapsedItemCellInventory(ItemStack cell, @Nullable ISaveProvider host) {
+    public CollapsedItemStorageCellInventory(ItemStack cell, @Nullable ISaveProvider host) {
         this.cell = cell;
-        this.contents = new ArrayList<>(CollapsedItemCellItem.readContents(cell));
+        this.contents = new ArrayList<>(CollapsedItemStorageCellItem.readContents(cell));
         this.host = host;
     }
 
@@ -87,6 +87,6 @@ public class CollapsedItemCellInventory implements StorageCell {
 
     @Override
     public void persist() {
-        CollapsedItemCellItem.writeContents(cell, contents);
+        CollapsedItemStorageCellItem.writeContents(cell, contents);
     }
 }

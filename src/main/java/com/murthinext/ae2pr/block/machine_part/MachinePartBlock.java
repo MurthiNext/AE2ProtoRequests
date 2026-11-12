@@ -190,7 +190,7 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
         super.onRemove(state, level, pos, newState, isMoving);
     }
 
-    // 物品总量超量时整仓压成一个坍缩元件，否则逐个掉落
+    // 物品总量超量时整仓压成一个坍缩物品存储元件，否则逐个掉落
     private static void dropContents(Level level, BlockPos pos, BlockState state, IItemHandler handler) {
         ItemStack collapsed = CollapseHandler.tryCollapse(BuiltInRegistries.BLOCK.getKey(state.getBlock()), handler);
         if (collapsed != null) {
