@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.ModConfig;
+import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.client.repeat.RepeatOrderButton;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderConstants;
 import com.murthinext.ae2pr.logic.repeat.RepeatRoundsHolder;
@@ -138,7 +138,7 @@ public abstract class CraftAmountScreenMixin extends AEBaseScreen<CraftAmountMen
         if (rounds < 1) {
             return;
         }
-        rounds = Math.min(rounds, ModConfig.maxRounds());
+        rounds = Math.min(rounds, ServerConfig.maxRounds());
         this.ae2pr$rounds = rounds;
         this.ae2pr$syncRounds();
         this.ae2pr$updateButtonMessage();

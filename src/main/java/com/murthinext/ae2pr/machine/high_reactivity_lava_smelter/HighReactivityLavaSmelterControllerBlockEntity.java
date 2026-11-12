@@ -20,7 +20,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import com.murthinext.ae2pr.ModConfig;
+import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
@@ -92,8 +92,8 @@ public class HighReactivityLavaSmelterControllerBlockEntity extends AbstractMult
 
     // 陨石粉转耐久：仅当一批耐久能完整存入时才消耗
     private void absorbDust() {
-        int max = ModConfig.highReactivityLavaSmelterMaxDurability();
-        int perDust = Math.min(ModConfig.highReactivityLavaSmelterDurabilityPerDust(), max);
+        int max = ServerConfig.highReactivityLavaSmelterMaxDurability();
+        int perDust = Math.min(ServerConfig.highReactivityLavaSmelterDurabilityPerDust(), max);
         if (durability > max - perDust) {
             return;
         }
@@ -134,7 +134,7 @@ public class HighReactivityLavaSmelterControllerBlockEntity extends AbstractMult
             powerShortageTicks = 0;
             return;
         }
-        double drain = ModConfig.highReactivityLavaSmelterPassiveEnergy();
+        double drain = ServerConfig.highReactivityLavaSmelterPassiveEnergy();
         if (drain <= 0 || extractNetworkEnergy(drain, false) >= drain) {
             powerShortageTicks = 0;
             return;
@@ -143,7 +143,7 @@ public class HighReactivityLavaSmelterControllerBlockEntity extends AbstractMult
             return;
         }
         powerShortageTicks = 0;
-        if (durability > 0 && level.random.nextDouble() < ModConfig.highReactivityLavaSmelterDurabilityLossChance()) {
+        if (durability > 0 && level.random.nextDouble() < ServerConfig.highReactivityLavaSmelterDurabilityLossChance()) {
             durability--;
             markStateChanged();
         }

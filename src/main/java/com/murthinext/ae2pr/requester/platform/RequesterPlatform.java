@@ -6,7 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.PacketDistributor;
 
-import com.murthinext.ae2pr.ModConfig;
+import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.requester.network.DragAndDropPacket;
 import com.murthinext.ae2pr.requester.network.RequestUpdatePacket;
 import com.murthinext.ae2pr.requester.network.RequesterNetwork;
@@ -19,15 +19,15 @@ public final class RequesterPlatform {
 
     // 单个请求器可标记的物品数量上限（可配置）
     public static int getRequestLimit() {
-        return ModConfig.requesterSlots();
+        return ServerConfig.requesterSlots();
     }
 
     public static double getIdleEnergy() {
-        return ModConfig.requesterIdleEnergy();
+        return ServerConfig.requesterIdleEnergy();
     }
 
     public static boolean requireChannel() {
-        return ModConfig.requesterRequireChannel();
+        return ServerConfig.requesterRequireChannel();
     }
 
     public static void sendRequestState(long requesterId, int requestIndex, boolean state) {

@@ -12,7 +12,7 @@ import net.minecraftforge.fml.ModList;
 
 import appeng.core.definitions.AEBlocks;
 
-import com.murthinext.ae2pr.ModConfig;
+import com.murthinext.ae2pr.ServerConfig;
 
 // 水晶母岩候选表：按档位与材质解析实际方块，可选模组未安装时自动剔除
 public final class CrystalBuddingBlocks {
@@ -43,7 +43,7 @@ public final class CrystalBuddingBlocks {
     // 按配置权重掷出一次母岩：先定档位，再在该档位可用材质间挑选
     public static BlockState roll(RandomSource random) {
         Block[][] materials = resolve();
-        int[] materialWeights = ModConfig.crystalReactorMaterialWeights();
+        int[] materialWeights = ServerConfig.crystalReactorMaterialWeights();
         int tier = pickTier(random);
         int total = 0;
         for (int material = 0; material < MATERIAL_COUNT; material++) {
@@ -70,7 +70,7 @@ public final class CrystalBuddingBlocks {
     }
 
     private static int pickTier(RandomSource random) {
-        int[] weights = ModConfig.crystalReactorTierWeights();
+        int[] weights = ServerConfig.crystalReactorTierWeights();
         int total = 0;
         for (int weight : weights) {
             total += weight;

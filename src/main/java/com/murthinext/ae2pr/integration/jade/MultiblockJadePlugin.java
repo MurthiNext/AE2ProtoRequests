@@ -28,7 +28,7 @@ import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.BoxStyle;
 import snownee.jade.api.ui.IProgressStyle;
 
-import com.murthinext.ae2pr.ModConfig;
+import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
@@ -95,7 +95,7 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
     private void appendExtraTooltip(ITooltip tooltip, CompoundTag data) {
         if (data.contains(KEY_DURABILITY)) {
             tooltip.add(Component.translatable("gui.ae2pr.high_reactivity_lava_smelter.durability",
-                    data.getInt(KEY_DURABILITY), ModConfig.highReactivityLavaSmelterMaxDurability()));
+                    data.getInt(KEY_DURABILITY), ServerConfig.highReactivityLavaSmelterMaxDurability()));
         }
         String mode = data.getString(KEY_MODE);
         if (!mode.isEmpty()) {

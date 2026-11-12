@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import com.murthinext.ae2pr.ModConfig;
+import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
 
@@ -51,11 +51,11 @@ public class CrystalReactorCoreBlockEntity extends BlockEntity {
         }
         // 外壳立刻置换为随机母岩，核心自身暂时保留以驱动扩散
         RandomSource random = level.getRandom();
-        soundBudget = ModConfig.crystalReactorBreakSoundsPerTick();
+        soundBudget = ServerConfig.crystalReactorBreakSoundsPerTick();
         for (BlockPos offset : CrystalReactorStructure.shellOffsets()) {
             replace(level, worldPosition.offset(offset), random);
         }
-        duration = Math.max(1, ModConfig.crystalReactorDurationTicks());
+        duration = Math.max(1, ServerConfig.crystalReactorDurationTicks());
         progress = 0;
         elapsed = 0;
         active = true;
@@ -77,7 +77,7 @@ public class CrystalReactorCoreBlockEntity extends BlockEntity {
         List<BlockPos> offsets = CrystalReactorStructure.expansionOffsets();
         int target = (int) Math.min(offsets.size(), (long) offsets.size() * ++elapsed / duration);
         RandomSource random = level.getRandom();
-        soundBudget = ModConfig.crystalReactorBreakSoundsPerTick();
+        soundBudget = ServerConfig.crystalReactorBreakSoundsPerTick();
         while (progress < target) {
             BlockPos pos = offsets.get(progress).offset(worldPosition);
             // 未加载的区块留待后续 tick 处理，避免静默跳过

@@ -29,6 +29,8 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.molecular_assembly_core.MolecularAssemblyCoreRenderer;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectClientTooltip;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectLine;
+import com.murthinext.ae2pr.client.tooltip.FormulaClientTooltip;
+import com.murthinext.ae2pr.client.tooltip.FormulaTooltip;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchScreen;
 import com.murthinext.ae2pr.block.machine_part.ItemBusScreen;
 import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterScreen;
@@ -60,6 +62,7 @@ public final class ClientSetup {
     @SubscribeEvent
     public static void registerTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
         event.register(ColorEffectLine.class, ColorEffectClientTooltip::new);
+        event.register(FormulaTooltip.class, FormulaClientTooltip::new);
     }
 
     @SubscribeEvent

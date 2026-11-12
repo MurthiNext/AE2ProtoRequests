@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.murthinext.ae2pr.ModConfig;
+import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.registry.ModModules;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
@@ -44,13 +44,13 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
 
     @Override
     protected long parallelBonus() {
-        return (long) Math.max(0, lastSlices - CrystalAssemblyLineStructure.MIN_SLICES) * ModConfig.assemblyParallelPerSlice()
-                + (long) modules.count(ModModules.PARALLEL) * ModConfig.assemblyModuleParallelPerUnit();
+        return (long) Math.max(0, lastSlices - CrystalAssemblyLineStructure.MIN_SLICES) * ServerConfig.assemblyParallelPerSlice()
+                + (long) modules.count(ModModules.PARALLEL) * ServerConfig.assemblyModuleParallelPerUnit();
     }
 
     @Override
-    public double getSpeedMultiplier() {
-        return (1.0 + modules.count(ModModules.SPEED) * ModConfig.assemblyModuleSpeedPerUnit()) * super.getSpeedMultiplier();
+    protected double baseSpeedMultiplier() {
+        return (1.0 + modules.count(ModModules.SPEED) * ServerConfig.assemblyModuleSpeedPerUnit()) * super.baseSpeedMultiplier();
     }
 
     // 配方匹配
@@ -102,7 +102,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
         if (inputs.isEmpty()) {
             return matched;
         }
-        if (ModConfig.assemblyItemsOrdered()) {
+        if (ServerConfig.assemblyItemsOrdered()) {
             // 有序模式沿用绝对索引，并要求该部件属于候选组
             if (inputBuses.size() < inputs.size()) {
                 return null;
@@ -147,7 +147,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
         if (inputs.isEmpty()) {
             return matched;
         }
-        if (ModConfig.assemblyFluidsOrdered()) {
+        if (ServerConfig.assemblyFluidsOrdered()) {
             if (inputHatches.size() < inputs.size()) {
                 return null;
             }
@@ -188,7 +188,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
         int low = 0;
         int high = maxParallel();
         while (low < high) {
-            int middle = low + (high - low + 1) / 2;
+            int middle = low + (int) (((long) high - low + 1) / 2);
             if (group.inventory().consume(recipe, middle)) {
                 low = middle;
             } else {

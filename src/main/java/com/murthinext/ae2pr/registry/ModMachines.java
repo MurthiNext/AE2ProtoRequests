@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.registry;
 
 import java.util.List;
 
-import com.murthinext.ae2pr.ModConfig;
+import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.api.BlockProperties;
 import com.murthinext.ae2pr.api.machine.CoreLight;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -109,45 +109,45 @@ public final class ModMachines {
                 "crystal_assembly_line", CrystalAssemblyLineRecipe.Serializer::new);
 
         FILTER_PRESS = MultiblockMachineDefinition.standard("filter_press", ModMachines::metalProperties,
-                () -> FilterPressStructure.INSTANCE, ModConfig::filterPressBaseParallel, FILTER_PRESS_RECIPE::type);
+                () -> FilterPressStructure.INSTANCE, ServerConfig::filterPressBaseParallel, FILTER_PRESS_RECIPE::type);
         JIG = MultiblockMachineDefinition.standard("jig", JigControllerBlockEntity.class, JigControllerBlockEntity::new,
-                ModMachines::crystalProperties, () -> JigStructure.INSTANCE, ModConfig::jigBaseParallel,
+                ModMachines::crystalProperties, () -> JigStructure.INSTANCE, ServerConfig::jigBaseParallel,
                 JIG_RECIPE::type);
         CRYSTAL_REACTION_CHAMBER = MultiblockMachineDefinition.standard("crystal_reaction_chamber",
                 CrystalReactionChamberControllerBlockEntity.class, CrystalReactionChamberControllerBlockEntity::new,
                 ModMachines::crystalProperties, () -> CrystalReactionChamberStructure.INSTANCE,
-                ModConfig::crystalReactionBaseParallel, CRYSTAL_REACTION_CHAMBER_RECIPE::type)
+                ServerConfig::crystalReactionBaseParallel, CRYSTAL_REACTION_CHAMBER_RECIPE::type)
                 .coreLight(ModMachines.CRYSTAL_REACTOR_CORE);
         CRYSTAL_ASSEMBLY_LINE = MultiblockMachineDefinition.standard("crystal_assembly_line",
                 CrystalAssemblyLineControllerBlockEntity.class, CrystalAssemblyLineControllerBlockEntity::new,
                 ModMachines::metalProperties, () -> CrystalAssemblyLineStructure.INSTANCE,
-                ModConfig::assemblyBaseParallel, CRYSTAL_ASSEMBLY_LINE_RECIPE::type);
+                ServerConfig::assemblyBaseParallel, CRYSTAL_ASSEMBLY_LINE_RECIPE::type);
         MATTER_PHASE_TRANSFORMER = MultiblockMachineDefinition.standard("matter_phase_transformer",
                 MatterPhaseTransformerControllerBlockEntity.class, MatterPhaseTransformerControllerBlockEntity::new,
                 ModMachines::stoneProperties, () -> MatterPhaseTransformerStructure.INSTANCE,
-                ModConfig::matterPhaseTransformerBaseParallel, MATTER_PHASE_TRANSFORMER_RECIPE::type)
+                ServerConfig::matterPhaseTransformerBaseParallel, MATTER_PHASE_TRANSFORMER_RECIPE::type)
                 .coreLight(ModMachines.CRYSTAL_REACTOR_CORE);
         HIGH_REACTIVITY_LAVA_SMELTER = MultiblockMachineDefinition.customMenu("high_reactivity_lava_smelter",
                 HighReactivityLavaSmelterControllerBlockEntity.class, HighReactivityLavaSmelterControllerBlockEntity::new,
                 ModMachines::stoneProperties, () -> HighReactivityLavaSmelterStructure.INSTANCE,
-                ModConfig::highReactivityLavaSmelterBaseParallel, HIGH_REACTIVITY_LAVA_SMELTER_RECIPE::type,
+                ServerConfig::highReactivityLavaSmelterBaseParallel, HIGH_REACTIVITY_LAVA_SMELTER_RECIPE::type,
                 () -> HighReactivityLavaSmelterMenu.TYPE,
                 (definition, id, inventory, controller) -> new HighReactivityLavaSmelterMenu(id, inventory, controller));
         CRYSTAL_WORKSTATION = MultiblockMachineDefinition.withModes("crystal_workstation",
                 CrystalWorkstationControllerBlockEntity.class, CrystalWorkstationControllerBlockEntity::new,
                 ModMachines::crystalProperties, () -> CrystalWorkstationStructure.INSTANCE,
-                ModConfig::crystalWorkstationBaseParallel, CrystalWorkstationMode.ETCHING::recipeType,
+                ServerConfig::crystalWorkstationBaseParallel, CrystalWorkstationMode.ETCHING::recipeType,
                 List.of(CrystalWorkstationMode.values()))
                 .coreLight(ModMachines.CRYSTAL_REACTOR_CORE);
         MULTI_FACTORY = MultiblockMachineDefinition.withModes("multi_factory", MultiFactoryControllerBlockEntity.class,
                 MultiFactoryControllerBlockEntity::new, ModMachines::crystalProperties,
-                () -> MultiFactoryStructure.INSTANCE, ModConfig::multiFactoryBaseParallel,
+                () -> MultiFactoryStructure.INSTANCE, ServerConfig::multiFactoryBaseParallel,
                 MultiFactoryMode.INSCRIBING::recipeType, List.of(MultiFactoryMode.values()));
         NAMING_FACTORY = SingleblockMachineDefinition.create("naming_factory", NamingFactoryBlockEntity.class,
                 ModMachines::namingFactoryProperties, NamingFactoryBlock::new,
                 NamingFactoryBlockEntity::new, () -> NamingFactoryMenu.TYPE,
                 NamingFactoryMenu::new,
-                4, NamingFactoryBlockEntity.SLOT_COUNT, ModConfig::namingFactoryMaxPower);
+                4, NamingFactoryBlockEntity.SLOT_COUNT, ServerConfig::namingFactoryMaxPower);
         CRYSTAL_REACTOR = MachineDefinition.custom("high_energy_core", "crystal_reactor_core",
                 CrystalReactorCoreBlockEntity.class, () -> new HighEnergyCoreBlock(metalProperties()),
                 CrystalReactorCoreBlockEntity::new, null, null, 0);

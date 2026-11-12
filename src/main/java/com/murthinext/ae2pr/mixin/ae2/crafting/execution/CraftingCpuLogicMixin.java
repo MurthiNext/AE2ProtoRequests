@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.murthinext.ae2pr.ModConfig;
+import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.logic.repeat.FailureReason;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderBinding;
@@ -299,7 +299,7 @@ public abstract class CraftingCpuLogicMixin implements RepeatOrderHost {
     @Unique
     private void ae2pr$retryOrFail(RepeatOrderContext context, FailureReason reason) {
         context.recalc = null;
-        if (++context.retryCount > ModConfig.retryCount()) {
+        if (++context.retryCount > ServerConfig.retryCount()) {
             ae2pr.LOGGER.info("Repeat order failed: {}x{} after {} retries (reason: {})",
                     context.amountPerRound, context.what, context.retryCount - 1, reason);
             context.state = RepeatOrderState.FAILED;
@@ -308,7 +308,7 @@ public abstract class CraftingCpuLogicMixin implements RepeatOrderHost {
             this.ae2pr$context = null;
             return;
         }
-        context.retryCooldownTicks = ModConfig.retryIntervalTicks();
+        context.retryCooldownTicks = ServerConfig.retryIntervalTicks();
         context.state = RepeatOrderState.RETRY_WAIT;
     }
 

@@ -19,6 +19,7 @@ import com.murthinext.ae2pr.network.TerminalStorySyncPacket;
 import com.murthinext.ae2pr.network.TerminalStoryUnlockPacket;
 import com.murthinext.ae2pr.network.TerminalStoryUpdatePacket;
 import com.murthinext.ae2pr.network.TerminalStoryWatchPacket;
+import com.murthinext.ae2pr.network.ServerConfigSyncPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.NetworkDirection;
@@ -41,6 +42,12 @@ public final class ModNetwork {
     }
 
     public static void register() {
+        CHANNEL.registerMessage(nextMessageId++,
+                ServerConfigSyncPacket.class,
+                ServerConfigSyncPacket::encode,
+                ServerConfigSyncPacket::decode,
+                ServerConfigSyncPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
         CHANNEL.registerMessage(nextMessageId++,
                 RepeatOrderStatusPacket.class,
                 RepeatOrderStatusPacket::encode,

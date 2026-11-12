@@ -20,6 +20,7 @@ import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 import com.murthinext.ae2pr.logic.wrench.WrenchInteractions;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryBlockEntity;
 import com.murthinext.ae2pr.api.machine.MachineRegistries;
+import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.MachineTuning;
 import com.murthinext.ae2pr.registry.*;
 import net.minecraftforge.api.distmarker.Dist;
@@ -42,10 +43,11 @@ public class ae2pr {
     public ae2pr(FMLJavaModLoadingContext context) {
         var modEventBus = context.getModEventBus();
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(ServerConfig::onReload);
         // 机器模板的注册表需在 ModMachines.register 前注入
         MachineRegistries.install(ModBlocks.BLOCKS, ModItems.ITEMS, ModBlockEntities.BLOCK_ENTITIES,
                 ModMenus.MENUS, ModRecipes.RECIPE_TYPES, ModRecipes.SERIALIZERS);
-        MachineTuning.install(ModConfig::lossySpeedPerCard, ModConfig::lossyEnergyMultiplierPerCard);
+        MachineTuning.install(ServerConfig::lossySpeedPerCard, ServerConfig::lossyEnergyMultiplierPerCard);
         // 材质与机器的延迟注册项必须在注册事件触发前全部提交
         ModMaterials.register();
         ModMachines.register();
@@ -61,7 +63,8 @@ public class ae2pr {
         ModSounds.SOUNDS.register(modEventBus);
         ModEffects.EFFECTS.register(modEventBus);
         ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
-        context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, ModConfig.SPEC);
+        context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.SERVER, ServerConfig.SPEC,
+                ServerConfig.FILE_NAME);
         // 部件模型必须在预初始化阶段注册
         PartModels.registerModels(PartModelsHelper.createModels(MultiLevelEmitterPart.class));
         PartModels.registerModels(PartModelsHelper.createModels(MultiThresholdLevelEmitterPart.class));
@@ -108,6 +111,11 @@ public class ae2pr {
             for (var machine : ModMachines.ALL) {
                 if (machine.speedUpgrades() > 0) {
                     Upgrades.add(AEItems.SPEED_CARD, machine.block(), machine.speedUpgrades());
+                }
+                if (machine instanceof MultiblockMachineDefinition<?, ?>) {
+                    Upgrades.add(ModItems.AEV_SPEED_CARD.get(), machine.block(), machine.speedUpgrades());
+                    Upgrades.add(ModItems.AEV_PARALLEL_CARD.get(), machine.block(), machine.speedUpgrades());
+                    Upgrades.add(ModItems.AEV_ENERGY_CARD.get(), machine.block(), machine.speedUpgrades());
                 }
             }
 

@@ -7,7 +7,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.items.SlotItemHandler;
 
-import com.murthinext.ae2pr.ModConfig;
+import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
 import com.murthinext.ae2pr.registry.ModMachines;
 
@@ -49,6 +49,6 @@ public class HighReactivityLavaSmelterMenu extends AbstractMultiblockControllerM
     }
 
     public int getMaxDurability() {
-        return ModConfig.highReactivityLavaSmelterMaxDurability();
+        return ServerConfig.highReactivityLavaSmelterMaxDurability();
     }
 }

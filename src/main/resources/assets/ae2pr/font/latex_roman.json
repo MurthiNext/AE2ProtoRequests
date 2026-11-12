@@ -1,0 +1,15 @@
+{
+    "providers": [
+        {
+            "type": "ttf",
+            "file": "ae2pr:katex_roman.ttf",
+            "size": 12,
+            "oversample": 2,
+            "shift": [0, 0.7779]
+        },
+        {
+            "type": "reference",
+            "id": "minecraft:default"
+        }
+    ]
+}

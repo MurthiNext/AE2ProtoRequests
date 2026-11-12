@@ -12,7 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
-import com.murthinext.ae2pr.ModConfig;
+import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.api.machine.singleblock.AbstractSingleblockMachineBlockEntity;
 import com.murthinext.ae2pr.api.machine.singleblock.SingleblockMachineDefinition;
 
@@ -183,7 +183,7 @@ public class NamingFactoryBlockEntity extends AbstractSingleblockMachineBlockEnt
     }
 
     private static double cost(int parallel) {
-        return ModConfig.namingFactoryEnergyPerItem() * parallel;
+        return ServerConfig.namingFactoryEnergyPerItem() * parallel;
     }
 
     private boolean canWork() {

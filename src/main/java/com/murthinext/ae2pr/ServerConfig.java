@@ -1,13 +1,26 @@
 package com.murthinext.ae2pr;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.toml.TomlFormat;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import appeng.blockentity.misc.ChargerBlockEntity;
 import com.murthinext.ae2pr.api.EnergyAmount;
+import com.murthinext.ae2pr.api.math.LatexFormula;
+import com.murthinext.ae2pr.api.upgrade.MachineUpgradeDefinition;
+import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
+import com.murthinext.ae2pr.network.ServerConfigSyncPacket;
+import com.murthinext.ae2pr.registry.ModNetwork;
 
-public final class ModConfig {
+public final class ServerConfig {
+    public static final String FILE_NAME = "ae2pr-server.toml";
+
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
     private static final ForgeConfigSpec.IntValue MAX_ROUNDS;
@@ -70,6 +83,10 @@ public final class ModConfig {
     private static final ForgeConfigSpec.BooleanValue COLLAPSE_ENABLED;
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> COLLAPSE_EXTRA_BLOCKS;
     private static final ForgeConfigSpec.LongValue COLLAPSE_THRESHOLD;
+
+    public static final MachineUpgradeDefinition AEV_SPEED;
+    public static final MachineUpgradeDefinition AEV_PARALLEL;
+    public static final MachineUpgradeDefinition AEV_ENERGY;
 
     static final ForgeConfigSpec SPEC;
 
@@ -247,6 +264,12 @@ public final class ModConfig {
         LOSSY_ENERGY_MULTIPLIER_PER_CARD = BUILDER
                 .comment("多方块机器每张加速卡对单次作业耗能的倍率，逐张相乘")
                 .defineInRange("lossyEnergyMultiplierPerCard", 4.0, 1.0, 1000.0);
+        AEV_SPEED = define("aev_speed_card", MachineUpgradeType.SPEED, "f(x)=2x",
+                "x 为应用本张卡前的速度倍率，包含结构模块和 AE2 加速卡的增益");
+        AEV_PARALLEL = define("aev_parallel_card", MachineUpgradeType.PARALLEL, "f(x)=4x+32",
+                "x 为应用本张卡前的并行上限，包含结构模块的增益；每张卡计算后向下取整");
+        AEV_ENERGY = define("aev_energy_card", MachineUpgradeType.ENERGY, "f(x)=\\frac{x}{2}",
+                "x 为应用本张卡前的每并行配方耗能（AE），包含 AE2 加速卡的耗能惩罚");
         BUILDER.pop();
 
         BUILDER.push("collapse");
@@ -267,179 +290,220 @@ public final class ModConfig {
         SPEC = BUILDER.build();
     }
 
-    private ModConfig() {
+    private ServerConfig() {
+    }
+
+    // 客户端在进入服务器前还未收到同步配置，此时回退到默认值
+    private static <T> T read(ForgeConfigSpec.ConfigValue<T> value) {
+        return SPEC.isLoaded() ? value.get() : value.getDefault();
+    }
+
+    // 服务端已运行时的配置重载不会由 Forge 重发，这里补一次全量同步
+    public static void onReload(ModConfigEvent.Reloading event) {
+        var config = event.getConfig();
+        var server = ServerLifecycleHooks.getCurrentServer();
+        if (config.getSpec() == SPEC && config.getConfigData() instanceof CommentedFileConfig && server != null) {
+            byte[] snapshot = TomlFormat.instance().createWriter().writeToString(config.getConfigData())
+                    .getBytes(StandardCharsets.UTF_8);
+            server.execute(() -> ModNetwork.CHANNEL.send(PacketDistributor.ALL.noArg(),
+                    new ServerConfigSyncPacket(snapshot)));
+        }
+    }
+
+    private static MachineUpgradeDefinition define(String id, MachineUpgradeType type, String fallback,
+            String meaning) {
+        LatexFormula.parse(fallback);
+        BUILDER.push(id);
+        ForgeConfigSpec.ConfigValue<String> value = BUILDER
+                .comment(meaning, "同类卡逐张代入；无卡时不应用公式。使用 LaTeX，例如 f(x)=\\frac{x}{2}",
+                        "TOML 单引号字符串可直接写反斜杠；双引号字符串需要转义反斜杠。",
+                        "语法与边界规则见 docs/upgrade_cards.md")
+                .define("formula", fallback, candidate -> {
+                    if (!(candidate instanceof String source)) {
+                        return false;
+                    }
+                    try {
+                        LatexFormula.parse(source);
+                        return true;
+                    } catch (IllegalArgumentException exception) {
+                        ae2pr.LOGGER.warn("Invalid upgrade formula for {}: {}", id, exception.getMessage());
+                        return false;
+                    }
+                });
+        BUILDER.pop();
+        return new MachineUpgradeDefinition(id, type, fallback, () -> read(value));
     }
 
     public static int maxRounds() {
-        return MAX_ROUNDS.get();
+        return read(MAX_ROUNDS);
     }
 
     public static int retryCount() {
-        return RETRY_COUNT.get();
+        return read(RETRY_COUNT);
     }
 
     public static int retryIntervalTicks() {
-        return RETRY_INTERVAL_TICKS.get();
+        return read(RETRY_INTERVAL_TICKS);
     }
 
     public static boolean notifyOnFailure() {
-        return NOTIFY_ON_FAILURE.get();
+        return read(NOTIFY_ON_FAILURE);
     }
 
     public static int requesterSlots() {
-        return REQUESTER_SLOTS.get();
+        return read(REQUESTER_SLOTS);
     }
 
     public static double requesterIdleEnergy() {
-        return REQUESTER_IDLE_ENERGY.get();
+        return read(REQUESTER_IDLE_ENERGY);
     }
 
     public static boolean requesterRequireChannel() {
-        return REQUESTER_REQUIRE_CHANNEL.get();
+        return read(REQUESTER_REQUIRE_CHANNEL);
     }
 
     public static boolean assemblyItemsOrdered() {
-        return ASSEMBLY_ITEMS_ORDERED.get();
+        return read(ASSEMBLY_ITEMS_ORDERED);
     }
 
     public static boolean assemblyFluidsOrdered() {
-        return ASSEMBLY_FLUIDS_ORDERED.get();
+        return read(ASSEMBLY_FLUIDS_ORDERED);
     }
 
     public static int assemblyBaseParallel() {
-        return ASSEMBLY_BASE_PARALLEL.get();
+        return read(ASSEMBLY_BASE_PARALLEL);
     }
 
     public static int assemblyParallelPerSlice() {
-        return ASSEMBLY_PARALLEL_PER_SLICE.get();
+        return read(ASSEMBLY_PARALLEL_PER_SLICE);
     }
 
     public static int crystalAssemblyLineMaxSlices() {
-        return ASSEMBLY_MAX_SLICES.get();
+        return read(ASSEMBLY_MAX_SLICES);
     }
 
     public static int assemblyModuleParallelPerUnit() {
-        return ASSEMBLY_MODULE_PARALLEL_PER_UNIT.get();
+        return read(ASSEMBLY_MODULE_PARALLEL_PER_UNIT);
     }
 
     public static double assemblyModuleSpeedPerUnit() {
-        return ASSEMBLY_MODULE_SPEED_PER_UNIT.get();
+        return read(ASSEMBLY_MODULE_SPEED_PER_UNIT);
     }
 
     public static double namingFactoryMaxPower() {
-        return NAMING_FACTORY_MAX_POWER.get();
+        return read(NAMING_FACTORY_MAX_POWER);
     }
 
     public static double namingFactoryEnergyPerItem() {
-        return NAMING_FACTORY_ENERGY_PER_ITEM.get();
+        return read(NAMING_FACTORY_ENERGY_PER_ITEM);
     }
 
     public static int highReactivityLavaSmelterBaseParallel() {
-        return HIGH_REACTIVITY_LAVA_SMELTER_BASE_PARALLEL.get();
+        return read(HIGH_REACTIVITY_LAVA_SMELTER_BASE_PARALLEL);
     }
 
     public static double highReactivityLavaSmelterPassiveEnergy() {
-        return HIGH_REACTIVITY_LAVA_SMELTER_PASSIVE_ENERGY.get();
+        return read(HIGH_REACTIVITY_LAVA_SMELTER_PASSIVE_ENERGY);
     }
 
     public static double highReactivityLavaSmelterDurabilityLossChance() {
-        return HIGH_REACTIVITY_LAVA_SMELTER_DURABILITY_LOSS_CHANCE.get();
+        return read(HIGH_REACTIVITY_LAVA_SMELTER_DURABILITY_LOSS_CHANCE);
     }
 
     public static int highReactivityLavaSmelterMaxDurability() {
-        return HIGH_REACTIVITY_LAVA_SMELTER_MAX_DURABILITY.get();
+        return read(HIGH_REACTIVITY_LAVA_SMELTER_MAX_DURABILITY);
     }
 
     public static int highReactivityLavaSmelterDurabilityPerDust() {
-        return HIGH_REACTIVITY_LAVA_SMELTER_DURABILITY_PER_DUST.get();
+        return read(HIGH_REACTIVITY_LAVA_SMELTER_DURABILITY_PER_DUST);
     }
 
     public static int matterPhaseTransformerBaseParallel() {
-        return MATTER_PHASE_TRANSFORMER_BASE_PARALLEL.get();
+        return read(MATTER_PHASE_TRANSFORMER_BASE_PARALLEL);
     }
 
     public static int crystalReactionBaseParallel() {
-        return CRYSTAL_REACTION_BASE_PARALLEL.get();
+        return read(CRYSTAL_REACTION_BASE_PARALLEL);
     }
 
     public static int crystalWorkstationBaseParallel() {
-        return CRYSTAL_WORKSTATION_BASE_PARALLEL.get();
+        return read(CRYSTAL_WORKSTATION_BASE_PARALLEL);
     }
 
     public static int jigBaseParallel() {
-        return JIG_BASE_PARALLEL.get();
+        return read(JIG_BASE_PARALLEL);
     }
 
     public static int filterPressBaseParallel() {
-        return FILTER_PRESS_BASE_PARALLEL.get();
+        return read(FILTER_PRESS_BASE_PARALLEL);
     }
 
     public static int multiFactoryBaseParallel() {
-        return MULTI_FACTORY_BASE_PARALLEL.get();
+        return read(MULTI_FACTORY_BASE_PARALLEL);
     }
 
     public static int multiFactoryInscribingDuration() {
-        return MULTI_FACTORY_INSCRIBING_DURATION.get();
+        return read(MULTI_FACTORY_INSCRIBING_DURATION);
     }
 
     public static int multiFactoryChargingDuration() {
-        return MULTI_FACTORY_CHARGING_DURATION.get();
+        return read(MULTI_FACTORY_CHARGING_DURATION);
     }
 
     public static double multiFactoryInscribingEnergyPerParallel() {
-        return MULTI_FACTORY_INSCRIBING_ENERGY.get();
+        return read(MULTI_FACTORY_INSCRIBING_ENERGY);
     }
 
     public static double multiFactoryChargingEnergyPerParallel() {
-        return MULTI_FACTORY_CHARGING_ENERGY.get();
+        return read(MULTI_FACTORY_CHARGING_ENERGY);
     }
 
     public static int crystalReactorRadius() {
-        return CRYSTAL_REACTOR_RADIUS.get();
+        return read(CRYSTAL_REACTOR_RADIUS);
     }
 
     public static int crystalReactorDepth() {
-        return CRYSTAL_REACTOR_DEPTH.get();
+        return read(CRYSTAL_REACTOR_DEPTH);
     }
 
     public static int crystalReactorDurationTicks() {
-        return CRYSTAL_REACTOR_DURATION_TICKS.get();
+        return read(CRYSTAL_REACTOR_DURATION_TICKS);
     }
 
     public static int crystalReactorBreakSoundsPerTick() {
-        return CRYSTAL_REACTOR_SOUNDS_PER_TICK.get();
+        return read(CRYSTAL_REACTOR_SOUNDS_PER_TICK);
     }
 
     public static int[] crystalReactorTierWeights() {
-        return new int[] { CRYSTAL_REACTOR_FLAWLESS_WEIGHT.get(), CRYSTAL_REACTOR_FLAWED_WEIGHT.get(),
-                CRYSTAL_REACTOR_CHIPPED_WEIGHT.get(), CRYSTAL_REACTOR_DAMAGED_WEIGHT.get() };
+        return new int[] { read(CRYSTAL_REACTOR_FLAWLESS_WEIGHT), read(CRYSTAL_REACTOR_FLAWED_WEIGHT),
+                read(CRYSTAL_REACTOR_CHIPPED_WEIGHT), read(CRYSTAL_REACTOR_DAMAGED_WEIGHT) };
     }
 
     public static int[] crystalReactorMaterialWeights() {
-        return new int[] { CRYSTAL_REACTOR_AMETHYST_WEIGHT.get(), CRYSTAL_REACTOR_CERTUS_WEIGHT.get(),
-                CRYSTAL_REACTOR_ENERGIZED_WEIGHT.get(), CRYSTAL_REACTOR_OVERLOAD_WEIGHT.get() };
+        return new int[] { read(CRYSTAL_REACTOR_AMETHYST_WEIGHT), read(CRYSTAL_REACTOR_CERTUS_WEIGHT),
+                read(CRYSTAL_REACTOR_ENERGIZED_WEIGHT), read(CRYSTAL_REACTOR_OVERLOAD_WEIGHT) };
     }
 
     public static double lossySpeedPerCard() {
-        return LOSSY_SPEED_PER_CARD.get();
+        return read(LOSSY_SPEED_PER_CARD);
     }
 
     public static double lossyEnergyMultiplierPerCard() {
-        return LOSSY_ENERGY_MULTIPLIER_PER_CARD.get();
+        return read(LOSSY_ENERGY_MULTIPLIER_PER_CARD);
     }
 
     public static boolean collapseEnabled() {
-        return COLLAPSE_ENABLED.get();
+        return read(COLLAPSE_ENABLED);
     }
 
     public static List<String> collapseExtraBlocks() {
-        return COLLAPSE_EXTRA_BLOCKS.get().stream()
+        return read(COLLAPSE_EXTRA_BLOCKS).stream()
                 .filter(String.class::isInstance)
                 .map(String.class::cast)
                 .toList();
     }
 
     public static long collapseThreshold() {
-        return COLLAPSE_THRESHOLD.get();
+        return read(COLLAPSE_THRESHOLD);
     }
 }

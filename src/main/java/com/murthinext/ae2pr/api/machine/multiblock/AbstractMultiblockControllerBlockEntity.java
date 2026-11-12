@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import appeng.api.upgrades.IUpgradeInventory;
+import appeng.api.upgrades.IUpgradeableObject;
 import appeng.api.upgrades.UpgradeInventories;
 import appeng.core.definitions.AEItems;
 
@@ -45,8 +46,10 @@ import com.murthinext.ae2pr.api.multiblock.StructureValidator;
 import com.murthinext.ae2pr.api.recipe.ChancedItemStack;
 import com.murthinext.ae2pr.api.recipe.CountedIngredient;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
+import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
+import com.murthinext.ae2pr.logic.upgrade.MachineUpgrades;
 
-public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntity implements ControllerHost {
+public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntity implements ControllerHost, IUpgradeableObject {
 
     public enum Error {
         NONE(null), POWER("power"), OUTPUT("output"), DURABILITY("durability"), NETWORK("network");
@@ -116,7 +119,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         this.definition = definition;
         this.structureFacade = definition.structure();
         this.structure = new StructureValidator(structureFacade.pattern());
-        this.upgrades = UpgradeInventories.forMachine(definition.item(), UPGRADE_SLOTS, this::setChanged);
+        this.upgrades = UpgradeInventories.forMachine(definition.item(), UPGRADE_SLOTS, this::markStateChanged);
         this.coreLight = definition.coreLight();
     }
 
@@ -130,7 +133,8 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
 
     public int maxParallel() {
         long total = (long) definition.maxParallel() + parallelBonus();
-        return (int) Math.min(total, Integer.MAX_VALUE);
+        return (int) MachineUpgrades.apply(upgrades, MachineUpgradeType.PARALLEL,
+                Math.max(1, Math.min(total, Integer.MAX_VALUE)));
     }
 
     protected long parallelBonus() {
@@ -340,7 +344,9 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     protected double energyCost(Match match) {
-        return EnergyAmount.clamp(match.recipe().getEnergyPerParallel() * match.parallel() * lossyEnergyMultiplier());
+        double perParallel = match.recipe().getEnergyPerParallel() * lossyEnergyMultiplier();
+        return EnergyAmount.clamp(MachineUpgrades.apply(upgrades, MachineUpgradeType.ENERGY, perParallel)
+                * match.parallel());
     }
 
     private void finishJob() {
@@ -484,7 +490,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         int low = 0;
         int high = outputCountBound(recipe, maximum);
         while (low < high) {
-            int middle = low + (high - low + 1) / 2;
+            int middle = low + (int) (((long) high - low + 1) / 2);
             if (feasible.test(middle)) {
                 low = middle;
             } else {
@@ -559,6 +565,10 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     public double getSpeedMultiplier() {
+        return MachineUpgrades.apply(upgrades, MachineUpgradeType.SPEED, baseSpeedMultiplier());
+    }
+
+    protected double baseSpeedMultiplier() {
         return 1.0 + getSpeedCardCount() * MachineTuning.speedPerCard();
     }
 
@@ -572,6 +582,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return (int) Math.max(1L, Math.min((long) Math.ceil(baseTicks / speed), Integer.MAX_VALUE));
     }
 
+    @Override
     public IUpgradeInventory getUpgrades() {
         return upgrades;
     }

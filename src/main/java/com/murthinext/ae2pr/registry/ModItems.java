@@ -1,6 +1,7 @@
 package com.murthinext.ae2pr.registry;
 
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.item.ComputationCellComponentItem;
 import com.murthinext.ae2pr.item.CrystalProcessorItem;
 import com.murthinext.ae2pr.item.crystaline.CrystalineItem;
@@ -11,6 +12,7 @@ import com.murthinext.ae2pr.item.filter_cell.FilterCellItem;
 import com.murthinext.ae2pr.item.collapsed_storage_cell.CollapsedItemStorageCellItem;
 import com.murthinext.ae2pr.item.proto_terminal.ProtoTerminalItem;
 import com.murthinext.ae2pr.item.upgrade.SuperStackCardItem;
+import com.murthinext.ae2pr.item.upgrade.MachineUpgradeCardItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
@@ -42,6 +44,15 @@ public final class ModItems {
 
     public static final RegistryObject<SuperStackCardItem> SUPER_STACK_CARD = ITEMS.register("super_stack_card",
             () -> new SuperStackCardItem(new Item.Properties()));
+
+    public static final RegistryObject<MachineUpgradeCardItem> AEV_SPEED_CARD = ITEMS.register("aev_speed_card",
+            () -> new MachineUpgradeCardItem(new Item.Properties(), ServerConfig.AEV_SPEED));
+
+    public static final RegistryObject<MachineUpgradeCardItem> AEV_PARALLEL_CARD = ITEMS.register("aev_parallel_card",
+            () -> new MachineUpgradeCardItem(new Item.Properties(), ServerConfig.AEV_PARALLEL));
+
+    public static final RegistryObject<MachineUpgradeCardItem> AEV_ENERGY_CARD = ITEMS.register("aev_energy_card",
+            () -> new MachineUpgradeCardItem(new Item.Properties(), ServerConfig.AEV_ENERGY));
 
     public static final RegistryObject<CollapsedItemStorageCellItem> COLLAPSED_ITEM_STORAGE_CELL = ITEMS.register(
             "collapsed_item_storage_cell", () -> new CollapsedItemStorageCellItem(new Item.Properties().stacksTo(1)));
