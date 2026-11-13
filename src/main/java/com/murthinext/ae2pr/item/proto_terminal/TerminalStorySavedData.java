@@ -30,15 +30,19 @@ public class TerminalStorySavedData extends SavedData {
         if (progress.epoch != (current == null ? 0 : current.epoch)) {
             return false;
         }
-        if (current != null && current.programId.equals(progress.programId)) {
-            var nodes = new LinkedHashMap<>(current.nodes);
+        // 上传只带当前块，其余块沿用存档
+        if (current != null) {
+            Map<String, TerminalStoryProgress.NodeProgress> nodes = new LinkedHashMap<>(current.nodes);
             nodes.putAll(progress.nodes);
             progress.nodes = nodes;
+            // 快照只在同一编译产物下可复用
+            if (progress.inkState.isEmpty() && progress.programId.equals(current.programId)) {
+                progress.inkState = current.inkState;
+            }
         }
         if (progress.nodes.size() > 128) {
             throw new IOException("Story node save data exceeds the size limit");
         }
-        progress.compress();
         players.put(player, progress);
         setDirty();
         return true;

@@ -6,28 +6,45 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
+/**
+ * 玩家阅读进度。
+ *
+ * <p>数据分两层：
+ * <ul>
+ * <li>权威态——{@code variables}、{@code decisions}、{@code finished}、{@code log}。
+ * 它们只描述玩家做过什么、看到过什么，与编译产物无关，更新剧情时全部保留。</li>
+ * <li>派生态——{@code inkState}（Ink 执行位置快照）。它只在 {@code programId} 与当前程序一致时有效，
+ * 否则由 {@link TerminalStoryRunner} 回放权威态重建。</li>
+ * </ul>
+ * 因此重新编译剧情不会清空进度；最坏情况只是某个分支被改动的章节退回本章开头。
+ */
 public final class TerminalStoryProgress {
 
+    public static final int SCHEMA_VERSION = 3;
     public static final int MAX_JSON_BYTES = 1048576;
     public static final int MAX_UPDATE_BYTES = 30000;
     public static final int MAX_SNAPSHOT_BYTES = 1000000;
     public static final int MAX_LOG_LINES = 1024;
+    public static final int MAX_DECISIONS = 8192;
     private static final Gson GSON = new Gson();
 
+    public int schemaVersion = SCHEMA_VERSION;
     public long epoch;
     public String programId = "";
+    // 派生态
     public String inkState = "";
+    // 权威态
+    public Map<String, JsonPrimitive> variables = new LinkedHashMap<>();
     public Map<String, NodeProgress> nodes = new LinkedHashMap<>();
 
     public record Line(String id, String speaker, String text, int delay, boolean answer) {
@@ -35,6 +52,15 @@ public final class TerminalStoryProgress {
         public String prefix() {
             return speaker.isBlank() ? "" : "<" + speaker + "> ";
         }
+    }
+
+    public static final class NodeProgress {
+
+        public String entry = "";
+        public List<String> decisions = new ArrayList<>();
+        public boolean finished;
+        public List<Line> log = new ArrayList<>();
+        public Playback playback = new Playback();
     }
 
     public static final class Playback {
@@ -46,15 +72,6 @@ public final class TerminalStoryProgress {
         public int answerDelay;
     }
 
-    public static final class NodeProgress {
-
-        public String entry = "";
-        public List<Line> log = new ArrayList<>();
-        public Set<String> visitedPaths = new LinkedHashSet<>();
-        public Playback playback = new Playback();
-        public boolean finished;
-    }
-
     public static TerminalStoryProgress fromJson(String json) {
         if (json == null || json.isBlank()) {
             return new TerminalStoryProgress();
@@ -63,19 +80,32 @@ public final class TerminalStoryProgress {
             throw new IllegalArgumentException("Story snapshot is too large");
         }
         TerminalStoryProgress progress = GSON.fromJson(json, TerminalStoryProgress.class);
-        if (progress == null || progress.epoch < 0 || progress.programId == null || progress.inkState == null
-                || progress.nodes == null || progress.nodes.size() > 128
+        if (progress == null || progress.schemaVersion != SCHEMA_VERSION || progress.epoch < 0
+                || progress.programId == null || progress.inkState == null || progress.variables == null
+                || progress.nodes == null || progress.variables.size() > 256 || progress.nodes.size() > 128
                 || !progress.programId.isEmpty() && !progress.programId.matches("[0-9a-f]{64}")) {
             throw new IllegalArgumentException("Invalid story snapshot");
+        }
+        for (var entry : progress.variables.entrySet()) {
+            JsonPrimitive value = entry.getValue();
+            if (entry.getKey().isBlank() || entry.getKey().length() > 256 || value == null
+                    || value.isNumber() && !Double.isFinite(value.getAsDouble())) {
+                throw new IllegalArgumentException("Invalid story variable: " + entry.getKey());
+            }
         }
         for (var entry : progress.nodes.entrySet()) {
             NodeProgress node = entry.getValue();
             if (entry.getKey().isBlank() || entry.getKey().length() > 256 || node == null
-                    || node.entry == null || node.entry.isBlank() || node.entry.length() > 256 || node.log == null
-                    || node.log.size() > MAX_LOG_LINES || node.playback == null || node.visitedPaths == null
-                    || node.visitedPaths.size() > 16384
-                    || node.visitedPaths.stream().anyMatch(path -> path == null || path.length() > 256)) {
+                    || node.entry == null || node.entry.isBlank() || node.entry.length() > 256
+                    || node.decisions == null || node.decisions.size() > MAX_DECISIONS
+                    || node.decisions.stream().anyMatch(decision -> decision == null || decision.isBlank()
+                            || decision.length() > 256)
+                    || node.log == null || node.log.size() > MAX_LOG_LINES) {
                 throw new IllegalArgumentException("Invalid story node progress: " + entry.getKey());
+            }
+            node.playback = node.playback == null ? new Playback() : node.playback;
+            for (Line line : node.log) {
+                validate(line);
             }
             Playback playback = node.playback;
             if (playback.delay < 0 || playback.delay > 60000 || playback.answerDelay < 0 || playback.answerDelay > 320
@@ -83,11 +113,8 @@ public final class TerminalStoryProgress {
                     || playback.pendingLine != null && playback.typing) {
                 throw new IllegalArgumentException("Invalid story playback state: " + entry.getKey());
             }
-            for (Line line : node.log) {
-                validate(line);
-            }
-            if (node.playback.pendingLine != null) {
-                validate(node.playback.pendingLine);
+            if (playback.pendingLine != null) {
+                validate(playback.pendingLine);
             }
         }
         if (!progress.inkState.isEmpty()) {
@@ -100,8 +127,6 @@ public final class TerminalStoryProgress {
                     || !state.getAsJsonObject("flows").has("DEFAULT_FLOW") || !state.has("inkSaveVersion")) {
                 throw new IllegalArgumentException("Invalid Ink snapshot");
             }
-        } else if (!progress.nodes.isEmpty()) {
-            throw new IllegalArgumentException("Story node progress is missing the Ink snapshot");
         }
         return progress;
     }
@@ -148,24 +173,10 @@ public final class TerminalStoryProgress {
     }
 
     public boolean resetNode(String id) {
-        NodeProgress removed = nodes.remove(id);
-        if (removed == null) {
+        if (nodes.remove(id) == null) {
             return false;
         }
-        if (!inkState.isEmpty()) {
-            JsonObject state = JsonParser.parseString(inkState).getAsJsonObject();
-            state.getAsJsonObject("flows").remove(id);
-            if (id.equals(state.get("currentFlowName").getAsString())) {
-                state.addProperty("currentFlowName", "DEFAULT_FLOW");
-            }
-            for (String path : removed.visitedPaths) {
-                if (nodes.values().stream().noneMatch(node -> node.visitedPaths.contains(path))) {
-                    state.getAsJsonObject("visitCounts").remove(path);
-                    state.getAsJsonObject("turnIndices").remove(path);
-                }
-            }
-            inkState = state.toString();
-        }
+        inkState = "";
         return true;
     }
 }

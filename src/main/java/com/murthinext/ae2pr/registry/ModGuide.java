@@ -21,20 +21,20 @@ public final class ModGuide {
             "multiblocks/crystal_assembly_line.md");
     public static final ResourceLocation HIGH_REACTIVITY_LAVA_SMELTER_PAGE = Ids.of(
             "multiblocks/high_reactivity_lava_smelter.md");
-    public static final ResourceLocation MATTER_PHASE_TRANSFORMER_PAGE = ResourceLocation.fromNamespaceAndPath(
-            ae2pr.MODID, "multiblocks/matter_phase_transformer.md");
-    public static final ResourceLocation CRYSTAL_REACTION_CHAMBER_PAGE = ResourceLocation.fromNamespaceAndPath(
-            ae2pr.MODID, "multiblocks/crystal_reaction_chamber.md");
-    public static final ResourceLocation CRYSTAL_REACTOR_PAGE = ResourceLocation.fromNamespaceAndPath(
-            ae2pr.MODID, "multiblocks/crystal_reactor.md");
-    public static final ResourceLocation CRYSTAL_WORKSTATION_PAGE = ResourceLocation.fromNamespaceAndPath(
-            ae2pr.MODID, "multiblocks/crystal_workstation.md");
-    public static final ResourceLocation JIG_PAGE = ResourceLocation.fromNamespaceAndPath(
-            ae2pr.MODID, "multiblocks/jig.md");
-    public static final ResourceLocation FILTER_PRESS_PAGE = ResourceLocation.fromNamespaceAndPath(
-            ae2pr.MODID, "multiblocks/filter_press.md");
-    public static final ResourceLocation MULTI_FACTORY_PAGE = ResourceLocation.fromNamespaceAndPath(
-            ae2pr.MODID, "multiblocks/multi_factory.md");
+    public static final ResourceLocation MATTER_PHASE_TRANSFORMER_PAGE = Ids.of(
+            "multiblocks/matter_phase_transformer.md");
+    public static final ResourceLocation CRYSTAL_REACTION_CHAMBER_PAGE = Ids.of(
+            "multiblocks/crystal_reaction_chamber.md");
+    public static final ResourceLocation CRYSTAL_REACTOR_PAGE = Ids.of(
+            "multiblocks/crystal_reactor.md");
+    public static final ResourceLocation CRYSTAL_WORKSTATION_PAGE = Ids.of(
+            "multiblocks/crystal_workstation.md");
+    public static final ResourceLocation JIG_PAGE = Ids.of(
+            "multiblocks/jig.md");
+    public static final ResourceLocation FILTER_PRESS_PAGE = Ids.of(
+            "multiblocks/filter_press.md");
+    public static final ResourceLocation MULTI_FACTORY_PAGE = Ids.of(
+            "multiblocks/multi_factory.md");
     public static final ResourceLocation NAMING_FACTORY_PAGE = Ids.of(
             "machines/naming_factory.md");
     public static final ResourceLocation CHAMBERS_PAGE = Ids.of(

@@ -4,6 +4,7 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.registry.ModGuide;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -72,10 +73,9 @@ public final class MachineClients {
                 controller -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.HIGH_REACTIVITY_LAVA_SMELTER));
         register(ModMachines.CRYSTAL_WORKSTATION,
                 Style.crystal(ModGuide.CRYSTAL_WORKSTATION_PAGE, 0x8EE6E0).withModeIcons(Map.of(
-                        CrystalWorkstationMode.ETCHING, new MachineModeButton.TextureIcon(ResourceLocation.fromNamespaceAndPath(
-                                ae2pr.MODID, "textures/gui/etching.png")),
-                        CrystalWorkstationMode.CUTTING, new MachineModeButton.TextureIcon(ResourceLocation.fromNamespaceAndPath(
-                                ae2pr.MODID, "textures/gui/cutting.png")))), MachineScreen::new, controller -> {
+                        CrystalWorkstationMode.ETCHING, new MachineModeButton.TextureIcon(Ids.of("textures/gui/etching.png")),
+                        CrystalWorkstationMode.CUTTING, new MachineModeButton.TextureIcon(Ids.of("textures/gui/cutting.png"))
+                )), MachineScreen::new, controller -> {
                     CrystalWorkstationShell.update(controller);
                     MachineProcessingSounds.tick(controller, controller.getMode() == CrystalWorkstationMode.ETCHING
                             ? MachineProcessingSounds.Type.CRYSTAL_WORKSTATION_ETCHING

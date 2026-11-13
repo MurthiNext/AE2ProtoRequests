@@ -286,20 +286,13 @@ public final class TerminalScreen extends Screen {
         }
         revealAt.clear();
         TerminalStoryProgress progress = TerminalStoryProgressCache.get();
-        boolean changed = !progress.programId.isEmpty()
-                && !progress.programId.equals(TerminalStoryRunner.programId(story.program()));
-        if (changed) {
-            long epoch = progress.epoch;
-            progress = new TerminalStoryProgress();
-            progress.epoch = epoch;
-            ae2pr.LOGGER.warn("Proto terminal story program changed, reading progress has been reset");
-            if (minecraft.player != null) {
-                minecraft.player.sendSystemMessage(label("program_changed"));
-            }
-        }
         try {
             runner = new TerminalStoryRunner(story.program(), progress, TerminalStoryText.playerName());
-            if (changed) {
+            if (runner.programChanged()) {
+                ae2pr.LOGGER.info("Proto terminal story program changed, rebuilding reading progress");
+                if (minecraft.player != null) {
+                    minecraft.player.sendSystemMessage(label("program_changed"));
+                }
                 TerminalStoryProgressCache.record(runner.snapshot(), null);
             }
         } catch (RuntimeException exception) {

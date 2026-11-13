@@ -212,7 +212,7 @@
   "gui.ae2pr.proto_terminal.close": "Close",
   "gui.ae2pr.proto_terminal.load_failed": "Unable to load terminal story. Check the log; use /ae2pr story resetAll if reading progress is corrupted.",
   "gui.ae2pr.proto_terminal.save_failed": "Terminal reading progress is too large to save. Ask an administrator to check the log.",
-  "gui.ae2pr.proto_terminal.program_changed": "Story content has changed. Terminal reading progress has been restarted.",
+  "gui.ae2pr.proto_terminal.program_changed": "Story content has changed. Progress and variables are kept, interrupted chapters resume where possible.",
   "gui.ae2pr.proto_terminal.locked.and": " AND ",
   "gui.ae2pr.proto_terminal.locked.or": " OR ",
   "gui.ae2pr.proto_terminal.locked.not": "NOT (%s)",

@@ -17,6 +17,7 @@ import net.minecraft.network.chat.Component;
 // 终端剧情进度缓存
 public final class TerminalStoryProgressCache {
 
+    private static final int SUMMARY_LOG_LINES = 64;
     private static final Set<String> satisfiedUnlocks = new LinkedHashSet<>();
     private static TerminalStoryProgress progress = new TerminalStoryProgress();
     private static boolean synced;
@@ -96,14 +97,11 @@ public final class TerminalStoryProgressCache {
             return;
         }
         try {
-            TerminalStoryProgress update = new TerminalStoryProgress();
-            update.epoch = snapshot.epoch;
-            update.programId = snapshot.programId;
-            update.inkState = snapshot.inkState;
-            if (nodeId != null) {
-                update.nodes.put(nodeId, snapshot.nodes.get(nodeId));
+            byte[] bytes = upload(snapshot, nodeId, false).compress();
+            if (bytes.length > TerminalStoryProgress.MAX_UPDATE_BYTES) {
+                // 超限时退化为只带权威态：对话与访问记录在下次载入时由回放重建
+                bytes = upload(snapshot, nodeId, true).compress();
             }
-            byte[] bytes = update.compress();
             if (bytes.length > TerminalStoryProgress.MAX_UPDATE_BYTES) {
                 throw new IOException("Story node and shared Ink state exceed the upload limit");
             }
@@ -118,5 +116,38 @@ public final class TerminalStoryProgressCache {
                 saveErrorReported = true;
             }
         }
+    }
+
+    private static TerminalStoryProgress upload(TerminalStoryProgress snapshot, String nodeId, boolean summaryOnly) {
+        TerminalStoryProgress update = new TerminalStoryProgress();
+        update.epoch = snapshot.epoch;
+        update.programId = snapshot.programId;
+        update.variables.putAll(snapshot.variables);
+        if (summaryOnly) {
+            // 不带执行位置快照；服务端会保留同一编译产物下上一次的合法快照
+            if (nodeId != null) {
+                update.nodes.put(nodeId, summary(snapshot.nodes.get(nodeId)));
+            } else {
+                snapshot.nodes.forEach((id, node) -> update.nodes.put(id, summary(node)));
+            }
+            return update;
+        }
+        update.inkState = snapshot.inkState;
+        if (nodeId != null) {
+            update.nodes.put(nodeId, snapshot.nodes.get(nodeId));
+        } else {
+            update.nodes.putAll(snapshot.nodes);
+        }
+        return update;
+    }
+
+    private static TerminalStoryProgress.NodeProgress summary(TerminalStoryProgress.NodeProgress node) {
+        TerminalStoryProgress.NodeProgress copy = new TerminalStoryProgress.NodeProgress();
+        copy.entry = node.entry;
+        copy.decisions = List.copyOf(node.decisions);
+        copy.finished = node.finished;
+        int from = Math.max(0, node.log.size() - SUMMARY_LOG_LINES);
+        copy.log = List.copyOf(node.log.subList(from, node.log.size()));
+        return copy;
     }
 }
