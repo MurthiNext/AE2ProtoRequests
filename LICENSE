@@ -19,13 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-Exceptions: the "ME Redstone Requester" code under com/murthinext/ae2pr/requester is derived
-from ME Requester (https://github.com/AlmostReliable/merequester) and is
-licensed under LGPL-3.0.
-
-The KaTeX fonts under assets/ae2pr/font (katex_roman.ttf, katex_math.ttf) are
-from KaTeX (https://github.com/KaTeX/KaTeX) and are licensed under the SIL Open
-Font License 1.1; see licenses/katex-fonts.

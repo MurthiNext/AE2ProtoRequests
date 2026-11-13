@@ -13,6 +13,7 @@ import com.murthinext.ae2pr.item.collapsed_storage_cell.CollapsedItemStorageCell
 import com.murthinext.ae2pr.item.proto_terminal.ProtoTerminalItem;
 import com.murthinext.ae2pr.item.upgrade.SuperStackCardItem;
 import com.murthinext.ae2pr.item.upgrade.MachineUpgradeCardItem;
+import com.murthinext.ae2pr.item.VoltageBlockItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
@@ -30,7 +31,8 @@ public final class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ae2pr.MODID);
 
     private static RegistryObject<BlockItem> blockItem(RegistryObject<? extends Block> block) {
-        return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), new Item.Properties()));
+        return ITEMS.register(block.getId().getPath(),
+                () -> new VoltageBlockItem(block.get(), new Item.Properties()));
     }
 
     public static final RegistryObject<FilterCellItem> FILTER_CELL = ITEMS.register("filter_cell",

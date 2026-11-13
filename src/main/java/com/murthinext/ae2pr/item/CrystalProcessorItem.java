@@ -10,17 +10,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import com.murthinext.ae2pr.api.text.Voltage;
+
 public class CrystalProcessorItem extends Item {
 
-    private final String tierKey;
+    private final String tier;
 
-    public CrystalProcessorItem(Properties properties, String tierKey) {
+    public CrystalProcessorItem(Properties properties, String tier) {
         super(properties);
-        this.tierKey = tierKey;
+        this.tier = tier;
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("tooltip.ae2pr.circuit." + tierKey));
+        tooltip.add(Voltage.circuit(tier));
     }
 }

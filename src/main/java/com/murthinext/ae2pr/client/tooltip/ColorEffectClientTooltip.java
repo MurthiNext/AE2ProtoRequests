@@ -17,6 +17,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import org.joml.Matrix4f;
 
+import com.murthinext.ae2pr.api.text.GradientText;
+
 @OnlyIn(Dist.CLIENT)
 public final class ColorEffectClientTooltip implements ClientTooltipComponent {
 
@@ -24,7 +26,7 @@ public final class ColorEffectClientTooltip implements ClientTooltipComponent {
     private static final int TRANSPARENT_LIGHT = 15728880;
 
     private static final float SWITCH_STEPS_PER_SECOND = 4.0F;
-    private static final float GRADIENT_LOOPS_PER_SECOND = 0.2F;
+    private static final float GRADIENT_LOOPS_PER_SECOND = 0.5F;
 
     private final ColorEffectLine line;
 
@@ -68,7 +70,7 @@ public final class ColorEffectClientTooltip implements ClientTooltipComponent {
 
     private void renderEffect(Segment segment, Font font, int lineX, int x, int y, int lineWidth, long now,
             Matrix4f pose, MultiBufferSource.BufferSource bufferSource) {
-        TooltipColorEffect effect = segment.effect();
+        GradientText effect = segment.effect();
         if (effect.flow()) {
             // 颜色写在字符样式上，阴影由原版按亮度系数自动压暗
             int shift = (int) (now / 1000.0D * effect.speed() * SWITCH_STEPS_PER_SECOND);
@@ -86,7 +88,7 @@ public final class ColorEffectClientTooltip implements ClientTooltipComponent {
 
     // 每个字符取列表中顺序下一个颜色，整体随时间轮换
     private static FormattedCharSequence flowText(Segment segment, int shift) {
-        TooltipColorEffect effect = segment.effect();
+        GradientText effect = segment.effect();
         Style style = segment.style();
         String text = segment.text();
         List<FormattedCharSequence> characters = new ArrayList<>();

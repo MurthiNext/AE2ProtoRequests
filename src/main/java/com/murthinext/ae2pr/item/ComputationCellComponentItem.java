@@ -10,24 +10,21 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import com.murthinext.ae2pr.api.text.Voltage;
+
 public class ComputationCellComponentItem extends Item {
 
     public static final int AEV_TIER = 0;
 
-    private final int tier;
+    private final String tier;
 
     public ComputationCellComponentItem(Properties properties, int tier) {
         super(properties);
-        this.tier = tier;
+        this.tier = tier == AEV_TIER ? "aev" : "aev_d" + tier;
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable(circuitTranslationKey()));
-    }
-
-    // AEV 级电路直接取 aev，降级变体取 aev_dN
-    private String circuitTranslationKey() {
-        return tier == AEV_TIER ? "tooltip.ae2pr.circuit.aev" : "tooltip.ae2pr.circuit.aev_d" + tier;
+        tooltip.add(Voltage.circuit(tier));
     }
 }

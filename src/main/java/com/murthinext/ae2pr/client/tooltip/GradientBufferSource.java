@@ -36,10 +36,10 @@ final class GradientBufferSource implements MultiBufferSource {
         return colorizer;
     }
 
-    // 行内位置映射到循环渐变的插值颜色
+    // 行内位置映射到循环渐变的插值颜色，相位增加时色带向右推进
     private int colorAt(float x) {
         float fraction = width <= 0.0F ? 0.0F : Mth.clamp((x - originX) / width, 0.0F, 1.0F);
-        float scaled = ((fraction + phase) % 1.0F) * colors.length;
+        float scaled = Mth.frac(fraction - phase) * colors.length;
         int index = (int) scaled;
         float delta = scaled - index;
         int from = colors[index % colors.length];

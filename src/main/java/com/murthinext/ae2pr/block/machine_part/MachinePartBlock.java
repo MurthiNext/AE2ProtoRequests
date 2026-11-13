@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -38,6 +39,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.NetworkHooks;
 
 import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
+import com.murthinext.ae2pr.api.text.Voltage;
 import com.murthinext.ae2pr.logic.collapse.CollapseHandler;
 import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.api.wrench.WrenchTags;
@@ -75,6 +77,11 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
                 .setValue(FACING, context.getNearestLookingDirection().getOpposite())
                 .setValue(FORMED, false)
                 .setValue(STYLE, DEFAULT_STYLE);
+    }
+
+    @Override
+    public MutableComponent getName() {
+        return Voltage.name(getDescriptionId());
     }
 
     @Nullable

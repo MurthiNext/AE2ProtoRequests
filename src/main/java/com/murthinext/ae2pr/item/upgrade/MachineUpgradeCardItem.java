@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import com.murthinext.ae2pr.api.text.Voltage;
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeDefinition;
 
 public class MachineUpgradeCardItem extends UpgradeCardItem {
@@ -20,6 +21,11 @@ public class MachineUpgradeCardItem extends UpgradeCardItem {
     public MachineUpgradeCardItem(Properties properties, MachineUpgradeDefinition definition) {
         super(properties);
         this.definition = definition;
+    }
+
+    @Override
+    public Component getName(ItemStack stack) {
+        return Voltage.name(getDescriptionId(stack));
     }
 
     public MachineUpgradeDefinition definition() {

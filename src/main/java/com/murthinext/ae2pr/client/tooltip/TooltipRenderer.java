@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.util.StringDecomposer;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 
+import com.murthinext.ae2pr.api.text.GradientText;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectLine.Segment;
 
 // 统一物品 Tooltip 文本处理与渲染入口
@@ -22,11 +23,11 @@ public final class TooltipRenderer {
 
     // 流动
     public static MutableComponent flow(String text, int... colors) {
-        return flow(text, TooltipColorEffect.DEFAULT_SPEED, colors);
+        return flow(text, GradientText.DEFAULT_SPEED, colors);
     }
 
     public static MutableComponent flow(String text, float speed, int[] colors) {
-        return MutableComponent.create(new TooltipColorEffect(text, colors, speed, true));
+        return MutableComponent.create(GradientText.flow(text, speed, colors));
     }
 
     // 元素列表中是否包含特效文本

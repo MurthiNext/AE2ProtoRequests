@@ -11,6 +11,8 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 
+import com.murthinext.ae2pr.api.text.GradientText;
+
 public record ColorEffectLine(List<Segment> segments) implements TooltipComponent {
 
     public ColorEffectLine(List<Segment> segments) {
@@ -18,7 +20,7 @@ public record ColorEffectLine(List<Segment> segments) implements TooltipComponen
     }
 
     // 行内片段
-    public record Segment(String text, Style style, TooltipColorEffect effect) {
+    public record Segment(String text, Style style, GradientText effect) {
 
         Segment slice(int from, int to) {
             return new Segment(text.substring(from, to), style, effect);
@@ -27,7 +29,7 @@ public record ColorEffectLine(List<Segment> segments) implements TooltipComponen
 
     // 组件树中是否携带特效内容
     public static boolean containsEffect(Component component) {
-        if (component.getContents() instanceof TooltipColorEffect) {
+        if (component.getContents() instanceof GradientText) {
             return true;
         }
         for (Component sibling : component.getSiblings()) {
@@ -57,7 +59,7 @@ public record ColorEffectLine(List<Segment> segments) implements TooltipComponen
     private static void collect(Component component, Style parent, List<Segment> segments) {
         Style style = component.getStyle().applyTo(parent);
         ComponentContents contents = component.getContents();
-        if (contents instanceof TooltipColorEffect effect) {
+        if (contents instanceof GradientText effect) {
             segments.add(new Segment(effect.text(), style, effect));
         } else {
             contents.visit((segmentStyle, text) -> {
