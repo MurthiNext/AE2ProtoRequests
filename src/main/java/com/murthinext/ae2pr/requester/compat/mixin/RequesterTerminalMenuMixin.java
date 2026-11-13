@@ -16,13 +16,15 @@ import com.almostreliable.merequester.platform.Platform;
 import com.almostreliable.merequester.requester.Requests;
 import com.almostreliable.merequester.requester.abstraction.AbstractRequesterMenu;
 import com.almostreliable.merequester.terminal.RequesterTerminalMenu;
-import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
-import com.murthinext.ae2pr.requester.compat.IOurRequesterTerminalHost;
+
+import net.minecraft.nbt.CompoundTag;
 
 import appeng.api.networking.IGrid;
 import appeng.api.networking.security.IActionHost;
 import appeng.api.stacks.GenericStack;
-import net.minecraft.nbt.CompoundTag;
+
+import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
+import com.murthinext.ae2pr.requester.compat.IOurRequesterTerminalHost;
 
 /**
  * 让本模组的 ME 红石请求器也出现在 ME Requester 的请求器终端中：

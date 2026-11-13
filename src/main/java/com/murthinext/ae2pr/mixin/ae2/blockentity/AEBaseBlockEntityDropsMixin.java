@@ -7,12 +7,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.logic.collapse.CollapseHandler;
-
-import appeng.blockentity.AEBaseBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+
+import appeng.blockentity.AEBaseBlockEntity;
+
+import com.murthinext.ae2pr.logic.collapse.CollapseHandler;
 
 @Mixin(value = AEBaseBlockEntity.class, priority = 500, remap = false)
 public abstract class AEBaseBlockEntityDropsMixin {

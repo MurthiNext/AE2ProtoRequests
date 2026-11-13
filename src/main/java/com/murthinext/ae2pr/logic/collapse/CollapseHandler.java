@@ -7,15 +7,16 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
-import appeng.api.parts.IPart;
-import appeng.api.stacks.AEItemKey;
-import appeng.api.stacks.AEKey;
-import appeng.api.stacks.GenericStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
+
+import appeng.api.parts.IPart;
+import appeng.api.stacks.AEItemKey;
+import appeng.api.stacks.AEKey;
+import appeng.api.stacks.GenericStack;
 
 import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.item.collapsed_storage_cell.CollapsedItemStorageCellItem;

@@ -3,10 +3,10 @@ package com.murthinext.ae2pr.api.machine.part;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
-
-import com.murthinext.ae2pr.api.machine.ControllerHost;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.IItemHandlerModifiable;
+
+import com.murthinext.ae2pr.api.machine.ControllerHost;
 
 public interface MachinePart {
 

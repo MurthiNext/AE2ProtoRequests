@@ -5,7 +5,8 @@ import com.google.gson.JsonSyntaxException;
 import com.murthinext.ae2pr.api.recipe.RecipeDraft;
 
 public record RecipeConstraints(int maxItemInputs, int maxFluidInputs, int maxItemOutputs, int maxFluidOutputs,
-        int minItemInputs, int minFluidInputs, int minItemOutputs, int minFluidOutputs, boolean energyRequired) {
+                                int minItemInputs, int minFluidInputs, int minItemOutputs, int minFluidOutputs,
+                                boolean energyRequired) {
 
     public static final RecipeConstraints NONE = builder().build();
 
@@ -78,7 +79,7 @@ public record RecipeConstraints(int maxItemInputs, int maxFluidInputs, int maxIt
 
         public RecipeConstraints build() {
             return new RecipeConstraints(maxItemInputs, maxFluidInputs, maxItemOutputs, maxFluidOutputs, minItemInputs,
-                    minFluidInputs, minItemOutputs, minFluidOutputs, energyRequired);
+                                         minFluidInputs, minItemOutputs, minFluidOutputs, energyRequired);
         }
     }
 }

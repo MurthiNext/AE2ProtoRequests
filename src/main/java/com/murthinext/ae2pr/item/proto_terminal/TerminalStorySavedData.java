@@ -6,10 +6,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import com.murthinext.ae2pr.ae2pr;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
+
+import com.murthinext.ae2pr.ae2pr;
 
 public class TerminalStorySavedData extends SavedData {
 
@@ -17,8 +18,8 @@ public class TerminalStorySavedData extends SavedData {
     private final Map<UUID, TerminalStoryProgress> players = new HashMap<>();
 
     public static TerminalStorySavedData get(MinecraftServer server) {
-        return server.overworld().getDataStorage()
-                .computeIfAbsent(TerminalStorySavedData::load, TerminalStorySavedData::new, DATA_NAME);
+        return server.overworld().getDataStorage().computeIfAbsent(TerminalStorySavedData::load,
+                                                                   TerminalStorySavedData::new, DATA_NAME);
     }
 
     public TerminalStoryProgress get(UUID player) {
@@ -75,7 +76,7 @@ public class TerminalStorySavedData extends SavedData {
                 data.players.put(UUID.fromString(key), progress);
             } catch (IOException | RuntimeException exception) {
                 ae2pr.LOGGER.warn("Invalid proto terminal story save data, ignored record of player {}", key,
-                        exception);
+                                  exception);
             }
         }
         return data;

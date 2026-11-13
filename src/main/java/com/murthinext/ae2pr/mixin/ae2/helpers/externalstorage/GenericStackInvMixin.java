@@ -12,12 +12,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
-
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.AEKeyType;
 import appeng.api.stacks.GenericStack;
 import appeng.helpers.externalstorage.GenericStackInv;
+
+import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 
 // 装卡后所有 AEKey 的堆叠上限统一为 INT MAX，移卡后保留已有超量存量
 @Mixin(value = GenericStackInv.class, priority = 500, remap = false)
@@ -68,11 +68,15 @@ public abstract class GenericStackInvMixin implements SuperStackSupport.Target {
     }
 
     /** setStack 的两处容量判定改为 max(真实上限, 同槽同 key 的原存量)，移卡后不把超量截回原值。 */
-    @Redirect(method = "setStack", at = @At(value = "INVOKE",
-            target = "Lappeng/helpers/externalstorage/GenericStackInv;getMaxAmount(Lappeng/api/stacks/AEKey;)J"),
+    @Redirect(
+            method = "setStack",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lappeng/helpers/externalstorage/GenericStackInv;getMaxAmount(Lappeng/api/stacks/AEKey;)J")
+            ,
             remap = false)
-    private long ae2pr$limitForMove(GenericStackInv inventory, AEKey key, int slot,
-            @Nullable GenericStack replacement) {
+    private long
+    ae2pr$limitForMove(GenericStackInv inventory, AEKey key, int slot, @Nullable GenericStack replacement) {
         var limit = inventory.getMaxAmount(key);
         if (key == null || !ae2pr$isManaged()) {
             return limit;

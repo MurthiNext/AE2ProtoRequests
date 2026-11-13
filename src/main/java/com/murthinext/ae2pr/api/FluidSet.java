@@ -25,17 +25,18 @@ public final class FluidSet implements Supplier<ForgeFlowingFluid> {
     private final RegistryObject<BucketItem> bucket;
 
     private FluidSet(String id, DeferredRegister<FluidType> types, DeferredRegister<Fluid> fluids,
-            DeferredRegister<Item> items, Supplier<? extends FluidType> typeFactory) {
+                     DeferredRegister<Item> items, Supplier<? extends FluidType> typeFactory) {
         this.id = id;
         this.type = types.register(id, typeFactory);
         this.source = fluids.register(id, () -> new ForgeFlowingFluid.Source(properties()));
         this.flowing = fluids.register("flowing_" + id, () -> new ForgeFlowingFluid.Flowing(properties()));
-        this.bucket = items.register(id + "_bucket",
+        this.bucket = items.register(
+                id + "_bucket",
                 () -> new NoBlockFluidBucketItem(this, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
     }
 
     public static FluidSet of(String id, DeferredRegister<FluidType> types, DeferredRegister<Fluid> fluids,
-            DeferredRegister<Item> items, Supplier<? extends FluidType> typeFactory) {
+                              DeferredRegister<Item> items, Supplier<? extends FluidType> typeFactory) {
         return new FluidSet(id, types, fluids, items, typeFactory);
     }
 

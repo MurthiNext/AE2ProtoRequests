@@ -39,17 +39,16 @@ public class AaeReactionRecipeProvider implements DataProvider {
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
         Path directory = output.getOutputFolder(PackOutput.Target.DATA_PACK)
-                .resolve("ae2pr/recipes/crystal_reaction_chamber");
+                                 .resolve("ae2pr/recipes/crystal_reaction_chamber");
         Map<String, Integer> usedIds = new HashMap<>();
         List<CompletableFuture<?>> writes = new ArrayList<>();
         for (AaeReactionRecipes.Reaction reaction : AaeReactionRecipes.readAll()) {
             JsonObject recipe = convert(reaction);
             Set<String> mods = requiredMods(reaction);
             JsonObject json = mods.isEmpty() ? recipe : conditional(recipe, mods);
-            writes.add(DataProvider.saveStable(cache, json,
-                    directory.resolve(nextId(reaction, usedIds) + ".json")));
+            writes.add(DataProvider.saveStable(cache, json, directory.resolve(nextId(reaction, usedIds) + ".json")));
         }
-        return CompletableFuture.allOf(writes.toArray(CompletableFuture[]::new));
+        return CompletableFuture.allOf(writes.toArray(CompletableFuture[] ::new));
     }
 
     @Override
@@ -73,7 +72,8 @@ public class AaeReactionRecipeProvider implements DataProvider {
         if (reaction.fluid() != null) {
             JsonObject fluid = reaction.fluid().getAsJsonObject("fluidStack");
             JsonArray fluidInputs = new JsonArray();
-            fluidInputs.add(fluidEntry(GsonHelper.getAsString(fluid, "FluidName"), GsonHelper.getAsInt(fluid, "Amount")));
+            fluidInputs.add(fluidEntry(GsonHelper.getAsString(fluid, "FluidName"),
+                                       GsonHelper.getAsInt(fluid, "Amount")));
             json.add("fluid_inputs", fluidInputs);
         }
 

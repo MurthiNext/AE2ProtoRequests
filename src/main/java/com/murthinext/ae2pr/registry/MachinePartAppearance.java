@@ -1,12 +1,11 @@
 package com.murthinext.ae2pr.registry;
 
-import com.murthinext.ae2pr.api.multiblock.StructureHooks;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import com.murthinext.ae2pr.api.multiblock.StructureHooks;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 
@@ -16,10 +15,9 @@ final class MachinePartAppearance {
     }
 
     static void install() {
-        StructureHooks.install(
-                () -> ModBlocks.MACHINE_PARTS.stream().map(entry -> (Block) entry.get()).toList(),
-                ModBlocks.ME_NETWORK_ACCESS_HATCH::get,
-                MachinePartAppearance::apply);
+        StructureHooks.install(()
+                                       -> ModBlocks.MACHINE_PARTS.stream().map(entry -> (Block) entry.get()).toList(),
+                               ModBlocks.ME_NETWORK_ACCESS_HATCH::get, MachinePartAppearance::apply);
     }
 
     private static void apply(Level level, BlockPos pos, boolean formed, int style, boolean active) {

@@ -31,16 +31,19 @@ public record WorldInteractionCircumstance(@Nullable TagKey<Fluid> fluidTag, boo
         if (fluidTag == null) {
             return List.of();
         }
-        return ForgeRegistries.FLUIDS.tags().getTag(fluidTag).stream()
+        return ForgeRegistries.FLUIDS.tags()
+                .getTag(fluidTag)
+                .stream()
                 .filter(fluid -> fluid != Fluids.EMPTY && (!sourceOnly || fluid.defaultFluidState().isSource()))
                 .toList();
     }
 
     public static WorldInteractionCircumstance fromJson(JsonObject json) {
         return switch (GsonHelper.getAsString(json, "type")) {
-            case "fluid" -> new WorldInteractionCircumstance(
-                    TagKey.create(Registries.FLUID, ResourceLocation.parse(GsonHelper.getAsString(json, "tag"))),
-                    GsonHelper.getAsBoolean(json, "source_only", true));
+            case "fluid" ->
+                new WorldInteractionCircumstance(
+                        TagKey.create(Registries.FLUID, ResourceLocation.parse(GsonHelper.getAsString(json, "tag"))),
+                        GsonHelper.getAsBoolean(json, "source_only", true));
             case "explosion" -> new WorldInteractionCircumstance(null, false);
             default -> throw new JsonSyntaxException("Unknown world interaction circumstance type");
         };
@@ -51,7 +54,7 @@ public record WorldInteractionCircumstance(@Nullable TagKey<Fluid> fluidTag, boo
             return new WorldInteractionCircumstance(null, false);
         }
         return new WorldInteractionCircumstance(TagKey.create(Registries.FLUID, buffer.readResourceLocation()),
-                buffer.readBoolean());
+                                                buffer.readBoolean());
     }
 
     public void toNetwork(FriendlyByteBuf buffer) {

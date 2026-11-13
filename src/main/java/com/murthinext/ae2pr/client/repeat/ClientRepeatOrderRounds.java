@@ -5,10 +5,10 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
-
-import appeng.api.stacks.AEKey;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import appeng.api.stacks.AEKey;
 
 @OnlyIn(Dist.CLIENT)
 public final class ClientRepeatOrderRounds {
@@ -48,6 +48,5 @@ public final class ClientRepeatOrderRounds {
         ROUNDS.clear();
     }
 
-    public record RoundInfo(int remainingRounds, int totalRounds) {
-    }
+    public record RoundInfo(int remainingRounds, int totalRounds) {}
 }

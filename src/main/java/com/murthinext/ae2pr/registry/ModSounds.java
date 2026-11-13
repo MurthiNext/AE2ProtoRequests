@@ -1,24 +1,28 @@
 package com.murthinext.ae2pr.registry;
 
-import com.murthinext.ae2pr.api.Ids;
-
-import com.murthinext.ae2pr.ae2pr;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.Ids;
+
 public final class ModSounds {
 
-    public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(
-            ForgeRegistries.SOUND_EVENTS, ae2pr.MODID);
+    public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS,
+                                                                                      ae2pr.MODID);
 
     public static final RegistryObject<SoundEvent> CRYSTAL_ASSEMBLY_LINE = register("crystal_assembly_line_processing");
-    public static final RegistryObject<SoundEvent> HIGH_REACTIVITY_LAVA_SMELTER = register("high_reactivity_lava_smelter_processing");
-    public static final RegistryObject<SoundEvent> MATTER_PHASE_TRANSFORMER = register("matter_phase_transformer_processing");
+    public static final RegistryObject<SoundEvent> HIGH_REACTIVITY_LAVA_SMELTER = register(
+            "high_reactivity_lava_smelter_processing");
+    public static final RegistryObject<SoundEvent> MATTER_PHASE_TRANSFORMER = register(
+            "matter_phase_transformer_processing");
     public static final RegistryObject<SoundEvent> CRYSTAL_REACTION = register("crystal_reaction_processing");
-    public static final RegistryObject<SoundEvent> CRYSTAL_WORKSTATION_ETCHING = register("crystal_workstation_etching");
-    public static final RegistryObject<SoundEvent> CRYSTAL_WORKSTATION_CUTTING = register("crystal_workstation_cutting");
+    public static final RegistryObject<SoundEvent> CRYSTAL_WORKSTATION_ETCHING = register(
+            "crystal_workstation_etching");
+    public static final RegistryObject<SoundEvent> CRYSTAL_WORKSTATION_CUTTING = register(
+            "crystal_workstation_cutting");
     public static final RegistryObject<SoundEvent> JIG = register("jig_processing");
     public static final RegistryObject<SoundEvent> FILTER_PRESS = register("filter_press_processing");
     public static final RegistryObject<SoundEvent> MULTI_FACTORY_INSCRIBING = register("multi_factory_inscribing");
@@ -28,7 +32,6 @@ public final class ModSounds {
     }
 
     private static RegistryObject<SoundEvent> register(String name) {
-        return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(
-                Ids.of( name)));
+        return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(Ids.of(name)));
     }
 }

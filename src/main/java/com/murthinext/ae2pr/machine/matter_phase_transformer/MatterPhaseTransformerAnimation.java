@@ -22,8 +22,7 @@ public final class MatterPhaseTransformerAnimation {
         }
         previousActivity = activity;
         previousParticleTime = particleTime;
-        activity = running ? Math.min(1.0F, activity + CHARGE_STEP)
-                : Math.max(0.0F, activity - RELEASE_STEP);
+        activity = running ? Math.min(1.0F, activity + CHARGE_STEP) : Math.max(0.0F, activity - RELEASE_STEP);
         double acceleration = activity * activity * (3.0 - 2.0 * activity);
         particleTime += 1.0 + (MAX_SPEED - 1.0) * acceleration;
     }

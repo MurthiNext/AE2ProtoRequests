@@ -1,18 +1,21 @@
 package com.murthinext.ae2pr.requester.crafting;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Future;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.world.level.Level;
+
 import appeng.api.networking.IGrid;
 import appeng.api.networking.crafting.CalculationStrategy;
 import appeng.api.networking.crafting.ICraftingPlan;
 import appeng.api.networking.crafting.ICraftingSimulationRequester;
 import appeng.api.networking.security.IActionSource;
+
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.requester.Requests;
-import net.minecraft.world.level.Level;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Future;
 
 public final class RequestCrafting {
 
@@ -33,11 +36,11 @@ public final class RequestCrafting {
                 continue;
             }
             try {
-                pending.add(service.beginCraftingCalculation(level, simulationRequester,
-                        request.getKey(), request.getAmount(), CalculationStrategy.CRAFT_LESS));
+                pending.add(service.beginCraftingCalculation(level, simulationRequester, request.getKey(),
+                                                             request.getAmount(), CalculationStrategy.CRAFT_LESS));
             } catch (Exception exception) {
-                ae2pr.LOGGER.warn("Failed to start crafting calculation for {}x{}",
-                        request.getAmount(), request.getKey(), exception);
+                ae2pr.LOGGER.warn("Failed to start crafting calculation for {}x{}", request.getAmount(),
+                                  request.getKey(), exception);
             }
         }
     }

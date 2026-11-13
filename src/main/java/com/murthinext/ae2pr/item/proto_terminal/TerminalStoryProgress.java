@@ -80,27 +80,27 @@ public final class TerminalStoryProgress {
             throw new IllegalArgumentException("Story snapshot is too large");
         }
         TerminalStoryProgress progress = GSON.fromJson(json, TerminalStoryProgress.class);
-        if (progress == null || progress.schemaVersion != SCHEMA_VERSION || progress.epoch < 0
-                || progress.programId == null || progress.inkState == null || progress.variables == null
-                || progress.nodes == null || progress.variables.size() > 256 || progress.nodes.size() > 128
-                || !progress.programId.isEmpty() && !progress.programId.matches("[0-9a-f]{64}")) {
+        if (progress == null || progress.schemaVersion != SCHEMA_VERSION || progress.epoch < 0 ||
+            progress.programId == null || progress.inkState == null || progress.variables == null ||
+            progress.nodes == null || progress.variables.size() > 256 || progress.nodes.size() > 128 ||
+            !progress.programId.isEmpty() && !progress.programId.matches("[0-9a-f]{64}")) {
             throw new IllegalArgumentException("Invalid story snapshot");
         }
         for (var entry : progress.variables.entrySet()) {
             JsonPrimitive value = entry.getValue();
-            if (entry.getKey().isBlank() || entry.getKey().length() > 256 || value == null
-                    || value.isNumber() && !Double.isFinite(value.getAsDouble())) {
+            if (entry.getKey().isBlank() || entry.getKey().length() > 256 || value == null ||
+                value.isNumber() && !Double.isFinite(value.getAsDouble())) {
                 throw new IllegalArgumentException("Invalid story variable: " + entry.getKey());
             }
         }
         for (var entry : progress.nodes.entrySet()) {
             NodeProgress node = entry.getValue();
-            if (entry.getKey().isBlank() || entry.getKey().length() > 256 || node == null
-                    || node.entry == null || node.entry.isBlank() || node.entry.length() > 256
-                    || node.decisions == null || node.decisions.size() > MAX_DECISIONS
-                    || node.decisions.stream().anyMatch(decision -> decision == null || decision.isBlank()
-                            || decision.length() > 256)
-                    || node.log == null || node.log.size() > MAX_LOG_LINES) {
+            if (entry.getKey().isBlank() || entry.getKey().length() > 256 || node == null || node.entry == null ||
+                node.entry.isBlank() || node.entry.length() > 256 || node.decisions == null ||
+                node.decisions.size() > MAX_DECISIONS ||
+                node.decisions.stream().anyMatch(
+                        decision -> decision == null || decision.isBlank() || decision.length() > 256) ||
+                node.log == null || node.log.size() > MAX_LOG_LINES) {
                 throw new IllegalArgumentException("Invalid story node progress: " + entry.getKey());
             }
             node.playback = node.playback == null ? new Playback() : node.playback;
@@ -108,9 +108,9 @@ public final class TerminalStoryProgress {
                 validate(line);
             }
             Playback playback = node.playback;
-            if (playback.delay < 0 || playback.delay > 60000 || playback.answerDelay < 0 || playback.answerDelay > 320
-                    || playback.typed < 0 || playback.typed > 17000
-                    || playback.pendingLine != null && playback.typing) {
+            if (playback.delay < 0 || playback.delay > 60000 || playback.answerDelay < 0 ||
+                playback.answerDelay > 320 || playback.typed < 0 || playback.typed > 17000 ||
+                playback.pendingLine != null && playback.typing) {
                 throw new IllegalArgumentException("Invalid story playback state: " + entry.getKey());
             }
             if (playback.pendingLine != null) {
@@ -119,12 +119,12 @@ public final class TerminalStoryProgress {
         }
         if (!progress.inkState.isEmpty()) {
             JsonObject state = JsonParser.parseString(progress.inkState).getAsJsonObject();
-            if (!state.has("flows") || !state.get("flows").isJsonObject()
-                    || !state.has("visitCounts") || !state.get("visitCounts").isJsonObject()
-                    || !state.has("turnIndices") || !state.get("turnIndices").isJsonObject()
-                    || !state.has("currentFlowName") || !state.get("currentFlowName").isJsonPrimitive()
-                    || !state.getAsJsonObject("flows").has(state.get("currentFlowName").getAsString())
-                    || !state.getAsJsonObject("flows").has("DEFAULT_FLOW") || !state.has("inkSaveVersion")) {
+            if (!state.has("flows") || !state.get("flows").isJsonObject() || !state.has("visitCounts") ||
+                !state.get("visitCounts").isJsonObject() || !state.has("turnIndices") ||
+                !state.get("turnIndices").isJsonObject() || !state.has("currentFlowName") ||
+                !state.get("currentFlowName").isJsonPrimitive() ||
+                !state.getAsJsonObject("flows").has(state.get("currentFlowName").getAsString()) ||
+                !state.getAsJsonObject("flows").has("DEFAULT_FLOW") || !state.has("inkSaveVersion")) {
                 throw new IllegalArgumentException("Invalid Ink snapshot");
             }
         }
@@ -132,10 +132,9 @@ public final class TerminalStoryProgress {
     }
 
     static void validate(Line line) {
-        if (line == null || line.id() == null || line.speaker() == null || line.text() == null
-                || line.id().isBlank() || line.id().length() > 256
-                || line.speaker().length() > 256 || line.text().length() > 16384
-                || line.delay() < 0 || line.delay() > 60000) {
+        if (line == null || line.id() == null || line.speaker() == null || line.text() == null || line.id().isBlank() ||
+            line.id().length() > 256 || line.speaker().length() > 256 || line.text().length() > 16384 ||
+            line.delay() < 0 || line.delay() > 60000) {
             throw new IllegalArgumentException("Invalid story line");
         }
     }

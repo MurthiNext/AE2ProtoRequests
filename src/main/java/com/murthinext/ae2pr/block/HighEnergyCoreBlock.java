@@ -44,7 +44,8 @@ public class HighEnergyCoreBlock extends DisassemblableBlock implements EntityBl
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip,
+                                TooltipFlag flag) {
         tooltip.add(Component.translatable("tooltip.ae2pr.high_energy_core.desc"));
     }
 
@@ -57,7 +58,7 @@ public class HighEnergyCoreBlock extends DisassemblableBlock implements EntityBl
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
-            BlockEntityType<T> type) {
+                                                                  BlockEntityType<T> type) {
         if (level.isClientSide) {
             return null;
         }
@@ -80,7 +81,7 @@ public class HighEnergyCoreBlock extends DisassemblableBlock implements EntityBl
     // 空手右键即尝试触发水晶反应器
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
-            BlockHitResult hit) {
+                                 BlockHitResult hit) {
         if (!player.getItemInHand(hand).isEmpty() || state.getValue(LIT)) {
             return InteractionResult.PASS;
         }

@@ -33,18 +33,19 @@ public class RecipeIsolationButton extends AbstractWidget {
         if (!isHovered()) {
             return false;
         }
-        GuiTooltips.render(graphics, font, List.of(
-                Component.translatable("gui.ae2pr.machine_part.isolation.title"),
-                Component.translatable(state.getAsBoolean() ? "gui.ae2pr.machine_part.isolation.enabled"
-                        : "gui.ae2pr.machine_part.isolation.disabled")), mouseX, mouseY);
+        GuiTooltips.render(graphics, font,
+                           List.of(Component.translatable("gui.ae2pr.machine_part.isolation.title"),
+                                   Component.translatable(state.getAsBoolean()
+                                                                  ? "gui.ae2pr.machine_part.isolation.enabled"
+                                                                  : "gui.ae2pr.machine_part.isolation.disabled")),
+                           mouseX, mouseY);
         return true;
     }
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         // 边框只看鼠标悬停，避免点击后焦点残留高亮
-        GuiTextures.frame(graphics,
-                isHovered() ? GuiTextures.BUTTON_HOVER : GuiTextures.BUTTON, getX(), getY());
+        GuiTextures.frame(graphics, isHovered() ? GuiTextures.BUTTON_HOVER : GuiTextures.BUTTON, getX(), getY());
         GuiTextures.frame(graphics, state.getAsBoolean() ? ICON_ON : ICON_OFF, getX(), getY());
     }
 
@@ -56,9 +57,10 @@ public class RecipeIsolationButton extends AbstractWidget {
     @Override
     protected void updateWidgetNarration(NarrationElementOutput narration) {
         setMessage(Component.translatable("gui.ae2pr.machine_part.isolation.title")
-                .append(": ").append(Component.translatable(state.getAsBoolean()
-                        ? "gui.ae2pr.machine_part.isolation.enabled"
-                        : "gui.ae2pr.machine_part.isolation.disabled")));
+                           .append(": ")
+                           .append(Component.translatable(state.getAsBoolean()
+                                                                  ? "gui.ae2pr.machine_part.isolation.enabled"
+                                                                  : "gui.ae2pr.machine_part.isolation.disabled")));
         defaultButtonNarrationText(narration);
     }
 }

@@ -1,18 +1,18 @@
 package com.murthinext.ae2pr.client.repeat;
 
-import com.murthinext.ae2pr.api.Ids;
-
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraft.client.gui.GuiGraphics;
 
 import appeng.client.gui.Icon;
 import appeng.client.gui.style.Blitter;
 import appeng.client.gui.widgets.IconButton;
-import net.minecraft.client.gui.GuiGraphics;
+
+import com.murthinext.ae2pr.api.Ids;
 
 public class RepeatOrderButton extends IconButton {
 
-    private static final Blitter ICON = Blitter.texture(
-            Ids.of( "textures/gui/repeat_order.png"), 16, 16);
+    private static final Blitter ICON = Blitter.texture(Ids.of("textures/gui/repeat_order.png"), 16, 16);
 
     public RepeatOrderButton(OnPress onPress) {
         super(onPress);
@@ -34,9 +34,7 @@ public class RepeatOrderButton extends IconButton {
 
         Icon.TOOLBAR_BUTTON_BACKGROUND.getBlitter().dest(getX(), getY()).blit(guiGraphics);
         // 自有贴图无 src 矩形，必须显式给出目标尺寸
-        ICON.copy()
-                .dest(getX(), getY(), getWidth(), getHeight())
-                .blit(guiGraphics);
+        ICON.copy().dest(getX(), getY(), getWidth(), getHeight()).blit(guiGraphics);
 
         RenderSystem.enableDepthTest();
     }

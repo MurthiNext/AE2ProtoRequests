@@ -10,9 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class AutoTransferButton extends AbstractWidget {
 
-    public enum Type {
-        PULL, PUSH
-    }
+    public enum Type { PULL, PUSH }
 
     private static final int SIZE = GuiTextures.SIZE;
     private static final int COLOR_TOOLBAR_BACKGROUND = 0xFF101418;
@@ -40,8 +38,7 @@ public class AutoTransferButton extends AbstractWidget {
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        GuiTextures.frame(graphics,
-                isHovered() ? GuiTextures.BUTTON_HOVER : GuiTextures.BUTTON, getX(), getY());
+        GuiTextures.frame(graphics, isHovered() ? GuiTextures.BUTTON_HOVER : GuiTextures.BUTTON, getX(), getY());
         GuiTextures.frame(graphics, icon(), getX(), getY());
     }
 

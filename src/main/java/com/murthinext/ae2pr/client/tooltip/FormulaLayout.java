@@ -52,8 +52,8 @@ final class FormulaLayout {
             }
             int precedence = precedence(binary);
             Box left = operand(binary.left(), precedence);
-            Box right = operand(binary.right(), precedence + (binary.operator().equals("-")
-                    || binary.operator().equals("/") ? 1 : 0));
+            Box right = operand(binary.right(),
+                                precedence + (binary.operator().equals("-") || binary.operator().equals("/") ? 1 : 0));
             if (binary.right() instanceof LatexFormula.Unary) {
                 right = delimit("(", expression(binary.right()), ")");
             }
@@ -72,9 +72,9 @@ final class FormulaLayout {
             float topBaseline = -6 - top.descent();
             float bottomBaseline = bottom.ascent();
             return new Composite(width, top.ascent() - topBaseline, bottomBaseline + bottom.descent(),
-                    List.of(new Placed(top, (width - top.width()) / 2, topBaseline),
-                            new Placed(bottom, (width - bottom.width()) / 2, bottomBaseline)),
-                    List.of(new Line(0, -3, width - 1, -3)));
+                                 List.of(new Placed(top, (width - top.width()) / 2, topBaseline),
+                                         new Placed(bottom, (width - bottom.width()) / 2, bottomBaseline)),
+                                 List.of(new Line(0, -3, width - 1, -3)));
         }
         if (expression instanceof LatexFormula.Root root) {
             Box content = expression(root.radicand());
@@ -83,12 +83,11 @@ final class FormulaLayout {
             float width = offset + content.width() + 2;
             float top = -content.ascent() - 3;
             float degreeBaseline = Math.min(-5, top + degree.ascent() - 2);
-            return new Composite(width, Math.max(-top, degree.ascent() - degreeBaseline), content.descent(),
+            return new Composite(
+                    width, Math.max(-top, degree.ascent() - degreeBaseline), content.descent(),
                     List.of(new Placed(content, offset, 0), new Placed(degree, 0, degreeBaseline)),
-                    List.of(new Line(offset - 9, -3, offset - 7, -3),
-                            new Line(offset - 7, -3, offset - 5, 1),
-                            new Line(offset - 5, 1, offset - 2, top),
-                            new Line(offset - 2, top, width - 1, top)));
+                    List.of(new Line(offset - 9, -3, offset - 7, -3), new Line(offset - 7, -3, offset - 5, 1),
+                            new Line(offset - 5, 1, offset - 2, top), new Line(offset - 2, top, width - 1, top)));
         }
         if (expression instanceof LatexFormula.Function function) {
             List<Box> arguments = new ArrayList<>();
@@ -98,13 +97,15 @@ final class FormulaLayout {
                 }
                 arguments.add(expression(argument));
             }
-            Box content = row(arguments.toArray(Box[]::new));
+            Box content = row(arguments.toArray(Box[] ::new));
             return switch (function.name()) {
                 case ABS -> delimit("|", content, "|");
                 case FLOOR -> delimit("⌊", content, "⌋");
                 case CEIL -> delimit("⌈", content, "⌉");
-                default -> row(function.base() == null ? text(function.name().text())
-                        : script(text(function.name().text()), expression(function.base()), false),
+                default ->
+                    row(function.base() == null
+                                ? text(function.name().text())
+                                : script(text(function.name().text()), expression(function.base()), false),
                         delimit("(", content, ")"));
             };
         }
@@ -144,18 +145,19 @@ final class FormulaLayout {
         // 括号下缘对齐内容下缘
         float baseline = content.descent() - left.descent();
         return new Composite(left.width() + content.width() + right.width(),
-                Math.max(content.ascent(), left.ascent() - baseline), content.descent(),
-                List.of(new Placed(left, 0, baseline), new Placed(content, left.width(), 0),
-                        new Placed(right, left.width() + content.width(), baseline)), List.of());
+                             Math.max(content.ascent(), left.ascent() - baseline), content.descent(),
+                             List.of(new Placed(left, 0, baseline), new Placed(content, left.width(), 0),
+                                     new Placed(right, left.width() + content.width(), baseline)),
+                             List.of());
     }
 
     private static Box script(Box base, Box script, boolean superscript) {
         Box small = new Scaled(script, 0.72F, 0.72F);
-        float baseline = superscript ? -base.ascent() * 0.65F - small.descent() : base.descent() + small.ascent() * 0.65F;
-        return new Composite(base.width() + small.width() + 1,
-                Math.max(base.ascent(), small.ascent() - baseline),
-                Math.max(base.descent(), small.descent() + baseline),
-                List.of(new Placed(base, 0, 0), new Placed(small, base.width() + 1, baseline)), List.of());
+        float baseline = superscript ? -base.ascent() * 0.65F - small.descent()
+                                     : base.descent() + small.ascent() * 0.65F;
+        return new Composite(base.width() + small.width() + 1, Math.max(base.ascent(), small.ascent() - baseline),
+                             Math.max(base.descent(), small.descent() + baseline),
+                             List.of(new Placed(base, 0, 0), new Placed(small, base.width() + 1, baseline)), List.of());
     }
 
     private static Box row(Box... boxes) {
@@ -231,8 +233,7 @@ final class FormulaLayout {
         }
     }
 
-    private record Placed(Box box, float x, float baseline) {
-    }
+    private record Placed(Box box, float x, float baseline) {}
 
     private record Line(float x1, float y1, float x2, float y2) {
         void draw(GuiGraphics graphics) {

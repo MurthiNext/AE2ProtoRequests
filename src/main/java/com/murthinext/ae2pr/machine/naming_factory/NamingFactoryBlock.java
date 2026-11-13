@@ -13,8 +13,8 @@ import com.murthinext.ae2pr.api.wrench.WrenchTags;
 // 名称压印工厂方块
 public class NamingFactoryBlock extends AbstractSingleblockMachineBlock<NamingFactoryBlockEntity> {
 
-    public NamingFactoryBlock(SingleblockMachineDefinition<NamingFactoryBlock, NamingFactoryBlockEntity,
-            NamingFactoryMenu> definition) {
+    public NamingFactoryBlock(
+            SingleblockMachineDefinition<NamingFactoryBlock, NamingFactoryBlockEntity, NamingFactoryMenu> definition) {
         super(definition);
     }
 
@@ -34,8 +34,10 @@ public class NamingFactoryBlock extends AbstractSingleblockMachineBlock<NamingFa
     }
 
     private static void openRenameScreen(Level level, BlockPos pos) {
-        String currentName = level.getBlockEntity(pos) instanceof NamingFactoryBlockEntity factory
-                && factory.getCustomName() != null ? factory.getCustomName().getString() : "";
+        String currentName = level.getBlockEntity(pos) instanceof NamingFactoryBlockEntity factory &&
+                        factory.getCustomName() != null
+                ? factory.getCustomName().getString()
+                : "";
         NamingFactoryRenameScreen.open(pos, currentName);
     }
 }

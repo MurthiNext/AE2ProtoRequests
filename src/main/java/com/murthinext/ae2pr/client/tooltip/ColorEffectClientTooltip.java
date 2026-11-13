@@ -3,7 +3,7 @@ package com.murthinext.ae2pr.client.tooltip;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.murthinext.ae2pr.client.tooltip.ColorEffectLine.Segment;
+import org.joml.Matrix4f;
 
 import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
@@ -15,9 +15,8 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import org.joml.Matrix4f;
-
 import com.murthinext.ae2pr.api.text.GradientText;
+import com.murthinext.ae2pr.client.tooltip.ColorEffectLine.Segment;
 
 @OnlyIn(Dist.CLIENT)
 public final class ColorEffectClientTooltip implements ClientTooltipComponent {
@@ -56,7 +55,7 @@ public final class ColorEffectClientTooltip implements ClientTooltipComponent {
         for (Segment segment : line.segments()) {
             if (segment.effect() == null) {
                 font.drawInBatch(FormattedCharSequence.forward(segment.text(), segment.style()), lineX + advance, y, -1,
-                        true, pose, bufferSource, Font.DisplayMode.NORMAL, 0, TRANSPARENT_LIGHT);
+                                 true, pose, bufferSource, Font.DisplayMode.NORMAL, 0, TRANSPARENT_LIGHT);
             } else {
                 renderEffect(segment, font, lineX, lineX + advance, y, lineWidth, now, pose, bufferSource);
             }
@@ -69,20 +68,20 @@ public final class ColorEffectClientTooltip implements ClientTooltipComponent {
     }
 
     private void renderEffect(Segment segment, Font font, int lineX, int x, int y, int lineWidth, long now,
-            Matrix4f pose, MultiBufferSource.BufferSource bufferSource) {
+                              Matrix4f pose, MultiBufferSource.BufferSource bufferSource) {
         GradientText effect = segment.effect();
         if (effect.flow()) {
             // 颜色写在字符样式上，阴影由原版按亮度系数自动压暗
             int shift = (int) (now / 1000.0D * effect.speed() * SWITCH_STEPS_PER_SECOND);
-            font.drawInBatch(flowText(segment, shift), x, y, -1, true, pose, bufferSource,
-                    Font.DisplayMode.NORMAL, 0, TRANSPARENT_LIGHT);
+            font.drawInBatch(flowText(segment, shift), x, y, -1, true, pose, bufferSource, Font.DisplayMode.NORMAL, 0,
+                             TRANSPARENT_LIGHT);
         } else {
             // 顶点颜色由渐变着色器接管，样式固定白色以让亮度系数只表示明暗
             float phase = (float) (now / 1000.0D * effect.speed() * GRADIENT_LOOPS_PER_SECOND % 1.0D);
             GradientBufferSource gradient = new GradientBufferSource(effect.colors());
             gradient.configure(bufferSource, lineX, lineWidth, phase);
             font.drawInBatch(FormattedCharSequence.forward(segment.text(), segment.style().withColor(0xFFFFFF)), x, y,
-                    -1, true, pose, gradient, Font.DisplayMode.NORMAL, 0, TRANSPARENT_LIGHT);
+                             -1, true, pose, gradient, Font.DisplayMode.NORMAL, 0, TRANSPARENT_LIGHT);
         }
     }
 

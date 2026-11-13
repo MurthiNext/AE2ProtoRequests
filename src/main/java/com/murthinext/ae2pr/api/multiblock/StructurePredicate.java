@@ -83,8 +83,7 @@ public abstract class StructurePredicate {
 
     // 类型与朝向同时命中才算匹配
     @Nullable
-    public StructurePredicate test(Level level, BlockPos pos, BlockState state,
-            StructureOrientation orientation) {
+    public StructurePredicate test(Level level, BlockPos pos, BlockState state, StructureOrientation orientation) {
         StructurePredicate matched = testBlock(level, pos, state);
         return matched != null && oriented(state, orientation) ? matched : null;
     }
@@ -202,7 +201,7 @@ public abstract class StructurePredicate {
     }
 
     private static boolean contains(StructureOrientation orientation, List<RelativeDirection> facings,
-            Direction value) {
+                                    Direction value) {
         for (RelativeDirection relative : facings) {
             if (orientation.direction(relative) == value) {
                 return true;
@@ -222,8 +221,7 @@ public abstract class StructurePredicate {
             predicate = predicate.or(blocks(part));
         }
         Block networkAccessHatch = StructureHooks.networkAccessHatch();
-        return networkAccessHatch == null ? predicate
-                : predicate.or(blocks(networkAccessHatch).maxCount(1));
+        return networkAccessHatch == null ? predicate : predicate.or(blocks(networkAccessHatch).maxCount(1));
     }
 
     // 模块插槽：接受基础方块或提供允许功能的模块方块
@@ -273,8 +271,10 @@ public abstract class StructurePredicate {
             if (state.is(base)) {
                 return this;
             }
-            return state.getBlock() instanceof ModuleProvider provider
-                    && allowed.contains(provider.moduleDefinition().type()) ? this : null;
+            return state.getBlock() instanceof ModuleProvider provider &&
+                            allowed.contains(provider.moduleDefinition().type())
+                    ? this
+                    : null;
         }
 
         @Override
@@ -289,11 +289,12 @@ public abstract class StructurePredicate {
             List<Block> result = new ArrayList<>();
             result.add(base);
             BuiltInRegistries.BLOCK.stream()
-                    .filter(block -> block instanceof ModuleProvider provider
-                            && allowed.contains(provider.moduleDefinition().type()))
-                    .sorted(Comparator.comparingInt((Block block) ->
-                            ((ModuleProvider) block).moduleDefinition().level())
-                            .thenComparing(block -> BuiltInRegistries.BLOCK.getKey(block).toString()))
+                    .filter(block
+                            -> block instanceof ModuleProvider provider &&
+                                    allowed.contains(provider.moduleDefinition().type()))
+                    .sorted(Comparator
+                                    .comparingInt((Block block) -> ((ModuleProvider) block).moduleDefinition().level())
+                                    .thenComparing(block -> BuiltInRegistries.BLOCK.getKey(block).toString()))
                     .forEach(result::add);
             return List.copyOf(result);
         }
@@ -323,8 +324,7 @@ public abstract class StructurePredicate {
         // 组自身与命中的叶子都需满足朝向要求
         @Nullable
         @Override
-        public StructurePredicate test(Level level, BlockPos pos, BlockState state,
-                StructureOrientation orientation) {
+        public StructurePredicate test(Level level, BlockPos pos, BlockState state, StructureOrientation orientation) {
             if (!oriented(state, orientation)) {
                 return null;
             }

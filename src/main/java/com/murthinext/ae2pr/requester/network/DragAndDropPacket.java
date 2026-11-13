@@ -1,11 +1,12 @@
 package com.murthinext.ae2pr.requester.network;
 
-import com.murthinext.ae2pr.requester.abstraction.AbstractRedstoneRequesterMenu;
+import javax.annotation.Nullable;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nullable;
+import com.murthinext.ae2pr.requester.abstraction.AbstractRedstoneRequesterMenu;
 
 public class DragAndDropPacket extends ClientToServerPacket<DragAndDropPacket> {
 
@@ -20,7 +21,8 @@ public class DragAndDropPacket extends ClientToServerPacket<DragAndDropPacket> {
         this.item = item;
     }
 
-    DragAndDropPacket() {}
+    DragAndDropPacket() {
+    }
 
     @Override
     public void encode(DragAndDropPacket packet, FriendlyByteBuf buffer) {
@@ -31,11 +33,7 @@ public class DragAndDropPacket extends ClientToServerPacket<DragAndDropPacket> {
 
     @Override
     public DragAndDropPacket decode(FriendlyByteBuf buffer) {
-        return new DragAndDropPacket(
-            buffer.readLong(),
-            buffer.readVarInt(),
-            buffer.readItem()
-        );
+        return new DragAndDropPacket(buffer.readLong(), buffer.readVarInt(), buffer.readItem());
     }
 
     @Override

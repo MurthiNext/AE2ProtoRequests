@@ -43,8 +43,8 @@ import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 import com.murthinext.ae2pr.item.filter_cell.FilterCellItem;
 
 // 多条件发信器的公共部分：过滤元件、仓储/合成监听、模型与持久化
-public abstract class AbstractMultiLevelEmitterPart extends AbstractLevelEmitterPart
-        implements IConfigInvHost, ICraftingProvider, InternalInventoryHost {
+public abstract class AbstractMultiLevelEmitterPart
+        extends AbstractLevelEmitterPart implements IConfigInvHost, ICraftingProvider, InternalInventoryHost {
 
     public static final Setting<CombineMode> COMBINE_MODE = new Setting<>("combine_mode", CombineMode.class);
 
@@ -172,8 +172,8 @@ public abstract class AbstractMultiLevelEmitterPart extends AbstractLevelEmitter
 
     protected final boolean isFilterFuzzy() {
         var stack = getFilterCellStack();
-        return stack != null && stack.getItem() instanceof FilterCellItem item
-                && item.getUpgrades(stack).isInstalled(AEItems.FUZZY_CARD);
+        return stack != null && stack.getItem() instanceof FilterCellItem item &&
+                item.getUpgrades(stack).isInstalled(AEItems.FUZZY_CARD);
     }
 
     protected final long amountFor(KeyCounter stacks, AEKey key) {
@@ -265,8 +265,8 @@ public abstract class AbstractMultiLevelEmitterPart extends AbstractLevelEmitter
 
     @Override
     public Set<AEKey> getEmitableItems() {
-        if (!isUpgradedWith(AEItems.CRAFTING_CARD)
-                || getConfigManager().getSetting(Settings.CRAFT_VIA_REDSTONE) != YesNo.YES) {
+        if (!isUpgradedWith(AEItems.CRAFTING_CARD) ||
+            getConfigManager().getSetting(Settings.CRAFT_VIA_REDSTONE) != YesNo.YES) {
             return Set.of();
         }
         var advanced = getAdvancedFilter();

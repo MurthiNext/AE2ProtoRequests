@@ -18,9 +18,10 @@ public class SideConfigButton extends ToolbarButton {
         if (!isHovered()) {
             return false;
         }
-        GuiTooltips.render(graphics, font, List.of(
-                Component.translatable("gui.ae2pr.side_config.title"),
-                Component.translatable("gui.ae2pr.side_config.desc")), mouseX, mouseY);
+        GuiTooltips.render(graphics, font,
+                           List.of(Component.translatable("gui.ae2pr.side_config.title"),
+                                   Component.translatable("gui.ae2pr.side_config.desc")),
+                           mouseX, mouseY);
         return true;
     }
 }

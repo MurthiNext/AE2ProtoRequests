@@ -30,8 +30,8 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity implem
 
     public static final int MAX_CHANNELS = 8;
 
-    private static final IGridNodeListener<MENetworkAccessHatchBlockEntity> CHANNEL_LISTENER =
-            (hatch, node) -> hatch.setChanged();
+    private static final IGridNodeListener<MENetworkAccessHatchBlockEntity> CHANNEL_LISTENER = (hatch, node)
+            -> hatch.setChanged();
 
     private final List<IManagedGridNode> channelNodes = new ArrayList<>();
     private final NetworkPart networkView = new NetworkPart() {
@@ -88,8 +88,8 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity implem
     }
 
     public void updateController(ControllerHost controller) {
-        if (this.controller != null && this.controller != controller && !this.controller.isControllerRemoved()
-                && this.controller.isFormed()) {
+        if (this.controller != null && this.controller != controller && !this.controller.isControllerRemoved() &&
+            this.controller.isFormed()) {
             return;
         }
         this.controller = controller;
@@ -108,15 +108,16 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity implem
         if (mainNode == null || level == null || level.isClientSide) {
             return;
         }
-        int requested = Math.min(MAX_CHANNELS, getRequiredChannels());        while (channelNodes.size() > requested) {
+        int requested = Math.min(MAX_CHANNELS, getRequiredChannels());
+        while (channelNodes.size() > requested) {
             channelNodes.remove(channelNodes.size() - 1).destroy();
         }
         // 每个内部节点向 AE2 实际申请一个频道
         while (channelNodes.size() < requested) {
             IManagedGridNode node = GridHelper.createManagedNode(this, CHANNEL_LISTENER)
-                    .setInWorldNode(false)
-                    .setFlags(GridFlags.REQUIRE_CHANNEL)
-                    .setIdlePowerUsage(0);
+                                            .setInWorldNode(false)
+                                            .setFlags(GridFlags.REQUIRE_CHANNEL)
+                                            .setIdlePowerUsage(0);
             node.setOwningPlayerId(mainNode.getOwningPlayerId());
             channelNodes.add(node);
             node.create(level, worldPosition);
@@ -126,7 +127,8 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity implem
 
     public int getRequiredChannels() {
         return controller != null && !controller.isControllerRemoved() && controller.isFormed()
-                ? controller.getRequiredChannels() : 0;
+                ? controller.getRequiredChannels()
+                : 0;
     }
 
     public int getAllocatedChannels() {
@@ -145,9 +147,8 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity implem
 
     public boolean isNetworkConnected(ControllerHost controller) {
         int required = getRequiredChannels();
-        return this.controller == controller && getMainNode().isActive()
-                && required > 0 && required <= MAX_CHANNELS
-                && getAllocatedChannels() >= required;
+        return this.controller == controller && getMainNode().isActive() && required > 0 && required <= MAX_CHANNELS &&
+                getAllocatedChannels() >= required;
     }
 
     public double extractAEPower(double amount, boolean simulate) {
@@ -158,13 +159,14 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity implem
         if (clamped <= 0) {
             return 0;
         }
-        return getMainNode().getGrid().getEnergyService().extractAEPower(clamped,
-                simulate ? Actionable.SIMULATE : Actionable.MODULATE, PowerMultiplier.CONFIG);
+        return getMainNode().getGrid().getEnergyService().extractAEPower(
+                clamped, simulate ? Actionable.SIMULATE : Actionable.MODULATE, PowerMultiplier.CONFIG);
     }
 
     public double getAvailableAEPower() {
         return controller != null && isNetworkConnected(controller)
-                ? getMainNode().getGrid().getEnergyService().getStoredPower() : 0;
+                ? getMainNode().getGrid().getEnergyService().getStoredPower()
+                : 0;
     }
 
     @Override

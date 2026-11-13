@@ -59,7 +59,7 @@ public class FluidStackAmountRenderer implements IIngredientRenderer<FluidStack>
             }
         }
         lines.add(Component.translatable("jei.tooltip.liquid.amount", JeiAmountFormat.exact(ingredient.getAmount()))
-                .withStyle(ChatFormatting.GRAY));
+                          .withStyle(ChatFormatting.GRAY));
         return lines;
     }
 
@@ -72,11 +72,12 @@ public class FluidStackAmountRenderer implements IIngredientRenderer<FluidStack>
 
     private static void drawFluid(GuiGraphics graphics, FluidStack fluid, int posX, int posY) {
         IClientFluidTypeExtensions extensions = IClientFluidTypeExtensions.of(fluid.getFluid());
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                .apply(extensions.getStillTexture(fluid));
+        TextureAtlasSprite sprite = Minecraft.getInstance()
+                                            .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+                                            .apply(extensions.getStillTexture(fluid));
         int color = extensions.getTintColor(fluid);
-        graphics.setColor(((color >> 16) & 0xFF) / 255.0F, ((color >> 8) & 0xFF) / 255.0F,
-                (color & 0xFF) / 255.0F, ((color >>> 24) & 0xFF) / 255.0F);
+        graphics.setColor(((color >> 16) & 0xFF) / 255.0F, ((color >> 8) & 0xFF) / 255.0F, (color & 0xFF) / 255.0F,
+                          ((color >>> 24) & 0xFF) / 255.0F);
         graphics.blit(posX, posY, 0, 16, 16, sprite);
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }

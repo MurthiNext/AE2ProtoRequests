@@ -31,8 +31,8 @@ import com.murthinext.ae2pr.registry.ModMachines;
 public class MachineGuiHandler implements IGuiContainerHandler<AbstractContainerScreen<?>> {
 
     @Override
-    public Collection<IGuiClickableArea> getGuiClickableAreas(AbstractContainerScreen<?> screen,
-            double mouseX, double mouseY) {
+    public Collection<IGuiClickableArea> getGuiClickableAreas(AbstractContainerScreen<?> screen, double mouseX,
+                                                              double mouseY) {
         if (!(screen instanceof AbstractMultiblockControllerScreen<?> machineScreen)) {
             return List.of();
         }
@@ -42,7 +42,7 @@ public class MachineGuiHandler implements IGuiContainerHandler<AbstractContainer
         }
         Rect2i area = machineScreen.jobStatusArea();
         return List.of(IGuiClickableArea.createBasic(area.getX(), area.getY(), area.getWidth(), area.getHeight(),
-                recipeType));
+                                                     recipeType));
     }
 
     private static RecipeType<?> recipeType(AbstractMultiblockControllerMenu<?> menu) {
@@ -53,8 +53,8 @@ public class MachineGuiHandler implements IGuiContainerHandler<AbstractContainer
         if (definition == ModMachines.JIG) {
             return JigCategory.RECIPE_TYPE;
         }
-        if (definition == ModMachines.MULTI_FACTORY && menu instanceof MachineMenu<?> machineMenu
-                && machineMenu.getMode() instanceof MultiFactoryMode mode) {
+        if (definition == ModMachines.MULTI_FACTORY && menu instanceof MachineMenu<?> machineMenu &&
+            machineMenu.getMode() instanceof MultiFactoryMode mode) {
             return Ae2prJeiPlugin.multiFactoryRecipeType(mode);
         }
         return null;
@@ -90,7 +90,7 @@ public class MachineGuiHandler implements IGuiContainerHandler<AbstractContainer
     }
 
     private static boolean contains(Rect2i bounds, double mouseX, double mouseY) {
-        return mouseX >= bounds.getX() && mouseX < bounds.getX() + bounds.getWidth()
-                && mouseY >= bounds.getY() && mouseY < bounds.getY() + bounds.getHeight();
+        return mouseX >= bounds.getX() && mouseX < bounds.getX() + bounds.getWidth() && mouseY >= bounds.getY() &&
+                mouseY < bounds.getY() + bounds.getHeight();
     }
 }

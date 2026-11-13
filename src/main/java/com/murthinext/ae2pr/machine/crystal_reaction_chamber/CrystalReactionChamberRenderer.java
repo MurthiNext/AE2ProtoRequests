@@ -1,7 +1,5 @@
 package com.murthinext.ae2pr.machine.crystal_reaction_chamber;
 
-import com.murthinext.ae2pr.api.Ids;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
@@ -17,15 +15,16 @@ import net.minecraft.world.phys.Vec3;
 
 import appeng.core.definitions.AEBlocks;
 
-import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.client.effect.EmissiveCubeRenderer;
+import com.murthinext.ae2pr.registry.ModMachines;
 
 // 水晶母岩放射电弧与高能核心自发光
 public class CrystalReactionChamberRenderer
         implements BlockEntityRenderer<CrystalReactionChamberControllerBlockEntity> {
 
-    private static final RenderType CORE = RenderType.beaconBeam(
-            Ids.of( "textures/block/high_energy_core_glow.png"), true);
+    private static final RenderType CORE = RenderType.beaconBeam(Ids.of("textures/block/high_energy_core_glow.png"),
+                                                                 true);
     private static final int ARC_COUNT = 12;
     private static final int SEGMENTS = 7;
     private static final double ARC_REACH = 1.42;
@@ -35,7 +34,7 @@ public class CrystalReactionChamberRenderer
 
     @Override
     public void render(CrystalReactionChamberControllerBlockEntity controller, float partialTick, PoseStack pose,
-            MultiBufferSource buffers, int light, int overlay) {
+                       MultiBufferSource buffers, int light, int overlay) {
         if (!controller.isRunning() || controller.getLevel() == null) {
             return;
         }
@@ -46,10 +45,10 @@ public class CrystalReactionChamberRenderer
         BlockPos origin = controller.getBlockPos();
         pose.pushPose();
         pose.translate(quartz.getX() - origin.getX() + 0.5, quartz.getY() - origin.getY() + 0.5,
-                quartz.getZ() - origin.getZ() + 0.5);
+                       quartz.getZ() - origin.getZ() + 0.5);
         double time = controller.getLevel().getGameTime() + partialTick;
-        Vec3 view = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition()
-                .subtract(Vec3.atCenterOf(quartz));
+        Vec3 view = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().subtract(
+                Vec3.atCenterOf(quartz));
         renderArcs(pose.last(), buffers.getBuffer(RenderType.lightning()), view, time, quartz.asLong());
         if (controller.getLevel().getBlockState(controller.getCorePos()).is(ModMachines.CRYSTAL_REACTOR.block())) {
             pose.translate(0, 2, 0);
@@ -75,16 +74,18 @@ public class CrystalReactionChamberRenderer
                 double progress = (double) segment / SEGMENTS;
                 double jitter = segment == SEGMENTS ? 0 : 0.23;
                 Vec3 next = target.scale(progress).add((random.nextDouble() - 0.5) * jitter * 2,
-                        (random.nextDouble() - 0.5) * jitter * 2, (random.nextDouble() - 0.5) * jitter * 2);
+                                                       (random.nextDouble() - 0.5) * jitter * 2,
+                                                       (random.nextDouble() - 0.5) * jitter * 2);
                 renderDischarge(pose, consumer, previous, next, view, strength, 1.0);
                 if (segment == 3 || segment == 5) {
-                    Vec3 fork = next.add(direction.scale(0.25)).add((random.nextDouble() - 0.5) * 0.5,
-                            (random.nextDouble() - 0.5) * 0.5, (random.nextDouble() - 0.5) * 0.5);
-                    fork = new Vec3(Mth.clamp(fork.x, -ARC_REACH, ARC_REACH),
-                            Mth.clamp(fork.y, -ARC_REACH, ARC_REACH), Mth.clamp(fork.z, -ARC_REACH, ARC_REACH));
+                    Vec3 fork = next.add(direction.scale(0.25))
+                                        .add((random.nextDouble() - 0.5) * 0.5, (random.nextDouble() - 0.5) * 0.5,
+                                             (random.nextDouble() - 0.5) * 0.5);
+                    fork = new Vec3(Mth.clamp(fork.x, -ARC_REACH, ARC_REACH), Mth.clamp(fork.y, -ARC_REACH, ARC_REACH),
+                                    Mth.clamp(fork.z, -ARC_REACH, ARC_REACH));
                     Vec3 tip = fork.add(direction.scale(0.25));
-                    tip = new Vec3(Mth.clamp(tip.x, -ARC_REACH, ARC_REACH),
-                            Mth.clamp(tip.y, -ARC_REACH, ARC_REACH), Mth.clamp(tip.z, -ARC_REACH, ARC_REACH));
+                    tip = new Vec3(Mth.clamp(tip.x, -ARC_REACH, ARC_REACH), Mth.clamp(tip.y, -ARC_REACH, ARC_REACH),
+                                   Mth.clamp(tip.z, -ARC_REACH, ARC_REACH));
                     renderDischarge(pose, consumer, next, fork, view, strength * 0.65F, 0.55);
                     renderDischarge(pose, consumer, fork, tip, view, strength * 0.35F, 0.3);
                 }
@@ -93,13 +94,13 @@ public class CrystalReactionChamberRenderer
         }
     }
 
-    private static void renderDischarge(PoseStack.Pose pose, VertexConsumer consumer, Vec3 start, Vec3 end,
-            Vec3 view, float strength, double scale) {
+    private static void renderDischarge(PoseStack.Pose pose, VertexConsumer consumer, Vec3 start, Vec3 end, Vec3 view,
+                                        float strength, double scale) {
         Vec3 direction = end.subtract(start);
         Vec3 side = view.subtract(start).cross(direction);
         if (side.lengthSqr() < 1.0E-8) {
-            side = direction.cross(Math.abs(direction.y) < direction.length() * 0.9
-                    ? new Vec3(0, 1, 0) : new Vec3(1, 0, 0));
+            side = direction.cross(Math.abs(direction.y) < direction.length() * 0.9 ? new Vec3(0, 1, 0)
+                                                                                    : new Vec3(1, 0, 0));
         }
         side = side.normalize().scale(scale);
         renderRibbon(pose, consumer, start, end, side.scale(0.038), 0.15F, 0.45F, 1.0F, strength * 0.16F);
@@ -108,13 +109,14 @@ public class CrystalReactionChamberRenderer
     }
 
     private static void renderRibbon(PoseStack.Pose pose, VertexConsumer consumer, Vec3 start, Vec3 end, Vec3 side,
-            float red, float green, float blue, float alpha) {
+                                     float red, float green, float blue, float alpha) {
         for (int corner = 0; corner < 4; corner++) {
             Vec3 point = corner == 1 || corner == 2 ? end : start;
             double sign = corner < 2 ? -1.0 : 1.0;
             consumer.vertex(pose.pose(), (float) (point.x + side.x * sign), (float) (point.y + side.y * sign),
-                    (float) (point.z + side.z * sign))
-                    .color(red, green, blue, alpha).endVertex();
+                            (float) (point.z + side.z * sign))
+                    .color(red, green, blue, alpha)
+                    .endVertex();
         }
     }
 

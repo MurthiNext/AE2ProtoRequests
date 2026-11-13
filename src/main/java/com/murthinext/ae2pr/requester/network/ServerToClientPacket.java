@@ -1,12 +1,12 @@
 package com.murthinext.ae2pr.requester.network;
 
+import java.util.function.Supplier;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
 
 public abstract class ServerToClientPacket<T> implements Packet<T> {
 

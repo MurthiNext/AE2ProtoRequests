@@ -18,8 +18,7 @@ public final class RequesterClientSetup {
 
     @SubscribeEvent
     public static void registerScreens(FMLClientSetupEvent event) {
-        InitScreens.register(RequesterRegistration.REDSTONE_REQUESTER_MENU.get(),
-                RedstoneRequesterScreen::new,
-                "/screens/redstone_requester.json");
+        InitScreens.register(RequesterRegistration.REDSTONE_REQUESTER_MENU.get(), RedstoneRequesterScreen::new,
+                             "/screens/redstone_requester.json");
     }
 }

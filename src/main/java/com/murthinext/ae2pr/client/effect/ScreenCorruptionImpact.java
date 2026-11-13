@@ -1,8 +1,5 @@
 package com.murthinext.ae2pr.client.effect;
 
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.registry.ModEffects;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -12,6 +9,9 @@ import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.registry.ModEffects;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class ScreenCorruptionImpact {
@@ -27,9 +27,9 @@ public final class ScreenCorruptionImpact {
 
     public static void trigger() {
         var minecraft = Minecraft.getInstance();
-        if (minecraft.player == null || !minecraft.player.isAlive() || minecraft.level == null
-                || !minecraft.options.getCameraType().isFirstPerson()
-                || minecraft.getCameraEntity() != minecraft.player || minecraft.getOverlay() != null) {
+        if (minecraft.player == null || !minecraft.player.isAlive() || minecraft.level == null ||
+            !minecraft.options.getCameraType().isFirstPerson() || minecraft.getCameraEntity() != minecraft.player ||
+            minecraft.getOverlay() != null) {
             return;
         }
         player = minecraft.player;
@@ -45,10 +45,10 @@ public final class ScreenCorruptionImpact {
             return;
         }
         var minecraft = Minecraft.getInstance();
-        if (minecraft.player != player || minecraft.level != level || !player.isAlive()
-                || !player.hasEffect(ModEffects.SCREEN_CORRUPTION.get())
-                || !minecraft.options.getCameraType().isFirstPerson() || minecraft.getCameraEntity() != player
-                || minecraft.getOverlay() != null) {
+        if (minecraft.player != player || minecraft.level != level || !player.isAlive() ||
+            !player.hasEffect(ModEffects.SCREEN_CORRUPTION.get()) ||
+            !minecraft.options.getCameraType().isFirstPerson() || minecraft.getCameraEntity() != player ||
+            minecraft.getOverlay() != null) {
             clear();
             return;
         }
@@ -92,7 +92,8 @@ public final class ScreenCorruptionImpact {
     static float strength() {
         var minecraft = Minecraft.getInstance();
         return player != null && minecraft.screen == null && minecraft.getOverlay() == null
-                ? minecraft.options.screenEffectScale().get().floatValue() : 0;
+                ? minecraft.options.screenEffectScale().get().floatValue()
+                : 0;
     }
 
     static float seed() {

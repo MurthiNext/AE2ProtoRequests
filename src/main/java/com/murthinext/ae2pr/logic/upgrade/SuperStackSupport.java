@@ -9,8 +9,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.registry.ModItems;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import appeng.api.stacks.AEKeyType;
 import appeng.api.stacks.GenericStack;
@@ -22,11 +25,9 @@ import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEParts;
 import appeng.helpers.InterfaceLogic;
 import appeng.helpers.externalstorage.GenericStackInv;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.registries.ForgeRegistries;
+
+import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.registry.ModItems;
 
 /**
  * 超级堆叠卡的接入点：登记可用机器，并把返回/存储槽的容量放大判定绑到宿主上。
@@ -53,29 +54,39 @@ public final class SuperStackSupport {
     private static final List<String> STORAGE_FIELDS = List.of("returnInv", "storage", "storageInv");
 
     private static final String[] AE2CS_INTERFACES = {
-            "ender_interface", "extended_ender_interface",
-            "integrated_interface", "extended_integrated_interface",
-            "ender_interface_part", "extended_ender_interface_part",
-            "integrated_interface_part", "extended_integrated_interface_part",
+        "ender_interface",           "extended_ender_interface",
+        "integrated_interface",      "extended_integrated_interface",
+        "ender_interface_part",      "extended_ender_interface_part",
+        "integrated_interface_part", "extended_integrated_interface_part",
     };
 
     private static final String[] AE2CS_PROVIDERS = {
-            "resonating_pattern_provider", "extended_resonating_pattern_provider",
-            "simple_pattern_provider", "mirror_pattern_provider", "meteorite_pattern_provider",
-            "resonating_pattern_provider_part", "extended_resonating_pattern_provider_part",
-            "simple_pattern_provider_part", "mirror_pattern_provider_part", "meteorite_pattern_provider_part",
+        "resonating_pattern_provider",
+        "extended_resonating_pattern_provider",
+        "simple_pattern_provider",
+        "mirror_pattern_provider",
+        "meteorite_pattern_provider",
+        "resonating_pattern_provider_part",
+        "extended_resonating_pattern_provider_part",
+        "simple_pattern_provider_part",
+        "mirror_pattern_provider_part",
+        "meteorite_pattern_provider_part",
     };
 
     private static final String[] EXTENDED_AE_INTERFACES = {
-            "ex_interface", "ex_interface_part",
-            "oversize_interface", "oversize_interface_part",
+        "ex_interface",
+        "ex_interface_part",
+        "oversize_interface",
+        "oversize_interface_part",
     };
 
     private static final String[] EXTENDED_AE_PROVIDERS = { "ex_pattern_provider", "ex_pattern_provider_part" };
 
     private static final String[] ADVANCED_AE_PROVIDERS = {
-            "adv_pattern_provider", "adv_pattern_provider_part",
-            "small_adv_pattern_provider", "small_adv_pattern_provider_part",
+        "adv_pattern_provider",
+        "adv_pattern_provider_part",
+        "small_adv_pattern_provider",
+        "small_adv_pattern_provider_part",
     };
 
     private static final Map<Class<?>, Field[]> UPGRADE_FIELDS = new ConcurrentHashMap<>();

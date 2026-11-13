@@ -26,9 +26,11 @@ public class FilterPressPlateBlock extends DisassemblableBlock {
     public FilterPressPlateBlock(Properties properties) {
         super(properties.noOcclusion());
         registerDefaultState(stateDefinition.any()
-                .setValue(AXIS, Direction.Axis.Z)
-                .setValue(LEFT, false).setValue(RIGHT, false)
-                .setValue(UP, false).setValue(DOWN, false));
+                                     .setValue(AXIS, Direction.Axis.Z)
+                                     .setValue(LEFT, false)
+                                     .setValue(RIGHT, false)
+                                     .setValue(UP, false)
+                                     .setValue(DOWN, false));
     }
 
     private boolean connectsTo(BlockState state, BlockState neighbor) {
@@ -46,7 +48,7 @@ public class FilterPressPlateBlock extends DisassemblableBlock {
     // 按给定方块视图推导连接状态
     public static BlockState connectedShape(BlockState state, BlockGetter level, BlockPos pos) {
         return state.getBlock() instanceof FilterPressPlateBlock plate ? plate.updateConnections(state, level, pos)
-                : state;
+                                                                       : state;
     }
 
     @Override
@@ -61,14 +63,16 @@ public class FilterPressPlateBlock extends DisassemblableBlock {
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighbor,
-            LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(BlockState state, Direction direction, BlockState neighbor, LevelAccessor level,
+                                  BlockPos pos, BlockPos neighborPos) {
         if (direction.getAxis() == state.getValue(AXIS)) {
             return state;
         }
         Direction left = state.getValue(AXIS) == Direction.Axis.Z ? Direction.WEST : Direction.NORTH;
-        BooleanProperty connection = direction == Direction.UP ? UP : direction == Direction.DOWN ? DOWN
-                : direction == left ? LEFT : RIGHT;
+        BooleanProperty connection = direction == Direction.UP ? UP
+                : direction == Direction.DOWN                  ? DOWN
+                : direction == left                            ? LEFT
+                                                               : RIGHT;
         return state.setValue(connection, connectsTo(state, neighbor));
     }
 
@@ -79,14 +83,16 @@ public class FilterPressPlateBlock extends DisassemblableBlock {
         Direction.Axis axis = rotatedLeft.getAxis() == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
         Direction newLeft = axis == Direction.Axis.Z ? Direction.WEST : Direction.NORTH;
         BlockState rotated = state.setValue(AXIS, axis);
-        return rotatedLeft == newLeft ? rotated
+        return rotatedLeft == newLeft
+                ? rotated
                 : rotated.setValue(LEFT, state.getValue(RIGHT)).setValue(RIGHT, state.getValue(LEFT));
     }
 
     @Override
     public BlockState mirror(BlockState state, Mirror mirror) {
         Direction left = state.getValue(AXIS) == Direction.Axis.Z ? Direction.WEST : Direction.NORTH;
-        return mirror.mirror(left) == left ? state
+        return mirror.mirror(left) == left
+                ? state
                 : state.setValue(LEFT, state.getValue(RIGHT)).setValue(RIGHT, state.getValue(LEFT));
     }
 

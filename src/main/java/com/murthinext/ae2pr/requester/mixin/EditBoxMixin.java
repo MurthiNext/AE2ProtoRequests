@@ -1,8 +1,9 @@
 package com.murthinext.ae2pr.requester.mixin;
 
-import net.minecraft.client.gui.components.EditBox;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+
+import net.minecraft.client.gui.components.EditBox;
 
 @SuppressWarnings("ALL")
 @Mixin(EditBox.class)

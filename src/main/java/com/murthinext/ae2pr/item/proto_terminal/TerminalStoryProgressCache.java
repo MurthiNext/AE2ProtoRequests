@@ -6,13 +6,14 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.murthinext.ae2pr.registry.ModNetwork;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.network.TerminalStoryRequestPacket;
 import com.murthinext.ae2pr.network.TerminalStoryUpdatePacket;
 import com.murthinext.ae2pr.network.TerminalStoryWatchPacket;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
+import com.murthinext.ae2pr.registry.ModNetwork;
 
 // 终端剧情进度缓存
 public final class TerminalStoryProgressCache {

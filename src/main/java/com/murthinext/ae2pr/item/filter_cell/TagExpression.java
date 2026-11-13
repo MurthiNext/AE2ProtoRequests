@@ -18,7 +18,8 @@ import appeng.api.stacks.AEKeyType;
 
 /**
  * 标签匹配表达式：以物品标签 id 为操作数，支持布尔运算与 glob 通配。
- * {@code &} 与、{@code |} 或、{@code ^} 异或、{@code !} 取反、{@code ()} 分组、{@code *} 通配；优先级 {@code ! > & > ^ > |}。
+ * {@code &} 与、{@code |} 或、{@code ^} 异或、{@code !} 取反、{@code ()} 分组、{@code *} 通配；优先级 {@code ! > & > ^
+ * > |}。
  */
 public final class TagExpression implements Predicate<AEKey> {
 
@@ -51,13 +52,13 @@ public final class TagExpression implements Predicate<AEKey> {
         boolean test(AEKey key);
     }
 
-        private record TagNode(TagKey<Item> tag) implements Node {
+    private record TagNode(TagKey<Item> tag) implements Node {
 
         @Override
-            public boolean test(AEKey key) {
-                return key.isTagged(tag);
-            }
+        public boolean test(AEKey key) {
+            return key.isTagged(tag);
         }
+    }
 
     private static final class GlobNode implements Node {
         private final String pattern;
@@ -79,9 +80,7 @@ public final class TagExpression implements Predicate<AEKey> {
         }
 
         private List<TagKey<?>> matchingTags(AEKeyType type) {
-            return type.getTagNames()
-                    .filter(tag -> matches(pattern, tag.location().toString()))
-                    .toList();
+            return type.getTagNames().filter(tag -> matches(pattern, tag.location().toString())).toList();
         }
 
         private static boolean matches(String glob, String text) {
@@ -138,8 +137,7 @@ public final class TagExpression implements Predicate<AEKey> {
         }
     }
 
-    private static final class ParseException extends RuntimeException {
-    }
+    private static final class ParseException extends RuntimeException {}
 
     /**
      * 递归下降解析器：or := xor ('|' xor)*；xor := and ('^' and)*；and := unary ('&' unary)*；
@@ -237,10 +235,8 @@ public final class TagExpression implements Predicate<AEKey> {
         }
 
         private static boolean isTagChar(char c) {
-            return c >= 'a' && c <= 'z'
-                    || c >= 'A' && c <= 'Z'
-                    || c >= '0' && c <= '9'
-                    || c == '_' || c == '-' || c == '.' || c == ':' || c == '/' || c == '*';
+            return c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '_' || c == '-' ||
+                    c == '.' || c == ':' || c == '/' || c == '*';
         }
     }
 }

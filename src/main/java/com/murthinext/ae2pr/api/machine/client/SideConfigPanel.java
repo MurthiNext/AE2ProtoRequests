@@ -27,12 +27,12 @@ public final class SideConfigPanel {
 
     // 布局（列, 行）：顶 / 左 前 右 / 后 下
     private static final int[][] FACE_CELLS = {
-            { 1, 0 }, // 顶
-            { 0, 1 }, // 左
-            { 1, 1 }, // 前
-            { 2, 1 }, // 右
-            { 0, 2 }, // 后
-            { 1, 2 }, // 下
+        { 1, 0 }, // 顶
+        { 0, 1 }, // 左
+        { 1, 1 }, // 前
+        { 2, 1 }, // 右
+        { 0, 2 }, // 后
+        { 1, 2 }, // 下
     };
 
     private static final ResourceLocation TEXTURE_PANEL = Ids.of("textures/gui/panel_popup.png");
@@ -54,8 +54,8 @@ public final class SideConfigPanel {
 
     public void render(GuiGraphics graphics, Font font, int x, int y, int mouseX, int mouseY) {
         graphics.blit(TEXTURE_PANEL, x, y, 0, 0.0F, 0.0F, WIDTH, HEIGHT, WIDTH, HEIGHT);
-        graphics.drawString(font, Component.translatable("gui.ae2pr.side_config.title"), x + ORIGIN_X,
-                y + 5, COLOR_TITLE, false);
+        graphics.drawString(font, Component.translatable("gui.ae2pr.side_config.title"), x + ORIGIN_X, y + 5,
+                            COLOR_TITLE, false);
 
         for (int index = 0; index < FACE_CELLS.length; index++) {
             int bx = x + cellX(FACE_CELLS[index]);
@@ -97,8 +97,7 @@ public final class SideConfigPanel {
     }
 
     // 六个面按钮只靠纯色区分模式，不用图标
-    private static void drawFaceButton(GuiGraphics graphics, int x, int y, SideMode mode,
-            int mouseX, int mouseY) {
+    private static void drawFaceButton(GuiGraphics graphics, int x, int y, SideMode mode, int mouseX, int mouseY) {
         GuiTextures.solidBlock(graphics, x, y, modeColor(mode), isInside(mouseX, mouseY, x, y));
     }
 
@@ -112,24 +111,23 @@ public final class SideConfigPanel {
     }
 
     private void drawToggle(GuiGraphics graphics, int x, int y, int row, ResourceLocation on, ResourceLocation off,
-            boolean enabled, int mouseX, int mouseY) {
+                            boolean enabled, int mouseX, int mouseY) {
         drawIcon(graphics, x + toggleX(), y + rowY(row), enabled ? on : off, mouseX, mouseY);
     }
 
-    private void drawAction(GuiGraphics graphics, int x, int y, int row, ResourceLocation icon,
-            int mouseX, int mouseY) {
+    private void drawAction(GuiGraphics graphics, int x, int y, int row, ResourceLocation icon, int mouseX,
+                            int mouseY) {
         drawIcon(graphics, x + toggleX(), y + rowY(row), icon, mouseX, mouseY);
     }
 
-    private static void drawIcon(GuiGraphics graphics, int bx, int by, ResourceLocation icon,
-            int mouseX, int mouseY) {
+    private static void drawIcon(GuiGraphics graphics, int bx, int by, ResourceLocation icon, int mouseX, int mouseY) {
         drawFrame(graphics, bx, by, mouseX, mouseY);
         graphics.blit(icon, bx, by, 0, 0.0F, 0.0F, BUTTON, BUTTON, BUTTON, BUTTON);
     }
 
     private static void drawFrame(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
-        GuiTextures.frame(graphics,
-                isInside(mouseX, mouseY, x, y) ? GuiTextures.BUTTON_HOVER : GuiTextures.BUTTON, x, y);
+        GuiTextures.frame(graphics, isInside(mouseX, mouseY, x, y) ? GuiTextures.BUTTON_HOVER : GuiTextures.BUTTON, x,
+                          y);
     }
 
     private void renderTooltip(GuiGraphics graphics, Font font, int x, int y, int mouseX, int mouseY) {
@@ -140,33 +138,35 @@ public final class SideConfigPanel {
                 continue;
             }
             Direction dir = orderedDirection(index);
-            GuiTooltips.render(graphics, font, List.of(
-                    Component.translatable("gui.ae2pr.side_config.face." + faceKey(dir)),
-                    config.get(dir).displayName()), mouseX, mouseY);
+            GuiTooltips.render(graphics, font,
+                               List.of(Component.translatable("gui.ae2pr.side_config.face." + faceKey(dir)),
+                                       config.get(dir).displayName()),
+                               mouseX, mouseY);
             return;
         }
         int toggleX = x + toggleX();
         if (isInside(mouseX, mouseY, toggleX, y + rowY(0))) {
-            GuiTooltips.render(graphics, font, List.of(
-                    Component.translatable("gui.ae2pr.side_config.auto_pull"),
-                    stateLine(config.isAutoPull())), mouseX, mouseY);
+            GuiTooltips.render(graphics, font,
+                               List.of(Component.translatable("gui.ae2pr.side_config.auto_pull"),
+                                       stateLine(config.isAutoPull())),
+                               mouseX, mouseY);
             return;
         }
         if (isInside(mouseX, mouseY, toggleX, y + rowY(1))) {
-            GuiTooltips.render(graphics, font, List.of(
-                    Component.translatable("gui.ae2pr.side_config.auto_push"),
-                    stateLine(config.isAutoPush())), mouseX, mouseY);
+            GuiTooltips.render(graphics, font,
+                               List.of(Component.translatable("gui.ae2pr.side_config.auto_push"),
+                                       stateLine(config.isAutoPush())),
+                               mouseX, mouseY);
             return;
         }
         if (isInside(mouseX, mouseY, toggleX, y + rowY(2))) {
-            GuiTooltips.render(graphics, font,
-                    List.of(Component.translatable("gui.ae2pr.side_config.clear")), mouseX, mouseY);
+            GuiTooltips.render(graphics, font, List.of(Component.translatable("gui.ae2pr.side_config.clear")), mouseX,
+                               mouseY);
         }
     }
 
     private static Component stateLine(boolean enabled) {
-        return Component.translatable(enabled ? "gui.ae2pr.side_config.enabled"
-                : "gui.ae2pr.side_config.disabled");
+        return Component.translatable(enabled ? "gui.ae2pr.side_config.enabled" : "gui.ae2pr.side_config.disabled");
     }
 
     // 0 顶，1 左，2 前，3 右，4 后，5 下；左右按玩家面向正面的直觉换算

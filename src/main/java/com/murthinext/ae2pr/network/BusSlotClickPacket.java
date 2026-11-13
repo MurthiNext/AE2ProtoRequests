@@ -36,15 +36,15 @@ public class BusSlotClickPacket {
 
     public static BusSlotClickPacket decode(FriendlyByteBuf buffer) {
         return new BusSlotClickPacket(buffer.readBlockPos(), buffer.readVarInt(), buffer.readVarInt(),
-                buffer.readBoolean(), buffer.readBoolean());
+                                      buffer.readBoolean(), buffer.readBoolean());
     }
 
     public static void handle(BusSlotClickPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
-            if (player != null && player.containerMenu instanceof ItemBusMenu menu
-                    && menu.getBlockPos().equals(packet.pos)) {
+            if (player != null && player.containerMenu instanceof ItemBusMenu menu &&
+                menu.getBlockPos().equals(packet.pos)) {
                 if (packet.creativeClone) {
                     menu.handleCreativeClone(packet.slot, player);
                 } else {

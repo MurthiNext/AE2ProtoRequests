@@ -26,8 +26,11 @@ public class ToolbarButton extends AbstractWidget {
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        GuiTextures.frame(graphics, selected.getAsBoolean() ? GuiTextures.BUTTON_SELECTED
-                : isHovered() ? GuiTextures.BUTTON_HOVER : GuiTextures.BUTTON, getX(), getY());
+        GuiTextures.frame(graphics,
+                          selected.getAsBoolean() ? GuiTextures.BUTTON_SELECTED
+                                  : isHovered()   ? GuiTextures.BUTTON_HOVER
+                                                  : GuiTextures.BUTTON,
+                          getX(), getY());
         GuiTextures.frame(graphics, icon, getX(), getY());
     }
 

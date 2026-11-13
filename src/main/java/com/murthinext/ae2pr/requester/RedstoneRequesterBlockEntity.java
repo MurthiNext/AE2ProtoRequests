@@ -27,8 +27,7 @@ import com.murthinext.ae2pr.requester.abstraction.RequestHost;
 import com.murthinext.ae2pr.requester.crafting.RequestCrafting;
 import com.murthinext.ae2pr.requester.platform.RequesterPlatform;
 
-public class RedstoneRequesterBlockEntity extends AENetworkBlockEntity
-        implements RequestHost, IGridTickable {
+public class RedstoneRequesterBlockEntity extends AENetworkBlockEntity implements RequestHost, IGridTickable {
 
     private static final String REQUESTS_ID = "requests";
     private static final String REDSTONE_ID = "redstone";
@@ -150,9 +149,8 @@ public class RedstoneRequesterBlockEntity extends AENetworkBlockEntity
 
     @Override
     public Component getTerminalName() {
-        return hasCustomName()
-                ? Objects.requireNonNull(getCustomName())
-                : RequesterUtils.translate("block", RequesterConstants.REQUESTER_ID);
+        return hasCustomName() ? Objects.requireNonNull(getCustomName())
+                               : RequesterUtils.translate("block", RequesterConstants.REQUESTER_ID);
     }
 
     public long getSortValue() {

@@ -1,6 +1,6 @@
 package com.murthinext.ae2pr.machine.matter_phase_transformer;
 
-import com.murthinext.ae2pr.api.Ids;
+import org.joml.Quaternionf;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -15,23 +15,21 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 
+import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.client.effect.EmissiveCubeRenderer;
 import com.murthinext.ae2pr.client.effect.RoundedBeamRenderer;
 import com.murthinext.ae2pr.registry.ModMachines;
-
-import org.joml.Quaternionf;
 
 // 相变仪空腔粒子、蓄能光柱与中央核心自发光
 public class MatterPhaseTransformerRenderer
         implements BlockEntityRenderer<MatterPhaseTransformerControllerBlockEntity> {
 
     // 三层统一使用原版信标光束层
-    private static final RenderType PARTICLE = RenderType.beaconBeam(
-            Ids.of("textures/particle/matter_particle.png"), true);
-    private static final RenderType CORE = RenderType.beaconBeam(
-            Ids.of("textures/block/high_energy_core_glow.png"), true);
-    private static final RenderType BEAM = RenderType.beaconBeam(
-            Ids.of("textures/entity/matter_beam.png"), true);
+    private static final RenderType PARTICLE = RenderType.beaconBeam(Ids.of("textures/particle/matter_particle.png"),
+                                                                     true);
+    private static final RenderType CORE = RenderType.beaconBeam(Ids.of("textures/block/high_energy_core_glow.png"),
+                                                                 true);
+    private static final RenderType BEAM = RenderType.beaconBeam(Ids.of("textures/entity/matter_beam.png"), true);
     private static final int PARTICLES_PER_CHAMBER = 96;
     private static final float[] WHITE = { 1.0F, 1.0F, 1.0F };
 
@@ -40,7 +38,7 @@ public class MatterPhaseTransformerRenderer
 
     @Override
     public void render(MatterPhaseTransformerControllerBlockEntity controller, float partialTick, PoseStack pose,
-            MultiBufferSource buffers, int light, int overlay) {
+                       MultiBufferSource buffers, int light, int overlay) {
         if (!controller.isFormed() || controller.getLevel() == null) {
             return;
         }
@@ -51,7 +49,7 @@ public class MatterPhaseTransformerRenderer
         BlockPos origin = controller.getBlockPos();
         pose.pushPose();
         pose.translate(core.getX() - origin.getX() + 0.5, core.getY() - origin.getY(),
-                core.getZ() - origin.getZ() + 0.5);
+                       core.getZ() - origin.getZ() + 0.5);
         double time = controller.getParticleTime(partialTick);
         float activity = controller.getEffectActivity(partialTick);
         float beamStrength = controller.getBeamStrength(partialTick);
@@ -69,7 +67,7 @@ public class MatterPhaseTransformerRenderer
     }
 
     private static void renderChamber(PoseStack pose, VertexConsumer consumer, double time, float activity,
-            float beamStrength, boolean upper) {
+                                      float beamStrength, boolean upper) {
         if (beamStrength >= 0.999F) {
             return;
         }
@@ -86,8 +84,7 @@ public class MatterPhaseTransformerRenderer
             double y = upper ? 3.9 - progress * 2.8 : -2.9 + progress * 2.8;
             float size = (0.01F + (i % 4) * 0.01F) * (1.0F - activity * 0.25F);
             double fade = Math.min(1.0, Math.min(progress, 1.0 - progress) * 8.0);
-            float alpha = (float) (fade * fade * (3.0 - 2.0 * fade)
-                    * (0.4 + (i % 3) * 0.1) * (1.0 - beamStrength));
+            float alpha = (float) (fade * fade * (3.0 - 2.0 * fade) * (0.4 + (i % 3) * 0.1) * (1.0 - beamStrength));
             pose.pushPose();
             pose.translate(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
             pose.mulPose(cameraOrientation);
@@ -111,7 +108,7 @@ public class MatterPhaseTransformerRenderer
     }
 
     private static void renderBeams(PoseStack pose, VertexConsumer consumer, BlockPos core, double ticks,
-            float strength) {
+                                    float strength) {
         Vec3 camera = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         Vec3 view = new Vec3(camera.x - (core.getX() + 0.5), 0, camera.z - (core.getZ() + 0.5));
         view = view.lengthSqr() < 1.0E-6 ? new Vec3(0, 0, 1) : view.normalize();
@@ -127,8 +124,8 @@ public class MatterPhaseTransformerRenderer
         pose.popPose();
     }
 
-    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, float x, float y, float z,
-            float u, float v, float alpha) {
+    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, float x, float y, float z, float u,
+                               float v, float alpha) {
         consumer.vertex(pose.pose(), x, y, z)
                 .color(WHITE[0], WHITE[1], WHITE[2], alpha)
                 .uv(u, v)

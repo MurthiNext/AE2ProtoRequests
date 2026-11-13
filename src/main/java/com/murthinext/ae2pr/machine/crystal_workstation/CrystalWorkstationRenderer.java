@@ -1,7 +1,5 @@
 package com.murthinext.ae2pr.machine.crystal_workstation;
 
-import com.murthinext.ae2pr.api.Ids;
-
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
@@ -19,21 +17,19 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 
-import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
+import com.murthinext.ae2pr.registry.ModMachines;
 
 // 晶能工作站成型特效
-public class CrystalWorkstationRenderer
-        implements BlockEntityRenderer<CrystalWorkstationControllerBlockEntity> {
+public class CrystalWorkstationRenderer implements BlockEntityRenderer<CrystalWorkstationControllerBlockEntity> {
 
     private static final RenderType CORE = RenderType.entityTranslucentEmissive(
-            Ids.of( "textures/block/crystal_workstation/core_cube.png"),
-            false);
+            Ids.of("textures/block/crystal_workstation/core_cube.png"), false);
     private static final RenderType FLUID = RenderType.entityTranslucentEmissive(
-            Ids.of( "textures/block/crystal_workstation/portal_liquid.png"),
-            false);
+            Ids.of("textures/block/crystal_workstation/portal_liquid.png"), false);
     private static final RenderType MOTES = RenderType.entityTranslucentEmissive(
-            Ids.of( "textures/particle/workstation_mote.png"), false);
+            Ids.of("textures/particle/workstation_mote.png"), false);
 
     // 内腔半深
     private static final float CAVITY_HALF = 1.49F;
@@ -61,7 +57,7 @@ public class CrystalWorkstationRenderer
 
     @Override
     public void render(CrystalWorkstationControllerBlockEntity controller, float partialTick, PoseStack pose,
-            MultiBufferSource buffers, int light, int overlay) {
+                       MultiBufferSource buffers, int light, int overlay) {
         if (!controller.isFormed() || controller.getLevel() == null) {
             return;
         }
@@ -75,16 +71,16 @@ public class CrystalWorkstationRenderer
         }
         Direction facing = controller.getBlockState().getValue(MachineBlock.FACING);
         Direction sideAxis = CrystalWorkstationStructure.sideAxis(facing, controller.isMirrorSide(),
-                controller.isMirrorFront());
+                                                                  controller.isMirrorFront());
         Direction depthAxis = CrystalWorkstationStructure.depthAxis(facing, controller.isMirrorSide(),
-                controller.isMirrorFront());
+                                                                    controller.isMirrorFront());
         BlockPos origin = controller.getBlockPos();
         double time = controller.getLevel().getGameTime() + partialTick;
         float activity = controller.isRunning() ? 1.0F : 0.6F;
 
         pose.pushPose();
         pose.translate(core.getX() - origin.getX() + 0.5, core.getY() - origin.getY() + 0.5,
-                core.getZ() - origin.getZ() + 0.5);
+                       core.getZ() - origin.getZ() + 0.5);
         renderCubes(pose, buffers.getBuffer(CORE), time, activity, depthAxis);
         renderFluid(pose, buffers.getBuffer(FLUID), time, activity, sideAxis, depthAxis);
         renderMotes(pose, buffers.getBuffer(MOTES), time, activity, sideAxis, depthAxis);
@@ -95,15 +91,15 @@ public class CrystalWorkstationRenderer
 
     // 两颗立方体：棱长各自在 1~2 格之间起伏并周期交错，因此会互相换到内外位置
     private static void renderCubes(PoseStack pose, VertexConsumer consumer, double time, float activity,
-            Direction depthAxis) {
+                                    Direction depthAxis) {
         double wave = Math.sin(time * (Math.PI * 2.0 / CUBE_PERIOD));
         float first = (float) (CUBE_MIN_HALF + (CUBE_MAX_HALF - CUBE_MIN_HALF) * (0.5 + 0.5 * wave));
         float second = CUBE_MAX_HALF - (first - CUBE_MIN_HALF);
         // 绕三轴以互不相关的速度旋转，姿态可覆盖任意方向；尺寸互补所以内外位置会互换
         renderCube(pose, consumer, first, spin(time * 0.011), spin(time * 0.0073), spin(time * 0.0046), depthAxis,
-                (int) ((96 + 26 * Math.sin(time * 0.055)) * activity), 0.72F, 0.95F, 1.0F);
-        renderCube(pose, consumer, second, spin(-time * 0.0083), spin(time * 0.0121), spin(-time * 0.0061),
-                depthAxis, (int) ((84 + 22 * Math.cos(time * 0.049)) * activity), 0.78F, 0.74F, 1.0F);
+                   (int) ((96 + 26 * Math.sin(time * 0.055)) * activity), 0.72F, 0.95F, 1.0F);
+        renderCube(pose, consumer, second, spin(-time * 0.0083), spin(time * 0.0121), spin(-time * 0.0061), depthAxis,
+                   (int) ((84 + 22 * Math.cos(time * 0.049)) * activity), 0.78F, 0.74F, 1.0F);
     }
 
     // 角度折算到一圈以内，避免长时间运行后精度下降
@@ -112,10 +108,10 @@ public class CrystalWorkstationRenderer
     }
 
     private static void renderCube(PoseStack pose, VertexConsumer consumer, float half, float yaw, float pitch,
-            float roll, Direction depthAxis, int alpha, float red, float green, float blue) {
+                                   float roll, Direction depthAxis, int alpha, float red, float green, float blue) {
         Quaternionf rotation = new Quaternionf(Axis.YP.rotation(yaw))
-                .mul(Axis.XP.rotation(pitch))
-                .mul(Axis.ZP.rotation(roll));
+                                       .mul(Axis.XP.rotation(pitch))
+                                       .mul(Axis.ZP.rotation(roll));
         float scale = fitScale(rotation, half, depthAxis);
         pose.pushPose();
         pose.mulPose(rotation);
@@ -123,18 +119,34 @@ public class CrystalWorkstationRenderer
         for (Direction direction : Direction.values()) {
             pose.pushPose();
             pose.mulPose(direction.getRotation());
-            consumer.vertex(pose.last().pose(), -half, half, -half).color(red, green, blue, alpha / 255.0F)
-                    .uv(0, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT)
-                    .normal(pose.last().normal(), 0, 1, 0).endVertex();
-            consumer.vertex(pose.last().pose(), -half, half, half).color(red, green, blue, alpha / 255.0F)
-                    .uv(0, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT)
-                    .normal(pose.last().normal(), 0, 1, 0).endVertex();
-            consumer.vertex(pose.last().pose(), half, half, half).color(red, green, blue, alpha / 255.0F)
-                    .uv(1, 1).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT)
-                    .normal(pose.last().normal(), 0, 1, 0).endVertex();
-            consumer.vertex(pose.last().pose(), half, half, -half).color(red, green, blue, alpha / 255.0F)
-                    .uv(1, 0).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT)
-                    .normal(pose.last().normal(), 0, 1, 0).endVertex();
+            consumer.vertex(pose.last().pose(), -half, half, -half)
+                    .color(red, green, blue, alpha / 255.0F)
+                    .uv(0, 0)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(LightTexture.FULL_BRIGHT)
+                    .normal(pose.last().normal(), 0, 1, 0)
+                    .endVertex();
+            consumer.vertex(pose.last().pose(), -half, half, half)
+                    .color(red, green, blue, alpha / 255.0F)
+                    .uv(0, 1)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(LightTexture.FULL_BRIGHT)
+                    .normal(pose.last().normal(), 0, 1, 0)
+                    .endVertex();
+            consumer.vertex(pose.last().pose(), half, half, half)
+                    .color(red, green, blue, alpha / 255.0F)
+                    .uv(1, 1)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(LightTexture.FULL_BRIGHT)
+                    .normal(pose.last().normal(), 0, 1, 0)
+                    .endVertex();
+            consumer.vertex(pose.last().pose(), half, half, -half)
+                    .color(red, green, blue, alpha / 255.0F)
+                    .uv(1, 0)
+                    .overlayCoords(OverlayTexture.NO_OVERLAY)
+                    .uv2(LightTexture.FULL_BRIGHT)
+                    .normal(pose.last().normal(), 0, 1, 0)
+                    .endVertex();
             pose.popPose();
         }
         pose.popPose();
@@ -148,9 +160,9 @@ public class CrystalWorkstationRenderer
         Vector3f axisX = rotation.transform(new Vector3f(1, 0, 0));
         Vector3f axisY = rotation.transform(new Vector3f(0, 1, 0));
         Vector3f axisZ = rotation.transform(new Vector3f(0, 0, 1));
-        float depth = softAbs(half * (axisX.x * x + axisX.y * y + axisX.z * z))
-                + softAbs(half * (axisY.x * x + axisY.y * y + axisY.z * z))
-                + softAbs(half * (axisZ.x * x + axisZ.y * y + axisZ.z * z));
+        float depth = softAbs(half * (axisX.x * x + axisX.y * y + axisX.z * z)) +
+                softAbs(half * (axisY.x * x + axisY.y * y + axisY.z * z)) +
+                softAbs(half * (axisZ.x * x + axisZ.y * y + axisZ.z * z));
         float vertical = softAbs(half * axisX.y) + softAbs(half * axisY.y) + softAbs(half * axisZ.y);
         float margin = CAVITY_HALF / softMax(depth, vertical) - 1.0F;
         return 1.0F + 0.5F * (margin - (float) Math.sqrt(margin * margin + FIT_SOFTNESS * FIT_SOFTNESS));
@@ -166,7 +178,7 @@ public class CrystalWorkstationRenderer
     }
 
     private static void renderFluid(PoseStack pose, VertexConsumer consumer, double time, float activity,
-            Direction sideAxis, Direction depthAxis) {
+                                    Direction sideAxis, Direction depthAxis) {
         for (int sign : new int[] { 1, -1 }) {
             Panel panel = new Panel(pose.last(), sideAxis, depthAxis, sign);
             renderSea(consumer, panel, time, activity);
@@ -207,13 +219,11 @@ public class CrystalWorkstationRenderer
                     float v0 = j / (float) grid;
                     float v1 = (j + 1) / (float) grid;
                     // 浪峰更亮、浪谷更暗，强化起伏观感
-                    float crest = (height[i][j] + height[i + 1][j] + height[i][j + 1] + height[i + 1][j + 1])
-                            * -0.25F;
+                    float crest = (height[i][j] + height[i + 1][j] + height[i][j + 1] + height[i + 1][j + 1]) * -0.25F;
                     float lit = 0.55F + Math.min(1.0F, (crest - baseline) / Math.max(0.0001F, amplitude)) * 0.45F;
                     panel.vertex(consumer, a0, b0, height[i][j], u0, v0, 0.62F * lit, 0.90F * lit, lit, alpha);
                     panel.vertex(consumer, a0, b1, height[i][j + 1], u0, v1, 0.62F * lit, 0.90F * lit, lit, alpha);
-                    panel.vertex(consumer, a1, b1, height[i + 1][j + 1], u1, v1, 0.62F * lit, 0.90F * lit, lit,
-                            alpha);
+                    panel.vertex(consumer, a1, b1, height[i + 1][j + 1], u1, v1, 0.62F * lit, 0.90F * lit, lit, alpha);
                     panel.vertex(consumer, a1, b0, height[i + 1][j], u1, v0, 0.62F * lit, 0.90F * lit, lit, alpha);
                 }
             }
@@ -222,22 +232,18 @@ public class CrystalWorkstationRenderer
 
     private static float swell(float a, float b, double time, int layer) {
         double t = time + layer * 1.7;
-        double h = Math.sin(a * 1.35 + b * 0.55 + t) * 0.55
-                + Math.sin(b * 1.9 - a * 0.42 - t * 0.83) * 0.32
-                + Math.sin((a + b) * 2.6 + t * 1.37) * 0.18
-                + Math.cos((a - b) * 3.4 - t * 0.61) * 0.12;
+        double h = Math.sin(a * 1.35 + b * 0.55 + t) * 0.55 + Math.sin(b * 1.9 - a * 0.42 - t * 0.83) * 0.32 +
+                Math.sin((a + b) * 2.6 + t * 1.37) * 0.18 + Math.cos((a - b) * 3.4 - t * 0.61) * 0.12;
         return (float) h;
     }
 
     private record Panel(PoseStack.Pose pose, Direction normal, Direction depth, int sign) {
 
         void vertex(VertexConsumer consumer, float a, float b, float push, float u, float v, float red, float green,
-                float blue, int alpha) {
+                    float blue, int alpha) {
             float reach = (PANEL_REACH + push) * sign;
-            consumer.vertex(pose.pose(),
-                    normal.getStepX() * reach + depth.getStepX() * b,
-                    normal.getStepY() * reach + a,
-                    normal.getStepZ() * reach + depth.getStepZ() * b)
+            consumer.vertex(pose.pose(), normal.getStepX() * reach + depth.getStepX() * b,
+                            normal.getStepY() * reach + a, normal.getStepZ() * reach + depth.getStepZ() * b)
                     .color(red, green, blue, alpha / 255.0F)
                     .uv(u, v)
                     .overlayCoords(OverlayTexture.NO_OVERLAY)
@@ -248,7 +254,7 @@ public class CrystalWorkstationRenderer
     }
 
     private static void renderMotes(PoseStack pose, VertexConsumer consumer, double time, float activity,
-            Direction side, Direction depth) {
+                                    Direction side, Direction depth) {
         for (int sign : new int[] { 1, -1 }) {
             for (int i = 0; i < MOTES_PER_SIDE; i++) {
                 // 相位错开保持稀疏
@@ -268,25 +274,40 @@ public class CrystalWorkstationRenderer
                 float size = 0.045F + (float) hash(seed * 11.3) * 0.025F;
                 float tint = 0.85F + (float) hash(seed * 5.9) * 0.15F;
                 pose.pushPose();
-                pose.translate(side.getStepX() * reach + depth.getStepX() * b,
-                        side.getStepY() * reach + a,
-                        side.getStepZ() * reach + depth.getStepZ() * b);
+                pose.translate(side.getStepX() * reach + depth.getStepX() * b, side.getStepY() * reach + a,
+                               side.getStepZ() * reach + depth.getStepZ() * b);
                 pose.mulPose(Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation());
                 float red = MOTE_COLOR[0] * tint;
                 float green = MOTE_COLOR[1] * tint;
                 float blue = MOTE_COLOR[2];
-                consumer.vertex(pose.last().pose(), -size, -size, 0).color(red, green, blue, alpha / 255.0F).uv(0, 1)
-                        .overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT)
-                        .normal(pose.last().normal(), 0, 0, 1).endVertex();
-                consumer.vertex(pose.last().pose(), size, -size, 0).color(red, green, blue, alpha / 255.0F).uv(1, 1)
-                        .overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT)
-                        .normal(pose.last().normal(), 0, 0, 1).endVertex();
-                consumer.vertex(pose.last().pose(), size, size, 0).color(red, green, blue, alpha / 255.0F).uv(1, 0)
-                        .overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT)
-                        .normal(pose.last().normal(), 0, 0, 1).endVertex();
-                consumer.vertex(pose.last().pose(), -size, size, 0).color(red, green, blue, alpha / 255.0F).uv(0, 0)
-                        .overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT)
-                        .normal(pose.last().normal(), 0, 0, 1).endVertex();
+                consumer.vertex(pose.last().pose(), -size, -size, 0)
+                        .color(red, green, blue, alpha / 255.0F)
+                        .uv(0, 1)
+                        .overlayCoords(OverlayTexture.NO_OVERLAY)
+                        .uv2(LightTexture.FULL_BRIGHT)
+                        .normal(pose.last().normal(), 0, 0, 1)
+                        .endVertex();
+                consumer.vertex(pose.last().pose(), size, -size, 0)
+                        .color(red, green, blue, alpha / 255.0F)
+                        .uv(1, 1)
+                        .overlayCoords(OverlayTexture.NO_OVERLAY)
+                        .uv2(LightTexture.FULL_BRIGHT)
+                        .normal(pose.last().normal(), 0, 0, 1)
+                        .endVertex();
+                consumer.vertex(pose.last().pose(), size, size, 0)
+                        .color(red, green, blue, alpha / 255.0F)
+                        .uv(1, 0)
+                        .overlayCoords(OverlayTexture.NO_OVERLAY)
+                        .uv2(LightTexture.FULL_BRIGHT)
+                        .normal(pose.last().normal(), 0, 0, 1)
+                        .endVertex();
+                consumer.vertex(pose.last().pose(), -size, size, 0)
+                        .color(red, green, blue, alpha / 255.0F)
+                        .uv(0, 0)
+                        .overlayCoords(OverlayTexture.NO_OVERLAY)
+                        .uv2(LightTexture.FULL_BRIGHT)
+                        .normal(pose.last().normal(), 0, 0, 1)
+                        .endVertex();
                 pose.popPose();
             }
         }

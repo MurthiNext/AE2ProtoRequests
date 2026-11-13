@@ -28,8 +28,9 @@ public final class InkStoryCompiler {
         List<Path> languages;
         try (var directories = Files.list(source)) {
             languages = directories.filter(Files::isDirectory)
-                    .filter(directory -> Files.isRegularFile(directory.resolve("main.ink")))
-                    .sorted().toList();
+                                .filter(directory -> Files.isRegularFile(directory.resolve("main.ink")))
+                                .sorted()
+                                .toList();
         }
         if (languages.isEmpty()) {
             throw new IllegalArgumentException("At least one story language directory is required: " + source);
@@ -40,7 +41,8 @@ public final class InkStoryCompiler {
         }
         try (var generated = Files.walk(output.resolve("assets/ae2pr/story"))) {
             for (Path file : generated.filter(path -> path.getFileName().toString().equals("main.ink.json"))
-                    .filter(path -> !targets.contains(path)).toList()) {
+                                     .filter(path -> !targets.contains(path))
+                                     .toList()) {
                 Files.delete(file);
             }
         }
@@ -76,8 +78,8 @@ public final class InkStoryCompiler {
             public String resolveInkFilename(String includeName) {
                 Path file = language.resolve(includeName).normalize();
                 if (!file.startsWith(language)) {
-                    throw new IllegalArgumentException(
-                            "INCLUDE escapes the current language directory: " + includeName);
+                    throw new IllegalArgumentException("INCLUDE escapes the current language directory: " +
+                                                       includeName);
                 }
                 return file.toString();
             }
@@ -95,8 +97,8 @@ public final class InkStoryCompiler {
             for (Path file : definitions.filter(path -> path.toString().endsWith(".json")).sorted().toList()) {
                 Object entry = SimpleJson.textToDictionary(Files.readString(file)).get("entry");
                 if (!(entry instanceof String knot) || !program.hasFunction(knot)) {
-                    throw new IllegalArgumentException(
-                            "Story entry does not exist: " + file + " / " + language.getFileName());
+                    throw new IllegalArgumentException("Story entry does not exist: " + file + " / " +
+                                                       language.getFileName());
                 }
             }
         }

@@ -16,8 +16,7 @@ public final class CtmMask {
     public static final int NONE = 0;
 
     // 棱：两条不同轴的面方向
-    private record Edge(Direction a, Direction b) {
-    }
+    private record Edge(Direction a, Direction b) {}
 
     // 邻居连接判定
     @FunctionalInterface
@@ -26,18 +25,12 @@ public final class CtmMask {
     }
 
     private static final List<Edge> EDGES = List.of(
-            new Edge(Direction.EAST, Direction.UP),
-            new Edge(Direction.EAST, Direction.DOWN),
-            new Edge(Direction.WEST, Direction.UP),
-            new Edge(Direction.WEST, Direction.DOWN),
-            new Edge(Direction.EAST, Direction.NORTH),
-            new Edge(Direction.EAST, Direction.SOUTH),
-            new Edge(Direction.WEST, Direction.NORTH),
-            new Edge(Direction.WEST, Direction.SOUTH),
-            new Edge(Direction.UP, Direction.NORTH),
-            new Edge(Direction.UP, Direction.SOUTH),
-            new Edge(Direction.DOWN, Direction.NORTH),
-            new Edge(Direction.DOWN, Direction.SOUTH));
+            new Edge(Direction.EAST, Direction.UP), new Edge(Direction.EAST, Direction.DOWN),
+            new Edge(Direction.WEST, Direction.UP), new Edge(Direction.WEST, Direction.DOWN),
+            new Edge(Direction.EAST, Direction.NORTH), new Edge(Direction.EAST, Direction.SOUTH),
+            new Edge(Direction.WEST, Direction.NORTH), new Edge(Direction.WEST, Direction.SOUTH),
+            new Edge(Direction.UP, Direction.NORTH), new Edge(Direction.UP, Direction.SOUTH),
+            new Edge(Direction.DOWN, Direction.NORTH), new Edge(Direction.DOWN, Direction.SOUTH));
 
     private static final int[][] EDGE_BIT = new int[6][6];
 

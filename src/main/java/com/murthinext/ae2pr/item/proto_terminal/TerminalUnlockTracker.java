@@ -8,14 +8,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import com.murthinext.ae2pr.registry.ModNetwork;
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.network.TerminalStoryUnlockPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.network.TerminalStoryUnlockPacket;
+import com.murthinext.ae2pr.registry.ModNetwork;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class TerminalUnlockTracker {

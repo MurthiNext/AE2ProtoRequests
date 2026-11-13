@@ -3,13 +3,14 @@ package com.murthinext.ae2pr.network;
 import java.io.IOException;
 import java.util.function.Supplier;
 
-import com.murthinext.ae2pr.registry.ModNetwork;
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress;
-import com.murthinext.ae2pr.item.proto_terminal.TerminalStorySavedData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.network.NetworkEvent;
+
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStorySavedData;
+import com.murthinext.ae2pr.registry.ModNetwork;
 
 // 客户端上报压缩后的剧情快照
 public class TerminalStoryUpdatePacket {
@@ -44,8 +45,9 @@ public class TerminalStoryUpdatePacket {
             } catch (IOException | RuntimeException exception) {
                 ae2pr.LOGGER.warn("Invalid proto terminal story snapshot from player {}", player.getUUID(), exception);
                 player.sendSystemMessage(Component.translatable("gui.ae2pr.proto_terminal.save_failed"));
-                ModNetwork.sendToPlayer(player, new TerminalStorySyncPacket(
-                        TerminalStorySavedData.get(player.server).get(player.getUUID())));
+                ModNetwork.sendToPlayer(
+                        player,
+                        new TerminalStorySyncPacket(TerminalStorySavedData.get(player.server).get(player.getUUID())));
             }
         });
         context.setPacketHandled(true);

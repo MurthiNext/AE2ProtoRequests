@@ -7,7 +7,8 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraftforge.fluids.FluidStack;
 
 public record RecipeDraft(List<CountedIngredient> itemInputs, List<FluidStack> fluidInputs,
-        List<ChancedItemStack> itemOutputs, List<FluidStack> fluidOutputs, int duration, @Nullable Double energy) {
+                          List<ChancedItemStack> itemOutputs, List<FluidStack> fluidOutputs, int duration,
+                          @Nullable Double energy) {
 
     public RecipeDraft {
         itemInputs = List.copyOf(itemInputs);

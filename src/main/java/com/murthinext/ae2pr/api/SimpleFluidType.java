@@ -24,7 +24,7 @@ public class SimpleFluidType extends FluidType {
     private final int tint;
 
     protected SimpleFluidType(Properties properties, ResourceLocation stillTexture, ResourceLocation flowingTexture,
-            int tint) {
+                              int tint) {
         super(properties);
         this.stillTexture = stillTexture;
         this.flowingTexture = flowingTexture;
@@ -32,25 +32,25 @@ public class SimpleFluidType extends FluidType {
     }
 
     public static SimpleFluidType of(Properties properties, ResourceLocation stillTexture,
-            ResourceLocation flowingTexture, int tint) {
+                                     ResourceLocation flowingTexture, int tint) {
         return new SimpleFluidType(properties, stillTexture, flowingTexture, tint);
     }
 
     public static SimpleFluidType waterLike(String id, int lightLevel, int density, int viscosity, int temperature) {
         return of(fluidProperties(false, lightLevel, density, viscosity, temperature),
-                Ids.of(TEXTURE_ROOT + id + "_still"), Ids.of(TEXTURE_ROOT + id + "_flow"), NO_TINT);
+                  Ids.of(TEXTURE_ROOT + id + "_still"), Ids.of(TEXTURE_ROOT + id + "_flow"), NO_TINT);
     }
 
     public static Properties fluidProperties(boolean lavaLike, int lightLevel, int density, int viscosity,
-            int temperature) {
+                                             int temperature) {
         return common(lavaLike ? BlockPathTypes.LAVA : BlockPathTypes.WATER,
-                lavaLike ? SoundEvents.BUCKET_FILL_LAVA : SoundEvents.BUCKET_FILL,
-                lavaLike ? SoundEvents.BUCKET_EMPTY_LAVA : SoundEvents.BUCKET_EMPTY,
-                lightLevel, density, viscosity, temperature);
+                      lavaLike ? SoundEvents.BUCKET_FILL_LAVA : SoundEvents.BUCKET_FILL,
+                      lavaLike ? SoundEvents.BUCKET_EMPTY_LAVA : SoundEvents.BUCKET_EMPTY, lightLevel, density,
+                      viscosity, temperature);
     }
 
     protected static Properties common(BlockPathTypes pathType, SoundEvent fillSound, SoundEvent emptySound,
-            int lightLevel, int density, int viscosity, int temperature) {
+                                       int lightLevel, int density, int viscosity, int temperature) {
         return FluidType.Properties.create()
                 .canSwim(false)
                 .canDrown(false)

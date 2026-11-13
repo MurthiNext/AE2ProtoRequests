@@ -6,14 +6,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
 
 import appeng.blockentity.misc.CellWorkbenchBlockEntity;
 import appeng.menu.implementations.CellWorkbenchMenu;
 import appeng.menu.implementations.UpgradeableMenu;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.ItemStack;
+
+import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
 
 // 元件工作台菜单：注册白/黑名单表达式同步用的 client action
 @Mixin(value = CellWorkbenchMenu.class, remap = false)
@@ -25,7 +26,7 @@ public abstract class CellWorkbenchMenuMixin extends UpgradeableMenu<CellWorkben
     private static final String ae2pr$ACTION_SET_BLACKLIST = AdvancedFilterCellItem.ACTION_SET_BLACKLIST;
 
     public CellWorkbenchMenuMixin(MenuType<?> menuType, int id, Inventory playerInventory,
-            CellWorkbenchBlockEntity host) {
+                                  CellWorkbenchBlockEntity host) {
         super(menuType, id, playerInventory, host);
     }
 

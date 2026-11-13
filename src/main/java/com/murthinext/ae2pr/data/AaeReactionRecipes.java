@@ -39,16 +39,15 @@ public final class AaeReactionRecipes {
     private AaeReactionRecipes() {
     }
 
-    public record Reaction(String source, String path, int energy, List<JsonObject> inputs,
-            @Nullable JsonObject fluid, JsonObject output, Set<String> conditions) {
-    }
+    public record Reaction(String source, String path, int energy, List<JsonObject> inputs, @Nullable JsonObject fluid,
+                           JsonObject output, Set<String> conditions) {}
 
     public static List<Reaction> readAll() {
         List<Reaction> reactions = new ArrayList<>();
         for (Path jarPath : jarPaths()) {
             try (JarFile jar = new JarFile(jarPath.toFile())) {
                 String source = readSource(jar, jarPath);
-                for (Enumeration<JarEntry> entries = jar.entries(); entries.hasMoreElements(); ) {
+                for (Enumeration<JarEntry> entries = jar.entries(); entries.hasMoreElements();) {
                     JarEntry entry = entries.nextElement();
                     String name = entry.getName();
                     if (!name.endsWith(".json") || RECIPE_DIRS.stream().noneMatch(name::startsWith)) {
@@ -69,7 +68,8 @@ public final class AaeReactionRecipes {
     private static List<Path> jarPaths() {
         String value = System.getProperty(JARS_PROPERTY);
         if (value == null || value.isBlank()) {
-            throw new IllegalStateException("Missing -D" + JARS_PROPERTY + ", run datagen through the runData Gradle task");
+            throw new IllegalStateException("Missing -D" + JARS_PROPERTY +
+                                            ", run datagen through the runData Gradle task");
         }
         List<Path> paths = new ArrayList<>();
         for (String part : value.split(Pattern.quote(File.pathSeparator))) {
@@ -132,8 +132,8 @@ public final class AaeReactionRecipes {
             inputs.add(element.getAsJsonObject());
         }
         return new Reaction(source, path, GsonHelper.getAsInt(json, "energy"), inputs,
-                json.has("fluid") ? GsonHelper.getAsJsonObject(json, "fluid") : null,
-                GsonHelper.getAsJsonObject(json, "output"), conditions);
+                            json.has("fluid") ? GsonHelper.getAsJsonObject(json, "fluid") : null,
+                            GsonHelper.getAsJsonObject(json, "output"), conditions);
     }
 
     private static Set<String> readConditions(JsonObject wrapper) {

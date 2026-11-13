@@ -3,6 +3,7 @@ package com.murthinext.ae2pr.item.proto_terminal;
 import org.joml.Matrix4f;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
@@ -23,11 +24,8 @@ final class TerminalStarfieldRenderer {
     private final float halfWidth;
     private final float halfHeight;
     private final Layer nebula = new Layer(0.32F, 0, 0, 0);
-    private final Layer[] stars = {
-            new Layer(0.22F, 24, 0.65F, 0.55F),
-            new Layer(0.55F, 37, 0.58F, 0.8F),
-            new Layer(1, 63, 0.62F, 1.1F)
-    };
+    private final Layer[] stars = { new Layer(0.22F, 24, 0.65F, 0.55F), new Layer(0.55F, 37, 0.58F, 0.8F),
+                                    new Layer(1, 63, 0.62F, 1.1F) };
 
     TerminalStarfieldRenderer(int x, int y, int width, int height) {
         halfWidth = width / 2.0F;
@@ -125,8 +123,8 @@ final class TerminalStarfieldRenderer {
         return Math.round(Mth.lerp(y, top, bottom) * brightness);
     }
 
-    void renderStars(GuiGraphics graphics, int x, int y, int width, int height, float slant,
-            float seconds, float opacity, TerminalOpeningPixelRenderer aperture) {
+    void renderStars(GuiGraphics graphics, int x, int y, int width, int height, float slant, float seconds,
+                     float opacity, TerminalOpeningPixelRenderer aperture) {
         if (width <= slant || height <= 0 || opacity <= 0) {
             return;
         }
@@ -152,30 +150,29 @@ final class TerminalStarfieldRenderer {
                         float margin = size * 5;
                         boolean inside = aperture != null
                                 ? aperture.contains(px - margin, py - margin, px + margin, py + margin)
-                                : TerminalGraphicsRenderer.contains(px - margin, py - margin,
-                                        x, y, width, height, slant)
-                                        && TerminalGraphicsRenderer.contains(px + margin, py + margin,
-                                                x, y, width, height, slant);
+                                : TerminalGraphicsRenderer.contains(px - margin, py - margin, x, y, width, height,
+                                                                    slant) &&
+                                        TerminalGraphicsRenderer.contains(px + margin, py + margin, x, y, width, height,
+                                                                          slant);
                         if (!inside) {
                             continue;
                         }
                         float light = starlight(seed, seconds);
                         float tint = random(seed, 4);
                         int color = STAR_COLORS[tint > 0.94F ? 3 : (int) (tint / 0.94F * 3)];
-                        float brightness = (0.12F + layer.depth * 0.3F + light * (0.2F + layer.depth * 0.4F))
-                                * opacity;
+                        float brightness = (0.12F + layer.depth * 0.3F + light * (0.2F + layer.depth * 0.4F)) * opacity;
                         if (index > 0) {
                             glow(vertices, matrix, px, py, size * (2 + light), color, brightness * 0.07F);
                         }
                         if (index == 2 && light > 0.55F && random(seed, 5) > 0.55F) {
                             float reach = size * (2 + light * 2);
-                            point(vertices, matrix, px - reach, py - size * 0.22F,
-                                    px + reach, py + size * 0.22F, color, brightness * light * 0.24F);
-                            point(vertices, matrix, px - size * 0.22F, py - reach,
-                                    px + size * 0.22F, py + reach, color, brightness * light * 0.24F);
+                            point(vertices, matrix, px - reach, py - size * 0.22F, px + reach, py + size * 0.22F, color,
+                                  brightness * light * 0.24F);
+                            point(vertices, matrix, px - size * 0.22F, py - reach, px + size * 0.22F, py + reach, color,
+                                  brightness * light * 0.24F);
                         }
-                        point(vertices, matrix, px - size / 2, py - size / 2,
-                                px + size / 2, py + size / 2, color, brightness);
+                        point(vertices, matrix, px - size / 2, py - size / 2, px + size / 2, py + size / 2, color,
+                              brightness);
                     }
                 }
             }
@@ -192,13 +189,12 @@ final class TerminalStarfieldRenderer {
         float duration = 0.12F + random(event, 2) * 0.18F;
         float pulse = Math.max(0, 1 - Math.abs(phase - center) / duration);
         pulse = pulse * pulse * (3 - 2 * pulse);
-        float shimmer = 0.5F + 0.5F * Mth.sin(seconds * (0.4F + random(seed, 8))
-                + random(seed, 9) * Mth.TWO_PI);
+        float shimmer = 0.5F + 0.5F * Mth.sin(seconds * (0.4F + random(seed, 8)) + random(seed, 9) * Mth.TWO_PI);
         return shimmer * 0.2F + pulse * (0.35F + random(event, 3) * 0.45F);
     }
 
-    private static void point(VertexConsumer vertices, Matrix4f matrix, float left, float top,
-            float right, float bottom, int color, float opacity) {
+    private static void point(VertexConsumer vertices, Matrix4f matrix, float left, float top, float right,
+                              float bottom, int color, float opacity) {
         int alpha = Math.round(Mth.clamp(opacity, 0, 1) * 255);
         vertex(vertices, matrix, left, top, color, alpha);
         vertex(vertices, matrix, left, bottom, color, alpha);
@@ -206,8 +202,8 @@ final class TerminalStarfieldRenderer {
         vertex(vertices, matrix, right, top, color, alpha);
     }
 
-    private static void glow(VertexConsumer vertices, Matrix4f matrix, float x, float y,
-            float radius, int color, float opacity) {
+    private static void glow(VertexConsumer vertices, Matrix4f matrix, float x, float y, float radius, int color,
+                             float opacity) {
         int alpha = Math.round(opacity * 255);
         for (int sector = 0; sector < 8; sector++) {
             float angle = sector * Mth.TWO_PI / 8;
@@ -258,9 +254,9 @@ final class TerminalStarfieldRenderer {
         fx = fx * fx * (3 - 2 * fx);
         fy = fy * fy * (3 - 2 * fy);
         float top = Mth.lerp(fx, random(hash(ix & (cells - 1), iy & (cells - 1), salt), 0),
-                random(hash((ix + 1) & (cells - 1), iy & (cells - 1), salt), 0));
+                             random(hash((ix + 1) & (cells - 1), iy & (cells - 1), salt), 0));
         float bottom = Mth.lerp(fx, random(hash(ix & (cells - 1), (iy + 1) & (cells - 1), salt), 0),
-                random(hash((ix + 1) & (cells - 1), (iy + 1) & (cells - 1), salt), 0));
+                                random(hash((ix + 1) & (cells - 1), (iy + 1) & (cells - 1), salt), 0));
         return Mth.lerp(fy, top, bottom);
     }
 

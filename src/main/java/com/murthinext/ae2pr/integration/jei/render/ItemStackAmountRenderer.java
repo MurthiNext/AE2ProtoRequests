@@ -34,7 +34,7 @@ public class ItemStackAmountRenderer implements IIngredientRenderer<ItemStack> {
         graphics.renderFakeItem(ingredient, posX, posY);
         int count = ingredient.getCount();
         graphics.renderItemDecorations(Minecraft.getInstance().font, ingredient, posX, posY,
-                JeiAmountFormat.abbreviated(count) ? JeiAmountFormat.item(count) : null);
+                                       JeiAmountFormat.abbreviated(count) ? JeiAmountFormat.item(count) : null);
         RenderSystem.disableBlend();
     }
 

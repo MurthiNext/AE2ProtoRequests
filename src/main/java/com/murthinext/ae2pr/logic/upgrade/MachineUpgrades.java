@@ -1,7 +1,8 @@
 package com.murthinext.ae2pr.logic.upgrade;
 
-import appeng.api.upgrades.IUpgradeInventory;
 import net.minecraft.world.item.ItemStack;
+
+import appeng.api.upgrades.IUpgradeInventory;
 
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
 import com.murthinext.ae2pr.item.upgrade.MachineUpgradeCardItem;

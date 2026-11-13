@@ -10,19 +10,19 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import com.murthinext.ae2pr.api.recipe.AbstractMultiblockRecipe;
-import com.murthinext.ae2pr.api.recipe.AbstractMultiblockRecipeSerializer;
-import com.murthinext.ae2pr.api.recipe.RecipeDraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 
-import com.murthinext.ae2pr.registry.ModModules;
-import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleRequirement;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleType;
+import com.murthinext.ae2pr.api.recipe.AbstractMultiblockRecipe;
+import com.murthinext.ae2pr.api.recipe.AbstractMultiblockRecipeSerializer;
+import com.murthinext.ae2pr.api.recipe.RecipeDraft;
+import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.registry.ModModules;
 
 public class CrystalAssemblyLineRecipe extends AbstractMultiblockRecipe {
 
@@ -31,7 +31,7 @@ public class CrystalAssemblyLineRecipe extends AbstractMultiblockRecipe {
     private final List<ModuleRequirement> moduleRequirements;
 
     public CrystalAssemblyLineRecipe(ResourceLocation id, RecipeDraft draft,
-            List<ModuleRequirement> moduleRequirements) {
+                                     List<ModuleRequirement> moduleRequirements) {
         super(id, draft);
         this.moduleRequirements = List.copyOf(moduleRequirements);
     }
@@ -79,7 +79,7 @@ public class CrystalAssemblyLineRecipe extends AbstractMultiblockRecipe {
 
         @Override
         protected CrystalAssemblyLineRecipe createFromNetwork(ResourceLocation id, RecipeDraft draft,
-                FriendlyByteBuf buffer) {
+                                                              FriendlyByteBuf buffer) {
             int size = buffer.readVarInt();
             List<ModuleRequirement> requirements = new ArrayList<>(size);
             for (int i = 0; i < size; i++) {

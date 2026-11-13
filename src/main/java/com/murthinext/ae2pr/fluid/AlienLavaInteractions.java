@@ -4,6 +4,7 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fluids.FluidInteractionRegistry;
 
 import appeng.core.definitions.AEBlocks;
+
 import com.murthinext.ae2pr.registry.ModFluids;
 
 public final class AlienLavaInteractions {
@@ -13,7 +14,8 @@ public final class AlienLavaInteractions {
 
     public static void register() {
         FluidInteractionRegistry.addInteraction(ModFluids.ALIEN_LAVA_TYPE.get(),
-                new FluidInteractionRegistry.InteractionInformation(ForgeMod.WATER_TYPE.get(),
-                        AEBlocks.SKY_STONE_BLOCK.block().defaultBlockState()));
+                                                new FluidInteractionRegistry.InteractionInformation(
+                                                        ForgeMod.WATER_TYPE.get(),
+                                                        AEBlocks.SKY_STONE_BLOCK.block().defaultBlockState()));
     }
 }

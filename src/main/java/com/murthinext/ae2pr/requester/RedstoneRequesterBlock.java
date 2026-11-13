@@ -31,7 +31,7 @@ public class RedstoneRequesterBlock extends AEBaseEntityBlock<RedstoneRequesterB
 
     @Override
     public InteractionResult onActivated(Level level, BlockPos pos, Player player, InteractionHand hand,
-            @Nullable ItemStack stack, BlockHitResult hit) {
+                                         @Nullable ItemStack stack, BlockHitResult hit) {
         var entity = getBlockEntity(level, pos);
         if (entity == null || InteractionUtil.isInAlternateUseMode(player)) {
             return InteractionResult.PASS;
@@ -44,7 +44,7 @@ public class RedstoneRequesterBlock extends AEBaseEntityBlock<RedstoneRequesterB
 
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos,
-            boolean isMoving) {
+                                boolean isMoving) {
         super.neighborChanged(state, level, pos, block, fromPos, isMoving);
         var entity = getBlockEntity(level, pos);
         if (entity != null) {
@@ -54,11 +54,11 @@ public class RedstoneRequesterBlock extends AEBaseEntityBlock<RedstoneRequesterB
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip,
-            TooltipFlag flag) {
+                                TooltipFlag flag) {
         if (Screen.hasShiftDown()) {
             tooltip.add(Component.literal(" "));
             tooltip.add(RequesterUtils.translate("tooltip",
-                    RequesterUtils.f("{}_desc", RequesterConstants.REQUESTER_ID)));
+                                                 RequesterUtils.f("{}_desc", RequesterConstants.REQUESTER_ID)));
         } else {
             RequesterUtils.addShiftInfoTooltip(tooltip);
         }

@@ -31,7 +31,7 @@ public sealed interface TerminalStoryCondition {
         @Override
         public boolean matches(TerminalStoryRunner runner, Predicate<String> inventory) {
             return all ? conditions.stream().allMatch(condition -> condition.matches(runner, inventory))
-                    : conditions.stream().anyMatch(condition -> condition.matches(runner, inventory));
+                       : conditions.stream().anyMatch(condition -> condition.matches(runner, inventory));
         }
 
         @Override
@@ -97,8 +97,8 @@ public sealed interface TerminalStoryCondition {
         @Override
         public void validate(Set<String> nodes, TerminalStoryRunner runner) {
             Object value = runner.variable(name);
-            if (value == null || (expected instanceof Number) != (value instanceof Number)
-                    || (expected instanceof Boolean) != (value instanceof Boolean)) {
+            if (value == null || (expected instanceof Number) != (value instanceof Number) ||
+                (expected instanceof Boolean) != (value instanceof Boolean)) {
                 throw new IllegalArgumentException("Condition variable is undeclared or has mismatched type: " + name);
             }
         }
@@ -132,8 +132,10 @@ public sealed interface TerminalStoryCondition {
             return new Constant(element.getAsBoolean());
         }
         JsonObject json = element.getAsJsonObject();
-        long kinds = List.of("all", "any", "not", "completed", "variable", "item", "tag").stream()
-                .filter(json::has).count();
+        long kinds = List.of("all", "any", "not", "completed", "variable", "item", "tag")
+                             .stream()
+                             .filter(json::has)
+                             .count();
         if (kinds != 1) {
             throw new IllegalArgumentException("Each story condition must specify exactly one kind");
         }
@@ -159,7 +161,8 @@ public sealed interface TerminalStoryCondition {
             String operator = operators.get(0);
             var value = json.getAsJsonPrimitive(operator);
             Object expected = value.isBoolean() ? value.getAsBoolean()
-                    : value.isNumber() ? value.getAsDouble() : value.getAsString();
+                    : value.isNumber()          ? value.getAsDouble()
+                                                : value.getAsString();
             if (!operator.equals("equals") && !(expected instanceof Number)) {
                 throw new IllegalArgumentException("Range conditions only support numeric variables");
             }

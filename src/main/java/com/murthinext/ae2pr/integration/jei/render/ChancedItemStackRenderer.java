@@ -60,8 +60,8 @@ public class ChancedItemStackRenderer implements IIngredientRenderer<ItemStack> 
 
     @Override
     public List<Component> getTooltip(ItemStack ingredient, @Nullable Player player, TooltipFlag tooltipFlag) {
-        List<Component> lines = new ArrayList<>(
-                ItemStackAmountRenderer.INSTANCE.getTooltip(ingredient, player, tooltipFlag));
+        List<Component> lines = new ArrayList<>(ItemStackAmountRenderer.INSTANCE.getTooltip(ingredient, player,
+                                                                                            tooltipFlag));
         if (chance < 1.0F) {
             lines.add(chanceTooltip(chance));
         }

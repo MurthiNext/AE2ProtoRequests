@@ -1,10 +1,11 @@
 package com.murthinext.ae2pr.requester.abstraction;
 
-import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
-import com.murthinext.ae2pr.requester.Requests;
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.CompoundTag;
 
-import javax.annotation.Nullable;
+import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
+import com.murthinext.ae2pr.requester.Requests;
 
 public final class RequestTracker {
 

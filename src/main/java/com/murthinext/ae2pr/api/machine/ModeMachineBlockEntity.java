@@ -11,8 +11,7 @@ import com.murthinext.ae2pr.api.machine.Mode;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 
 // 带工作模式的控制器，模式列表由机器定义提供
-public abstract class ModeMachineBlockEntity<T extends Enum<T> & Mode>
-        extends AbstractMultiblockControllerBlockEntity {
+public abstract class ModeMachineBlockEntity<T extends Enum<T> & Mode> extends AbstractMultiblockControllerBlockEntity {
 
     private static final String MODE_ID = "mode";
 
@@ -20,7 +19,7 @@ public abstract class ModeMachineBlockEntity<T extends Enum<T> & Mode>
     private T mode;
 
     protected ModeMachineBlockEntity(MultiblockMachineDefinition<?, ?> definition, BlockPos pos, BlockState state,
-            List<T> modes) {
+                                     List<T> modes) {
         super(definition, pos, state);
         this.modes = List.copyOf(modes);
         this.mode = this.modes.get(0);

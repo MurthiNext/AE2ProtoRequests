@@ -26,22 +26,21 @@ import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 
-import com.murthinext.ae2pr.block.FilterPressPlateBlock;
 import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.api.multiblock.StructureOrientation;
 import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleInstance;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleSnapshot;
+import com.murthinext.ae2pr.block.FilterPressPlateBlock;
 
 // 只读预览世界，保留完整材料并按层提供渲染邻居
 public final class MultiblockPreview implements BlockAndTintGetter {
 
     // 预览统一按未镜像、朝向北方的可成型姿态摆放
     private static final StructureOrientation ORIENTATION = new StructureOrientation(Direction.NORTH, Direction.UP,
-            false, false);
-    public record Cell(BlockPos pos, StructurePredicate predicate, List<Block> candidates) {
-    }
+                                                                                     false, false);
+    public record Cell(BlockPos pos, StructurePredicate predicate, List<Block> candidates) {}
 
     private final MultiblockPattern pattern;
     private final LevelLightEngine lightEngine;
@@ -64,11 +63,12 @@ public final class MultiblockPreview implements BlockAndTintGetter {
         Map<BlockPos, BlockState> previous = new HashMap<>(states);
         states.clear();
         List<Cell> result = new ArrayList<>();
-        for (MultiblockPattern.PatternCell cell : pattern.patternCells(BlockPos.ZERO, Direction.NORTH, Direction.UP,
-                false, false, this.slices)) {
+        for (MultiblockPattern.PatternCell cell :
+             pattern.patternCells(BlockPos.ZERO, Direction.NORTH, Direction.UP, false, false, this.slices)) {
             StructurePredicate predicate = pattern.predicate(cell.symbol());
-            List<Block> blocks = candidates.computeIfAbsent(predicate, key -> key.previewBlocks().stream()
-                    .filter(block -> !block.defaultBlockState().isAir()).toList());
+            List<Block> blocks = candidates.computeIfAbsent(
+                    predicate,
+                    key -> key.previewBlocks().stream().filter(block -> !block.defaultBlockState().isAir()).toList());
             if (blocks.isEmpty()) {
                 continue;
             }
@@ -89,8 +89,8 @@ public final class MultiblockPreview implements BlockAndTintGetter {
         bounds = new AABB(minX, minY, minZ, maxX + 1, maxY + 1, maxZ + 1);
         for (Cell cell : cells) {
             BlockState old = previous.get(cell.pos());
-            Block block = old != null && cell.candidates().contains(old.getBlock())
-                    ? old.getBlock() : cell.candidates().get(0);
+            Block block = old != null && cell.candidates().contains(old.getBlock()) ? old.getBlock()
+                                                                                    : cell.candidates().get(0);
             states.put(cell.pos(), stateFor(cell, block));
         }
         applyShapes();
@@ -228,7 +228,7 @@ public final class MultiblockPreview implements BlockAndTintGetter {
             double x = cell.pos().getX() + 0.5 - bounds.getCenter().x;
             double z = cell.pos().getZ() + 0.5 - bounds.getCenter().z;
             facing = Math.abs(x) > Math.abs(z) ? (x < 0 ? Direction.WEST : Direction.EAST)
-                    : (z < 0 ? Direction.NORTH : Direction.SOUTH);
+                                               : (z < 0 ? Direction.NORTH : Direction.SOUTH);
         }
         if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
             state = state.setValue(BlockStateProperties.HORIZONTAL_FACING, facing);

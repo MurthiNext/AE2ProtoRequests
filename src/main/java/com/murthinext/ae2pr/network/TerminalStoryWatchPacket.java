@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import com.murthinext.ae2pr.item.proto_terminal.TerminalUnlockCondition;
-import com.murthinext.ae2pr.item.proto_terminal.TerminalUnlockTracker;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
+
+import com.murthinext.ae2pr.item.proto_terminal.TerminalUnlockCondition;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalUnlockTracker;
 
 /**
  * 客户端 -> 服务端：登记终端当前用到的解锁条件，由服务端持续判定并推送结果；

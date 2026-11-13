@@ -31,7 +31,7 @@ public final class StructureHooks {
     }
 
     public static void install(Supplier<List<Block>> parts, @Nullable Supplier<Block> networkAccessHatch,
-            @Nullable PartAppearance partAppearance) {
+                               @Nullable PartAppearance partAppearance) {
         if (parts != null) {
             StructureHooks.parts = parts;
         }

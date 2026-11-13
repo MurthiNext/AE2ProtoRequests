@@ -1,16 +1,16 @@
 package com.murthinext.ae2pr.network;
 
-import com.murthinext.ae2pr.api.ClientHooks;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import com.murthinext.ae2pr.block.machine_part.FluidHatchScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.network.NetworkEvent;
+
+import com.murthinext.ae2pr.api.ClientHooks;
+import com.murthinext.ae2pr.block.machine_part.FluidHatchScreen;
 
 // 服务端 -> 客户端：同步流体仓流体与搬运开关
 public class MachinePartFluidPacket {
@@ -20,8 +20,7 @@ public class MachinePartFluidPacket {
     private final boolean autoTransfer;
     private final boolean recipeIsolated;
 
-    public MachinePartFluidPacket(BlockPos pos, List<FluidStack> fluids, boolean autoTransfer,
-            boolean recipeIsolated) {
+    public MachinePartFluidPacket(BlockPos pos, List<FluidStack> fluids, boolean autoTransfer, boolean recipeIsolated) {
         this.pos = pos;
         this.fluids = fluids;
         this.autoTransfer = autoTransfer;
@@ -50,9 +49,13 @@ public class MachinePartFluidPacket {
 
     public static void handle(MachinePartFluidPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
-        context.enqueueWork(() -> ClientHooks.run(
-                () -> () -> FluidHatchScreen
-                        .applyFluidSync(packet.pos, packet.fluids, packet.autoTransfer, packet.recipeIsolated)));
+        context.enqueueWork(
+                ()
+                        -> ClientHooks.run(()
+                                                   -> ()
+                                                           -> FluidHatchScreen.applyFluidSync(packet.pos, packet.fluids,
+                                                                                              packet.autoTransfer,
+                                                                                              packet.recipeIsolated)));
         context.setPacketHandled(true);
     }
 }

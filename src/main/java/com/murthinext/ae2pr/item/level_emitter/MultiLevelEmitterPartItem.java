@@ -1,8 +1,8 @@
 package com.murthinext.ae2pr.item.level_emitter;
 
-import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterPart;
-
 import appeng.items.parts.PartItem;
+
+import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterPart;
 
 public class MultiLevelEmitterPartItem extends PartItem<MultiLevelEmitterPart> {
 

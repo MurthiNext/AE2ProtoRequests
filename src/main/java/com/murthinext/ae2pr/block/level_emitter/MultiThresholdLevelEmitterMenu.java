@@ -12,21 +12,26 @@ public class MultiThresholdLevelEmitterMenu extends AbstractMultiLevelEmitterMen
     private static final String ACTION_SET_UPPER_VALUE = "setUpperValue";
     private static final String ACTION_SET_LOWER_VALUE = "setLowerValue";
 
-    public static final MenuType<MultiThresholdLevelEmitterMenu> TYPE = MenuTypeBuilder
-            .create(MultiThresholdLevelEmitterMenu::new, MultiThresholdLevelEmitterPart.class)
-            .withMenuTitle(host -> Component.translatable("gui.ae2pr.multi_threshold_level_emitter"))
-            .withInitialData((host, buffer) -> {
-                GenericStack.writeBuffer(host.getConfig().getStack(0), buffer);
-                buffer.writeVarLong(host.getReportingValue());
-                buffer.writeVarLong(host.getLowerThreshold());
-            }, (host, menu, buffer) -> menu.loadValues(GenericStack.readBuffer(buffer), buffer.readVarLong(), buffer.readVarLong()))
-            .build("multi_threshold_level_emitter");
+    public static final MenuType<MultiThresholdLevelEmitterMenu>
+            TYPE = MenuTypeBuilder.create(MultiThresholdLevelEmitterMenu::new, MultiThresholdLevelEmitterPart.class)
+                           .withMenuTitle(host -> Component.translatable("gui.ae2pr.multi_threshold_level_emitter"))
+                           .withInitialData(
+                                   (host, buffer)
+                                           -> {
+                                       GenericStack.writeBuffer(host.getConfig().getStack(0), buffer);
+                                       buffer.writeVarLong(host.getReportingValue());
+                                       buffer.writeVarLong(host.getLowerThreshold());
+                                   },
+                                   (host, menu, buffer)
+                                           -> menu.loadValues(GenericStack.readBuffer(buffer), buffer.readVarLong(),
+                                                              buffer.readVarLong()))
+                           .build("multi_threshold_level_emitter");
 
     private long currentUpper;
     private long currentLower;
 
     public MultiThresholdLevelEmitterMenu(MenuType<MultiThresholdLevelEmitterMenu> menuType, int id, Inventory ip,
-            MultiThresholdLevelEmitterPart host) {
+                                          MultiThresholdLevelEmitterPart host) {
         super(menuType, id, ip, host);
         registerClientAction(ACTION_SET_UPPER_VALUE, Long.class, this::setUpperValue);
         registerClientAction(ACTION_SET_LOWER_VALUE, Long.class, this::setLowerValue);

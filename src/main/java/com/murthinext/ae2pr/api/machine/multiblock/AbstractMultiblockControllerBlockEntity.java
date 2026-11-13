@@ -1,6 +1,5 @@
 package com.murthinext.ae2pr.api.machine.multiblock;
 
-import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -37,6 +36,7 @@ import com.murthinext.ae2pr.api.machine.ControllerHost;
 import com.murthinext.ae2pr.api.machine.CoreLight;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
 import com.murthinext.ae2pr.api.machine.MachineTuning;
+import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.part.InputGroup;
 import com.murthinext.ae2pr.api.machine.part.MachinePart;
 import com.murthinext.ae2pr.api.machine.part.PartInventory;
@@ -49,10 +49,15 @@ import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
 import com.murthinext.ae2pr.logic.upgrade.MachineUpgrades;
 
-public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntity implements ControllerHost, IUpgradeableObject {
+public abstract class AbstractMultiblockControllerBlockEntity
+        extends BlockEntity implements ControllerHost, IUpgradeableObject {
 
     public enum Error {
-        NONE(null), POWER("power"), OUTPUT("output"), DURABILITY("durability"), NETWORK("network");
+        NONE(null),
+        POWER("power"),
+        OUTPUT("output"),
+        DURABILITY("durability"),
+        NETWORK("network");
 
         private final String key;
 
@@ -113,8 +118,8 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
 
     private final MultiblockMachineDefinition<?, ?> definition;
 
-    protected AbstractMultiblockControllerBlockEntity(MultiblockMachineDefinition<?, ?> definition,
-            BlockPos pos, BlockState state) {
+    protected AbstractMultiblockControllerBlockEntity(MultiblockMachineDefinition<?, ?> definition, BlockPos pos,
+                                                      BlockState state) {
         super(definition.blockEntityType(), pos, state);
         this.definition = definition;
         this.structureFacade = definition.structure();
@@ -134,7 +139,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     public int maxParallel() {
         long total = (long) definition.maxParallel() + parallelBonus();
         return (int) MachineUpgrades.apply(upgrades, MachineUpgradeType.PARALLEL,
-                Math.max(1, Math.min(total, Integer.MAX_VALUE)));
+                                           Math.max(1, Math.min(total, Integer.MAX_VALUE)));
     }
 
     protected long parallelBonus() {
@@ -178,7 +183,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             if (!remaining.isEmpty()) {
                 // 启动前已检查，兜底掉落避免产物丢失
                 ae2pr.LOGGER.warn("{} output could not be inserted into output buses, dropped {}", machineKey(),
-                        remaining);
+                                  remaining);
                 Block.popResource(level, worldPosition, remaining);
             }
         }
@@ -196,7 +201,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             if (!remaining.isEmpty()) {
                 // 启动前已检查，兜底记录避免产物丢失
                 ae2pr.LOGGER.warn("{} output could not be stored in output hatches, discarded {}", machineKey(),
-                        remaining);
+                                  remaining);
             }
         }
     }
@@ -345,8 +350,8 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
 
     protected double energyCost(Match match) {
         double perParallel = match.recipe().getEnergyPerParallel() * lossyEnergyMultiplier();
-        return EnergyAmount.clamp(MachineUpgrades.apply(upgrades, MachineUpgradeType.ENERGY, perParallel)
-                * match.parallel());
+        return EnergyAmount.clamp(MachineUpgrades.apply(upgrades, MachineUpgradeType.ENERGY, perParallel) *
+                                  match.parallel());
     }
 
     private void finishJob() {
@@ -482,7 +487,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
 
     protected int outputParallel(MultiblockRecipe recipe, int maximum) {
         return searchParallel(recipe, maximum,
-                parallel -> new PartInventory(outputBuses, outputHatches).insert(recipe, parallel));
+                              parallel -> new PartInventory(outputBuses, outputHatches).insert(recipe, parallel));
     }
 
     // 并行数单调可行，二分取最大
@@ -555,8 +560,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         return Math.max(0, high);
     }
 
-    public record Match(MultiblockRecipe recipe, int parallel, InputGroup group) {
-    }
+    public record Match(MultiblockRecipe recipe, int parallel, InputGroup group) {}
 
     // 加速卡与电力
 
@@ -654,7 +658,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             // 结构未变化，但相邻控制器可能重置过部件外观，此处补回
             if (formedCells.isEmpty()) {
                 formedCells = structureFacade.updateFormed(level, worldPosition, facing, result, formedCells,
-                        isRunning());
+                                                           isRunning());
             } else {
                 structureFacade.reapply(level, formedCells, isRunning());
             }
@@ -693,8 +697,8 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         }
         // 按 片 → 行 → 列 排序，保证部件顺序稳定
         List<BlockPos> cells = new ArrayList<>(result.cells());
-        cells.sort(structureFacade.pattern().posComparator(getFacing(), Direction.UP,
-                result.mirrorSide(), result.mirrorFront()));
+        cells.sort(structureFacade.pattern().posComparator(getFacing(), Direction.UP, result.mirrorSide(),
+                                                           result.mirrorFront()));
         for (BlockPos pos : cells) {
             BlockEntity entity = level.getBlockEntity(pos);
             if (!(entity instanceof MachinePart part)) {
@@ -747,10 +751,9 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         boolean showRunning = formed && jobTicksLeft > 0 && !paused;
         boolean showPaused = formed && paused;
         BlockState state = getBlockState();
-        BlockState updated = state
-                .setValue(MachineBlock.FORMED, formed)
-                .setValue(MachineBlock.RUNNING, showRunning)
-                .setValue(MachineBlock.PAUSED, showPaused);
+        BlockState updated = state.setValue(MachineBlock.FORMED, formed)
+                                     .setValue(MachineBlock.RUNNING, showRunning)
+                                     .setValue(MachineBlock.PAUSED, showPaused);
         if (updated != state) {
             level.setBlock(worldPosition, updated, Block.UPDATE_ALL);
         }

@@ -19,6 +19,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 
+import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleDefinition;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
@@ -26,12 +27,11 @@ import com.murthinext.ae2pr.api.multiblock.module.ModuleRequirement;
 import com.murthinext.ae2pr.integration.jei.JeiRecipeInfo;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineRecipe;
 import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.ae2pr;
 
 public class CrystalAssemblyLineCategory extends AbstractMachineCategory<CrystalAssemblyLineRecipe> {
 
-    public static final RecipeType<CrystalAssemblyLineRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID,
-            "crystal_assembly_line", CrystalAssemblyLineRecipe.class);
+    public static final RecipeType<CrystalAssemblyLineRecipe> RECIPE_TYPE = RecipeType.create(
+            ae2pr.MODID, "crystal_assembly_line", CrystalAssemblyLineRecipe.class);
 
     private static final int SLOT = SlotArea.SIZE;
     private static final int PADDING = 4;
@@ -55,8 +55,7 @@ public class CrystalAssemblyLineCategory extends AbstractMachineCategory<Crystal
     private static final int HEIGHT = INFO_Y + 3 * 10 + 2;
     private static final int COLOR_TEXT = 0x404040;
     private static final int COLOR_HINT = 0x808080;
-    private static final ResourceLocation PIPE_TEXTURE = Ids.of(
-            "textures/gui/jei/crystal_assembly_line_pipes.png");
+    private static final ResourceLocation PIPE_TEXTURE = Ids.of("textures/gui/jei/crystal_assembly_line_pipes.png");
 
     public CrystalAssemblyLineCategory(IGuiHelper guiHelper) {
         super(guiHelper, new ItemStack(ModMachines.CRYSTAL_ASSEMBLY_LINE.block()), WIDTH, HEIGHT);
@@ -110,12 +109,12 @@ public class CrystalAssemblyLineCategory extends AbstractMachineCategory<Crystal
     @Override
     protected void drawProcess(GuiGraphics graphics) {
         float progress = (Util.getMillis() % PIPE_CYCLE_MS) / (float) PIPE_CYCLE_MS;
-        graphics.blit(PIPE_TEXTURE, PIPE_X, PIPE_Y, 0.0F, 0.0F, PIPE_WIDTH, PIPE_HEIGHT,
-                PIPE_WIDTH, PIPE_TEXTURE_HEIGHT);
+        graphics.blit(PIPE_TEXTURE, PIPE_X, PIPE_Y, 0.0F, 0.0F, PIPE_WIDTH, PIPE_HEIGHT, PIPE_WIDTH,
+                      PIPE_TEXTURE_HEIGHT);
         int filled = Math.round(PIPE_WIDTH * progress);
         if (filled > 0) {
-            graphics.blit(PIPE_TEXTURE, PIPE_X, PIPE_Y, 0.0F, PIPE_HEIGHT, filled, PIPE_HEIGHT,
-                    PIPE_WIDTH, PIPE_TEXTURE_HEIGHT);
+            graphics.blit(PIPE_TEXTURE, PIPE_X, PIPE_Y, 0.0F, PIPE_HEIGHT, filled, PIPE_HEIGHT, PIPE_WIDTH,
+                          PIPE_TEXTURE_HEIGHT);
         }
     }
 
@@ -124,14 +123,14 @@ public class CrystalAssemblyLineCategory extends AbstractMachineCategory<Crystal
     protected void drawInfo(GuiGraphics graphics, CrystalAssemblyLineRecipe recipe) {
         var font = Minecraft.getInstance().font;
         graphics.drawString(font, JeiRecipeInfo.duration(recipe.getDuration()), PADDING, INFO_Y, COLOR_TEXT, false);
-        graphics.drawString(font, JeiRecipeInfo.energy(recipe.getEnergyPerParallel()), PADDING, INFO_Y + 10,
-                COLOR_TEXT, false);
+        graphics.drawString(font, JeiRecipeInfo.energy(recipe.getEnergyPerParallel()), PADDING, INFO_Y + 10, COLOR_TEXT,
+                            false);
         int hidden = recipe.getItemInputs().size() - ITEM_COLS * ITEM_ROWS;
         if (hidden > 0) {
             graphics.drawString(font, JeiRecipeInfo.moreInputs(hidden), PADDING, INFO_Y + 20, COLOR_HINT, false);
         } else if (recipe.getItemOutputs().size() > 1) {
             graphics.drawString(font, JeiRecipeInfo.moreOutputs(recipe.getItemOutputs().size() - 1), PADDING,
-                    INFO_Y + 20, COLOR_HINT, false);
+                                INFO_Y + 20, COLOR_HINT, false);
         }
     }
 
@@ -157,7 +156,7 @@ public class CrystalAssemblyLineCategory extends AbstractMachineCategory<Crystal
     }
 
     private static Component requirementHint(ModuleRequirement requirement) {
-        return Component.translatable("jei.ae2pr.crystal_assembly_line.module_requirement.hint",
-                requirement.minLevel(), Component.translatable(requirement.type().translationKey()));
+        return Component.translatable("jei.ae2pr.crystal_assembly_line.module_requirement.hint", requirement.minLevel(),
+                                      Component.translatable(requirement.type().translationKey()));
     }
 }

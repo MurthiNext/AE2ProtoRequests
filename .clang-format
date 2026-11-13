@@ -1,0 +1,75 @@
+Language: Java
+BasedOnStyle: LLVM
+
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ContinuationIndentWidth: 8
+ColumnLimit: 120
+AccessModifierOffset: 0
+MaxEmptyLinesToKeep: 1
+
+BreakBeforeBraces: Attach
+BraceWrapping:
+    AfterCaseLabel: false
+    AfterClass: false
+    AfterControlStatement: Never
+    AfterEnum: false
+    AfterFunction: false
+    AfterStruct: false
+    BeforeCatch: false
+    BeforeElse: false
+    SplitEmptyFunction: true
+    SplitEmptyRecord: true
+    SplitEmptyNamespace: true
+
+AlignAfterOpenBracket: Align
+AlignOperands: DontAlign
+AlignEscapedNewlines: Right
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignConsecutiveMacros: false
+AlignTrailingComments:
+    Kind: Always
+    OverEmptyLines: 0
+BreakBeforeBinaryOperators: None
+BreakBeforeTernaryOperators: true
+BreakInheritanceList: AfterColon
+BreakConstructorInitializers: AfterColon
+BreakStringLiterals: false
+BreakAfterJavaFieldAnnotations: true
+ReflowComments: true
+
+PenaltyBreakAssignment: 2000
+PenaltyBreakOpenParenthesis: 50
+PenaltyBreakBeforeMemberAccess: 150
+
+BinPackArguments: true
+BinPackParameters: true
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: WithoutElse
+AllowShortLambdasOnASingleLine: All
+AllowShortLoopsOnASingleLine: false
+
+IndentCaseBlocks: false
+IndentCaseLabels: false
+IndentGotoLabels: false
+IndentWrappedFunctionNames: false
+
+SpaceBeforeParens: ControlStatements
+SpacesInParens: Never
+SpacesInContainerLiterals: true
+Cpp11BracedListStyle: false
+SpaceAfterCStyleCast: true
+SpaceBeforeAssignmentOperators: true
+SpacesBeforeTrailingComments: 1
+
+SortIncludes: true
+SortJavaStaticImport: After
+JavaImportGroups: ['java', 'javax', 'org', 'com', 'net', 'appeng', 'mezz', 'com.murthinext']

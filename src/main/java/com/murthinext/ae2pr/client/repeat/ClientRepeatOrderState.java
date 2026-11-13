@@ -6,10 +6,11 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.murthinext.ae2pr.network.CpuRoundInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import com.murthinext.ae2pr.network.CpuRoundInfo;
 
 @OnlyIn(Dist.CLIENT)
 public final class ClientRepeatOrderState {

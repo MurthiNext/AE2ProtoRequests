@@ -15,8 +15,7 @@ public final class HighReactivityLavaSmelterFurnace {
     public static final int SLOT_X = 21;
     public static final int SLOT_Y = 13;
 
-    private static final ResourceLocation TEXTURE = Ids.of(
-            "textures/gui/jei/high_reactivity_lava_smelter_furnace.png");
+    private static final ResourceLocation TEXTURE = Ids.of("textures/gui/jei/high_reactivity_lava_smelter_furnace.png");
     private static final int X = 7;
     private static final int Y = 4;
     private static final int WIDTH = 104;

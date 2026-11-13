@@ -1,12 +1,13 @@
 package com.murthinext.ae2pr.requester.network;
 
-import com.murthinext.ae2pr.requester.client.abstraction.AbstractRedstoneRequesterScreen;
+import java.util.Objects;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 
-import java.util.Objects;
+import com.murthinext.ae2pr.requester.client.abstraction.AbstractRedstoneRequesterScreen;
 
 public class RequesterSyncPacket extends ServerToClientPacket<RequesterSyncPacket> {
 
@@ -20,7 +21,8 @@ public class RequesterSyncPacket extends ServerToClientPacket<RequesterSyncPacke
         this.data = data;
     }
 
-    RequesterSyncPacket() {}
+    RequesterSyncPacket() {
+    }
 
     public static RequesterSyncPacket clearData() {
         return new RequesterSyncPacket(true, -1, new CompoundTag());
@@ -39,11 +41,8 @@ public class RequesterSyncPacket extends ServerToClientPacket<RequesterSyncPacke
 
     @Override
     public RequesterSyncPacket decode(FriendlyByteBuf buffer) {
-        return new RequesterSyncPacket(
-            buffer.readBoolean(),
-            buffer.readLong(),
-            Objects.requireNonNull(buffer.readNbt())
-        );
+        return new RequesterSyncPacket(buffer.readBoolean(), buffer.readLong(),
+                                       Objects.requireNonNull(buffer.readNbt()));
     }
 
     @Override

@@ -2,8 +2,8 @@ package com.murthinext.ae2pr.integration.jei.render;
 
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -27,7 +27,8 @@ public class FluidBlockIngredientRenderer implements IIngredientRenderer<FluidSt
     @Override
     public List<Component> getTooltip(FluidStack fluidStack, @Nullable Player player, TooltipFlag tooltipFlag) {
         return List.of(fluidStack.getDisplayName(),
-                Component.translatable("jei.tooltip.liquid.amount", JeiAmountFormat.exact(fluidStack.getAmount())));
+                       Component.translatable("jei.tooltip.liquid.amount",
+                                              JeiAmountFormat.exact(fluidStack.getAmount())));
     }
 
     @Override

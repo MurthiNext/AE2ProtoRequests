@@ -22,8 +22,9 @@ public final class MachineRegistries {
     }
 
     public static void install(DeferredRegister<Block> blocks, DeferredRegister<Item> items,
-            DeferredRegister<BlockEntityType<?>> blockEntities, DeferredRegister<MenuType<?>> menus,
-            DeferredRegister<RecipeType<?>> recipeTypes, DeferredRegister<RecipeSerializer<?>> recipeSerializers) {
+                               DeferredRegister<BlockEntityType<?>> blockEntities, DeferredRegister<MenuType<?>> menus,
+                               DeferredRegister<RecipeType<?>> recipeTypes,
+                               DeferredRegister<RecipeSerializer<?>> recipeSerializers) {
         MachineRegistries.blocks = blocks;
         MachineRegistries.items = items;
         MachineRegistries.blockEntities = blockEntities;

@@ -12,8 +12,9 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.api.machine.MachineDefinition;
 
-public final class SingleblockMachineDefinition<B extends AbstractSingleblockMachineBlock<E>,
-        E extends AbstractSingleblockMachineBlockEntity, M extends AbstractSingleblockMachineMenu<E>>
+public final class SingleblockMachineDefinition<B extends AbstractSingleblockMachineBlock<E>, E
+                                                        extends AbstractSingleblockMachineBlockEntity, M
+                                                        extends AbstractSingleblockMachineMenu<E>>
         extends MachineDefinition<B, E, M> {
 
     private final Supplier<Block.Properties> blockProperties;
@@ -23,9 +24,10 @@ public final class SingleblockMachineDefinition<B extends AbstractSingleblockMac
     private final DoubleSupplier powerCapacity;
 
     private SingleblockMachineDefinition(String id, Class<E> entityClass, Supplier<Block.Properties> blockProperties,
-            Function<SingleblockMachineDefinition<B, E, M>, B> blockFactory, EntityFactory<B, E, M> entityFactory,
-            Supplier<MenuType<M>> menuTypeFactory, MenuFactory<E, M> menuFactory, int speedUpgrades, int slots,
-            DoubleSupplier powerCapacity) {
+                                         Function<SingleblockMachineDefinition<B, E, M>, B> blockFactory,
+                                         EntityFactory<B, E, M> entityFactory, Supplier<MenuType<M>> menuTypeFactory,
+                                         MenuFactory<E, M> menuFactory, int speedUpgrades, int slots,
+                                         DoubleSupplier powerCapacity) {
         super(id, id, entityClass, definition -> menuTypeFactory.get(), menuFactory, speedUpgrades, List.of());
         this.blockProperties = blockProperties;
         this.blockFactory = blockFactory;
@@ -34,14 +36,14 @@ public final class SingleblockMachineDefinition<B extends AbstractSingleblockMac
         this.powerCapacity = powerCapacity;
     }
 
-    public static <B extends AbstractSingleblockMachineBlock<E>, E extends AbstractSingleblockMachineBlockEntity,
-            M extends AbstractSingleblockMachineMenu<E>> SingleblockMachineDefinition<B, E, M> create(String id,
-            Class<E> entityClass, Supplier<Block.Properties> blockProperties,
-            Function<SingleblockMachineDefinition<B, E, M>, B> blockFactory, EntityFactory<B, E, M> entityFactory,
-            Supplier<MenuType<M>> menuTypeFactory, MenuFactory<E, M> menuFactory, int speedUpgrades, int slots,
-            DoubleSupplier powerCapacity) {
+    public static <B extends AbstractSingleblockMachineBlock<E>, E extends AbstractSingleblockMachineBlockEntity, M
+                           extends AbstractSingleblockMachineMenu<E>> SingleblockMachineDefinition<B, E, M>
+    create(String id, Class<E> entityClass, Supplier<Block.Properties> blockProperties,
+           Function<SingleblockMachineDefinition<B, E, M>, B> blockFactory, EntityFactory<B, E, M> entityFactory,
+           Supplier<MenuType<M>> menuTypeFactory, MenuFactory<E, M> menuFactory, int speedUpgrades, int slots,
+           DoubleSupplier powerCapacity) {
         return new SingleblockMachineDefinition<>(id, entityClass, blockProperties, blockFactory, entityFactory,
-                menuTypeFactory, menuFactory, speedUpgrades, slots, powerCapacity);
+                                                  menuTypeFactory, menuFactory, speedUpgrades, slots, powerCapacity);
     }
 
     public Block.Properties properties() {
@@ -68,8 +70,9 @@ public final class SingleblockMachineDefinition<B extends AbstractSingleblockMac
     }
 
     @FunctionalInterface
-    public interface EntityFactory<B extends AbstractSingleblockMachineBlock<E>,
-            E extends AbstractSingleblockMachineBlockEntity, M extends AbstractSingleblockMachineMenu<E>> {
+    public interface EntityFactory<B extends AbstractSingleblockMachineBlock<E>, E
+                                           extends AbstractSingleblockMachineBlockEntity, M
+                                           extends AbstractSingleblockMachineMenu<E>> {
         E create(SingleblockMachineDefinition<B, E, M> definition, BlockPos pos, BlockState state);
     }
 }

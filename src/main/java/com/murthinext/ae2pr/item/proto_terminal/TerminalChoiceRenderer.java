@@ -13,7 +13,7 @@ final class TerminalChoiceRenderer {
     }
 
     static void render(GuiGraphics graphics, Font font, int x, int y, int width, int height, String text,
-            boolean hovered, float opacity, float progress, long now, int index) {
+                       boolean hovered, float opacity, float progress, long now, int index) {
         float appear = TerminalGraphicsRenderer.ease(progress);
         float glitch = (1 - progress) * (1 - progress);
         int signal = (int) (now / 32) + index * 131;
@@ -33,10 +33,11 @@ final class TerminalChoiceRenderer {
             TerminalGraphicsRenderer.panel(graphics, x + jitter - split, y + glitch, width, height, slant, 0, cyan);
             TerminalGraphicsRenderer.panel(graphics, x + jitter + split, y - glitch, width, height, slant, 0, red);
         }
-        TerminalGraphicsRenderer.panel(graphics, x + jitter, y, width, height, slant,
+        TerminalGraphicsRenderer.panel(
+                graphics, x + jitter, y, width, height, slant,
                 TerminalGraphicsRenderer.alpha(hovered ? 0xFF10233D : TerminalGraphicsRenderer.PANEL, alpha),
-                TerminalGraphicsRenderer.alpha(hovered ? TerminalGraphicsRenderer.ACCENT
-                        : TerminalGraphicsRenderer.BORDER, alpha));
+                TerminalGraphicsRenderer.alpha(
+                        hovered ? TerminalGraphicsRenderer.ACCENT : TerminalGraphicsRenderer.BORDER, alpha));
 
         graphics.pose().pushPose();
         try {
@@ -49,7 +50,7 @@ final class TerminalChoiceRenderer {
                 graphics.pose().translate(-split, 0, 0);
             }
             graphics.drawString(font, text, x + 12, y + 6,
-                    TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.TEXT, alpha), false);
+                                TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.TEXT, alpha), false);
         } finally {
             graphics.pose().popPose();
         }
@@ -59,8 +60,8 @@ final class TerminalChoiceRenderer {
             int tearWidth = Math.max(3, Math.round(width * glitch * 0.42F));
             int tearX = x + (signal >>> 10 & 31) % Math.max(1, width - tearWidth - 6) + 3;
             graphics.fill(tearX + jitter, tearY, tearX + jitter + tearWidth, tearY + 1, cyan);
-            graphics.fill(x + width - tearWidth - jitter, tearY + 2,
-                    x + width + Math.round(split) - jitter, tearY + 3, red);
+            graphics.fill(x + width - tearWidth - jitter, tearY + 2, x + width + Math.round(split) - jitter, tearY + 3,
+                          red);
         }
     }
 }

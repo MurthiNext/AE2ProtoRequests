@@ -11,22 +11,25 @@ import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
 import com.murthinext.ae2pr.registry.ModMachines;
 
-public class HighReactivityLavaSmelterMenu extends AbstractMultiblockControllerMenu<HighReactivityLavaSmelterControllerBlockEntity> {
+public class HighReactivityLavaSmelterMenu
+        extends AbstractMultiblockControllerMenu<HighReactivityLavaSmelterControllerBlockEntity> {
 
-    public static final MenuType<HighReactivityLavaSmelterMenu> TYPE = IForgeMenuType.create(HighReactivityLavaSmelterMenu::new);
+    public static final MenuType<HighReactivityLavaSmelterMenu> TYPE = IForgeMenuType.create(
+            HighReactivityLavaSmelterMenu::new);
 
     private static final int DUST_SLOT_X = 151;
     private static final int DUST_SLOT_Y = 95;
 
     private static final int DATA_DURABILITY = DATA_COUNT;
 
-    public HighReactivityLavaSmelterMenu(int id, Inventory playerInventory, HighReactivityLavaSmelterControllerBlockEntity controller) {
+    public HighReactivityLavaSmelterMenu(int id, Inventory playerInventory,
+                                         HighReactivityLavaSmelterControllerBlockEntity controller) {
         super(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER, id, playerInventory, controller, 1);
     }
 
     public HighReactivityLavaSmelterMenu(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
-        this(id, playerInventory, readController(playerInventory.player, buffer,
-                ModMachines.HIGH_REACTIVITY_LAVA_SMELTER));
+        this(id, playerInventory,
+             readController(playerInventory.player, buffer, ModMachines.HIGH_REACTIVITY_LAVA_SMELTER));
     }
 
     @Override

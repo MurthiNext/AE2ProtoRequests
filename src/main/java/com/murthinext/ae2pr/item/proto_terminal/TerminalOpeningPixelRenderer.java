@@ -8,6 +8,7 @@ import java.util.Random;
 import org.joml.Matrix4f;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
@@ -39,14 +40,11 @@ final class TerminalOpeningPixelRenderer {
     private float energy;
     private float settle;
 
-    record Band(int left, int top, int right, int bottom) {
-    }
+    record Band(int left, int top, int right, int bottom) {}
 
-    private record Edge(float x1, float y1, float x2, float y2) {
-    }
+    private record Edge(float x1, float y1, float x2, float y2) {}
 
-    private record Mote(float x, float y, float size, float phase, float brightness) {
-    }
+    private record Mote(float x, float y, float size, float phase, float brightness) {}
 
     TerminalOpeningPixelRenderer(int x, int y, int width, int height) {
         this.width = width;
@@ -66,15 +64,14 @@ final class TerminalOpeningPixelRenderer {
         int seed = random.nextInt();
         for (int row = 0; row < noise.length; row++) {
             for (int column = 0; column < noise[row].length; column++) {
-                noise[row][column] = sample(column / 4, row / 4, seed) * 0.65F
-                        + sample(column / 2, row / 2, seed + 1) * 0.25F
-                        + sample(column, row, seed + 2) * 0.1F;
+                noise[row][column] = sample(column / 4, row / 4, seed) * 0.65F +
+                        sample(column / 2, row / 2, seed + 1) * 0.25F + sample(column, row, seed + 2) * 0.1F;
             }
         }
         for (int i = 0; i < 280; i++) {
             motes.add(new Mote(x + random.nextFloat() * width, y + random.nextFloat() * height,
-                    0.6F + random.nextFloat() * 1.5F, random.nextFloat() * Mth.TWO_PI,
-                    0.25F + random.nextFloat() * 0.65F));
+                               0.6F + random.nextFloat() * 1.5F, random.nextFloat() * Mth.TWO_PI,
+                               0.25F + random.nextFloat() * 0.65F));
         }
     }
 
@@ -165,8 +162,7 @@ final class TerminalOpeningPixelRenderer {
             if (exposed.get(middle)) {
                 coreLeft = exposed.previousClearBit(middle) + 1;
                 coreRight = exposed.nextClearBit(middle);
-                bands.add(new Band(originX + coreLeft, originY + coreTop,
-                        originX + coreRight, originY + coreBottom));
+                bands.add(new Band(originX + coreLeft, originY + coreTop, originX + coreRight, originY + coreBottom));
             }
         }
         for (int top = firstRow; top <= lastRow;) {
@@ -248,23 +244,26 @@ final class TerminalOpeningPixelRenderer {
             VertexConsumer vertices = graphics.bufferSource().getBuffer(RenderType.gui());
             for (Edge edge : edges) {
                 float pulse = (float) Math.pow(Math.max(0,
-                        Mth.sin((edge.x1() - centerX) * 0.035F + (edge.y1() - centerY) * 0.047F - seconds * 12)), 6);
-                int color = TerminalGraphicsRenderer.mix(TerminalGraphicsRenderer.BORDER,
-                        TerminalGraphicsRenderer.TEXT, energy * (0.28F + pulse * 0.55F));
+                                                        Mth.sin((edge.x1() - centerX) * 0.035F +
+                                                                (edge.y1() - centerY) * 0.047F - seconds * 12)),
+                                               6);
+                int color = TerminalGraphicsRenderer.mix(TerminalGraphicsRenderer.BORDER, TerminalGraphicsRenderer.TEXT,
+                                                         energy * (0.28F + pulse * 0.55F));
                 glow(vertices, matrix, edge, 3 + energy * 5, energy * (0.14F + pulse * 0.12F));
                 glow(vertices, matrix, edge, 1.4F, energy * 0.22F);
                 TerminalGraphicsRenderer.line(graphics, edge.x1(), edge.y1(), edge.x2(), edge.y2(),
-                        TerminalGraphicsRenderer.alpha(color, outlineOpacity), 1);
+                                              TerminalGraphicsRenderer.alpha(color, outlineOpacity), 1);
             }
             renderMotes(graphics, seconds);
             float ignition = smooth(progress / 0.055F) * (1 - smooth((progress - 0.08F) / 0.24F));
             float radius = Math.min(halfSpan * 0.85F, 48);
             Edge seam = new Edge(centerX - radius, centerY, centerX + radius, centerY);
             glow(vertices, matrix, seam, Math.min(halfHeight, 6), ignition * 0.25F);
-            TerminalGraphicsRenderer.line(graphics, seam.x1(), seam.y1(), seam.x2(), seam.y2(),
+            TerminalGraphicsRenderer.line(
+                    graphics, seam.x1(), seam.y1(), seam.x2(), seam.y2(),
                     TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.TEXT, ignition * 0.8F), 0.8F);
-            TerminalGraphicsRenderer.outline(graphics, originX + MARGIN, originY + MARGIN,
-                    width, height, TerminalGraphicsRenderer.slant(height),
+            TerminalGraphicsRenderer.outline(
+                    graphics, originX + MARGIN, originY + MARGIN, width, height, TerminalGraphicsRenderer.slant(height),
                     TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.BORDER, 1 - outlineOpacity));
         });
     }
@@ -277,8 +276,7 @@ final class TerminalOpeningPixelRenderer {
             float vertical = Math.abs(dy) - halfHeight;
             float distance = Math.max(horizontal, vertical);
             float wake = 1 - smooth(Math.abs(distance + 9) / Math.min(42, halfHeight + 1));
-            float opacity = wake * energy * mote.brightness()
-                    * (0.65F + 0.35F * Mth.sin(seconds * 13 + mote.phase()));
+            float opacity = wake * energy * mote.brightness() * (0.65F + 0.35F * Mth.sin(seconds * 13 + mote.phase()));
             if (opacity < 0.015F) {
                 continue;
             }
@@ -309,7 +307,9 @@ final class TerminalOpeningPixelRenderer {
     }
 
     private static void vertex(VertexConsumer vertices, Matrix4f matrix, float x, float y, int color) {
-        vertices.vertex(matrix, x, y, 0).color(color >> 16 & 255, color >> 8 & 255, color & 255, color >>> 24).endVertex();
+        vertices.vertex(matrix, x, y, 0)
+                .color(color >> 16 & 255, color >> 8 & 255, color & 255, color >>> 24)
+                .endVertex();
     }
 
     private static float smooth(float progress) {

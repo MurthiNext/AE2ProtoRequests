@@ -1,12 +1,13 @@
 package com.murthinext.ae2pr.client.tooltip;
 
+import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
+
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
-import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
 
 // 按字形顶点的行内横向位置重写颜色，得到子字符级平滑渐变
 final class GradientBufferSource implements MultiBufferSource {
@@ -90,7 +91,7 @@ final class GradientBufferSource implements MultiBufferSource {
             float brightness = red / 255.0F;
             int color = this.owner.colorAt(this.localX);
             this.target.color(scale(color >>> 16 & 0xFF, brightness), scale(color >>> 8 & 0xFF, brightness),
-                    scale(color & 0xFF, brightness), alpha);
+                              scale(color & 0xFF, brightness), alpha);
             return this;
         }
 

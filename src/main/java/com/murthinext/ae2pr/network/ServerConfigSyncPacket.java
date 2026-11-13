@@ -21,8 +21,14 @@ public record ServerConfigSyncPacket(byte[] snapshot) {
 
     public static void handle(ServerConfigSyncPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
-        context.enqueueWork(() -> ClientHooks.run(() -> () -> ConfigSync.INSTANCE.receiveSyncedConfig(
-                new HandshakeMessages.S2CConfigData(ServerConfig.FILE_NAME, packet.snapshot()), contextSupplier)));
+        context.enqueueWork(
+                ()
+                        -> ClientHooks.run(()
+                                                   -> ()
+                                                           -> ConfigSync.INSTANCE.receiveSyncedConfig(
+                                                                   new HandshakeMessages.S2CConfigData(
+                                                                           ServerConfig.FILE_NAME, packet.snapshot()),
+                                                                   contextSupplier)));
         context.setPacketHandled(true);
     }
 }

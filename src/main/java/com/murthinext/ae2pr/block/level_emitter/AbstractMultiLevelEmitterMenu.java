@@ -35,7 +35,8 @@ public abstract class AbstractMultiLevelEmitterMenu<T extends AbstractMultiLevel
         getHost().getConfig().setStack(0, filter);
     }
 
-    public void setCombineMode(CombineMode mode) {        if (isClientSide()) {
+    public void setCombineMode(CombineMode mode) {
+        if (isClientSide()) {
             sendClientAction(ACTION_SET_COMBINE_MODE, mode);
         } else {
             getHost().getConfigManager().putSetting(AbstractMultiLevelEmitterPart.COMBINE_MODE, mode);
@@ -52,8 +53,8 @@ public abstract class AbstractMultiLevelEmitterMenu<T extends AbstractMultiLevel
 
     @Override
     protected void setupConfig() {
-        addSlot(new EmitterConfigSlot(getHost().getConfig().createMenuWrapper(),
-                getHost().getFilterCellInventory()), SlotSemantics.CONFIG);
+        addSlot(new EmitterConfigSlot(getHost().getConfig().createMenuWrapper(), getHost().getFilterCellInventory()),
+                SlotSemantics.CONFIG);
     }
 
     @Override
@@ -77,7 +78,8 @@ public abstract class AbstractMultiLevelEmitterMenu<T extends AbstractMultiLevel
             // 从玩家背包放入过滤元件
             if (source.container instanceof Inventory && source.getItem().getItem() instanceof FilterCell) {
                 for (var configSlot : getSlots(SlotSemantics.CONFIG)) {
-                    if (configSlot instanceof EmitterConfigSlot emitterSlot && emitterSlot.insertFromShiftClick(source)) {
+                    if (configSlot instanceof EmitterConfigSlot emitterSlot &&
+                        emitterSlot.insertFromShiftClick(source)) {
                         broadcastChanges();
                         return ItemStack.EMPTY;
                     }

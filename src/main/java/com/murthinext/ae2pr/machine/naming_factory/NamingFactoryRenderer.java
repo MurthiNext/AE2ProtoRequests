@@ -1,7 +1,5 @@
 package com.murthinext.ae2pr.machine.naming_factory;
 
-import com.murthinext.ae2pr.api.Ids;
-
 import java.util.Map;
 import java.util.function.Function;
 
@@ -25,13 +23,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.model.data.ModelData;
 
+import com.murthinext.ae2pr.api.Ids;
+
 public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryBlockEntity> {
 
-    public static final ResourceLocation FORGE_MODEL = Ids.of(
-            "block/naming_factory_forge");
+    public static final ResourceLocation FORGE_MODEL = Ids.of("block/naming_factory_forge");
 
-    private static final ResourceLocation ROD_TEXTURE = Ids.of(
-            "block/naming_factory_rod");
+    private static final ResourceLocation ROD_TEXTURE = Ids.of("block/naming_factory_rod");
 
     private static final float ROD_MIN = 4.0F;
     private static final float ROD_MAX = 12.0F;
@@ -61,7 +59,7 @@ public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryB
 
     @Override
     public void render(NamingFactoryBlockEntity blockEntity, float partialTicks, PoseStack poseStack,
-            MultiBufferSource buffers, int combinedLight, int combinedOverlay) {
+                       MultiBufferSource buffers, int combinedLight, int combinedOverlay) {
         Level level = blockEntity.getLevel();
         if (level == null) {
             return;
@@ -80,8 +78,8 @@ public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryB
         if (forgeModel != null) {
             poseStack.pushPose();
             poseStack.translate(0, -offset / 16.0F, 0);
-            blockRenderer.renderModel(poseStack.last(), buffer, blockEntity.getBlockState(), forgeModel,
-                    1.0F, 1.0F, 1.0F, combinedLight, combinedOverlay, ModelData.EMPTY, null);
+            blockRenderer.renderModel(poseStack.last(), buffer, blockEntity.getBlockState(), forgeModel, 1.0F, 1.0F,
+                                      1.0F, combinedLight, combinedOverlay, ModelData.EMPTY, null);
             poseStack.popPose();
         }
         if (offset > 0.01F) {
@@ -95,7 +93,7 @@ public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryB
 
     // 绘制活塞连杆，材质以底端为原点随行程平移
     private void renderRod(PoseStack poseStack, VertexConsumer buffer, TextureAtlasSprite sprite, float offset,
-            int light, int overlay) {
+                           int light, int overlay) {
         float top = ROD_ANCHOR;
         float bottom = ROD_ANCHOR - offset;
         PoseStack.Pose pose = poseStack.last();
@@ -125,9 +123,9 @@ public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryB
         addVertex(buffer, pose, sprite, ROD_MAX, top, ROD_MIN, 0, offset, 1, 0, 0, light, overlay, SHADE_EW);
     }
 
-    private static void addVertex(VertexConsumer buffer, PoseStack.Pose pose, TextureAtlasSprite sprite,
-            float x, float y, float z, float u, float v, float nx, float ny, float nz,
-            int light, int overlay, float shade) {
+    private static void addVertex(VertexConsumer buffer, PoseStack.Pose pose, TextureAtlasSprite sprite, float x,
+                                  float y, float z, float u, float v, float nx, float ny, float nz, int light,
+                                  int overlay, float shade) {
         buffer.vertex(pose.pose(), x / 16.0F, y / 16.0F, z / 16.0F);
         buffer.color(shade, shade, shade, 1.0F);
         buffer.uv(sprite.getU(u), sprite.getV(v));
@@ -138,7 +136,7 @@ public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryB
     }
 
     private void renderPlatformItem(NamingFactoryBlockEntity blockEntity, PoseStack poseStack,
-            MultiBufferSource buffers, int combinedLight, int combinedOverlay) {
+                                    MultiBufferSource buffers, int combinedLight, int combinedOverlay) {
         ItemStack stack = blockEntity.getInputStack();
         if (stack.isEmpty()) {
             return;
@@ -147,8 +145,9 @@ public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryB
         poseStack.translate(0.5F, PLATFORM_TOP / 16.0F + 0.02F, 0.5F);
         poseStack.mulPose(Axis.XP.rotationDegrees(90));
         poseStack.scale(0.5F, 0.5F, 0.5F);
-        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.FIXED,
-                combinedLight, combinedOverlay, poseStack, buffers, blockEntity.getLevel(), 0);
+        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.FIXED, combinedLight,
+                                                               combinedOverlay, poseStack, buffers,
+                                                               blockEntity.getLevel(), 0);
         poseStack.popPose();
     }
 }

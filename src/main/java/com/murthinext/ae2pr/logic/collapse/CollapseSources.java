@@ -5,14 +5,15 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import appeng.api.behaviors.GenericInternalInventory;
-import appeng.api.parts.IPart;
-import appeng.api.parts.IPartHost;
-import appeng.capabilities.Capabilities;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+
+import appeng.api.behaviors.GenericInternalInventory;
+import appeng.api.parts.IPart;
+import appeng.api.parts.IPartHost;
+import appeng.capabilities.Capabilities;
 
 // 内容来源探测
 public final class CollapseSources {
@@ -40,7 +41,7 @@ public final class CollapseSources {
     private static CollapseSource directSource(BlockEntity blockEntity) {
         var id = CollapseHandler.idOf(blockEntity);
         GenericInternalInventory generic = blockEntity.getCapability(Capabilities.GENERIC_INTERNAL_INV, null)
-                .orElse(null);
+                                                   .orElse(null);
         if (generic != null) {
             return CollapseSource.of(id, generic);
         }

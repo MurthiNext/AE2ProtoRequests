@@ -43,8 +43,8 @@ public abstract class RequestWidgetMixin {
     private void ae2pr$mergeBatchIntoAmount(Request request, CallbackInfo ci) {
         // 本模组请求器的 id 由方块坐标导出，恒为非负；ME Requester 自身的 id 从 Long.MIN_VALUE 递增
         boolean ours = ((RequesterReference) request.getRequesterReference()).getRequesterId() >= 0;
-        ((IResizableWidget) this.amountField).resize(
-                ours ? ae2pr$MERGED_AMOUNT_WIDTH : ae2pr$BATCHED_AMOUNT_WIDTH, ae2pr$FIELD_HEIGHT);
+        ((IResizableWidget) this.amountField)
+                .resize(ours ? ae2pr$MERGED_AMOUNT_WIDTH : ae2pr$BATCHED_AMOUNT_WIDTH, ae2pr$FIELD_HEIGHT);
 
         // applyRequest 每次都会把所有子控件设为可见，隐藏要重新施加
         this.batchField.visible = !ours;

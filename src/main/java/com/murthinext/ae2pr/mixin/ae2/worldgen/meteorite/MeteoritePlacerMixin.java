@@ -12,15 +12,16 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import com.murthinext.ae2pr.block.meteorite.MeteoriteOres;
-
-import appeng.worldgen.meteorite.MeteoriteBlockPutter;
-import appeng.worldgen.meteorite.MeteoritePlacer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+
+import appeng.worldgen.meteorite.MeteoriteBlockPutter;
+import appeng.worldgen.meteorite.MeteoritePlacer;
+
+import com.murthinext.ae2pr.block.meteorite.MeteoriteOres;
 
 // 修正放大陨石后的循环边界，并按矿脉替换部分陨石为陨石矿石
 @Mixin(value = MeteoritePlacer.class, remap = false)
@@ -73,9 +74,16 @@ public abstract class MeteoritePlacerMixin {
         return Math.max(9, ae2pr$bodyBound());
     }
 
-    @Redirect(method = "placeMeteoriteSkyStone", at = @At(value = "INVOKE", target = "Lappeng/worldgen/meteorite/MeteoriteBlockPutter;put(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z", ordinal = 2), remap = false)
-    private boolean ae2pr$placeOreOrSkyStone(MeteoriteBlockPutter putter, LevelAccessor level, BlockPos pos,
-            BlockState skyStone) {
+    @Redirect(
+            method = "placeMeteoriteSkyStone",
+            at = @At(
+                    value = "INVOKE",
+                    target =
+                            "Lappeng/worldgen/meteorite/MeteoriteBlockPutter;put(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z",
+                    ordinal = 2),
+            remap = false)
+    private boolean
+    ae2pr$placeOreOrSkyStone(MeteoriteBlockPutter putter, LevelAccessor level, BlockPos pos, BlockState skyStone) {
         ae2pr$oreCredit += ORE_FRACTION;
         BlockState ore = ae2pr$pendingOres.remove(pos);
         if (ore == null) {

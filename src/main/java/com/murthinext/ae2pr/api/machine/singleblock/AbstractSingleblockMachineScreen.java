@@ -74,13 +74,11 @@ public abstract class AbstractSingleblockMachineScreen<M extends AbstractSingleb
         super.init();
         AbstractSingleblockMachineBlockEntity machine = menu.getMachine();
         SideConfig config = machine != null ? machine.getSideConfig() : new SideConfig();
-        Direction facing = machine != null
-                ? machine.getBlockState().getValue(AbstractSingleblockMachineBlock.FACING)
-                : Direction.NORTH;
+        Direction facing = machine != null ? machine.getBlockState().getValue(AbstractSingleblockMachineBlock.FACING)
+                                           : Direction.NORTH;
         sideConfigPanel = new SideConfigPanel(config, facing, this::pressSideConfigButton);
-        sideConfigButton = new SideConfigButton(leftPos + TOOLBAR_X + 1,
-                topPos + TOOLBAR_Y + 1 + TOOLBAR_ROW_STEP,
-                () -> sideConfigOpen, this::toggleSideConfig);
+        sideConfigButton = new SideConfigButton(leftPos + TOOLBAR_X + 1, topPos + TOOLBAR_Y + 1 + TOOLBAR_ROW_STEP,
+                                                () -> sideConfigOpen, this::toggleSideConfig);
         addRenderableWidget(sideConfigButton);
     }
 

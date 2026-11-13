@@ -38,17 +38,14 @@ public final class MolecularAssemblyCoreParticles {
         double y = pos.getY() + 0.3 + random.nextDouble() * 0.4;
         double z = pos.getZ() + 0.3 + random.nextDouble() * 0.4;
         double speed = 0.01 + random.nextDouble() * 0.02;
-        level.addParticle(ParticleTypes.CRAFTING, x, y, z,
-                (random.nextDouble() - 0.5) * speed,
-                (random.nextDouble() - 0.5) * speed,
-                (random.nextDouble() - 0.5) * speed);
+        level.addParticle(ParticleTypes.CRAFTING, x, y, z, (random.nextDouble() - 0.5) * speed,
+                          (random.nextDouble() - 0.5) * speed, (random.nextDouble() - 0.5) * speed);
     }
 
     private static boolean isVisible(ClientLevel level, BlockPos pos) {
         Minecraft minecraft = Minecraft.getInstance();
-        return minecraft.level == level && !minecraft.isPaused()
-                && minecraft.player != null
-                && minecraft.player.position().distanceToSqr(
-                        pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) < RANGE_SQUARED;
+        return minecraft.level == level && !minecraft.isPaused() && minecraft.player != null &&
+                minecraft.player.position().distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <
+                RANGE_SQUARED;
     }
 }

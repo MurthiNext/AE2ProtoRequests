@@ -1,7 +1,9 @@
 package com.murthinext.ae2pr.api.upgrade;
 
 public enum MachineUpgradeType {
-    SPEED, PARALLEL, ENERGY;
+    SPEED,
+    PARALLEL,
+    ENERGY;
 
     public double clamp(double previous, double result) {
         return switch (this) {

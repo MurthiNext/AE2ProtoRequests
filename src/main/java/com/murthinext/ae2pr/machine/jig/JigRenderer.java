@@ -21,9 +21,9 @@ import net.minecraft.world.level.Level;
 public class JigRenderer implements BlockEntityRenderer<JigControllerBlockEntity> {
 
     private static final ResourceLocation WATER_STILL = ResourceLocation.fromNamespaceAndPath("minecraft",
-            "block/water_still");
+                                                                                              "block/water_still");
     private static final ResourceLocation WATER_FLOW = ResourceLocation.fromNamespaceAndPath("minecraft",
-            "block/water_flow");
+                                                                                             "block/water_flow");
     private static final float SOURCE_HEIGHT = 8.0F / 9.0F;
 
     public JigRenderer(BlockEntityRendererProvider.Context context) {
@@ -31,7 +31,7 @@ public class JigRenderer implements BlockEntityRenderer<JigControllerBlockEntity
 
     @Override
     public void render(JigControllerBlockEntity controller, float partialTick, PoseStack pose,
-            MultiBufferSource buffers, int light, int overlay) {
+                       MultiBufferSource buffers, int light, int overlay) {
         Level level = controller.getLevel();
         if (level == null || !controller.isRunning()) {
             return;
@@ -58,34 +58,32 @@ public class JigRenderer implements BlockEntityRenderer<JigControllerBlockEntity
             float y = cell.getY() - origin.getY();
             float z = dz + 0.5F;
             if (source) {
-                surface(consumer, pose.last(), still, side, back, x, y, z, frontHeight, backHeight,
-                        -0.5F, 0.5F, 0.0F, 1.0F, color, cellLight);
+                surface(consumer, pose.last(), still, side, back, x, y, z, frontHeight, backHeight, -0.5F, 0.5F, 0.0F,
+                        1.0F, color, cellLight);
             } else {
                 // 在纹理边界拆分斜面，滚动 UV 始终限制在当前图集精灵内
-                surface(consumer, pose.last(), flow, side, back, x, y, z, frontHeight, backHeight,
-                        -0.5F, 0.5F - phase, phase, 1.0F, color, cellLight);
+                surface(consumer, pose.last(), flow, side, back, x, y, z, frontHeight, backHeight, -0.5F, 0.5F - phase,
+                        phase, 1.0F, color, cellLight);
                 if (phase > 0.0F) {
-                    surface(consumer, pose.last(), flow, side, back, x, y, z, frontHeight, backHeight,
-                            0.5F - phase, 0.5F, 0.0F, phase, color, cellLight);
+                    surface(consumer, pose.last(), flow, side, back, x, y, z, frontHeight, backHeight, 0.5F - phase,
+                            0.5F, 0.0F, phase, color, cellLight);
                 }
             }
             if (depth == 0) {
-                endFace(consumer, pose.last(), flow, side, back, x, y, z,
-                        -0.5F, frontHeight, color, cellLight);
+                endFace(consumer, pose.last(), flow, side, back, x, y, z, -0.5F, frontHeight, color, cellLight);
             } else if (source && !level.getBlockState(cell.relative(back)).canOcclude()) {
-                endFace(consumer, pose.last(), still, side, back, x, y, z,
-                        0.5F, backHeight, color, cellLight);
+                endFace(consumer, pose.last(), still, side, back, x, y, z, 0.5F, backHeight, color, cellLight);
             }
             if (Math.abs(across) == 1 && !level.getBlockState(cell.relative(side, across)).canOcclude()) {
-                sideFace(consumer, pose.last(), flow, side, back, x, y, z,
-                        across * 0.5F, frontHeight, backHeight, color, cellLight);
+                sideFace(consumer, pose.last(), flow, side, back, x, y, z, across * 0.5F, frontHeight, backHeight,
+                         color, cellLight);
             }
         }
     }
 
-    private static void surface(VertexConsumer consumer, PoseStack.Pose pose, TextureAtlasSprite sprite,
-            Direction side, Direction back, float x, float y, float z, float frontHeight, float backHeight,
-            float start, float end, float v0, float v1, int color, int light) {
+    private static void surface(VertexConsumer consumer, PoseStack.Pose pose, TextureAtlasSprite sprite, Direction side,
+                                Direction back, float x, float y, float z, float frontHeight, float backHeight,
+                                float start, float end, float v0, float v1, int color, int light) {
         float y0 = y + frontHeight + (backHeight - frontHeight) * (start + 0.5F);
         float y1 = y + frontHeight + (backHeight - frontHeight) * (end + 0.5F);
         vertex(consumer, pose, sprite, x, y0, z, side, back, -0.5F, start, 0.0F, v0, color, light, Direction.UP);
@@ -94,9 +92,9 @@ public class JigRenderer implements BlockEntityRenderer<JigControllerBlockEntity
         vertex(consumer, pose, sprite, x, y0, z, side, back, 0.5F, start, 1.0F, v0, color, light, Direction.UP);
     }
 
-    private static void endFace(VertexConsumer consumer, PoseStack.Pose pose, TextureAtlasSprite sprite,
-            Direction side, Direction back, float x, float y, float z, float depth, float height,
-            int color, int light) {
+    private static void endFace(VertexConsumer consumer, PoseStack.Pose pose, TextureAtlasSprite sprite, Direction side,
+                                Direction back, float x, float y, float z, float depth, float height, int color,
+                                int light) {
         Direction normal = depth < 0 ? back.getOpposite() : back;
         float v = 1.0F - height;
         vertex(consumer, pose, sprite, x, y, z, side, back, -0.5F, depth, 0.0F, 1.0F, color, light, normal);
@@ -106,22 +104,22 @@ public class JigRenderer implements BlockEntityRenderer<JigControllerBlockEntity
     }
 
     private static void sideFace(VertexConsumer consumer, PoseStack.Pose pose, TextureAtlasSprite sprite,
-            Direction side, Direction back, float x, float y, float z, float across,
-            float frontHeight, float backHeight, int color, int light) {
+                                 Direction side, Direction back, float x, float y, float z, float across,
+                                 float frontHeight, float backHeight, int color, int light) {
         Direction normal = across < 0 ? side.getOpposite() : side;
         vertex(consumer, pose, sprite, x, y, z, side, back, across, -0.5F, 0.0F, 1.0F, color, light, normal);
         vertex(consumer, pose, sprite, x, y, z, side, back, across, 0.5F, 1.0F, 1.0F, color, light, normal);
-        vertex(consumer, pose, sprite, x, y + backHeight, z, side, back, across, 0.5F,
-                1.0F, 1.0F - backHeight, color, light, normal);
-        vertex(consumer, pose, sprite, x, y + frontHeight, z, side, back, across, -0.5F,
-                0.0F, 1.0F - frontHeight, color, light, normal);
+        vertex(consumer, pose, sprite, x, y + backHeight, z, side, back, across, 0.5F, 1.0F, 1.0F - backHeight, color,
+               light, normal);
+        vertex(consumer, pose, sprite, x, y + frontHeight, z, side, back, across, -0.5F, 0.0F, 1.0F - frontHeight,
+               color, light, normal);
     }
 
-    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, TextureAtlasSprite sprite,
-            float x, float y, float z, Direction side, Direction back, float across, float depth,
-            float u, float v, int color, int light, Direction normal) {
+    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, TextureAtlasSprite sprite, float x,
+                               float y, float z, Direction side, Direction back, float across, float depth, float u,
+                               float v, int color, int light, Direction normal) {
         consumer.vertex(pose.pose(), x + side.getStepX() * across + back.getStepX() * depth, y,
-                z + side.getStepZ() * across + back.getStepZ() * depth)
+                        z + side.getStepZ() * across + back.getStepZ() * depth)
                 .color((color >> 16) & 255, (color >> 8) & 255, color & 255, 190)
                 .uv(sprite.getU(u * 16.0), sprite.getV(v * 16.0))
                 .overlayCoords(OverlayTexture.NO_OVERLAY)

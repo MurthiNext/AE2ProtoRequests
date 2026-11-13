@@ -187,7 +187,7 @@ public final class MachinePartFluidStorage {
             return;
         }
         IFluidHandler handler = target.getCapability(ForgeCapabilities.FLUID_HANDLER, facing.getOpposite())
-                .orElse(null);
+                                        .orElse(null);
         if (handler == null) {
             return;
         }

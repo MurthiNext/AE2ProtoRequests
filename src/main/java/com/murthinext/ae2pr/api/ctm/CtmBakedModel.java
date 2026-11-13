@@ -37,7 +37,7 @@ public class CtmBakedModel extends BakedModelWrapper<BakedModel> {
 
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand,
-            ModelData data, @Nullable RenderType renderType) {
+                                    ModelData data, @Nullable RenderType renderType) {
         ModelData parent = data.has(CtmModelProperties.PARENT) ? data.get(CtmModelProperties.PARENT) : data;
         List<BakedQuad> quads = super.getQuads(state, side, rand, parent, renderType);
         if (state == null || quads.isEmpty()) {

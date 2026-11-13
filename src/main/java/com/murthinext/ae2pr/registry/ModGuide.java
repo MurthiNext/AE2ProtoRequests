@@ -1,44 +1,34 @@
 package com.murthinext.ae2pr.registry;
 
-import com.murthinext.ae2pr.api.Ids;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.Ids;
 
 import guideme.Guide;
 import guideme.GuidesCommon;
 import guideme.PageAnchor;
 
-import com.murthinext.ae2pr.ae2pr;
-
 public final class ModGuide {
 
-    public static final ResourceLocation GUIDE_ID = Ids.of( "guide");
-    public static final ResourceLocation INDEX_PAGE = Ids.of( "index.md");
-    public static final ResourceLocation EMITTER_PAGE = Ids.of(
-            "devices/multi_level_emitter.md");
-    public static final ResourceLocation CRYSTAL_ASSEMBLY_LINE_PAGE = Ids.of(
-            "multiblocks/crystal_assembly_line.md");
+    public static final ResourceLocation GUIDE_ID = Ids.of("guide");
+    public static final ResourceLocation INDEX_PAGE = Ids.of("index.md");
+    public static final ResourceLocation EMITTER_PAGE = Ids.of("devices/multi_level_emitter.md");
+    public static final ResourceLocation CRYSTAL_ASSEMBLY_LINE_PAGE = Ids.of("multiblocks/crystal_assembly_line.md");
     public static final ResourceLocation HIGH_REACTIVITY_LAVA_SMELTER_PAGE = Ids.of(
             "multiblocks/high_reactivity_lava_smelter.md");
     public static final ResourceLocation MATTER_PHASE_TRANSFORMER_PAGE = Ids.of(
             "multiblocks/matter_phase_transformer.md");
     public static final ResourceLocation CRYSTAL_REACTION_CHAMBER_PAGE = Ids.of(
             "multiblocks/crystal_reaction_chamber.md");
-    public static final ResourceLocation CRYSTAL_REACTOR_PAGE = Ids.of(
-            "multiblocks/crystal_reactor.md");
-    public static final ResourceLocation CRYSTAL_WORKSTATION_PAGE = Ids.of(
-            "multiblocks/crystal_workstation.md");
-    public static final ResourceLocation JIG_PAGE = Ids.of(
-            "multiblocks/jig.md");
-    public static final ResourceLocation FILTER_PRESS_PAGE = Ids.of(
-            "multiblocks/filter_press.md");
-    public static final ResourceLocation MULTI_FACTORY_PAGE = Ids.of(
-            "multiblocks/multi_factory.md");
-    public static final ResourceLocation NAMING_FACTORY_PAGE = Ids.of(
-            "machines/naming_factory.md");
-    public static final ResourceLocation CHAMBERS_PAGE = Ids.of(
-            "multiblocks/chambers.md");
+    public static final ResourceLocation CRYSTAL_REACTOR_PAGE = Ids.of("multiblocks/crystal_reactor.md");
+    public static final ResourceLocation CRYSTAL_WORKSTATION_PAGE = Ids.of("multiblocks/crystal_workstation.md");
+    public static final ResourceLocation JIG_PAGE = Ids.of("multiblocks/jig.md");
+    public static final ResourceLocation FILTER_PRESS_PAGE = Ids.of("multiblocks/filter_press.md");
+    public static final ResourceLocation MULTI_FACTORY_PAGE = Ids.of("multiblocks/multi_factory.md");
+    public static final ResourceLocation NAMING_FACTORY_PAGE = Ids.of("machines/naming_factory.md");
+    public static final ResourceLocation CHAMBERS_PAGE = Ids.of("multiblocks/chambers.md");
 
     private static Guide guide;
 
@@ -47,10 +37,7 @@ public final class ModGuide {
 
     public static void init() {
         if (guide == null) {
-            guide = Guide.builder(GUIDE_ID)
-                    .folder("ae2guide")
-                    .defaultLanguage("zh_cn")
-                    .build();
+            guide = Guide.builder(GUIDE_ID).folder("ae2guide").defaultLanguage("zh_cn").build();
         }
     }
 

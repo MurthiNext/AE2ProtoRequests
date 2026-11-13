@@ -40,7 +40,7 @@ public final class MachineRecipe extends AbstractMultiblockRecipe {
         private final RecipeConstraints constraints;
 
         public Serializer(RecipeDefinition<MachineRecipe> definition, int defaultDuration,
-                RecipeConstraints constraints) {
+                          RecipeConstraints constraints) {
             super(defaultDuration);
             this.definition = definition;
             this.constraints = constraints;

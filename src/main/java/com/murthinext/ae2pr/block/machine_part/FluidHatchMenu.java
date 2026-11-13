@@ -23,8 +23,8 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
 
-import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
+import com.murthinext.ae2pr.registry.ModNetwork;
 
 public class FluidHatchMenu extends AbstractContainerMenu {
 
@@ -45,7 +45,8 @@ public class FluidHatchMenu extends AbstractContainerMenu {
     private boolean lastAutoTransfer;
     private boolean lastRecipeIsolated;
 
-    private FluidHatchMenu(int id, Inventory playerInventory, BlockPos pos, @Nullable FluidHatchBlockEntity blockEntity) {
+    private FluidHatchMenu(int id, Inventory playerInventory, BlockPos pos,
+                           @Nullable FluidHatchBlockEntity blockEntity) {
         super(TYPE, id);
         this.pos = pos;
         this.owner = playerInventory.player;
@@ -53,8 +54,8 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         this.blockEntity = blockEntity;
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < INV_COLS; col++) {
-                addSlot(new Slot(playerInventory, col + row * INV_COLS + INV_COLS,
-                        INV_X + col * SLOT_SIZE, INV_Y + row * SLOT_SIZE));
+                addSlot(new Slot(playerInventory, col + row * INV_COLS + INV_COLS, INV_X + col * SLOT_SIZE,
+                                 INV_Y + row * SLOT_SIZE));
             }
         }
         for (int col = 0; col < INV_COLS; col++) {
@@ -70,7 +71,7 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         BlockPos pos = buffer.readBlockPos();
         BlockEntity blockEntity = playerInventory.player.level().getBlockEntity(pos);
         return new FluidHatchMenu(id, playerInventory, pos,
-                blockEntity instanceof FluidHatchBlockEntity hatch ? hatch : null);
+                                  blockEntity instanceof FluidHatchBlockEntity hatch ? hatch : null);
     }
 
     public BlockPos getBlockPos() {
@@ -96,15 +97,14 @@ public class FluidHatchMenu extends AbstractContainerMenu {
             List<FluidStack> current = blockEntity.getFluidSnapshots();
             boolean autoTransfer = blockEntity.isAutoTransfer();
             boolean recipeIsolated = blockEntity.isRecipeIsolated();
-            if (!fluidSynced || autoTransfer != lastAutoTransfer
-                    || recipeIsolated != lastRecipeIsolated
-                    || !sameFluids(current, lastSentFluids)) {
+            if (!fluidSynced || autoTransfer != lastAutoTransfer || recipeIsolated != lastRecipeIsolated ||
+                !sameFluids(current, lastSentFluids)) {
                 fluidSynced = true;
                 lastSentFluids = current;
                 lastAutoTransfer = autoTransfer;
                 lastRecipeIsolated = recipeIsolated;
                 ModNetwork.sendToPlayer(serverPlayer,
-                        new MachinePartFluidPacket(pos, lastSentFluids, autoTransfer, recipeIsolated));
+                                        new MachinePartFluidPacket(pos, lastSentFluids, autoTransfer, recipeIsolated));
             }
         }
         super.broadcastChanges();
@@ -151,7 +151,7 @@ public class FluidHatchMenu extends AbstractContainerMenu {
     }
 
     public static void handleTankClick(AbstractContainerMenu menu, Player owner, MachinePartFluidStorage storage,
-            int tank, int button) {
+                                       int tank, int button) {
         if (owner.level().isClientSide || tank < 0 || tank >= storage.getTankCount()) {
             return;
         }
@@ -171,7 +171,7 @@ public class FluidHatchMenu extends AbstractContainerMenu {
     }
 
     private static void storeFluid(AbstractContainerMenu menu, Player owner, MachinePartFluidStorage storage,
-            ItemStack carried, int tank) {
+                                   ItemStack carried, int tank) {
         ItemStack single = carried.copyWithCount(1);
         IFluidHandlerItem handler = single.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
         if (handler == null) {
@@ -191,7 +191,7 @@ public class FluidHatchMenu extends AbstractContainerMenu {
     }
 
     private static void takeFluid(AbstractContainerMenu menu, Player owner, MachinePartFluidStorage storage,
-            ItemStack carried, int tank) {
+                                  ItemStack carried, int tank) {
         ItemStack single = carried.copyWithCount(1);
         IFluidHandlerItem handler = single.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).orElse(null);
         if (handler == null) {
@@ -217,8 +217,8 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         }
         carried.shrink(1);
         menu.setCarried(carried.isEmpty() ? ItemStack.EMPTY : carried);
-        ItemStack remainder = ItemHandlerHelper.insertItemStacked(
-                new PlayerMainInvWrapper(owner.getInventory()), result, false);
+        ItemStack remainder = ItemHandlerHelper.insertItemStacked(new PlayerMainInvWrapper(owner.getInventory()),
+                                                                  result, false);
         if (!remainder.isEmpty()) {
             owner.drop(remainder, false);
         }
@@ -231,7 +231,6 @@ public class FluidHatchMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return blockEntity != null && !blockEntity.isRemoved()
-                && player.distanceToSqr(Vec3.atCenterOf(pos)) <= 64.0;
+        return blockEntity != null && !blockEntity.isRemoved() && player.distanceToSqr(Vec3.atCenterOf(pos)) <= 64.0;
     }
 }

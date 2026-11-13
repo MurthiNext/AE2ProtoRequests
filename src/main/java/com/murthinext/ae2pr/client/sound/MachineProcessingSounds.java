@@ -20,9 +20,9 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import com.murthinext.ae2pr.registry.ModSounds;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
+import com.murthinext.ae2pr.registry.ModSounds;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT)
 public final class MachineProcessingSounds {
@@ -33,7 +33,8 @@ public final class MachineProcessingSounds {
 
     public enum Type {
         CRYSTAL_ASSEMBLY_LINE(ModSounds.CRYSTAL_ASSEMBLY_LINE, 1.0F, 1.0F, 0),
-        HIGH_REACTIVITY_LAVA_SMELTER(() -> SoundEvents.LAVA_AMBIENT, 0.4F, 0.8F, 0, ModSounds.HIGH_REACTIVITY_LAVA_SMELTER),
+        HIGH_REACTIVITY_LAVA_SMELTER(
+                () -> SoundEvents.LAVA_AMBIENT, 0.4F, 0.8F, 0, ModSounds.HIGH_REACTIVITY_LAVA_SMELTER),
         MATTER_PHASE_TRANSFORMER(ModSounds.MATTER_PHASE_TRANSFORMER, 0.65F, 1.0F, 0),
         CRYSTAL_REACTION(ModSounds.CRYSTAL_REACTION, 0.7F, 1.0F, 0),
         CRYSTAL_WORKSTATION_ETCHING(ModSounds.CRYSTAL_WORKSTATION_ETCHING, 0.7F, 1.0F, 0),
@@ -53,8 +54,7 @@ public final class MachineProcessingSounds {
             this(sound, volume, pitch, delay, sound);
         }
 
-        Type(Supplier<SoundEvent> sound, float volume, float pitch, int delay,
-                Supplier<SoundEvent> subtitleSource) {
+        Type(Supplier<SoundEvent> sound, float volume, float pitch, int delay, Supplier<SoundEvent> subtitleSource) {
             this.sound = sound;
             this.volume = volume;
             this.pitch = pitch;
@@ -64,10 +64,8 @@ public final class MachineProcessingSounds {
 
         private boolean isRunning(BlockEntity controller) {
             BlockState state = controller.getBlockState();
-            return state.hasProperty(MachineBlock.FORMED)
-                    && state.hasProperty(MachineBlock.RUNNING)
-                    && state.getValue(MachineBlock.FORMED)
-                    && state.getValue(MachineBlock.RUNNING);
+            return state.hasProperty(MachineBlock.FORMED) && state.hasProperty(MachineBlock.RUNNING) &&
+                    state.getValue(MachineBlock.FORMED) && state.getValue(MachineBlock.RUNNING);
         }
     }
 
@@ -76,8 +74,7 @@ public final class MachineProcessingSounds {
 
     public static void tick(BlockEntity controller, Type type) {
         Minecraft minecraft = Minecraft.getInstance();
-        if (!type.isRunning(controller)
-                || !isAudible(minecraft, controller)) {
+        if (!type.isRunning(controller) || !isAudible(minecraft, controller)) {
             return;
         }
         ProcessingSound sound = SOUNDS.get(controller);
@@ -100,12 +97,11 @@ public final class MachineProcessingSounds {
     }
 
     private static boolean isAudible(Minecraft minecraft, BlockEntity controller) {
-        return minecraft.level != null && minecraft.level == controller.getLevel()
-                && minecraft.player != null && !controller.isRemoved()
-                && minecraft.level.hasChunkAt(controller.getBlockPos())
-                && controller.getBlockPos().distToCenterSqr(minecraft.player.position()) < RANGE_SQUARED
-                && minecraft.options.getSoundSourceVolume(SoundSource.MASTER) > 0.0F
-                && minecraft.options.getSoundSourceVolume(SoundSource.BLOCKS) > 0.0F;
+        return minecraft.level != null && minecraft.level == controller.getLevel() && minecraft.player != null &&
+                !controller.isRemoved() && minecraft.level.hasChunkAt(controller.getBlockPos()) &&
+                controller.getBlockPos().distToCenterSqr(minecraft.player.position()) < RANGE_SQUARED &&
+                minecraft.options.getSoundSourceVolume(SoundSource.MASTER) > 0.0F &&
+                minecraft.options.getSoundSourceVolume(SoundSource.BLOCKS) > 0.0F;
     }
 
     @SubscribeEvent
@@ -157,8 +153,8 @@ public final class MachineProcessingSounds {
         @Override
         public boolean canPlaySound() {
             Minecraft minecraft = Minecraft.getInstance();
-            return !isStopped() && type.isRunning(controller) && isAudible(minecraft, controller)
-                    && minecraft.level.getBlockEntity(controller.getBlockPos()) == controller;
+            return !isStopped() && type.isRunning(controller) && isAudible(minecraft, controller) &&
+                    minecraft.level.getBlockEntity(controller.getBlockPos()) == controller;
         }
 
         // 刷新字幕
@@ -167,8 +163,8 @@ public final class MachineProcessingSounds {
                 return;
             }
             subtitleTicks = 0;
-            WeighedSoundEvents events = minecraft.getSoundManager()
-                    .getSoundEvent(type.subtitleSource.get().getLocation());
+            WeighedSoundEvents events = minecraft.getSoundManager().getSoundEvent(
+                    type.subtitleSource.get().getLocation());
             if (events == null || events.getSubtitle() == null) {
                 return;
             }
@@ -190,8 +186,7 @@ public final class MachineProcessingSounds {
                 return;
             }
             var soundManager = minecraft.getSoundManager();
-            splashes.removeIf(splash -> splash.isStopped()
-                    || (++splash.age > 20 && !soundManager.isActive(splash)));
+            splashes.removeIf(splash -> splash.isStopped() || (++splash.age > 20 && !soundManager.isActive(splash)));
             if (--splashTicks > 0) {
                 return;
             }
@@ -218,7 +213,8 @@ public final class MachineProcessingSounds {
         private int age;
 
         private LavaSplashSound(ProcessingSound owner) {
-            super(ModSounds.HIGH_REACTIVITY_LAVA_SMELTER.get(), SoundSource.BLOCKS, SoundInstance.createUnseededRandom());
+            super(ModSounds.HIGH_REACTIVITY_LAVA_SMELTER.get(), SoundSource.BLOCKS,
+                  SoundInstance.createUnseededRandom());
             this.owner = owner;
             this.volume = 0.22F + random.nextFloat() * 0.18F;
             this.pitch = 0.6F + random.nextFloat() * 0.55F;

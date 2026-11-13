@@ -54,8 +54,8 @@ final class ScreenCorruptionState {
             double area = 0.10 + random.nextDouble() * 0.10;
             double width = Math.sqrt(area) * (0.8 + random.nextDouble() * 0.4);
             double height = area / width;
-            return new Region(random.nextDouble() * (1 - width), random.nextDouble() * (1 - height),
-                    width, height, random.nextFloat() * 256, time);
+            return new Region(random.nextDouble() * (1 - width), random.nextDouble() * (1 - height), width, height,
+                              random.nextFloat() * 256, time);
         }
 
         double areaProgress(double time) {

@@ -1,7 +1,5 @@
 package com.murthinext.ae2pr.block.level_emitter;
 
-import com.murthinext.ae2pr.api.Ids;
-
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -12,19 +10,18 @@ import net.minecraft.resources.ResourceLocation;
 import appeng.client.gui.Icon;
 import appeng.client.gui.widgets.IconButton;
 
+import com.murthinext.ae2pr.api.Ids;
+
 public class CombineModeButton extends IconButton {
 
-    private static final ResourceLocation AND_ICON = Ids.of(
-            "textures/gui/combine_and.png");
-    private static final ResourceLocation OR_ICON = Ids.of(
-            "textures/gui/combine_or.png");
+    private static final ResourceLocation AND_ICON = Ids.of("textures/gui/combine_and.png");
+    private static final ResourceLocation OR_ICON = Ids.of("textures/gui/combine_or.png");
 
     private final Consumer<CombineMode> onToggle;
     private CombineMode mode = CombineMode.OR;
 
     public CombineModeButton(Consumer<CombineMode> onToggle) {
-        super(button -> {
-        });
+        super(button -> {});
         this.onToggle = onToggle;
     }
 
@@ -67,7 +64,7 @@ public class CombineModeButton extends IconButton {
     @Override
     public List<Component> getTooltipMessage() {
         return List.of(this.mode == CombineMode.AND
-                ? Component.translatable("gui.ae2pr.multi_level_emitter.combine.and")
-                : Component.translatable("gui.ae2pr.multi_level_emitter.combine.or"));
+                               ? Component.translatable("gui.ae2pr.multi_level_emitter.combine.and")
+                               : Component.translatable("gui.ae2pr.multi_level_emitter.combine.or"));
     }
 }

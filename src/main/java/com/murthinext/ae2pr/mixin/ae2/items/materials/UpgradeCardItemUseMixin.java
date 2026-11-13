@@ -5,16 +5,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 
 import appeng.api.parts.IPartHost;
 import appeng.api.parts.SelectedPart;
 import appeng.api.upgrades.IUpgradeableObject;
 import appeng.items.materials.UpgradeCardItem;
 import appeng.util.InteractionUtil;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.UseOnContext;
+
+import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 
 // 升级卡首次 Shift 右键时先补出槽位，保证未开界面/未读档也能插卡
 @Mixin(UpgradeCardItem.class)
@@ -22,7 +23,7 @@ public abstract class UpgradeCardItemUseMixin {
 
     @Inject(method = "onItemUseFirst", at = @At("HEAD"), remap = false)
     private void ae2pr$appendUpgradeSlot(ItemStack stack, UseOnContext context,
-            CallbackInfoReturnable<InteractionResult> cir) {
+                                         CallbackInfoReturnable<InteractionResult> cir) {
         var player = context.getPlayer();
         if (player == null || !InteractionUtil.isInAlternateUseMode(player)) {
             return;

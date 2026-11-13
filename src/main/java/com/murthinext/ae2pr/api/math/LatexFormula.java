@@ -67,7 +67,7 @@ public record LatexFormula(String source, Expression expression) {
             return switch (operator) {
                 case "+" -> a + b;
                 case "-" -> a - b;
-                case "*", "" -> a * b;
+                case "*", "" -> a *b;
                 case "/" -> a / b;
                 case "^" -> Math.pow(a, b);
                 default -> throw new IllegalStateException("Unknown operator: " + operator);
@@ -92,13 +92,23 @@ public record LatexFormula(String source, Expression expression) {
             if (!Double.isFinite(value) || !Double.isFinite(n) || n == 0) {
                 return Double.NaN;
             }
-            return value < 0 && n == Math.rint(n) && Math.abs(n % 2) == 1
-                    ? -Math.pow(-value, 1 / n) : Math.pow(value, 1 / n);
+            return value < 0 && n == Math.rint(n) && Math.abs(n % 2) == 1 ? -Math.pow(-value, 1 / n)
+                                                                          : Math.pow(value, 1 / n);
         }
     }
 
     public enum FunctionName {
-        MIN(2), MAX(2), ABS(1), FLOOR(1), CEIL(1), LN(1), LOG(1), EXP(1), SIN(1), COS(1), TAN(1);
+        MIN(2),
+        MAX(2),
+        ABS(1),
+        FLOOR(1),
+        CEIL(1),
+        LN(1),
+        LOG(1),
+        EXP(1),
+        SIN(1),
+        COS(1),
+        TAN(1);
 
         private final int arguments;
 
@@ -131,8 +141,9 @@ public record LatexFormula(String source, Expression expression) {
                 case FLOOR -> Math.floor(a);
                 case CEIL -> Math.ceil(a);
                 case LN -> Math.log(a);
-                case LOG -> Double.isFinite(logBase) && logBase > 0 && logBase != 1
-                        ? Math.log(a) / Math.log(logBase) : Double.NaN;
+                case LOG ->
+                    Double.isFinite(logBase) && logBase > 0 && logBase != 1 ? Math.log(a) / Math.log(logBase)
+                                                                            : Double.NaN;
                 case EXP -> Math.exp(a);
                 case SIN -> Math.sin(a);
                 case COS -> Math.cos(a);
@@ -187,8 +198,8 @@ public record LatexFormula(String source, Expression expression) {
                         default -> token;
                     };
                 } else if (Character.isDigit(first) || first == '.') {
-                    while (position < text.length()
-                            && (Character.isDigit(text.charAt(position)) || text.charAt(position) == '.')) {
+                    while (position < text.length() &&
+                           (Character.isDigit(text.charAt(position)) || text.charAt(position) == '.')) {
                         position++;
                     }
                     token = text.substring(start, position);
@@ -239,9 +250,10 @@ public record LatexFormula(String source, Expression expression) {
         }
 
         private boolean startsAtom() {
-            return !token.isEmpty() && (Character.isDigit(token.charAt(0)) || token.charAt(0) == '.'
-                    || token.equals("x") || token.equals("e") || token.equals("(") || token.equals("[") || token.equals("{")
-                    || token.startsWith("\\") && !token.equals("\\rfloor") && !token.equals("\\rceil"));
+            return !token.isEmpty() &&
+                    (Character.isDigit(token.charAt(0)) || token.charAt(0) == '.' || token.equals("x") ||
+                     token.equals("e") || token.equals("(") || token.equals("[") || token.equals("{") ||
+                     token.startsWith("\\") && !token.equals("\\rfloor") && !token.equals("\\rceil"));
         }
 
         private Expression unary() {
@@ -289,7 +301,8 @@ public record LatexFormula(String source, Expression expression) {
             }
             if (value.equals("|") || value.equals("\\lfloor") || value.equals("\\lceil")) {
                 FunctionName name = value.equals("|") ? FunctionName.ABS
-                        : value.equals("\\lfloor") ? FunctionName.FLOOR : FunctionName.CEIL;
+                        : value.equals("\\lfloor")    ? FunctionName.FLOOR
+                                                      : FunctionName.CEIL;
                 String close = value.equals("|") ? "|" : value.equals("\\lfloor") ? "\\rfloor" : "\\rceil";
                 return new Function(name, List.of(grouped(value, close)), null);
             }

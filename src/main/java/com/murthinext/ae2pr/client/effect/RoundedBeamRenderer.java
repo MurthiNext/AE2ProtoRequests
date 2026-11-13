@@ -20,7 +20,7 @@ public final class RoundedBeamRenderer {
     }
 
     public static void renderColumn(PoseStack pose, VertexConsumer consumer, Vec3 view, double bottom, double top,
-            boolean coreAtTop, double time, float strength, float[] color) {
+                                    boolean coreAtTop, double time, float strength, float[] color) {
         double width = 0.35 + 0.65 * Math.min(1.0F, strength);
         renderLayer(pose, consumer, view, bottom, top, coreAtTop, time, strength, color, 0.36 * width, 0.16);
         renderLayer(pose, consumer, view, bottom, top, coreAtTop, time, strength, color, 0.16 * width, 0.48);
@@ -28,7 +28,8 @@ public final class RoundedBeamRenderer {
     }
 
     private static void renderLayer(PoseStack pose, VertexConsumer consumer, Vec3 view, double bottom, double top,
-            boolean coreAtTop, double time, float strength, float[] color, double radius, double alphaScale) {
+                                    boolean coreAtTop, double time, float strength, float[] color, double radius,
+                                    double alphaScale) {
         PoseStack.Pose last = pose.last();
         float height = (float) (top - bottom);
         for (int row = 0; row < ROWS; row++) {
@@ -43,21 +44,21 @@ public final class RoundedBeamRenderer {
                 float u0 = (float) segment / SEGMENTS;
                 float u1 = (float) (segment + 1) / SEGMENTS;
                 // 绕序朝外，背面由渲染层剔除
-                vertex(consumer, last, view, radius, angle0, y0, u0, v0, bottom, top, time, strength, color,
-                        alphaScale, coreAtTop);
-                vertex(consumer, last, view, radius, angle0, y1, u0, v1, bottom, top, time, strength, color,
-                        alphaScale, coreAtTop);
-                vertex(consumer, last, view, radius, angle1, y1, u1, v1, bottom, top, time, strength, color,
-                        alphaScale, coreAtTop);
-                vertex(consumer, last, view, radius, angle1, y0, u1, v0, bottom, top, time, strength, color,
-                        alphaScale, coreAtTop);
+                vertex(consumer, last, view, radius, angle0, y0, u0, v0, bottom, top, time, strength, color, alphaScale,
+                       coreAtTop);
+                vertex(consumer, last, view, radius, angle0, y1, u0, v1, bottom, top, time, strength, color, alphaScale,
+                       coreAtTop);
+                vertex(consumer, last, view, radius, angle1, y1, u1, v1, bottom, top, time, strength, color, alphaScale,
+                       coreAtTop);
+                vertex(consumer, last, view, radius, angle1, y0, u1, v0, bottom, top, time, strength, color, alphaScale,
+                       coreAtTop);
             }
         }
     }
 
     private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, Vec3 view, double radius, double angle,
-            double y, float u, float v, double bottom, double top, double time, float strength, float[] color,
-            double alphaScale, boolean coreAtTop) {
+                               double y, float u, float v, double bottom, double top, double time, float strength,
+                               float[] color, double alphaScale, boolean coreAtTop) {
         double rest = Math.min(y - bottom, top - y);
         double taper = Math.max(0.0, Math.min(1.0, rest / END_FADE));
         taper = taper * taper * (3.0 - 2.0 * taper);

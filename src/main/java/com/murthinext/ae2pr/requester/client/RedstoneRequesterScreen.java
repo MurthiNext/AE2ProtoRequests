@@ -1,23 +1,26 @@
 package com.murthinext.ae2pr.requester.client;
 
-import appeng.client.gui.style.ScreenStyle;
-import appeng.client.guidebook.PageAnchor;
-import com.murthinext.ae2pr.registry.ModGuide;
-import com.murthinext.ae2pr.requester.RequesterConstants;
-import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.requester.client.abstraction.AbstractRedstoneRequesterScreen;
-import com.murthinext.ae2pr.requester.client.abstraction.RequesterReference;
-import com.murthinext.ae2pr.requester.platform.RequesterPlatform;
-import com.murthinext.ae2pr.requester.RedstoneRequesterMenu;
+import java.util.Collections;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.Set;
+import appeng.client.gui.style.ScreenStyle;
+import appeng.client.guidebook.PageAnchor;
+
+import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.registry.ModGuide;
+import com.murthinext.ae2pr.requester.RedstoneRequesterMenu;
+import com.murthinext.ae2pr.requester.RequesterConstants;
+import com.murthinext.ae2pr.requester.client.abstraction.AbstractRedstoneRequesterScreen;
+import com.murthinext.ae2pr.requester.client.abstraction.RequesterReference;
+import com.murthinext.ae2pr.requester.platform.RequesterPlatform;
 
 import static com.murthinext.ae2pr.requester.RequesterUtils.f;
 
@@ -27,18 +30,19 @@ public class RedstoneRequesterScreen extends AbstractRedstoneRequesterScreen<Red
     private static final Rect2i FOOTER_BBOX = new Rect2i(0, 114, GUI_WIDTH, GUI_FOOTER_HEIGHT);
     private static final int MAX_ROW_COUNT = 10;
 
-    @Nullable private RequesterReference requesterReference;
+    @Nullable
+    private RequesterReference requesterReference;
 
-    public RedstoneRequesterScreen(
-        RedstoneRequesterMenu menu, Inventory playerInventory, Component name, ScreenStyle style
-    ) {
+    public RedstoneRequesterScreen(RedstoneRequesterMenu menu, Inventory playerInventory, Component name,
+                                   ScreenStyle style) {
         super(menu, playerInventory, name, style, TEXTURE);
     }
 
     @Override
     protected void init() {
         var possibleRows = (height - GUI_HEADER_HEIGHT - GUI_FOOTER_HEIGHT) / ROW_HEIGHT;
-        rowAmount = Mth.clamp(possibleRows, MIN_ROW_COUNT, Math.min(RequesterPlatform.getRequestLimit(), MAX_ROW_COUNT));
+        rowAmount = Mth.clamp(possibleRows, MIN_ROW_COUNT,
+                              Math.min(RequesterPlatform.getRequestLimit(), MAX_ROW_COUNT));
         super.init();
     }
 

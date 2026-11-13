@@ -12,14 +12,14 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import appeng.api.stacks.GenericStack;
+import appeng.integration.modules.jeirei.EncodingHelper;
+import appeng.menu.me.items.PatternEncodingTermMenu;
+
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
-
-import appeng.api.stacks.GenericStack;
-import appeng.integration.modules.jeirei.EncodingHelper;
-import appeng.menu.me.items.PatternEncodingTermMenu;
 
 import com.murthinext.ae2pr.api.recipe.CountedIngredient;
 import com.murthinext.ae2pr.integration.jei.category.CrystalAssemblyLineCategory;
@@ -47,7 +47,8 @@ public class CrystalAssemblyLinePatternTransferHandler
     @Nullable
     @Override
     public IRecipeTransferError transferRecipe(PatternEncodingTermMenu menu, CrystalAssemblyLineRecipe recipe,
-            IRecipeSlotsView slotsView, Player player, boolean maxTransfer, boolean doTransfer) {
+                                               IRecipeSlotsView slotsView, Player player, boolean maxTransfer,
+                                               boolean doTransfer) {
         if (!doTransfer) {
             return null;
         }
@@ -76,9 +77,6 @@ public class CrystalAssemblyLinePatternTransferHandler
     }
 
     private static List<GenericStack> outputs(CrystalAssemblyLineRecipe recipe) {
-        return recipe.getItemOutputs().stream()
-                .map(GenericStack::fromItemStack)
-                .filter(Objects::nonNull)
-                .toList();
+        return recipe.getItemOutputs().stream().map(GenericStack::fromItemStack).filter(Objects::nonNull).toList();
     }
 }

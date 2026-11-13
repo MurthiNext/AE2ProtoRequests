@@ -1,7 +1,5 @@
 package com.murthinext.ae2pr.item.crystaline;
 
-import com.murthinext.ae2pr.api.ClientHooks;
-
 import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
@@ -11,6 +9,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+
+import com.murthinext.ae2pr.api.ClientHooks;
 
 public class CrystalineItem extends Item {
 

@@ -14,15 +14,15 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.murthinext.ae2pr.ServerConfig;
-import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.registry.ModModules;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.api.machine.part.MachinePart;
 import com.murthinext.ae2pr.api.machine.part.InputGroup;
+import com.murthinext.ae2pr.api.machine.part.MachinePart;
 import com.murthinext.ae2pr.api.multiblock.StructureResult;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleSnapshot;
 import com.murthinext.ae2pr.api.recipe.CountedIngredient;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
+import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.registry.ModModules;
 
 public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
@@ -44,13 +44,15 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
 
     @Override
     protected long parallelBonus() {
-        return (long) Math.max(0, lastSlices - CrystalAssemblyLineStructure.MIN_SLICES) * ServerConfig.assemblyParallelPerSlice()
-                + (long) modules.count(ModModules.PARALLEL) * ServerConfig.assemblyModuleParallelPerUnit();
+        return (long) Math.max(0, lastSlices - CrystalAssemblyLineStructure.MIN_SLICES) *
+                ServerConfig.assemblyParallelPerSlice() +
+                (long) modules.count(ModModules.PARALLEL) * ServerConfig.assemblyModuleParallelPerUnit();
     }
 
     @Override
     protected double baseSpeedMultiplier() {
-        return (1.0 + modules.count(ModModules.SPEED) * ServerConfig.assemblyModuleSpeedPerUnit()) * super.baseSpeedMultiplier();
+        return (1.0 + modules.count(ModModules.SPEED) * ServerConfig.assemblyModuleSpeedPerUnit()) *
+                super.baseSpeedMultiplier();
     }
 
     // 配方匹配
@@ -206,8 +208,8 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
 
         ModuleSnapshot snapshot = result.formed() ? result.modules() : ModuleSnapshot.EMPTY;
         MultiblockRecipe recipe = currentRecipe();
-        if (recipe instanceof CrystalAssemblyLineRecipe lineRecipe
-                && !snapshot.satisfies(lineRecipe.getModuleRequirements())) {
+        if (recipe instanceof CrystalAssemblyLineRecipe lineRecipe &&
+            !snapshot.satisfies(lineRecipe.getModuleRequirements())) {
             cancelJob();
         }
         modules = snapshot;
@@ -256,6 +258,5 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
         return false;
     }
 
-    private record UnitCell(BlockPos pos, Block block) {
-    }
+    private record UnitCell(BlockPos pos, Block block) {}
 }

@@ -1,16 +1,18 @@
 package com.murthinext.ae2pr.requester.abstraction;
 
-import appeng.api.networking.IGrid;
-import appeng.helpers.InventoryAction;
-import appeng.menu.AEBaseMenu;
-import com.murthinext.ae2pr.requester.platform.RequesterPlatform;
-import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
+import javax.annotation.Nullable;
+
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nullable;
+import appeng.api.networking.IGrid;
+import appeng.helpers.InventoryAction;
+import appeng.menu.AEBaseMenu;
+
+import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
+import com.murthinext.ae2pr.requester.platform.RequesterPlatform;
 
 public abstract class AbstractRedstoneRequesterMenu extends AEBaseMenu {
 

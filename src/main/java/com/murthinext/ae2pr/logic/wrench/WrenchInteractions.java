@@ -16,8 +16,8 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import appeng.blockentity.AEBaseBlockEntity;
 
-import com.murthinext.ae2pr.api.wrench.Wrenchable;
 import com.murthinext.ae2pr.api.wrench.WrenchTags;
+import com.murthinext.ae2pr.api.wrench.Wrenchable;
 
 // 扳手交互统一入口
 public final class WrenchInteractions {
@@ -27,8 +27,8 @@ public final class WrenchInteractions {
 
     // 扳手右键路由
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getUseBlock() == Event.Result.DENY
-                || event.getEntity().isSpectator() || !event.getItemStack().is(WrenchTags.WRENCH)) {
+        if (event.getUseBlock() == Event.Result.DENY || event.getEntity().isSpectator() ||
+            !event.getItemStack().is(WrenchTags.WRENCH)) {
             return;
         }
         BlockState state = event.getLevel().getBlockState(event.getPos());
@@ -41,7 +41,7 @@ public final class WrenchInteractions {
             }
             event.setCanceled(true);
             event.setCancellationResult(disassemble(event.getEntity(), event.getLevel(), event.getPos(),
-                    event.getHitVec(), event.getItemStack()));
+                                                    event.getHitVec(), event.getItemStack()));
             return;
         }
         BlockState rotated = wrenchable.rotateWithWrench(state);
@@ -50,8 +50,8 @@ public final class WrenchInteractions {
         }
         event.setCanceled(true);
         event.setCancellationResult(wrenchable.canRotateWithWrench(state)
-                ? rotate(event.getLevel(), event.getPos(), rotated, wrenchable)
-                : InteractionResult.PASS);
+                                            ? rotate(event.getLevel(), event.getPos(), rotated, wrenchable)
+                                            : InteractionResult.PASS);
     }
 
     private static InteractionResult rotate(Level level, BlockPos pos, BlockState rotated, Wrenchable wrenchable) {
@@ -66,7 +66,7 @@ public final class WrenchInteractions {
 
     // 拆除：本体回收到背包，内部物品照常掉落
     private static InteractionResult disassemble(Player player, Level level, BlockPos pos, BlockHitResult hit,
-            ItemStack wrench) {
+                                                 ItemStack wrench) {
         if (level.isClientSide) {
             return InteractionResult.sidedSuccess(true);
         }

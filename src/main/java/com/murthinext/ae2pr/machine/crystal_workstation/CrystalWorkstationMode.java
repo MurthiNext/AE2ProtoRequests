@@ -8,7 +8,8 @@ import com.murthinext.ae2pr.registry.ModMachines;
 
 public enum CrystalWorkstationMode implements Mode {
 
-    ETCHING("etching"), CUTTING("cutting");
+    ETCHING("etching"),
+    CUTTING("cutting");
 
     private final String id;
 
@@ -29,6 +30,6 @@ public enum CrystalWorkstationMode implements Mode {
     @Override
     public RecipeType<MachineRecipe> recipeType() {
         return this == ETCHING ? ModMachines.CRYSTAL_WORKSTATION_ETCHING_RECIPE.type()
-                : ModMachines.CRYSTAL_WORKSTATION_CUTTING_RECIPE.type();
+                               : ModMachines.CRYSTAL_WORKSTATION_CUTTING_RECIPE.type();
     }
 }

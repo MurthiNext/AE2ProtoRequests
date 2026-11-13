@@ -2,11 +2,12 @@ package com.murthinext.ae2pr.network;
 
 import java.util.function.Supplier;
 
-import com.murthinext.ae2pr.registry.ModNetwork;
-import com.murthinext.ae2pr.item.proto_terminal.TerminalStorySavedData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
+
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStorySavedData;
+import com.murthinext.ae2pr.registry.ModNetwork;
 
 // 客户端 -> 服务端：请求本玩家在当前存档里的源始终端阅读进度
 public final class TerminalStoryRequestPacket {
@@ -31,8 +32,9 @@ public final class TerminalStoryRequestPacket {
             if (player == null) {
                 return;
             }
-            ModNetwork.sendToPlayer(player, new TerminalStorySyncPacket(
-                    TerminalStorySavedData.get(player.server).get(player.getUUID())));
+            ModNetwork.sendToPlayer(
+                    player,
+                    new TerminalStorySyncPacket(TerminalStorySavedData.get(player.server).get(player.getUUID())));
         });
         context.setPacketHandled(true);
     }

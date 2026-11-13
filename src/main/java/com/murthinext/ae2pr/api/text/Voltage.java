@@ -51,20 +51,20 @@ public enum Voltage {
 
     // 电路 Tooltip 行
     public MutableComponent circuit(int downgrade) {
-        MutableComponent label = Component.empty()
-                .append(MutableComponent.create(GradientText.gradient(name(), SPEED, colors)));
+        MutableComponent label = Component.empty().append(MutableComponent.create(GradientText.gradient(name(), SPEED,
+                                                                                                        colors)));
         if (downgrade > 0) {
             label.append(Component.literal("-" + downgrade).withStyle(style -> style.withColor(DOWNGRADE_COLOR)));
         }
         int accent = accent();
-        return label.append(Component.translatable("tooltip.ae2pr.circuit.suffix")
-                .withStyle(style -> style.withColor(accent)));
+        return label.append(
+                Component.translatable("tooltip.ae2pr.circuit.suffix").withStyle(style -> style.withColor(accent)));
     }
 
     public static MutableComponent name(String descriptionId) {
         Voltage voltage = of(descriptionId);
         return voltage == null ? Component.translatable(descriptionId)
-                : Component.translatable(descriptionId, voltage.label());
+                               : Component.translatable(descriptionId, voltage.label());
     }
 
     public static MutableComponent circuit(String tier) {

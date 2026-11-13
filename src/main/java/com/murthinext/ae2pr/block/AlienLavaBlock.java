@@ -51,7 +51,7 @@ public class AlienLavaBlock extends LiquidBlock implements WorldInteractionCatal
         FlowingFluid fluid = getFluid();
         if (level == 0) {
             return fluid.getSource(false).setValue(AlienLavaFluid.CONVERSIONS,
-                    state.getValue(AlienLavaFluid.CONVERSIONS));
+                                                   state.getValue(AlienLavaFluid.CONVERSIONS));
         }
         if (level >= 8) {
             return fluid.getFlowing(8, true);
@@ -87,7 +87,7 @@ public class AlienLavaBlock extends LiquidBlock implements WorldInteractionCatal
 
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos,
-            boolean isMoving) {
+                                boolean isMoving) {
         if (!FluidInteractionRegistry.canInteract(level, pos)) {
             level.scheduleTick(pos, state.getFluidState().getType(), getFluid().getTickDelay(level));
         }
@@ -95,15 +95,13 @@ public class AlienLavaBlock extends LiquidBlock implements WorldInteractionCatal
 
     @Override
     public int getRemainingInteractions(BlockState state) {
-        return state.getValue(LEVEL) == 0
-                ? AlienLavaFluid.MAX_CONVERSIONS - state.getValue(AlienLavaFluid.CONVERSIONS)
-                : 0;
+        return state.getValue(LEVEL) == 0 ? AlienLavaFluid.MAX_CONVERSIONS - state.getValue(AlienLavaFluid.CONVERSIONS)
+                                          : 0;
     }
 
     @Override
     public void consumeInteractions(Level level, BlockPos pos, BlockState state, int count) {
-        int conversions = Math.min(AlienLavaFluid.MAX_CONVERSIONS,
-                state.getValue(AlienLavaFluid.CONVERSIONS) + count);
+        int conversions = Math.min(AlienLavaFluid.MAX_CONVERSIONS, state.getValue(AlienLavaFluid.CONVERSIONS) + count);
         level.setBlockAndUpdate(pos, state.setValue(AlienLavaFluid.CONVERSIONS, conversions));
         if (conversions == AlienLavaFluid.MAX_CONVERSIONS) {
             level.scheduleTick(pos, this, 20);

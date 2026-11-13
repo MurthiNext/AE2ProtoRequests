@@ -1,11 +1,11 @@
 package com.murthinext.ae2pr.integration.jei.render;
 
+import org.joml.Quaternionf;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
-
-import org.joml.Quaternionf;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -47,8 +47,8 @@ public final class FluidBlockRendering {
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder builder = tesselator.getBuilder();
         builder.begin(renderType.mode(), renderType.format());
-        Minecraft.getInstance().getBlockRenderer().renderLiquid(BlockPos.ZERO,
-                new FakeWorld(fluidState), builder, fluidState.createLegacyBlock(), fluidState);
+        Minecraft.getInstance().getBlockRenderer().renderLiquid(BlockPos.ZERO, new FakeWorld(fluidState), builder,
+                                                                fluidState.createLegacyBlock(), fluidState);
         if (builder.building()) {
             tesselator.end();
         }
@@ -75,54 +75,54 @@ public final class FluidBlockRendering {
     private record FakeWorld(FluidState fluidState) implements BlockAndTintGetter {
 
         @Override
-            public float getShade(Direction direction, boolean shade) {
-                return 1.0f;
-            }
-
-            @Override
-            public LevelLightEngine getLightEngine() {
-                throw new UnsupportedOperationException();
-            }
-
-            @Override
-            public int getBrightness(LightLayer layer, BlockPos pos) {
-                return 15;
-            }
-
-            @Override
-            public int getRawBrightness(BlockPos pos, int ambientDarkness) {
-                return 15;
-            }
-
-            @Override
-            public int getBlockTint(BlockPos pos, ColorResolver colorResolver) {
-                var level = Minecraft.getInstance().level;
-                return level == null ? -1 : colorResolver.getColor(level.getBiome(pos).value(), 0, 0);
-            }
-
-            @Override
-            public BlockEntity getBlockEntity(BlockPos pos) {
-                return null;
-            }
-
-            @Override
-            public BlockState getBlockState(BlockPos pos) {
-                return BlockPos.ZERO.equals(pos) ? fluidState.createLegacyBlock() : Blocks.AIR.defaultBlockState();
-            }
-
-            @Override
-            public FluidState getFluidState(BlockPos pos) {
-                return BlockPos.ZERO.equals(pos) ? fluidState : Fluids.EMPTY.defaultFluidState();
-            }
-
-            @Override
-            public int getHeight() {
-                return 0;
-            }
-
-            @Override
-            public int getMinBuildHeight() {
-                return 0;
-            }
+        public float getShade(Direction direction, boolean shade) {
+            return 1.0f;
         }
+
+        @Override
+        public LevelLightEngine getLightEngine() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int getBrightness(LightLayer layer, BlockPos pos) {
+            return 15;
+        }
+
+        @Override
+        public int getRawBrightness(BlockPos pos, int ambientDarkness) {
+            return 15;
+        }
+
+        @Override
+        public int getBlockTint(BlockPos pos, ColorResolver colorResolver) {
+            var level = Minecraft.getInstance().level;
+            return level == null ? -1 : colorResolver.getColor(level.getBiome(pos).value(), 0, 0);
+        }
+
+        @Override
+        public BlockEntity getBlockEntity(BlockPos pos) {
+            return null;
+        }
+
+        @Override
+        public BlockState getBlockState(BlockPos pos) {
+            return BlockPos.ZERO.equals(pos) ? fluidState.createLegacyBlock() : Blocks.AIR.defaultBlockState();
+        }
+
+        @Override
+        public FluidState getFluidState(BlockPos pos) {
+            return BlockPos.ZERO.equals(pos) ? fluidState : Fluids.EMPTY.defaultFluidState();
+        }
+
+        @Override
+        public int getHeight() {
+            return 0;
+        }
+
+        @Override
+        public int getMinBuildHeight() {
+            return 0;
+        }
+    }
 }

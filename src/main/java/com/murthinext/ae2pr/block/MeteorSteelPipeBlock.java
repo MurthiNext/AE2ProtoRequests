@@ -18,10 +18,10 @@ public class MeteorSteelPipeBlock extends Block implements Wrenchable {
 
     public MeteorSteelPipeBlock() {
         super(Properties.of()
-                .mapColor(MapColor.METAL)
-                .strength(3.5F)
-                .sound(SoundType.METAL)
-                .requiresCorrectToolForDrops());
+                      .mapColor(MapColor.METAL)
+                      .strength(3.5F)
+                      .sound(SoundType.METAL)
+                      .requiresCorrectToolForDrops());
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 

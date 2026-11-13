@@ -1,10 +1,11 @@
 package com.murthinext.ae2pr.requester.network;
 
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
-import java.util.function.Supplier;
+
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkEvent;
 
 public abstract class ClientToServerPacket<T> implements Packet<T> {
 

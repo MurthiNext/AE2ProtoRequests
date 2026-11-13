@@ -2,12 +2,13 @@ package com.murthinext.ae2pr.item.collapsed_storage_cell;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.murthinext.ae2pr.registry.ModItems;
+import net.minecraft.world.item.ItemStack;
 
 import appeng.api.storage.cells.ICellHandler;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
-import net.minecraft.world.item.ItemStack;
+
+import com.murthinext.ae2pr.registry.ModItems;
 
 public class CollapsedItemStorageCellHandler implements ICellHandler {
 

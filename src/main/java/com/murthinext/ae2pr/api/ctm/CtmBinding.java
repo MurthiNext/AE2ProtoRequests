@@ -24,8 +24,8 @@ public interface CtmBinding {
 
     // 整面替换外观；返回 null 表示走通用连接纹理
     @Nullable
-    default List<BakedQuad> appearance(List<BakedQuad> quads, @Nullable Direction side,
-            BlockAndTintGetter level, BlockPos pos) {
+    default List<BakedQuad> appearance(List<BakedQuad> quads, @Nullable Direction side, BlockAndTintGetter level,
+                                       BlockPos pos) {
         return null;
     }
 
@@ -34,6 +34,5 @@ public interface CtmBinding {
         return null;
     }
 
-    record Retarget(TextureAtlasSprite from, TextureAtlasSprite to) {
-    }
+    record Retarget(TextureAtlasSprite from, TextureAtlasSprite to) {}
 }

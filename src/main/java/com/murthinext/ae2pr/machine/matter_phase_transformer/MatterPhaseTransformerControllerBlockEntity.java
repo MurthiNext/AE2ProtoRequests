@@ -4,8 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.registry.ModMachines;
 
 public class MatterPhaseTransformerControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
@@ -23,8 +23,7 @@ public class MatterPhaseTransformerControllerBlockEntity extends AbstractMultibl
     @Override
     public AABB getRenderBoundingBox() {
         BlockPos core = getCorePos();
-        return new AABB(core.getX(), core.getY() - 3, core.getZ(),
-                core.getX() + 1, core.getY() + 4, core.getZ() + 1);
+        return new AABB(core.getX(), core.getY() - 3, core.getZ(), core.getX() + 1, core.getY() + 4, core.getZ() + 1);
     }
 
     // 客户端动画

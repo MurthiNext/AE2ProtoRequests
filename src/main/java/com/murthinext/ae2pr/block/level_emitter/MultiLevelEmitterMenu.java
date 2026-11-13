@@ -11,19 +11,23 @@ public class MultiLevelEmitterMenu extends AbstractMultiLevelEmitterMenu<MultiLe
 
     private static final String ACTION_SET_REPORTING_VALUE = "setReportingValue";
 
-    public static final MenuType<MultiLevelEmitterMenu> TYPE = MenuTypeBuilder
-            .create(MultiLevelEmitterMenu::new, MultiLevelEmitterPart.class)
-            .withMenuTitle(host -> Component.translatable("gui.ae2pr.multi_level_emitter"))
-            .withInitialData((host, buffer) -> {
-                GenericStack.writeBuffer(host.getConfig().getStack(0), buffer);
-                buffer.writeVarLong(host.getReportingValue());
-            }, (host, menu, buffer) -> menu.loadValues(GenericStack.readBuffer(buffer), buffer.readVarLong()))
-            .build("multi_level_emitter");
+    public static final MenuType<MultiLevelEmitterMenu>
+            TYPE = MenuTypeBuilder.create(MultiLevelEmitterMenu::new, MultiLevelEmitterPart.class)
+                           .withMenuTitle(host -> Component.translatable("gui.ae2pr.multi_level_emitter"))
+                           .withInitialData(
+                                   (host, buffer)
+                                           -> {
+                                       GenericStack.writeBuffer(host.getConfig().getStack(0), buffer);
+                                       buffer.writeVarLong(host.getReportingValue());
+                                   },
+                                   (host, menu,
+                                    buffer) -> menu.loadValues(GenericStack.readBuffer(buffer), buffer.readVarLong()))
+                           .build("multi_level_emitter");
 
     private long currentValue;
 
     public MultiLevelEmitterMenu(MenuType<MultiLevelEmitterMenu> menuType, int id, Inventory ip,
-            MultiLevelEmitterPart host) {
+                                 MultiLevelEmitterPart host) {
         super(menuType, id, ip, host);
         registerClientAction(ACTION_SET_REPORTING_VALUE, Long.class, this::setValue);
     }

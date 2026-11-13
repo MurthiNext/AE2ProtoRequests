@@ -9,8 +9,8 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 
-import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.ae2pr.network.NamingFactoryRenamePacket;
+import com.murthinext.ae2pr.registry.ModNetwork;
 
 public class NamingFactoryRenameScreen extends Screen {
 
@@ -39,7 +39,7 @@ public class NamingFactoryRenameScreen extends Screen {
         int left = (width - PANEL_WIDTH) / 2;
         int top = (height - PANEL_HEIGHT) / 2;
         nameBox = new EditBox(font, left + (PANEL_WIDTH - EDIT_WIDTH) / 2, top + 34, EDIT_WIDTH, EDIT_HEIGHT,
-                Component.translatable("screen.ae2pr.naming_factory.rename.title"));
+                              Component.translatable("screen.ae2pr.naming_factory.rename.title"));
         nameBox.setMaxLength(64);
         nameBox.setValue(initialName);
         nameBox.setHint(Component.translatable("screen.ae2pr.naming_factory.rename.hint"));
@@ -58,8 +58,8 @@ public class NamingFactoryRenameScreen extends Screen {
         graphics.fill(left, top, left + PANEL_WIDTH, top + PANEL_HEIGHT, 0xFF2B2F3A);
 
         graphics.drawCenteredString(font, title, width / 2, top + 12, 0xFF55FFFF);
-        graphics.drawCenteredString(font, Component.translatable("screen.ae2pr.naming_factory.rename.tip"),
-                width / 2, top + 66, 0xFFAAB8C6);
+        graphics.drawCenteredString(font, Component.translatable("screen.ae2pr.naming_factory.rename.tip"), width / 2,
+                                    top + 66, 0xFFAAB8C6);
 
         super.render(graphics, mouseX, mouseY, partialTick);
     }

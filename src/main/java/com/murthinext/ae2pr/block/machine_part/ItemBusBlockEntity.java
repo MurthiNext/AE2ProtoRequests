@@ -16,8 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -222,9 +222,9 @@ public class ItemBusBlockEntity extends BlockEntity implements MachinePart {
     }
 
     public boolean isOutputBus() {
-        return getBlockState().is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get())
-                || getBlockState().is(ModBlocks.AEV_OUTPUT_BUS.get())
-                || getBlockState().is(ModBlocks.AEV_DUAL_OUTPUT_HATCH.get());
+        return getBlockState().is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()) ||
+                getBlockState().is(ModBlocks.AEV_OUTPUT_BUS.get()) ||
+                getBlockState().is(ModBlocks.AEV_DUAL_OUTPUT_HATCH.get());
     }
 
     public boolean isAutoTransfer() {
@@ -255,8 +255,7 @@ public class ItemBusBlockEntity extends BlockEntity implements MachinePart {
         if (target == null) {
             return;
         }
-        IItemHandler handler = target.getCapability(ForgeCapabilities.ITEM_HANDLER, facing.getOpposite())
-                .orElse(null);
+        IItemHandler handler = target.getCapability(ForgeCapabilities.ITEM_HANDLER, facing.getOpposite()).orElse(null);
         if (handler == null) {
             return;
         }

@@ -1,7 +1,5 @@
 package com.murthinext.ae2pr.api.machine.client;
 
-import com.murthinext.ae2pr.api.Ids;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +19,10 @@ import net.minecraft.world.level.ItemLike;
 import appeng.api.upgrades.Upgrades;
 import appeng.core.localization.GuiText;
 
-public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> extends AbstractContainerScreen<M>
-        implements GuiExtraAreas {
+import com.murthinext.ae2pr.api.Ids;
+
+public abstract class AbstractMachineScreen<M extends AbstractContainerMenu>
+        extends AbstractContainerScreen<M> implements GuiExtraAreas {
 
     protected static final int WIDTH = 176;
     protected static final int HEIGHT = 200;
@@ -87,7 +87,7 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
     }
 
     protected static ResourceLocation texture(String path) {
-        return Ids.of( "textures/gui/" + path + ".png");
+        return Ids.of("textures/gui/" + path + ".png");
     }
 
     protected abstract ResourceLocation guidePage();
@@ -101,10 +101,10 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
     public List<Rect2i> getGuiExtraAreas() {
         List<Rect2i> areas = new ArrayList<>(2);
         areas.add(new Rect2i(leftPos + TOOLBAR_X, topPos + TOOLBAR_Y, TOOLBAR_WIDTH,
-                toolbarButtons() * TOOLBAR_ROW_STEP + 2));
+                             toolbarButtons() * TOOLBAR_ROW_STEP + 2));
         if (upgradeMachine() != null) {
             areas.add(new Rect2i(leftPos + UPGRADE_PANEL_X, topPos + UPGRADE_PANEL_Y, TOOLBAR_WIDTH,
-                    UPGRADE_SLOTS * UPGRADE_SLOT_STEP + 2));
+                                 UPGRADE_SLOTS * UPGRADE_SLOT_STEP + 2));
         }
         return areas;
     }
@@ -125,7 +125,7 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
     protected void init() {
         super.init();
         guideButton = new GuideButton(leftPos + TOOLBAR_X + 1, topPos + TOOLBAR_Y + 1,
-                () -> GuideOpener.open(guidePage()));
+                                      () -> GuideOpener.open(guidePage()));
         addRenderableWidget(guideButton);
     }
 
@@ -160,9 +160,9 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
         int y = topPos + SEPARATOR_Y;
         graphics.fill(leftPos + SEPARATOR_LEFT, y, leftPos + imageWidth - SEPARATOR_RIGHT, y + 1, COLOR_SEPARATOR);
         graphics.fill(leftPos + SEPARATOR_LEFT, y, leftPos + SEPARATOR_LEFT + SEPARATOR_ACCENT_WIDTH, y + 1,
-                separatorAccent());
+                      separatorAccent());
         graphics.fill(leftPos + SEPARATOR_LEFT, y + 1, leftPos + SEPARATOR_LEFT + SEPARATOR_ACCENT_WIDTH, y + 2,
-                separatorAccentDark());
+                      separatorAccentDark());
     }
 
     protected void drawSlot(GuiGraphics graphics, int x, int y) {
@@ -194,8 +194,8 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
         drawProgressBar(graphics, x, y, BAR_WIDTH, BAR_HEIGHT, progress, true);
     }
 
-    protected void drawProgressBar(GuiGraphics graphics, int x, int y, int width, int height,
-            float progress, boolean vertical) {
+    protected void drawProgressBar(GuiGraphics graphics, int x, int y, int width, int height, float progress,
+                                   boolean vertical) {
         int grooveU = vertical ? BAR_GROOVE_V_U : BAR_GROOVE_H_U;
         int grooveV = vertical ? BAR_GROOVE_V_V : BAR_GROOVE_H_V;
         graphics.blit(PROGRESS_BAR_TEXTURE, x, y, grooveU, grooveV, width, height, BAR_TEX_WIDTH, BAR_TEX_HEIGHT);
@@ -210,11 +210,11 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
         int fillV = vertical ? BAR_FILL_V_V : BAR_FILL_H_V;
         if (vertical) {
             fillV += innerLength - filled;
-            graphics.blit(PROGRESS_BAR_TEXTURE, x + 1, y + 1 + innerLength - filled, fillU, fillV,
-                    innerThickness, filled, BAR_TEX_WIDTH, BAR_TEX_HEIGHT);
+            graphics.blit(PROGRESS_BAR_TEXTURE, x + 1, y + 1 + innerLength - filled, fillU, fillV, innerThickness,
+                          filled, BAR_TEX_WIDTH, BAR_TEX_HEIGHT);
         } else {
-            graphics.blit(PROGRESS_BAR_TEXTURE, x + 1, y + 1, fillU, fillV,
-                    filled, innerThickness, BAR_TEX_WIDTH, BAR_TEX_HEIGHT);
+            graphics.blit(PROGRESS_BAR_TEXTURE, x + 1, y + 1, fillU, fillV, filled, innerThickness, BAR_TEX_WIDTH,
+                          BAR_TEX_HEIGHT);
         }
     }
 

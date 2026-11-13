@@ -18,20 +18,19 @@ public final class ModFluids {
     private ModFluids() {
     }
 
-    public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister
-            .create(ForgeRegistries.Keys.FLUID_TYPES, ae2pr.MODID);
+    public static final DeferredRegister<FluidType> FLUID_TYPES = DeferredRegister.create(
+            ForgeRegistries.Keys.FLUID_TYPES, ae2pr.MODID);
 
-    public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister
-            .create(ForgeRegistries.FLUIDS, ae2pr.MODID);
+    public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS, ae2pr.MODID);
 
     public static final RegistryObject<FluidType> ALIEN_LAVA_TYPE = FLUID_TYPES.register("alien_lava",
-            AlienLavaFluidType::new);
+                                                                                         AlienLavaFluidType::new);
 
-    public static final RegistryObject<ForgeFlowingFluid> ALIEN_LAVA = FLUIDS.register("alien_lava",
-            () -> new AlienLavaFluid.Source(alienLavaProperties()));
+    public static final RegistryObject<ForgeFlowingFluid> ALIEN_LAVA = FLUIDS.register(
+            "alien_lava", () -> new AlienLavaFluid.Source(alienLavaProperties()));
 
-    public static final RegistryObject<ForgeFlowingFluid> FLOWING_ALIEN_LAVA = FLUIDS.register("flowing_alien_lava",
-            () -> new AlienLavaFluid.Flowing(alienLavaProperties()));
+    public static final RegistryObject<ForgeFlowingFluid> FLOWING_ALIEN_LAVA = FLUIDS.register(
+            "flowing_alien_lava", () -> new AlienLavaFluid.Flowing(alienLavaProperties()));
 
     private static ForgeFlowingFluid.Properties alienLavaProperties() {
         return new ForgeFlowingFluid.Properties(ALIEN_LAVA_TYPE, ALIEN_LAVA, FLOWING_ALIEN_LAVA)
@@ -43,9 +42,11 @@ public final class ModFluids {
                 .explosionResistance(100.0F);
     }
 
-    public static final FluidSet COARSE_METEORITE_SLURRY = FluidSet.of("coarse_meteorite_slurry", FLUID_TYPES, FLUIDS,
-            ModItems.ITEMS, () -> SimpleFluidType.waterLike("coarse_meteorite_slurry", 0, 3000, 8000, 350));
+    public static final FluidSet COARSE_METEORITE_SLURRY = FluidSet.of(
+            "coarse_meteorite_slurry", FLUID_TYPES, FLUIDS, ModItems.ITEMS,
+            () -> SimpleFluidType.waterLike("coarse_meteorite_slurry", 0, 3000, 8000, 350));
 
-    public static final FluidSet COARSE_METEORITE_SOLUTION = FluidSet.of("coarse_meteorite_solution", FLUID_TYPES,
-            FLUIDS, ModItems.ITEMS, () -> SimpleFluidType.waterLike("coarse_meteorite_solution", 0, 1600, 2200, 310));
+    public static final FluidSet COARSE_METEORITE_SOLUTION = FluidSet.of(
+            "coarse_meteorite_solution", FLUID_TYPES, FLUIDS, ModItems.ITEMS,
+            () -> SimpleFluidType.waterLike("coarse_meteorite_solution", 0, 1600, 2200, 310));
 }

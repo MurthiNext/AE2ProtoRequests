@@ -35,9 +35,8 @@ public final class ClientCtm {
     @SubscribeEvent
     public static void onModifyBakingResult(ModelEvent.ModifyBakingResult event) {
         for (var entry : event.getModels().entrySet()) {
-            if (entry.getKey() instanceof ModelResourceLocation id
-                    && ae2pr.MODID.equals(id.getNamespace())
-                    && !(entry.getValue() instanceof CtmBakedModel)) {
+            if (entry.getKey() instanceof ModelResourceLocation id && ae2pr.MODID.equals(id.getNamespace()) &&
+                !(entry.getValue() instanceof CtmBakedModel)) {
                 entry.setValue(new CtmBakedModel(entry.getValue(), MachineCtm.INSTANCE));
             }
         }

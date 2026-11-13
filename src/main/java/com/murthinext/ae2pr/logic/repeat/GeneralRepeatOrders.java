@@ -10,8 +10,9 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.murthinext.ae2pr.ServerConfig;
-import com.murthinext.ae2pr.ae2pr;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 
 import appeng.api.features.IPlayerRegistry;
 import appeng.api.networking.IGrid;
@@ -21,9 +22,9 @@ import appeng.api.networking.crafting.ICraftingPlan;
 import appeng.api.networking.crafting.ICraftingSubmitResult;
 import appeng.api.stacks.AEKey;
 import appeng.core.sync.packets.CraftingJobStatusPacket;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.server.ServerStoppedEvent;
+
+import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.ae2pr;
 
 // 通用重复订单管理器，接管 VCPU 型 CPU
 public final class GeneralRepeatOrders {
@@ -38,7 +39,7 @@ public final class GeneralRepeatOrders {
 
     // 状态包构造时暂存参数（Mixin 调用）
     public static void observeConstruction(UUID jobId, AEKey what, long requestedAmount,
-            CraftingJobStatusPacket.Status status) {
+                                           CraftingJobStatusPacket.Status status) {
         PENDING_STATUS.set(new PendingStatus(jobId, what, requestedAmount, status));
     }
 
@@ -96,15 +97,15 @@ public final class GeneralRepeatOrders {
     }
 
     public static void onJobStatus(ServerPlayer player, UUID jobId, AEKey what, long requestedAmount,
-            CraftingJobStatusPacket.Status status) {
+                                   CraftingJobStatusPacket.Status status) {
         if (status == null) {
             return;
         }
         var playerId = IPlayerRegistry.getPlayerId(player);
         switch (status) {
-            case STARTED -> onStarted(playerId, jobId, what, requestedAmount);
-            case FINISHED -> onFinished(playerId, jobId, what, requestedAmount);
-            case CANCELLED -> onCancelled(playerId, jobId, what, requestedAmount);
+        case STARTED -> onStarted(playerId, jobId, what, requestedAmount);
+        case FINISHED -> onFinished(playerId, jobId, what, requestedAmount);
+        case CANCELLED -> onCancelled(playerId, jobId, what, requestedAmount);
         }
     }
 
@@ -132,9 +133,8 @@ public final class GeneralRepeatOrders {
         order.jobId = null;
         order.completedRounds++;
         order.retryCount = 0;
-        order.state = order.completedRounds >= order.totalRounds
-                ? RepeatOrderState.DONE
-                : RepeatOrderState.PENDING_NEXT;
+        order.state = order.completedRounds >= order.totalRounds ? RepeatOrderState.DONE
+                                                                 : RepeatOrderState.PENDING_NEXT;
     }
 
     private static void onCancelled(int playerId, UUID jobId, AEKey what, long requestedAmount) {
@@ -154,7 +154,7 @@ public final class GeneralRepeatOrders {
         if (order.state == RepeatOrderState.DONE) {
             // 延迟到 tick 末尾发送，原生完成包先到
             RepeatOrderNotifier.sendFinished(order.ownerPlayerId, order.level, order.what, order.amountPerRound,
-                    order.totalRounds);
+                                             order.totalRounds);
             return false;
         }
         if (order.state == RepeatOrderState.CANCELLED || order.state == RepeatOrderState.FAILED) {
@@ -165,20 +165,20 @@ public final class GeneralRepeatOrders {
             order.notifyCooldownTicks = 20;
             if (order.state == RepeatOrderState.RUNNING || order.state == RepeatOrderState.PENDING_NEXT) {
                 RepeatOrderNotifier.sendRound(order.ownerPlayerId, order.level, order.what, order.totalRounds,
-                        order.totalRounds - order.completedRounds);
+                                              order.totalRounds - order.completedRounds);
             }
         }
 
         switch (order.state) {
-            case PENDING_NEXT -> beginRecalc(order);
-            case PLANNING -> pollRecalc(order);
-            case RETRY_WAIT -> {
-                if (--order.retryCooldownTicks <= 0) {
-                    beginRecalc(order);
-                }
+        case PENDING_NEXT -> beginRecalc(order);
+        case PLANNING -> pollRecalc(order);
+        case RETRY_WAIT -> {
+            if (--order.retryCooldownTicks <= 0) {
+                beginRecalc(order);
             }
-            default -> {
-            }
+        }
+        default -> {
+        }
         }
         return true;
     }
@@ -190,8 +190,8 @@ public final class GeneralRepeatOrders {
         }
         order.jobId = null;
         try {
-            order.recalc = order.grid.getCraftingService().beginCraftingCalculation(order.level,
-                    () -> order.source, order.what, order.amountPerRound, CalculationStrategy.CRAFT_LESS);
+            order.recalc = order.grid.getCraftingService().beginCraftingCalculation(
+                    order.level, () -> order.source, order.what, order.amountPerRound, CalculationStrategy.CRAFT_LESS);
             order.state = RepeatOrderState.PLANNING;
         } catch (Throwable t) {
             ae2pr.LOGGER.warn("Failed to recalculate generic repeat order plan", t);
@@ -247,7 +247,7 @@ public final class GeneralRepeatOrders {
             order.state = RepeatOrderState.RUNNING;
             updateDisplayCpu(order, busyBefore);
             RepeatOrderNotifier.sendRound(order.ownerPlayerId, order.level, order.what, order.totalRounds,
-                    order.totalRounds - order.completedRounds);
+                                          order.totalRounds - order.completedRounds);
             order.notifyCooldownTicks = 20;
         } else {
             retryOrFail(order, FailureReason.fromCode(result != null ? result.errorCode() : null));
@@ -257,12 +257,12 @@ public final class GeneralRepeatOrders {
     private static void retryOrFail(GeneralRepeatOrder order, FailureReason reason) {
         order.recalc = null;
         if (++order.retryCount > ServerConfig.retryCount()) {
-            ae2pr.LOGGER.info("Generic repeat order failed: {}x{} after {} retries (reason: {})",
-                    order.amountPerRound, order.what, order.retryCount - 1, reason);
+            ae2pr.LOGGER.info("Generic repeat order failed: {}x{} after {} retries (reason: {})", order.amountPerRound,
+                              order.what, order.retryCount - 1, reason);
             order.state = RepeatOrderState.FAILED;
             RepeatOrderNotifier.sendRound(order.ownerPlayerId, order.level, order.what, order.totalRounds, 0);
             RepeatOrderNotifier.sendFailure(order.ownerPlayerId, order.level, order.what, order.amountPerRound,
-                    order.totalRounds, order.completedRounds, reason);
+                                            order.totalRounds, order.completedRounds, reason);
             return;
         }
         order.retryCooldownTicks = ServerConfig.retryIntervalTicks();
@@ -273,8 +273,8 @@ public final class GeneralRepeatOrders {
     private static GeneralRepeatOrder findRunning(int playerId, UUID jobId, AEKey what, long requestedAmount) {
         GeneralRepeatOrder fallback = null;
         for (var order : ORDERS) {
-            if (order.state != RepeatOrderState.RUNNING
-                    || order.ownerPlayerId == null || order.ownerPlayerId != playerId) {
+            if (order.state != RepeatOrderState.RUNNING || order.ownerPlayerId == null ||
+                order.ownerPlayerId != playerId) {
                 continue;
             }
             if (jobId != null && jobId.equals(order.jobId)) {
@@ -336,11 +336,9 @@ public final class GeneralRepeatOrders {
     }
 
     // 状态界面展示信息
-    public record RoundInfo(int round, int total) {
-    }
+    public record RoundInfo(int round, int total) {}
 
     // 发送用状态包构造时暂存的参数
     public record PendingStatus(UUID jobId, @Nullable AEKey what, long requestedAmount,
-            CraftingJobStatusPacket.Status status) {
-    }
+                                CraftingJobStatusPacket.Status status) {}
 }

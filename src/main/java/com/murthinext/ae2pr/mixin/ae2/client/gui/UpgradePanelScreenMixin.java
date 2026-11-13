@@ -11,8 +11,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
-import com.murthinext.ae2pr.mixin.ae2.accessor.WidgetContainerAccessor;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.level.ItemLike;
 
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.Upgrades;
@@ -23,9 +24,9 @@ import appeng.client.gui.widgets.UpgradesPanel;
 import appeng.core.localization.GuiText;
 import appeng.menu.SlotSemantics;
 import appeng.menu.slot.AppEngSlot;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.level.ItemLike;
+
+import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import com.murthinext.ae2pr.mixin.ae2.accessor.WidgetContainerAccessor;
 
 // 所有受管机器界面：样式已声明 upgrades 锚点时补出升级面板，已有同名控件则复用
 @Mixin(value = AEBaseScreen.class, priority = 500, remap = false)
@@ -67,8 +68,8 @@ public abstract class UpgradePanelScreenMixin {
     @Unique
     private static IUpgradeInventory ae2pr$upgrades(List<Slot> slots) {
         for (Slot slot : slots) {
-            if (slot instanceof AppEngSlot appEngSlot
-                    && appEngSlot.getInventory() instanceof IUpgradeInventory inventory) {
+            if (slot instanceof AppEngSlot appEngSlot &&
+                appEngSlot.getInventory() instanceof IUpgradeInventory inventory) {
                 return inventory;
             }
         }

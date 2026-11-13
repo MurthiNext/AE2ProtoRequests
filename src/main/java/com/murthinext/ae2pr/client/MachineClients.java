@@ -4,8 +4,6 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.registry.ModGuide;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -16,18 +14,20 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 
 import appeng.core.definitions.AEBlocks;
 
-import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.client.sound.MachineProcessingSounds;
-import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
+import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.MachineDefinition;
 import com.murthinext.ae2pr.api.machine.Mode;
-import com.murthinext.ae2pr.api.machine.client.MachineStyle;
-import com.murthinext.ae2pr.api.machine.client.MachineStyles;
+import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
+import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 import com.murthinext.ae2pr.api.machine.client.GuideOpener;
 import com.murthinext.ae2pr.api.machine.client.MachineModeButton;
 import com.murthinext.ae2pr.api.machine.client.MachineScreen;
-import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
+import com.murthinext.ae2pr.api.machine.client.MachineStyle;
+import com.murthinext.ae2pr.api.machine.client.MachineStyles;
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
+import com.murthinext.ae2pr.client.sound.MachineProcessingSounds;
 import com.murthinext.ae2pr.machine.crystal_reaction_chamber.CrystalReactionChamberRenderer;
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationMode;
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationRenderer;
@@ -40,8 +40,8 @@ import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryMode;
 import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryRenderer;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryRenderer;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryScreen;
-import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
+import com.murthinext.ae2pr.registry.ModGuide;
+import com.murthinext.ae2pr.registry.ModMachines;
 
 public final class MachineClients {
 
@@ -54,45 +54,62 @@ public final class MachineClients {
         MachineStyles.install(STYLES::get);
         GuideOpener.install(ModGuide::openAt);
         register(ModMachines.FILTER_PRESS, Style.crystal(ModGuide.FILTER_PRESS_PAGE, 0x9CD3FF), MachineScreen::new,
-                controller -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.FILTER_PRESS));
+                 controller -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.FILTER_PRESS));
         register(ModMachines.JIG, Style.crystal(ModGuide.JIG_PAGE, 0x9CD3FF), MachineScreen::new,
-                controller -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.JIG));
-        register(ModMachines.CRYSTAL_REACTION_CHAMBER,
-                Style.crystal(ModGuide.CRYSTAL_REACTION_CHAMBER_PAGE, 0x8EE6E0), MachineScreen::new,
-                controller -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.CRYSTAL_REACTION));
-        register(ModMachines.CRYSTAL_ASSEMBLY_LINE,
-                Style.crystal(ModGuide.CRYSTAL_ASSEMBLY_LINE_PAGE, 0x55FFFF), MachineScreen::new,
-                controller -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.CRYSTAL_ASSEMBLY_LINE));
-        register(ModMachines.MATTER_PHASE_TRANSFORMER,
-                Style.ember(ModGuide.MATTER_PHASE_TRANSFORMER_PAGE, 0xFFC46B), MachineScreen::new, controller -> {
-                    controller.clientTick();
-                    MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.MATTER_PHASE_TRANSFORMER);
-                });
-        register(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER,
+                 controller -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.JIG));
+        register(ModMachines.CRYSTAL_REACTION_CHAMBER, Style.crystal(ModGuide.CRYSTAL_REACTION_CHAMBER_PAGE, 0x8EE6E0),
+                 MachineScreen::new,
+                 controller -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.CRYSTAL_REACTION));
+        register(ModMachines.CRYSTAL_ASSEMBLY_LINE, Style.crystal(ModGuide.CRYSTAL_ASSEMBLY_LINE_PAGE, 0x55FFFF),
+                 MachineScreen::new,
+                 controller
+                 -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.CRYSTAL_ASSEMBLY_LINE));
+        register(ModMachines.MATTER_PHASE_TRANSFORMER, Style.ember(ModGuide.MATTER_PHASE_TRANSFORMER_PAGE, 0xFFC46B),
+                 MachineScreen::new, controller -> {
+                     controller.clientTick();
+                     MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.MATTER_PHASE_TRANSFORMER);
+                 });
+        register(
+                ModMachines.HIGH_REACTIVITY_LAVA_SMELTER,
                 Style.ember(ModGuide.HIGH_REACTIVITY_LAVA_SMELTER_PAGE, 0xFFC46B), HighReactivityLavaSmelterScreen::new,
-                controller -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.HIGH_REACTIVITY_LAVA_SMELTER));
+                controller
+                -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.HIGH_REACTIVITY_LAVA_SMELTER));
         register(ModMachines.CRYSTAL_WORKSTATION,
-                Style.crystal(ModGuide.CRYSTAL_WORKSTATION_PAGE, 0x8EE6E0).withModeIcons(Map.of(
-                        CrystalWorkstationMode.ETCHING, new MachineModeButton.TextureIcon(Ids.of("textures/gui/etching.png")),
-                        CrystalWorkstationMode.CUTTING, new MachineModeButton.TextureIcon(Ids.of("textures/gui/cutting.png"))
-                )), MachineScreen::new, controller -> {
-                    CrystalWorkstationShell.update(controller);
-                    MachineProcessingSounds.tick(controller, controller.getMode() == CrystalWorkstationMode.ETCHING
-                            ? MachineProcessingSounds.Type.CRYSTAL_WORKSTATION_ETCHING
-                            : MachineProcessingSounds.Type.CRYSTAL_WORKSTATION_CUTTING);
-                });
-        register(ModMachines.MULTI_FACTORY, Style.crystal(ModGuide.MULTI_FACTORY_PAGE, 0xCDA6F0).withModeIcons(Map.of(
-                        MultiFactoryMode.INSCRIBING, new MachineModeButton.ItemIcon(new ItemStack(AEBlocks.INSCRIBER.block())),
-                        MultiFactoryMode.CHARGING, new MachineModeButton.ItemIcon(new ItemStack(AEBlocks.CHARGER.block())))), MachineScreen::new,
-                controller -> MachineProcessingSounds.tick(controller, controller.getMode() == MultiFactoryMode.INSCRIBING
-                        ? MachineProcessingSounds.Type.MULTI_FACTORY_INSCRIBING : MachineProcessingSounds.Type.MULTI_FACTORY_CHARGING));
+                 Style.crystal(ModGuide.CRYSTAL_WORKSTATION_PAGE, 0x8EE6E0)
+                         .withModeIcons(Map.of(CrystalWorkstationMode.ETCHING,
+                                               new MachineModeButton.TextureIcon(Ids.of("textures/gui/etching.png")),
+                                               CrystalWorkstationMode.CUTTING,
+                                               new MachineModeButton.TextureIcon(Ids.of("textures/gui/cutting.png")))),
+                 MachineScreen::new, controller -> {
+                     CrystalWorkstationShell.update(controller);
+                     MachineProcessingSounds.tick(controller,
+                                                  controller.getMode() == CrystalWorkstationMode.ETCHING
+                                                          ? MachineProcessingSounds.Type.CRYSTAL_WORKSTATION_ETCHING
+                                                          : MachineProcessingSounds.Type.CRYSTAL_WORKSTATION_CUTTING);
+                 });
+        register(
+                ModMachines.MULTI_FACTORY,
+                Style.crystal(ModGuide.MULTI_FACTORY_PAGE, 0xCDA6F0)
+                        .withModeIcons(Map.of(MultiFactoryMode.INSCRIBING,
+                                              new MachineModeButton.ItemIcon(new ItemStack(AEBlocks.INSCRIBER.block())),
+                                              MultiFactoryMode.CHARGING,
+                                              new MachineModeButton.ItemIcon(new ItemStack(AEBlocks.CHARGER.block())))),
+                MachineScreen::new,
+                controller
+                -> MachineProcessingSounds.tick(controller,
+                                                controller.getMode() == MultiFactoryMode.INSCRIBING
+                                                        ? MachineProcessingSounds.Type.MULTI_FACTORY_INSCRIBING
+                                                        : MachineProcessingSounds.Type.MULTI_FACTORY_CHARGING));
         MenuScreens.register(ModMachines.NAMING_FACTORY.menuType(), NamingFactoryScreen::new);
         STYLES.put(ModMachines.NAMING_FACTORY, Style.crystal(ModGuide.NAMING_FACTORY_PAGE, 0x55FFFF));
     }
 
-    private static <E extends AbstractMultiblockControllerBlockEntity, M extends AbstractMultiblockControllerMenu<E>>
-            void register(MultiblockMachineDefinition<E, M> definition, Style style, ScreenFactory<M> screenFactory,
-                    Consumer<E> clientTicker) {
+    private static <E extends AbstractMultiblockControllerBlockEntity, M
+                            extends AbstractMultiblockControllerMenu<E>> void register(MultiblockMachineDefinition<E, M>
+                                                                                               definition,
+                                                                                       Style style,
+                                                                                       ScreenFactory<M> screenFactory,
+                                                                                       Consumer<E> clientTicker) {
         STYLES.put(definition, style);
         definition.clientTicker(clientTicker);
         MenuScreens.register(definition.menuType(), screenFactory::create);
@@ -108,28 +125,32 @@ public final class MachineClients {
 
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModMachines.NAMING_FACTORY.blockEntityType(), NamingFactoryRenderer::new);
-        event.registerBlockEntityRenderer(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.blockEntityType(), HighReactivityLavaSmelterRenderer::new);
-        event.registerBlockEntityRenderer(ModMachines.MATTER_PHASE_TRANSFORMER.blockEntityType(), MatterPhaseTransformerRenderer::new);
-        event.registerBlockEntityRenderer(ModMachines.CRYSTAL_REACTION_CHAMBER.blockEntityType(), CrystalReactionChamberRenderer::new);
-        event.registerBlockEntityRenderer(ModMachines.CRYSTAL_WORKSTATION.blockEntityType(), CrystalWorkstationRenderer::new);
+        event.registerBlockEntityRenderer(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.blockEntityType(),
+                                          HighReactivityLavaSmelterRenderer::new);
+        event.registerBlockEntityRenderer(ModMachines.MATTER_PHASE_TRANSFORMER.blockEntityType(),
+                                          MatterPhaseTransformerRenderer::new);
+        event.registerBlockEntityRenderer(ModMachines.CRYSTAL_REACTION_CHAMBER.blockEntityType(),
+                                          CrystalReactionChamberRenderer::new);
+        event.registerBlockEntityRenderer(ModMachines.CRYSTAL_WORKSTATION.blockEntityType(),
+                                          CrystalWorkstationRenderer::new);
         event.registerBlockEntityRenderer(ModMachines.JIG.blockEntityType(), JigRenderer::new);
         event.registerBlockEntityRenderer(ModMachines.MULTI_FACTORY.blockEntityType(), MultiFactoryRenderer::new);
     }
 
     public record Style(ResourceLocation guidePage, int titleColor, int accent, int accentDark,
-            Map<Mode, MachineModeButton.Icon> modeIcons) implements MachineStyle {
+                        Map<Mode, MachineModeButton.Icon> modeIcons) implements MachineStyle {
         public Style {
             modeIcons = Map.copyOf(modeIcons);
         }
 
         public static Style crystal(ResourceLocation guidePage, int titleColor) {
-            return new Style(guidePage, titleColor, AbstractMachineScreen.ACCENT_CRYSTAL, AbstractMachineScreen.ACCENT_CRYSTAL_DARK,
-                    Map.of());
+            return new Style(guidePage, titleColor, AbstractMachineScreen.ACCENT_CRYSTAL,
+                             AbstractMachineScreen.ACCENT_CRYSTAL_DARK, Map.of());
         }
 
         public static Style ember(ResourceLocation guidePage, int titleColor) {
-            return new Style(guidePage, titleColor, AbstractMachineScreen.ACCENT_EMBER, AbstractMachineScreen.ACCENT_EMBER_DARK,
-                    Map.of());
+            return new Style(guidePage, titleColor, AbstractMachineScreen.ACCENT_EMBER,
+                             AbstractMachineScreen.ACCENT_EMBER_DARK, Map.of());
         }
 
         public Style withModeIcons(Map<Mode, MachineModeButton.Icon> icons) {

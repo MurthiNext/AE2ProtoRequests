@@ -16,7 +16,7 @@ public class MultiLevelEmitterScreen extends AbstractMultiLevelEmitterScreen<Mul
     private final NumberEntryWidget level;
 
     public MultiLevelEmitterScreen(MultiLevelEmitterMenu menu, Inventory playerInventory, Component title,
-            ScreenStyle style) {
+                                   ScreenStyle style) {
         super(menu, playerInventory, title, style, RedstoneMode.LOW_SIGNAL);
 
         this.level = widgets.addNumberEntryWidget("level", NumberEntryType.of(menu.getConfiguredFilter()));

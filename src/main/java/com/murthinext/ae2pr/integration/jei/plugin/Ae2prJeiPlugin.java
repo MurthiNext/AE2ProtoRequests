@@ -9,6 +9,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 
+import appeng.recipes.handlers.ChargerRecipe;
+import appeng.recipes.handlers.InscriberRecipe;
+
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -18,9 +21,6 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
-
-import appeng.recipes.handlers.ChargerRecipe;
-import appeng.recipes.handlers.InscriberRecipe;
 
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
@@ -46,34 +46,35 @@ import com.murthinext.ae2pr.registry.ModRecipes;
 @JeiPlugin
 public class Ae2prJeiPlugin implements IModPlugin {
 
-    private static final mezz.jei.api.recipe.RecipeType<InscriberRecipe> AE2_INSCRIBER =
-            mezz.jei.api.recipe.RecipeType.create("ae2", "inscriber", InscriberRecipe.class);
-    private static final mezz.jei.api.recipe.RecipeType<ChargerRecipe> AE2_CHARGER =
-            mezz.jei.api.recipe.RecipeType.create("ae2", "charger", ChargerRecipe.class);
+    private static final mezz.jei.api.recipe.RecipeType<InscriberRecipe>
+            AE2_INSCRIBER = mezz.jei.api.recipe.RecipeType.create("ae2", "inscriber", InscriberRecipe.class);
+    private static final mezz.jei.api.recipe.RecipeType<ChargerRecipe>
+            AE2_CHARGER = mezz.jei.api.recipe.RecipeType.create("ae2", "charger", ChargerRecipe.class);
 
     private record MachineCategory(mezz.jei.api.recipe.RecipeType<?> jeiType, RecipeType<?> vanillaType,
-            Function<IGuiHelper, IRecipeCategory<?>> factory, ItemStack catalyst) {
-    }
+                                   Function<IGuiHelper, IRecipeCategory<?>> factory, ItemStack catalyst) {}
 
     private static List<MachineCategory> machines() {
         return List.of(
                 new MachineCategory(JigCategory.RECIPE_TYPE, ModMachines.JIG_RECIPE.type(), JigCategory::new,
-                        ModMachines.JIG.item().getDefaultInstance()),
+                                    ModMachines.JIG.item().getDefaultInstance()),
                 new MachineCategory(FilterPressCategory.RECIPE_TYPE, ModMachines.FILTER_PRESS_RECIPE.type(),
-                        FilterPressCategory::new, ModMachines.FILTER_PRESS.item().getDefaultInstance()),
+                                    FilterPressCategory::new, ModMachines.FILTER_PRESS.item().getDefaultInstance()),
                 new MachineCategory(CrystalReactionChamberCategory.RECIPE_TYPE,
-                        ModMachines.CRYSTAL_REACTION_CHAMBER_RECIPE.type(), CrystalReactionChamberCategory::new,
-                        ModMachines.CRYSTAL_REACTION_CHAMBER.item().getDefaultInstance()),
+                                    ModMachines.CRYSTAL_REACTION_CHAMBER_RECIPE.type(),
+                                    CrystalReactionChamberCategory::new,
+                                    ModMachines.CRYSTAL_REACTION_CHAMBER.item().getDefaultInstance()),
                 new MachineCategory(HighReactivityLavaSmelterCategory.RECIPE_TYPE,
-                        ModMachines.HIGH_REACTIVITY_LAVA_SMELTER_RECIPE.type(),
-                        HighReactivityLavaSmelterCategory::new,
-                        ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.item().getDefaultInstance()),
+                                    ModMachines.HIGH_REACTIVITY_LAVA_SMELTER_RECIPE.type(),
+                                    HighReactivityLavaSmelterCategory::new,
+                                    ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.item().getDefaultInstance()),
                 new MachineCategory(MatterPhaseTransformerCategory.RECIPE_TYPE,
-                        ModMachines.MATTER_PHASE_TRANSFORMER_RECIPE.type(), MatterPhaseTransformerCategory::new,
-                        ModMachines.MATTER_PHASE_TRANSFORMER.item().getDefaultInstance()),
+                                    ModMachines.MATTER_PHASE_TRANSFORMER_RECIPE.type(),
+                                    MatterPhaseTransformerCategory::new,
+                                    ModMachines.MATTER_PHASE_TRANSFORMER.item().getDefaultInstance()),
                 new MachineCategory(CrystalAssemblyLineCategory.RECIPE_TYPE,
-                        ModMachines.CRYSTAL_ASSEMBLY_LINE_RECIPE.type(), CrystalAssemblyLineCategory::new,
-                        ModMachines.CRYSTAL_ASSEMBLY_LINE.block().asItem().getDefaultInstance()));
+                                    ModMachines.CRYSTAL_ASSEMBLY_LINE_RECIPE.type(), CrystalAssemblyLineCategory::new,
+                                    ModMachines.CRYSTAL_ASSEMBLY_LINE.block().asItem().getDefaultInstance()));
     }
 
     @Override
@@ -104,7 +105,7 @@ public class Ae2prJeiPlugin implements IModPlugin {
         }
         registration.addRecipes(MultiblockPreviewCategory.RECIPE_TYPE, MultiblockPreviewRecipe.recipes());
         addRecipes(registration, ComplexWorldInteractionCategory.RECIPE_TYPE,
-                ModRecipes.COMPLEX_WORLD_INTERACTION_TYPE.get());
+                   ModRecipes.COMPLEX_WORLD_INTERACTION_TYPE.get());
     }
 
     @Override
@@ -123,9 +124,9 @@ public class Ae2prJeiPlugin implements IModPlugin {
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
         registration.addRecipeTransferHandler(new CrystalAssemblyLinePatternTransferHandler(),
-                CrystalAssemblyLineCategory.RECIPE_TYPE);
+                                              CrystalAssemblyLineCategory.RECIPE_TYPE);
         registration.addRecipeTransferHandler(new MultiblockPatternTransferHandler(),
-                MultiblockPreviewCategory.RECIPE_TYPE);
+                                              MultiblockPreviewCategory.RECIPE_TYPE);
     }
 
     @Override
@@ -139,7 +140,7 @@ public class Ae2prJeiPlugin implements IModPlugin {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private static void addRecipes(IRecipeRegistration registration, mezz.jei.api.recipe.RecipeType<?> jeiType,
-            RecipeType<?> vanillaType) {
+                                   RecipeType<?> vanillaType) {
         var level = Minecraft.getInstance().level;
         if (level == null) {
             return;
@@ -149,8 +150,8 @@ public class Ae2prJeiPlugin implements IModPlugin {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private static void addCatalyst(IRecipeCatalystRegistration registration,
-            mezz.jei.api.recipe.RecipeType<?> jeiType, ItemStack catalyst) {
+    private static void addCatalyst(IRecipeCatalystRegistration registration, mezz.jei.api.recipe.RecipeType<?> jeiType,
+                                    ItemStack catalyst) {
         registration.addRecipeCatalysts((mezz.jei.api.recipe.RecipeType) jeiType, catalyst);
     }
 }

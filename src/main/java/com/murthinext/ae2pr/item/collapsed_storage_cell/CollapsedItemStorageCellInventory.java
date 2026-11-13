@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+
 import appeng.api.config.Actionable;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEKey;
@@ -13,8 +16,6 @@ import appeng.api.stacks.KeyCounter;
 import appeng.api.storage.cells.CellState;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
 
 /**
  * 坍缩物品存储元件的内容视图：网络只能读取与抽取，存入一律拒绝。

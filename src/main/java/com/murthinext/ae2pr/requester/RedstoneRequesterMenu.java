@@ -1,23 +1,27 @@
 package com.murthinext.ae2pr.requester;
 
-import appeng.api.networking.IGrid;
-import appeng.menu.implementations.MenuTypeBuilder;
-import com.murthinext.ae2pr.requester.platform.RequesterPlatform;
-import com.murthinext.ae2pr.requester.abstraction.AbstractRedstoneRequesterMenu;
-import com.murthinext.ae2pr.requester.abstraction.RequestTracker;
+import javax.annotation.Nullable;
+
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nullable;
+import appeng.api.networking.IGrid;
+import appeng.menu.implementations.MenuTypeBuilder;
+
+import com.murthinext.ae2pr.requester.abstraction.AbstractRedstoneRequesterMenu;
+import com.murthinext.ae2pr.requester.abstraction.RequestTracker;
+import com.murthinext.ae2pr.requester.platform.RequesterPlatform;
 
 public final class RedstoneRequesterMenu extends AbstractRedstoneRequesterMenu {
 
     public static final MenuType<RedstoneRequesterMenu> TYPE = MenuTypeBuilder
-        .create(RedstoneRequesterMenu::new, RedstoneRequesterBlockEntity.class)
-        .build(RequesterConstants.REQUESTER_ID);
+                                                                       .create(RedstoneRequesterMenu::new,
+                                                                               RedstoneRequesterBlockEntity.class)
+                                                                       .build(RequesterConstants.REQUESTER_ID);
 
-    @Nullable private RequestTracker requestTracker;
+    @Nullable
+    private RequestTracker requestTracker;
 
     private RedstoneRequesterMenu(int id, Inventory playerInventory, RedstoneRequesterBlockEntity host) {
         super(TYPE, id, playerInventory, host);

@@ -6,15 +6,6 @@ import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
 
-import appeng.api.config.AccessRestriction;
-import appeng.api.config.Actionable;
-import appeng.api.config.PowerMultiplier;
-import appeng.api.inventories.InternalInventory;
-import appeng.api.networking.IGrid;
-import appeng.api.upgrades.IUpgradeInventory;
-import appeng.api.upgrades.UpgradeInventories;
-import appeng.blockentity.grid.AENetworkPowerBlockEntity;
-import appeng.core.definitions.AEItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -33,6 +24,16 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
+
+import appeng.api.config.AccessRestriction;
+import appeng.api.config.Actionable;
+import appeng.api.config.PowerMultiplier;
+import appeng.api.inventories.InternalInventory;
+import appeng.api.networking.IGrid;
+import appeng.api.upgrades.IUpgradeInventory;
+import appeng.api.upgrades.UpgradeInventories;
+import appeng.blockentity.grid.AENetworkPowerBlockEntity;
+import appeng.core.definitions.AEItems;
 
 import com.murthinext.ae2pr.api.EnergyAmount;
 import com.murthinext.ae2pr.api.machine.MachineTuning;
@@ -63,7 +64,7 @@ public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPow
     private final SideConfig sideConfig = new SideConfig();
 
     protected AbstractSingleblockMachineBlockEntity(SingleblockMachineDefinition<?, ?, ?> definition, BlockPos pos,
-            BlockState state) {
+                                                    BlockState state) {
         super(definition.blockEntityType(), pos, state);
         this.slotCount = definition.slots();
         this.items = NonNullList.withSize(slotCount, ItemStack.EMPTY);
@@ -195,7 +196,7 @@ public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPow
                 continue;
             }
             IItemHandler handler = neighbour.getCapability(ForgeCapabilities.ITEM_HANDLER, dir.getOpposite())
-                    .orElse(null);
+                                           .orElse(null);
             if (handler == null) {
                 continue;
             }
@@ -302,8 +303,8 @@ public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPow
         if (grid == null) {
             return false;
         }
-        double fromGrid = grid.getEnergyService().extractAEPower(amount - fromSelf,
-                Actionable.SIMULATE, PowerMultiplier.CONFIG);
+        double fromGrid = grid.getEnergyService().extractAEPower(amount - fromSelf, Actionable.SIMULATE,
+                                                                 PowerMultiplier.CONFIG);
         return fromSelf + fromGrid >= amount - ENERGY_EPSILON;
     }
 
@@ -321,8 +322,8 @@ public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPow
             if (grid == null) {
                 return false;
             }
-            fromGrid = grid.getEnergyService().extractAEPower(amount - fromSelf,
-                    Actionable.SIMULATE, PowerMultiplier.CONFIG);
+            fromGrid = grid.getEnergyService().extractAEPower(amount - fromSelf, Actionable.SIMULATE,
+                                                              PowerMultiplier.CONFIG);
         }
         if (fromSelf + fromGrid < amount - ENERGY_EPSILON) {
             return false;
@@ -582,9 +583,9 @@ public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPow
             int moved = Math.min(amount, current.getCount());
             ItemStack result = current.copyWithCount(moved);
             if (!simulate) {
-                inventory.setItem(target, moved >= current.getCount()
-                        ? ItemStack.EMPTY
-                        : current.copyWithCount(current.getCount() - moved));
+                inventory.setItem(target,
+                                  moved >= current.getCount() ? ItemStack.EMPTY
+                                                              : current.copyWithCount(current.getCount() - moved));
             }
             return result;
         }

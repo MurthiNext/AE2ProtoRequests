@@ -12,15 +12,14 @@ import appeng.client.gui.widgets.AETextField;
 
 import com.murthinext.ae2pr.registry.ModGuide;
 
-public class MultiThresholdLevelEmitterScreen
-        extends AbstractMultiLevelEmitterScreen<MultiThresholdLevelEmitterMenu> {
+public class MultiThresholdLevelEmitterScreen extends AbstractMultiLevelEmitterScreen<MultiThresholdLevelEmitterMenu> {
 
     private final AETextField upperField;
     private final AETextField lowerField;
     private boolean updatingFields;
 
     public MultiThresholdLevelEmitterScreen(MultiThresholdLevelEmitterMenu menu, Inventory playerInventory,
-            Component title, ScreenStyle style) {
+                                            Component title, ScreenStyle style) {
         super(menu, playerInventory, title, style, RedstoneMode.HIGH_SIGNAL);
 
         this.upperField = createValueField(menu.getCurrentUpper(), this::onUpperChanged);

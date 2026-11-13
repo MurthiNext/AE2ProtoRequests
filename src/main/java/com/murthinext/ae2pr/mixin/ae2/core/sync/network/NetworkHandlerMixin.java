@@ -5,12 +5,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
+import net.minecraft.server.level.ServerPlayer;
 
 import appeng.core.sync.BasePacket;
 import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.CraftingJobStatusPacket;
-import net.minecraft.server.level.ServerPlayer;
+
+import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
 
 // 观察发往玩家的合成状态包，推进通用（VCPU）重复订单轮次（钩子需完全防御式）
 @Mixin(value = NetworkHandler.class, remap = false)
@@ -27,7 +28,7 @@ public abstract class NetworkHandlerMixin {
         }
         try {
             GeneralRepeatOrders.onJobStatus(player, pending.jobId(), pending.what(), pending.requestedAmount(),
-                    pending.status());
+                                            pending.status());
         } catch (Throwable t) {
             GeneralRepeatOrders.logObserverFailure(t);
         }

@@ -10,11 +10,11 @@ import appeng.api.config.FuzzyMode;
 import appeng.api.config.RedstoneMode;
 import appeng.api.config.Settings;
 import appeng.api.config.YesNo;
-import appeng.client.guidebook.PageAnchor;
 import appeng.client.gui.implementations.UpgradeableScreen;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.ServerSettingToggleButton;
 import appeng.client.gui.widgets.SettingToggleButton;
+import appeng.client.guidebook.PageAnchor;
 import appeng.core.definitions.AEItems;
 
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;
@@ -29,7 +29,7 @@ public abstract class AbstractMultiLevelEmitterScreen<T extends AbstractMultiLev
     protected final CombineModeButton combineMode;
 
     protected AbstractMultiLevelEmitterScreen(T menu, Inventory playerInventory, Component title, ScreenStyle style,
-            RedstoneMode defaultRedstoneMode) {
+                                              RedstoneMode defaultRedstoneMode) {
         super(menu, playerInventory, title, style);
 
         this.redstoneMode = new ServerSettingToggleButton<>(Settings.REDSTONE_EMITTER, defaultRedstoneMode);
@@ -80,11 +80,10 @@ public abstract class AbstractMultiLevelEmitterScreen<T extends AbstractMultiLev
     // 配置槽内过滤元件的 shift 点击改发 QUICK_MOVE
     @Override
     protected void slotClicked(Slot slot, int slotIdx, int mouseButton, ClickType clickType) {
-        if (slot instanceof EmitterConfigSlot && mouseButton == 0
-                && slot.getItem().getItem() instanceof FilterCell
-                && (clickType == ClickType.QUICK_MOVE || hasShiftDown())) {
-            this.minecraft.gameMode.handleInventoryMouseClick(this.menu.containerId, slotIdx, 0,
-                    ClickType.QUICK_MOVE, this.minecraft.player);
+        if (slot instanceof EmitterConfigSlot && mouseButton == 0 && slot.getItem().getItem() instanceof FilterCell &&
+            (clickType == ClickType.QUICK_MOVE || hasShiftDown())) {
+            this.minecraft.gameMode.handleInventoryMouseClick(this.menu.containerId, slotIdx, 0, ClickType.QUICK_MOVE,
+                                                              this.minecraft.player);
             return;
         }
         super.slotClicked(slot, slotIdx, mouseButton, clickType);

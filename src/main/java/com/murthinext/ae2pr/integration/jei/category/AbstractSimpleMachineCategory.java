@@ -25,8 +25,8 @@ public abstract class AbstractSimpleMachineCategory extends AbstractMachineCateg
     private final String titleKey;
     private final IDrawable process;
 
-    protected AbstractSimpleMachineCategory(IGuiHelper guiHelper, RecipeType<MachineRecipe> recipeType,
-            ItemStack icon, String titleKey, String processTexture) {
+    protected AbstractSimpleMachineCategory(IGuiHelper guiHelper, RecipeType<MachineRecipe> recipeType, ItemStack icon,
+                                            String titleKey, String processTexture) {
         super(guiHelper, icon, WIDTH, HEIGHT);
         this.recipeType = recipeType;
         this.titleKey = titleKey;

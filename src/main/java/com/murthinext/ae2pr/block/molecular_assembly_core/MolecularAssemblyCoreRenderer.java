@@ -28,7 +28,7 @@ public class MolecularAssemblyCoreRenderer implements BlockEntityRenderer<Molecu
 
     @Override
     public void render(MolecularAssemblyCoreBlockEntity core, float partialTick, PoseStack pose,
-            MultiBufferSource buffers, int light, int overlay) {
+                       MultiBufferSource buffers, int light, int overlay) {
         Level level = core.getLevel();
         if (level == null) {
             return;
@@ -41,7 +41,8 @@ public class MolecularAssemblyCoreRenderer implements BlockEntityRenderer<Molecu
         pose.mulPose(Axis.ZP.rotationDegrees(core.rollOffset + ticks * ROLL_SPEED * core.rollSpeed));
         pose.scale(ITEM_SCALE, ITEM_SCALE, ITEM_SCALE);
         Minecraft.getInstance().getItemRenderer().renderStatic(SINGULARITY, ItemDisplayContext.FIXED,
-                LightTexture.FULL_BRIGHT, overlay, pose, buffers, level, 0);
+                                                               LightTexture.FULL_BRIGHT, overlay, pose, buffers, level,
+                                                               0);
         pose.popPose();
     }
 }

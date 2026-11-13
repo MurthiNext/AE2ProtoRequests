@@ -44,17 +44,15 @@ public final class RequesterPlatform {
 
     public static void sendClearData(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
-            RequesterNetwork.CHANNEL.send(
-                    PacketDistributor.PLAYER.with(() -> serverPlayer),
-                    RequesterSyncPacket.clearData());
+            RequesterNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer),
+                                          RequesterSyncPacket.clearData());
         }
     }
 
     public static void sendInventoryData(Player player, long requesterId, CompoundTag data) {
         if (player instanceof ServerPlayer serverPlayer) {
-            RequesterNetwork.CHANNEL.send(
-                    PacketDistributor.PLAYER.with(() -> serverPlayer),
-                    RequesterSyncPacket.inventory(requesterId, data));
+            RequesterNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer),
+                                          RequesterSyncPacket.inventory(requesterId, data));
         }
     }
 }

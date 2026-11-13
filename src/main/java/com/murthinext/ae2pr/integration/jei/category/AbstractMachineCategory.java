@@ -126,8 +126,8 @@ public abstract class AbstractMachineCategory<T extends MultiblockRecipe> implem
         for (int index = 0; index < Math.max(ingredientArea.count(), ingredients.size()); index++) {
             IIngredientAcceptor<?> acceptor;
             if (index < ingredientArea.count()) {
-                IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT,
-                        ingredientArea.slotX(index), ingredientArea.slotY(index));
+                IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, ingredientArea.slotX(index),
+                                                          ingredientArea.slotY(index));
                 if (ingredientArea.background()) {
                     slot.setStandardSlotBackground();
                 }
@@ -140,7 +140,8 @@ public abstract class AbstractMachineCategory<T extends MultiblockRecipe> implem
             if (index < ingredients.size()) {
                 CountedIngredient ingredient = ingredients.get(index);
                 acceptor.addItemStacks(Arrays.stream(ingredient.ingredient().getItems())
-                        .map(stack -> stack.copyWithCount(ingredient.count())).toList());
+                                               .map(stack -> stack.copyWithCount(ingredient.count()))
+                                               .toList());
             }
         }
 
@@ -149,8 +150,8 @@ public abstract class AbstractMachineCategory<T extends MultiblockRecipe> implem
         for (int index = 0; index < Math.max(incomingArea.count(), incoming.size()); index++) {
             IIngredientAcceptor<?> acceptor;
             if (index < incomingArea.count()) {
-                IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT,
-                        incomingArea.slotX(index), incomingArea.slotY(index));
+                IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, incomingArea.slotX(index),
+                                                          incomingArea.slotY(index));
                 if (incomingArea.background()) {
                     slot.setBackground(fluidSlot, -1, -1);
                 }
@@ -170,8 +171,9 @@ public abstract class AbstractMachineCategory<T extends MultiblockRecipe> implem
         for (int index = 0; index < Math.max(resultArea.count(), results.size()); index++) {
             IIngredientAcceptor<?> acceptor;
             if (index < resultArea.count()) {
-                IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.OUTPUT,
-                        resultArea.slotX(index), resultArea.slotY(index)).setStandardSlotBackground();
+                IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.OUTPUT, resultArea.slotX(index),
+                                                          resultArea.slotY(index))
+                                                  .setStandardSlotBackground();
                 slot.setCustomRenderer(VanillaTypes.ITEM_STACK, ChancedItemStackRenderer.of(results, index));
                 acceptor = slot;
             } else {
@@ -187,8 +189,8 @@ public abstract class AbstractMachineCategory<T extends MultiblockRecipe> implem
         for (int index = 0; index < Math.max(outgoingArea.count(), outgoing.size()); index++) {
             IIngredientAcceptor<?> acceptor;
             if (index < outgoingArea.count()) {
-                IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.OUTPUT,
-                        outgoingArea.slotX(index), outgoingArea.slotY(index));
+                IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.OUTPUT, outgoingArea.slotX(index),
+                                                          outgoingArea.slotY(index));
                 if (outgoingArea.background()) {
                     slot.setBackground(fluidSlot, -1, -1);
                 }
@@ -218,13 +220,12 @@ public abstract class AbstractMachineCategory<T extends MultiblockRecipe> implem
         int y = infoY();
         int step = infoStep();
         graphics.drawString(font, JeiRecipeInfo.duration(recipe.getDuration()), x, y, COLOR_TEXT, false);
-        graphics.drawString(font, JeiRecipeInfo.energy(recipe.getEnergyPerParallel()), x, y + step,
-                COLOR_TEXT, false);
+        graphics.drawString(font, JeiRecipeInfo.energy(recipe.getEnergyPerParallel()), x, y + step, COLOR_TEXT, false);
         int hiddenInputs = hiddenItemInputs(recipe) + hiddenFluids(recipe.getFluidInputs(), fluidInputs());
         int hiddenOutputs = hiddenItemOutputs(recipe) + hiddenFluids(recipe.getFluidOutputs(), fluidOutputs());
         if (showsHiddenHint() && (hiddenInputs > 0 || hiddenOutputs > 0)) {
-            graphics.drawString(font, JeiRecipeInfo.moreIo(hiddenInputs, hiddenOutputs), x, y + 2 * step,
-                    COLOR_HINT, false);
+            graphics.drawString(font, JeiRecipeInfo.moreIo(hiddenInputs, hiddenOutputs), x, y + 2 * step, COLOR_HINT,
+                                false);
         }
     }
 
@@ -284,7 +285,7 @@ public abstract class AbstractMachineCategory<T extends MultiblockRecipe> implem
         for (int index = area.count(); index < fluids.size(); index++) {
             FluidStack fluid = fluids.get(index);
             tooltip.add(Component.literal(JeiAmountFormat.exact(fluid.getAmount()) + " mB ")
-                    .append(fluid.getDisplayName()));
+                                .append(fluid.getDisplayName()));
         }
     }
 

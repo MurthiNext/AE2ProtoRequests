@@ -22,16 +22,19 @@ public final class MaterialFluids {
     private static final Map<Material, FluidSet> REGISTRY = new LinkedHashMap<>();
 
     public static Material register(DeferredRegister<Item> items, DeferredRegister<FluidType> types,
-            DeferredRegister<Fluid> fluids, Material material) {
+                                    DeferredRegister<Fluid> fluids, Material material) {
         FluidSpec spec = material.fluid();
         if (spec == null) {
             throw new IllegalStateException("Material %s declares no fluid".formatted(material.id()));
         }
         String root = TEXTURE_ROOT + material.modelSet() + "/" + TEXTURE;
-        FluidSet set = FluidSet.of(spec.id(), types, fluids, items, () -> SimpleFluidType.of(
-                SimpleFluidType.fluidProperties(spec.lavaLike(), spec.lightLevel(), spec.density(), spec.viscosity(),
-                        spec.temperature()),
-                Ids.of(root), Ids.of(root), material.argb(0)));
+        FluidSet set = FluidSet.of(
+                spec.id(), types, fluids, items,
+                ()
+                        -> SimpleFluidType.of(SimpleFluidType.fluidProperties(spec.lavaLike(), spec.lightLevel(),
+                                                                              spec.density(), spec.viscosity(),
+                                                                              spec.temperature()),
+                                              Ids.of(root), Ids.of(root), material.argb(0)));
         REGISTRY.put(material, set);
         return material;
     }

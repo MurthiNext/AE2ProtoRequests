@@ -113,9 +113,8 @@ public class FluidHatchBlockEntity extends BlockEntity implements MachinePart {
     }
 
     public static boolean isOutputHatch(BlockState state) {
-        return state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get())
-                || state.is(ModBlocks.AEV_OUTPUT_HATCH.get())
-                || state.is(ModBlocks.AEV_DUAL_OUTPUT_HATCH.get());
+        return state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()) ||
+                state.is(ModBlocks.AEV_OUTPUT_HATCH.get()) || state.is(ModBlocks.AEV_DUAL_OUTPUT_HATCH.get());
     }
 
     public boolean acceptsPlayerInsert() {

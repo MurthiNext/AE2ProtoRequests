@@ -3,9 +3,6 @@ package com.murthinext.ae2pr.machine.multi_factory;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.murthinext.ae2pr.api.recipe.ChancedItemStack;
-import com.murthinext.ae2pr.api.recipe.CountedIngredient;
-import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +15,10 @@ import appeng.recipes.handlers.ChargerRecipe;
 import appeng.recipes.handlers.InscriberProcessType;
 import appeng.recipes.handlers.InscriberRecipe;
 
+import com.murthinext.ae2pr.api.recipe.ChancedItemStack;
+import com.murthinext.ae2pr.api.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
+
 // 通式加工厂配方包装器：直接适配 AE2 原生压印与充能配方
 public final class MultiFactoryRecipe implements MultiblockRecipe {
 
@@ -29,7 +30,7 @@ public final class MultiFactoryRecipe implements MultiblockRecipe {
     private final List<ChancedItemStack> chancedItemOutputs;
 
     private MultiFactoryRecipe(ResourceLocation id, MultiFactoryMode mode, List<CountedIngredient> itemInputs,
-            List<CountedIngredient> itemCatalysts, ItemStack output) {
+                               List<CountedIngredient> itemCatalysts, ItemStack output) {
         this.id = id;
         this.mode = mode;
         this.itemInputs = List.copyOf(itemInputs);
@@ -52,16 +53,15 @@ public final class MultiFactoryRecipe implements MultiblockRecipe {
             boolean press = inscriber.getProcessType() == InscriberProcessType.PRESS;
             addOptional(press ? inputs : catalysts, inscriber.getTopOptional());
             addOptional(press ? inputs : catalysts, inscriber.getBottomOptional());
-            return new MultiFactoryRecipe(inscriber.getId(), mode, inputs, catalysts,
-                    inscriber.getResultItem().copy());
+            return new MultiFactoryRecipe(inscriber.getId(), mode, inputs, catalysts, inscriber.getResultItem().copy());
         }
         if (recipe instanceof ChargerRecipe charger) {
             if (mode != MultiFactoryMode.CHARGING) {
                 return null;
             }
             return new MultiFactoryRecipe(charger.getId(), mode,
-                    List.of(new CountedIngredient(charger.getIngredient(), 1)), List.of(),
-                    charger.getResultItem());
+                                          List.of(new CountedIngredient(charger.getIngredient(), 1)), List.of(),
+                                          charger.getResultItem());
         }
         return null;
     }

@@ -9,7 +9,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 import appeng.api.config.Actionable;
 import appeng.api.crafting.PatternDetailsHelper;
@@ -25,11 +29,8 @@ import appeng.menu.slot.DisabledSlot;
 import appeng.menu.slot.FakeSlot;
 import appeng.menu.slot.InaccessibleSlot;
 import appeng.util.ConfigMenuInventory;
-import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickType;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
+
+import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 
 // 超级堆叠卡：接管返回/存储槽的玩家交互，避免界面层按原版堆叠上限截断或吞掉超量物品
 @Mixin(value = AEBaseMenu.class, priority = 500, remap = false)
@@ -109,8 +110,8 @@ public abstract class AEBaseMenuSuperStackMixin {
     @Inject(method = "quickMoveStack", at = @At("HEAD"), cancellable = true, remap = true)
     private void ae2pr$onQuickMoveStack(Player player, int idx, CallbackInfoReturnable<ItemStack> cir) {
         var menu = (AEBaseMenu) (Object) this;
-        if (menu.isClientSide() || !menu.isValidMenu() || !menu.stillValid(player) || player.isSpectator() || idx < 0
-                || idx >= menu.slots.size()) {
+        if (menu.isClientSide() || !menu.isValidMenu() || !menu.stillValid(player) || player.isSpectator() || idx < 0 ||
+            idx >= menu.slots.size()) {
             return;
         }
         var source = menu.slots.get(idx);
@@ -137,7 +138,7 @@ public abstract class AEBaseMenuSuperStackMixin {
      */
     @Unique
     private void ae2pr$playerToMenu(AEBaseMenu menu, Slot source, ItemStack stack,
-            CallbackInfoReturnable<ItemStack> cir) {
+                                    CallbackInfoReturnable<ItemStack> cir) {
         var key = AEItemKey.of(stack);
         if (key == null || GenericStack.isWrapped(stack)) {
             return;
@@ -206,9 +207,8 @@ public abstract class AEBaseMenuSuperStackMixin {
 
     @Unique
     private boolean ae2pr$isStorageSlot(Slot slot) {
-        return slot instanceof AppEngSlot aeSlot
-                && aeSlot.getInventory() instanceof ConfigMenuInventory wrapper
-                && wrapper.getDelegate().getMode() == GenericStackInv.Mode.STORAGE;
+        return slot instanceof AppEngSlot aeSlot && aeSlot.getInventory() instanceof ConfigMenuInventory wrapper &&
+                wrapper.getDelegate().getMode() == GenericStackInv.Mode.STORAGE;
     }
 
     @Inject(method = "canDragTo", at = @At("HEAD"), cancellable = true, remap = true)
@@ -264,9 +264,8 @@ public abstract class AEBaseMenuSuperStackMixin {
      */
     @Unique
     private boolean ae2pr$accepts(Slot slot, ItemStack stack) {
-        return slot instanceof AppEngSlot aeSlot
-                && aeSlot.getInventory() instanceof ConfigMenuInventory wrapper
-                && wrapper.isItemValid(aeSlot.getContainerSlot(), stack);
+        return slot instanceof AppEngSlot aeSlot && aeSlot.getInventory() instanceof ConfigMenuInventory wrapper &&
+                wrapper.isItemValid(aeSlot.getContainerSlot(), stack);
     }
 
     /**
@@ -288,8 +287,7 @@ public abstract class AEBaseMenuSuperStackMixin {
      * 数字键交换：把快捷栏物品换进槽位。放不下或存量超过一组时整体不交换。
      */
     @Unique
-    private void ae2pr$swapWithHotbar(AEBaseMenu menu, Slot slot, GenericStackInv inv, int hotbarSlot,
-            Player player) {
+    private void ae2pr$swapWithHotbar(AEBaseMenu menu, Slot slot, GenericStackInv inv, int hotbarSlot, Player player) {
         if (hotbarSlot < 0 || hotbarSlot >= 9) {
             return;
         }
@@ -300,8 +298,8 @@ public abstract class AEBaseMenuSuperStackMixin {
             return;
         }
         // 槽内超量存量无法完整放进快捷栏，拒绝交换
-        if (existing != null && !(existing.what() instanceof AEItemKey existingKey
-                && existing.amount() <= existingKey.getMaxStackSize())) {
+        if (existing != null &&
+            !(existing.what() instanceof AEItemKey existingKey && existing.amount() <= existingKey.getMaxStackSize())) {
             return;
         }
         if (!hotbar.isEmpty()) {
@@ -387,7 +385,7 @@ public abstract class AEBaseMenuSuperStackMixin {
      */
     @Unique
     private void ae2pr$slotToPlayer(AEBaseMenu menu, Slot slot, GenericStackInv inv,
-            CallbackInfoReturnable<ItemStack> cir) {
+                                    CallbackInfoReturnable<ItemStack> cir) {
         int invSlot = ((AppEngSlot) slot).getContainerSlot();
         var stack = inv.getStack(invSlot);
         if (stack == null || !(stack.what() instanceof AEItemKey key)) {
@@ -462,7 +460,7 @@ public abstract class AEBaseMenuSuperStackMixin {
 
     @Unique
     private int ae2pr$mergeIntoMenu(AEBaseMenu menu, ItemStack stack, AEItemKey key, int remaining,
-            boolean allowStorage) {
+                                    boolean allowStorage) {
         for (Slot dest : menu.slots) {
             if (remaining <= 0) {
                 break;
@@ -503,7 +501,7 @@ public abstract class AEBaseMenuSuperStackMixin {
 
     @Unique
     private int ae2pr$fillMenuEmpty(AEBaseMenu menu, ItemStack stack, AEItemKey key, int remaining,
-            boolean storagePass) {
+                                    boolean storagePass) {
         for (Slot dest : menu.slots) {
             if (remaining <= 0) {
                 break;
@@ -521,7 +519,7 @@ public abstract class AEBaseMenuSuperStackMixin {
                 }
                 // 直接写真实库存，绕过包装层按物品上限做的放置判定
                 remaining -= (int) inv.insert(((AppEngSlot) dest).getContainerSlot(), key, remaining,
-                        Actionable.MODULATE);
+                                              Actionable.MODULATE);
                 continue;
             }
             if (!dest.mayPlace(stack)) {
@@ -543,16 +541,16 @@ public abstract class AEBaseMenuSuperStackMixin {
 
     @Unique
     private boolean ae2pr$isPlayerDestination(Slot slot) {
-        return slot.isActive() && isPlayerSideSlot(slot) && !(slot instanceof DisabledSlot)
-                && !(slot instanceof InaccessibleSlot) && !(slot instanceof FakeSlot)
-                && !(slot instanceof CraftingMatrixSlot);
+        return slot.isActive() && isPlayerSideSlot(slot) && !(slot instanceof DisabledSlot) &&
+                !(slot instanceof InaccessibleSlot) && !(slot instanceof FakeSlot) &&
+                !(slot instanceof CraftingMatrixSlot);
     }
 
     @Unique
     private boolean ae2pr$isMenuDestination(Slot slot) {
-        return slot.isActive() && !isPlayerSideSlot(slot) && !(slot instanceof FakeSlot)
-                && !(slot instanceof CraftingMatrixSlot) && !(slot instanceof DisabledSlot)
-                && !(slot instanceof InaccessibleSlot);
+        return slot.isActive() && !isPlayerSideSlot(slot) && !(slot instanceof FakeSlot) &&
+                !(slot instanceof CraftingMatrixSlot) && !(slot instanceof DisabledSlot) &&
+                !(slot instanceof InaccessibleSlot);
     }
 
     @Unique

@@ -2,14 +2,15 @@ package com.murthinext.ae2pr.client.repeat;
 
 import java.util.List;
 
-import appeng.api.client.AEKeyRendering;
-import appeng.api.stacks.AEKey;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
+
+import appeng.api.client.AEKeyRendering;
+import appeng.api.stacks.AEKey;
 
 abstract class AbstractRepeatOrderToast implements Toast {
 

@@ -5,13 +5,14 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import appeng.api.behaviors.GenericInternalInventory;
-import appeng.api.stacks.AEItemKey;
-import appeng.api.stacks.GenericStack;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
+
+import appeng.api.behaviors.GenericInternalInventory;
+import appeng.api.stacks.AEItemKey;
+import appeng.api.stacks.GenericStack;
 
 import com.murthinext.ae2pr.api.collapse.Collapsible;
 

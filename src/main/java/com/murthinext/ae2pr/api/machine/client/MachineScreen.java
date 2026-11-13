@@ -1,19 +1,18 @@
 package com.murthinext.ae2pr.api.machine.client;
 
-import com.murthinext.ae2pr.api.machine.client.MachineStyles;
-
-import com.murthinext.ae2pr.api.machine.MachineMenu;
-
 import java.util.List;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
+import com.murthinext.ae2pr.api.machine.MachineMenu;
+import com.murthinext.ae2pr.api.machine.client.MachineStyles;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerScreen;
 
-public final class MachineScreen<M extends AbstractMultiblockControllerMenu<?>> extends AbstractMultiblockControllerScreen<M> {
+public final class MachineScreen<M extends AbstractMultiblockControllerMenu<?>>
+        extends AbstractMultiblockControllerScreen<M> {
 
     private MachineModeButton modeButton;
 
@@ -30,8 +29,8 @@ public final class MachineScreen<M extends AbstractMultiblockControllerMenu<?>> 
     protected void init() {
         super.init();
         if (menu instanceof MachineMenu<?> machineMenu && machineMenu.getMode() != null) {
-            modeButton = new MachineModeButton(leftPos + TOOLBAR_X + 1,
-                    topPos + TOOLBAR_Y + 1 + TOOLBAR_ROW_STEP, machineMenu.getMode(),
+            modeButton = new MachineModeButton(
+                    leftPos + TOOLBAR_X + 1, topPos + TOOLBAR_Y + 1 + TOOLBAR_ROW_STEP, machineMenu.getMode(),
                     MachineStyles.of(menu.definition()).modeIcons(), () -> {
                         if (minecraft != null && minecraft.gameMode != null) {
                             minecraft.gameMode.handleInventoryButtonClick(menu.containerId, MachineMenu.SWITCH_MODE);
@@ -65,10 +64,11 @@ public final class MachineScreen<M extends AbstractMultiblockControllerMenu<?>> 
         if (modeButton == null || !modeButton.isHovered() || modeLabel() == null) {
             return false;
         }
-        GuiTooltips.render(graphics, font, List.of(modeLabel(),
-                Component.translatable(menu.isBusy() ? "gui.ae2pr.multiblock.mode.locked"
-                        : "gui.ae2pr.multiblock.mode.switch")),
-                mouseX, mouseY);
+        GuiTooltips.render(graphics, font,
+                           List.of(modeLabel(),
+                                   Component.translatable(menu.isBusy() ? "gui.ae2pr.multiblock.mode.locked"
+                                                                        : "gui.ae2pr.multiblock.mode.switch")),
+                           mouseX, mouseY);
         return true;
     }
 

@@ -18,11 +18,11 @@ public class MolecularAssemblyCoreBlock extends DisassemblableBlock implements E
 
     public MolecularAssemblyCoreBlock() {
         super(Properties.of()
-                .mapColor(MapColor.METAL)
-                .strength(3.5F)
-                .sound(SoundType.METAL)
-                .noOcclusion()
-                .requiresCorrectToolForDrops());
+                      .mapColor(MapColor.METAL)
+                      .strength(3.5F)
+                      .sound(SoundType.METAL)
+                      .noOcclusion()
+                      .requiresCorrectToolForDrops());
     }
 
     @Nullable
@@ -34,9 +34,9 @@ public class MolecularAssemblyCoreBlock extends DisassemblableBlock implements E
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
-            BlockEntityType<T> type) {
-        return level.isClientSide
-                ? (tickLevel, pos, tickState, blockEntity) -> MolecularAssemblyCoreParticles.tick(tickLevel, pos)
-                : null;
+                                                                  BlockEntityType<T> type) {
+        return level.isClientSide ? (tickLevel, pos, tickState, blockEntity)
+                                            -> MolecularAssemblyCoreParticles.tick(tickLevel, pos)
+                                  : null;
     }
 }

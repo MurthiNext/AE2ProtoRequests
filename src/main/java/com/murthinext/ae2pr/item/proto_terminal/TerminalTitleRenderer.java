@@ -24,23 +24,21 @@ final class TerminalTitleRenderer {
             Map.entry('n', new Glyph(5, 0, 0, 0b11110, 0b10001, 0b10001, 0b10001, 0b10001)),
             Map.entry('a', new Glyph(5, 0, 0, 0b01110, 0b00001, 0b01111, 0b10001, 0b01111)),
             Map.entry('l', new Glyph(2, 0b10, 0b10, 0b10, 0b10, 0b10, 0b10, 0b11)));
-    private static final int TEXT_WIDTH = TEXT.chars().map(character -> GLYPHS.get((char) character).width() + 1)
-            .sum() - 1;
+    private static final int
+            TEXT_WIDTH = TEXT.chars().map(character -> GLYPHS.get((char) character).width() + 1).sum() - 1;
 
-    private record Glyph(int width, int... rows) {
-    }
+    private record Glyph(int width, int... rows) {}
 
     private TerminalTitleRenderer() {
     }
 
-    static void render(GuiGraphics graphics, float x, float y, int width, int height, float slant,
-            float opacity, long elapsed) {
+    static void render(GuiGraphics graphics, float x, float y, int width, int height, float slant, float opacity,
+                       long elapsed) {
         if (opacity <= 0 || elapsed < 0) {
             return;
         }
         float textSlant = GLYPH_HEIGHT * TerminalGraphicsRenderer.EDGE_SLOPE;
-        float pixelSize = Math.min((width - slant - 20) / (TEXT_WIDTH + textSlant),
-                (height - 14.0F) / GLYPH_HEIGHT);
+        float pixelSize = Math.min((width - slant - 20) / (TEXT_WIDTH + textSlant), (height - 14.0F) / GLYPH_HEIGHT);
         if (pixelSize <= 0) {
             return;
         }
@@ -66,10 +64,12 @@ final class TerminalTitleRenderer {
                         float px = cursor + column * pixelSize + shear - shift;
                         float py = top + row * pixelSize + shift;
                         int color = TerminalGraphicsRenderer.mix(TerminalGraphicsRenderer.TEXT,
-                                TerminalGraphicsRenderer.ACCENT, row * 0.035F + (1 - reveal) * 0.5F);
-                        TerminalGraphicsRenderer.line(graphics, px, py + pixelSize / 2,
-                                px + pixelSize, py + pixelSize / 2,
-                                TerminalGraphicsRenderer.alpha(color, opacity * reveal), pixelSize);
+                                                                 TerminalGraphicsRenderer.ACCENT,
+                                                                 row * 0.035F + (1 - reveal) * 0.5F);
+                        TerminalGraphicsRenderer.line(graphics, px, py + pixelSize / 2, px + pixelSize,
+                                                      py + pixelSize / 2,
+                                                      TerminalGraphicsRenderer.alpha(color, opacity * reveal),
+                                                      pixelSize);
                     }
                 }
                 cursor += (glyph.width() + 1) * pixelSize;

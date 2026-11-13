@@ -41,11 +41,10 @@ public abstract class AbstractStructureFacade {
      * @return 本次成型覆盖的方块，未成型时为空
      */
     public List<BlockPos> updateFormed(Level level, BlockPos controllerPos, Direction facing, StructureResult result,
-            List<BlockPos> previousCells, boolean active) {
-        List<BlockPos> cells = result.formed()
-                ? pattern.cells(controllerPos, facing, Direction.UP, result.mirrorSide(), result.mirrorFront(),
-                        result.slices())
-                : List.of();
+                                       List<BlockPos> previousCells, boolean active) {
+        List<BlockPos> cells = result.formed() ? pattern.cells(controllerPos, facing, Direction.UP, result.mirrorSide(),
+                                                               result.mirrorFront(), result.slices())
+                                               : List.of();
         // 撤销已不在当前结构内的旧方块
         if (!previousCells.isEmpty()) {
             Set<BlockPos> current = new HashSet<>(cells);

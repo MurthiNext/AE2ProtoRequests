@@ -25,11 +25,9 @@ public final class CrystalWorkstationShell {
     private static final int PRUNE_INTERVAL = 10;
 
     public record Look(CrystalWorkstationStructure.PartRole role, @Nullable Direction outward,
-            @Nullable Direction depthAxis, int panelX, int panelY) {
-    }
+                       @Nullable Direction depthAxis, int panelX, int panelY) {}
 
-    private record Snapshot(Map<BlockPos, Look> looks, BlockPos min, BlockPos max, int signature) {
-    }
+    private record Snapshot(Map<BlockPos, Look> looks, BlockPos min, BlockPos max, int signature) {}
 
     private static final Map<BlockPos, Snapshot> MACHINES = new HashMap<>();
     // 区块网格在后台线程构建，索引整体替换后以 volatile 发布
@@ -89,7 +87,7 @@ public final class CrystalWorkstationShell {
     }
 
     private static void refresh(BlockPos controllerPos, @Nullable Snapshot previous,
-            CrystalWorkstationControllerBlockEntity controller, int signature) {
+                                CrystalWorkstationControllerBlockEntity controller, int signature) {
         Map<BlockPos, Look> looks = controller.isFormed() ? collect(controller) : Map.of();
         if (looks.isEmpty()) {
             if (previous == null) {
@@ -121,9 +119,9 @@ public final class CrystalWorkstationShell {
         Direction facing = controller.getBlockState().getValue(MachineBlock.FACING);
         Map<BlockPos, Look> looks = new HashMap<>();
         for (CrystalWorkstationStructure.Part part : CrystalWorkstationStructure.effectParts(
-                controller.getBlockPos(), facing, controller.isMirrorSide(), controller.isMirrorFront())) {
+                     controller.getBlockPos(), facing, controller.isMirrorSide(), controller.isMirrorFront())) {
             looks.put(part.pos(),
-                    new Look(part.role(), part.outward(), part.depthAxis(), part.panelX(), part.panelY()));
+                      new Look(part.role(), part.outward(), part.depthAxis(), part.panelX(), part.panelY()));
         }
         return looks;
     }
@@ -144,7 +142,7 @@ public final class CrystalWorkstationShell {
             maxZ = Math.max(maxZ, pos.getZ());
         }
         return new Snapshot(Map.copyOf(looks), new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ),
-                signature);
+                            signature);
     }
 
     private static void rebuildIndex() {
@@ -174,7 +172,7 @@ public final class CrystalWorkstationShell {
             return;
         }
         pruneTicks = 0;
-        for (BlockPos pos : MACHINES.keySet().toArray(BlockPos[]::new)) {
+        for (BlockPos pos : MACHINES.keySet().toArray(BlockPos[] ::new)) {
             if (!current.hasChunkAt(pos)) {
                 // 区块未加载，保留缓存等待主机重新上报
                 continue;
@@ -220,9 +218,9 @@ public final class CrystalWorkstationShell {
             max = a.max();
         } else {
             min = new BlockPos(Math.min(a.min().getX(), b.min().getX()), Math.min(a.min().getY(), b.min().getY()),
-                    Math.min(a.min().getZ(), b.min().getZ()));
+                               Math.min(a.min().getZ(), b.min().getZ()));
             max = new BlockPos(Math.max(a.max().getX(), b.max().getX()), Math.max(a.max().getY(), b.max().getY()),
-                    Math.max(a.max().getZ(), b.max().getZ()));
+                               Math.max(a.max().getZ(), b.max().getZ()));
         }
         var levelRenderer = Minecraft.getInstance().levelRenderer;
         if (levelRenderer != null) {

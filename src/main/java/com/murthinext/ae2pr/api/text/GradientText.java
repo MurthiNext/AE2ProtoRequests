@@ -38,7 +38,7 @@ public record GradientText(String text, int[] colors, float speed, boolean flow)
     // 颜色统一按 RGB 处理
     private static int[] normalize(int[] colors) {
         if (colors == null || colors.length == 0) {
-            return new int[]{0xFFFFFF};
+            return new int[] { 0xFFFFFF };
         }
         int[] normalized = new int[colors.length];
         for (int i = 0; i < colors.length; i++) {
@@ -58,9 +58,9 @@ public record GradientText(String text, int[] colors, float speed, boolean flow)
         int from = colors[index];
         int to = colors[Math.min(index + 1, colors.length - 1)];
         float delta = scaled - index;
-        return interpolate(from >>> 16 & 0xFF, to >>> 16 & 0xFF, delta) << 16
-                | interpolate(from >>> 8 & 0xFF, to >>> 8 & 0xFF, delta) << 8
-                | interpolate(from & 0xFF, to & 0xFF, delta);
+        return interpolate(from >>> 16 & 0xFF, to >>> 16 & 0xFF, delta) << 16 |
+                interpolate(from >>> 8 & 0xFF, to >>> 8 & 0xFF, delta) << 8 |
+                interpolate(from & 0xFF, to & 0xFF, delta);
     }
 
     private static int interpolate(int from, int to, float delta) {

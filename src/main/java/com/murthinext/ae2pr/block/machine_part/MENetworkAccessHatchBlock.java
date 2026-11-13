@@ -26,8 +26,8 @@ import appeng.block.AEBaseEntityBlock;
 
 import com.murthinext.ae2pr.api.wrench.Wrenchable;
 
-public class MENetworkAccessHatchBlock extends AEBaseEntityBlock<MENetworkAccessHatchBlockEntity>
-        implements Wrenchable {
+public class MENetworkAccessHatchBlock
+        extends AEBaseEntityBlock<MENetworkAccessHatchBlockEntity> implements Wrenchable {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty FORMED = BooleanProperty.create("formed");
@@ -35,14 +35,14 @@ public class MENetworkAccessHatchBlock extends AEBaseEntityBlock<MENetworkAccess
 
     public MENetworkAccessHatchBlock() {
         super(Properties.of()
-                .mapColor(MapColor.METAL)
-                .strength(3.0F)
-                .sound(SoundType.METAL)
-                .requiresCorrectToolForDrops());
+                      .mapColor(MapColor.METAL)
+                      .strength(3.0F)
+                      .sound(SoundType.METAL)
+                      .requiresCorrectToolForDrops());
         registerDefaultState(stateDefinition.any()
-                .setValue(FACING, Direction.NORTH)
-                .setValue(FORMED, false)
-                .setValue(STYLE, MachinePartBlock.DEFAULT_STYLE));
+                                     .setValue(FACING, Direction.NORTH)
+                                     .setValue(FORMED, false)
+                                     .setValue(STYLE, MachinePartBlock.DEFAULT_STYLE));
     }
 
     @Override
@@ -78,7 +78,7 @@ public class MENetworkAccessHatchBlock extends AEBaseEntityBlock<MENetworkAccess
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip,
-            TooltipFlag flag) {
+                                TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
         tooltip.add(Component.translatable("tooltip.ae2pr.me_network_access_hatch"));
     }

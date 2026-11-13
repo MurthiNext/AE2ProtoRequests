@@ -1,13 +1,13 @@
 package com.murthinext.ae2pr.network;
 
-import com.murthinext.ae2pr.api.ClientHooks;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+
+import com.murthinext.ae2pr.api.ClientHooks;
 
 // 服务端 -> 客户端：菜单可见 CPU 的轮次信息
 public class RepeatOrderStatusPacket {
@@ -41,8 +41,12 @@ public class RepeatOrderStatusPacket {
 
     public static void handle(RepeatOrderStatusPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
-        context.enqueueWork(() -> ClientHooks.run(
-                () -> () -> com.murthinext.ae2pr.client.repeat.ClientRepeatOrderState.update(packet.containerId, packet.entries)));
+        context.enqueueWork(
+                ()
+                        -> ClientHooks.run(()
+                                                   -> ()
+                                                           -> com.murthinext.ae2pr.client.repeat.ClientRepeatOrderState
+                                                                      .update(packet.containerId, packet.entries)));
         context.setPacketHandled(true);
     }
 }

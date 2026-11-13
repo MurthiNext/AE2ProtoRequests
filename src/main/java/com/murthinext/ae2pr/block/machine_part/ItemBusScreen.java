@@ -17,12 +17,12 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
 import com.murthinext.ae2pr.api.machine.client.DisplaySlot;
 import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
+import com.murthinext.ae2pr.registry.ModNetwork;
 
 public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implements CustomIngredientSource {
 
@@ -40,7 +40,7 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
 
     // 客户端同步入口，仅由同步包调用
     public static void applyStackSync(BlockPos pos, List<ItemStack> stacks, boolean autoTransfer,
-            boolean recipeIsolated) {
+                                      boolean recipeIsolated) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level != null && minecraft.level.getBlockEntity(pos) instanceof ItemBusBlockEntity bus) {
             for (int i = 0; i < stacks.size() && i < bus.getSlotCount(); i++) {
@@ -68,8 +68,9 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
             if (fluid.isEmpty()) {
                 continue;
             }
-            areas.add(Area.ofFluid(fluid, new Rect2i(leftPos + DUAL_TANK_X + tank * TANK_STEP,
-                    topPos + TANK_Y, TANK_WIDTH, TANK_HEIGHT)));
+            areas.add(Area.ofFluid(fluid,
+                                   new Rect2i(leftPos + DUAL_TANK_X + tank * TANK_STEP, topPos + TANK_Y, TANK_WIDTH,
+                                              TANK_HEIGHT)));
         }
         return areas;
     }
@@ -93,16 +94,16 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
             drawSlot(graphics, slotX(slot), slotY(slot));
         }
         MachinePartFluidStorage storage = menu.getFluidStorage();
-        drawArrow(graphics, leftPos + (storage != null ? DUAL_SLOT_X + 12 : ARROW_X),
-                topPos + ARROW_Y, !menu.isOutputBus(), true);
+        drawArrow(graphics, leftPos + (storage != null ? DUAL_SLOT_X + 12 : ARROW_X), topPos + ARROW_Y,
+                  !menu.isOutputBus(), true);
         if (storage != null) {
             for (int tank = 0; tank < storage.getTankCount(); tank++) {
                 int x = leftPos + DUAL_TANK_X + tank * TANK_STEP;
                 int y = topPos + TANK_Y;
                 drawTank(graphics, x, y);
                 drawTankArrow(graphics, x, y, !menu.isOutputBus());
-                drawFluid(graphics, storage.getTank(tank).getFluid(), x + 2, y + 2,
-                        TANK_INNER_WIDTH, TANK_INNER_HEIGHT, storage.getCapacityPerTank());
+                drawFluid(graphics, storage.getTank(tank).getFluid(), x + 2, y + 2, TANK_INNER_WIDTH, TANK_INNER_HEIGHT,
+                          storage.getCapacityPerTank());
             }
         }
     }
@@ -160,7 +161,7 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
             ModNetwork.sendToServer(new BusSlotClickPacket(menu.getBlockPos(), index, mouseButton, false, true));
         } else if (clickType == ClickType.PICKUP || clickType == ClickType.QUICK_MOVE) {
             ModNetwork.sendToServer(new BusSlotClickPacket(menu.getBlockPos(), index, mouseButton,
-                    clickType == ClickType.QUICK_MOVE, false));
+                                                           clickType == ClickType.QUICK_MOVE, false));
         }
     }
 
@@ -173,11 +174,12 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
         MachinePartFluidStorage storage = menu.getFluidStorage();
         if (tank >= 0 && storage != null) {
             var fluid = storage.getTank(tank).getFluid();
-            GuiTooltips.render(graphics, font, List.of(
-                    fluid.isEmpty() ? Component.translatable("gui.ae2pr.machine_part.tank.empty")
-                            : fluid.getDisplayName(),
-                    Component.translatable("gui.ae2pr.machine_part.tank.mb", NUMBER.format(fluid.getAmount()))),
-                    mouseX, mouseY);
+            GuiTooltips.render(graphics, font,
+                               List.of(fluid.isEmpty() ? Component.translatable("gui.ae2pr.machine_part.tank.empty")
+                                                       : fluid.getDisplayName(),
+                                       Component.translatable("gui.ae2pr.machine_part.tank.mb",
+                                                              NUMBER.format(fluid.getAmount()))),
+                               mouseX, mouseY);
             return;
         }
         // 展示槽的物品提示由原版槽位渲染
@@ -190,8 +192,7 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
             for (int tank = 0; tank < storage.getTankCount(); tank++) {
                 int x = leftPos + DUAL_TANK_X + tank * TANK_STEP;
                 int y = topPos + TANK_Y;
-                if (mouseX >= x && mouseX < x + TANK_WIDTH
-                        && mouseY >= y && mouseY < y + TANK_HEIGHT) {
+                if (mouseX >= x && mouseX < x + TANK_WIDTH && mouseY >= y && mouseY < y + TANK_HEIGHT) {
                     return tank;
                 }
             }
@@ -202,8 +203,8 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
     @Nullable
     private ItemBusBlockEntity clientBus() {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.level != null
-                && minecraft.level.getBlockEntity(menu.getBlockPos()) instanceof ItemBusBlockEntity bus) {
+        if (minecraft.level != null &&
+            minecraft.level.getBlockEntity(menu.getBlockPos()) instanceof ItemBusBlockEntity bus) {
             return bus;
         }
         return null;

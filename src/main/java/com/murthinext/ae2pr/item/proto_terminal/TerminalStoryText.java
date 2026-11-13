@@ -12,7 +12,7 @@ final class TerminalStoryText {
     // 打字机每秒显示的字符数
     private static final float GLYPHS_PER_SECOND = 34;
     private static final Pattern DELAY = Pattern.compile("<delay\\s*=\\s*(\\d{1,5})\\s*/?\\s*>",
-            Pattern.CASE_INSENSITIVE);
+                                                         Pattern.CASE_INSENSITIVE);
     private static final int MAX_DELAY = 60000;
 
     private final String plain;
@@ -27,7 +27,7 @@ final class TerminalStoryText {
         while (matcher.find()) {
             visible.append(raw, cursor, matcher.start());
             pauses[visible.length()] = Math.min(MAX_DELAY,
-                    pauses[visible.length()] + Integer.parseInt(matcher.group(1)));
+                                                pauses[visible.length()] + Integer.parseInt(matcher.group(1)));
             cursor = matcher.end();
         }
         visible.append(raw, cursor, raw.length());

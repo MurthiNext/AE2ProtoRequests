@@ -8,7 +8,12 @@ import net.minecraft.core.Direction;
 // 结构模式中的相对方向：由控制器朝向与镜像推算实际方向
 public enum RelativeDirection {
 
-    UP, DOWN, LEFT, RIGHT, FRONT, BACK;
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    FRONT,
+    BACK;
 
     public Direction getFacing(Direction front, Direction up, boolean flipSide, boolean flipFront) {
         return switch (this) {
@@ -25,11 +30,11 @@ public enum RelativeDirection {
         Direction facing = getFacing(front, up, flipSide, flipFront);
         return switch (facing) {
             case UP -> Comparator.comparingInt(BlockPos::getY);
-            case DOWN -> Comparator.comparingInt(pos -> -pos.getY());
+            case DOWN -> Comparator.comparingInt(pos -> - pos.getY());
             case EAST -> Comparator.comparingInt(BlockPos::getX);
-            case WEST -> Comparator.comparingInt(pos -> -pos.getX());
+            case WEST -> Comparator.comparingInt(pos -> - pos.getX());
             case SOUTH -> Comparator.comparingInt(BlockPos::getZ);
-            case NORTH -> Comparator.comparingInt(pos -> -pos.getZ());
+            case NORTH -> Comparator.comparingInt(pos -> - pos.getZ());
         };
     }
 

@@ -12,11 +12,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrder;
-import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
-import com.murthinext.ae2pr.logic.repeat.RepeatOrderBinding;
-import com.murthinext.ae2pr.logic.repeat.RepeatOrderNotifier;
-import com.murthinext.ae2pr.logic.repeat.ServerRepeatRegistry;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 import appeng.api.features.IPlayerRegistry;
 import appeng.api.networking.IGrid;
@@ -25,8 +22,12 @@ import appeng.api.networking.crafting.ICraftingPlan;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.GenericStack;
 import appeng.menu.me.crafting.CraftConfirmMenu;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
+
+import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrder;
+import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
+import com.murthinext.ae2pr.logic.repeat.RepeatOrderBinding;
+import com.murthinext.ae2pr.logic.repeat.RepeatOrderNotifier;
+import com.murthinext.ae2pr.logic.repeat.ServerRepeatRegistry;
 
 // 确认菜单：未命中普通 CPU 时兜底登记通用重复订单
 @Mixin(CraftConfirmMenu.class)
@@ -131,7 +132,7 @@ public abstract class CraftConfirmMenuMixin {
         order.displayCpu = newlyBusy != null ? newlyBusy : target;
         GeneralRepeatOrders.register(order);
         RepeatOrderNotifier.sendRound(order.ownerPlayerId, order.level, order.what, order.totalRounds,
-                order.totalRounds);
+                                      order.totalRounds);
         order.notifyCooldownTicks = 20;
     }
 

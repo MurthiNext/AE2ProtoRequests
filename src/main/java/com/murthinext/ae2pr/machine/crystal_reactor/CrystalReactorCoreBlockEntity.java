@@ -15,8 +15,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import com.murthinext.ae2pr.ServerConfig;
-import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
+import com.murthinext.ae2pr.registry.ModMachines;
 
 // 高能核心方块实体，水晶反应器
 public class CrystalReactorCoreBlockEntity extends BlockEntity {
@@ -92,8 +92,8 @@ public class CrystalReactorCoreBlockEntity extends BlockEntity {
             return;
         }
         if (level instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(ParticleTypes.END_ROD, worldPosition.getX() + 0.5,
-                    worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5, 3, 1.5, 0.5, 1.5, 0.0);
+            serverLevel.sendParticles(ParticleTypes.END_ROD, worldPosition.getX() + 0.5, worldPosition.getY() + 0.5,
+                                      worldPosition.getZ() + 0.5, 3, 1.5, 0.5, 1.5, 0.0);
         }
         setChanged();
     }
@@ -113,7 +113,7 @@ public class CrystalReactorCoreBlockEntity extends BlockEntity {
             soundBudget--;
             // 以被破坏方块自身的破坏音效回放，音调随机化
             level.playSound(null, pos, state.getSoundType().getBreakSound(), SoundSource.BLOCKS, 0.6F,
-                    0.8F + random.nextFloat() * 0.4F);
+                            0.8F + random.nextFloat() * 0.4F);
         }
         level.setBlock(pos, CrystalBuddingBlocks.roll(random), Block.UPDATE_ALL);
     }

@@ -90,7 +90,7 @@ public final class CtmTextures {
                 continue;
             }
             ResourceLocation ctm = ResourceLocation.fromNamespaceAndPath(base.getNamespace(),
-                    base.getPath() + ATLAS_SUFFIX);
+                                                                         base.getPath() + ATLAS_SUFFIX);
             TextureAtlasSprite atlasSprite = spriteOrNull(atlas, ctm);
             if (atlasSprite == null) {
                 missing.add(base);
@@ -101,7 +101,7 @@ public final class CtmTextures {
         }
         if (!missing.isEmpty()) {
             ae2pr.LOGGER.warn("Connected texture atlas is missing, affected blocks will use plain textures: {}",
-                    missing);
+                              missing);
         }
     }
 

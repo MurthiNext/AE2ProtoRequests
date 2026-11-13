@@ -2,8 +2,6 @@ package com.murthinext.ae2pr.registry;
 
 import java.util.List;
 
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.api.BlockProperties;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
@@ -15,19 +13,21 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.BlockProperties;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleDefinition;
+import com.murthinext.ae2pr.block.AlienLavaBlock;
 import com.murthinext.ae2pr.block.ComputerCasingBlock;
 import com.murthinext.ae2pr.block.DisassemblableBlock;
 import com.murthinext.ae2pr.block.DisassemblableGlassBlock;
 import com.murthinext.ae2pr.block.FilterPressPlateBlock;
-import com.murthinext.ae2pr.block.AlienLavaBlock;
+import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
+import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
+import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
+import com.murthinext.ae2pr.block.meteorite.MeteoriteOreBlock;
 import com.murthinext.ae2pr.block.molecular_assembly_core.MolecularAssemblyCoreBlock;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineModuleBlock;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineUnitBlock;
-import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
-import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
-import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
-import com.murthinext.ae2pr.block.meteorite.MeteoriteOreBlock;
-import com.murthinext.ae2pr.api.multiblock.module.ModuleDefinition;
 
 public final class ModBlocks {
 
@@ -45,28 +45,31 @@ public final class ModBlocks {
     public static final RegistryObject<CrystalAssemblyLineUnitBlock> CRYSTAL_ASSEMBLY_LINE_UNIT = BLOCKS.register(
             "crystal_assembly_line_unit", CrystalAssemblyLineUnitBlock::new);
 
-    public static final RegistryObject<CrystalAssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT = BLOCKS.register(
-            "crystal_assembly_line_charging_unit",
-            () -> new CrystalAssemblyLineModuleBlock(ModuleDefinition.of(ModModules.CHARGING, 1)));
+    public static final RegistryObject<CrystalAssemblyLineModuleBlock>
+            CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT = BLOCKS.register(
+                    "crystal_assembly_line_charging_unit",
+                    () -> new CrystalAssemblyLineModuleBlock(ModuleDefinition.of(ModModules.CHARGING, 1)));
 
-    public static final RegistryObject<CrystalAssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT = BLOCKS
-            .register("crystal_assembly_line_advanced_charging_unit",
+    public static final RegistryObject<CrystalAssemblyLineModuleBlock>
+            CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT = BLOCKS.register(
+                    "crystal_assembly_line_advanced_charging_unit",
                     () -> new CrystalAssemblyLineModuleBlock(ModuleDefinition.of(ModModules.CHARGING, 2)));
 
-    public static final RegistryObject<CrystalAssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT = BLOCKS.register(
-            "crystal_assembly_line_parallel_unit",
-            () -> new CrystalAssemblyLineModuleBlock(ModuleDefinition.of(ModModules.PARALLEL, 1)));
+    public static final RegistryObject<CrystalAssemblyLineModuleBlock>
+            CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT = BLOCKS.register(
+                    "crystal_assembly_line_parallel_unit",
+                    () -> new CrystalAssemblyLineModuleBlock(ModuleDefinition.of(ModModules.PARALLEL, 1)));
 
-    public static final RegistryObject<CrystalAssemblyLineModuleBlock> CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT = BLOCKS.register(
-            "crystal_assembly_line_speed_unit",
-            () -> new CrystalAssemblyLineModuleBlock(ModuleDefinition.of(ModModules.SPEED, 1)));
+    public static final RegistryObject<CrystalAssemblyLineModuleBlock>
+            CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT = BLOCKS.register(
+                    "crystal_assembly_line_speed_unit",
+                    () -> new CrystalAssemblyLineModuleBlock(ModuleDefinition.of(ModModules.SPEED, 1)));
 
     public static final RegistryObject<Block> CRYSTAL_ASSEMBLY_LINE_GRATING = BLOCKS.register(
             "crystal_assembly_line_grating", () -> new DisassemblableBlock(casingProperties()));
 
     public static final RegistryObject<GlassBlock> CRYSTAL_GLASS = BLOCKS.register(
-            "crystal_glass",
-            () -> new DisassemblableGlassBlock(BlockProperties.glass(MapColor.COLOR_LIGHT_BLUE)));
+            "crystal_glass", () -> new DisassemblableGlassBlock(BlockProperties.glass(MapColor.COLOR_LIGHT_BLUE)));
 
     public static final RegistryObject<GlassBlock> FIREPROOF_CRYSTAL_GLASS = BLOCKS.register(
             "fireproof_crystal_glass",
@@ -102,20 +105,20 @@ public final class ModBlocks {
     public static final RegistryObject<ComputerCasingBlock> ME_ADVANCED_COMPUTER_CASING = BLOCKS.register(
             "me_advanced_computer_casing", () -> new ComputerCasingBlock(casingProperties()));
 
-    public static final RegistryObject<MachinePartBlock> AEV_INPUT_BUS = BLOCKS.register(
-            "aev_input_bus", MachinePartBlock::new);
+    public static final RegistryObject<MachinePartBlock> AEV_INPUT_BUS = BLOCKS.register("aev_input_bus",
+                                                                                         MachinePartBlock::new);
 
-    public static final RegistryObject<MachinePartBlock> AEV_OUTPUT_BUS = BLOCKS.register(
-            "aev_output_bus", MachinePartBlock::new);
+    public static final RegistryObject<MachinePartBlock> AEV_OUTPUT_BUS = BLOCKS.register("aev_output_bus",
+                                                                                          MachinePartBlock::new);
 
-    public static final RegistryObject<MachinePartBlock> AEV_INPUT_HATCH = BLOCKS.register(
-            "aev_input_hatch", MachinePartBlock::new);
+    public static final RegistryObject<MachinePartBlock> AEV_INPUT_HATCH = BLOCKS.register("aev_input_hatch",
+                                                                                           MachinePartBlock::new);
 
-    public static final RegistryObject<MachinePartBlock> AEV_OUTPUT_HATCH = BLOCKS.register(
-            "aev_output_hatch", MachinePartBlock::new);
+    public static final RegistryObject<MachinePartBlock> AEV_OUTPUT_HATCH = BLOCKS.register("aev_output_hatch",
+                                                                                            MachinePartBlock::new);
 
-    public static final RegistryObject<MachinePartBlock> AEV_DUAL_INPUT_HATCH = BLOCKS.register(
-            "aev_dual_input_hatch", MachinePartBlock::new);
+    public static final RegistryObject<MachinePartBlock> AEV_DUAL_INPUT_HATCH = BLOCKS.register("aev_dual_input_hatch",
+                                                                                                MachinePartBlock::new);
 
     public static final RegistryObject<MachinePartBlock> AEV_DUAL_OUTPUT_HATCH = BLOCKS.register(
             "aev_dual_output_hatch", MachinePartBlock::new);
@@ -125,30 +128,26 @@ public final class ModBlocks {
 
     // 全部仓室方块，供方块实体注册与结构判定共用
     public static final List<RegistryObject<MachinePartBlock>> MACHINE_PARTS = List.of(
-            CERTUS_QUARTZ_CRYSTAL_INPUT_BUS,
-            CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH,
-            CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS,
-            CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH,
-            AEV_INPUT_BUS,
-            AEV_INPUT_HATCH,
-            AEV_OUTPUT_BUS,
-            AEV_OUTPUT_HATCH,
-            AEV_DUAL_INPUT_HATCH,
-            AEV_DUAL_OUTPUT_HATCH);
+            CERTUS_QUARTZ_CRYSTAL_INPUT_BUS, CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH, CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS,
+            CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH, AEV_INPUT_BUS, AEV_INPUT_HATCH, AEV_OUTPUT_BUS, AEV_OUTPUT_HATCH,
+            AEV_DUAL_INPUT_HATCH, AEV_DUAL_OUTPUT_HATCH);
 
     public static final RegistryObject<Block> LOGISTICS_CONTROL_CASING = BLOCKS.register(
             "logistics_control_casing", () -> new DisassemblableBlock(BlockProperties.metal(MapColor.COLOR_PURPLE)));
 
-    public static final RegistryObject<AlienLavaBlock> ALIEN_LAVA = BLOCKS.register("alien_lava",
-            () -> new AlienLavaBlock(ModFluids.ALIEN_LAVA, Block.Properties.of()
-                    .mapColor(MapColor.FIRE)
-                    .replaceable()
-                    .noCollission()
-                    .randomTicks()
-                    .strength(100.0F)
-                    .pushReaction(PushReaction.DESTROY)
-                    .lightLevel(state -> 15)
-                    .noLootTable()));
+    public static final RegistryObject<AlienLavaBlock> ALIEN_LAVA = BLOCKS.register(
+            "alien_lava",
+            ()
+                    -> new AlienLavaBlock(ModFluids.ALIEN_LAVA,
+                                          Block.Properties.of()
+                                                  .mapColor(MapColor.FIRE)
+                                                  .replaceable()
+                                                  .noCollission()
+                                                  .randomTicks()
+                                                  .strength(100.0F)
+                                                  .pushReaction(PushReaction.DESTROY)
+                                                  .lightLevel(state -> 15)
+                                                  .noLootTable()));
 
     public static final RegistryObject<MeteoriteOreBlock> METEORITE_IRON_ORE = BLOCKS.register(
             "meteorite_iron_ore", () -> new MeteoriteOreBlock(meteoriteOreProperties(), ConstantInt.of(0)));
@@ -181,11 +180,13 @@ public final class ModBlocks {
             "zircon_block", () -> new Block(storageBlockProperties(MapColor.COLOR_LIGHT_GRAY)));
 
     public static final RegistryObject<Block> DENSE_SKY_STONE_BLOCK = BLOCKS.register(
-            "dense_sky_stone_block", () -> new Block(Block.Properties.of()
-                    .mapColor(MapColor.STONE)
-                    .strength(5.0F, 150.0F)
-                    .sound(SoundType.STONE)
-                    .requiresCorrectToolForDrops()));
+            "dense_sky_stone_block",
+            ()
+                    -> new Block(Block.Properties.of()
+                                         .mapColor(MapColor.STONE)
+                                         .strength(5.0F, 150.0F)
+                                         .sound(SoundType.STONE)
+                                         .requiresCorrectToolForDrops()));
 
     public static final RegistryObject<FilterPressPlateBlock> FILTER_PRESS_PLATE = BLOCKS.register(
             "filter_press_plate", () -> new FilterPressPlateBlock(casingProperties()));

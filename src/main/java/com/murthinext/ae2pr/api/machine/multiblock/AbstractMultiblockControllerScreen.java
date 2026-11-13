@@ -22,11 +22,11 @@ import net.minecraftforge.fluids.FluidStack;
 
 import appeng.util.ReadableNumberConverter;
 
+import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
 import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
-import com.murthinext.ae2pr.api.machine.part.MachinePart;
 import com.murthinext.ae2pr.api.machine.client.MachineStyles;
-import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
+import com.murthinext.ae2pr.api.machine.part.MachinePart;
 
 public abstract class AbstractMultiblockControllerScreen<M extends AbstractMultiblockControllerMenu<?>>
         extends AbstractMachineScreen<M> implements CustomIngredientSource {
@@ -95,12 +95,14 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         super.renderLabels(graphics, mouseX, mouseY);
-        graphics.drawString(font, Component.translatable(menu.isFormed() ? "gui.ae2pr.multiblock.formed"
-                : "gui.ae2pr.multiblock.unformed"), TEXT_X, STATUS_Y, menu.isFormed() ? COLOR_OK : COLOR_FAIL, false);
-        graphics.drawString(font, powerText(), TEXT_X, POWER_Y,
-                menu.isNetworkConnected() ? COLOR_INFO : COLOR_GRAY, false);
+        graphics.drawString(font,
+                            Component.translatable(menu.isFormed() ? "gui.ae2pr.multiblock.formed"
+                                                                   : "gui.ae2pr.multiblock.unformed"),
+                            TEXT_X, STATUS_Y, menu.isFormed() ? COLOR_OK : COLOR_FAIL, false);
+        graphics.drawString(font, powerText(), TEXT_X, POWER_Y, menu.isNetworkConnected() ? COLOR_INFO : COLOR_GRAY,
+                            false);
         graphics.drawString(font, Component.translatable("gui.ae2pr.multiblock.parallel", menu.getMaxParallel()),
-                TEXT_X, PARALLEL_Y, COLOR_INFO, false);
+                            TEXT_X, PARALLEL_Y, COLOR_INFO, false);
         graphics.drawString(font, Component.translatable(statusKey()), TEXT_X, JOB_Y, jobColor(), false);
         Component error = errorText();
         if (error != null) {
@@ -134,8 +136,8 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
             name = fluid.getDisplayName();
             amount = NumberFormat.getIntegerInstance().format(fluid.getAmount()) + " mB";
         }
-        Component tail = Component.literal(amount).append(Component.translatable(
-                "gui.ae2pr.multiblock.job.time", menu.getJobElapsed(), duration));
+        Component tail = Component.literal(amount).append(Component.translatable("gui.ae2pr.multiblock.job.time",
+                                                                                 menu.getJobElapsed(), duration));
         int tailX = imageWidth - 2 - font.width(tail);
         renderJobName(graphics, name.getString(), tailX - JOB_TAIL_GAP - JOB_TEXT_X);
         graphics.drawString(font, tail, tailX, JOB_TEXT_Y, COLOR_RUNNING, false);
@@ -143,11 +145,12 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
 
     private void renderFluidIcon(GuiGraphics graphics, FluidStack fluid) {
         IClientFluidTypeExtensions extensions = IClientFluidTypeExtensions.of(fluid.getFluid());
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                .apply(extensions.getStillTexture(fluid));
+        TextureAtlasSprite sprite = Minecraft.getInstance()
+                                            .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+                                            .apply(extensions.getStillTexture(fluid));
         int color = extensions.getTintColor(fluid);
-        graphics.setColor(((color >> 16) & 0xFF) / 255.0F, ((color >> 8) & 0xFF) / 255.0F,
-                (color & 0xFF) / 255.0F, ((color >>> 24) & 0xFF) / 255.0F);
+        graphics.setColor(((color >> 16) & 0xFF) / 255.0F, ((color >> 8) & 0xFF) / 255.0F, (color & 0xFF) / 255.0F,
+                          ((color >>> 24) & 0xFF) / 255.0F);
         graphics.blit(JOB_ITEM_X, JOB_ITEM_Y, 0, 16, 16, sprite);
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
@@ -165,8 +168,8 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
         int shift = (int) (Util.getMillis() * JOB_NAME_SCROLL_SPEED / 1000.0D % cycle);
         // 绘制使用局部坐标，裁剪使用屏幕绝对坐标。
         graphics.flush();
-        graphics.enableScissor(leftPos + JOB_TEXT_X, topPos + JOB_TEXT_Y,
-                leftPos + JOB_TEXT_X + maxWidth, topPos + JOB_TEXT_Y + font.lineHeight);
+        graphics.enableScissor(leftPos + JOB_TEXT_X, topPos + JOB_TEXT_Y, leftPos + JOB_TEXT_X + maxWidth,
+                               topPos + JOB_TEXT_Y + font.lineHeight);
         graphics.drawString(font, name, JOB_TEXT_X - shift, JOB_TEXT_Y, COLOR_RUNNING, false);
         graphics.drawString(font, name, JOB_TEXT_X - shift + cycle, JOB_TEXT_Y, COLOR_RUNNING, false);
         graphics.flush();
@@ -178,7 +181,8 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
             return Component.translatable("gui.ae2pr.multiblock.network.disconnected");
         }
         double power = menu.getNetworkStoredPower();
-        return Component.translatable("gui.ae2pr.multiblock.power.stored",
+        return Component.translatable(
+                "gui.ae2pr.multiblock.power.stored",
                 ReadableNumberConverter.format((long) Math.min(Math.max(power, 0), Long.MAX_VALUE), 5) + " AE");
     }
 
@@ -201,27 +205,30 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
         if (super.renderCustomTooltip(graphics, mouseX, mouseY)) {
             return true;
         }
-        if (mouseX >= leftPos + TEXT_X && mouseX < leftPos + 174
-                && mouseY >= topPos + POWER_Y && mouseY < topPos + POWER_Y + font.lineHeight) {
-            GuiTooltips.render(graphics, font, List.of(
-                    Component.translatable("gui.ae2pr.multiblock.channels", menu.getAllocatedChannels(),
-                            menu.getRequiredChannels()),
-                    Component.translatable("gui.ae2pr.multiblock.channels.limit",
-                            MachinePart.NetworkPart.MAX_CHANNELS)), mouseX, mouseY);
+        if (mouseX >= leftPos + TEXT_X && mouseX < leftPos + 174 && mouseY >= topPos + POWER_Y &&
+            mouseY < topPos + POWER_Y + font.lineHeight) {
+            GuiTooltips.render(graphics, font,
+                               List.of(Component.translatable("gui.ae2pr.multiblock.channels",
+                                                              menu.getAllocatedChannels(), menu.getRequiredChannels()),
+                                       Component.translatable("gui.ae2pr.multiblock.channels.limit",
+                                                              MachinePart.NetworkPart.MAX_CHANNELS)),
+                               mouseX, mouseY);
             return true;
         }
         if (jobItemArea().contains(mouseX, mouseY)) {
             ItemStack item = menu.getJobItem();
             if (!item.isEmpty()) {
-                graphics.renderTooltip(font, Screen.getTooltipFromItem(minecraft, item), item.getTooltipImage(),
-                        item, mouseX, mouseY);
+                graphics.renderTooltip(font, Screen.getTooltipFromItem(minecraft, item), item.getTooltipImage(), item,
+                                       mouseX, mouseY);
                 return true;
             }
             FluidStack fluid = menu.getJobFluid();
             if (!fluid.isEmpty()) {
-                GuiTooltips.render(graphics, font, List.of(fluid.getDisplayName(),
-                        Component.translatable("gui.ae2pr.machine_part.tank.mb",
-                                String.format(java.util.Locale.ROOT, "%,d", fluid.getAmount()))),
+                GuiTooltips.render(
+                        graphics, font,
+                        List.of(fluid.getDisplayName(),
+                                Component.translatable("gui.ae2pr.machine_part.tank.mb",
+                                                       String.format(java.util.Locale.ROOT, "%,d", fluid.getAmount()))),
                         mouseX, mouseY);
                 return true;
             }

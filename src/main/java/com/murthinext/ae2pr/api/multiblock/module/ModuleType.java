@@ -1,8 +1,8 @@
 package com.murthinext.ae2pr.api.multiblock.module;
 
-import com.murthinext.ae2pr.api.Ids;
-
 import net.minecraft.resources.ResourceLocation;
+
+import com.murthinext.ae2pr.api.Ids;
 
 public record ModuleType(ResourceLocation id, int maxCount) {
 
@@ -13,7 +13,7 @@ public record ModuleType(ResourceLocation id, int maxCount) {
     }
 
     public static ModuleType of(String path, int maxCount) {
-        return new ModuleType(Ids.of( path), maxCount);
+        return new ModuleType(Ids.of(path), maxCount);
     }
 
     public String translationKey() {

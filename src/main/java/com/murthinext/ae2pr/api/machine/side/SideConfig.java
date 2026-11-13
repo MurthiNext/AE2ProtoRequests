@@ -52,21 +52,21 @@ public final class SideConfig {
             return true;
         }
         switch (id) {
-            case BUTTON_AUTO_PULL -> {
-                autoPull = !autoPull;
-                return true;
-            }
-            case BUTTON_AUTO_PUSH -> {
-                autoPush = !autoPush;
-                return true;
-            }
-            case BUTTON_CLEAR -> {
-                reset(SideMode.NONE);
-                return true;
-            }
-            default -> {
-                return false;
-            }
+        case BUTTON_AUTO_PULL -> {
+            autoPull = !autoPull;
+            return true;
+        }
+        case BUTTON_AUTO_PUSH -> {
+            autoPush = !autoPush;
+            return true;
+        }
+        case BUTTON_CLEAR -> {
+            reset(SideMode.NONE);
+            return true;
+        }
+        default -> {
+            return false;
+        }
         }
     }
 

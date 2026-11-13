@@ -8,9 +8,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
-
 import appeng.util.ConfigInventory;
+
+import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 
 // AE2CS 集成接口：独立逻辑不复用 InterfaceLogic，这里补上配置/存储库存的宿主绑定
 @Pseudo
@@ -25,11 +25,11 @@ public abstract class IntegratedInterfaceLogicMixin {
     @Final
     private ConfigInventory storage;
 
-    @Inject(
-            method = "<init>(Lappeng/api/networking/IManagedGridNode;Lio/github/lounode/ae2cs/common/me/logic/IntegratedInterfaceHost;II)V",
-            at = @At("TAIL"),
-            remap = false)
-    private void ae2pr$bindInventory(CallbackInfo ci) {
+    @Inject(method =
+                    "<init>(Lappeng/api/networking/IManagedGridNode;Lio/github/lounode/ae2cs/common/me/logic/IntegratedInterfaceHost;II)V",
+            at = @At("TAIL"), remap = false)
+    private void
+    ae2pr$bindInventory(CallbackInfo ci) {
         SuperStackSupport.bind(this.configInv, this);
         SuperStackSupport.bind(this.storage, this);
     }

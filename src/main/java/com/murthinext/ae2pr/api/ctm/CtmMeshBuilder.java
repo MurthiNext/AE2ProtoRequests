@@ -17,13 +17,9 @@ public final class CtmMeshBuilder {
     private static final float GRID = 8.0F;
     private static final float EPS = 1.0E-4F;
 
-    private static final int[] VALID_CORNERS = {
-            0, 0, 0, 0, 0, 1, 2, 3, 0, 4, 8, 12, 0, 5, 10, 15
-    };
+    private static final int[] VALID_CORNERS = { 0, 0, 0, 0, 0, 1, 2, 3, 0, 4, 8, 12, 0, 5, 10, 15 };
 
-    private static final int[] TILE_OFFSET = {
-            0, 1, 2, 3, 4, 5, 7, 9, 13, 14, 16, 18, 22, 23, 27, 31
-    };
+    private static final int[] TILE_OFFSET = { 0, 1, 2, 3, 4, 5, 7, 9, 13, 14, 16, 18, 22, 23, 27, 31 };
 
     private CtmMeshBuilder() {
     }
@@ -43,14 +39,13 @@ public final class CtmMeshBuilder {
         if (atlas == null) {
             return List.of(quad);
         }
-        return CtmTextures.isQuadrant(base)
-                ? QuadrantCtmMeshBuilder.build(quad, base, atlas, worldMask)
-                : List.of(rewriteTile(quad, base, atlas, worldMask));
+        return CtmTextures.isQuadrant(base) ? QuadrantCtmMeshBuilder.build(quad, base, atlas, worldMask)
+                                            : List.of(rewriteTile(quad, base, atlas, worldMask));
     }
 
     // 把四边形 UV 重写到 47-tile 图集中对应图块
     public static BakedQuad rewriteTile(BakedQuad quad, TextureAtlasSprite base, TextureAtlasSprite atlas,
-            int worldMask) {
+                                        int worldMask) {
         int[] src = quad.getVertices();
         int[] out = src.clone();
 

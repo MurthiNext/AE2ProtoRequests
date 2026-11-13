@@ -1,5 +1,26 @@
 package com.murthinext.ae2pr.requester.client.abstraction;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
+import com.mojang.blaze3d.platform.InputConstants;
+
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+
 import appeng.api.behaviors.ContainerItemStrategies;
 import appeng.api.behaviors.EmptyingAction;
 import appeng.api.stacks.GenericStack;
@@ -13,32 +34,15 @@ import appeng.core.localization.Tooltips;
 import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.InventoryActionPacket;
 import appeng.helpers.InventoryAction;
+
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.requester.RequesterUtils;
-import com.murthinext.ae2pr.requester.client.RequestSlot;
-import com.murthinext.ae2pr.requester.client.widgets.RequestWidget;
 import com.murthinext.ae2pr.mixin.ae2.accessor.WidgetContainerAccessor;
+import com.murthinext.ae2pr.requester.RequesterUtils;
 import com.murthinext.ae2pr.requester.Requests.Request;
 import com.murthinext.ae2pr.requester.abstraction.AbstractRedstoneRequesterMenu;
 import com.murthinext.ae2pr.requester.abstraction.RequestTracker;
-import com.mojang.blaze3d.platform.InputConstants;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.ClickType;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
-
-import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.murthinext.ae2pr.requester.client.RequestSlot;
+import com.murthinext.ae2pr.requester.client.widgets.RequestWidget;
 
 import static com.murthinext.ae2pr.requester.RequesterUtils.f;
 
@@ -46,7 +50,8 @@ import static com.murthinext.ae2pr.requester.RequesterUtils.f;
  * yoinked from {@link PatternAccessTermScreen}
  */
 @SuppressWarnings("UnstableApiUsage")
-public abstract class AbstractRedstoneRequesterScreen<M extends AbstractRedstoneRequesterMenu> extends AEBaseScreen<M> implements RequestDisplay {
+public abstract class AbstractRedstoneRequesterScreen<M extends AbstractRedstoneRequesterMenu>
+        extends AEBaseScreen<M> implements RequestDisplay {
 
     protected static final int GUI_WIDTH = 195;
     private static final int GUI_PADDING_X = 8;
@@ -75,9 +80,8 @@ public abstract class AbstractRedstoneRequesterScreen<M extends AbstractRedstone
     protected int rowAmount;
 
     @SuppressWarnings("AssignmentToSuperclassField")
-    protected AbstractRedstoneRequesterScreen(
-        M menu, Inventory playerInventory, Component name, ScreenStyle style, ResourceLocation texture
-    ) {
+    protected AbstractRedstoneRequesterScreen(M menu, Inventory playerInventory, Component name, ScreenStyle style,
+                                              ResourceLocation texture) {
         super(menu, playerInventory, name, style);
         this.texture = texture;
         scrollbar = widgets.addScrollBar("scrollbar");
@@ -138,8 +142,7 @@ public abstract class AbstractRedstoneRequesterScreen<M extends AbstractRedstone
         imageHeight = GUI_HEADER_HEIGHT + GUI_FOOTER_HEIGHT + rowAmount * ROW_HEIGHT;
 
         requestWidgets.forEach(
-            w -> w.preInit(RequesterUtils.cast(widgets, WidgetContainerAccessor.class).ae2pr$getWidgets())
-        );
+                w -> w.preInit(RequesterUtils.cast(widgets, WidgetContainerAccessor.class).ae2pr$getWidgets()));
         super.init();
         // clear old widgets because init() is recalled when the terminal resizes
         requestWidgets.clear();
@@ -169,21 +172,15 @@ public abstract class AbstractRedstoneRequesterScreen<M extends AbstractRedstone
 
     @Override
     public void drawFG(GuiGraphics guiGraphics, int pX, int pY, int mX, int mY) {
-        menu.slots.removeIf(RequestSlot.class::isInstance);
+        menu.slots.removeIf(RequestSlot.class ::isInstance);
 
         int textColor = style.getColor(PaletteColor.DEFAULT_TEXT_COLOR).toARGB();
 
         if (lines.isEmpty()) {
             var text = RequesterUtils.translateAsString("gui", "no_requesters");
             var textWidth = font.width(text);
-            guiGraphics.drawString(
-                font,
-                text,
-                (int) ((GUI_WIDTH - textWidth) / 2f - 10),
-                GUI_PADDING_Y + GUI_HEADER_HEIGHT,
-                textColor,
-                false
-            );
+            guiGraphics.drawString(font, text, (int) ((GUI_WIDTH - textWidth) / 2f - 10),
+                                   GUI_PADDING_Y + GUI_HEADER_HEIGHT, textColor, false);
             requestWidgets.forEach(RequestWidget::hide);
             return;
         }
@@ -206,14 +203,8 @@ public abstract class AbstractRedstoneRequesterScreen<M extends AbstractRedstone
                 if (rows > 1) text = f("{} ({})", text, rows);
                 text = font.plainSubstrByWidth(text, TEXT_MAX_WIDTH, true);
 
-                guiGraphics.drawString(
-                    font,
-                    text,
-                    GUI_PADDING_X + TEXT_MARGIN_X,
-                    GUI_PADDING_Y + GUI_HEADER_HEIGHT + i * ROW_HEIGHT,
-                    textColor,
-                    false
-                );
+                guiGraphics.drawString(font, text, GUI_PADDING_X + TEXT_MARGIN_X,
+                                       GUI_PADDING_Y + GUI_HEADER_HEIGHT + i * ROW_HEIGHT, textColor, false);
                 requestWidgets.get(i).hide();
             } else {
                 ae2pr.LOGGER.debug("Unknown line element: {}", lineElement);
@@ -232,38 +223,29 @@ public abstract class AbstractRedstoneRequesterScreen<M extends AbstractRedstone
 
         // fluid container handler
         if (mouseButton == InputConstants.MOUSE_BUTTON_RIGHT && getEmptyingAction(slot, menu.getCarried()) != null) {
-            var packet = new InventoryActionPacket(
-                InventoryAction.EMPTY_ITEM,
-                requestSlot.getSlot(),
-                requestSlot.getRequesterReference().getRequesterId()
-            );
+            var packet = new InventoryActionPacket(InventoryAction.EMPTY_ITEM, requestSlot.getSlot(),
+                                                   requestSlot.getRequesterReference().getRequesterId());
             NetworkHandler.instance().sendToServer(packet);
             return;
         }
 
         InventoryAction action = null;
         switch (clickType) {
-            case PICKUP -> action = mouseButton == 1 ?
-                InventoryAction.SPLIT_OR_PLACE_SINGLE :
-                InventoryAction.PICKUP_OR_SET_DOWN;
-            case QUICK_MOVE -> action = mouseButton == 1 ?
-                InventoryAction.PICKUP_SINGLE :
-                InventoryAction.SHIFT_CLICK;
-            case CLONE -> {
-                if (getPlayer().getAbilities().instabuild) {
-                    action = InventoryAction.CREATIVE_DUPLICATE;
-                }
+        case PICKUP ->
+            action = mouseButton == 1 ? InventoryAction.SPLIT_OR_PLACE_SINGLE : InventoryAction.PICKUP_OR_SET_DOWN;
+        case QUICK_MOVE -> action = mouseButton == 1 ? InventoryAction.PICKUP_SINGLE : InventoryAction.SHIFT_CLICK;
+        case CLONE -> {
+            if (getPlayer().getAbilities().instabuild) {
+                action = InventoryAction.CREATIVE_DUPLICATE;
             }
-            default -> {
-            }
+        }
+        default -> {
+        }
         }
 
         if (action != null) {
             InventoryActionPacket packet = new InventoryActionPacket(
-                action,
-                requestSlot.getSlot(),
-                requestSlot.getRequesterReference().getRequesterId()
-            );
+                    action, requestSlot.getSlot(), requestSlot.getRequesterReference().getRequesterId());
             NetworkHandler.instance().sendToServer(packet);
         }
     }
@@ -308,13 +290,8 @@ public abstract class AbstractRedstoneRequesterScreen<M extends AbstractRedstone
     }
 
     private RequestSlot createSlot(int index, Request request) {
-        var slot = new RequestSlot(
-            this,
-            (RequesterReference) request.getRequesterReference(),
-            request.getIndex(),
-            ROW_HEIGHT + GUI_PADDING_X,
-            (index + 1) * ROW_HEIGHT + 1
-        );
+        var slot = new RequestSlot(this, (RequesterReference) request.getRequesterReference(), request.getIndex(),
+                                   ROW_HEIGHT + GUI_PADDING_X, (index + 1) * ROW_HEIGHT + 1);
         slot.setHideAmount(true);
         slot.setLocked(request.getClientStatus().locksRequest());
         return slot;

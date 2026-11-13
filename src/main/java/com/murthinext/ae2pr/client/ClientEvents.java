@@ -1,14 +1,7 @@
 package com.murthinext.ae2pr.client;
 
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgressCache;
-import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderFailures;
-import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderRounds;
-import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderState;
-import com.murthinext.ae2pr.client.tooltip.TooltipRenderer;
-import com.murthinext.ae2pr.client.tooltip.FormulaTooltip;
-import com.murthinext.ae2pr.item.upgrade.MachineUpgradeCardItem;
 import com.mojang.datafixers.util.Either;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -19,6 +12,15 @@ import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderFailures;
+import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderRounds;
+import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderState;
+import com.murthinext.ae2pr.client.tooltip.FormulaTooltip;
+import com.murthinext.ae2pr.client.tooltip.TooltipRenderer;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgressCache;
+import com.murthinext.ae2pr.item.upgrade.MachineUpgradeCardItem;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class ClientEvents {
@@ -40,10 +42,16 @@ public final class ClientEvents {
         // 特效行由自定义组件渲染，需在此处自行折行
         int maxWidth = event.getMaxWidth() > 0 ? event.getMaxWidth() : event.getScreenWidth() - 32;
         if (stack.getItem() instanceof MachineUpgradeCardItem card) {
-            elements.replaceAll(element -> element.left().filter(text -> text instanceof Component component
-                    && component.getContents() instanceof TranslatableContents contents
-                    && contents.getKey().equals("tooltip.ae2pr.machine_upgrade.formula")).isPresent()
-                            ? Either.right(new FormulaTooltip(card.definition().formula(), maxWidth)) : element);
+            elements.replaceAll(
+                    element
+                    -> element.left()
+                                    .filter(text
+                                            -> text instanceof Component component &&
+                                                    component.getContents() instanceof TranslatableContents contents &&
+                                                    contents.getKey().equals("tooltip.ae2pr.machine_upgrade.formula"))
+                                    .isPresent()
+                            ? Either.right(new FormulaTooltip(card.definition().formula(), maxWidth))
+                            : element);
         }
         var prepared = TooltipRenderer.prepareElements(elements, Minecraft.getInstance().font, maxWidth);
         elements.clear();

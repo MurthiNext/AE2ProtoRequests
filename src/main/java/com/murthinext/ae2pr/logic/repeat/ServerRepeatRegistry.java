@@ -56,6 +56,5 @@ public final class ServerRepeatRegistry {
         RESTORE.remove(playerId);
     }
 
-    private record Pending(int rounds, long timestamp) {
-    }
+    private record Pending(int rounds, long timestamp) {}
 }

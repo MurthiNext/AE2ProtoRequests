@@ -4,8 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.registry.ModMachines;
 
 public class CrystalReactionChamberControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
@@ -14,8 +14,7 @@ public class CrystalReactionChamberControllerBlockEntity extends AbstractMultibl
     }
 
     public BlockPos getBuddingQuartzPos() {
-        return CrystalReactionChamberStructure.buddingQuartzPos(worldPosition, getFacing(), mirrorSide,
-                mirrorFront);
+        return CrystalReactionChamberStructure.buddingQuartzPos(worldPosition, getFacing(), mirrorSide, mirrorFront);
     }
 
     @Override

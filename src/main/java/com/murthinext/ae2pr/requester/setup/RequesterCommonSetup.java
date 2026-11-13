@@ -7,8 +7,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import appeng.blockentity.AEBaseBlockEntity;
 
-import com.murthinext.ae2pr.registry.ModCreativeTabs;
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.registry.ModCreativeTabs;
 import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
 import com.murthinext.ae2pr.requester.network.RequesterNetwork;
 
@@ -23,10 +23,10 @@ public final class RequesterCommonSetup {
         event.enqueueWork(() -> {
             RequesterNetwork.init();
             var blockEntityType = RequesterRegistration.REDSTONE_REQUESTER_BLOCK_ENTITY.get();
-            RequesterRegistration.REDSTONE_REQUESTER_BLOCK.get()
-                    .setBlockEntity(RedstoneRequesterBlockEntity.class, blockEntityType, null, null);
+            RequesterRegistration.REDSTONE_REQUESTER_BLOCK.get().setBlockEntity(RedstoneRequesterBlockEntity.class,
+                                                                                blockEntityType, null, null);
             AEBaseBlockEntity.registerBlockEntityItem(blockEntityType,
-                    RequesterRegistration.REDSTONE_REQUESTER_ITEM.get());
+                                                      RequesterRegistration.REDSTONE_REQUESTER_ITEM.get());
         });
     }
 

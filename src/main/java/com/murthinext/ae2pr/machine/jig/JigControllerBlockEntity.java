@@ -7,8 +7,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.registry.ModMachines;
 
 public class JigControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
@@ -31,7 +31,6 @@ public class JigControllerBlockEntity extends AbstractMultiblockControllerBlockE
     @Override
     public AABB getRenderBoundingBox() {
         List<BlockPos> cells = getWaterCells();
-        return new AABB(cells.get(0)).minmax(new AABB(cells.get(cells.size() - 1)))
-                .minmax(new AABB(worldPosition));
+        return new AABB(cells.get(0)).minmax(new AABB(cells.get(cells.size() - 1))).minmax(new AABB(worldPosition));
     }
 }

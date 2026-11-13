@@ -6,8 +6,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
-import com.murthinext.ae2pr.mixin.ae2.accessor.AEBaseMenuInvoker;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
 import appeng.client.gui.implementations.CellWorkbenchScreen;
 import appeng.client.gui.implementations.UpgradeableScreen;
@@ -16,10 +18,9 @@ import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.AETextField;
 import appeng.menu.SlotSemantics;
 import appeng.menu.implementations.CellWorkbenchMenu;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
+
+import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
+import com.murthinext.ae2pr.mixin.ae2.accessor.AEBaseMenuInvoker;
 
 // 元件工作台界面：高级过滤元件用白/黑名单输入框替换 63 格配置区
 @Mixin(value = CellWorkbenchScreen.class, remap = false)
@@ -50,13 +51,13 @@ public abstract class CellWorkbenchScreenMixin extends UpgradeableScreen<CellWor
     private String ae2pr$sentBlack = "";
 
     public CellWorkbenchScreenMixin(CellWorkbenchMenu menu, Inventory playerInventory, Component title,
-            ScreenStyle style) {
+                                    ScreenStyle style) {
         super(menu, playerInventory, title, style);
     }
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void ae2pr$initFields(CellWorkbenchMenu menu, Inventory playerInventory, Component title, ScreenStyle style,
-            CallbackInfo ci) {
+                                  CallbackInfo ci) {
         var white = new AETextField(this.style, this.font, 0, 0, ae2pr$FIELD_WIDTH, 14);
         white.setMaxLength(256);
         white.setBordered(false);
@@ -171,17 +172,17 @@ public abstract class CellWorkbenchScreenMixin extends UpgradeableScreen<CellWor
         }
 
         int color = this.style.getColor(PaletteColor.DEFAULT_TEXT_COLOR).toARGB();
-        guiGraphics.drawString(font, Component.translatable("gui.ae2pr.advanced_filter_cell.whitelist"),
-                ae2pr$FIELD_X, ae2pr$WHITELIST_Y - 10, color, false);
-        guiGraphics.drawString(font, Component.translatable("gui.ae2pr.advanced_filter_cell.blacklist"),
-                ae2pr$FIELD_X, ae2pr$BLACKLIST_Y - 10, color, false);
+        guiGraphics.drawString(font, Component.translatable("gui.ae2pr.advanced_filter_cell.whitelist"), ae2pr$FIELD_X,
+                               ae2pr$WHITELIST_Y - 10, color, false);
+        guiGraphics.drawString(font, Component.translatable("gui.ae2pr.advanced_filter_cell.blacklist"), ae2pr$FIELD_X,
+                               ae2pr$BLACKLIST_Y - 10, color, false);
 
         var pose = guiGraphics.pose();
         pose.pushPose();
         pose.translate(ae2pr$FIELD_X, 112, 0);
         pose.scale(1, 1, 1);
-        guiGraphics.drawString(font, Component.translatable("gui.ae2pr.advanced_filter_cell.hint"), 0, 0,
-                0xFF808080, false);
+        guiGraphics.drawString(font, Component.translatable("gui.ae2pr.advanced_filter_cell.hint"), 0, 0, 0xFF808080,
+                               false);
         pose.popPose();
     }
 }

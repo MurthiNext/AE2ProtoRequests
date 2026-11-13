@@ -1,8 +1,8 @@
 package com.murthinext.ae2pr.api.material;
 
-import net.minecraft.world.item.Item;
-
 import java.util.List;
+
+import net.minecraft.world.item.Item;
 
 /**
  * 材质的形态模板：决定物品 id 后缀与物品类型。

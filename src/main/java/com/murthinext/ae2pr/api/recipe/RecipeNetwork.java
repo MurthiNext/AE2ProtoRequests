@@ -26,7 +26,7 @@ public final class RecipeNetwork {
 
     public static RecipeDraft readDraft(FriendlyByteBuf buffer) {
         return new RecipeDraft(readItemInputs(buffer), readFluidStacks(buffer), readItemOutputs(buffer),
-                readFluidStacks(buffer), buffer.readVarInt(), readEnergy(buffer));
+                               readFluidStacks(buffer), buffer.readVarInt(), readEnergy(buffer));
     }
 
     public static void writeItemInputs(FriendlyByteBuf buffer, List<CountedIngredient> inputs) {

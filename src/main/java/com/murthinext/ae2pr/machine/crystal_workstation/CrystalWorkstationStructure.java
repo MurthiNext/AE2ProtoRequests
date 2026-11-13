@@ -1,6 +1,5 @@
 package com.murthinext.ae2pr.machine.crystal_workstation;
 
-import com.murthinext.ae2pr.registry.ModMachines;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,44 +8,44 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 
-import com.murthinext.ae2pr.registry.ModBlocks;
-import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
 import com.murthinext.ae2pr.api.multiblock.AbstractStructureFacade;
+import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
 import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.api.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
+import com.murthinext.ae2pr.registry.ModBlocks;
+import com.murthinext.ae2pr.registry.ModMachines;
 
 // 晶能工作站结构定义
 public final class CrystalWorkstationStructure extends AbstractStructureFacade {
 
-    public static final MultiblockPattern PATTERN = MultiblockPattern
-            .builder(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.RIGHT)
-            .origin(0, 4)
-            .slice("AAAAKAAAA", "B#######B", "B#######B", "B#######B", "AAAAAAAAA")
-            .slice("AAAAAAAAA", "CDDDDDDDC", "CDDDDDDDC", "CDDDDDDDC", "AAAAAAAAA")
-            .slice("AAAAAAAAA", "C#######C", "C###G###C", "C#######C", "AAAAAAAAA")
-            .slice("AAAAAAAAA", "CDDDDDDDC", "CDDDDDDDC", "CDDDDDDDC", "AAAAAAAAA")
-            .slice("AAAAAAAAA", "B#######B", "B#######B", "B#######B", "AAAAAAAAA")
-            .where('K', StructurePredicate.blocks(ModMachines.CRYSTAL_WORKSTATION.block()))
-            .where('A', StructurePredicate.casingWithParts(ModBlocks.CRYSTAL_ENERGY_CASING.get()))
-            .where('B', StructurePredicate.blocks(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()))
-            .where('C', StructurePredicate.blocks(ModBlocks.HIGH_ENERGY_STABILITY_CASING.get()))
-            .where('D', StructurePredicate.blocks(ModBlocks.CRYSTAL_GLASS.get()))
-            .where('G', StructurePredicate.blocks(ModMachines.CRYSTAL_REACTOR.block()))
-            .where('#', StructurePredicate.any())
-            .build();
+    public static final MultiblockPattern
+            PATTERN = MultiblockPattern.builder(RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.RIGHT)
+                              .origin(0, 4)
+                              .slice("AAAAKAAAA", "B#######B", "B#######B", "B#######B", "AAAAAAAAA")
+                              .slice("AAAAAAAAA", "CDDDDDDDC", "CDDDDDDDC", "CDDDDDDDC", "AAAAAAAAA")
+                              .slice("AAAAAAAAA", "C#######C", "C###G###C", "C#######C", "AAAAAAAAA")
+                              .slice("AAAAAAAAA", "CDDDDDDDC", "CDDDDDDDC", "CDDDDDDDC", "AAAAAAAAA")
+                              .slice("AAAAAAAAA", "B#######B", "B#######B", "B#######B", "AAAAAAAAA")
+                              .where('K', StructurePredicate.blocks(ModMachines.CRYSTAL_WORKSTATION.block()))
+                              .where('A', StructurePredicate.casingWithParts(ModBlocks.CRYSTAL_ENERGY_CASING.get()))
+                              .where('B',
+                                     StructurePredicate.blocks(
+                                             ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()))
+                              .where('C', StructurePredicate.blocks(ModBlocks.HIGH_ENERGY_STABILITY_CASING.get()))
+                              .where('D', StructurePredicate.blocks(ModBlocks.CRYSTAL_GLASS.get()))
+                              .where('G', StructurePredicate.blocks(ModMachines.CRYSTAL_REACTOR.block()))
+                              .where('#', StructurePredicate.any())
+                              .build();
 
     public static final CrystalWorkstationStructure INSTANCE = new CrystalWorkstationStructure();
 
-    public enum PartRole {
-        STABILITY, GLASS, CORE
-    }
+    public enum PartRole { STABILITY, GLASS, CORE }
 
     public static final int PANEL_SIZE = 3;
 
     public record Part(BlockPos pos, PartRole role, @Nullable Direction outward, @Nullable Direction depthAxis,
-            int panelX, int panelY) {
-    }
+                       int panelX, int panelY) {}
 
     private CrystalWorkstationStructure() {
         super(PATTERN, MachinePartFacade.CRYSTAL_ENERGY);
@@ -63,11 +62,11 @@ public final class CrystalWorkstationStructure extends AbstractStructureFacade {
     }
 
     public static List<Part> effectParts(BlockPos controllerPos, Direction facing, boolean mirrorSide,
-            boolean mirrorFront) {
+                                         boolean mirrorFront) {
         Direction side = sideAxis(facing, mirrorSide, mirrorFront);
         Direction depth = depthAxis(facing, mirrorSide, mirrorFront);
         List<MultiblockPattern.PatternCell> cells = PATTERN.patternCells(controllerPos, facing, Direction.UP,
-                mirrorSide, mirrorFront, PATTERN.minSlices());
+                                                                         mirrorSide, mirrorFront, PATTERN.minSlices());
         MultiblockPattern.PatternCell core = null;
         for (MultiblockPattern.PatternCell cell : cells) {
             if (cell.symbol() == 'G') {

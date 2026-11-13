@@ -23,8 +23,7 @@ final class ScreenCorruptionMask implements AutoCloseable {
     private List<ScreenCorruptionState.Region> regions = List.of();
     private boolean expanding;
 
-    int update(GuiGraphics graphics, List<ScreenCorruptionState.Region> regions, int width, int height,
-            double time) {
+    int update(GuiGraphics graphics, List<ScreenCorruptionState.Region> regions, int width, int height, double time) {
         boolean resized = target == null || target.width != width || target.height != height;
         if (!resized && !expanding && this.regions.equals(regions)) {
             return target.getColorTextureId();
@@ -63,13 +62,17 @@ final class ScreenCorruptionMask implements AutoCloseable {
                     float centerX = (float) ((region.x() + region.width() * 0.5) * width);
                     float centerY = (float) ((region.y() + region.height() * 0.5) * height);
                     buffer.vertex(matrix, centerX - halfWidth, centerY - halfHeight, 0)
-                            .color(255, 255, 255, 255).endVertex();
+                            .color(255, 255, 255, 255)
+                            .endVertex();
                     buffer.vertex(matrix, centerX - halfWidth, centerY + halfHeight, 0)
-                            .color(255, 255, 255, 255).endVertex();
+                            .color(255, 255, 255, 255)
+                            .endVertex();
                     buffer.vertex(matrix, centerX + halfWidth, centerY + halfHeight, 0)
-                            .color(255, 255, 255, 255).endVertex();
+                            .color(255, 255, 255, 255)
+                            .endVertex();
                     buffer.vertex(matrix, centerX + halfWidth, centerY - halfHeight, 0)
-                            .color(255, 255, 255, 255).endVertex();
+                            .color(255, 255, 255, 255)
+                            .endVertex();
                 }
                 BufferUploader.drawWithShader(buffer.end());
                 this.regions = List.copyOf(regions);

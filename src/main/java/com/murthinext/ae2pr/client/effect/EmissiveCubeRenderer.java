@@ -34,7 +34,7 @@ public final class EmissiveCubeRenderer {
     }
 
     private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, Vec3 position, float u, float v,
-            float alpha, Vec3 normal) {
+                               float alpha, Vec3 normal) {
         consumer.vertex(pose.pose(), (float) position.x, (float) position.y, (float) position.z)
                 .color(WHITE[0], WHITE[1], WHITE[2], alpha)
                 .uv(u, v)

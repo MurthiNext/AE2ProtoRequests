@@ -2,8 +2,6 @@ package com.murthinext.ae2pr.machine.naming_factory;
 
 import org.jetbrains.annotations.Nullable;
 
-import appeng.core.definitions.AEItems;
-import appeng.items.materials.NamePressItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,6 +9,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+
+import appeng.core.definitions.AEItems;
+import appeng.items.materials.NamePressItem;
 
 import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.api.machine.singleblock.AbstractSingleblockMachineBlockEntity;
@@ -36,12 +37,7 @@ public class NamingFactoryBlockEntity extends AbstractSingleblockMachineBlockEnt
     private static final String TAG_PRESS_TICKS = "pressTicks";
     private static final String TAG_RETRACT_TICKS = "retractTicks";
 
-    public enum WorkState {
-        IDLE,
-        CHARGING,
-        PRESSING,
-        RETRACTING
-    }
+    public enum WorkState { IDLE, CHARGING, PRESSING, RETRACTING }
 
     private WorkState state = WorkState.IDLE;
     private long workStart;
@@ -122,7 +118,7 @@ public class NamingFactoryBlockEntity extends AbstractSingleblockMachineBlockEnt
         }
         float elapsed = level.getGameTime() + partialTicks - workStart;
         return switch (state) {
-            case PRESSING -> TRAVEL * easeOutCubic(Mth.clamp(elapsed / pressTicks, 0, 1));
+            case PRESSING -> TRAVEL *easeOutCubic(Mth.clamp(elapsed / pressTicks, 0, 1));
             case RETRACTING -> TRAVEL * (1 - easeInOutCubic(Mth.clamp(elapsed / retractTicks, 0, 1)));
             case CHARGING, IDLE -> 0;
         };
@@ -145,33 +141,33 @@ public class NamingFactoryBlockEntity extends AbstractSingleblockMachineBlockEnt
     protected void tickMachine() {
         long elapsed = level.getGameTime() - workStart;
         switch (state) {
-            case IDLE -> {
-                if (canWork() && hasEnergy(cost(getInputStack().getCount()))) {
-                    updatePhaseDurations();
-                    beginState(WorkState.CHARGING);
-                }
+        case IDLE -> {
+            if (canWork() && hasEnergy(cost(getInputStack().getCount()))) {
+                updatePhaseDurations();
+                beginState(WorkState.CHARGING);
             }
-            case CHARGING -> {
-                // 蓄力期间仍可继续收货，时长不重置；压印前按当时数量一次性结算
-                if (elapsed >= chargeTicks) {
-                    if (canWork() && consumeEnergy(cost(getInputStack().getCount()))) {
-                        beginState(WorkState.PRESSING);
-                    } else {
-                        beginState(WorkState.IDLE);
-                    }
-                }
-            }
-            case PRESSING -> {
-                if (elapsed >= pressTicks) {
-                    completeWork();
-                    beginState(WorkState.RETRACTING);
-                }
-            }
-            case RETRACTING -> {
-                if (elapsed >= retractTicks) {
+        }
+        case CHARGING -> {
+            // 蓄力期间仍可继续收货，时长不重置；压印前按当时数量一次性结算
+            if (elapsed >= chargeTicks) {
+                if (canWork() && consumeEnergy(cost(getInputStack().getCount()))) {
+                    beginState(WorkState.PRESSING);
+                } else {
                     beginState(WorkState.IDLE);
                 }
             }
+        }
+        case PRESSING -> {
+            if (elapsed >= pressTicks) {
+                completeWork();
+                beginState(WorkState.RETRACTING);
+            }
+        }
+        case RETRACTING -> {
+            if (elapsed >= retractTicks) {
+                beginState(WorkState.IDLE);
+            }
+        }
         }
     }
 
@@ -200,8 +196,8 @@ public class NamingFactoryBlockEntity extends AbstractSingleblockMachineBlockEnt
             return true;
         }
         ItemStack result = renamed(input, name);
-        return ItemStack.isSameItemSameTags(output, result)
-                && output.getCount() + input.getCount() <= output.getMaxStackSize();
+        return ItemStack.isSameItemSameTags(output, result) &&
+                output.getCount() + input.getCount() <= output.getMaxStackSize();
     }
 
     private void completeWork() {

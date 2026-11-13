@@ -6,19 +6,20 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.murthinext.ae2pr.ServerConfig;
-import com.murthinext.ae2pr.client.repeat.RepeatOrderButton;
-import com.murthinext.ae2pr.logic.repeat.RepeatOrderConstants;
-import com.murthinext.ae2pr.logic.repeat.RepeatRoundsHolder;
-import com.murthinext.ae2pr.mixin.ae2.accessor.AEBaseMenuInvoker;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
 
 import appeng.client.gui.AEBaseScreen;
 import appeng.client.gui.me.crafting.CraftAmountScreen;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.AETextField;
 import appeng.menu.me.crafting.CraftAmountMenu;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Inventory;
+
+import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.client.repeat.RepeatOrderButton;
+import com.murthinext.ae2pr.logic.repeat.RepeatOrderConstants;
+import com.murthinext.ae2pr.logic.repeat.RepeatRoundsHolder;
+import com.murthinext.ae2pr.mixin.ae2.accessor.AEBaseMenuInvoker;
 
 // 数量选择界面：添加重复下单按钮与轮数输入框
 @Mixin(value = CraftAmountScreen.class, remap = false)
@@ -35,14 +36,13 @@ public abstract class CraftAmountScreenMixin extends AEBaseScreen<CraftAmountMen
     @Unique
     private int ae2pr$syncedRounds = 1;
 
-    public CraftAmountScreenMixin(CraftAmountMenu menu, Inventory playerInventory, Component title,
-            ScreenStyle style) {
+    public CraftAmountScreenMixin(CraftAmountMenu menu, Inventory playerInventory, Component title, ScreenStyle style) {
         super(menu, playerInventory, title, style);
     }
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void ae2pr$initRepeatOrder(CraftAmountMenu menu, Inventory playerInventory, Component title,
-            ScreenStyle style, CallbackInfo ci) {
+                                       ScreenStyle style, CallbackInfo ci) {
         this.ae2pr$repeatButton = this.addToLeftToolbar(
                 new RepeatOrderButton(button -> this.ae2pr$toggleRepeatField()));
 
@@ -161,8 +161,8 @@ public abstract class CraftAmountScreenMixin extends AEBaseScreen<CraftAmountMen
             return;
         }
         if (this.ae2pr$rounds > 1) {
-            this.ae2pr$repeatButton.setMessage(
-                    Component.translatable("gui.ae2pr.repeat_order.button.enabled", this.ae2pr$rounds));
+            this.ae2pr$repeatButton.setMessage(Component.translatable("gui.ae2pr.repeat_order.button.enabled",
+                                                                      this.ae2pr$rounds));
         } else {
             this.ae2pr$repeatButton.setMessage(Component.translatable("gui.ae2pr.repeat_order.button"));
         }

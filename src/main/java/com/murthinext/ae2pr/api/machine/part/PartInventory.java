@@ -161,7 +161,7 @@ public final class PartInventory {
                         continue;
                     }
                     int moved = (int) Math.min(remaining,
-                            Math.max(0, slot.tank.getCapacity() - slot.stack.getAmount()));
+                                               Math.max(0, slot.tank.getCapacity() - slot.stack.getAmount()));
                     if (moved > 0) {
                         int amount = slot.stack.getAmount() + moved;
                         slot.stack = output.copy();

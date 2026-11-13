@@ -1,10 +1,10 @@
 package com.murthinext.ae2pr.data;
 
-import com.murthinext.ae2pr.ae2pr;
-
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import com.murthinext.ae2pr.ae2pr;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class ModDataGen {

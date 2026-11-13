@@ -1,24 +1,24 @@
 package com.murthinext.ae2pr.requester.client.widgets;
 
-import appeng.client.gui.style.Blitter;
-import appeng.client.gui.style.ScreenStyle;
-import appeng.client.gui.widgets.AECheckbox;
-import appeng.client.gui.widgets.ITooltip;
-import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.requester.RequesterUtils;
+import java.util.List;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 
-import java.util.List;
+import appeng.client.gui.style.Blitter;
+import appeng.client.gui.style.ScreenStyle;
+import appeng.client.gui.widgets.AECheckbox;
+import appeng.client.gui.widgets.ITooltip;
+
+import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.requester.RequesterUtils;
 
 public class SubmitButton extends AECheckbox implements ITooltip {
 
     private static final int SIZE = 12;
 
-    private static final Blitter BLITTER = Blitter.texture(
-        Ids.of("textures/gui/submit_button.png"), SIZE * 2, SIZE
-    );
+    private static final Blitter BLITTER = Blitter.texture(Ids.of("textures/gui/submit_button.png"), SIZE * 2, SIZE);
     private static final Blitter UNFOCUSED = BLITTER.copy().src(0, 0, SIZE, SIZE);
     private static final Blitter FOCUSED = BLITTER.copy().src(SIZE, 0, SIZE, SIZE);
 

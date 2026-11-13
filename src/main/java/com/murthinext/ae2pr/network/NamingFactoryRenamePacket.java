@@ -49,7 +49,7 @@ public record NamingFactoryRenamePacket(BlockPos pos, String name) {
     }
 
     private static boolean holdsKnife(ServerPlayer player) {
-        return player.getItemInHand(InteractionHand.MAIN_HAND).is(WrenchTags.KNIFE)
-                || player.getItemInHand(InteractionHand.OFF_HAND).is(WrenchTags.KNIFE);
+        return player.getItemInHand(InteractionHand.MAIN_HAND).is(WrenchTags.KNIFE) ||
+                player.getItemInHand(InteractionHand.OFF_HAND).is(WrenchTags.KNIFE);
     }
 }

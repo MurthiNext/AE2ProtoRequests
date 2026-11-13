@@ -8,13 +8,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.almostreliable.merequester.requester.abstraction.AbstractRequesterMenu;
-import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
-import com.murthinext.ae2pr.requester.abstraction.RequesterMenuActions;
-import com.murthinext.ae2pr.requester.compat.IOurRequesterTerminalHost;
+
+import net.minecraft.server.level.ServerPlayer;
 
 import appeng.helpers.InventoryAction;
 import appeng.menu.AEBaseMenu;
-import net.minecraft.server.level.ServerPlayer;
+
+import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
+import com.murthinext.ae2pr.requester.abstraction.RequesterMenuActions;
+import com.murthinext.ae2pr.requester.compat.IOurRequesterTerminalHost;
 
 /**
  * 让 ME Requester 终端的服务端菜单能够处理本模组红石请求器的条目修改请求
@@ -24,7 +26,8 @@ import net.minecraft.server.level.ServerPlayer;
 public class AbstractRequesterMenuMixin {
 
     @Inject(method = "updateRequesterNumbers", at = @At("HEAD"), cancellable = true, remap = false)
-    private void ae2pr$updateNumbers(long requesterId, int requestIndex, long amount, long ignoredBatch, CallbackInfo ci) {
+    private void ae2pr$updateNumbers(long requesterId, int requestIndex, long amount, long ignoredBatch,
+                                     CallbackInfo ci) {
         var be = ae2pr$our(this, requesterId);
         if (be == null) {
             return;
@@ -51,8 +54,7 @@ public class AbstractRequesterMenuMixin {
     }
 
     @Inject(method = "doAction", at = @At("HEAD"), cancellable = true, remap = false)
-    private void ae2pr$doAction(ServerPlayer player, InventoryAction action, int slot, long id,
-            CallbackInfo ci) {
+    private void ae2pr$doAction(ServerPlayer player, InventoryAction action, int slot, long id, CallbackInfo ci) {
         var be = ae2pr$our(this, id);
         if (be == null) {
             return;

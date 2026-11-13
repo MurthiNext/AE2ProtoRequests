@@ -13,6 +13,7 @@ import com.bladecoder.ink.runtime.Story;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+
 import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress.Line;
 import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress.NodeProgress;
 
@@ -29,8 +30,7 @@ public final class TerminalStoryRunner {
     private static final String ADVANCE = "a";
     private static final String CHOOSE = "c";
 
-    public record Choice(String id, String text, int index) {
-    }
+    public record Choice(String id, String text, int index) {}
 
     private final Story story;
     private final TerminalStoryProgress progress;
@@ -61,8 +61,8 @@ public final class TerminalStoryRunner {
 
     public static String programId(String program) {
         try {
-            return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
-                    .digest(program.getBytes(StandardCharsets.UTF_8)));
+            return HexFormat.of().formatHex(
+                    MessageDigest.getInstance("SHA-256").digest(program.getBytes(StandardCharsets.UTF_8)));
         } catch (NoSuchAlgorithmException exception) {
             throw new IllegalStateException(exception);
         }
@@ -133,19 +133,27 @@ public final class TerminalStoryRunner {
         if (story.getCurrentChoices().size() > 12) {
             throw new IllegalStateException("A single choice group must not exceed 12 options");
         }
-        return story.getCurrentChoices().stream().map(choice -> {
-            try {
-                return new Choice(tag(choice.getTags() == null ? List.of() : choice.getTags(), "id",
-                        choice.getPathStringOnChoice()), choice.getText(), choice.getIndex());
-            } catch (Exception exception) {
-                throw new IllegalStateException(exception);
-            }
-        }).toList();
+        return story.getCurrentChoices()
+                .stream()
+                .map(choice -> {
+                    try {
+                        return new Choice(tag(choice.getTags() == null ? List.of() : choice.getTags(), "id",
+                                              choice.getPathStringOnChoice()),
+                                          choice.getText(), choice.getIndex());
+                    } catch (Exception exception) {
+                        throw new IllegalStateException(exception);
+                    }
+                })
+                .toList();
     }
 
     public void choose(String id) {
-        Choice selected = choices().stream().filter(choice -> choice.id().equals(id)).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Story choice does not exist: " + id));
+        Choice selected = choices()
+                                  .stream()
+                                  .filter(choice -> choice.id().equals(id))
+                                  .findFirst()
+                                  .orElseThrow(
+                                          () -> new IllegalArgumentException("Story choice does not exist: " + id));
         try {
             story.chooseChoiceIndex(selected.index());
             recordChoice(id);
@@ -223,8 +231,8 @@ public final class TerminalStoryRunner {
             String id = tag(tags, "id", story.getState().getCurrentPathString());
             String speaker = tag(tags, "speaker", "");
             int separator = output.indexOf(':');
-            if (speaker.isEmpty() && separator > 0 && separator <= 64
-                    && !output.substring(0, separator).contains("\n")) {
+            if (speaker.isEmpty() && separator > 0 && separator <= 64 &&
+                !output.substring(0, separator).contains("\n")) {
                 speaker = output.substring(0, separator).strip();
                 output = output.substring(separator + 1).stripLeading();
             }
@@ -232,8 +240,8 @@ public final class TerminalStoryRunner {
             if (delay < 0 || delay > 60000) {
                 throw new IllegalArgumentException("Story delay must be between 0 and 60000 ms");
             }
-            Line line = new Line(id == null ? activeNode + "/end" : id, speaker,
-                    output.replace("<br/>", "\n"), delay, tags.contains("answer"));
+            Line line = new Line(id == null ? activeNode + "/end" : id, speaker, output.replace("<br/>", "\n"), delay,
+                                 tags.contains("answer"));
             TerminalStoryProgress.validate(line);
             return line;
         }
@@ -241,8 +249,12 @@ public final class TerminalStoryRunner {
     }
 
     private static String tag(List<String> tags, String key, String fallback) {
-        return tags.stream().map(String::strip).filter(tag -> tag.startsWith(key + ":"))
-                .map(tag -> tag.substring(key.length() + 1).strip()).findFirst().orElse(fallback);
+        return tags.stream()
+                .map(String::strip)
+                .filter(tag -> tag.startsWith(key + ":"))
+                .map(tag -> tag.substring(key.length() + 1).strip())
+                .findFirst()
+                .orElse(fallback);
     }
 
     private void recordAdvance() {
@@ -329,8 +341,11 @@ public final class TerminalStoryRunner {
                     }
                 } else if (decision.startsWith(CHOOSE)) {
                     String choiceId = decision.substring(CHOOSE.length());
-                    Choice selected = choices().stream().filter(choice -> choice.id().equals(choiceId))
-                            .findFirst().orElse(null);
+                    Choice selected = choices()
+                                              .stream()
+                                              .filter(choice -> choice.id().equals(choiceId))
+                                              .findFirst()
+                                              .orElse(null);
                     if (selected == null) {
                         return false;
                     }
@@ -340,8 +355,7 @@ public final class TerminalStoryRunner {
                 }
             }
             if (replayed.size() > TerminalStoryProgress.MAX_LOG_LINES) {
-                replayed = replayed.subList(replayed.size() - TerminalStoryProgress.MAX_LOG_LINES,
-                        replayed.size());
+                replayed = replayed.subList(replayed.size() - TerminalStoryProgress.MAX_LOG_LINES, replayed.size());
             }
             node.log = replayed;
             return true;
@@ -372,8 +386,8 @@ public final class TerminalStoryRunner {
         }
         if (primitive.isNumber()) {
             String text = primitive.getAsString();
-            return text.contains(".") || text.contains("e") || text.contains("E")
-                    ? (Object) primitive.getAsFloat() : (Object) primitive.getAsInt();
+            return text.contains(".") || text.contains("e") || text.contains("E") ? (Object) primitive.getAsFloat()
+                                                                                  : (Object) primitive.getAsInt();
         }
         return primitive.getAsString();
     }

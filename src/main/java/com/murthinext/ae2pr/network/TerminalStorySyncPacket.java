@@ -1,14 +1,14 @@
 package com.murthinext.ae2pr.network;
 
-import com.murthinext.ae2pr.api.ClientHooks;
-
 import java.io.IOException;
 import java.util.function.Supplier;
 
-import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress;
-import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgressCache;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
+
+import com.murthinext.ae2pr.api.ClientHooks;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgressCache;
 
 // 服务端 -> 客户端：本玩家在当前存档里的源始终端阅读进度
 public class TerminalStorySyncPacket {
@@ -37,8 +37,7 @@ public class TerminalStorySyncPacket {
 
     public static void handle(TerminalStorySyncPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
-        context.enqueueWork(() -> ClientHooks.run(
-                () -> () -> TerminalStoryProgressCache.apply(packet.snapshot)));
+        context.enqueueWork(() -> ClientHooks.run(() -> () -> TerminalStoryProgressCache.apply(packet.snapshot)));
         context.setPacketHandled(true);
     }
 }

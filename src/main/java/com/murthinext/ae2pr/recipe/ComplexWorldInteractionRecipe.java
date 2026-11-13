@@ -35,7 +35,8 @@ public class ComplexWorldInteractionRecipe extends AbstractRecipe {
     private final Fluid resultFluid;
 
     public ComplexWorldInteractionRecipe(ResourceLocation id, List<CountedIngredient> ingredients,
-            WorldInteractionCircumstance circumstance, List<ItemStack> results, @Nullable Fluid resultFluid) {
+                                         WorldInteractionCircumstance circumstance, List<ItemStack> results,
+                                         @Nullable Fluid resultFluid) {
         super(id, ingredients);
         this.circumstance = circumstance;
         this.results = results.stream().map(ItemStack::copy).toList();
@@ -97,8 +98,8 @@ public class ComplexWorldInteractionRecipe extends AbstractRecipe {
                 JsonObject output = fluidOutputs.get(0).getAsJsonObject();
                 ResourceLocation fluidId = ResourceLocation.parse(GsonHelper.getAsString(output, "fluid"));
                 resultFluid = ForgeRegistries.FLUIDS.getValue(fluidId);
-                if (resultFluid == null || resultFluid == Fluids.EMPTY || !resultFluid.defaultFluidState().isSource()
-                        || GsonHelper.getAsInt(output, "amount") != FluidType.BUCKET_VOLUME) {
+                if (resultFluid == null || resultFluid == Fluids.EMPTY || !resultFluid.defaultFluidState().isSource() ||
+                    GsonHelper.getAsInt(output, "amount") != FluidType.BUCKET_VOLUME) {
                     throw new JsonSyntaxException("fluid_outputs requires a source fluid and amount must be 1000");
                 }
             }
@@ -113,9 +114,8 @@ public class ComplexWorldInteractionRecipe extends AbstractRecipe {
             List<CountedIngredient> ingredients = RecipeNetwork.readItemInputs(buffer);
             WorldInteractionCircumstance circumstance = WorldInteractionCircumstance.fromNetwork(buffer);
             List<ItemStack> results = RecipeNetwork.readItemStacks(buffer);
-            Fluid resultFluid = buffer.readBoolean()
-                    ? ForgeRegistries.FLUIDS.getValue(buffer.readResourceLocation())
-                    : null;
+            Fluid resultFluid = buffer.readBoolean() ? ForgeRegistries.FLUIDS.getValue(buffer.readResourceLocation())
+                                                     : null;
             return new ComplexWorldInteractionRecipe(id, ingredients, circumstance, results, resultFluid);
         }
 

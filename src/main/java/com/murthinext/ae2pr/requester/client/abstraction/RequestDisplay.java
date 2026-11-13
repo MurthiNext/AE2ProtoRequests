@@ -1,14 +1,16 @@
 package com.murthinext.ae2pr.requester.client.abstraction;
 
-import com.murthinext.ae2pr.requester.client.RequestSlot;
-import com.murthinext.ae2pr.requester.Requests.Request;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Map;
+import com.murthinext.ae2pr.requester.Requests.Request;
+import com.murthinext.ae2pr.requester.client.RequestSlot;
 
 public interface RequestDisplay {
     void addSubWidget(String id, AbstractWidget widget, Map<String, AbstractWidget> subWidgets);

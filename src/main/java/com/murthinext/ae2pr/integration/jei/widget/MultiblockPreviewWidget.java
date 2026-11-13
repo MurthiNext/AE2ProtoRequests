@@ -33,8 +33,8 @@ import com.murthinext.ae2pr.integration.jei.render.ItemStackAmountRenderer;
 
 public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEventListener {
 
-    private static final ScreenRectangle AREA = new ScreenRectangle(0, 0,
-            MultiblockPreviewCategory.WIDTH, MultiblockPreviewCategory.HEIGHT);
+    private static final ScreenRectangle AREA = new ScreenRectangle(0, 0, MultiblockPreviewCategory.WIDTH,
+                                                                    MultiblockPreviewCategory.HEIGHT);
     private static final ScreenRectangle VIEW = new ScreenRectangle(4, 22, 124, 148);
     private static final ScreenRectangle REPLACEMENTS = new ScreenRectangle(132, 34, 24, 126);
     private static final ScreenRectangle LAYER = new ScreenRectangle(86, 2, 42, 14);
@@ -97,8 +97,7 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
         var font = Minecraft.getInstance().font;
         OPEN_WIDGETS.put(recipe.id(), new WeakReference<>(this));
         drawButton(graphics, RESET, "R", true, mouseX, mouseY);
-        drawButton(graphics, LAYER, preview.layer() < 0 ? "L: *" : "L:" + (preview.layer() + 1),
-                true, mouseX, mouseY);
+        drawButton(graphics, LAYER, preview.layer() < 0 ? "L: *" : "L:" + (preview.layer() + 1), true, mouseX, mouseY);
         if (hasVariableLength()) {
             drawButton(graphics, LENGTH, "LEN: " + preview.slices(), true, mouseX, mouseY);
         }
@@ -124,8 +123,8 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
         if (replacements.size() > REPLACEMENT_ROWS) {
             int trackHeight = REPLACEMENTS.height();
             int thumb = Math.max(8, trackHeight * REPLACEMENT_ROWS / replacements.size());
-            int top = REPLACEMENTS.top() + (trackHeight - thumb) * replacementOffset
-                    / (replacements.size() - REPLACEMENT_ROWS);
+            int top = REPLACEMENTS.top() +
+                    (trackHeight - thumb) * replacementOffset / (replacements.size() - REPLACEMENT_ROWS);
             int x = REPLACEMENTS.right();
             graphics.fill(x, REPLACEMENTS.top(), x + 2, REPLACEMENTS.bottom(), 0xFFC2CCD4);
             graphics.fill(x, top, x + 2, top + thumb, MUTED);
@@ -140,13 +139,12 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
             }
             ItemStack stack = materials.get(index);
             int x = MATERIAL_X + i * SLOT;
-            graphics.blit(AbstractMachineScreen.SLOT_TEXTURE, x - 1, MATERIAL_Y - 1,
-                    0, 0.0F, 0.0F, SLOT, SLOT, SLOT, SLOT);
+            graphics.blit(AbstractMachineScreen.SLOT_TEXTURE, x - 1, MATERIAL_Y - 1, 0, 0.0F, 0.0F, SLOT, SLOT, SLOT,
+                          SLOT);
             ItemStackAmountRenderer.INSTANCE.render(graphics, stack, x, MATERIAL_Y);
         }
         drawButton(graphics, MATERIAL_PREV, "<", materialOffset > 0, mouseX, mouseY);
-        drawButton(graphics, MATERIAL_NEXT, ">", materialOffset + MATERIAL_COLUMNS < materials.size(),
-                mouseX, mouseY);
+        drawButton(graphics, MATERIAL_NEXT, ">", materialOffset + MATERIAL_COLUMNS < materials.size(), mouseX, mouseY);
     }
 
     @Override
@@ -167,8 +165,7 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
             tooltip.add(text("prev_page"));
             return;
         }
-        if (contains(MATERIAL_NEXT, mouseX, mouseY)
-                && materialOffset + MATERIAL_COLUMNS < preview.materials().size()) {
+        if (contains(MATERIAL_NEXT, mouseX, mouseY) && materialOffset + MATERIAL_COLUMNS < preview.materials().size()) {
             tooltip.add(text("next_page"));
             return;
         }
@@ -273,13 +270,13 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollDelta) {
         if (contains(VIEW, mouseX, mouseY)) {
             renderer.zoom(scrollDelta);
-        } else if (mouseX >= REPLACEMENTS.left() - 2
-                && mouseY >= REPLACEMENTS.top() && mouseY < REPLACEMENTS.bottom()) {
+        } else if (mouseX >= REPLACEMENTS.left() - 2 && mouseY >= REPLACEMENTS.top() &&
+                   mouseY < REPLACEMENTS.bottom()) {
             replacementOffset = Mth.clamp(replacementOffset - (int) Math.signum(scrollDelta), 0,
-                    Math.max(0, replacements().size() - REPLACEMENT_ROWS));
+                                          Math.max(0, replacements().size() - REPLACEMENT_ROWS));
         } else if (mouseY >= MATERIAL_Y - 2) {
             materialOffset = Mth.clamp(materialOffset - (int) Math.signum(scrollDelta), 0,
-                    Math.max(0, preview.materials().size() - MATERIAL_COLUMNS));
+                                       Math.max(0, preview.materials().size() - MATERIAL_COLUMNS));
         } else {
             return false;
         }
@@ -322,8 +319,8 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
     }
 
     private int materialIndex(double mouseX, double mouseY) {
-        if (mouseX < MATERIAL_X || mouseX >= MATERIAL_X + MATERIAL_COLUMNS * SLOT
-                || mouseY < MATERIAL_Y || mouseY >= MATERIAL_Y + 16) {
+        if (mouseX < MATERIAL_X || mouseX >= MATERIAL_X + MATERIAL_COLUMNS * SLOT || mouseY < MATERIAL_Y ||
+            mouseY >= MATERIAL_Y + 16) {
             return -1;
         }
         int column = (int) (mouseX - MATERIAL_X) / SLOT;
@@ -336,7 +333,7 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
     }
 
     private static void drawButton(GuiGraphics graphics, ScreenRectangle area, String label, boolean enabled,
-            double mouseX, double mouseY) {
+                                   double mouseX, double mouseY) {
         int color = enabled && contains(area, mouseX, mouseY) ? ACCENT : 0xFFC2CCD4;
         if (!enabled) {
             color = 0xFFE4E8EB;
@@ -344,7 +341,7 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
         graphics.fill(area.left(), area.top(), area.right(), area.bottom(), color);
         var font = Minecraft.getInstance().font;
         graphics.drawString(font, label, area.left() + (area.width() - font.width(label)) / 2,
-                area.top() + (area.height() - font.lineHeight) / 2, enabled ? TEXT : 0xFF9AA5AE, false);
+                            area.top() + (area.height() - font.lineHeight) / 2, enabled ? TEXT : 0xFF9AA5AE, false);
     }
 
     private static void drawCentered(GuiGraphics graphics, Component label, int x, int y, int width) {
@@ -356,7 +353,8 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
     private static void addItemTooltip(ITooltipBuilder tooltip, ItemStack stack) {
         var minecraft = Minecraft.getInstance();
         tooltip.addAll(stack.getTooltipLines(minecraft.player,
-                minecraft.options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL));
+                                             minecraft.options.advancedItemTooltips ? TooltipFlag.Default.ADVANCED
+                                                                                    : TooltipFlag.Default.NORMAL));
     }
 
     private static MutableComponent text(String key, Object... args) {

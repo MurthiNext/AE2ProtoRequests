@@ -8,15 +8,16 @@ import net.minecraft.world.item.ItemStack;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
 
+import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.machine.MachineRecipe;
 import com.murthinext.ae2pr.integration.jei.JeiRecipeInfo;
 import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.ae2pr;
 
 public class HighReactivityLavaSmelterCategory extends AbstractMachineCategory<MachineRecipe> {
 
     public static final RecipeType<MachineRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID,
-            "high_reactivity_lava_smelter", MachineRecipe.class);
+                                                                                  "high_reactivity_lava_smelter",
+                                                                                  MachineRecipe.class);
 
     private static final int WIDTH = 142;
     private static final int HEIGHT = 98;
@@ -43,15 +44,15 @@ public class HighReactivityLavaSmelterCategory extends AbstractMachineCategory<M
     // 炉膛贴图自带槽位底纹
     @Override
     protected SlotArea itemInputs() {
-        return new SlotArea(HighReactivityLavaSmelterFurnace.ITEM_COUNT,
-                HighReactivityLavaSmelterFurnace.ITEM_COLS, HighReactivityLavaSmelterFurnace.SLOT_X,
-                HighReactivityLavaSmelterFurnace.SLOT_Y, false);
+        return new SlotArea(HighReactivityLavaSmelterFurnace.ITEM_COUNT, HighReactivityLavaSmelterFurnace.ITEM_COLS,
+                            HighReactivityLavaSmelterFurnace.SLOT_X, HighReactivityLavaSmelterFurnace.SLOT_Y, false);
     }
 
     @Override
     protected SlotArea fluidInputs() {
         return new SlotArea(HighReactivityLavaSmelterFurnace.FLUID_COUNT, 1,
-                HighReactivityLavaSmelterFurnace.fluidSlotX(0), HighReactivityLavaSmelterFurnace.SLOT_Y, false);
+                            HighReactivityLavaSmelterFurnace.fluidSlotX(0), HighReactivityLavaSmelterFurnace.SLOT_Y,
+                            false);
     }
 
     @Override
@@ -77,8 +78,8 @@ public class HighReactivityLavaSmelterCategory extends AbstractMachineCategory<M
     @Override
     protected void drawInfo(GuiGraphics graphics, MachineRecipe recipe) {
         var font = Minecraft.getInstance().font;
-        graphics.drawString(font, Component.translatable(
-                "jei.ae2pr.high_reactivity_lava_smelter.durability_cost", 1), 4, INFO_Y, COLOR_TEXT, false);
+        graphics.drawString(font, Component.translatable("jei.ae2pr.high_reactivity_lava_smelter.durability_cost", 1),
+                            4, INFO_Y, COLOR_TEXT, false);
         graphics.drawString(font, JeiRecipeInfo.duration(recipe.getDuration()), 4, INFO_Y + 10, COLOR_TEXT, false);
     }
 }

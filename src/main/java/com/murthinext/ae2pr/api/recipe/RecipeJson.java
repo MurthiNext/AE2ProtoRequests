@@ -29,8 +29,8 @@ public final class RecipeJson {
 
     public static RecipeDraft readDraft(JsonObject json, int defaultDuration) {
         return new RecipeDraft(readItemInputs(json, "item_inputs"), readFluidStacks(json, "fluid_inputs"),
-                readItemOutputs(json, "item_outputs"), readFluidStacks(json, "fluid_outputs"),
-                readDuration(json, defaultDuration), readEnergy(json));
+                               readItemOutputs(json, "item_outputs"), readFluidStacks(json, "fluid_outputs"),
+                               readDuration(json, defaultDuration), readEnergy(json));
     }
 
     public static List<CountedIngredient> readItemInputs(JsonObject json, String key) {

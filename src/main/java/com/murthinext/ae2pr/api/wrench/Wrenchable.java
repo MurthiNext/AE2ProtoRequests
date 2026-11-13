@@ -22,15 +22,14 @@ public interface Wrenchable {
             return state;
         }
         Direction current = state.getValue(facing);
-        Direction next = facing == BlockStateProperties.HORIZONTAL_FACING ? current.getClockWise()
-                : switch (current) {
-                    case DOWN -> Direction.UP;
-                    case UP -> Direction.NORTH;
-                    case NORTH -> Direction.SOUTH;
-                    case SOUTH -> Direction.WEST;
-                    case WEST -> Direction.EAST;
-                    case EAST -> Direction.DOWN;
-                };
+        Direction next = facing == BlockStateProperties.HORIZONTAL_FACING ? current.getClockWise() : switch (current) {
+            case DOWN -> Direction.UP;
+            case UP -> Direction.NORTH;
+            case NORTH -> Direction.SOUTH;
+            case SOUTH -> Direction.WEST;
+            case WEST -> Direction.EAST;
+            case EAST -> Direction.DOWN;
+        };
         return state.setValue(facing, next);
     }
 

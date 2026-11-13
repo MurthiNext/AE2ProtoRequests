@@ -1,10 +1,11 @@
 package com.murthinext.ae2pr.requester.client.abstraction;
 
-import com.murthinext.ae2pr.requester.Requests;
-import com.murthinext.ae2pr.requester.abstraction.RequestHost;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import com.murthinext.ae2pr.requester.Requests;
+import com.murthinext.ae2pr.requester.abstraction.RequestHost;
 
 /**
  * yoinked from AE2's legacy {@code PatternProviderRecord}
@@ -28,10 +29,12 @@ public class RequesterReference implements RequestHost, Comparable<RequesterRefe
 
     // <editor-fold defaultstate="collapsed" desc="Not important for a reference.">
     @Override
-    public void saveChanges() {}
+    public void saveChanges() {
+    }
 
     @Override
-    public void requestChanged(int index) {}
+    public void requestChanged(int index) {
+    }
 
     @Override
     public boolean isClientSide() {

@@ -17,11 +17,11 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.MapColor;
 
 import com.murthinext.ae2pr.ServerConfig;
-import com.murthinext.ae2pr.registry.ModModules;
-import com.murthinext.ae2pr.api.wrench.Wrenchable;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleDefinition;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleType;
+import com.murthinext.ae2pr.api.wrench.Wrenchable;
+import com.murthinext.ae2pr.registry.ModModules;
 
 public class CrystalAssemblyLineUnitBlock extends Block implements Wrenchable {
 
@@ -31,10 +31,10 @@ public class CrystalAssemblyLineUnitBlock extends Block implements Wrenchable {
 
     public CrystalAssemblyLineUnitBlock() {
         super(Properties.of()
-                .mapColor(MapColor.METAL)
-                .strength(3.5F)
-                .sound(SoundType.METAL)
-                .requiresCorrectToolForDrops());
+                      .mapColor(MapColor.METAL)
+                      .strength(3.5F)
+                      .sound(SoundType.METAL)
+                      .requiresCorrectToolForDrops());
         registerDefaultState(stateDefinition.any().setValue(ACTIVE, false));
     }
 
@@ -44,7 +44,8 @@ public class CrystalAssemblyLineUnitBlock extends Block implements Wrenchable {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip,
+                                TooltipFlag flag) {
         if (this instanceof ModuleProvider provider) {
             tooltip.add(moduleTooltip(provider.moduleDefinition()));
         }
@@ -55,13 +56,13 @@ public class CrystalAssemblyLineUnitBlock extends Block implements Wrenchable {
         ModuleType type = definition.type();
         if (type == ModModules.PARALLEL) {
             return Component.translatable("tooltip.ae2pr.crystal_assembly_line_module.parallel",
-                    NUMBER.format(ServerConfig.assemblyModuleParallelPerUnit()));
+                                          NUMBER.format(ServerConfig.assemblyModuleParallelPerUnit()));
         }
         if (type == ModModules.SPEED) {
             return Component.translatable("tooltip.ae2pr.crystal_assembly_line_module.speed",
-                    NUMBER.format(ServerConfig.assemblyModuleSpeedPerUnit() * 100.0) + "%");
+                                          NUMBER.format(ServerConfig.assemblyModuleSpeedPerUnit() * 100.0) + "%");
         }
         return Component.translatable("tooltip.ae2pr.crystal_assembly_line_module",
-                Component.translatable(type.translationKey()), definition.level());
+                                      Component.translatable(type.translationKey()), definition.level());
     }
 }

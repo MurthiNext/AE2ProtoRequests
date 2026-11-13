@@ -33,21 +33,21 @@ public final class MachineCtm implements CtmBinding {
     public static final MachineCtm INSTANCE = new MachineCtm();
 
     public static final ResourceLocation AEV_PART_CASING = Ids.of("block/aev_machine_casing");
-    public static final ResourceLocation HIGH_REACTIVITY_LAVA_SMELTER_CONTROLLER_CASING = Ids
-            .of("block/high_reactivity_lava_smelter/controller_casing");
-    public static final ResourceLocation MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING = Ids
-            .of("block/matter_phase_transformer/controller_casing");
-    public static final ResourceLocation CRYSTAL_REACTION_CONTROLLER_CASING = Ids
-            .of("block/crystal_reaction_chamber/controller_casing");
-    public static final ResourceLocation CRYSTAL_ASSEMBLY_LINE_CONTROLLER_CASING = Ids
-            .of("block/crystal_assembly_line/controller_casing");
-    public static final ResourceLocation CRYSTAL_WORKSTATION_CONTROLLER_CASING = Ids
-            .of("block/crystal_workstation/controller_casing");
+    public static final ResourceLocation HIGH_REACTIVITY_LAVA_SMELTER_CONTROLLER_CASING = Ids.of(
+            "block/high_reactivity_lava_smelter/controller_casing");
+    public static final ResourceLocation MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING = Ids.of(
+            "block/matter_phase_transformer/controller_casing");
+    public static final ResourceLocation CRYSTAL_REACTION_CONTROLLER_CASING = Ids.of(
+            "block/crystal_reaction_chamber/controller_casing");
+    public static final ResourceLocation CRYSTAL_ASSEMBLY_LINE_CONTROLLER_CASING = Ids.of(
+            "block/crystal_assembly_line/controller_casing");
+    public static final ResourceLocation CRYSTAL_WORKSTATION_CONTROLLER_CASING = Ids.of(
+            "block/crystal_workstation/controller_casing");
     public static final ResourceLocation JIG_CONTROLLER_CASING = Ids.of("block/jig/controller_casing");
-    public static final ResourceLocation MULTI_FACTORY_CONTROLLER_CASING = Ids
-            .of("block/multi_factory/controller_casing");
-    public static final ResourceLocation FILTER_PRESS_CONTROLLER_CASING = Ids
-            .of("block/filter_press/controller_casing");
+    public static final ResourceLocation MULTI_FACTORY_CONTROLLER_CASING = Ids.of(
+            "block/multi_factory/controller_casing");
+    public static final ResourceLocation FILTER_PRESS_CONTROLLER_CASING = Ids.of(
+            "block/filter_press/controller_casing");
     public static final ResourceLocation WORKSTATION_PANEL_INNER = Ids.of("block/crystal_workstation/panel_face");
 
     private MachineCtm() {
@@ -68,11 +68,11 @@ public final class MachineCtm implements CtmBinding {
         }
         CtmTextures.registerTile47("block/meteor_steel_pipe_side");
         // 仅换装用的底图，不参与连接
-        for (ResourceLocation base : List.of(HIGH_REACTIVITY_LAVA_SMELTER_CONTROLLER_CASING,
-                MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING, CRYSTAL_REACTION_CONTROLLER_CASING,
-                CRYSTAL_ASSEMBLY_LINE_CONTROLLER_CASING, CRYSTAL_WORKSTATION_CONTROLLER_CASING,
-                JIG_CONTROLLER_CASING, MULTI_FACTORY_CONTROLLER_CASING, FILTER_PRESS_CONTROLLER_CASING,
-                WORKSTATION_PANEL_INNER)) {
+        for (ResourceLocation base :
+             List.of(HIGH_REACTIVITY_LAVA_SMELTER_CONTROLLER_CASING, MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING,
+                     CRYSTAL_REACTION_CONTROLLER_CASING, CRYSTAL_ASSEMBLY_LINE_CONTROLLER_CASING,
+                     CRYSTAL_WORKSTATION_CONTROLLER_CASING, JIG_CONTROLLER_CASING, MULTI_FACTORY_CONTROLLER_CASING,
+                     FILTER_PRESS_CONTROLLER_CASING, WORKSTATION_PANEL_INNER)) {
             CtmTextures.registerSprite(base);
         }
         // 成型外观贴图随注册表自动登记
@@ -94,15 +94,15 @@ public final class MachineCtm implements CtmBinding {
     public int mask(BlockAndTintGetter level, BlockPos pos, BlockState state) {
         // 棱方向不做轴向判断，只看方块族归属
         return CtmMask.compute(level, pos,
-                (direction, neighbor, neighborState) -> direction == null
-                        ? connects(neighborState, state)
-                        : connects(neighborState, state, direction));
+                               (direction, neighbor, neighborState)
+                                       -> direction == null ? connects(neighborState, state)
+                                                            : connects(neighborState, state, direction));
     }
 
     @Override
     @Nullable
-    public List<BakedQuad> appearance(List<BakedQuad> quads, @Nullable Direction side,
-            BlockAndTintGetter level, BlockPos pos) {
+    public List<BakedQuad> appearance(List<BakedQuad> quads, @Nullable Direction side, BlockAndTintGetter level,
+                                      BlockPos pos) {
         // 预览环境下不做成型换装
         return level instanceof MultiblockPreview ? null : CrystalWorkstationCtm.appearance(quads, side, level, pos);
     }
@@ -122,7 +122,7 @@ public final class MachineCtm implements CtmBinding {
      */
     public static int mask(BlockAndTintGetter level, BlockPos pos, BiPredicate<BlockPos, BlockState> joined) {
         return CtmMask.compute(level, pos,
-                (direction, neighbor, neighborState) -> joined.test(neighbor, neighborState));
+                               (direction, neighbor, neighborState) -> joined.test(neighbor, neighborState));
     }
 
     public static boolean connects(BlockState neighbor, BlockState self) {
@@ -147,10 +147,10 @@ public final class MachineCtm implements CtmBinding {
         if (block == ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()) {
             return 1;
         }
-        if (block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get()
-                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()
-                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()
-                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()) {
+        if (block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get() ||
+            block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get() ||
+            block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get() ||
+            block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()) {
 
             return partFamily(state, 1);
         }
@@ -210,30 +210,26 @@ public final class MachineCtm implements CtmBinding {
         if (state.is(ModMachines.FILTER_PRESS.block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIUM_IRON;
         }
-        if ((state.is(ModMachines.CRYSTAL_WORKSTATION.block()) || state.is(ModMachines.MULTI_FACTORY.block()))
-                && state.getValue(MachineBlock.FORMED)) {
+        if ((state.is(ModMachines.CRYSTAL_WORKSTATION.block()) || state.is(ModMachines.MULTI_FACTORY.block())) &&
+            state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.CRYSTAL_ENERGY;
         }
-        if (state.is(ModMachines.CRYSTAL_ASSEMBLY_LINE.block())
-                && state.getValue(MachineBlock.FORMED)) {
+        if (state.is(ModMachines.CRYSTAL_ASSEMBLY_LINE.block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.CRYSTAL;
         }
-        if (state.is(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.block())
-                && state.getValue(MachineBlock.FORMED)) {
+        if (state.is(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIA;
         }
         if (state.is(ModMachines.MATTER_PHASE_TRANSFORMER.block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIA;
         }
-        if (state.is(ModMachines.CRYSTAL_REACTION_CHAMBER.block())
-                && state.getValue(MachineBlock.FORMED)) {
+        if (state.is(ModMachines.CRYSTAL_REACTION_CHAMBER.block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.CRYSTAL;
         }
         if (state.getBlock() instanceof MachinePartBlock && state.getValue(MachinePartBlock.FORMED)) {
             return MachinePartFacade.byStyle(state.getValue(MachinePartBlock.STYLE));
         }
-        if (state.is(ModBlocks.ME_NETWORK_ACCESS_HATCH.get())
-                && state.getValue(MENetworkAccessHatchBlock.FORMED)) {
+        if (state.is(ModBlocks.ME_NETWORK_ACCESS_HATCH.get()) && state.getValue(MENetworkAccessHatchBlock.FORMED)) {
             return MachinePartFacade.byStyle(state.getValue(MENetworkAccessHatchBlock.STYLE));
         }
         return null;
@@ -279,8 +275,7 @@ public final class MachineCtm implements CtmBinding {
         if (!(block instanceof MachinePartBlock)) {
             return null;
         }
-        return MachinePartBlock.isAevPart(block)
-                ? CtmTextures.baseSprite(AEV_PART_CASING)
-                : CtmTextures.baseSprite(MachinePartFacade.CRYSTAL.texture());
+        return MachinePartBlock.isAevPart(block) ? CtmTextures.baseSprite(AEV_PART_CASING)
+                                                 : CtmTextures.baseSprite(MachinePartFacade.CRYSTAL.texture());
     }
 }

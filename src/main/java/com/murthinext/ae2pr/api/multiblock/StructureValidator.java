@@ -30,13 +30,13 @@ public final class StructureValidator {
             Direction facing = state.hasProperty(BlockStateProperties.FACING)
                     ? state.getValue(BlockStateProperties.FACING)
                     : state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)
-                            ? state.getValue(BlockStateProperties.HORIZONTAL_FACING)
-                            : null;
+                    ? state.getValue(BlockStateProperties.HORIZONTAL_FACING)
+                    : null;
             Direction.Axis axis = state.hasProperty(BlockStateProperties.AXIS)
                     ? state.getValue(BlockStateProperties.AXIS)
                     : state.hasProperty(BlockStateProperties.HORIZONTAL_AXIS)
-                            ? state.getValue(BlockStateProperties.HORIZONTAL_AXIS)
-                            : null;
+                    ? state.getValue(BlockStateProperties.HORIZONTAL_AXIS)
+                    : null;
             return new Snapshot(state.getBlock(), facing, axis);
         }
 
@@ -51,8 +51,7 @@ public final class StructureValidator {
     }
 
     // 验证结构；{@link StructureResult#fromCache()} 为 true 时无需刷新外观与部件引用
-    public StructureResult validate(Level level, BlockPos controllerPos, Direction front, Direction up,
-            int maxSlices) {
+    public StructureResult validate(Level level, BlockPos controllerPos, Direction front, Direction up, int maxSlices) {
         if (lastFormed != null && verified(level)) {
             return lastFormed.asCached();
         }

@@ -33,7 +33,7 @@ public final class QuadrantCtmMeshBuilder {
 
     // 把单个面拆成 4 个象限面
     public static List<BakedQuad> build(BakedQuad quad, TextureAtlasSprite base, TextureAtlasSprite atlas,
-            int worldMask) {
+                                        int worldMask) {
         Direction uAxis = CtmMeshBuilder.uAxis(quad);
         Direction vAxis = CtmMeshBuilder.vAxis(quad);
         int edgeMask = edgeMask(uAxis, vAxis, worldMask);
@@ -90,8 +90,8 @@ public final class QuadrantCtmMeshBuilder {
     }
 
     // 该象限的对角块是否连接；两条邻边未同时连接时恒为 false
-    private static boolean diagonal(int cornerBit, int edgeMask, int worldMask,
-            @Nullable Direction uAxis, @Nullable Direction vAxis) {
+    private static boolean diagonal(int cornerBit, int edgeMask, int worldMask, @Nullable Direction uAxis,
+                                    @Nullable Direction vAxis) {
         if (uAxis == null || vAxis == null) {
             return false;
         }
@@ -144,8 +144,8 @@ public final class QuadrantCtmMeshBuilder {
         }
 
         // 切出指定象限，并把 UV 重映射到目标格或基础贴图的对应象限
-        BakedQuad subQuad(BakedQuad quad, TextureAtlasSprite base, TextureAtlasSprite atlas,
-                int qx, int qy, @Nullable int[] cell, float tileWidth, float tileHeight) {
+        BakedQuad subQuad(BakedQuad quad, TextureAtlasSprite base, TextureAtlasSprite atlas, int qx, int qy,
+                          @Nullable int[] cell, float tileWidth, float tileHeight) {
             int[] src = quad.getVertices();
             int[] out = src.clone();
 
@@ -162,10 +162,8 @@ public final class QuadrantCtmMeshBuilder {
             float baseWidth = base.getU1() - base.getU0();
             float baseHeight = base.getV1() - base.getV0();
             // 未连接时取基础贴图里对应的那一个象限，而不是整张底图
-            float cellU0 = cell == null ? base.getU0() + qx * baseWidth * HALF
-                    : atlas.getU0() + cell[0] * tileWidth;
-            float cellV0 = cell == null ? base.getV0() + qy * baseHeight * HALF
-                    : atlas.getV0() + cell[1] * tileHeight;
+            float cellU0 = cell == null ? base.getU0() + qx * baseWidth * HALF : atlas.getU0() + cell[0] * tileWidth;
+            float cellV0 = cell == null ? base.getV0() + qy * baseHeight * HALF : atlas.getV0() + cell[1] * tileHeight;
             float spanU = cell == null ? baseWidth * HALF : tileWidth;
             float spanV = cell == null ? baseHeight * HALF : tileHeight;
 
@@ -181,7 +179,7 @@ public final class QuadrantCtmMeshBuilder {
                 out[offset + UV_OFFSET + 1] = Float.floatToRawIntBits(cellV0 + (t * 2.0F - qy) * spanV);
             }
             return new BakedQuad(out, quad.getTintIndex(), quad.getDirection(), cell == null ? base : atlas,
-                    quad.isShade());
+                                 quad.isShade());
         }
     }
 }
