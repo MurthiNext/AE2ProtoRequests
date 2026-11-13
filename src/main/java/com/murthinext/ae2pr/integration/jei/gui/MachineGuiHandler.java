@@ -33,7 +33,7 @@ public class MachineGuiHandler implements IGuiContainerHandler<AbstractContainer
     @Override
     public Collection<IGuiClickableArea> getGuiClickableAreas(AbstractContainerScreen<?> screen, double mouseX,
                                                               double mouseY) {
-        if (!(screen instanceof AbstractMultiblockControllerScreen<?> machineScreen)) {
+        if (!(screen instanceof AbstractMultiblockControllerScreen<?> machineScreen) || machineScreen.isDataPage()) {
             return List.of();
         }
         RecipeType<?> recipeType = recipeType(machineScreen.getMenu());

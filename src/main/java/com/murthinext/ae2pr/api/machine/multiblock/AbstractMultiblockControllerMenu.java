@@ -3,6 +3,7 @@ package com.murthinext.ae2pr.api.machine.multiblock;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -16,6 +17,9 @@ import net.minecraftforge.items.SlotItemHandler;
 import appeng.api.upgrades.Upgrades;
 
 import com.murthinext.ae2pr.api.machine.MachineDefinition;
+import com.murthinext.ae2pr.api.machine.MachineStats;
+import com.murthinext.ae2pr.network.MachineStatsPacket;
+import com.murthinext.ae2pr.registry.ModNetwork;
 
 public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultiblockControllerBlockEntity>
         extends AbstractContainerMenu {
@@ -57,6 +61,9 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
     protected final boolean clientSide;
     private final SimpleContainerData data;
     private final int playerSlotFirst;
+    private final Player owner;
+    @Nullable
+    private MachineStats machineStats;
 
     protected AbstractMultiblockControllerMenu(MachineDefinition<?, T, ?> definition, int id, Inventory playerInventory,
                                                @Nullable T controller, int extraDataSlots) {
@@ -64,6 +71,7 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
         this.definition = definition;
         this.controller = controller;
         this.clientSide = playerInventory.player.level().isClientSide;
+        this.owner = playerInventory.player;
         this.data = new SimpleContainerData(DATA_COUNT + extraDataSlots);
         this.playerSlotFirst = UPGRADE_SLOTS + extraSlots();
 
@@ -127,6 +135,13 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
             data.set(DATA_POWER_HI, (int) (power >>> 32));
             setIntData(data, DATA_PARALLEL_LO, controller.maxParallel());
             writeExtraData(data);
+            if (owner instanceof ServerPlayer player) {
+                MachineStats current = controller.getMachineStats();
+                if (!current.equals(machineStats)) {
+                    machineStats = current;
+                    ModNetwork.sendToPlayer(player, new MachineStatsPacket(containerId, current));
+                }
+            }
         }
         super.broadcastChanges();
     }
@@ -181,6 +196,17 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
 
     public int getMaxParallel() {
         return getIntData(data, DATA_PARALLEL_LO);
+    }
+
+    @Nullable
+    public MachineStats getMachineStats() {
+        return machineStats;
+    }
+
+    public void setMachineStats(MachineStats stats) {
+        if (clientSide) {
+            machineStats = stats;
+        }
     }
 
     public MachineDefinition<?, T, ?> definition() {

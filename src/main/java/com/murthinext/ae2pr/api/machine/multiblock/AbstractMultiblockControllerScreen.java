@@ -1,6 +1,8 @@
 package com.murthinext.ae2pr.api.machine.multiblock;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
@@ -22,10 +24,13 @@ import net.minecraftforge.fluids.FluidStack;
 
 import appeng.util.ReadableNumberConverter;
 
+import com.murthinext.ae2pr.api.machine.MachineStat;
+import com.murthinext.ae2pr.api.machine.MachineStats;
 import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
 import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
 import com.murthinext.ae2pr.api.machine.client.MachineStyles;
+import com.murthinext.ae2pr.api.machine.client.MachineTabButton;
 import com.murthinext.ae2pr.api.machine.part.MachinePart;
 
 public abstract class AbstractMultiblockControllerScreen<M extends AbstractMultiblockControllerMenu<?>>
@@ -45,6 +50,10 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     private static final int JOB_TAIL_GAP = 4;
     private static final double JOB_NAME_SCROLL_SPEED = 12.0D;
     private static final int JOB_NAME_SCROLL_GAP = 24;
+    private static final int TAB_Y = 1 - MachineTabButton.HEIGHT;
+    private static final int DATA_Y = 32;
+    private static final int DATA_STEP = 22;
+    private static final int DATA_HINT_Y = 104;
 
     private static final int COLOR_OK = 0x55FF55;
     private static final int COLOR_FAIL = 0xFF5555;
@@ -52,9 +61,48 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     private static final int COLOR_PAUSED = 0xFFDE00;
     private static final int COLOR_INFO = 0xACE9FF;
     private static final int COLOR_GRAY = 0x7A8794;
+    private boolean dataPage;
 
     protected AbstractMultiblockControllerScreen(M menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        addRenderableWidget(new MachineTabButton(leftPos, topPos + TAB_Y,
+                                                 Component.translatable("gui.ae2pr.multiblock.tab.home"),
+                                                 separatorAccent(), () -> !dataPage, () -> dataPage = false));
+        addRenderableWidget(new MachineTabButton(leftPos + MachineTabButton.WIDTH, topPos + TAB_Y,
+                                                 Component.translatable("gui.ae2pr.multiblock.tab.data"),
+                                                 separatorAccent(), () -> dataPage, () -> dataPage = true));
+    }
+
+    public boolean isDataPage() {
+        return dataPage;
+    }
+
+    @Override
+    protected int topExtension() {
+        return -TAB_Y;
+    }
+
+    @Override
+    public List<Rect2i> getGuiExtraAreas() {
+        List<Rect2i> areas = new ArrayList<>(super.getGuiExtraAreas());
+        areas.add(new Rect2i(leftPos, topPos + TAB_Y, MachineTabButton.WIDTH * 2, MachineTabButton.HEIGHT));
+        return areas;
+    }
+
+    @Override
+    protected boolean hasClickedOutside(double mouseX, double mouseY, int guiLeft, int guiTop, int button) {
+        for (Rect2i area : getGuiExtraAreas()) {
+            if (mouseX >= area.getX() && mouseX < area.getX() + area.getWidth() && mouseY >= area.getY() &&
+                mouseY < area.getY() + area.getHeight()) {
+                return false;
+            }
+        }
+        return super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop, button);
     }
 
     @Override
@@ -95,6 +143,10 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         super.renderLabels(graphics, mouseX, mouseY);
+        if (dataPage) {
+            renderDataLabels(graphics);
+            return;
+        }
         graphics.drawString(font,
                             Component.translatable(menu.isFormed() ? "gui.ae2pr.multiblock.formed"
                                                                    : "gui.ae2pr.multiblock.unformed"),
@@ -113,6 +165,82 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     }
 
     protected void renderExtraLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+    }
+
+    private void renderDataLabels(GuiGraphics graphics) {
+        MachineStats stats = menu.getMachineStats();
+        if (stats == null) {
+            graphics.drawString(font, Component.translatable("gui.ae2pr.multiblock.data.waiting"), TEXT_X, DATA_Y,
+                                COLOR_GRAY, false);
+            return;
+        }
+        for (int row = 0; row < 3; row++) {
+            graphics.drawString(font, dataText(stats, row), TEXT_X, DATA_Y + row * DATA_STEP, COLOR_INFO, false);
+        }
+        graphics.drawString(font, Component.translatable("gui.ae2pr.multiblock.data.hint"), TEXT_X, DATA_HINT_Y,
+                            COLOR_GRAY, false);
+    }
+
+    private Component dataText(MachineStats stats, int row) {
+        String value = row == 1 && !stats.recipeEnergy()
+                ? Component.translatable("gui.ae2pr.multiblock.data.not_applicable").getString()
+                : formatStat(stat(stats, row).value(), row != 2);
+        return Component.translatable("gui.ae2pr.multiblock.data." + switch (row) {
+            case 0 -> "speed";
+            case 1 -> "energy";
+            default -> "parallel";
+        }, value);
+    }
+
+    private static MachineStat stat(MachineStats stats, int row) {
+        return switch (row) {
+            case 0 -> stats.speed();
+            case 1 -> stats.energy();
+            default -> stats.parallel();
+        };
+    }
+
+    private static String formatStat(double value, boolean multiplier) {
+        double magnitude = Math.abs(value);
+        NumberFormat format = magnitude != 0 && (magnitude < 0.0001 || magnitude >= 1_000_000_000)
+                ? new DecimalFormat("0.####E0")
+                : NumberFormat.getNumberInstance();
+        format.setMaximumFractionDigits(4);
+        return format.format(value) + (multiplier ? "×" : "");
+    }
+
+    private boolean renderDataTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+        MachineStats stats = menu.getMachineStats();
+        if (stats == null) {
+            return false;
+        }
+        for (int row = 0; row < 3; row++) {
+            Component text = dataText(stats, row);
+            if (!isHovering(TEXT_X, DATA_Y + row * DATA_STEP, font.width(text), font.lineHeight, mouseX, mouseY)) {
+                continue;
+            }
+            List<Component> lines = new ArrayList<>();
+            lines.add(text);
+            if (row != 1 || stats.recipeEnergy()) {
+                double scale = row == 1 ? stats.energyBase() : 1;
+                for (MachineStat.Source source : stat(stats, row).sources()) {
+                    String before = formatStat(source.before() / scale, row != 2);
+                    String after = formatStat(source.after() / scale, row != 2);
+                    lines.add(source.before() == source.after()
+                                      ? Component.translatable("gui.ae2pr.multiblock.data.source.value", source.name(),
+                                                               after)
+                                      : Component.translatable("gui.ae2pr.multiblock.data.source.change", source.name(),
+                                                               before, after));
+                }
+                lines.add(Component.translatable("gui.ae2pr.multiblock.data.order"));
+            }
+            if (row == 1) {
+                lines.add(stats.energyContext());
+            }
+            GuiTooltips.render(graphics, font, lines, mouseX, mouseY);
+            return true;
+        }
+        return false;
     }
 
     private void renderJob(GuiGraphics graphics) {
@@ -205,6 +333,9 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
         if (super.renderCustomTooltip(graphics, mouseX, mouseY)) {
             return true;
         }
+        if (dataPage) {
+            return renderDataTooltip(graphics, mouseX, mouseY);
+        }
         if (mouseX >= leftPos + TEXT_X && mouseX < leftPos + 174 && mouseY >= topPos + POWER_Y &&
             mouseY < topPos + POWER_Y + font.lineHeight) {
             GuiTooltips.render(graphics, font,
@@ -238,6 +369,9 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
 
     @Override
     public List<Area> getCustomAreas() {
+        if (dataPage) {
+            return List.of();
+        }
         ItemStack item = menu.getJobItem();
         if (!item.isEmpty()) {
             return List.of(Area.ofItem(item, jobItemArea()));

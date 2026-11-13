@@ -73,6 +73,11 @@ public class HighReactivityLavaSmelterControllerBlockEntity extends AbstractMult
     }
 
     @Override
+    protected boolean usesRecipeEnergy() {
+        return false;
+    }
+
+    @Override
     protected int capParallel(MultiblockRecipe recipe, int parallel) {
         return Math.min(parallel, durability);
     }

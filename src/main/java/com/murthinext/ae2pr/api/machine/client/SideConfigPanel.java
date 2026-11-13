@@ -9,7 +9,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.side.SideConfig;
 import com.murthinext.ae2pr.api.machine.side.SideMode;
 
@@ -35,7 +34,6 @@ public final class SideConfigPanel {
         { 1, 2 }, // 下
     };
 
-    private static final ResourceLocation TEXTURE_PANEL = Ids.of("textures/gui/panel_popup.png");
     private static final int COLOR_TITLE = 0x55FFFF;
 
     private final SideConfig config;
@@ -53,7 +51,7 @@ public final class SideConfigPanel {
     }
 
     public void render(GuiGraphics graphics, Font font, int x, int y, int mouseX, int mouseY) {
-        graphics.blit(TEXTURE_PANEL, x, y, 0, 0.0F, 0.0F, WIDTH, HEIGHT, WIDTH, HEIGHT);
+        GuiPanels.popup(graphics, x, y, WIDTH, HEIGHT);
         graphics.drawString(font, Component.translatable("gui.ae2pr.side_config.title"), x + ORIGIN_X, y + 5,
                             COLOR_TITLE, false);
 

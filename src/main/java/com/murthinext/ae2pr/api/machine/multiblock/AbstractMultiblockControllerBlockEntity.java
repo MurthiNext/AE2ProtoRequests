@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -28,13 +29,14 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.IUpgradeableObject;
 import appeng.api.upgrades.UpgradeInventories;
-import appeng.core.definitions.AEItems;
 
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.EnergyAmount;
 import com.murthinext.ae2pr.api.machine.ControllerHost;
 import com.murthinext.ae2pr.api.machine.CoreLight;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
+import com.murthinext.ae2pr.api.machine.MachineStat;
+import com.murthinext.ae2pr.api.machine.MachineStats;
 import com.murthinext.ae2pr.api.machine.MachineTuning;
 import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.part.InputGroup;
@@ -137,9 +139,12 @@ public abstract class AbstractMultiblockControllerBlockEntity
     }
 
     public int maxParallel() {
+        return (int) MachineUpgrades.apply(upgrades, MachineUpgradeType.PARALLEL, baseParallel());
+    }
+
+    private double baseParallel() {
         long total = (long) definition.maxParallel() + parallelBonus();
-        return (int) MachineUpgrades.apply(upgrades, MachineUpgradeType.PARALLEL,
-                                           Math.max(1, Math.min(total, Integer.MAX_VALUE)));
+        return Math.max(1, Math.min(total, Integer.MAX_VALUE));
     }
 
     protected long parallelBonus() {
@@ -349,7 +354,7 @@ public abstract class AbstractMultiblockControllerBlockEntity
     }
 
     protected double energyCost(Match match) {
-        double perParallel = match.recipe().getEnergyPerParallel() * lossyEnergyMultiplier();
+        double perParallel = match.recipe().getEnergyPerParallel();
         return EnergyAmount.clamp(MachineUpgrades.apply(upgrades, MachineUpgradeType.ENERGY, perParallel) *
                                   match.parallel());
     }
@@ -564,20 +569,58 @@ public abstract class AbstractMultiblockControllerBlockEntity
 
     // 加速卡与电力
 
-    public int getSpeedCardCount() {
-        return upgrades.getInstalledUpgrades(AEItems.SPEED_CARD);
-    }
-
     public double getSpeedMultiplier() {
-        return MachineUpgrades.apply(upgrades, MachineUpgradeType.SPEED, baseSpeedMultiplier());
+        double base = baseSpeedMultiplier();
+        return MachineUpgrades.apply(upgrades, MachineUpgradeType.SPEED, base, base * MachineTuning.speedPerCard(),
+                                     null);
     }
 
     protected double baseSpeedMultiplier() {
-        return 1.0 + getSpeedCardCount() * MachineTuning.speedPerCard();
+        return 1.0;
     }
 
-    public double lossyEnergyMultiplier() {
-        return Math.pow(MachineTuning.energyMultiplierPerCard(), getSpeedCardCount());
+    protected boolean usesRecipeEnergy() {
+        return true;
+    }
+
+    protected void collectBaseStatSources(MachineUpgradeType type, List<MachineStat.Source> sources) {
+        if (type == MachineUpgradeType.PARALLEL && parallelBonus() != 0) {
+            sources.add(new MachineStat.Source(Component.translatable("gui.ae2pr.multiblock.data.structure"),
+                                               definition.maxParallel(), baseParallel()));
+        }
+    }
+
+    public MachineStats getMachineStats() {
+        double speedBase = baseSpeedMultiplier();
+        List<MachineStat.Source> speedSources = new ArrayList<>();
+        speedSources.add(new MachineStat.Source(Component.translatable("gui.ae2pr.multiblock.data.base"), 1, 1));
+        collectBaseStatSources(MachineUpgradeType.SPEED, speedSources);
+        double speed = MachineUpgrades.apply(upgrades, MachineUpgradeType.SPEED, speedBase,
+                                             speedBase * MachineTuning.speedPerCard(), speedSources);
+
+        List<MachineStat.Source> parallelSources = new ArrayList<>();
+        parallelSources.add(new MachineStat.Source(Component.translatable("gui.ae2pr.multiblock.data.base"),
+                                                   definition.maxParallel(), definition.maxParallel()));
+        collectBaseStatSources(MachineUpgradeType.PARALLEL, parallelSources);
+        double parallel = MachineUpgrades.apply(upgrades, MachineUpgradeType.PARALLEL, baseParallel(), 0,
+                                                parallelSources);
+
+        MultiblockRecipe recipe = currentRecipe();
+        boolean recipeBasis = recipe != null && recipe.getEnergyPerParallel() > 0;
+        double energyBase = recipeBasis ? recipe.getEnergyPerParallel() : 1;
+        List<MachineStat.Source> energySources = new ArrayList<>();
+        energySources.add(new MachineStat.Source(Component.translatable("gui.ae2pr.multiblock.data.base"), energyBase,
+                                                 energyBase));
+        double energy = usesRecipeEnergy()
+                ? MachineUpgrades.apply(upgrades, MachineUpgradeType.ENERGY, energyBase, 0, energySources)
+                : energyBase;
+        Component context = Component.translatable(!usesRecipeEnergy()   ? "gui.ae2pr.multiblock.data.energy.passive"
+                                                           : recipeBasis ? "gui.ae2pr.multiblock.data.energy.recipe"
+                                                                         : "gui.ae2pr.multiblock.data.energy.reference",
+                                                   energyBase);
+        return new MachineStats(new MachineStat(speed, speedSources),
+                                new MachineStat(energy / energyBase, energySources),
+                                new MachineStat(parallel, parallelSources), energyBase, context, usesRecipeEnergy());
     }
 
     // 速度倍率封顶 INT MAX，单次作业至少 1 tick

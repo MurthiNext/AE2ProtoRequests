@@ -13,6 +13,7 @@ import com.murthinext.ae2pr.network.BusSlotClickPacket;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 import com.murthinext.ae2pr.network.MachinePartStackPacket;
+import com.murthinext.ae2pr.network.MachineStatsPacket;
 import com.murthinext.ae2pr.network.NamingFactoryRenamePacket;
 import com.murthinext.ae2pr.network.RepeatOrderFailedPacket;
 import com.murthinext.ae2pr.network.RepeatOrderFinishedPacket;
@@ -95,6 +96,10 @@ public final class ModNetwork {
         CHANNEL.registerMessage(nextMessageId++, ScreenCorruptionImpactPacket.class,
                                 ScreenCorruptionImpactPacket::encode, ScreenCorruptionImpactPacket::decode,
                                 ScreenCorruptionImpactPacket::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        CHANNEL.registerMessage(nextMessageId++, MachineStatsPacket.class, MachineStatsPacket::encode,
+                                MachineStatsPacket::decode, MachineStatsPacket::handle,
+                                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 
     public static void sendToPlayer(ServerPlayer player, Object packet) {

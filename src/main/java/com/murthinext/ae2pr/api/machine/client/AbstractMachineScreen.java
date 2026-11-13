@@ -69,7 +69,6 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu>
     protected static final int ARROW_WIDTH = 10;
     protected static final int ARROW_HEIGHT = 12;
 
-    private static final ResourceLocation PANEL_TEXTURE = texture("components/panel");
     public static final ResourceLocation SLOT_TEXTURE = texture("components/slot");
     private static final ResourceLocation PROGRESS_BAR_TEXTURE = texture("components/progress_bar");
     private static final ResourceLocation ARROW_ITEM_DOWN = texture("components/arrow_item_down");
@@ -121,9 +120,14 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu>
         return 0x55FFFF;
     }
 
+    protected int topExtension() {
+        return 0;
+    }
+
     @Override
     protected void init() {
         super.init();
+        topPos += topExtension() / 2;
         guideButton = new GuideButton(leftPos + TOOLBAR_X + 1, topPos + TOOLBAR_Y + 1,
                                       () -> GuideOpener.open(guidePage()));
         addRenderableWidget(guideButton);
@@ -153,7 +157,7 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu>
     }
 
     protected void drawPanel(GuiGraphics graphics) {
-        graphics.blit(PANEL_TEXTURE, leftPos, topPos, 0, 0.0F, 0.0F, imageWidth, imageHeight, WIDTH, HEIGHT);
+        GuiPanels.panel(graphics, leftPos, topPos, imageWidth, imageHeight, INV_Y - 3);
     }
 
     protected void drawSeparator(GuiGraphics graphics) {

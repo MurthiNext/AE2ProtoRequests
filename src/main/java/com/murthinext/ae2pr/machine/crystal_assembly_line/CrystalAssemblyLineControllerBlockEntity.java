@@ -6,6 +6,7 @@ import java.util.List;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.api.machine.MachineStat;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 import com.murthinext.ae2pr.api.machine.part.InputGroup;
 import com.murthinext.ae2pr.api.machine.part.MachinePart;
@@ -21,6 +23,7 @@ import com.murthinext.ae2pr.api.multiblock.StructureResult;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleSnapshot;
 import com.murthinext.ae2pr.api.recipe.CountedIngredient;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
+import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.registry.ModModules;
 
@@ -53,6 +56,34 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
     protected double baseSpeedMultiplier() {
         return (1.0 + modules.count(ModModules.SPEED) * ServerConfig.assemblyModuleSpeedPerUnit()) *
                 super.baseSpeedMultiplier();
+    }
+
+    @Override
+    protected void collectBaseStatSources(MachineUpgradeType type, List<MachineStat.Source> sources) {
+        if (type == MachineUpgradeType.SPEED && modules.count(ModModules.SPEED) > 0) {
+            sources.add(new MachineStat.Source(Component.translatable("gui.ae2pr.multiblock.data.modules",
+                                                                      Component.translatable("module.ae2pr.speed"),
+                                                                      modules.count(ModModules.SPEED)),
+                                               1, baseSpeedMultiplier()));
+        } else if (type == MachineUpgradeType.PARALLEL) {
+            double base = ModMachines.CRYSTAL_ASSEMBLY_LINE.maxParallel();
+            long slices = (long) Math.max(0, lastSlices - CrystalAssemblyLineStructure.MIN_SLICES) *
+                    ServerConfig.assemblyParallelPerSlice();
+            double extended = Math.min(Integer.MAX_VALUE, base + slices);
+            if (slices > 0) {
+                sources.add(new MachineStat.Source(Component.translatable("gui.ae2pr.multiblock.data.structure"), base,
+                                                   extended));
+            }
+            int count = modules.count(ModModules.PARALLEL);
+            if (count > 0) {
+                double total = Math.min(Integer.MAX_VALUE,
+                                        extended + (long) count * ServerConfig.assemblyModuleParallelPerUnit());
+                sources.add(new MachineStat.Source(
+                        Component.translatable("gui.ae2pr.multiblock.data.modules",
+                                               Component.translatable("module.ae2pr.parallel"), count),
+                        extended, total));
+            }
+        }
     }
 
     // 配方匹配
