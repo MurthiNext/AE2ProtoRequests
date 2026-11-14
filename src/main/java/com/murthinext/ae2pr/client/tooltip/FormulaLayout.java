@@ -78,16 +78,26 @@ final class FormulaLayout {
         }
         if (expression instanceof LatexFormula.Root root) {
             Box content = expression(root.radicand());
-            Box degree = root.degree() == null ? text("") : new Scaled(expression(root.degree()), 0.65F, 0.65F);
-            float offset = Math.max(9, degree.width() + 4);
-            float width = offset + content.width() + 2;
-            float top = -content.ascent() - 3;
-            float degreeBaseline = Math.min(-5, top + degree.ascent() - 2);
-            return new Composite(
-                    width, Math.max(-top, degree.ascent() - degreeBaseline), content.descent(),
-                    List.of(new Placed(content, offset, 0), new Placed(degree, 0, degreeBaseline)),
-                    List.of(new Line(offset - 9, -3, offset - 7, -3), new Line(offset - 7, -3, offset - 5, 1),
-                            new Line(offset - 5, 1, offset - 2, top), new Line(offset - 2, top, width - 1, top)));
+            Box degree = root.degree() == null ? null : new Scaled(expression(root.degree()), 0.65F, 0.65F);
+            float ink = simpleInk(root.radicand());
+            float top = -Math.max((Float.isNaN(ink) ? content.ascent() : ink) + 1, 6.5F);
+            // 使用字体里的根号字形，避免用 1px 线段画出锯齿；该字形的上缘约等于其步进宽度
+            Box surd = text("√");
+            float scale = -top / Math.max(1.0F, surd.width());
+            Box scaledSurd = new Scaled(surd, scale, scale);
+            float surdOffset = degree == null ? 0 : degree.width() + 3;
+            float contentOffset = surdOffset + scaledSurd.width() + 1.5F;
+            float width = contentOffset + content.width() + 2;
+            float degreeBaseline = degree == null ? 0 : Math.min(-5, top + degree.ascent() - 2);
+            List<Placed> children = new ArrayList<>();
+            if (degree != null) {
+                children.add(new Placed(degree, 0, degreeBaseline));
+            }
+            children.add(new Placed(scaledSurd, surdOffset, 0));
+            children.add(new Placed(content, contentOffset, 0));
+            return new Composite(width, Math.max(-top + 0.5F, degree == null ? 0 : degree.ascent() - degreeBaseline),
+                                 Math.max(content.descent(), scaledSurd.descent()), children,
+                                 List.of(new Line(surdOffset + scaledSurd.width() - 0.5F, top, width - 1, top)));
         }
         if (expression instanceof LatexFormula.Function function) {
             List<Box> arguments = new ArrayList<>();
@@ -110,6 +120,26 @@ final class FormulaLayout {
             };
         }
         throw new IllegalArgumentException("Unsupported formula node: " + expression);
+    }
+
+    // 简单算式按实际字形的视觉高度计算，避免根号横线与内容之间出现大片空隙
+    private static float simpleInk(Expression expression) {
+        if (expression instanceof LatexFormula.Variable) {
+            return 4.0F;
+        }
+        if (expression instanceof LatexFormula.Literal) {
+            return 5.5F;
+        }
+        if (expression instanceof LatexFormula.Unary unary) {
+            return simpleInk(unary.operand());
+        }
+        if (expression instanceof LatexFormula.Binary binary && !binary.operator().equals("^") &&
+            !binary.operator().equals("/")) {
+            float left = simpleInk(binary.left());
+            float right = simpleInk(binary.right());
+            return Float.isNaN(left) || Float.isNaN(right) ? Float.NaN : Math.max(left, right);
+        }
+        return Float.NaN;
     }
 
     private Box operand(Expression expression, int minimumPrecedence) {
@@ -153,11 +183,13 @@ final class FormulaLayout {
 
     private static Box script(Box base, Box script, boolean superscript) {
         Box small = new Scaled(script, 0.72F, 0.72F);
+        float gap = superscript ? 1 : 0;
         float baseline = superscript ? -base.ascent() * 0.65F - small.descent()
-                                     : base.descent() + small.ascent() * 0.65F;
-        return new Composite(base.width() + small.width() + 1, Math.max(base.ascent(), small.ascent() - baseline),
+                                     : base.descent() + small.ascent() * 0.2F;
+        return new Composite(base.width() + gap + small.width(), Math.max(base.ascent(), small.ascent() - baseline),
                              Math.max(base.descent(), small.descent() + baseline),
-                             List.of(new Placed(base, 0, 0), new Placed(small, base.width() + 1, baseline)), List.of());
+                             List.of(new Placed(base, 0, 0), new Placed(small, base.width() + gap, baseline)),
+                             List.of());
     }
 
     private static Box row(Box... boxes) {

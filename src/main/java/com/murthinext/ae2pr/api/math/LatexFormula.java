@@ -10,15 +10,13 @@ public record LatexFormula(String source, Expression expression) {
         if (source == null || source.isBlank() || source.length() > 1024) {
             throw new IllegalArgumentException("Formula must contain 1 to 1024 characters");
         }
-        String text = source.replaceAll("\\s+", "");
+        String text = source.trim();
         if (text.startsWith("$") && text.endsWith("$")) {
             text = text.substring(1, text.length() - 1);
         } else if (text.startsWith("\\(") && text.endsWith("\\)")) {
             text = text.substring(2, text.length() - 2);
         }
-        if (text.startsWith("f(x)=")) {
-            text = text.substring(5);
-        }
+        text = text.replaceFirst("^\\s*f\\s*\\(\\s*x\\s*\\)\\s*=\\s*", "");
         Parser parser = new Parser(text);
         Expression expression = parser.expression();
         if (!parser.token.isEmpty()) {
@@ -177,6 +175,12 @@ public record LatexFormula(String source, Expression expression) {
         private void next() {
             token = "";
             while (position < text.length()) {
+                while (position < text.length() && Character.isWhitespace(text.charAt(position))) {
+                    position++;
+                }
+                if (position >= text.length()) {
+                    return;
+                }
                 int start = position++;
                 char first = text.charAt(start);
                 if (first == '\\') {

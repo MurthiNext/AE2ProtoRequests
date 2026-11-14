@@ -220,12 +220,11 @@ public final class ServerConfig {
                                        .defineInRange("lossySpeedPerCard", 0.5, 0.0, 100.0);
         LOSSY_ENERGY_MULTIPLIER_PER_CARD = BUILDER.comment("多方块机器每张加速卡对单次作业耗能的倍率，逐张相乘")
                                                    .defineInRange("lossyEnergyMultiplierPerCard", 4.0, 1.0, 1000.0);
-        AEV_SPEED = define("aev_speed_card", MachineUpgradeType.SPEED, "f(x)=2x",
-                           "x 为应用本张卡前的速度倍率，包含结构模块和 AE2 加速卡的增益");
-        AEV_PARALLEL = define("aev_parallel_card", MachineUpgradeType.PARALLEL, "f(x)=4x+32",
-                              "x 为应用本张卡前的并行上限，包含结构模块的增益；每张卡计算后向下取整");
-        AEV_ENERGY = define("aev_energy_card", MachineUpgradeType.ENERGY, "f(x)=\\frac{x}{2}",
-                            "x 为应用本张卡前的每并行配方耗能（AE），包含 AE2 加速卡的耗能惩罚");
+        AEV_SPEED = define("aev_speed_card", MachineUpgradeType.SPEED,
+                           "f(x)=\\lceil x+\\sqrt{x}\\cdot\\log_2(x+1) \\rceil", "AEV 速度升级卡");
+        AEV_PARALLEL = define("aev_parallel_card", MachineUpgradeType.PARALLEL,
+                              "f(x)=\\lfloor \\frac{x\\cdot\\log_2(x+1)}{3} \\rfloor", "AEV 并行升级卡");
+        AEV_ENERGY = define("aev_energy_card", MachineUpgradeType.ENERGY, "f(x)=\\frac{4}{5}x", "AEV 节能升级卡");
         BUILDER.pop();
 
         BUILDER.push("collapse");
@@ -270,23 +269,18 @@ public final class ServerConfig {
                                                    String meaning) {
         LatexFormula.parse(fallback);
         BUILDER.push(id);
-        ForgeConfigSpec.ConfigValue<String>
-                value = BUILDER.comment(meaning, "同类卡逐张代入；无卡时不应用公式。使用 LaTeX，例如 f(x)=\\frac{x}{2}",
-                                        "TOML 单引号字符串可直接写反斜杠；双引号字符串需要转义反斜杠。",
-                                        "语法与边界规则见 docs/upgrade_cards.md")
-                                .define("formula", fallback, candidate -> {
-                                    if (!(candidate instanceof String source)) {
-                                        return false;
-                                    }
-                                    try {
-                                        LatexFormula.parse(source);
-                                        return true;
-                                    } catch (IllegalArgumentException exception) {
-                                        ae2pr.LOGGER.warn("Invalid upgrade formula for {}: {}", id,
-                                                          exception.getMessage());
-                                        return false;
-                                    }
-                                });
+        ForgeConfigSpec.ConfigValue<String> value = BUILDER.comment(meaning).define("formula", fallback, candidate -> {
+            if (!(candidate instanceof String source)) {
+                return false;
+            }
+            try {
+                LatexFormula.parse(source);
+                return true;
+            } catch (IllegalArgumentException exception) {
+                ae2pr.LOGGER.warn("Invalid upgrade formula for {}: {}", id, exception.getMessage());
+                return false;
+            }
+        });
         BUILDER.pop();
         return new MachineUpgradeDefinition(id, type, fallback, () -> read(value));
     }
