@@ -45,7 +45,12 @@ public abstract class AppEngInternalInventoryUpgradesMixin implements SuperStack
         if (!((Object) this instanceof IUpgradeInventory upgrades)) {
             return;
         }
-        if (!SuperStackSupport.isSupportedMachine(upgrades.getUpgradableItem())) {
+        var machine = upgrades.getUpgradableItem();
+        if (!SuperStackSupport.isSupportedMachine(machine)) {
+            return;
+        }
+
+        if (SuperStackSupport.isProviderMachine(machine)) {
             return;
         }
         var grown = NonNullList.withSize(this.stacks.size() + 1, ItemStack.EMPTY);

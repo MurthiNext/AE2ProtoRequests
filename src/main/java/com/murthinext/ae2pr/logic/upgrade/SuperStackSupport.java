@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
@@ -26,7 +27,6 @@ import appeng.core.definitions.AEParts;
 import appeng.helpers.InterfaceLogic;
 import appeng.helpers.externalstorage.GenericStackInv;
 
-import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.registry.ModItems;
 
 /**
@@ -49,6 +49,9 @@ public final class SuperStackSupport {
 
     // 已登记的宿主机器物品
     private static final Set<Item> SUPPORTED_MACHINES = ConcurrentHashMap.newKeySet();
+
+    // 升级槽数量由宿主界面自行绘制的供应器物品，不允许本模组再扩容
+    private static final Set<Item> PROVIDER_MACHINES = ConcurrentHashMap.newKeySet();
 
     // 视作返回/存储槽的库存字段名
     private static final List<String> STORAGE_FIELDS = List.of("returnInv", "storage", "storageInv");
@@ -151,10 +154,13 @@ public final class SuperStackSupport {
     private static void registerSupported(ItemLike card, ItemLike machine, String group) {
         Upgrades.add(card, machine, 1, group);
         SUPPORTED_MACHINES.add(machine.asItem());
+        if (PROVIDER_GROUP.equals(group)) {
+            PROVIDER_MACHINES.add(machine.asItem());
+        }
     }
 
     private static void registerModItem(ItemLike card, String modId, String path, String group) {
-        Item item = ForgeRegistries.ITEMS.getValue(Ids.of(path));
+        Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.fromNamespaceAndPath(modId, path));
         if (item != null && item != Items.AIR) {
             registerSupported(card, item, group);
         }
@@ -162,6 +168,10 @@ public final class SuperStackSupport {
 
     public static boolean isSupportedMachine(@Nullable ItemLike machine) {
         return machine != null && SUPPORTED_MACHINES.contains(machine.asItem());
+    }
+
+    public static boolean isProviderMachine(@Nullable ItemLike machine) {
+        return machine != null && PROVIDER_MACHINES.contains(machine.asItem());
     }
 
     public static void bind(@Nullable GenericStackInv inventory, @Nullable Object owner) {
@@ -260,11 +270,7 @@ public final class SuperStackSupport {
 
     public static IUpgradeInventory providerUpgrades(@Nullable Object logic) {
         var inventory = upgradesOf(logic);
-        if (inventory == null) {
-            return UpgradeInventories.empty();
-        }
-        appendUpgradeSlot(inventory);
-        return inventory;
+        return inventory != null ? inventory : UpgradeInventories.empty();
     }
 
     public static void appendUpgradeSlot(IUpgradeInventory inventory) {

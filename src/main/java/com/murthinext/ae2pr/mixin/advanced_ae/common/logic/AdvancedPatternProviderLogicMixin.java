@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.pedroksl.advanced_ae.common.logic.AdvPatternProviderLogicHost;
 
 import appeng.api.upgrades.IUpgradeInventory;
+import appeng.api.upgrades.IUpgradeableObject;
 import appeng.api.upgrades.UpgradeInventories;
 import appeng.helpers.patternprovider.PatternProviderReturnInventory;
 
@@ -49,9 +50,13 @@ public abstract class AdvancedPatternProviderLogicMixin implements SuperStackSup
 
     @Override
     public IUpgradeInventory ae2pr$getProviderUpgrades() {
+        // 第三方已接管升级库存时不建兜底
+        if ((Object) this instanceof IUpgradeableObject) {
+            return UpgradeInventories.empty();
+        }
         if (!this.ae2pr$upgradesCreated && this.host != null) {
             this.ae2pr$upgradesCreated = true;
-            this.ae2pr$upgrades = UpgradeInventories.forMachine(this.host.getTerminalIcon().getItem(), 0,
+            this.ae2pr$upgrades = UpgradeInventories.forMachine(this.host.getTerminalIcon().getItem(), 1,
                                                                 this.host::saveChanges);
         }
         return this.ae2pr$upgrades;
@@ -59,22 +64,25 @@ public abstract class AdvancedPatternProviderLogicMixin implements SuperStackSup
 
     @Inject(method = "readFromNBT", at = @At("HEAD"), remap = false)
     private void ae2pr$loadUpgrades(CompoundTag tag, CallbackInfo ci) {
-        // 先解析生效库存，确保本模组的兜底库存已按追加规则就位
+        // 先解析生效库存，让本模组的兜底库存先就位再读档
         SuperStackSupport.providerUpgrades(this);
-        if (!this.ae2pr$upgrades.isEmpty()) {
+        if (this.ae2pr$upgradesCreated) {
             this.ae2pr$upgrades.readFromNBT(tag, SuperStackSupport.NBT_PROVIDER_UPGRADES);
         }
     }
 
     @Inject(method = "writeToNBT", at = @At("TAIL"), remap = false)
     private void ae2pr$saveUpgrades(CompoundTag tag, CallbackInfo ci) {
-        if (!this.ae2pr$upgrades.isEmpty()) {
+        if (this.ae2pr$upgradesCreated) {
             this.ae2pr$upgrades.writeToNBT(tag, SuperStackSupport.NBT_PROVIDER_UPGRADES);
         }
     }
 
     @Inject(method = "addDrops", at = @At("TAIL"), remap = false)
     private void ae2pr$dropUpgrades(List<ItemStack> drops, CallbackInfo ci) {
+        if (!this.ae2pr$upgradesCreated) {
+            return;
+        }
         for (var stack : this.ae2pr$upgrades) {
             if (!stack.isEmpty()) {
                 drops.add(stack);
@@ -84,6 +92,8 @@ public abstract class AdvancedPatternProviderLogicMixin implements SuperStackSup
 
     @Inject(method = "clearContent", at = @At("TAIL"), remap = false)
     private void ae2pr$clearUpgrades(CallbackInfo ci) {
-        this.ae2pr$upgrades.clear();
+        if (this.ae2pr$upgradesCreated) {
+            this.ae2pr$upgrades.clear();
+        }
     }
 }

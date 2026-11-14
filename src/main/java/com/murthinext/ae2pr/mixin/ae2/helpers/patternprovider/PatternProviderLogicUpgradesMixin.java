@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 
 import appeng.api.networking.IManagedGridNode;
 import appeng.api.upgrades.IUpgradeInventory;
+import appeng.api.upgrades.IUpgradeableObject;
 import appeng.api.upgrades.UpgradeInventories;
 import appeng.helpers.patternprovider.PatternProviderLogic;
 import appeng.helpers.patternprovider.PatternProviderLogicHost;
@@ -45,13 +46,16 @@ public abstract class PatternProviderLogicUpgradesMixin implements SuperStackSup
 
     @Override
     public IUpgradeInventory ae2pr$getProviderUpgrades() {
+        if ((Object) this instanceof IUpgradeableObject) {
+            return UpgradeInventories.empty();
+        }
         // 未登记的机器不提供本模组 fallback，避免无谓库存与存档
-        if (!SuperStackSupport.isSupportedMachine(this.host.getTerminalIcon().getItem())) {
+        var machine = this.host.getTerminalIcon().getItem();
+        if (!SuperStackSupport.isSupportedMachine(machine)) {
             return UpgradeInventories.empty();
         }
         if (this.ae2pr$upgrades == null) {
-            this.ae2pr$upgrades = UpgradeInventories.forMachine(this.host.getTerminalIcon().getItem(), 0,
-                                                                this.host::saveChanges);
+            this.ae2pr$upgrades = UpgradeInventories.forMachine(machine, 1, this.host::saveChanges);
         }
         return this.ae2pr$upgrades;
     }
@@ -65,8 +69,7 @@ public abstract class PatternProviderLogicUpgradesMixin implements SuperStackSup
         var logic = (PatternProviderLogic) (Object) this;
         var inventory = SuperStackSupport.upgradesOf(logic);
         // 只有解析结果就是本模组 fallback 时才读自己的键，第三方库存自行处理
-        if (inventory != null && inventory == this.ae2pr$upgrades) {
-            SuperStackSupport.appendUpgradeSlot(inventory);
+        if (inventory == this.ae2pr$upgrades) {
             inventory.readFromNBT(tag, SuperStackSupport.NBT_PROVIDER_UPGRADES);
         }
     }
@@ -74,7 +77,6 @@ public abstract class PatternProviderLogicUpgradesMixin implements SuperStackSup
     @Inject(method = "writeToNBT", at = @At("TAIL"))
     private void ae2pr$saveUpgrades(CompoundTag tag, CallbackInfo ci) {
         if (ae2pr$fallbackActive()) {
-            SuperStackSupport.appendUpgradeSlot(this.ae2pr$upgrades);
             this.ae2pr$upgrades.writeToNBT(tag, SuperStackSupport.NBT_PROVIDER_UPGRADES);
         }
     }
