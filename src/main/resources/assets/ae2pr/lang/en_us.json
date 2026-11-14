@@ -8,6 +8,8 @@
   "subtitle.ae2pr.multi_factory_inscribing": "Multi Factory inscribes",
   "subtitle.ae2pr.multi_factory_charging": "Multi Factory charges",
   "itemGroup.ae2pr": "AE2 Proto Requests",
+  "item.ae2pr.sky_dome_annihilation_plane": "ME Sky Dome Annihilation Plane",
+  "tooltip.ae2pr.sky_dome_annihilation_plane.placement": "Mount on top of a cable at the highest buildable layer only",
   "item.ae2pr.advanced_filter_cell": "Advanced Filter Cell",
   "item.ae2pr.aev_speed_card": "%s Speed Upgrade Card",
   "item.ae2pr.aev_parallel_card": "%s Parallel Upgrade Card",

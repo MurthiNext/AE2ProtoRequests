@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "SFS",
+        "EPE",
+        "SFS"
+    ],
+    "key": {
+        "S": { "item": "ae2:sky_stone_block" },
+        "F": { "tag": "forge:gems/fluix" },
+        "E": { "item": "ae2:engineering_processor" },
+        "P": { "item": "ae2:annihilation_plane" }
+    },
+    "result": {
+        "item": "ae2pr:sky_dome_annihilation_plane"
+    }
+}

@@ -104,6 +104,7 @@ public final class ModCreativeTabs {
                                    // 线缆部件
                                    output.accept(ModItems.MULTI_LEVEL_EMITTER.get());
                                    output.accept(ModItems.MULTI_THRESHOLD_LEVEL_EMITTER.get());
+                                   output.accept(ModItems.SKY_DOME_ANNIHILATION_PLANE.get());
 
                                    // 单方块机器
                                    output.accept(ModMachines.NAMING_FACTORY.item());

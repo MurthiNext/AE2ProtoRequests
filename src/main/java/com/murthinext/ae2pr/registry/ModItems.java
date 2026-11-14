@@ -21,6 +21,7 @@ import com.murthinext.ae2pr.item.filter_cell.FilterCellItem;
 import com.murthinext.ae2pr.item.level_emitter.MultiLevelEmitterPartItem;
 import com.murthinext.ae2pr.item.level_emitter.MultiThresholdLevelEmitterPartItem;
 import com.murthinext.ae2pr.item.proto_terminal.ProtoTerminalItem;
+import com.murthinext.ae2pr.item.sky_dome_annihilation_plane.SkyDomeAnnihilationPlanePartItem;
 import com.murthinext.ae2pr.item.upgrade.MachineUpgradeCardItem;
 import com.murthinext.ae2pr.item.upgrade.SuperStackCardItem;
 
@@ -80,6 +81,9 @@ public final class ModItems {
 
     public static final RegistryObject<MultiLevelEmitterPartItem> MULTI_LEVEL_EMITTER = ITEMS.register(
             "multi_level_emitter", () -> new MultiLevelEmitterPartItem(new Item.Properties()));
+
+    public static final RegistryObject<SkyDomeAnnihilationPlanePartItem> SKY_DOME_ANNIHILATION_PLANE = ITEMS.register(
+            "sky_dome_annihilation_plane", () -> new SkyDomeAnnihilationPlanePartItem(new Item.Properties()));
 
     public static final RegistryObject<MultiThresholdLevelEmitterPartItem>
             MULTI_THRESHOLD_LEVEL_EMITTER = ITEMS.register(

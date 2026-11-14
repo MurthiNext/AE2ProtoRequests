@@ -29,6 +29,7 @@
     "ae2.menu.me.crafting.CraftConfirmMenuMixin",
     "ae2.menu.me.crafting.CraftingStatusMenuBroadcastMixin",
     "ae2.menu.slot.AppEngSlotSuperStackMixin",
+    "ae2.parts.CableBusContainerMixin",
     "ae2.parts.crafting.PatternProviderPartMixin",
     "ae2.util.inv.AppEngInternalInventoryUpgradesMixin",
     "ae2.worldgen.meteorite.MeteoritePlacerMixin",

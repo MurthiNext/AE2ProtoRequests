@@ -19,3 +19,5 @@ AE2 Proto Requests 添加了许多基于原版 AE2 或其他附属模组，功�
 [ME 通式阈值发信器](multi_threshold_level_emitter.md)
 
 [源始终端](proto_terminal.md)
+
+[ME穹顶破坏面板](sky_dome_annihilation_plane.md)

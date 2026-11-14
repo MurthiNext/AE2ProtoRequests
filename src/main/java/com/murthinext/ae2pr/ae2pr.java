@@ -25,6 +25,7 @@ import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterPart;
 import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterPart;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOres;
+import com.murthinext.ae2pr.block.sky_dome_annihilation_plane.SkyDomeAnnihilationPlanePart;
 import com.murthinext.ae2pr.fluid.AlienLavaInteractions;
 import com.murthinext.ae2pr.item.collapsed_storage_cell.CollapsedItemStorageCellGuiHandler;
 import com.murthinext.ae2pr.item.collapsed_storage_cell.CollapsedItemStorageCellHandler;
@@ -72,6 +73,7 @@ public class ae2pr {
         // 部件模型必须在预初始化阶段注册
         PartModels.registerModels(PartModelsHelper.createModels(MultiLevelEmitterPart.class));
         PartModels.registerModels(PartModelsHelper.createModels(MultiThresholdLevelEmitterPart.class));
+        PartModels.registerModels(PartModelsHelper.createModels(SkyDomeAnnihilationPlanePart.class));
         ModNetwork.register();
         // 通用重复订单：由服务端 tick 驱动
         MinecraftForge.EVENT_BUS.addListener(GeneralRepeatOrders::onServerTick);

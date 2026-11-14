@@ -8,6 +8,8 @@
   "subtitle.ae2pr.multi_factory_inscribing": "通式加工厂：压印",
   "subtitle.ae2pr.multi_factory_charging": "通式加工厂：充能",
   "itemGroup.ae2pr": "应用能源：源始请求",
+  "item.ae2pr.sky_dome_annihilation_plane": "ME穹顶破坏面板",
+  "tooltip.ae2pr.sky_dome_annihilation_plane.placement": "仅可安装在世界最高可建造层的线缆顶面",
   "item.ae2pr.advanced_filter_cell": "高级过滤元件",
   "item.ae2pr.aev_speed_card": "%s 速度升级卡",
   "item.ae2pr.aev_parallel_card": "%s 并行升级卡",
