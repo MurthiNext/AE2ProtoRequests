@@ -19,7 +19,7 @@ import com.murthinext.ae2pr.network.TerminalStoryUnlockPacket;
 import com.murthinext.ae2pr.registry.ModNetwork;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public final class TerminalUnlockTracker {
+public final class TerminalStoryUnlockTracker {
 
     private static final int INTERVAL_TICKS = 20;
 
@@ -37,7 +37,7 @@ public final class TerminalUnlockTracker {
     private static final Map<UUID, Watch> watches = new HashMap<>();
     private static int tick;
 
-    private TerminalUnlockTracker() {
+    private TerminalStoryUnlockTracker() {
     }
 
     public static void watch(ServerPlayer player, List<String> keys) {
@@ -45,7 +45,7 @@ public final class TerminalUnlockTracker {
             watches.remove(player.getUUID());
             return;
         }
-        List<String> satisfied = TerminalUnlockCondition.satisfied(player, keys);
+        List<String> satisfied = TerminalStoryUnlockCondition.satisfied(player, keys);
         watches.put(player.getUUID(), new Watch(List.copyOf(keys), new HashSet<>(satisfied)));
         ModNetwork.sendToPlayer(player, new TerminalStoryUnlockPacket(satisfied));
     }
@@ -63,7 +63,7 @@ public final class TerminalUnlockTracker {
                 continue;
             }
             Watch watch = entry.getValue();
-            List<String> satisfied = TerminalUnlockCondition.satisfied(player, watch.conditions);
+            List<String> satisfied = TerminalStoryUnlockCondition.satisfied(player, watch.conditions);
             if (watch.satisfied.equals(new HashSet<>(satisfied))) {
                 continue;
             }

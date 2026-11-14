@@ -4,12 +4,12 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 
 // 选项入场特效
-final class TerminalChoiceRenderer {
+final class TerminalStoryChoiceRenderer {
 
     private static final int CYAN = 0xFF54E8F2;
     private static final int RED = 0xFFFF537D;
 
-    private TerminalChoiceRenderer() {
+    private TerminalStoryChoiceRenderer() {
     }
 
     static void render(GuiGraphics graphics, Font font, int x, int y, int width, int height, String text,

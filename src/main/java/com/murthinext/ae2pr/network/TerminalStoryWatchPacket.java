@@ -8,8 +8,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
-import com.murthinext.ae2pr.item.proto_terminal.TerminalUnlockCondition;
-import com.murthinext.ae2pr.item.proto_terminal.TerminalUnlockTracker;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryUnlockCondition;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryUnlockTracker;
 
 /**
  * 客户端 -> 服务端：登记终端当前用到的解锁条件，由服务端持续判定并推送结果；
@@ -18,7 +18,7 @@ import com.murthinext.ae2pr.item.proto_terminal.TerminalUnlockTracker;
 public class TerminalStoryWatchPacket {
 
     private static final int MAX_CONDITIONS = 256;
-    private static final int MAX_CONDITION_LENGTH = TerminalUnlockCondition.MAX_KEY_LENGTH;
+    private static final int MAX_CONDITION_LENGTH = TerminalStoryUnlockCondition.MAX_KEY_LENGTH;
 
     private final List<String> conditions;
 
@@ -48,7 +48,7 @@ public class TerminalStoryWatchPacket {
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
             if (player != null) {
-                TerminalUnlockTracker.watch(player, packet.conditions);
+                TerminalStoryUnlockTracker.watch(player, packet.conditions);
             }
         });
         context.setPacketHandled(true);

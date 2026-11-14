@@ -1,9 +1,12 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.util.Mth;
 
 // 剧情台词
@@ -49,6 +52,34 @@ final class TerminalStoryText {
 
     static String plainOf(String raw) {
         return DELAY.matcher(raw).replaceAll("");
+    }
+
+    static List<String> wrap(Font font, String text, int width) {
+        List<String> lines = new ArrayList<>();
+        for (String paragraph : text.split("\n", -1)) {
+            if (paragraph.isEmpty()) {
+                lines.add("");
+                continue;
+            }
+            String rest = paragraph;
+            while (!rest.isEmpty()) {
+                String piece = font.plainSubstrByWidth(rest, width);
+                if (piece.isEmpty()) {
+                    piece = rest.substring(0, 1);
+                } else if (piece.length() < rest.length()) {
+                    int space = piece.lastIndexOf(' ');
+                    if (space > 0) {
+                        piece = piece.substring(0, space);
+                    }
+                }
+                lines.add(piece);
+                rest = rest.substring(piece.length());
+                while (rest.startsWith(" ")) {
+                    rest = rest.substring(1);
+                }
+            }
+        }
+        return List.copyOf(lines);
     }
 
     String plain() {

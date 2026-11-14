@@ -11,7 +11,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public record TerminalUnlockCondition(ResourceLocation id, boolean tag, int count) {
+public record TerminalStoryUnlockCondition(ResourceLocation id, boolean tag, int count) {
 
     public static final int MAX_COUNT = 9999;
     public static final int MAX_KEY_LENGTH = 160;
@@ -20,7 +20,7 @@ public record TerminalUnlockCondition(ResourceLocation id, boolean tag, int coun
         return (tag ? "tag|" : "item|") + id + "|" + count;
     }
 
-    public static TerminalUnlockCondition parse(String key) {
+    public static TerminalStoryUnlockCondition parse(String key) {
         if (key == null || key.length() > MAX_KEY_LENGTH) {
             return null;
         }
@@ -48,14 +48,14 @@ public record TerminalUnlockCondition(ResourceLocation id, boolean tag, int coun
         } catch (NumberFormatException exception) {
             return null;
         }
-        return count < 1 || count > MAX_COUNT ? null : new TerminalUnlockCondition(id, tag, count);
+        return count < 1 || count > MAX_COUNT ? null : new TerminalStoryUnlockCondition(id, tag, count);
     }
 
     // 逐条判定条件是否被该玩家满足，返回其中已满足的标识
     public static List<String> satisfied(ServerPlayer player, List<String> keys) {
         List<String> satisfied = new ArrayList<>();
         for (String key : keys) {
-            TerminalUnlockCondition condition = parse(key);
+            TerminalStoryUnlockCondition condition = parse(key);
             if (condition != null && condition.matches(player) && !satisfied.contains(key)) {
                 satisfied.add(key);
             }
