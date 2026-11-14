@@ -29,6 +29,11 @@ public class MachineUpgradeCardItem extends UpgradeCardItem {
         return Voltage.name(getDescriptionId(stack));
     }
 
+    @Override
+    public Component getDescription() {
+        return Voltage.name(getDescriptionId());
+    }
+
     public MachineUpgradeDefinition definition() {
         return definition;
     }

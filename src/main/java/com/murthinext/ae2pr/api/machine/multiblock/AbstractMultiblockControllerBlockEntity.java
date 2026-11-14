@@ -614,10 +614,9 @@ public abstract class AbstractMultiblockControllerBlockEntity
         double energy = usesRecipeEnergy()
                 ? MachineUpgrades.apply(upgrades, MachineUpgradeType.ENERGY, energyBase, 0, energySources)
                 : energyBase;
-        Component context = Component.translatable(!usesRecipeEnergy()   ? "gui.ae2pr.multiblock.data.energy.passive"
-                                                           : recipeBasis ? "gui.ae2pr.multiblock.data.energy.recipe"
-                                                                         : "gui.ae2pr.multiblock.data.energy.reference",
-                                                   energyBase);
+        Component context = !usesRecipeEnergy() ? Component.translatable("gui.ae2pr.multiblock.data.energy.passive")
+                : recipeBasis ? Component.translatable("gui.ae2pr.multiblock.data.energy.recipe", energyBase)
+                              : null;
         return new MachineStats(new MachineStat(speed, speedSources),
                                 new MachineStat(energy / energyBase, energySources),
                                 new MachineStat(parallel, parallelSources), energyBase, context, usesRecipeEnergy());

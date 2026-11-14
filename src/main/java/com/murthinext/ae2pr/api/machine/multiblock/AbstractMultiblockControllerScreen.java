@@ -51,9 +51,8 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     private static final double JOB_NAME_SCROLL_SPEED = 12.0D;
     private static final int JOB_NAME_SCROLL_GAP = 24;
     private static final int TAB_Y = 1 - MachineTabButton.HEIGHT;
-    private static final int DATA_Y = 32;
-    private static final int DATA_STEP = 22;
-    private static final int DATA_HINT_Y = 104;
+    private static final int DATA_Y = 30;
+    private static final int DATA_STEP = 11;
 
     private static final int COLOR_OK = 0x55FF55;
     private static final int COLOR_FAIL = 0xFF5555;
@@ -177,8 +176,6 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
         for (int row = 0; row < 3; row++) {
             graphics.drawString(font, dataText(stats, row), TEXT_X, DATA_Y + row * DATA_STEP, COLOR_INFO, false);
         }
-        graphics.drawString(font, Component.translatable("gui.ae2pr.multiblock.data.hint"), TEXT_X, DATA_HINT_Y,
-                            COLOR_GRAY, false);
     }
 
     private Component dataText(MachineStats stats, int row) {
@@ -232,9 +229,8 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
                                       : Component.translatable("gui.ae2pr.multiblock.data.source.change", source.name(),
                                                                before, after));
                 }
-                lines.add(Component.translatable("gui.ae2pr.multiblock.data.order"));
             }
-            if (row == 1) {
+            if (row == 1 && stats.energyContext() != null) {
                 lines.add(stats.energyContext());
             }
             GuiTooltips.render(graphics, font, lines, mouseX, mouseY);
