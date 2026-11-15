@@ -7,7 +7,7 @@
   ],
   "key": {
     "I": {
-      "item": "ae2pr:zirconium_iron_alloy_ingot"
+      "tag": "forge:plates/zirconium_iron_alloy"
     },
     "S": {
       "item": "ae2pr:dense_sky_stone_block"
@@ -15,6 +15,6 @@
   },
   "result": {
     "item": "ae2pr:zirconium_iron_alloy_machine_casing",
-    "count": 1
+    "count": 2
   }
 }
