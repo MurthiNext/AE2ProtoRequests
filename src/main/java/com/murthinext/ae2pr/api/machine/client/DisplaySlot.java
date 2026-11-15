@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.api.machine.client;
 
 import java.util.function.Supplier;
-
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
@@ -23,12 +22,10 @@ public class DisplaySlot extends Slot {
     }
 
     @Override
-    public void set(ItemStack stack) {
-    }
+    public void set(ItemStack stack) {}
 
     @Override
-    public void setChanged() {
-    }
+    public void setChanged() {}
 
     @Override
     public boolean mayPlace(ItemStack stack) {

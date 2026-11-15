@@ -9,11 +9,9 @@ public final class GuideOpener {
         void open(ResourceLocation page);
     }
 
-    private static Opener opener = page -> {
-    };
+    private static Opener opener = page -> {};
 
-    private GuideOpener() {
-    }
+    private GuideOpener() {}
 
     public static void install(Opener impl) {
         opener = impl;

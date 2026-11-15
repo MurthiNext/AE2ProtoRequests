@@ -1,11 +1,5 @@
 package com.murthinext.ae2pr.block.level_emitter;
 
-import java.util.function.Predicate;
-
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
-
 import appeng.api.config.RedstoneMode;
 import appeng.api.config.Settings;
 import appeng.api.networking.IGrid;
@@ -17,24 +11,31 @@ import appeng.menu.MenuOpener;
 import appeng.menu.locator.MenuLocators;
 import appeng.parts.PartModel;
 import appeng.util.prioritylist.IPartitionList;
-
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.registry.ModMenus;
+import java.util.function.Predicate;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 
 // 多阈值发信器：上下限锁存，达到上限置位、低于下限复位
 public class MultiThresholdLevelEmitterPart extends AbstractMultiLevelEmitterPart {
 
     @PartModels
     public static final ResourceLocation MODEL_BASE_OFF = Ids.of("part/multi_threshold_level_emitter_base_off");
+
     @PartModels
     public static final ResourceLocation MODEL_BASE_ON = Ids.of("part/multi_threshold_level_emitter_base_on");
+
     @PartModels
     public static final ResourceLocation MODEL_STATUS_OFF = Ids.of("part/multi_threshold_level_emitter_status_off");
+
     @PartModels
     public static final ResourceLocation MODEL_STATUS_ON = Ids.of("part/multi_threshold_level_emitter_status_on");
+
     @PartModels
-    public static final ResourceLocation MODEL_STATUS_HAS_CHANNEL = Ids.of(
-            "part/multi_threshold_level_emitter_status_has_channel");
+    public static final ResourceLocation MODEL_STATUS_HAS_CHANNEL =
+            Ids.of("part/multi_threshold_level_emitter_status_has_channel");
 
     private static final PartModel MODEL_OFF_OFF = new PartModel(MODEL_BASE_OFF, MODEL_STATUS_OFF);
     private static final PartModel MODEL_OFF_ON = new PartModel(MODEL_BASE_OFF, MODEL_STATUS_ON);

@@ -1,11 +1,11 @@
 package com.murthinext.ae2pr.integration.jei.render;
 
+import com.murthinext.ae2pr.api.recipe.ChancedItemStack;
+import com.murthinext.ae2pr.integration.jei.JeiRecipeInfo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import org.jetbrains.annotations.Nullable;
-
+import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,11 +14,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-
-import mezz.jei.api.ingredients.IIngredientRenderer;
-
-import com.murthinext.ae2pr.api.recipe.ChancedItemStack;
-import com.murthinext.ae2pr.integration.jei.JeiRecipeInfo;
+import org.jetbrains.annotations.Nullable;
 
 public class ChancedItemStackRenderer implements IIngredientRenderer<ItemStack> {
 
@@ -34,7 +30,8 @@ public class ChancedItemStackRenderer implements IIngredientRenderer<ItemStack> 
     }
 
     public static ChancedItemStackRenderer of(List<ChancedItemStack> outputs, int index) {
-        return new ChancedItemStackRenderer(index < outputs.size() ? outputs.get(index).chance() : 1.0F);
+        return new ChancedItemStackRenderer(
+                index < outputs.size() ? outputs.get(index).chance() : 1.0F);
     }
 
     @Override
@@ -60,8 +57,8 @@ public class ChancedItemStackRenderer implements IIngredientRenderer<ItemStack> 
 
     @Override
     public List<Component> getTooltip(ItemStack ingredient, @Nullable Player player, TooltipFlag tooltipFlag) {
-        List<Component> lines = new ArrayList<>(ItemStackAmountRenderer.INSTANCE.getTooltip(ingredient, player,
-                                                                                            tooltipFlag));
+        List<Component> lines =
+                new ArrayList<>(ItemStackAmountRenderer.INSTANCE.getTooltip(ingredient, player, tooltipFlag));
         if (chance < 1.0F) {
             lines.add(chanceTooltip(chance));
         }

@@ -1,16 +1,13 @@
 package com.murthinext.ae2pr.block.level_emitter;
 
+import appeng.client.gui.Icon;
+import appeng.client.gui.widgets.IconButton;
+import com.murthinext.ae2pr.api.Ids;
 import java.util.List;
 import java.util.function.Consumer;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-
-import appeng.client.gui.Icon;
-import appeng.client.gui.widgets.IconButton;
-
-import com.murthinext.ae2pr.api.Ids;
 
 public class CombineModeButton extends IconButton {
 
@@ -46,7 +43,8 @@ public class CombineModeButton extends IconButton {
             return;
         }
 
-        Icon.TOOLBAR_BUTTON_BACKGROUND.getBlitter()
+        Icon.TOOLBAR_BUTTON_BACKGROUND
+                .getBlitter()
                 .dest(getX(), getY())
                 .opacity(this.active ? 1f : 0.5f)
                 .blit(guiGraphics);
@@ -63,8 +61,9 @@ public class CombineModeButton extends IconButton {
 
     @Override
     public List<Component> getTooltipMessage() {
-        return List.of(this.mode == CombineMode.AND
-                               ? Component.translatable("gui.ae2pr.multi_level_emitter.combine.and")
-                               : Component.translatable("gui.ae2pr.multi_level_emitter.combine.or"));
+        return List.of(
+                this.mode == CombineMode.AND
+                        ? Component.translatable("gui.ae2pr.multi_level_emitter.combine.and")
+                        : Component.translatable("gui.ae2pr.multi_level_emitter.combine.or"));
     }
 }

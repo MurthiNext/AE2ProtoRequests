@@ -1,7 +1,8 @@
 package com.murthinext.ae2pr.api.machine.singleblock;
 
-import org.jetbrains.annotations.Nullable;
-
+import appeng.api.upgrades.Upgrades;
+import com.murthinext.ae2pr.api.machine.MachineDefinition;
+import com.murthinext.ae2pr.api.machine.side.SideConfig;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -11,11 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.SlotItemHandler;
-
-import appeng.api.upgrades.Upgrades;
-
-import com.murthinext.ae2pr.api.machine.MachineDefinition;
-import com.murthinext.ae2pr.api.machine.side.SideConfig;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractSingleblockMachineMenu<E extends AbstractSingleblockMachineBlockEntity>
         extends AbstractContainerMenu {
@@ -34,18 +31,19 @@ public abstract class AbstractSingleblockMachineMenu<E extends AbstractSingleblo
 
     @Nullable
     protected final E machine;
+
     private final MachineDefinition<?, E, ?> definition;
     private final int upgradeSlotStart;
     private final int playerSlotStart;
 
-    protected AbstractSingleblockMachineMenu(MachineDefinition<?, E, ?> definition, int id, Inventory playerInventory,
-                                             @Nullable E machine) {
+    protected AbstractSingleblockMachineMenu(
+            MachineDefinition<?, E, ?> definition, int id, Inventory playerInventory, @Nullable E machine) {
         super(definition.menuType(), id);
         this.definition = definition;
         this.machine = machine;
         this.upgradeSlotStart = machine == null ? 0 : machine.slotCount();
-        this.playerSlotStart = upgradeSlotStart +
-                (machine == null ? 0 : AbstractSingleblockMachineBlockEntity.UPGRADE_SLOTS);
+        this.playerSlotStart =
+                upgradeSlotStart + (machine == null ? 0 : AbstractSingleblockMachineBlockEntity.UPGRADE_SLOTS);
 
         if (machine != null) {
             addMachineSlots(machine);
@@ -56,8 +54,11 @@ public abstract class AbstractSingleblockMachineMenu<E extends AbstractSingleblo
         }
         for (int row = 0; row < INV_ROWS; row++) {
             for (int col = 0; col < INV_COLS; col++) {
-                addSlot(new Slot(playerInventory, col + row * INV_COLS + INV_COLS, INV_X + col * SLOT_SIZE,
-                                 INV_Y + row * SLOT_SIZE));
+                addSlot(new Slot(
+                        playerInventory,
+                        col + row * INV_COLS + INV_COLS,
+                        INV_X + col * SLOT_SIZE,
+                        INV_Y + row * SLOT_SIZE));
             }
         }
         for (int col = 0; col < INV_COLS; col++) {
@@ -131,8 +132,10 @@ public abstract class AbstractSingleblockMachineMenu<E extends AbstractSingleblo
 
     @Override
     public boolean stillValid(Player player) {
-        return machine != null && !machine.isRemoved() && machine.getLevel() == player.level() &&
-                player.distanceToSqr(Vec3.atCenterOf(machine.getBlockPos())) <= 64.0;
+        return machine != null
+                && !machine.isRemoved()
+                && machine.getLevel() == player.level()
+                && player.distanceToSqr(Vec3.atCenterOf(machine.getBlockPos())) <= 64.0;
     }
 
     // 面配置按钮：0-5 对应六个面，6/7 自动拉取/推出，8 清空
@@ -146,8 +149,8 @@ public abstract class AbstractSingleblockMachineMenu<E extends AbstractSingleblo
     }
 
     @Nullable
-    protected static <E extends AbstractSingleblockMachineBlockEntity>
-            E readMachine(Player player, FriendlyByteBuf buffer, MachineDefinition<?, E, ?> definition) {
+    protected static <E extends AbstractSingleblockMachineBlockEntity> E readMachine(
+            Player player, FriendlyByteBuf buffer, MachineDefinition<?, E, ?> definition) {
         BlockEntity entity = player.level().getBlockEntity(buffer.readBlockPos());
         return definition.controller(entity);
     }

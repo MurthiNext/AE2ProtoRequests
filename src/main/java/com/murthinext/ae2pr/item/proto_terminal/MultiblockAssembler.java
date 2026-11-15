@@ -1,14 +1,16 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
+import com.murthinext.ae2pr.api.machine.MachineBlock;
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
+import com.murthinext.ae2pr.api.multiblock.StructureOrientation;
+import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -29,12 +31,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-
-import com.murthinext.ae2pr.api.machine.MachineBlock;
-import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
-import com.murthinext.ae2pr.api.multiblock.StructureOrientation;
-import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 按结构模板补齐多方块：已匹配的方块保留，空位用背包内的对应方块填充。
@@ -42,15 +39,14 @@ import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
  */
 public final class MultiblockAssembler {
 
-    private MultiblockAssembler() {
-    }
+    private MultiblockAssembler() {}
 
     // 一格待处理方块
     private record Placement(BlockPos pos, StructurePredicate predicate, Block block) {}
 
     // 选定的一组镜像方案，谓词按该方案解释朝向
-    private record Layout(MultiblockPattern pattern, List<MultiblockPattern.PatternCell> cells,
-                          StructureOrientation orientation) {
+    private record Layout(
+            MultiblockPattern pattern, List<MultiblockPattern.PatternCell> cells, StructureOrientation orientation) {
 
         StructurePredicate predicateOf(MultiblockPattern.PatternCell cell) {
             return pattern.predicate(cell.symbol());
@@ -81,8 +77,8 @@ public final class MultiblockAssembler {
         }
     }
 
-    public static void assemble(ServerPlayer player, BlockPos controllerPos, MachineBlock<?> machine,
-                                InteractionHand hand) {
+    public static void assemble(
+            ServerPlayer player, BlockPos controllerPos, MachineBlock<?> machine, InteractionHand hand) {
         Level level = player.level();
         if (!level.mayInteract(player, controllerPos)) {
             return;
@@ -101,13 +97,15 @@ public final class MultiblockAssembler {
                 continue;
             }
             Direction outward = outward(center, placement.pos(), facing.getOpposite());
-            level.setBlock(placement.pos(), stateFor(player, hand, placement, outward, layout.orientation()),
-                           Block.UPDATE_ALL);
+            level.setBlock(
+                    placement.pos(),
+                    stateFor(player, hand, placement, outward, layout.orientation()),
+                    Block.UPDATE_ALL);
             placed.add(placement);
         }
         settle(level, placed, layout.orientation());
-        if (!placed.isEmpty() &&
-            level.getBlockEntity(controllerPos) instanceof AbstractMultiblockControllerBlockEntity controller) {
+        if (!placed.isEmpty()
+                && level.getBlockEntity(controllerPos) instanceof AbstractMultiblockControllerBlockEntity controller) {
             controller.validateStructure();
         }
         report(player, machine, plan, placed.size());
@@ -163,14 +161,15 @@ public final class MultiblockAssembler {
         Layout best = null;
         int bestScore = -1;
         for (boolean[] mirror : MultiblockPattern.MIRRORS) {
-            int score = pattern.score(level, controllerPos, facing, Direction.UP, mirror[0], mirror[1],
-                                      pattern.minSlices());
+            int score = pattern.score(
+                    level, controllerPos, facing, Direction.UP, mirror[0], mirror[1], pattern.minSlices());
             if (score > bestScore) {
                 bestScore = score;
-                best = new Layout(pattern,
-                                  pattern.patternCells(controllerPos, facing, Direction.UP, mirror[0], mirror[1],
-                                                       pattern.minSlices()),
-                                  new StructureOrientation(facing, Direction.UP, mirror[0], mirror[1]));
+                best = new Layout(
+                        pattern,
+                        pattern.patternCells(
+                                controllerPos, facing, Direction.UP, mirror[0], mirror[1], pattern.minSlices()),
+                        new StructureOrientation(facing, Direction.UP, mirror[0], mirror[1]));
             }
         }
         return best;
@@ -217,8 +216,12 @@ public final class MultiblockAssembler {
     }
 
     // 先按玩家放置时的上下文决定初始状态，再交给谓词的朝向要求摆成可成型姿态
-    private static BlockState stateFor(Player player, InteractionHand hand, Placement placement, Direction outward,
-                                       StructureOrientation orientation) {
+    private static BlockState stateFor(
+            Player player,
+            InteractionHand hand,
+            Placement placement,
+            Direction outward,
+            StructureOrientation orientation) {
         ItemStack stack = new ItemStack(placement.block());
         BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(placement.pos()), outward, placement.pos(), false);
         BlockState state = placement.block().getStateForPlacement(new BlockPlaceContext(player, hand, stack, hit));
@@ -288,8 +291,8 @@ public final class MultiblockAssembler {
     private static void report(ServerPlayer player, MachineBlock<?> machine, Plan plan, int placed) {
         MutableComponent name = machine.definition().block().getName().copy();
         if (placed == 0 && plan.missing.isEmpty() && plan.blocked == 0 && plan.misoriented == 0) {
-            player.displayClientMessage(Component.translatable("message.ae2pr.multiblock.assemble.complete", name),
-                                        true);
+            player.displayClientMessage(
+                    Component.translatable("message.ae2pr.multiblock.assemble.complete", name), true);
             return;
         }
         if (placed > 0) {
@@ -297,9 +300,9 @@ public final class MultiblockAssembler {
                     Component.translatable("message.ae2pr.multiblock.assemble.placed", name, placed), true);
         }
         if (!plan.missing.isEmpty()) {
-            player.displayClientMessage(Component.translatable("message.ae2pr.multiblock.assemble.missing",
-                                                               shortfall(plan.missing)),
-                                        false);
+            player.displayClientMessage(
+                    Component.translatable("message.ae2pr.multiblock.assemble.missing", shortfall(plan.missing)),
+                    false);
         }
         if (plan.blocked > 0) {
             player.displayClientMessage(

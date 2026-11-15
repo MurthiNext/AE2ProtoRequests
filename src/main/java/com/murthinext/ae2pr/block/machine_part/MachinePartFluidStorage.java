@@ -2,7 +2,6 @@ package com.murthinext.ae2pr.block.machine_part;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -78,7 +77,7 @@ public final class MachinePartFluidStorage {
                 return 0;
             }
             int filled = 0;
-            for (boolean sameFluid : new boolean[] { true, false }) {
+            for (boolean sameFluid : new boolean[] {true, false}) {
                 for (FluidTank tank : tanks) {
                     if (sameFluid ? !tank.getFluid().isFluidEqual(resource) : !tank.isEmpty()) {
                         continue;
@@ -187,7 +186,7 @@ public final class MachinePartFluidStorage {
             return;
         }
         IFluidHandler handler = target.getCapability(ForgeCapabilities.FLUID_HANDLER, facing.getOpposite())
-                                        .orElse(null);
+                .orElse(null);
         if (handler == null) {
             return;
         }

@@ -1,12 +1,13 @@
 package com.murthinext.ae2pr.api.machine.singleblock;
 
+import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
+import com.murthinext.ae2pr.api.machine.client.MachineStyles;
+import com.murthinext.ae2pr.api.machine.client.SideConfigButton;
+import com.murthinext.ae2pr.api.machine.client.SideConfigPanel;
+import com.murthinext.ae2pr.api.machine.side.SideConfig;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
@@ -15,12 +16,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.ItemLike;
-
-import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
-import com.murthinext.ae2pr.api.machine.client.MachineStyles;
-import com.murthinext.ae2pr.api.machine.client.SideConfigButton;
-import com.murthinext.ae2pr.api.machine.client.SideConfigPanel;
-import com.murthinext.ae2pr.api.machine.side.SideConfig;
+import org.jetbrains.annotations.Nullable;
+import org.lwjgl.glfw.GLFW;
 
 public abstract class AbstractSingleblockMachineScreen<M extends AbstractSingleblockMachineMenu<?>>
         extends AbstractMachineScreen<M> {
@@ -30,8 +27,10 @@ public abstract class AbstractSingleblockMachineScreen<M extends AbstractSingleb
 
     @Nullable
     private SideConfigButton sideConfigButton;
+
     @Nullable
     private SideConfigPanel sideConfigPanel;
+
     private boolean sideConfigOpen;
 
     protected AbstractSingleblockMachineScreen(M menu, Inventory playerInventory, Component title) {
@@ -74,11 +73,15 @@ public abstract class AbstractSingleblockMachineScreen<M extends AbstractSingleb
         super.init();
         AbstractSingleblockMachineBlockEntity machine = menu.getMachine();
         SideConfig config = machine != null ? machine.getSideConfig() : new SideConfig();
-        Direction facing = machine != null ? machine.getBlockState().getValue(AbstractSingleblockMachineBlock.FACING)
-                                           : Direction.NORTH;
+        Direction facing = machine != null
+                ? machine.getBlockState().getValue(AbstractSingleblockMachineBlock.FACING)
+                : Direction.NORTH;
         sideConfigPanel = new SideConfigPanel(config, facing, this::pressSideConfigButton);
-        sideConfigButton = new SideConfigButton(leftPos + TOOLBAR_X + 1, topPos + TOOLBAR_Y + 1 + TOOLBAR_ROW_STEP,
-                                                () -> sideConfigOpen, this::toggleSideConfig);
+        sideConfigButton = new SideConfigButton(
+                leftPos + TOOLBAR_X + 1,
+                topPos + TOOLBAR_Y + 1 + TOOLBAR_ROW_STEP,
+                () -> sideConfigOpen,
+                this::toggleSideConfig);
         addRenderableWidget(sideConfigButton);
     }
 

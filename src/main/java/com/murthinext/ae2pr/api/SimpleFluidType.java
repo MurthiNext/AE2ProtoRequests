@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.api;
 
 import java.util.function.Consumer;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -23,34 +22,47 @@ public class SimpleFluidType extends FluidType {
     private final ResourceLocation flowingTexture;
     private final int tint;
 
-    protected SimpleFluidType(Properties properties, ResourceLocation stillTexture, ResourceLocation flowingTexture,
-                              int tint) {
+    protected SimpleFluidType(
+            Properties properties, ResourceLocation stillTexture, ResourceLocation flowingTexture, int tint) {
         super(properties);
         this.stillTexture = stillTexture;
         this.flowingTexture = flowingTexture;
         this.tint = tint;
     }
 
-    public static SimpleFluidType of(Properties properties, ResourceLocation stillTexture,
-                                     ResourceLocation flowingTexture, int tint) {
+    public static SimpleFluidType of(
+            Properties properties, ResourceLocation stillTexture, ResourceLocation flowingTexture, int tint) {
         return new SimpleFluidType(properties, stillTexture, flowingTexture, tint);
     }
 
     public static SimpleFluidType waterLike(String id, int lightLevel, int density, int viscosity, int temperature) {
-        return of(fluidProperties(false, lightLevel, density, viscosity, temperature),
-                  Ids.of(TEXTURE_ROOT + id + "_still"), Ids.of(TEXTURE_ROOT + id + "_flow"), NO_TINT);
+        return of(
+                fluidProperties(false, lightLevel, density, viscosity, temperature),
+                Ids.of(TEXTURE_ROOT + id + "_still"),
+                Ids.of(TEXTURE_ROOT + id + "_flow"),
+                NO_TINT);
     }
 
-    public static Properties fluidProperties(boolean lavaLike, int lightLevel, int density, int viscosity,
-                                             int temperature) {
-        return common(lavaLike ? BlockPathTypes.LAVA : BlockPathTypes.WATER,
-                      lavaLike ? SoundEvents.BUCKET_FILL_LAVA : SoundEvents.BUCKET_FILL,
-                      lavaLike ? SoundEvents.BUCKET_EMPTY_LAVA : SoundEvents.BUCKET_EMPTY, lightLevel, density,
-                      viscosity, temperature);
+    public static Properties fluidProperties(
+            boolean lavaLike, int lightLevel, int density, int viscosity, int temperature) {
+        return common(
+                lavaLike ? BlockPathTypes.LAVA : BlockPathTypes.WATER,
+                lavaLike ? SoundEvents.BUCKET_FILL_LAVA : SoundEvents.BUCKET_FILL,
+                lavaLike ? SoundEvents.BUCKET_EMPTY_LAVA : SoundEvents.BUCKET_EMPTY,
+                lightLevel,
+                density,
+                viscosity,
+                temperature);
     }
 
-    protected static Properties common(BlockPathTypes pathType, SoundEvent fillSound, SoundEvent emptySound,
-                                       int lightLevel, int density, int viscosity, int temperature) {
+    protected static Properties common(
+            BlockPathTypes pathType,
+            SoundEvent fillSound,
+            SoundEvent emptySound,
+            int lightLevel,
+            int density,
+            int viscosity,
+            int temperature) {
         return FluidType.Properties.create()
                 .canSwim(false)
                 .canDrown(false)

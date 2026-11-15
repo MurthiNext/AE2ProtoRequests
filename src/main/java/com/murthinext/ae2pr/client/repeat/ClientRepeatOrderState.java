@@ -1,23 +1,19 @@
 package com.murthinext.ae2pr.client.repeat;
 
+import com.murthinext.ae2pr.network.CpuRoundInfo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import com.murthinext.ae2pr.network.CpuRoundInfo;
+import org.jetbrains.annotations.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public final class ClientRepeatOrderState {
     private static Map<Integer, CpuRoundInfo> bySerial = Map.of();
 
-    private ClientRepeatOrderState() {
-    }
+    private ClientRepeatOrderState() {}
 
     public static void update(int containerId, List<CpuRoundInfo> entries) {
         var player = Minecraft.getInstance().player;

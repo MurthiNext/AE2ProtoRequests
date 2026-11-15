@@ -1,16 +1,14 @@
 package com.murthinext.ae2pr.api.machine.client;
 
+import com.murthinext.ae2pr.api.machine.Mode;
 import java.util.Map;
 import java.util.Objects;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-
-import com.murthinext.ae2pr.api.machine.Mode;
 
 public final class MachineModeButton extends AbstractWidget {
 
@@ -39,8 +37,8 @@ public final class MachineModeButton extends AbstractWidget {
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        GuiTextures.frame(graphics, isHovered() && active ? GuiTextures.BUTTON_HOVER : GuiTextures.BUTTON, getX(),
-                          getY());
+        GuiTextures.frame(
+                graphics, isHovered() && active ? GuiTextures.BUTTON_HOVER : GuiTextures.BUTTON, getX(), getY());
         icon.render(graphics, getX() + 1, getY() + 1, active);
     }
 

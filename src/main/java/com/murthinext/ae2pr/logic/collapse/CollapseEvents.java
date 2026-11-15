@@ -1,14 +1,12 @@
 package com.murthinext.ae2pr.logic.collapse;
 
+import appeng.blockentity.AEBaseBlockEntity;
+import com.murthinext.ae2pr.ServerConfig;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import appeng.blockentity.AEBaseBlockEntity;
-
-import com.murthinext.ae2pr.ServerConfig;
 
 /**
  * 第三方机器的通用坍缩入口：玩家破坏方块时，若该方块在 {@code collapse.extraEnableCollapse} 内
@@ -18,8 +16,7 @@ import com.murthinext.ae2pr.ServerConfig;
  */
 public final class CollapseEvents {
 
-    private CollapseEvents() {
-    }
+    private CollapseEvents() {}
 
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {

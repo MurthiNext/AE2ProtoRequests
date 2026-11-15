@@ -1,12 +1,10 @@
 package com.murthinext.ae2pr.api.machine.client;
 
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Nullable;
 
 // 界面中手绘的非槽位物品与流体，供配方查看器识别
 public interface CustomIngredientSource {

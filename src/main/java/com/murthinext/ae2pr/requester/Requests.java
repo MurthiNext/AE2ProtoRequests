@@ -1,17 +1,6 @@
 package com.murthinext.ae2pr.requester;
 
-import java.util.Objects;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.google.common.primitives.Ints;
-
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import static com.murthinext.ae2pr.requester.RequesterUtils.f;
 
 import appeng.api.behaviors.GenericInternalInventory;
 import appeng.api.config.Actionable;
@@ -22,13 +11,19 @@ import appeng.api.stacks.AEKeyType;
 import appeng.api.stacks.GenericStack;
 import appeng.api.storage.MEStorage;
 import appeng.helpers.externalstorage.GenericStackInv;
-
+import com.google.common.primitives.Ints;
 import com.murthinext.ae2pr.requester.abstraction.RequestHost;
 import com.murthinext.ae2pr.requester.platform.RequesterPlatform;
 import com.murthinext.ae2pr.requester.platform.TagSerializable;
 import com.murthinext.ae2pr.requester.status.RequestStatus;
-
-import static com.murthinext.ae2pr.requester.RequesterUtils.f;
+import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 /**
  * Uses the same approach as {@link GenericStackInv} to track items and fluids.
@@ -41,6 +36,7 @@ public class Requests implements MEStorage, GenericInternalInventory, InternalIn
     // 无宿主的副本仅用于菜单同步，不需要保存。
     @Nullable
     private final RequestHost host;
+
     private final Request[] requests;
 
     public Requests(@Nullable RequestHost host) {
@@ -167,16 +163,13 @@ public class Requests implements MEStorage, GenericInternalInventory, InternalIn
 
     // <editor-fold defaultstate="collapsed" desc="Not required for requests.">
     @Override
-    public void beginBatch() {
-    }
+    public void beginBatch() {}
 
     @Override
-    public void endBatch() {
-    }
+    public void endBatch() {}
 
     @Override
-    public void endBatchSuppressed() {
-    }
+    public void endBatchSuppressed() {}
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="InternalInventory menu wrapper delegates.">
@@ -239,8 +232,10 @@ public class Requests implements MEStorage, GenericInternalInventory, InternalIn
         private final int index;
 
         private boolean state = true;
+
         @Nullable
         private AEKey key;
+
         private long amount;
 
         // this status is only relevant for the client
@@ -289,13 +284,19 @@ public class Requests implements MEStorage, GenericInternalInventory, InternalIn
 
         @Override
         public String toString() {
-            return f("Request[state={}, key={}, amount={}, client_status={}]", state,
-                     key == null ? "none" : key.getDisplayName(), amount, clientStatus);
+            return f(
+                    "Request[state={}, key={}, amount={}, client_status={}]",
+                    state,
+                    key == null ? "none" : key.getDisplayName(),
+                    amount,
+                    clientStatus);
         }
 
         public boolean isDifferent(Request clientRequest) {
-            return state != clientRequest.state || !Objects.equals(key, clientRequest.key) ||
-                    amount != clientRequest.amount || clientStatus != clientRequest.clientStatus;
+            return state != clientRequest.state
+                    || !Objects.equals(key, clientRequest.key)
+                    || amount != clientRequest.amount
+                    || clientStatus != clientRequest.clientStatus;
         }
 
         @Nullable

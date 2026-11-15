@@ -8,8 +8,7 @@ public final class MachineTuning {
     private static DoubleSupplier speedPerCard = () -> 0.0D;
     private static DoubleSupplier energyMultiplierPerCard = () -> 1.0D;
 
-    private MachineTuning() {
-    }
+    private MachineTuning() {}
 
     public static void install(DoubleSupplier speedPerCard, DoubleSupplier energyMultiplierPerCard) {
         MachineTuning.speedPerCard = speedPerCard;

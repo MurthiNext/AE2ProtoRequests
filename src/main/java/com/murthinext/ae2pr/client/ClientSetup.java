@@ -1,23 +1,6 @@
 package com.murthinext.ae2pr.client;
 
-import net.minecraft.client.gui.screens.MenuScreens;
-import net.minecraft.client.resources.model.ModelManager;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.client.model.DynamicFluidContainerModel;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.registries.RegistryObject;
-
 import appeng.init.client.InitScreens;
-
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.material.MaterialFluids;
@@ -36,22 +19,38 @@ import com.murthinext.ae2pr.client.tooltip.FormulaTooltip;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryRenderer;
 import com.murthinext.ae2pr.registry.ModBlockEntities;
 import com.murthinext.ae2pr.registry.ModMenus;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.resources.model.ModelManager;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.model.DynamicFluidContainerModel;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.registries.RegistryObject;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientSetup {
 
-    private static final ResourceLocation COLLAPSED_ITEM_STORAGE_CELL_MODEL = Ids.of(
-            "block/drive/collapsed_item_storage_cell");
+    private static final ResourceLocation COLLAPSED_ITEM_STORAGE_CELL_MODEL =
+            Ids.of("block/drive/collapsed_item_storage_cell");
 
-    private ClientSetup() {
-    }
+    private ClientSetup() {}
 
     @SubscribeEvent
     public static void registerScreens(FMLClientSetupEvent event) {
-        InitScreens.register(ModMenus.MULTI_LEVEL_EMITTER.get(), MultiLevelEmitterScreen::new,
-                             "/screens/multi_level_emitter.json");
-        InitScreens.register(ModMenus.MULTI_THRESHOLD_LEVEL_EMITTER.get(), MultiThresholdLevelEmitterScreen::new,
-                             "/screens/multi_threshold_level_emitter.json");
+        InitScreens.register(
+                ModMenus.MULTI_LEVEL_EMITTER.get(), MultiLevelEmitterScreen::new, "/screens/multi_level_emitter.json");
+        InitScreens.register(
+                ModMenus.MULTI_THRESHOLD_LEVEL_EMITTER.get(),
+                MultiThresholdLevelEmitterScreen::new,
+                "/screens/multi_threshold_level_emitter.json");
         event.enqueueWork(MachineClients::registerScreens);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_ITEM_BUS.get(), ItemBusScreen::new);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), FluidHatchScreen::new);
@@ -65,16 +64,17 @@ public final class ClientSetup {
 
     @SubscribeEvent
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-        ItemLike[] items = MaterialItems.all().stream().map(RegistryObject::get).toArray(ItemLike[] ::new);
-        event.register((stack, layer)
-                               -> stack.getItem() instanceof MaterialItem item ? item.material().argb(layer) : -1,
-                       items);
+        ItemLike[] items = MaterialItems.all().stream().map(RegistryObject::get).toArray(ItemLike[]::new);
+        event.register(
+                (stack, layer) -> stack.getItem() instanceof MaterialItem item
+                        ? item.material().argb(layer)
+                        : -1,
+                items);
 
         // 材质流体的桶共用灰度贴图，颜色来自流体的 tint
-        ItemLike[] buckets = MaterialFluids.all()
-                                     .stream()
-                                     .map(set -> (ItemLike) set.bucket().get())
-                                     .toArray(ItemLike[] ::new);
+        ItemLike[] buckets = MaterialFluids.all().stream()
+                .map(set -> (ItemLike) set.bucket().get())
+                .toArray(ItemLike[]::new);
         event.register(new DynamicFluidContainerModel.Colors(), buckets);
     }
 
@@ -97,7 +97,7 @@ public final class ClientSetup {
 
     private static void logNamingFactorySprites(ModelManager modelManager) {
         var atlas = modelManager.getAtlas(InventoryMenu.BLOCK_ATLAS);
-        for (String path : new String[] { "naming_factory", "naming_factory_rod", "naming_factory_glass" }) {
+        for (String path : new String[] {"naming_factory", "naming_factory_rod", "naming_factory_glass"}) {
             var sprite = atlas.getSprite(Ids.of("block/" + path));
             ae2pr.LOGGER.info("atlas sprite {} -> {}", path, sprite.contents().name());
         }
@@ -106,7 +106,7 @@ public final class ClientSetup {
     @SubscribeEvent
     public static void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         MachineClients.registerRenderers(event);
-        event.registerBlockEntityRenderer(ModBlockEntities.MOLECULAR_ASSEMBLY_CORE.get(),
-                                          MolecularAssemblyCoreRenderer::new);
+        event.registerBlockEntityRenderer(
+                ModBlockEntities.MOLECULAR_ASSEMBLY_CORE.get(), MolecularAssemblyCoreRenderer::new);
     }
 }

@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.api;
 
+import com.murthinext.ae2pr.item.NoBlockFluidBucketItem;
 import java.util.function.Supplier;
-
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -10,8 +10,6 @@ import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-
-import com.murthinext.ae2pr.item.NoBlockFluidBucketItem;
 
 /**
  * 普通流体的整套注册：类型、源、流动，以及配套的无方块桶。
@@ -24,19 +22,28 @@ public final class FluidSet implements Supplier<ForgeFlowingFluid> {
     private final RegistryObject<ForgeFlowingFluid> flowing;
     private final RegistryObject<BucketItem> bucket;
 
-    private FluidSet(String id, DeferredRegister<FluidType> types, DeferredRegister<Fluid> fluids,
-                     DeferredRegister<Item> items, Supplier<? extends FluidType> typeFactory) {
+    private FluidSet(
+            String id,
+            DeferredRegister<FluidType> types,
+            DeferredRegister<Fluid> fluids,
+            DeferredRegister<Item> items,
+            Supplier<? extends FluidType> typeFactory) {
         this.id = id;
         this.type = types.register(id, typeFactory);
         this.source = fluids.register(id, () -> new ForgeFlowingFluid.Source(properties()));
         this.flowing = fluids.register("flowing_" + id, () -> new ForgeFlowingFluid.Flowing(properties()));
         this.bucket = items.register(
                 id + "_bucket",
-                () -> new NoBlockFluidBucketItem(this, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
+                () -> new NoBlockFluidBucketItem(
+                        this, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
     }
 
-    public static FluidSet of(String id, DeferredRegister<FluidType> types, DeferredRegister<Fluid> fluids,
-                              DeferredRegister<Item> items, Supplier<? extends FluidType> typeFactory) {
+    public static FluidSet of(
+            String id,
+            DeferredRegister<FluidType> types,
+            DeferredRegister<Fluid> fluids,
+            DeferredRegister<Item> items,
+            Supplier<? extends FluidType> typeFactory) {
         return new FluidSet(id, types, fluids, items, typeFactory);
     }
 

@@ -1,19 +1,15 @@
 package com.murthinext.ae2pr.mixin.ae2.blockentity;
 
+import appeng.blockentity.AEBaseBlockEntity;
+import com.murthinext.ae2pr.logic.collapse.CollapseHandler;
 import java.util.List;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-
-import appeng.blockentity.AEBaseBlockEntity;
-
-import com.murthinext.ae2pr.logic.collapse.CollapseHandler;
 
 @Mixin(value = AEBaseBlockEntity.class, priority = 500, remap = false)
 public abstract class AEBaseBlockEntityDropsMixin {

@@ -1,12 +1,10 @@
 package com.murthinext.ae2pr.client.effect;
 
-import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexSorting;
-
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.registry.ModEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -17,17 +15,15 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.registry.ModEffects;
+import org.joml.Matrix4f;
+import org.lwjgl.opengl.GL11;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class ScreenCorruptionOverlay {
     private static final ScreenCorruptionState STATE = new ScreenCorruptionState();
     private static ClientLevel level;
 
-    private ScreenCorruptionOverlay() {
-    }
+    private ScreenCorruptionOverlay() {}
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onRenderTick(TickEvent.RenderTickEvent event) {
@@ -84,8 +80,8 @@ public final class ScreenCorruptionOverlay {
         modelView.pushPose();
         try {
             float farPlane = ForgeHooksClient.getGuiFarPlane();
-            RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0, width, height, 0, 1000, farPlane),
-                                             VertexSorting.ORTHOGRAPHIC_Z);
+            RenderSystem.setProjectionMatrix(
+                    new Matrix4f().setOrtho(0, width, height, 0, 1000, farPlane), VertexSorting.ORTHOGRAPHIC_Z);
             modelView.setIdentity();
             modelView.translate(0, 0, 1000 - farPlane);
             RenderSystem.applyModelViewMatrix();
@@ -94,8 +90,13 @@ public final class ScreenCorruptionOverlay {
             RenderSystem.disableBlend();
             RenderSystem.disableScissor();
             ScreenCorruptionShader.render(graphics, STATE.regions(), width, height, STATE.time());
-            ScreenCorruptionShader.renderImpact(graphics, width, height, ScreenCorruptionImpact.progress(),
-                                                ScreenCorruptionImpact.strength(), ScreenCorruptionImpact.seed());
+            ScreenCorruptionShader.renderImpact(
+                    graphics,
+                    width,
+                    height,
+                    ScreenCorruptionImpact.progress(),
+                    ScreenCorruptionImpact.strength(),
+                    ScreenCorruptionImpact.seed());
         } finally {
             modelView.popPose();
             RenderSystem.applyModelViewMatrix();

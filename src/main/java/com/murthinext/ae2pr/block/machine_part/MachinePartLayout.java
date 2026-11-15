@@ -9,8 +9,7 @@ public final class MachinePartLayout {
     private static final int ITEM_MULTI_X = 52;
     private static final int ITEM_DUAL_X = 98;
 
-    private MachinePartLayout() {
-    }
+    private MachinePartLayout() {}
 
     public static int itemSlotX(boolean dual, int slotCount, int index) {
         if (dual) {

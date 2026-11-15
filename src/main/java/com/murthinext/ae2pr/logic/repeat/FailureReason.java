@@ -1,8 +1,7 @@
 package com.murthinext.ae2pr.logic.repeat;
 
-import org.jetbrains.annotations.Nullable;
-
 import appeng.api.networking.crafting.CraftingSubmitErrorCode;
+import org.jetbrains.annotations.Nullable;
 
 public enum FailureReason {
     MISSING_MATERIAL,

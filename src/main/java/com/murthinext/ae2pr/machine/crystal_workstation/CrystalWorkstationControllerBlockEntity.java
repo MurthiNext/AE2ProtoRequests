@@ -1,13 +1,11 @@
 package com.murthinext.ae2pr.machine.crystal_workstation;
 
+import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
+import com.murthinext.ae2pr.registry.ModMachines;
 import java.util.List;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-
-import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
-import com.murthinext.ae2pr.registry.ModMachines;
 
 public class CrystalWorkstationControllerBlockEntity extends ModeMachineBlockEntity<CrystalWorkstationMode> {
 

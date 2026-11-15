@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.api.machine.client;
 
 import java.util.function.Function;
-
 import net.minecraft.resources.ResourceLocation;
 
 public final class MachineStyles {
@@ -10,8 +9,7 @@ public final class MachineStyles {
         throw new IllegalStateException("Machine style lookup not installed");
     };
 
-    private MachineStyles() {
-    }
+    private MachineStyles() {}
 
     public static void install(Function<Object, MachineStyle> impl) {
         lookup = impl;

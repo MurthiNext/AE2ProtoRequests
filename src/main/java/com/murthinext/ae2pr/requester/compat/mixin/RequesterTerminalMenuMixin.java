@@ -1,9 +1,18 @@
 package com.murthinext.ae2pr.requester.compat.mixin;
 
+import appeng.api.networking.IGrid;
+import appeng.api.networking.security.IActionHost;
+import appeng.api.stacks.GenericStack;
+import com.almostreliable.merequester.platform.Platform;
+import com.almostreliable.merequester.requester.Requests;
+import com.almostreliable.merequester.requester.abstraction.AbstractRequesterMenu;
+import com.almostreliable.merequester.terminal.RequesterTerminalMenu;
+import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
+import com.murthinext.ae2pr.requester.compat.IOurRequesterTerminalHost;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-
+import net.minecraft.nbt.CompoundTag;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -11,20 +20,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import com.almostreliable.merequester.platform.Platform;
-import com.almostreliable.merequester.requester.Requests;
-import com.almostreliable.merequester.requester.abstraction.AbstractRequesterMenu;
-import com.almostreliable.merequester.terminal.RequesterTerminalMenu;
-
-import net.minecraft.nbt.CompoundTag;
-
-import appeng.api.networking.IGrid;
-import appeng.api.networking.security.IActionHost;
-import appeng.api.stacks.GenericStack;
-
-import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
-import com.murthinext.ae2pr.requester.compat.IOurRequesterTerminalHost;
 
 /**
  * 让本模组的 ME 红石请求器也出现在 ME Requester 的请求器终端中：

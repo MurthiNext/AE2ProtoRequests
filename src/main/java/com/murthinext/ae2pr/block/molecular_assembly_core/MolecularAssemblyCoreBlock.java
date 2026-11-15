@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.block.molecular_assembly_core;
 
-import org.jetbrains.annotations.Nullable;
-
+import com.murthinext.ae2pr.block.DisassemblableBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
@@ -11,18 +10,17 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
-
-import com.murthinext.ae2pr.block.DisassemblableBlock;
+import org.jetbrains.annotations.Nullable;
 
 public class MolecularAssemblyCoreBlock extends DisassemblableBlock implements EntityBlock {
 
     public MolecularAssemblyCoreBlock() {
         super(Properties.of()
-                      .mapColor(MapColor.METAL)
-                      .strength(3.5F)
-                      .sound(SoundType.METAL)
-                      .noOcclusion()
-                      .requiresCorrectToolForDrops());
+                .mapColor(MapColor.METAL)
+                .strength(3.5F)
+                .sound(SoundType.METAL)
+                .noOcclusion()
+                .requiresCorrectToolForDrops());
     }
 
     @Nullable
@@ -33,10 +31,10 @@ public class MolecularAssemblyCoreBlock extends DisassemblableBlock implements E
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
-                                                                  BlockEntityType<T> type) {
-        return level.isClientSide ? (tickLevel, pos, tickState, blockEntity)
-                                            -> MolecularAssemblyCoreParticles.tick(tickLevel, pos)
-                                  : null;
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+            Level level, BlockState state, BlockEntityType<T> type) {
+        return level.isClientSide
+                ? (tickLevel, pos, tickState, blockEntity) -> MolecularAssemblyCoreParticles.tick(tickLevel, pos)
+                : null;
     }
 }

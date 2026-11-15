@@ -1,13 +1,5 @@
 package com.murthinext.ae2pr.integration.jei.category;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
-
-import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.RecipeType;
-
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.MachineRecipe;
@@ -15,15 +7,19 @@ import com.murthinext.ae2pr.integration.jei.JeiRecipeInfo;
 import com.murthinext.ae2pr.integration.jei.render.AnimatedTextureDrawable;
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationMode;
 import com.murthinext.ae2pr.registry.ModMachines;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
 public class CrystalWorkstationCategory extends AbstractMachineCategory<MachineRecipe> {
 
-    public static final RecipeType<MachineRecipe> ETCHING = RecipeType.create(ae2pr.MODID,
-                                                                              "crystal_workstation_etching",
-                                                                              MachineRecipe.class);
-    public static final RecipeType<MachineRecipe> CUTTING = RecipeType.create(ae2pr.MODID,
-                                                                              "crystal_workstation_cutting",
-                                                                              MachineRecipe.class);
+    public static final RecipeType<MachineRecipe> ETCHING =
+            RecipeType.create(ae2pr.MODID, "crystal_workstation_etching", MachineRecipe.class);
+    public static final RecipeType<MachineRecipe> CUTTING =
+            RecipeType.create(ae2pr.MODID, "crystal_workstation_cutting", MachineRecipe.class);
 
     private static final int SLOT = SlotArea.SIZE;
     private static final int PADDING = 4;
@@ -48,9 +44,12 @@ public class CrystalWorkstationCategory extends AbstractMachineCategory<MachineR
     public CrystalWorkstationCategory(IGuiHelper guiHelper, CrystalWorkstationMode mode) {
         super(guiHelper, new ItemStack(ModMachines.CRYSTAL_WORKSTATION.item()), WIDTH, HEIGHT);
         this.mode = mode;
-        this.process = new AnimatedTextureDrawable(Ids.of("textures/gui/jei/crystal_workstation_" + mode.id() +
-                                                          "_process.png"),
-                                                   PROCESS_W, PROCESS_H, 24, 80);
+        this.process = new AnimatedTextureDrawable(
+                Ids.of("textures/gui/jei/crystal_workstation_" + mode.id() + "_process.png"),
+                PROCESS_W,
+                PROCESS_H,
+                24,
+                80);
     }
 
     public static RecipeType<MachineRecipe> recipeType(CrystalWorkstationMode mode) {
@@ -64,7 +63,8 @@ public class CrystalWorkstationCategory extends AbstractMachineCategory<MachineR
 
     @Override
     public Component getTitle() {
-        return JeiRecipeInfo.titleWithMode(ModMachines.CRYSTAL_WORKSTATION.item().getDescription(), mode.displayName());
+        return JeiRecipeInfo.titleWithMode(
+                ModMachines.CRYSTAL_WORKSTATION.item().getDescription(), mode.displayName());
     }
 
     @Override

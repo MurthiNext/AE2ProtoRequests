@@ -1,20 +1,16 @@
 package com.murthinext.ae2pr.integration.jei.render;
 
+import com.murthinext.ae2pr.integration.jei.JeiAmountFormat;
 import java.util.List;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
+import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraftforge.fluids.FluidStack;
-
-import mezz.jei.api.ingredients.IIngredientRenderer;
-
-import com.murthinext.ae2pr.integration.jei.JeiAmountFormat;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class FluidBlockIngredientRenderer implements IIngredientRenderer<FluidStack> {
 
@@ -26,9 +22,9 @@ public class FluidBlockIngredientRenderer implements IIngredientRenderer<FluidSt
     @NotNull
     @Override
     public List<Component> getTooltip(FluidStack fluidStack, @Nullable Player player, TooltipFlag tooltipFlag) {
-        return List.of(fluidStack.getDisplayName(),
-                       Component.translatable("jei.tooltip.liquid.amount",
-                                              JeiAmountFormat.exact(fluidStack.getAmount())));
+        return List.of(
+                fluidStack.getDisplayName(),
+                Component.translatable("jei.tooltip.liquid.amount", JeiAmountFormat.exact(fluidStack.getAmount())));
     }
 
     @Override

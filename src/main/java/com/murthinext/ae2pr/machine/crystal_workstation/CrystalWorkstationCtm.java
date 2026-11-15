@@ -1,18 +1,5 @@
 package com.murthinext.ae2pr.machine.crystal_workstation;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.block.state.BlockState;
-
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.ctm.CtmMeshBuilder;
 import com.murthinext.ae2pr.api.ctm.CtmTextures;
@@ -21,6 +8,16 @@ import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
 import com.murthinext.ae2pr.client.ctm.MachineCtm;
 import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.registry.ModMachines;
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 // 晶能工作站成型外观：主机换装、隐藏核心、玻璃单面化与两侧 3x3 面板换装连纹
 public final class CrystalWorkstationCtm {
@@ -29,21 +26,21 @@ public final class CrystalWorkstationCtm {
     private static final int STRIDE = 8;
     private static final int UV_OFFSET = 4;
 
-    private CrystalWorkstationCtm() {
-    }
+    private CrystalWorkstationCtm() {}
 
     // 工作站成型外观的完整面重写
     @Nullable
-    public static List<BakedQuad> appearance(List<BakedQuad> quads, @Nullable Direction side, BlockAndTintGetter level,
-                                             BlockPos pos) {
+    public static List<BakedQuad> appearance(
+            List<BakedQuad> quads, @Nullable Direction side, BlockAndTintGetter level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
         if (state.is(ModMachines.CRYSTAL_WORKSTATION.block())) {
             return state.getValue(MachineBlock.FORMED) ? controller(quads, level, pos) : null;
         }
         CrystalWorkstationShell.Look look = CrystalWorkstationShell.look(pos);
         // 与面板或成型主机相邻的机壳并入工作站外观
-        boolean shell = look == null && state.is(ModBlocks.CRYSTAL_ENERGY_CASING.get()) &&
-                (CrystalWorkstationShell.bordersStability(pos) || bordersController(level, pos));
+        boolean shell = look == null
+                && state.is(ModBlocks.CRYSTAL_ENERGY_CASING.get())
+                && (CrystalWorkstationShell.bordersStability(pos) || bordersController(level, pos));
         if (look == null && !shell) {
             return null;
         }
@@ -69,8 +66,8 @@ public final class CrystalWorkstationCtm {
             // 外侧与机壳连成一片，内侧只在 3x3 面板内部相连
             worldMask = outer
                     ? MachineCtm.mask(level, pos, CrystalWorkstationCtm::connectsShell)
-                    : MachineCtm.mask(level, pos,
-                                      (neighbor, neighborState) -> CrystalWorkstationShell.isStability(neighbor));
+                    : MachineCtm.mask(
+                            level, pos, (neighbor, neighborState) -> CrystalWorkstationShell.isStability(neighbor));
         } else if (shell) {
             worldMask = MachineCtm.mask(level, pos, CrystalWorkstationCtm::connectsShell);
         } else {
@@ -98,10 +95,10 @@ public final class CrystalWorkstationCtm {
         return CtmMeshBuilder.rewrite(quads, MachineCtm.mask(level, pos, CrystalWorkstationCtm::connectsShell));
     }
 
-    private static List<BakedQuad> retargetPanel(List<BakedQuad> quads, boolean outer,
-                                                 CrystalWorkstationShell.Look look) {
-        TextureAtlasSprite target = CtmTextures.baseSprite(outer ? MachinePartFacade.CRYSTAL_ENERGY.texture()
-                                                                 : MachineCtm.WORKSTATION_PANEL_INNER);
+    private static List<BakedQuad> retargetPanel(
+            List<BakedQuad> quads, boolean outer, CrystalWorkstationShell.Look look) {
+        TextureAtlasSprite target = CtmTextures.baseSprite(
+                outer ? MachinePartFacade.CRYSTAL_ENERGY.texture() : MachineCtm.WORKSTATION_PANEL_INNER);
         if (target == null) {
             return quads;
         }
@@ -111,8 +108,8 @@ public final class CrystalWorkstationCtm {
                 result.add(quad);
                 continue;
             }
-            result.add(outer ? CtmMeshBuilder.retarget(quad, quad.getSprite(), target)
-                             : panelRegion(quad, target, look));
+            result.add(
+                    outer ? CtmMeshBuilder.retarget(quad, quad.getSprite(), target) : panelRegion(quad, target, look));
         }
         return result;
     }
@@ -136,8 +133,9 @@ public final class CrystalWorkstationCtm {
             float y = Float.intBitsToFloat(src[offset + 1]);
             float z = Float.intBitsToFloat(src[offset + 2]);
             // 面内横向沿结构深度轴，纵向自面板顶端向下
-            float across = depth.getStepX() != 0 ? (depth.getStepX() > 0 ? x : 1.0F - x)
-                                                 : (depth.getStepZ() > 0 ? z : 1.0F - z);
+            float across = depth.getStepX() != 0
+                    ? (depth.getStepX() > 0 ? x : 1.0F - x)
+                    : (depth.getStepZ() > 0 ? z : 1.0F - z);
             float down = 1.0F - y;
             float u = (look.panelX() + across) / size;
             float v = (look.panelY() + down) / size;
@@ -173,6 +171,7 @@ public final class CrystalWorkstationCtm {
         if (neighborState.is(ModMachines.CRYSTAL_WORKSTATION.block())) {
             return neighborState.getValue(MachineBlock.FORMED);
         }
-        return MachineCtm.connects(neighborState, ModBlocks.CRYSTAL_ENERGY_CASING.get().defaultBlockState());
+        return MachineCtm.connects(
+                neighborState, ModBlocks.CRYSTAL_ENERGY_CASING.get().defaultBlockState());
     }
 }

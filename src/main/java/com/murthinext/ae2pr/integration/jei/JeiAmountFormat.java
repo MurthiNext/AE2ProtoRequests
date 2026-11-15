@@ -8,8 +8,7 @@ public final class JeiAmountFormat {
     private static final long MEGA = 1_000_000L;
     private static final long GIGA = 1_000_000_000L;
 
-    private JeiAmountFormat() {
-    }
+    private JeiAmountFormat() {}
 
     public static boolean abbreviated(int count) {
         return count >= KILO;

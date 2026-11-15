@@ -1,11 +1,5 @@
 package com.murthinext.ae2pr.block.level_emitter;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.ClickType;
-import net.minecraft.world.inventory.Slot;
-
 import appeng.api.config.FuzzyMode;
 import appeng.api.config.RedstoneMode;
 import appeng.api.config.Settings;
@@ -16,8 +10,12 @@ import appeng.client.gui.widgets.ServerSettingToggleButton;
 import appeng.client.gui.widgets.SettingToggleButton;
 import appeng.client.guidebook.PageAnchor;
 import appeng.core.definitions.AEItems;
-
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
 
 // 多条件发信器界面的公共部分：工具栏、设置同步与过滤槽快捷操作
 public abstract class AbstractMultiLevelEmitterScreen<T extends AbstractMultiLevelEmitterMenu<?>>
@@ -28,8 +26,8 @@ public abstract class AbstractMultiLevelEmitterScreen<T extends AbstractMultiLev
     protected final SettingToggleButton<FuzzyMode> fuzzyMode;
     protected final CombineModeButton combineMode;
 
-    protected AbstractMultiLevelEmitterScreen(T menu, Inventory playerInventory, Component title, ScreenStyle style,
-                                              RedstoneMode defaultRedstoneMode) {
+    protected AbstractMultiLevelEmitterScreen(
+            T menu, Inventory playerInventory, Component title, ScreenStyle style, RedstoneMode defaultRedstoneMode) {
         super(menu, playerInventory, title, style);
 
         this.redstoneMode = new ServerSettingToggleButton<>(Settings.REDSTONE_EMITTER, defaultRedstoneMode);
@@ -80,10 +78,12 @@ public abstract class AbstractMultiLevelEmitterScreen<T extends AbstractMultiLev
     // 配置槽内过滤元件的 shift 点击改发 QUICK_MOVE
     @Override
     protected void slotClicked(Slot slot, int slotIdx, int mouseButton, ClickType clickType) {
-        if (slot instanceof EmitterConfigSlot && mouseButton == 0 && slot.getItem().getItem() instanceof FilterCell &&
-            (clickType == ClickType.QUICK_MOVE || hasShiftDown())) {
-            this.minecraft.gameMode.handleInventoryMouseClick(this.menu.containerId, slotIdx, 0, ClickType.QUICK_MOVE,
-                                                              this.minecraft.player);
+        if (slot instanceof EmitterConfigSlot
+                && mouseButton == 0
+                && slot.getItem().getItem() instanceof FilterCell
+                && (clickType == ClickType.QUICK_MOVE || hasShiftDown())) {
+            this.minecraft.gameMode.handleInventoryMouseClick(
+                    this.menu.containerId, slotIdx, 0, ClickType.QUICK_MOVE, this.minecraft.player);
             return;
         }
         super.slotClicked(slot, slotIdx, mouseButton, clickType);

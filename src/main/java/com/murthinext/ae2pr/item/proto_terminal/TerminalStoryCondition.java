@@ -1,11 +1,10 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 public sealed interface TerminalStoryCondition {
 
@@ -15,8 +14,7 @@ public sealed interface TerminalStoryCondition {
         return List.of();
     }
 
-    default void validate(Set<String> nodes, TerminalStoryRunner runner) {
-    }
+    default void validate(Set<String> nodes, TerminalStoryRunner runner) {}
 
     record Constant(boolean value) implements TerminalStoryCondition {
 
@@ -30,13 +28,17 @@ public sealed interface TerminalStoryCondition {
 
         @Override
         public boolean matches(TerminalStoryRunner runner, Predicate<String> inventory) {
-            return all ? conditions.stream().allMatch(condition -> condition.matches(runner, inventory))
-                       : conditions.stream().anyMatch(condition -> condition.matches(runner, inventory));
+            return all
+                    ? conditions.stream().allMatch(condition -> condition.matches(runner, inventory))
+                    : conditions.stream().anyMatch(condition -> condition.matches(runner, inventory));
         }
 
         @Override
         public List<String> inventoryKeys() {
-            return conditions.stream().flatMap(condition -> condition.inventoryKeys().stream()).distinct().toList();
+            return conditions.stream()
+                    .flatMap(condition -> condition.inventoryKeys().stream())
+                    .distinct()
+                    .toList();
         }
 
         @Override
@@ -97,8 +99,9 @@ public sealed interface TerminalStoryCondition {
         @Override
         public void validate(Set<String> nodes, TerminalStoryRunner runner) {
             Object value = runner.variable(name);
-            if (value == null || (expected instanceof Number) != (value instanceof Number) ||
-                (expected instanceof Boolean) != (value instanceof Boolean)) {
+            if (value == null
+                    || (expected instanceof Number) != (value instanceof Number)
+                    || (expected instanceof Boolean) != (value instanceof Boolean)) {
                 throw new IllegalArgumentException("Condition variable is undeclared or has mismatched type: " + name);
             }
         }
@@ -132,10 +135,9 @@ public sealed interface TerminalStoryCondition {
             return new Constant(element.getAsBoolean());
         }
         JsonObject json = element.getAsJsonObject();
-        long kinds = List.of("all", "any", "not", "completed", "variable", "item", "tag")
-                             .stream()
-                             .filter(json::has)
-                             .count();
+        long kinds = List.of("all", "any", "not", "completed", "variable", "item", "tag").stream()
+                .filter(json::has)
+                .count();
         if (kinds != 1) {
             throw new IllegalArgumentException("Each story condition must specify exactly one kind");
         }
@@ -145,7 +147,11 @@ public sealed interface TerminalStoryCondition {
             if (array.isEmpty() || array.size() > 32) {
                 throw new IllegalArgumentException("Condition group must contain 1-32 children");
             }
-            return new Group(all, array.asList().stream().map(child -> parse(child, depth + 1)).toList());
+            return new Group(
+                    all,
+                    array.asList().stream()
+                            .map(child -> parse(child, depth + 1))
+                            .toList());
         }
         if (json.has("not")) {
             return new Not(parse(json.get("not"), depth + 1));
@@ -154,15 +160,17 @@ public sealed interface TerminalStoryCondition {
             return new Completed(json.get("completed").getAsString());
         }
         if (json.has("variable")) {
-            List<String> operators = List.of("equals", "at_least", "at_most").stream().filter(json::has).toList();
+            List<String> operators = List.of("equals", "at_least", "at_most").stream()
+                    .filter(json::has)
+                    .toList();
             if (operators.size() != 1) {
                 throw new IllegalArgumentException("Variable condition must specify equals, at_least or at_most");
             }
             String operator = operators.get(0);
             var value = json.getAsJsonPrimitive(operator);
-            Object expected = value.isBoolean() ? value.getAsBoolean()
-                    : value.isNumber()          ? value.getAsDouble()
-                                                : value.getAsString();
+            Object expected = value.isBoolean()
+                    ? value.getAsBoolean()
+                    : value.isNumber() ? value.getAsDouble() : value.getAsString();
             if (!operator.equals("equals") && !(expected instanceof Number)) {
                 throw new IllegalArgumentException("Range conditions only support numeric variables");
             }

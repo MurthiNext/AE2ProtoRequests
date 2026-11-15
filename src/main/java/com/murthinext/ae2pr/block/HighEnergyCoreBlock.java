@@ -1,9 +1,8 @@
 package com.murthinext.ae2pr.block;
 
+import com.murthinext.ae2pr.machine.crystal_reactor.CrystalReactorCoreBlockEntity;
+import com.murthinext.ae2pr.machine.crystal_reactor.CrystalReactorStructure;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -24,9 +23,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
-
-import com.murthinext.ae2pr.machine.crystal_reactor.CrystalReactorCoreBlockEntity;
-import com.murthinext.ae2pr.machine.crystal_reactor.CrystalReactorStructure;
+import org.jetbrains.annotations.Nullable;
 
 // 高能核心，可作为结构方块/水晶反应器触发器
 public class HighEnergyCoreBlock extends DisassemblableBlock implements EntityBlock {
@@ -44,8 +41,8 @@ public class HighEnergyCoreBlock extends DisassemblableBlock implements EntityBl
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip,
-                                TooltipFlag flag) {
+    public void appendHoverText(
+            ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("tooltip.ae2pr.high_energy_core.desc"));
     }
 
@@ -57,8 +54,8 @@ public class HighEnergyCoreBlock extends DisassemblableBlock implements EntityBl
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
-                                                                  BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+            Level level, BlockState state, BlockEntityType<T> type) {
         if (level.isClientSide) {
             return null;
         }
@@ -80,8 +77,8 @@ public class HighEnergyCoreBlock extends DisassemblableBlock implements EntityBl
 
     // 空手右键即尝试触发水晶反应器
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
-                                 BlockHitResult hit) {
+    public InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (!player.getItemInHand(hand).isEmpty() || state.getValue(LIT)) {
             return InteractionResult.PASS;
         }

@@ -1,11 +1,10 @@
 package com.murthinext.ae2pr.machine.crystal_reaction_chamber;
 
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.registry.ModMachines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-
-import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.registry.ModMachines;
 
 public class CrystalReactionChamberControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 

@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.api.recipe;
 
 import java.util.List;
-
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;

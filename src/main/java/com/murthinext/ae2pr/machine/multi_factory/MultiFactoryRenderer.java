@@ -1,12 +1,14 @@
 package com.murthinext.ae2pr.machine.multi_factory;
 
-import java.util.function.Function;
-
-import org.jetbrains.annotations.Nullable;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.api.machine.MachineBlock;
+import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
+import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
+import com.murthinext.ae2pr.registry.ModBlocks;
+import java.util.function.Function;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.LightTexture;
@@ -24,13 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.ModelData;
-
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.api.machine.MachineBlock;
-import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
-import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
-import com.murthinext.ae2pr.registry.ModBlocks;
+import org.jetbrains.annotations.Nullable;
 
 public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFactoryControllerBlockEntity> {
 
@@ -45,8 +41,13 @@ public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFact
     }
 
     @Override
-    public void render(MultiFactoryControllerBlockEntity controller, float partialTick, PoseStack poseStack,
-                       MultiBufferSource buffers, int combinedLight, int combinedOverlay) {
+    public void render(
+            MultiFactoryControllerBlockEntity controller,
+            float partialTick,
+            PoseStack poseStack,
+            MultiBufferSource buffers,
+            int combinedLight,
+            int combinedOverlay) {
         Level level = controller.getLevel();
         if (level == null || !controller.isFormed()) {
             return;
@@ -61,17 +62,24 @@ public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFact
         for (Direction normal : Direction.values()) {
             Surface surface = surface(front, normal);
             TextureAtlasSprite base = atlas.apply(surface.panel().base);
-            ResourceLocation glowTexture = surface.panel().glow(state.getValue(MachineBlock.RUNNING),
-                                                                state.getValue(MachineBlock.PAUSED));
+            ResourceLocation glowTexture =
+                    surface.panel().glow(state.getValue(MachineBlock.RUNNING), state.getValue(MachineBlock.PAUSED));
             TextureAtlasSprite glow = glowTexture == null ? null : atlas.apply(glowTexture);
-            renderSurface(level, controller.getBlockPos(), core, surface, base, glow, poseStack, buffer,
-                          combinedOverlay);
+            renderSurface(
+                    level, controller.getBlockPos(), core, surface, base, glow, poseStack, buffer, combinedOverlay);
         }
     }
 
-    private void renderSurface(Level level, BlockPos controllerPos, BlockPos core, Surface surface,
-                               TextureAtlasSprite base, @Nullable TextureAtlasSprite glow, PoseStack poseStack,
-                               VertexConsumer buffer, int overlay) {
+    private void renderSurface(
+            Level level,
+            BlockPos controllerPos,
+            BlockPos core,
+            Surface surface,
+            TextureAtlasSprite base,
+            @Nullable TextureAtlasSprite glow,
+            PoseStack poseStack,
+            VertexConsumer buffer,
+            int overlay) {
         Direction normal = surface.normal();
         float shade = level.getShade(normal, true);
         int[] lights = surface.lights(level, core);
@@ -83,24 +91,27 @@ public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFact
                 }
                 BlockState state = level.getBlockState(cell);
                 boolean host = cell.equals(controllerPos);
-                boolean port = state.getBlock() instanceof MachinePartBlock ||
-                        state.getBlock() instanceof MENetworkAccessHatchBlock;
+                boolean port = state.getBlock() instanceof MachinePartBlock
+                        || state.getBlock() instanceof MENetworkAccessHatchBlock;
                 boolean shell = host || state.is(ModBlocks.CRYSTAL_ENERGY_CASING.get()) || port;
                 // 成型外观统一覆盖机壳和仓室的外表面。
                 if (!shell || !Block.shouldRenderFace(state, level, cell, normal, cell.relative(normal))) {
                     continue;
                 }
                 poseStack.pushPose();
-                poseStack.translate(cell.getX() - controllerPos.getX() + 0.5, cell.getY() - controllerPos.getY() + 0.5,
-                                    cell.getZ() - controllerPos.getZ() + 0.5);
+                poseStack.translate(
+                        cell.getX() - controllerPos.getX() + 0.5,
+                        cell.getY() - controllerPos.getY() + 0.5,
+                        cell.getZ() - controllerPos.getZ() + 0.5);
                 renderTile(buffer, poseStack.last(), surface, base, column, row, BASE_OFFSET, lights, overlay, shade);
                 if (glow != null) {
                     renderTile(buffer, poseStack.last(), surface, glow, column, row, LIGHT_OFFSET, null, overlay, 1.0F);
                 }
                 if (host || port) {
-                    poseStack.translate(-0.5 + normal.getStepX() * LIGHT_OFFSET,
-                                        -0.5 + normal.getStepY() * LIGHT_OFFSET,
-                                        -0.5 + normal.getStepZ() * LIGHT_OFFSET);
+                    poseStack.translate(
+                            -0.5 + normal.getStepX() * LIGHT_OFFSET,
+                            -0.5 + normal.getStepY() * LIGHT_OFFSET,
+                            -0.5 + normal.getStepZ() * LIGHT_OFFSET);
                     BlockState overlayState = host ? state.setValue(MachineBlock.FACING, normal) : state;
                     var model = Minecraft.getInstance().getBlockRenderer().getBlockModel(overlayState);
                     random.setSeed(overlayState.getSeed(cell));
@@ -108,12 +119,12 @@ public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFact
                     // 主机与仓室共用原模型 overlay，机壳底面仍使用连续成型纹理。
                     for (var quad : model.getQuads(overlayState, normal, random, ModelData.EMPTY, null)) {
                         ResourceLocation texture = quad.getSprite().contents().name();
-                        if (texture.getNamespace().equals(ae2pr.MODID) &&
-                            (texture.getPath().startsWith("block/overlay/") ||
-                             host && texture.getPath().startsWith("block/controller_front/"))) {
+                        if (texture.getNamespace().equals(ae2pr.MODID)
+                                && (texture.getPath().startsWith("block/overlay/")
+                                        || host && texture.getPath().startsWith("block/controller_front/"))) {
                             float brightness = quad.isShade() ? shade : 1.0F;
-                            buffer.putBulkData(poseStack.last(), quad, brightness, brightness, brightness, light,
-                                               overlay);
+                            buffer.putBulkData(
+                                    poseStack.last(), quad, brightness, brightness, brightness, light, overlay);
                         }
                     }
                 }
@@ -122,9 +133,17 @@ public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFact
         }
     }
 
-    private static void renderTile(VertexConsumer buffer, PoseStack.Pose pose, Surface surface,
-                                   TextureAtlasSprite sprite, int column, int row, float offset, @Nullable int[] lights,
-                                   int overlay, float shade) {
+    private static void renderTile(
+            VertexConsumer buffer,
+            PoseStack.Pose pose,
+            Surface surface,
+            TextureAtlasSprite sprite,
+            int column,
+            int row,
+            float offset,
+            @Nullable int[] lights,
+            int overlay,
+            float shade) {
         float u0 = sprite.getU(column * 16.0F / 3);
         float u1 = sprite.getU((column + 1) * 16.0F / 3);
         float v0 = sprite.getV(row * 16.0F / 3);
@@ -156,8 +175,18 @@ public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFact
         return lights;
     }
 
-    private static void vertex(VertexConsumer buffer, PoseStack.Pose pose, Surface surface, float across, float down,
-                               float offset, float u, float v, int light, int overlay, float shade) {
+    private static void vertex(
+            VertexConsumer buffer,
+            PoseStack.Pose pose,
+            Surface surface,
+            float across,
+            float down,
+            float offset,
+            float u,
+            float v,
+            int light,
+            int overlay,
+            float shade) {
         Direction normal = surface.normal();
         Direction right = surface.right();
         Direction vertical = surface.down();
@@ -178,10 +207,9 @@ public final class MultiFactoryRenderer implements BlockEntityRenderer<MultiFact
         boolean horizontal = normal.getAxis().isHorizontal();
         Direction right = horizontal ? normal.getCounterClockWise() : front.getCounterClockWise();
         Direction down = horizontal ? Direction.DOWN : normal == Direction.UP ? front : front.getOpposite();
-        Panel panel = !horizontal               ? Panel.TOP
-                : normal == front               ? Panel.FRONT
-                : normal == front.getOpposite() ? Panel.BACK
-                                                : Panel.SIDE;
+        Panel panel = !horizontal
+                ? Panel.TOP
+                : normal == front ? Panel.FRONT : normal == front.getOpposite() ? Panel.BACK : Panel.SIDE;
         return new Surface(normal, right, down, panel);
     }
 

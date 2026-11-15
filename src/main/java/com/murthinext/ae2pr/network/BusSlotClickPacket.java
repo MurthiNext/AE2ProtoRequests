@@ -1,13 +1,11 @@
 package com.murthinext.ae2pr.network;
 
+import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
 import java.util.function.Supplier;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
-
-import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
 
 // 客户端 -> 服务端：总线存储区点击
 public class BusSlotClickPacket {
@@ -35,16 +33,21 @@ public class BusSlotClickPacket {
     }
 
     public static BusSlotClickPacket decode(FriendlyByteBuf buffer) {
-        return new BusSlotClickPacket(buffer.readBlockPos(), buffer.readVarInt(), buffer.readVarInt(),
-                                      buffer.readBoolean(), buffer.readBoolean());
+        return new BusSlotClickPacket(
+                buffer.readBlockPos(),
+                buffer.readVarInt(),
+                buffer.readVarInt(),
+                buffer.readBoolean(),
+                buffer.readBoolean());
     }
 
     public static void handle(BusSlotClickPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> {
             ServerPlayer player = context.getSender();
-            if (player != null && player.containerMenu instanceof ItemBusMenu menu &&
-                menu.getBlockPos().equals(packet.pos)) {
+            if (player != null
+                    && player.containerMenu instanceof ItemBusMenu menu
+                    && menu.getBlockPos().equals(packet.pos)) {
                 if (packet.creativeClone) {
                     menu.handleCreativeClone(packet.slot, player);
                 } else {

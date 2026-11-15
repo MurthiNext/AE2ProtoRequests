@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -44,6 +43,5 @@ public final class MaterialItems {
 
     private record Key(TagPrefix prefix, Material material) {}
 
-    private MaterialItems() {
-    }
+    private MaterialItems() {}
 }

@@ -1,7 +1,10 @@
 package com.murthinext.ae2pr.api.machine.multiblock;
 
-import org.jetbrains.annotations.Nullable;
-
+import appeng.api.upgrades.Upgrades;
+import com.murthinext.ae2pr.api.machine.MachineDefinition;
+import com.murthinext.ae2pr.api.machine.MachineStats;
+import com.murthinext.ae2pr.network.MachineStatsPacket;
+import com.murthinext.ae2pr.registry.ModNetwork;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -13,13 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
-
-import appeng.api.upgrades.Upgrades;
-
-import com.murthinext.ae2pr.api.machine.MachineDefinition;
-import com.murthinext.ae2pr.api.machine.MachineStats;
-import com.murthinext.ae2pr.network.MachineStatsPacket;
-import com.murthinext.ae2pr.registry.ModNetwork;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultiblockControllerBlockEntity>
         extends AbstractContainerMenu {
@@ -62,11 +59,16 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
     private final SimpleContainerData data;
     private final int playerSlotFirst;
     private final Player owner;
+
     @Nullable
     private MachineStats machineStats;
 
-    protected AbstractMultiblockControllerMenu(MachineDefinition<?, T, ?> definition, int id, Inventory playerInventory,
-                                               @Nullable T controller, int extraDataSlots) {
+    protected AbstractMultiblockControllerMenu(
+            MachineDefinition<?, T, ?> definition,
+            int id,
+            Inventory playerInventory,
+            @Nullable T controller,
+            int extraDataSlots) {
         super(definition.menuType(), id);
         this.definition = definition;
         this.controller = controller;
@@ -84,8 +86,8 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
         }
         for (int row = 0; row < INV_ROWS; row++) {
             for (int col = 0; col < INV_COLS; col++) {
-                addSlot(new Slot(playerInventory, col + row * INV_COLS + INV_COLS, INV_X + col * SLOT,
-                                 INV_Y + row * SLOT));
+                addSlot(new Slot(
+                        playerInventory, col + row * INV_COLS + INV_COLS, INV_X + col * SLOT, INV_Y + row * SLOT));
             }
         }
         for (int col = 0; col < INV_COLS; col++) {
@@ -98,11 +100,9 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
         return 0;
     }
 
-    protected void addExtraSlots(T controller) {
-    }
+    protected void addExtraSlots(T controller) {}
 
-    protected void writeExtraData(SimpleContainerData data) {
-    }
+    protected void writeExtraData(SimpleContainerData data) {}
 
     protected SimpleContainerData data() {
         return data;
@@ -121,9 +121,12 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
     @Override
     public void broadcastChanges() {
         if (!clientSide && controller != null) {
-            data.set(DATA_FLAGS,
-                     (controller.isFormed() ? FLAG_FORMED : 0) | (controller.isRunning() ? FLAG_RUNNING : 0) |
-                             (controller.isPaused() ? FLAG_PAUSED : 0) | (controller.isBusy() ? FLAG_BUSY : 0));
+            data.set(
+                    DATA_FLAGS,
+                    (controller.isFormed() ? FLAG_FORMED : 0)
+                            | (controller.isRunning() ? FLAG_RUNNING : 0)
+                            | (controller.isPaused() ? FLAG_PAUSED : 0)
+                            | (controller.isBusy() ? FLAG_BUSY : 0));
             data.set(DATA_ERROR, controller.getError().ordinal());
             setIntData(data, DATA_ELAPSED_LO, controller.getJobElapsed());
             setIntData(data, DATA_DURATION_LO, controller.getJobDuration());
@@ -166,8 +169,9 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
     public AbstractMultiblockControllerBlockEntity.Error getError() {
         var values = AbstractMultiblockControllerBlockEntity.Error.values();
         int ordinal = data.get(DATA_ERROR);
-        return ordinal >= 0 && ordinal < values.length ? values[ordinal]
-                                                       : AbstractMultiblockControllerBlockEntity.Error.NONE;
+        return ordinal >= 0 && ordinal < values.length
+                ? values[ordinal]
+                : AbstractMultiblockControllerBlockEntity.Error.NONE;
     }
 
     public int getJobElapsed() {
@@ -248,14 +252,16 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
 
     @Override
     public boolean stillValid(Player player) {
-        return controller != null && !controller.isRemoved() && controller.getLevel() == player.level() &&
-                player.level().getBlockEntity(controller.getBlockPos()) == controller &&
-                player.distanceToSqr(controller.getBlockPos().getCenter()) <= 64.0;
+        return controller != null
+                && !controller.isRemoved()
+                && controller.getLevel() == player.level()
+                && player.level().getBlockEntity(controller.getBlockPos()) == controller
+                && player.distanceToSqr(controller.getBlockPos().getCenter()) <= 64.0;
     }
 
     @Nullable
-    protected static <C extends AbstractMultiblockControllerBlockEntity>
-            C readController(Player player, FriendlyByteBuf buffer, MachineDefinition<?, C, ?> definition) {
+    protected static <C extends AbstractMultiblockControllerBlockEntity> C readController(
+            Player player, FriendlyByteBuf buffer, MachineDefinition<?, C, ?> definition) {
         var blockEntity = player.level().getBlockEntity(buffer.readBlockPos());
         return definition.controller(blockEntity);
     }

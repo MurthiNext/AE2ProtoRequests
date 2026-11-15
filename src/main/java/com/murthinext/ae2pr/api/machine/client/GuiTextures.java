@@ -1,9 +1,8 @@
 package com.murthinext.ae2pr.api.machine.client;
 
+import com.murthinext.ae2pr.api.Ids;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-
-import com.murthinext.ae2pr.api.Ids;
 
 // 界面通用贴图与配色：贴图全部集中在 textures/gui 下，按钮框统一 18x18
 public final class GuiTextures {
@@ -32,8 +31,7 @@ public final class GuiTextures {
     public static final int COLOR_BOTH = 0xFF8773DB;
     public static final int COLOR_NONE = 0xFF6E7381;
 
-    private GuiTextures() {
-    }
+    private GuiTextures() {}
 
     public static void frame(GuiGraphics graphics, ResourceLocation texture, int x, int y) {
         graphics.blit(texture, x, y, 0, 0.0F, 0.0F, SIZE, SIZE, SIZE, SIZE);

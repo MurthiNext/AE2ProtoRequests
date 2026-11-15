@@ -1,30 +1,25 @@
 package com.murthinext.ae2pr.logic.collapse;
 
+import appeng.api.parts.IPart;
+import appeng.api.stacks.AEItemKey;
+import appeng.api.stacks.AEKey;
+import appeng.api.stacks.GenericStack;
+import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.item.collapsed_storage_cell.CollapsedItemStorageCellItem;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
-
-import appeng.api.parts.IPart;
-import appeng.api.stacks.AEItemKey;
-import appeng.api.stacks.AEKey;
-import appeng.api.stacks.GenericStack;
-
-import com.murthinext.ae2pr.ServerConfig;
-import com.murthinext.ae2pr.item.collapsed_storage_cell.CollapsedItemStorageCellItem;
+import org.jetbrains.annotations.Nullable;
 
 public final class CollapseHandler {
 
-    private CollapseHandler() {
-    }
+    private CollapseHandler() {}
 
     @Nullable
     public static ItemStack tryCollapse(BlockEntity blockEntity) {

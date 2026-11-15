@@ -1,14 +1,11 @@
 package com.murthinext.ae2pr.network;
 
-import java.util.function.Supplier;
-
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
-
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.GenericStack;
-
 import com.murthinext.ae2pr.api.ClientHooks;
+import java.util.function.Supplier;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
 
 // 服务端 -> 客户端：当前轮次通知
 public class RepeatOrderRoundPacket {
@@ -38,12 +35,8 @@ public class RepeatOrderRoundPacket {
     public static void handle(RepeatOrderRoundPacket packet, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
         context.enqueueWork(
-                ()
-                        -> ClientHooks.run(
-                                ()
-                                        -> ()
-                                                -> com.murthinext.ae2pr.client.repeat.ClientRepeatOrderRounds.update(
-                                                        packet.what, packet.remainingRounds, packet.totalRounds)));
+                () -> ClientHooks.run(() -> () -> com.murthinext.ae2pr.client.repeat.ClientRepeatOrderRounds.update(
+                        packet.what, packet.remainingRounds, packet.totalRounds)));
         context.setPacketHandled(true);
     }
 }

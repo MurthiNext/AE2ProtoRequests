@@ -1,18 +1,13 @@
 package com.murthinext.ae2pr.api.machine;
 
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.SimpleContainerData;
-
-import com.murthinext.ae2pr.api.machine.MachineDefinition;
-import com.murthinext.ae2pr.api.machine.Mode;
-import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
+import org.jetbrains.annotations.Nullable;
 
 public final class MachineMenu<E extends AbstractMultiblockControllerBlockEntity>
         extends AbstractMultiblockControllerMenu<E> {
@@ -47,8 +42,10 @@ public final class MachineMenu<E extends AbstractMultiblockControllerBlockEntity
 
     @Override
     public boolean clickMenuButton(Player player, int id) {
-        if (id != SWITCH_MODE || !(controller instanceof ModeMachineBlockEntity<?> machine) || !stillValid(player) ||
-            !machine.switchMode()) {
+        if (id != SWITCH_MODE
+                || !(controller instanceof ModeMachineBlockEntity<?> machine)
+                || !stillValid(player)
+                || !machine.switchMode()) {
             return false;
         }
         broadcastChanges();

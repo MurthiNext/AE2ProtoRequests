@@ -1,18 +1,16 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Consumer;
-
-import net.minecraft.Util;
-import net.minecraft.client.gui.Font;
-import net.minecraft.util.Mth;
-
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress.Line;
 import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress.NodeProgress;
 import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryRunner.Choice;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Consumer;
+import net.minecraft.Util;
+import net.minecraft.client.gui.Font;
+import net.minecraft.util.Mth;
 
 final class TerminalStoryPlayback {
 
@@ -155,8 +153,12 @@ final class TerminalStoryPlayback {
     }
 
     boolean waitingForAdvance() {
-        return !failed && !typing && choices.isEmpty() && answerContinueAt < 0 && pendingLine == null &&
-                runner.canContinue();
+        return !failed
+                && !typing
+                && choices.isEmpty()
+                && answerContinueAt < 0
+                && pendingLine == null
+                && runner.canContinue();
     }
 
     void update(long now) {
@@ -229,9 +231,8 @@ final class TerminalStoryPlayback {
         playback.typed = typedGlyphs;
         playback.pendingLine = pendingLine == null ? null : pendingLine.line();
         playback.delay = pendingLine == null ? 0 : (int) Mth.clamp(pendingLine.revealAt() - now, 0L, 60000L);
-        playback.answerDelay = answerContinueAt < 0
-                ? 0
-                : (int) Mth.clamp(answerContinueAt - now, 1L, ANSWER_ENTER_DURATION);
+        playback.answerDelay =
+                answerContinueAt < 0 ? 0 : (int) Mth.clamp(answerContinueAt - now, 1L, ANSWER_ENTER_DURATION);
         TerminalStoryProgressCache.record(runner.snapshot(), nodeId);
     }
 

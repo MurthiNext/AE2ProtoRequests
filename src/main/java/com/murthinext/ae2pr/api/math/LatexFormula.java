@@ -65,7 +65,7 @@ public record LatexFormula(String source, Expression expression) {
             return switch (operator) {
                 case "+" -> a + b;
                 case "-" -> a - b;
-                case "*", "" -> a *b;
+                case "*", "" -> a * b;
                 case "/" -> a / b;
                 case "^" -> Math.pow(a, b);
                 default -> throw new IllegalStateException("Unknown operator: " + operator);
@@ -90,8 +90,9 @@ public record LatexFormula(String source, Expression expression) {
             if (!Double.isFinite(value) || !Double.isFinite(n) || n == 0) {
                 return Double.NaN;
             }
-            return value < 0 && n == Math.rint(n) && Math.abs(n % 2) == 1 ? -Math.pow(-value, 1 / n)
-                                                                          : Math.pow(value, 1 / n);
+            return value < 0 && n == Math.rint(n) && Math.abs(n % 2) == 1
+                    ? -Math.pow(-value, 1 / n)
+                    : Math.pow(value, 1 / n);
         }
     }
 
@@ -140,8 +141,9 @@ public record LatexFormula(String source, Expression expression) {
                 case CEIL -> Math.ceil(a);
                 case LN -> Math.log(a);
                 case LOG ->
-                    Double.isFinite(logBase) && logBase > 0 && logBase != 1 ? Math.log(a) / Math.log(logBase)
-                                                                            : Double.NaN;
+                    Double.isFinite(logBase) && logBase > 0 && logBase != 1
+                            ? Math.log(a) / Math.log(logBase)
+                            : Double.NaN;
                 case EXP -> Math.exp(a);
                 case SIN -> Math.sin(a);
                 case COS -> Math.cos(a);
@@ -191,7 +193,8 @@ public record LatexFormula(String source, Expression expression) {
                         position++;
                     }
                     token = text.substring(start, position);
-                    if (List.of("\\left", "\\right", "\\,", "\\;", "\\!", "\\quad", "\\qquad").contains(token)) {
+                    if (List.of("\\left", "\\right", "\\,", "\\;", "\\!", "\\quad", "\\qquad")
+                            .contains(token)) {
                         token = "";
                         continue;
                     }
@@ -202,8 +205,8 @@ public record LatexFormula(String source, Expression expression) {
                         default -> token;
                     };
                 } else if (Character.isDigit(first) || first == '.') {
-                    while (position < text.length() &&
-                           (Character.isDigit(text.charAt(position)) || text.charAt(position) == '.')) {
+                    while (position < text.length()
+                            && (Character.isDigit(text.charAt(position)) || text.charAt(position) == '.')) {
                         position++;
                     }
                     token = text.substring(start, position);
@@ -254,10 +257,15 @@ public record LatexFormula(String source, Expression expression) {
         }
 
         private boolean startsAtom() {
-            return !token.isEmpty() &&
-                    (Character.isDigit(token.charAt(0)) || token.charAt(0) == '.' || token.equals("x") ||
-                     token.equals("e") || token.equals("(") || token.equals("[") || token.equals("{") ||
-                     token.startsWith("\\") && !token.equals("\\rfloor") && !token.equals("\\rceil"));
+            return !token.isEmpty()
+                    && (Character.isDigit(token.charAt(0))
+                            || token.charAt(0) == '.'
+                            || token.equals("x")
+                            || token.equals("e")
+                            || token.equals("(")
+                            || token.equals("[")
+                            || token.equals("{")
+                            || token.startsWith("\\") && !token.equals("\\rfloor") && !token.equals("\\rceil"));
         }
 
         private Expression unary() {
@@ -304,9 +312,9 @@ public record LatexFormula(String source, Expression expression) {
                 return value.equals("{") ? content : new Group(value, close, content);
             }
             if (value.equals("|") || value.equals("\\lfloor") || value.equals("\\lceil")) {
-                FunctionName name = value.equals("|") ? FunctionName.ABS
-                        : value.equals("\\lfloor")    ? FunctionName.FLOOR
-                                                      : FunctionName.CEIL;
+                FunctionName name = value.equals("|")
+                        ? FunctionName.ABS
+                        : value.equals("\\lfloor") ? FunctionName.FLOOR : FunctionName.CEIL;
                 String close = value.equals("|") ? "|" : value.equals("\\lfloor") ? "\\rfloor" : "\\rceil";
                 return new Function(name, List.of(grouped(value, close)), null);
             }

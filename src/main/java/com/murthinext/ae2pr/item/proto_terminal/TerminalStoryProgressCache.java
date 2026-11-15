@@ -1,19 +1,17 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
-
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.network.TerminalStoryRequestPacket;
 import com.murthinext.ae2pr.network.TerminalStoryUpdatePacket;
 import com.murthinext.ae2pr.network.TerminalStoryWatchPacket;
 import com.murthinext.ae2pr.registry.ModNetwork;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 
 // 终端剧情进度缓存
 public final class TerminalStoryProgressCache {
@@ -25,8 +23,7 @@ public final class TerminalStoryProgressCache {
     private static boolean unlocksSynced;
     private static boolean saveErrorReported;
 
-    private TerminalStoryProgressCache() {
-    }
+    private TerminalStoryProgressCache() {}
 
     public static TerminalStoryProgress get() {
         return progress;
@@ -86,8 +83,9 @@ public final class TerminalStoryProgressCache {
         } catch (IOException | RuntimeException exception) {
             ae2pr.LOGGER.error("Failed to sync proto terminal story progress", exception);
             if (Minecraft.getInstance().player != null) {
-                Minecraft.getInstance().player.sendSystemMessage(
-                        Component.translatable("gui.ae2pr.proto_terminal.load_failed"));
+                Minecraft.getInstance()
+                        .player
+                        .sendSystemMessage(Component.translatable("gui.ae2pr.proto_terminal.load_failed"));
             }
         }
     }
@@ -111,8 +109,9 @@ public final class TerminalStoryProgressCache {
             if (!saveErrorReported) {
                 ae2pr.LOGGER.error("Failed to save proto terminal reading progress", exception);
                 if (Minecraft.getInstance().player != null) {
-                    Minecraft.getInstance().player.sendSystemMessage(
-                            Component.translatable("gui.ae2pr.proto_terminal.save_failed"));
+                    Minecraft.getInstance()
+                            .player
+                            .sendSystemMessage(Component.translatable("gui.ae2pr.proto_terminal.save_failed"));
                 }
                 saveErrorReported = true;
             }

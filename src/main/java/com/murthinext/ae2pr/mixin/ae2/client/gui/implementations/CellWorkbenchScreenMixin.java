@@ -1,16 +1,5 @@
 package com.murthinext.ae2pr.mixin.ae2.client.gui.implementations;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
-
 import appeng.client.gui.implementations.CellWorkbenchScreen;
 import appeng.client.gui.implementations.UpgradeableScreen;
 import appeng.client.gui.style.PaletteColor;
@@ -18,9 +7,17 @@ import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.AETextField;
 import appeng.menu.SlotSemantics;
 import appeng.menu.implementations.CellWorkbenchMenu;
-
 import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
 import com.murthinext.ae2pr.mixin.ae2.accessor.AEBaseMenuInvoker;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 // 元件工作台界面：高级过滤元件用白/黑名单输入框替换 63 格配置区
 @Mixin(value = CellWorkbenchScreen.class, remap = false)
@@ -28,36 +25,45 @@ public abstract class CellWorkbenchScreenMixin extends UpgradeableScreen<CellWor
 
     @Unique
     private static final int ae2pr$FIELD_WIDTH = 128;
+
     @Unique
     private static final int ae2pr$FIELD_X = 10;
+
     @Unique
     private static final int ae2pr$WHITELIST_Y = 44;
+
     @Unique
     private static final int ae2pr$BLACKLIST_Y = 82;
 
     @Unique
     private AETextField ae2pr$whitelistField;
+
     @Unique
     private AETextField ae2pr$blacklistField;
+
     @Unique
     private boolean ae2pr$advanced;
+
     @Unique
     private String ae2pr$observedWhite = "";
+
     @Unique
     private String ae2pr$observedBlack = "";
+
     @Unique
     private String ae2pr$sentWhite = "";
+
     @Unique
     private String ae2pr$sentBlack = "";
 
-    public CellWorkbenchScreenMixin(CellWorkbenchMenu menu, Inventory playerInventory, Component title,
-                                    ScreenStyle style) {
+    public CellWorkbenchScreenMixin(
+            CellWorkbenchMenu menu, Inventory playerInventory, Component title, ScreenStyle style) {
         super(menu, playerInventory, title, style);
     }
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void ae2pr$initFields(CellWorkbenchMenu menu, Inventory playerInventory, Component title, ScreenStyle style,
-                                  CallbackInfo ci) {
+    private void ae2pr$initFields(
+            CellWorkbenchMenu menu, Inventory playerInventory, Component title, ScreenStyle style, CallbackInfo ci) {
         var white = new AETextField(this.style, this.font, 0, 0, ae2pr$FIELD_WIDTH, 14);
         white.setMaxLength(256);
         white.setBordered(false);
@@ -172,17 +178,27 @@ public abstract class CellWorkbenchScreenMixin extends UpgradeableScreen<CellWor
         }
 
         int color = this.style.getColor(PaletteColor.DEFAULT_TEXT_COLOR).toARGB();
-        guiGraphics.drawString(font, Component.translatable("gui.ae2pr.advanced_filter_cell.whitelist"), ae2pr$FIELD_X,
-                               ae2pr$WHITELIST_Y - 10, color, false);
-        guiGraphics.drawString(font, Component.translatable("gui.ae2pr.advanced_filter_cell.blacklist"), ae2pr$FIELD_X,
-                               ae2pr$BLACKLIST_Y - 10, color, false);
+        guiGraphics.drawString(
+                font,
+                Component.translatable("gui.ae2pr.advanced_filter_cell.whitelist"),
+                ae2pr$FIELD_X,
+                ae2pr$WHITELIST_Y - 10,
+                color,
+                false);
+        guiGraphics.drawString(
+                font,
+                Component.translatable("gui.ae2pr.advanced_filter_cell.blacklist"),
+                ae2pr$FIELD_X,
+                ae2pr$BLACKLIST_Y - 10,
+                color,
+                false);
 
         var pose = guiGraphics.pose();
         pose.pushPose();
         pose.translate(ae2pr$FIELD_X, 112, 0);
         pose.scale(1, 1, 1);
-        guiGraphics.drawString(font, Component.translatable("gui.ae2pr.advanced_filter_cell.hint"), 0, 0, 0xFF808080,
-                               false);
+        guiGraphics.drawString(
+                font, Component.translatable("gui.ae2pr.advanced_filter_cell.hint"), 0, 0, 0xFF808080, false);
         pose.popPose();
     }
 }

@@ -1,12 +1,8 @@
 package com.murthinext.ae2pr.api.recipe;
 
-import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-
+import java.util.List;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -16,6 +12,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 
 public record WorldInteractionCircumstance(@Nullable TagKey<Fluid> fluidTag, boolean sourceOnly) {
 
@@ -31,10 +28,9 @@ public record WorldInteractionCircumstance(@Nullable TagKey<Fluid> fluidTag, boo
         if (fluidTag == null) {
             return List.of();
         }
-        return ForgeRegistries.FLUIDS.tags()
-                .getTag(fluidTag)
-                .stream()
-                .filter(fluid -> fluid != Fluids.EMPTY && (!sourceOnly || fluid.defaultFluidState().isSource()))
+        return ForgeRegistries.FLUIDS.tags().getTag(fluidTag).stream()
+                .filter(fluid -> fluid != Fluids.EMPTY
+                        && (!sourceOnly || fluid.defaultFluidState().isSource()))
                 .toList();
     }
 
@@ -53,8 +49,8 @@ public record WorldInteractionCircumstance(@Nullable TagKey<Fluid> fluidTag, boo
         if (!buffer.readBoolean()) {
             return new WorldInteractionCircumstance(null, false);
         }
-        return new WorldInteractionCircumstance(TagKey.create(Registries.FLUID, buffer.readResourceLocation()),
-                                                buffer.readBoolean());
+        return new WorldInteractionCircumstance(
+                TagKey.create(Registries.FLUID, buffer.readResourceLocation()), buffer.readBoolean());
     }
 
     public void toNetwork(FriendlyByteBuf buffer) {

@@ -1,9 +1,10 @@
 package com.murthinext.ae2pr.block.machine_part;
 
+import com.murthinext.ae2pr.api.machine.client.DisplaySlot;
+import com.murthinext.ae2pr.network.MachinePartFluidPacket;
+import com.murthinext.ae2pr.network.MachinePartStackPacket;
+import com.murthinext.ae2pr.registry.ModNetwork;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,11 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemHandlerHelper;
-
-import com.murthinext.ae2pr.api.machine.client.DisplaySlot;
-import com.murthinext.ae2pr.network.MachinePartFluidPacket;
-import com.murthinext.ae2pr.network.MachinePartStackPacket;
-import com.murthinext.ae2pr.registry.ModNetwork;
+import org.jetbrains.annotations.Nullable;
 
 public class ItemBusMenu extends AbstractContainerMenu {
 
@@ -58,15 +55,18 @@ public class ItemBusMenu extends AbstractContainerMenu {
         for (int slot = 0; slot < playerSlotFirst; slot++) {
             int index = slot;
             // 槽位只画单个图标，数量由界面绘制
-            addSlot(new DisplaySlot(()
-                                            -> getStoredStack(index),
-                                    MachinePartLayout.itemSlotX(dual, playerSlotFirst, slot),
-                                    MachinePartLayout.itemSlotY(dual, slot)));
+            addSlot(new DisplaySlot(
+                    () -> getStoredStack(index),
+                    MachinePartLayout.itemSlotX(dual, playerSlotFirst, slot),
+                    MachinePartLayout.itemSlotY(dual, slot)));
         }
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < INV_COLS; col++) {
-                addSlot(new Slot(playerInventory, col + row * INV_COLS + INV_COLS, INV_X + col * SLOT_SIZE,
-                                 INV_Y + row * SLOT_SIZE));
+                addSlot(new Slot(
+                        playerInventory,
+                        col + row * INV_COLS + INV_COLS,
+                        INV_X + col * SLOT_SIZE,
+                        INV_Y + row * SLOT_SIZE));
             }
         }
         for (int col = 0; col < INV_COLS; col++) {
@@ -123,15 +123,15 @@ public class ItemBusMenu extends AbstractContainerMenu {
             List<ItemStack> current = blockEntity.getStorageSnapshots();
             boolean autoTransfer = blockEntity.isAutoTransfer();
             boolean recipeIsolated = blockEntity.isRecipeIsolated();
-            boolean stateChanged = !stackSynced || autoTransfer != lastAutoTransfer ||
-                    recipeIsolated != lastRecipeIsolated;
+            boolean stateChanged =
+                    !stackSynced || autoTransfer != lastAutoTransfer || recipeIsolated != lastRecipeIsolated;
             MachinePartFluidStorage storage = getFluidStorage();
             if (storage != null) {
                 List<FluidStack> fluids = storage.getFluidSnapshots();
                 if (stateChanged || !FluidHatchMenu.sameFluids(fluids, lastSentFluids)) {
                     lastSentFluids = fluids;
-                    ModNetwork.sendToPlayer(serverPlayer,
-                                            new MachinePartFluidPacket(pos, fluids, autoTransfer, recipeIsolated));
+                    ModNetwork.sendToPlayer(
+                            serverPlayer, new MachinePartFluidPacket(pos, fluids, autoTransfer, recipeIsolated));
                 }
             }
             if (stateChanged || !sameStacks(current, lastSentStacks)) {
@@ -139,8 +139,8 @@ public class ItemBusMenu extends AbstractContainerMenu {
                 lastSentStacks = current;
                 lastAutoTransfer = autoTransfer;
                 lastRecipeIsolated = recipeIsolated;
-                ModNetwork.sendToPlayer(serverPlayer,
-                                        new MachinePartStackPacket(pos, lastSentStacks, autoTransfer, recipeIsolated));
+                ModNetwork.sendToPlayer(
+                        serverPlayer, new MachinePartStackPacket(pos, lastSentStacks, autoTransfer, recipeIsolated));
             }
         }
         super.broadcastChanges();
@@ -183,8 +183,9 @@ public class ItemBusMenu extends AbstractContainerMenu {
         }
         if (shift) {
             ItemStack stored = getStoredStack(slot);
-            ItemStack taken = blockEntity.getStorage().extractItem(
-                    slot, stored.isEmpty() ? MAX_CLICK_TRANSFER : clickTransferLimit(stored), false);
+            ItemStack taken = blockEntity
+                    .getStorage()
+                    .extractItem(slot, stored.isEmpty() ? MAX_CLICK_TRANSFER : clickTransferLimit(stored), false);
             if (!taken.isEmpty()) {
                 ItemStack remainder = taken.copy();
                 moveItemStackTo(remainder, playerSlotFirst, slots.size(), true);
@@ -213,8 +214,10 @@ public class ItemBusMenu extends AbstractContainerMenu {
     }
 
     public void handleCreativeClone(int slot, Player player) {
-        if (!serverSide || blockEntity == null || !player.getAbilities().instabuild ||
-            !player.containerMenu.getCarried().isEmpty()) {
+        if (!serverSide
+                || blockEntity == null
+                || !player.getAbilities().instabuild
+                || !player.containerMenu.getCarried().isEmpty()) {
             return;
         }
         ItemStack stored = getStoredStack(slot);
@@ -233,8 +236,8 @@ public class ItemBusMenu extends AbstractContainerMenu {
             return ItemStack.EMPTY;
         }
         ItemStack original = slot.getItem().copy();
-        ItemStack remainder = ItemHandlerHelper.insertItemStacked(blockEntity.getStorage(), slot.getItem().copy(),
-                                                                  false);
+        ItemStack remainder = ItemHandlerHelper.insertItemStacked(
+                blockEntity.getStorage(), slot.getItem().copy(), false);
         if (remainder.getCount() == original.getCount()) {
             return ItemStack.EMPTY;
         }

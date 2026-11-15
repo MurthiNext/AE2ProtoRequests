@@ -2,7 +2,6 @@ package com.murthinext.ae2pr.api.recipe;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -54,6 +53,5 @@ public abstract class AbstractMultiblockRecipeSerializer<T extends AbstractMulti
 
     protected abstract T createFromNetwork(ResourceLocation id, RecipeDraft draft, FriendlyByteBuf buffer);
 
-    protected void writeExtra(FriendlyByteBuf buffer, T recipe) {
-    }
+    protected void writeExtra(FriendlyByteBuf buffer, T recipe) {}
 }

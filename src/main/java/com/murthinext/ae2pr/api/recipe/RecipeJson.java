@@ -1,15 +1,12 @@
 package com.murthinext.ae2pr.api.recipe;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-
+import com.murthinext.ae2pr.api.EnergyAmount;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
@@ -19,18 +16,17 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import com.murthinext.ae2pr.api.EnergyAmount;
+import org.jetbrains.annotations.Nullable;
 
 public final class RecipeJson {
 
-    private RecipeJson() {
-    }
+    private RecipeJson() {}
 
     public static RecipeDraft readDraft(JsonObject json, int defaultDuration) {
-        return new RecipeDraft(readItemInputs(json, "item_inputs"), readFluidStacks(json, "fluid_inputs"),
-                               readItemOutputs(json, "item_outputs"), readFluidStacks(json, "fluid_outputs"),
-                               readDuration(json, defaultDuration), readEnergy(json));
+        return new RecipeDraft(
+                readItemInputs(json, "item_inputs"), readFluidStacks(json, "fluid_inputs"),
+                readItemOutputs(json, "item_outputs"), readFluidStacks(json, "fluid_outputs"),
+                readDuration(json, defaultDuration), readEnergy(json));
     }
 
     public static List<CountedIngredient> readItemInputs(JsonObject json, String key) {

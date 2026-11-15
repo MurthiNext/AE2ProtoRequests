@@ -1,17 +1,15 @@
 package com.murthinext.ae2pr.client.tooltip;
 
+import com.murthinext.ae2pr.api.text.GradientText;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
-
-import com.murthinext.ae2pr.api.text.GradientText;
 
 public record ColorEffectLine(List<Segment> segments) implements TooltipComponent {
 
@@ -62,10 +60,12 @@ public record ColorEffectLine(List<Segment> segments) implements TooltipComponen
         if (contents instanceof GradientText effect) {
             segments.add(new Segment(effect.text(), style, effect));
         } else {
-            contents.visit((segmentStyle, text) -> {
-                segments.add(new Segment(text, segmentStyle, null));
-                return Optional.empty();
-            }, style);
+            contents.visit(
+                    (segmentStyle, text) -> {
+                        segments.add(new Segment(text, segmentStyle, null));
+                        return Optional.empty();
+                    },
+                    style);
         }
         for (Component sibling : component.getSiblings()) {
             collect(sibling, style, segments);

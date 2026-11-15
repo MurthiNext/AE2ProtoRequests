@@ -1,16 +1,14 @@
 package com.murthinext.ae2pr.client.tooltip;
 
+import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.api.math.LatexFormula;
+import com.murthinext.ae2pr.api.math.LatexFormula.Expression;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-
-import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.api.math.LatexFormula;
-import com.murthinext.ae2pr.api.math.LatexFormula.Expression;
 
 final class FormulaLayout {
     private static final int COLOR = 0xFF80E5EE;
@@ -52,8 +50,13 @@ final class FormulaLayout {
             }
             int precedence = precedence(binary);
             Box left = operand(binary.left(), precedence);
-            Box right = operand(binary.right(),
-                                precedence + (binary.operator().equals("-") || binary.operator().equals("/") ? 1 : 0));
+            Box right = operand(
+                    binary.right(),
+                    precedence
+                            + (binary.operator().equals("-")
+                                            || binary.operator().equals("/")
+                                    ? 1
+                                    : 0));
             if (binary.right() instanceof LatexFormula.Unary) {
                 right = delimit("(", expression(binary.right()), ")");
             }
@@ -71,10 +74,14 @@ final class FormulaLayout {
             float width = Math.max(top.width(), bottom.width()) + 6;
             float topBaseline = -6 - top.descent();
             float bottomBaseline = bottom.ascent();
-            return new Composite(width, top.ascent() - topBaseline, bottomBaseline + bottom.descent(),
-                                 List.of(new Placed(top, (width - top.width()) / 2, topBaseline),
-                                         new Placed(bottom, (width - bottom.width()) / 2, bottomBaseline)),
-                                 List.of(new Line(0, -3, width - 1, -3)));
+            return new Composite(
+                    width,
+                    top.ascent() - topBaseline,
+                    bottomBaseline + bottom.descent(),
+                    List.of(
+                            new Placed(top, (width - top.width()) / 2, topBaseline),
+                            new Placed(bottom, (width - bottom.width()) / 2, bottomBaseline)),
+                    List.of(new Line(0, -3, width - 1, -3)));
         }
         if (expression instanceof LatexFormula.Root root) {
             Box content = expression(root.radicand());
@@ -95,9 +102,12 @@ final class FormulaLayout {
             }
             children.add(new Placed(scaledSurd, surdOffset, 0));
             children.add(new Placed(content, contentOffset, 0));
-            return new Composite(width, Math.max(-top + 0.5F, degree == null ? 0 : degree.ascent() - degreeBaseline),
-                                 Math.max(content.descent(), scaledSurd.descent()), children,
-                                 List.of(new Line(surdOffset + scaledSurd.width() - 0.5F, top, width - 1, top)));
+            return new Composite(
+                    width,
+                    Math.max(-top + 0.5F, degree == null ? 0 : degree.ascent() - degreeBaseline),
+                    Math.max(content.descent(), scaledSurd.descent()),
+                    children,
+                    List.of(new Line(surdOffset + scaledSurd.width() - 0.5F, top, width - 1, top)));
         }
         if (expression instanceof LatexFormula.Function function) {
             List<Box> arguments = new ArrayList<>();
@@ -107,16 +117,17 @@ final class FormulaLayout {
                 }
                 arguments.add(expression(argument));
             }
-            Box content = row(arguments.toArray(Box[] ::new));
+            Box content = row(arguments.toArray(Box[]::new));
             return switch (function.name()) {
                 case ABS -> delimit("|", content, "|");
                 case FLOOR -> delimit("⌊", content, "⌋");
                 case CEIL -> delimit("⌈", content, "⌉");
                 default ->
-                    row(function.base() == null
-                                ? text(function.name().text())
-                                : script(text(function.name().text()), expression(function.base()), false),
-                        delimit("(", content, ")"));
+                    row(
+                            function.base() == null
+                                    ? text(function.name().text())
+                                    : script(text(function.name().text()), expression(function.base()), false),
+                            delimit("(", content, ")"));
             };
         }
         throw new IllegalArgumentException("Unsupported formula node: " + expression);
@@ -133,8 +144,9 @@ final class FormulaLayout {
         if (expression instanceof LatexFormula.Unary unary) {
             return simpleInk(unary.operand());
         }
-        if (expression instanceof LatexFormula.Binary binary && !binary.operator().equals("^") &&
-            !binary.operator().equals("/")) {
+        if (expression instanceof LatexFormula.Binary binary
+                && !binary.operator().equals("^")
+                && !binary.operator().equals("/")) {
             float left = simpleInk(binary.left());
             float right = simpleInk(binary.right());
             return Float.isNaN(left) || Float.isNaN(right) ? Float.NaN : Math.max(left, right);
@@ -174,22 +186,28 @@ final class FormulaLayout {
         Box right = new Scaled(text(close), 1, height / (ASCENT + DESCENT));
         // 括号下缘对齐内容下缘
         float baseline = content.descent() - left.descent();
-        return new Composite(left.width() + content.width() + right.width(),
-                             Math.max(content.ascent(), left.ascent() - baseline), content.descent(),
-                             List.of(new Placed(left, 0, baseline), new Placed(content, left.width(), 0),
-                                     new Placed(right, left.width() + content.width(), baseline)),
-                             List.of());
+        return new Composite(
+                left.width() + content.width() + right.width(),
+                Math.max(content.ascent(), left.ascent() - baseline),
+                content.descent(),
+                List.of(
+                        new Placed(left, 0, baseline),
+                        new Placed(content, left.width(), 0),
+                        new Placed(right, left.width() + content.width(), baseline)),
+                List.of());
     }
 
     private static Box script(Box base, Box script, boolean superscript) {
         Box small = new Scaled(script, 0.72F, 0.72F);
         float gap = superscript ? 1 : 0;
-        float baseline = superscript ? -base.ascent() * 0.65F - small.descent()
-                                     : base.descent() + small.ascent() * 0.2F;
-        return new Composite(base.width() + gap + small.width(), Math.max(base.ascent(), small.ascent() - baseline),
-                             Math.max(base.descent(), small.descent() + baseline),
-                             List.of(new Placed(base, 0, 0), new Placed(small, base.width() + gap, baseline)),
-                             List.of());
+        float baseline =
+                superscript ? -base.ascent() * 0.65F - small.descent() : base.descent() + small.ascent() * 0.2F;
+        return new Composite(
+                base.width() + gap + small.width(),
+                Math.max(base.ascent(), small.ascent() - baseline),
+                Math.max(base.descent(), small.descent() + baseline),
+                List.of(new Placed(base, 0, 0), new Placed(small, base.width() + gap, baseline)),
+                List.of());
     }
 
     private static Box row(Box... boxes) {
@@ -208,8 +226,11 @@ final class FormulaLayout {
 
     interface Box {
         float width();
+
         float ascent();
+
         float descent();
+
         void draw(GuiGraphics graphics);
     }
 

@@ -1,18 +1,5 @@
 package com.murthinext.ae2pr.block.level_emitter;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-
-import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
-
 import appeng.api.config.FuzzyMode;
 import appeng.api.config.Setting;
 import appeng.api.config.Settings;
@@ -37,14 +24,23 @@ import appeng.util.inv.AppEngInternalInventory;
 import appeng.util.inv.InternalInventoryHost;
 import appeng.util.inv.filter.IAEItemFilter;
 import appeng.util.prioritylist.IPartitionList;
-
 import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 import com.murthinext.ae2pr.item.filter_cell.FilterCellItem;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 // 多条件发信器的公共部分：过滤元件、仓储/合成监听、模型与持久化
-public abstract class AbstractMultiLevelEmitterPart
-        extends AbstractLevelEmitterPart implements IConfigInvHost, ICraftingProvider, InternalInventoryHost {
+public abstract class AbstractMultiLevelEmitterPart extends AbstractLevelEmitterPart
+        implements IConfigInvHost, ICraftingProvider, InternalInventoryHost {
 
     public static final Setting<CombineMode> COMBINE_MODE = new Setting<>("combine_mode", CombineMode.class);
 
@@ -95,8 +91,7 @@ public abstract class AbstractMultiLevelEmitterPart
             }
 
             @Override
-            public void onCraftableChange(AEKey what) {
-            }
+            public void onCraftableChange(AEKey what) {}
         };
         getMainNode().addService(ICraftingWatcherNode.class, craftingWatcherNode);
         getMainNode().addService(ICraftingProvider.class, this);
@@ -119,11 +114,9 @@ public abstract class AbstractMultiLevelEmitterPart
 
     protected abstract void openMenu(Player player);
 
-    protected void readExtraNbt(CompoundTag data) {
-    }
+    protected void readExtraNbt(CompoundTag data) {}
 
-    protected void writeExtraNbt(CompoundTag data) {
-    }
+    protected void writeExtraNbt(CompoundTag data) {}
 
     @Override
     protected int getUpgradeSlots() {
@@ -172,8 +165,9 @@ public abstract class AbstractMultiLevelEmitterPart
 
     protected final boolean isFilterFuzzy() {
         var stack = getFilterCellStack();
-        return stack != null && stack.getItem() instanceof FilterCellItem item &&
-                item.getUpgrades(stack).isInstalled(AEItems.FUZZY_CARD);
+        return stack != null
+                && stack.getItem() instanceof FilterCellItem item
+                && item.getUpgrades(stack).isInstalled(AEItems.FUZZY_CARD);
     }
 
     protected final long amountFor(KeyCounter stacks, AEKey key) {
@@ -265,8 +259,8 @@ public abstract class AbstractMultiLevelEmitterPart
 
     @Override
     public Set<AEKey> getEmitableItems() {
-        if (!isUpgradedWith(AEItems.CRAFTING_CARD) ||
-            getConfigManager().getSetting(Settings.CRAFT_VIA_REDSTONE) != YesNo.YES) {
+        if (!isUpgradedWith(AEItems.CRAFTING_CARD)
+                || getConfigManager().getSetting(Settings.CRAFT_VIA_REDSTONE) != YesNo.YES) {
             return Set.of();
         }
         var advanced = getAdvancedFilter();

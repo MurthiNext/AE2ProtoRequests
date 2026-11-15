@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.api.machine;
 
 import java.util.List;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 

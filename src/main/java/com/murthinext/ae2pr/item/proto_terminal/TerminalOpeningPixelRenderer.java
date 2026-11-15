@@ -1,17 +1,14 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Random;
-
-import org.joml.Matrix4f;
-
-import com.mojang.blaze3d.vertex.VertexConsumer;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
+import org.joml.Matrix4f;
 
 // 终端展开数据流
 final class TerminalOpeningPixelRenderer {
@@ -64,14 +61,18 @@ final class TerminalOpeningPixelRenderer {
         int seed = random.nextInt();
         for (int row = 0; row < noise.length; row++) {
             for (int column = 0; column < noise[row].length; column++) {
-                noise[row][column] = sample(column / 4, row / 4, seed) * 0.65F +
-                        sample(column / 2, row / 2, seed + 1) * 0.25F + sample(column, row, seed + 2) * 0.1F;
+                noise[row][column] = sample(column / 4, row / 4, seed) * 0.65F
+                        + sample(column / 2, row / 2, seed + 1) * 0.25F
+                        + sample(column, row, seed + 2) * 0.1F;
             }
         }
         for (int i = 0; i < 280; i++) {
-            motes.add(new Mote(x + random.nextFloat() * width, y + random.nextFloat() * height,
-                               0.6F + random.nextFloat() * 1.5F, random.nextFloat() * Mth.TWO_PI,
-                               0.25F + random.nextFloat() * 0.65F));
+            motes.add(new Mote(
+                    x + random.nextFloat() * width,
+                    y + random.nextFloat() * height,
+                    0.6F + random.nextFloat() * 1.5F,
+                    random.nextFloat() * Mth.TWO_PI,
+                    0.25F + random.nextFloat() * 0.65F));
         }
     }
 
@@ -128,7 +129,7 @@ final class TerminalOpeningPixelRenderer {
     private void buildContours(float reach) {
         for (int row = firstRow; row <= lastRow; row++) {
             BitSet occupied = rows[row];
-            for (int left = occupied.nextSetBit(0); left >= 0;) {
+            for (int left = occupied.nextSetBit(0); left >= 0; ) {
                 int right = occupied.nextClearBit(left);
                 edges.add(new Edge(originX + left, originY + row, originX + left, originY + row + 1));
                 edges.add(new Edge(originX + right, originY + row, originX + right, originY + row + 1));
@@ -165,7 +166,7 @@ final class TerminalOpeningPixelRenderer {
                 bands.add(new Band(originX + coreLeft, originY + coreTop, originX + coreRight, originY + coreBottom));
             }
         }
-        for (int top = firstRow; top <= lastRow;) {
+        for (int top = firstRow; top <= lastRow; ) {
             int bottom = top + 1;
             while (bottom <= lastRow && bottom != coreTop && bottom != coreBottom && rows[top].equals(rows[bottom])) {
                 bottom++;
@@ -175,7 +176,7 @@ final class TerminalOpeningPixelRenderer {
             if (top >= coreTop && top < coreBottom) {
                 exposed.clear(coreLeft, coreRight);
             }
-            for (int left = exposed.nextSetBit(0); left >= 0;) {
+            for (int left = exposed.nextSetBit(0); left >= 0; ) {
                 int right = exposed.nextClearBit(left);
                 bands.add(new Band(originX + left, originY + top, originX + right, originY + bottom));
                 left = exposed.nextSetBit(right);
@@ -185,7 +186,7 @@ final class TerminalOpeningPixelRenderer {
     }
 
     private void addHorizontalEdges(int row) {
-        for (int left = exposed.nextSetBit(0); left >= 0;) {
+        for (int left = exposed.nextSetBit(0); left >= 0; ) {
             int right = exposed.nextClearBit(left);
             edges.add(new Edge(originX + left, originY + row, originX + right, originY + row));
             left = exposed.nextSetBit(right);
@@ -243,16 +244,27 @@ final class TerminalOpeningPixelRenderer {
             Matrix4f matrix = graphics.pose().last().pose();
             VertexConsumer vertices = graphics.bufferSource().getBuffer(RenderType.gui());
             for (Edge edge : edges) {
-                float pulse = (float) Math.pow(Math.max(0,
-                                                        Mth.sin((edge.x1() - centerX) * 0.035F +
-                                                                (edge.y1() - centerY) * 0.047F - seconds * 12)),
-                                               6);
-                int color = TerminalGraphicsRenderer.mix(TerminalGraphicsRenderer.BORDER, TerminalGraphicsRenderer.TEXT,
-                                                         energy * (0.28F + pulse * 0.55F));
+                float pulse = (float) Math.pow(
+                        Math.max(
+                                0,
+                                Mth.sin((edge.x1() - centerX) * 0.035F
+                                        + (edge.y1() - centerY) * 0.047F
+                                        - seconds * 12)),
+                        6);
+                int color = TerminalGraphicsRenderer.mix(
+                        TerminalGraphicsRenderer.BORDER,
+                        TerminalGraphicsRenderer.TEXT,
+                        energy * (0.28F + pulse * 0.55F));
                 glow(vertices, matrix, edge, 3 + energy * 5, energy * (0.14F + pulse * 0.12F));
                 glow(vertices, matrix, edge, 1.4F, energy * 0.22F);
-                TerminalGraphicsRenderer.line(graphics, edge.x1(), edge.y1(), edge.x2(), edge.y2(),
-                                              TerminalGraphicsRenderer.alpha(color, outlineOpacity), 1);
+                TerminalGraphicsRenderer.line(
+                        graphics,
+                        edge.x1(),
+                        edge.y1(),
+                        edge.x2(),
+                        edge.y2(),
+                        TerminalGraphicsRenderer.alpha(color, outlineOpacity),
+                        1);
             }
             renderMotes(graphics, seconds);
             float ignition = smooth(progress / 0.055F) * (1 - smooth((progress - 0.08F) / 0.24F));
@@ -260,10 +272,20 @@ final class TerminalOpeningPixelRenderer {
             Edge seam = new Edge(centerX - radius, centerY, centerX + radius, centerY);
             glow(vertices, matrix, seam, Math.min(halfHeight, 6), ignition * 0.25F);
             TerminalGraphicsRenderer.line(
-                    graphics, seam.x1(), seam.y1(), seam.x2(), seam.y2(),
-                    TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.TEXT, ignition * 0.8F), 0.8F);
+                    graphics,
+                    seam.x1(),
+                    seam.y1(),
+                    seam.x2(),
+                    seam.y2(),
+                    TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.TEXT, ignition * 0.8F),
+                    0.8F);
             TerminalGraphicsRenderer.outline(
-                    graphics, originX + MARGIN, originY + MARGIN, width, height, TerminalGraphicsRenderer.slant(height),
+                    graphics,
+                    originX + MARGIN,
+                    originY + MARGIN,
+                    width,
+                    height,
+                    TerminalGraphicsRenderer.slant(height),
                     TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.BORDER, 1 - outlineOpacity));
         });
     }

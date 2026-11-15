@@ -7,8 +7,7 @@ final class TerminalParallelogramClip {
 
     record Band(int left, int top, int right, int bottom) {}
 
-    private TerminalParallelogramClip() {
-    }
+    private TerminalParallelogramClip() {}
 
     static List<Band> bands(double x, double y, double width, double height, double slant) {
         if (width <= slant || height <= 0) {

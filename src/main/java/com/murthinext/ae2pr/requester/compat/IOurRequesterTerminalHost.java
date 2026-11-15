@@ -1,8 +1,7 @@
 package com.murthinext.ae2pr.requester.compat;
 
-import org.jetbrains.annotations.Nullable;
-
 import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 由 {@code RequesterTerminalMenuMixin} 实现的鸭子接口，

@@ -1,12 +1,10 @@
 package com.murthinext.ae2pr.integration.jei.render;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.murthinext.ae2pr.integration.jei.JeiAmountFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
-import com.mojang.blaze3d.systems.RenderSystem;
-
+import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,10 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-
-import mezz.jei.api.ingredients.IIngredientRenderer;
-
-import com.murthinext.ae2pr.integration.jei.JeiAmountFormat;
+import org.jetbrains.annotations.Nullable;
 
 public class ItemStackAmountRenderer implements IIngredientRenderer<ItemStack> {
 
@@ -33,8 +28,12 @@ public class ItemStackAmountRenderer implements IIngredientRenderer<ItemStack> {
         RenderSystem.enableDepthTest();
         graphics.renderFakeItem(ingredient, posX, posY);
         int count = ingredient.getCount();
-        graphics.renderItemDecorations(Minecraft.getInstance().font, ingredient, posX, posY,
-                                       JeiAmountFormat.abbreviated(count) ? JeiAmountFormat.item(count) : null);
+        graphics.renderItemDecorations(
+                Minecraft.getInstance().font,
+                ingredient,
+                posX,
+                posY,
+                JeiAmountFormat.abbreviated(count) ? JeiAmountFormat.item(count) : null);
         RenderSystem.disableBlend();
     }
 

@@ -1,17 +1,15 @@
 package com.murthinext.ae2pr.block.machine_part;
 
+import com.murthinext.ae2pr.api.machine.client.GuiTextures;
+import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
 import java.util.List;
 import java.util.function.BooleanSupplier;
-
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-
-import com.murthinext.ae2pr.api.machine.client.GuiTextures;
-import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
 
 public class RecipeIsolationButton extends AbstractWidget {
 
@@ -33,12 +31,17 @@ public class RecipeIsolationButton extends AbstractWidget {
         if (!isHovered()) {
             return false;
         }
-        GuiTooltips.render(graphics, font,
-                           List.of(Component.translatable("gui.ae2pr.machine_part.isolation.title"),
-                                   Component.translatable(state.getAsBoolean()
-                                                                  ? "gui.ae2pr.machine_part.isolation.enabled"
-                                                                  : "gui.ae2pr.machine_part.isolation.disabled")),
-                           mouseX, mouseY);
+        GuiTooltips.render(
+                graphics,
+                font,
+                List.of(
+                        Component.translatable("gui.ae2pr.machine_part.isolation.title"),
+                        Component.translatable(
+                                state.getAsBoolean()
+                                        ? "gui.ae2pr.machine_part.isolation.enabled"
+                                        : "gui.ae2pr.machine_part.isolation.disabled")),
+                mouseX,
+                mouseY);
         return true;
     }
 
@@ -57,10 +60,11 @@ public class RecipeIsolationButton extends AbstractWidget {
     @Override
     protected void updateWidgetNarration(NarrationElementOutput narration) {
         setMessage(Component.translatable("gui.ae2pr.machine_part.isolation.title")
-                           .append(": ")
-                           .append(Component.translatable(state.getAsBoolean()
-                                                                  ? "gui.ae2pr.machine_part.isolation.enabled"
-                                                                  : "gui.ae2pr.machine_part.isolation.disabled")));
+                .append(": ")
+                .append(Component.translatable(
+                        state.getAsBoolean()
+                                ? "gui.ae2pr.machine_part.isolation.enabled"
+                                : "gui.ae2pr.machine_part.isolation.disabled")));
         defaultButtonNarrationText(narration);
     }
 }

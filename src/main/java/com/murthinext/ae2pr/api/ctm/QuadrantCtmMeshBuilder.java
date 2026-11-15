@@ -2,12 +2,10 @@ package com.murthinext.ae2pr.api.ctm;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 象限连接纹理：把一个面拆成 4 个象限，各自从 4×4 格（32×32）象限图集里取一块。
@@ -28,12 +26,11 @@ public final class QuadrantCtmMeshBuilder {
     private static final int UV_OFFSET = 4;
     private static final float HALF = 0.5F;
 
-    private QuadrantCtmMeshBuilder() {
-    }
+    private QuadrantCtmMeshBuilder() {}
 
     // 把单个面拆成 4 个象限面
-    public static List<BakedQuad> build(BakedQuad quad, TextureAtlasSprite base, TextureAtlasSprite atlas,
-                                        int worldMask) {
+    public static List<BakedQuad> build(
+            BakedQuad quad, TextureAtlasSprite base, TextureAtlasSprite atlas, int worldMask) {
         Direction uAxis = CtmMeshBuilder.uAxis(quad);
         Direction vAxis = CtmMeshBuilder.vAxis(quad);
         int edgeMask = edgeMask(uAxis, vAxis, worldMask);
@@ -62,9 +59,9 @@ public final class QuadrantCtmMeshBuilder {
             return null;
         }
         if (horizontal && vertical) {
-            return diagonal ? new int[] { qx, qy } : new int[] { qx + 2, qy + 2 };
+            return diagonal ? new int[] {qx, qy} : new int[] {qx + 2, qy + 2};
         }
-        return horizontal ? new int[] { qx, qy + 2 } : new int[] { qx + 2, qy };
+        return horizontal ? new int[] {qx, qy + 2} : new int[] {qx + 2, qy};
     }
 
     // 边掩码：bit0 = 最小 U 侧、bit1 = 最大 U 侧、bit2 = 最小 V 侧、bit3 = 最大 V 侧
@@ -90,8 +87,8 @@ public final class QuadrantCtmMeshBuilder {
     }
 
     // 该象限的对角块是否连接；两条邻边未同时连接时恒为 false
-    private static boolean diagonal(int cornerBit, int edgeMask, int worldMask, @Nullable Direction uAxis,
-                                    @Nullable Direction vAxis) {
+    private static boolean diagonal(
+            int cornerBit, int edgeMask, int worldMask, @Nullable Direction uAxis, @Nullable Direction vAxis) {
         if (uAxis == null || vAxis == null) {
             return false;
         }
@@ -144,8 +141,15 @@ public final class QuadrantCtmMeshBuilder {
         }
 
         // 切出指定象限，并把 UV 重映射到目标格或基础贴图的对应象限
-        BakedQuad subQuad(BakedQuad quad, TextureAtlasSprite base, TextureAtlasSprite atlas, int qx, int qy,
-                          @Nullable int[] cell, float tileWidth, float tileHeight) {
+        BakedQuad subQuad(
+                BakedQuad quad,
+                TextureAtlasSprite base,
+                TextureAtlasSprite atlas,
+                int qx,
+                int qy,
+                @Nullable int[] cell,
+                float tileWidth,
+                float tileHeight) {
             int[] src = quad.getVertices();
             int[] out = src.clone();
 
@@ -155,8 +159,8 @@ public final class QuadrantCtmMeshBuilder {
             float t1 = t0 + HALF;
 
             // 与原面同向的两个环绕顺序
-            float[][] forward = { { s0, t0 }, { s1, t0 }, { s1, t1 }, { s0, t1 } };
-            float[][] reverse = { { s0, t0 }, { s0, t1 }, { s1, t1 }, { s1, t0 } };
+            float[][] forward = {{s0, t0}, {s1, t0}, {s1, t1}, {s0, t1}};
+            float[][] reverse = {{s0, t0}, {s0, t1}, {s1, t1}, {s1, t0}};
             float[][] order = ccw ? forward : reverse;
 
             float baseWidth = base.getU1() - base.getU0();
@@ -178,8 +182,8 @@ public final class QuadrantCtmMeshBuilder {
                 out[offset + UV_OFFSET] = Float.floatToRawIntBits(cellU0 + (s * 2.0F - qx) * spanU);
                 out[offset + UV_OFFSET + 1] = Float.floatToRawIntBits(cellV0 + (t * 2.0F - qy) * spanV);
             }
-            return new BakedQuad(out, quad.getTintIndex(), quad.getDirection(), cell == null ? base : atlas,
-                                 quad.isShade());
+            return new BakedQuad(
+                    out, quad.getTintIndex(), quad.getDirection(), cell == null ? base : atlas, quad.isShade());
         }
     }
 }

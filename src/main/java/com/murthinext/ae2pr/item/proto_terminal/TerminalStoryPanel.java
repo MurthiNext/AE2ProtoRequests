@@ -1,10 +1,9 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryPlayback.Entry;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryRunner.Choice;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.joml.Vector3f;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -13,9 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryPlayback.Entry;
-import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryRunner.Choice;
+import org.joml.Vector3f;
 
 final class TerminalStoryPanel {
 
@@ -66,23 +63,22 @@ final class TerminalStoryPanel {
         }
     }
 
-    TerminalStoryPanel(TerminalStoryTree story, TerminalStoryTree.Node node, TerminalStoryRunner runner,
-                       boolean unlocked) {
+    TerminalStoryPanel(
+            TerminalStoryTree story, TerminalStoryTree.Node node, TerminalStoryRunner runner, boolean unlocked) {
         this.story = story;
         this.node = node;
         this.runner = runner;
         if (unlocked) {
             unlock();
         } else {
-            lockRows = unlockTip()
-                               .stream()
-                               .flatMap(tip -> TerminalStoryText.wrap(font, tip, TEXT_RIGHT - TEXT_LEFT - 10).stream())
-                               .toList();
+            lockRows = unlockTip().stream()
+                    .flatMap(tip -> TerminalStoryText.wrap(font, tip, TEXT_RIGHT - TEXT_LEFT - 10).stream())
+                    .toList();
             textHeight = lockRows.size() * LINE_HEIGHT;
         }
-        Minecraft.getInstance().getNarrator().sayNow(isLocked() && !lockRows.isEmpty()
-                                                             ? Component.literal(lockRows.get(0))
-                                                             : node.title());
+        Minecraft.getInstance()
+                .getNarrator()
+                .sayNow(isLocked() && !lockRows.isEmpty() ? Component.literal(lockRows.get(0)) : node.title());
     }
 
     TerminalStoryTree.Node node() {
@@ -186,13 +182,24 @@ final class TerminalStoryPanel {
         autoScroll = scroll >= maxScroll();
     }
 
-    void render(GuiGraphics graphics, long now, float reveal, int shift, float windowOpacity, int mouseX, int mouseY,
-                boolean interactive) {
+    void render(
+            GuiGraphics graphics,
+            long now,
+            float reveal,
+            int shift,
+            float windowOpacity,
+            int mouseX,
+            int mouseY,
+            boolean interactive) {
         boolean locked = isLocked();
         if (!locked) {
-            graphics.drawString(font, font.plainSubstrByWidth(node.title().getString(), 298), TEXT_LEFT + shift,
-                                TITLE_Y, TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.ACCENT, reveal),
-                                false);
+            graphics.drawString(
+                    font,
+                    font.plainSubstrByWidth(node.title().getString(), 298),
+                    TEXT_LEFT + shift,
+                    TITLE_Y,
+                    TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.ACCENT, reveal),
+                    false);
         }
         int border = TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.BORDER, reveal);
         graphics.fill(TEXT_LEFT - 2 + shift, RULE_Y, TEXT_LEFT - 2 + RULE_WIDTH + shift, RULE_Y + 1, border);
@@ -213,8 +220,13 @@ final class TerminalStoryPanel {
         if (!locked && node.image() != null) {
             renderImage(graphics, reveal, shift, windowOpacity, border);
         }
-        renderScrollbar(graphics, reveal, shift, right, border,
-                        locked ? TerminalGraphicsRenderer.LOCKED_ACCENT : TerminalGraphicsRenderer.ACCENT);
+        renderScrollbar(
+                graphics,
+                reveal,
+                shift,
+                right,
+                border,
+                locked ? TerminalGraphicsRenderer.LOCKED_ACCENT : TerminalGraphicsRenderer.ACCENT);
         if (locked) {
             return;
         }
@@ -236,16 +248,17 @@ final class TerminalStoryPanel {
                 continue;
             }
             Entry entry = row.entry();
-            float past = row.current() ? 0
+            float past = row.current()
+                    ? 0
                     : entry.pastStarted() < 0
-                    ? 1
-                    : TerminalGraphicsRenderer.ease((now - entry.pastStarted()) / (float) LINE_COLOR_DURATION);
-            int color = TerminalGraphicsRenderer.mix(TerminalGraphicsRenderer.TEXT, TerminalGraphicsRenderer.ACCENT,
-                                                     past);
+                            ? 1
+                            : TerminalGraphicsRenderer.ease((now - entry.pastStarted()) / (float) LINE_COLOR_DURATION);
+            int color =
+                    TerminalGraphicsRenderer.mix(TerminalGraphicsRenderer.TEXT, TerminalGraphicsRenderer.ACCENT, past);
             float enter = entry.enteredAt() < 0
                     ? 1
-                    : TerminalGraphicsRenderer.ease((now - entry.enteredAt()) /
-                                                    (float) TerminalStoryPlayback.ANSWER_ENTER_DURATION);
+                    : TerminalGraphicsRenderer.ease(
+                            (now - entry.enteredAt()) / (float) TerminalStoryPlayback.ANSWER_ENTER_DURATION);
             if (reveal * enter < 4.0F / 255) {
                 continue;
             }
@@ -257,12 +270,21 @@ final class TerminalStoryPanel {
                         ? 1
                         : TerminalGraphicsRenderer.ease((now - entry.speakerStarted()) / (float) SPEAKER_FADE_DURATION);
                 if (!speaker.isEmpty() && reveal * enter * speakerFade >= 4.0F / 255) {
-                    graphics.drawString(font, speaker, TEXT_LEFT + shift, lineY,
-                                        TerminalGraphicsRenderer.alpha(color, reveal * enter * speakerFade), false);
+                    graphics.drawString(
+                            font,
+                            speaker,
+                            TEXT_LEFT + shift,
+                            lineY,
+                            TerminalGraphicsRenderer.alpha(color, reveal * enter * speakerFade),
+                            false);
                 }
-                graphics.drawString(font, row.text().substring(row.speakerGlyphs()),
-                                    TEXT_LEFT + shift + font.width(speaker), lineY,
-                                    TerminalGraphicsRenderer.alpha(color, reveal * enter), false);
+                graphics.drawString(
+                        font,
+                        row.text().substring(row.speakerGlyphs()),
+                        TEXT_LEFT + shift + font.width(speaker),
+                        lineY,
+                        TerminalGraphicsRenderer.alpha(color, reveal * enter),
+                        false);
             } finally {
                 graphics.pose().popPose();
             }
@@ -274,9 +296,13 @@ final class TerminalStoryPanel {
         for (String row : lockRows) {
             int lineY = TEXT_TOP + y - (int) scroll;
             if (lineY >= TEXT_TOP - LINE_HEIGHT && lineY < TEXT_BOTTOM) {
-                graphics.drawString(font, row, TEXT_LEFT + shift, lineY,
-                                    TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.LOCKED_TEXT, reveal),
-                                    false);
+                graphics.drawString(
+                        font,
+                        row,
+                        TEXT_LEFT + shift,
+                        lineY,
+                        TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.LOCKED_TEXT, reveal),
+                        false);
             }
             y += LINE_HEIGHT;
         }
@@ -287,12 +313,28 @@ final class TerminalStoryPanel {
         int width = Math.max(1, Math.round(node.imageWidth() * scale));
         int height = Math.max(1, Math.round(node.imageHeight() * scale));
         TerminalGraphicsRenderer.panel(
-                graphics, 340 + shift, 102, 150, 157, TerminalGraphicsRenderer.slant(157),
-                TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.DETAIL_BACKGROUND, reveal), border);
+                graphics,
+                340 + shift,
+                102,
+                150,
+                157,
+                TerminalGraphicsRenderer.slant(157),
+                TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.DETAIL_BACKGROUND, reveal),
+                border);
         graphics.setColor(1, 1, 1, reveal * windowOpacity);
         try {
-            graphics.blit(node.image(), 361 + shift + (110 - width) / 2, 110 + (138 - height) / 2, width, height, 0, 0,
-                          node.imageWidth(), node.imageHeight(), node.imageWidth(), node.imageHeight());
+            graphics.blit(
+                    node.image(),
+                    361 + shift + (110 - width) / 2,
+                    110 + (138 - height) / 2,
+                    width,
+                    height,
+                    0,
+                    0,
+                    node.imageWidth(),
+                    node.imageHeight(),
+                    node.imageWidth(),
+                    node.imageHeight());
         } finally {
             graphics.setColor(1, 1, 1, windowOpacity);
         }
@@ -307,12 +349,16 @@ final class TerminalStoryPanel {
         int thumbHeight = Math.max(12, height * height / Math.max(1, textHeight));
         int thumbY = TEXT_TOP + (int) ((height - thumbHeight) * scroll / maxScroll);
         graphics.fill(right - 2 + shift, TEXT_TOP, right - 1 + shift, TEXT_BOTTOM, border);
-        graphics.fill(right - 2 + shift, thumbY, right - 1 + shift, thumbY + thumbHeight,
-                      TerminalGraphicsRenderer.alpha(accent, reveal));
+        graphics.fill(
+                right - 2 + shift,
+                thumbY,
+                right - 1 + shift,
+                thumbY + thumbHeight,
+                TerminalGraphicsRenderer.alpha(accent, reveal));
     }
 
-    private void renderOptions(GuiGraphics graphics, long now, int shift, float reveal, int mouseX, int mouseY,
-                               boolean interactive) {
+    private void renderOptions(
+            GuiGraphics graphics, long now, int shift, float reveal, int mouseX, int mouseY, boolean interactive) {
         optionHits.clear();
         if (playback.typing() || !interactive) {
             return;
@@ -324,9 +370,11 @@ final class TerminalStoryPanel {
             Choice option = choices.get(i);
             float progress = playback.choiceStarted() < 0
                     ? 1
-                    : Mth.clamp((now - playback.choiceStarted() - Math.min(i, 5) * CHOICE_REVEAL_STAGGER) /
-                                        (float) CHOICE_REVEAL_DURATION,
-                                0, 1);
+                    : Mth.clamp(
+                            (now - playback.choiceStarted() - Math.min(i, 5) * CHOICE_REVEAL_STAGGER)
+                                    / (float) CHOICE_REVEAL_DURATION,
+                            0,
+                            1);
             if (progress <= 0) {
                 continue;
             }
@@ -336,9 +384,19 @@ final class TerminalStoryPanel {
             int x = right - width + Math.round((1 - appear) * 12) + shift;
             int y = bottom - CHOICE_HEIGHT - i * (CHOICE_HEIGHT + CHOICE_GAP);
             boolean hovered = mouseX >= x && mouseX < x + width && mouseY >= y && mouseY < y + CHOICE_HEIGHT;
-            TerminalStoryChoiceRenderer.render(graphics, font, x, y, width, CHOICE_HEIGHT,
-                                               font.plainSubstrByWidth(text, width - 20), hovered, reveal, progress,
-                                               now, option.index());
+            TerminalStoryChoiceRenderer.render(
+                    graphics,
+                    font,
+                    x,
+                    y,
+                    width,
+                    CHOICE_HEIGHT,
+                    font.plainSubstrByWidth(text, width - 20),
+                    hovered,
+                    reveal,
+                    progress,
+                    now,
+                    option.index());
             optionHits.add(new OptionHit(x, y, x + width, y + CHOICE_HEIGHT, option));
         }
     }
@@ -361,21 +419,24 @@ final class TerminalStoryPanel {
     private String conditionText(TerminalStoryCondition condition) {
         if (condition instanceof TerminalStoryCondition.Group group) {
             String separator = label(group.all() ? "locked.and" : "locked.or").getString();
-            return String.join(separator,
-                               group.conditions().stream().map(child -> "(" + conditionText(child) + ")").toList());
+            return String.join(
+                    separator,
+                    group.conditions().stream()
+                            .map(child -> "(" + conditionText(child) + ")")
+                            .toList());
         }
         if (condition instanceof TerminalStoryCondition.Not not) {
             return Component.translatable("gui.ae2pr.proto_terminal.locked.not", conditionText(not.condition()))
                     .getString();
         }
         if (condition instanceof TerminalStoryCondition.Completed completed) {
-            String name = story.nodes()
-                                  .stream()
-                                  .filter(candidate -> candidate.id().equals(completed.id()))
-                                  .map(candidate -> candidate.title().getString())
-                                  .findFirst()
-                                  .orElse(completed.id());
-            return Component.translatable("gui.ae2pr.proto_terminal.locked.completed", name).getString();
+            String name = story.nodes().stream()
+                    .filter(candidate -> candidate.id().equals(completed.id()))
+                    .map(candidate -> candidate.title().getString())
+                    .findFirst()
+                    .orElse(completed.id());
+            return Component.translatable("gui.ae2pr.proto_terminal.locked.completed", name)
+                    .getString();
         }
         if (condition instanceof TerminalStoryCondition.Variable variable) {
             String operator = switch (variable.operator()) {
@@ -387,8 +448,8 @@ final class TerminalStoryPanel {
         }
         if (condition instanceof TerminalStoryCondition.Inventory inventory) {
             TerminalStoryUnlockCondition unlock = TerminalStoryUnlockCondition.parse(inventory.key());
-            return Component
-                    .translatable("gui.ae2pr.proto_terminal.locked.condition", unlockName(unlock), unlock.count())
+            return Component.translatable(
+                            "gui.ae2pr.proto_terminal.locked.condition", unlockName(unlock), unlock.count())
                     .getString();
         }
         return label("locked.requires").getString();
@@ -396,7 +457,8 @@ final class TerminalStoryPanel {
 
     private static Component unlockName(TerminalStoryUnlockCondition unlock) {
         if (unlock.tag()) {
-            return Component.translatable("gui.ae2pr.proto_terminal.locked.tag", unlock.id().toString());
+            return Component.translatable(
+                    "gui.ae2pr.proto_terminal.locked.tag", unlock.id().toString());
         }
         Item item = ForgeRegistries.ITEMS.getValue(unlock.id());
         return item == null ? Component.literal(unlock.id().toString()) : new ItemStack(item).getHoverName();

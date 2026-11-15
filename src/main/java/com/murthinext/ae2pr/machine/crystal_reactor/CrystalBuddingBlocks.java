@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.machine.crystal_reactor;
 
-import org.jetbrains.annotations.Nullable;
-
+import appeng.core.definitions.AEBlocks;
+import com.murthinext.ae2pr.ServerConfig;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -9,10 +9,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fml.ModList;
-
-import appeng.core.definitions.AEBlocks;
-
-import com.murthinext.ae2pr.ServerConfig;
+import org.jetbrains.annotations.Nullable;
 
 // 水晶母岩候选表：按档位与材质解析实际方块，可选模组未安装时自动剔除
 public final class CrystalBuddingBlocks {
@@ -37,8 +34,7 @@ public final class CrystalBuddingBlocks {
     @Nullable
     private static Block[][] table;
 
-    private CrystalBuddingBlocks() {
-    }
+    private CrystalBuddingBlocks() {}
 
     // 按配置权重掷出一次母岩：先定档位，再在该档位可用材质间挑选
     public static BlockState roll(RandomSource random) {

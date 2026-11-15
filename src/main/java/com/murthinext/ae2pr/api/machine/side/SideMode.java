@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.api.machine.side;
 
 import java.util.Locale;
-
 import net.minecraft.network.chat.Component;
 
 public enum SideMode {

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.util.Mth;
@@ -14,8 +13,8 @@ final class TerminalStoryText {
 
     // 打字机每秒显示的字符数
     private static final float GLYPHS_PER_SECOND = 34;
-    private static final Pattern DELAY = Pattern.compile("<delay\\s*=\\s*(\\d{1,5})\\s*/?\\s*>",
-                                                         Pattern.CASE_INSENSITIVE);
+    private static final Pattern DELAY =
+            Pattern.compile("<delay\\s*=\\s*(\\d{1,5})\\s*/?\\s*>", Pattern.CASE_INSENSITIVE);
     private static final int MAX_DELAY = 60000;
 
     private final String plain;
@@ -29,8 +28,8 @@ final class TerminalStoryText {
         int cursor = 0;
         while (matcher.find()) {
             visible.append(raw, cursor, matcher.start());
-            pauses[visible.length()] = Math.min(MAX_DELAY,
-                                                pauses[visible.length()] + Integer.parseInt(matcher.group(1)));
+            pauses[visible.length()] =
+                    Math.min(MAX_DELAY, pauses[visible.length()] + Integer.parseInt(matcher.group(1)));
             cursor = matcher.end();
         }
         visible.append(raw, cursor, raw.length());
@@ -47,7 +46,9 @@ final class TerminalStoryText {
 
     static String playerName() {
         Minecraft minecraft = Minecraft.getInstance();
-        return minecraft.player == null ? "?" : minecraft.player.getGameProfile().getName();
+        return minecraft.player == null
+                ? "?"
+                : minecraft.player.getGameProfile().getName();
     }
 
     static String plainOf(String raw) {

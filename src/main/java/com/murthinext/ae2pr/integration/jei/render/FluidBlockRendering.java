@@ -1,12 +1,9 @@
 package com.murthinext.ae2pr.integration.jei.render;
 
-import org.joml.Quaternionf;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.FogRenderer;
@@ -24,11 +21,11 @@ import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import org.joml.Quaternionf;
 
 public final class FluidBlockRendering {
 
-    private FluidBlockRendering() {
-    }
+    private FluidBlockRendering() {}
 
     public static void render(GuiGraphics graphics, Fluid fluid, int x, int y, int width, int height) {
         FluidState fluidState = fluid.defaultFluidState();
@@ -47,8 +44,10 @@ public final class FluidBlockRendering {
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder builder = tesselator.getBuilder();
         builder.begin(renderType.mode(), renderType.format());
-        Minecraft.getInstance().getBlockRenderer().renderLiquid(BlockPos.ZERO, new FakeWorld(fluidState), builder,
-                                                                fluidState.createLegacyBlock(), fluidState);
+        Minecraft.getInstance()
+                .getBlockRenderer()
+                .renderLiquid(
+                        BlockPos.ZERO, new FakeWorld(fluidState), builder, fluidState.createLegacyBlock(), fluidState);
         if (builder.building()) {
             tesselator.end();
         }
@@ -97,7 +96,9 @@ public final class FluidBlockRendering {
         @Override
         public int getBlockTint(BlockPos pos, ColorResolver colorResolver) {
             var level = Minecraft.getInstance().level;
-            return level == null ? -1 : colorResolver.getColor(level.getBiome(pos).value(), 0, 0);
+            return level == null
+                    ? -1
+                    : colorResolver.getColor(level.getBiome(pos).value(), 0, 0);
         }
 
         @Override

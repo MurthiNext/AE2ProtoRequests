@@ -3,7 +3,6 @@ package com.murthinext.ae2pr.logic.repeat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
 import org.jetbrains.annotations.Nullable;
 
 // 服务端重复轮数登记表，带时效防止串单
@@ -14,8 +13,7 @@ public final class ServerRepeatRegistry {
     private static final Map<UUID, Pending> PENDING = new HashMap<>();
     private static final Map<UUID, Pending> RESTORE = new HashMap<>();
 
-    private ServerRepeatRegistry() {
-    }
+    private ServerRepeatRegistry() {}
 
     public static void put(UUID playerId, int rounds) {
         PENDING.put(playerId, new Pending(rounds, System.currentTimeMillis()));

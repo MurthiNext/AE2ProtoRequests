@@ -1,14 +1,12 @@
 package com.murthinext.ae2pr.network;
 
-import java.util.function.Supplier;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
-
 import com.murthinext.ae2pr.api.ClientHooks;
 import com.murthinext.ae2pr.api.machine.MachineStats;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
+import java.util.function.Supplier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
 
 public record MachineStatsPacket(int containerId, MachineStats stats) {
     public static void encode(MachineStatsPacket packet, FriendlyByteBuf buffer) {
@@ -24,8 +22,9 @@ public record MachineStatsPacket(int containerId, MachineStats stats) {
         var context = contextSupplier.get();
         context.enqueueWork(() -> ClientHooks.run(() -> () -> {
             var player = Minecraft.getInstance().player;
-            if (player != null && player.containerMenu.containerId == packet.containerId() &&
-                player.containerMenu instanceof AbstractMultiblockControllerMenu<?> menu) {
+            if (player != null
+                    && player.containerMenu.containerId == packet.containerId()
+                    && player.containerMenu instanceof AbstractMultiblockControllerMenu<?> menu) {
                 menu.setMachineStats(packet.stats());
             }
         }));

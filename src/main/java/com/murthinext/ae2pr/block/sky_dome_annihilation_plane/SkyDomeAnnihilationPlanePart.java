@@ -1,16 +1,5 @@
 package com.murthinext.ae2pr.block.sky_dome_annihilation_plane;
 
-import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.client.model.data.ModelData;
-
 import appeng.api.config.Actionable;
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGridNode;
@@ -31,9 +20,17 @@ import appeng.parts.AEBasePart;
 import appeng.parts.PartModel;
 import appeng.parts.automation.PlaneConnectionHelper;
 import appeng.parts.automation.PlaneModelData;
-
 import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.api.Ids;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.client.model.data.ModelData;
+import org.jetbrains.annotations.Nullable;
 
 public class SkyDomeAnnihilationPlanePart extends AEBasePart implements IGridTickable {
 
@@ -43,18 +40,23 @@ public class SkyDomeAnnihilationPlanePart extends AEBasePart implements IGridTic
 
     @PartModels
     public static final ResourceLocation MODEL_OFF = Ids.of("part/sky_dome_annihilation_plane");
+
     @PartModels
     public static final ResourceLocation MODEL_POWERED = Ids.of("part/sky_dome_annihilation_plane_powered");
+
     @PartModels
     public static final ResourceLocation MODEL_ACTIVE = Ids.of("part/sky_dome_annihilation_plane_active");
+
     @PartModels
     public static final ResourceLocation MODEL_SURFACE_OFF = Ids.of("part/sky_dome_annihilation_plane_surface");
+
     @PartModels
-    public static final ResourceLocation MODEL_SURFACE_POWERED = Ids.of(
-            "part/sky_dome_annihilation_plane_surface_powered");
+    public static final ResourceLocation MODEL_SURFACE_POWERED =
+            Ids.of("part/sky_dome_annihilation_plane_surface_powered");
+
     @PartModels
-    public static final ResourceLocation MODEL_SURFACE_ACTIVE = Ids.of(
-            "part/sky_dome_annihilation_plane_surface_active");
+    public static final ResourceLocation MODEL_SURFACE_ACTIVE =
+            Ids.of("part/sky_dome_annihilation_plane_surface_active");
 
     private static final IPartModel OFF = new PartModel(MODEL_OFF, MODEL_SURFACE_OFF);
     private static final IPartModel POWERED = new PartModel(MODEL_POWERED, MODEL_SURFACE_POWERED);
@@ -85,8 +87,9 @@ public class SkyDomeAnnihilationPlanePart extends AEBasePart implements IGridTic
     @Override
     public TickRateModulation tickingRequest(IGridNode node, int ticksSinceLastCall) {
         var level = getLevel();
-        if (level.isClientSide() || !getMainNode().isActive() ||
-            !canPlaceAt(level, getBlockEntity().getBlockPos(), getSide())) {
+        if (level.isClientSide()
+                || !getMainNode().isActive()
+                || !canPlaceAt(level, getBlockEntity().getBlockPos(), getSide())) {
             return TickRateModulation.SAME;
         }
 
@@ -101,10 +104,13 @@ public class SkyDomeAnnihilationPlanePart extends AEBasePart implements IGridTic
         long amount = (long) pendingDust;
         if (amount > 0) {
             var grid = node.getGrid();
-            long inserted = StorageHelper.poweredInsert(grid.getEnergyService(),
-                                                        grid.getStorageService().getInventory(),
-                                                        AEItemKey.of(AEItems.SKY_DUST), amount, actionSource,
-                                                        Actionable.MODULATE);
+            long inserted = StorageHelper.poweredInsert(
+                    grid.getEnergyService(),
+                    grid.getStorageService().getInventory(),
+                    AEItemKey.of(AEItems.SKY_DUST),
+                    amount,
+                    actionSource,
+                    Actionable.MODULATE);
             // 网络阻塞期间最多保留 1 个陨石粉，不做补算。
             pendingDust = Math.min(pendingDust - inserted, 1.0);
         }
@@ -145,7 +151,9 @@ public class SkyDomeAnnihilationPlanePart extends AEBasePart implements IGridTic
 
     @Override
     public ModelData getModelData() {
-        return ModelData.builder().with(PlaneModelData.CONNECTIONS, connectionHelper.getConnections()).build();
+        return ModelData.builder()
+                .with(PlaneModelData.CONNECTIONS, connectionHelper.getConnections())
+                .build();
     }
 
     @Override

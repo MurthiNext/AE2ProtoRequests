@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.requester.network;
 
 import java.util.function.Supplier;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 

@@ -4,8 +4,7 @@ public final class EnergyAmount {
 
     public static final double MAX = (double) Long.MAX_VALUE;
 
-    private EnergyAmount() {
-    }
+    private EnergyAmount() {}
 
     public static double clamp(double amount) {
         if (!(amount > 0)) {

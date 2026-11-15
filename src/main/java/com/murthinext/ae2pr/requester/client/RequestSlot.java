@@ -1,20 +1,16 @@
 package com.murthinext.ae2pr.requester.client;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
-
 import appeng.menu.slot.FakeSlot;
-
 import com.murthinext.ae2pr.requester.RequesterUtils;
 import com.murthinext.ae2pr.requester.client.abstraction.RequestDisplay;
 import com.murthinext.ae2pr.requester.client.abstraction.RequesterReference;
 import com.murthinext.ae2pr.requester.mixin.SlotMixin;
 import com.murthinext.ae2pr.requester.platform.RequesterPlatform;
+import java.util.Collections;
+import java.util.List;
+import javax.annotation.Nullable;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
 public class RequestSlot extends FakeSlot {
 
@@ -34,12 +30,10 @@ public class RequestSlot extends FakeSlot {
     }
 
     @Override
-    public void increase(ItemStack is) {
-    }
+    public void increase(ItemStack is) {}
 
     @Override
-    public void decrease(ItemStack is) {
-    }
+    public void decrease(ItemStack is) {}
 
     @Override
     public boolean hasItem() {

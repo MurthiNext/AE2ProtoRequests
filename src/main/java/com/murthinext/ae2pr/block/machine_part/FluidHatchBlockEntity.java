@@ -1,9 +1,9 @@
 package com.murthinext.ae2pr.block.machine_part;
 
+import com.murthinext.ae2pr.api.machine.part.MachinePart;
+import com.murthinext.ae2pr.registry.ModBlockEntities;
+import com.murthinext.ae2pr.registry.ModBlocks;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -14,10 +14,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-
-import com.murthinext.ae2pr.api.machine.part.MachinePart;
-import com.murthinext.ae2pr.registry.ModBlockEntities;
-import com.murthinext.ae2pr.registry.ModBlocks;
+import org.jetbrains.annotations.Nullable;
 
 public class FluidHatchBlockEntity extends BlockEntity implements MachinePart {
 
@@ -113,8 +110,9 @@ public class FluidHatchBlockEntity extends BlockEntity implements MachinePart {
     }
 
     public static boolean isOutputHatch(BlockState state) {
-        return state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()) ||
-                state.is(ModBlocks.AEV_OUTPUT_HATCH.get()) || state.is(ModBlocks.AEV_DUAL_OUTPUT_HATCH.get());
+        return state.is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get())
+                || state.is(ModBlocks.AEV_OUTPUT_HATCH.get())
+                || state.is(ModBlocks.AEV_DUAL_OUTPUT_HATCH.get());
     }
 
     public boolean acceptsPlayerInsert() {

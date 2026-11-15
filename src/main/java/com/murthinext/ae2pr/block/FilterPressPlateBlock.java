@@ -25,12 +25,13 @@ public class FilterPressPlateBlock extends DisassemblableBlock {
 
     public FilterPressPlateBlock(Properties properties) {
         super(properties.noOcclusion());
-        registerDefaultState(stateDefinition.any()
-                                     .setValue(AXIS, Direction.Axis.Z)
-                                     .setValue(LEFT, false)
-                                     .setValue(RIGHT, false)
-                                     .setValue(UP, false)
-                                     .setValue(DOWN, false));
+        registerDefaultState(stateDefinition
+                .any()
+                .setValue(AXIS, Direction.Axis.Z)
+                .setValue(LEFT, false)
+                .setValue(RIGHT, false)
+                .setValue(UP, false)
+                .setValue(DOWN, false));
     }
 
     private boolean connectsTo(BlockState state, BlockState neighbor) {
@@ -47,8 +48,9 @@ public class FilterPressPlateBlock extends DisassemblableBlock {
 
     // 按给定方块视图推导连接状态
     public static BlockState connectedShape(BlockState state, BlockGetter level, BlockPos pos) {
-        return state.getBlock() instanceof FilterPressPlateBlock plate ? plate.updateConnections(state, level, pos)
-                                                                       : state;
+        return state.getBlock() instanceof FilterPressPlateBlock plate
+                ? plate.updateConnections(state, level, pos)
+                : state;
     }
 
     @Override
@@ -58,21 +60,25 @@ public class FilterPressPlateBlock extends DisassemblableBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockState state = defaultBlockState().setValue(AXIS, context.getHorizontalDirection().getAxis());
+        BlockState state = defaultBlockState()
+                .setValue(AXIS, context.getHorizontalDirection().getAxis());
         return updateConnections(state, context.getLevel(), context.getClickedPos());
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighbor, LevelAccessor level,
-                                  BlockPos pos, BlockPos neighborPos) {
+    public BlockState updateShape(
+            BlockState state,
+            Direction direction,
+            BlockState neighbor,
+            LevelAccessor level,
+            BlockPos pos,
+            BlockPos neighborPos) {
         if (direction.getAxis() == state.getValue(AXIS)) {
             return state;
         }
         Direction left = state.getValue(AXIS) == Direction.Axis.Z ? Direction.WEST : Direction.NORTH;
-        BooleanProperty connection = direction == Direction.UP ? UP
-                : direction == Direction.DOWN                  ? DOWN
-                : direction == left                            ? LEFT
-                                                               : RIGHT;
+        BooleanProperty connection =
+                direction == Direction.UP ? UP : direction == Direction.DOWN ? DOWN : direction == left ? LEFT : RIGHT;
         return state.setValue(connection, connectsTo(state, neighbor));
     }
 

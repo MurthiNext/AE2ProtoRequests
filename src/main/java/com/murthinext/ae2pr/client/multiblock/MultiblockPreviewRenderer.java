@@ -1,15 +1,8 @@
 package com.murthinext.ae2pr.client.multiblock;
 
-import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -24,6 +17,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.RenderTypeHelper;
 import net.minecraftforge.client.model.data.ModelData;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.lwjgl.opengl.GL11;
 
 public final class MultiblockPreviewRenderer {
 
@@ -63,8 +61,9 @@ public final class MultiblockPreviewRenderer {
 
     private Matrix4f transform() {
         AABB bounds = preview.bounds();
-        double diameter = Math.sqrt(bounds.getXsize() * bounds.getXsize() + bounds.getYsize() * bounds.getYsize() +
-                                    bounds.getZsize() * bounds.getZsize());
+        double diameter = Math.sqrt(bounds.getXsize() * bounds.getXsize()
+                + bounds.getYsize() * bounds.getYsize()
+                + bounds.getZsize() * bounds.getZsize());
         float scale = (float) (Math.min(width, height) * 0.88 / diameter) * zoom;
         Vec3 center = bounds.getCenter();
         return new Matrix4f()
@@ -91,8 +90,9 @@ public final class MultiblockPreviewRenderer {
             if (!preview.isVisible(cell.pos())) {
                 continue;
             }
-            BlockHitResult
-                    hit = preview.getBlockState(cell.pos()).getShape(preview, cell.pos()).clip(from, to, cell.pos());
+            BlockHitResult hit = preview.getBlockState(cell.pos())
+                    .getShape(preview, cell.pos())
+                    .clip(from, to, cell.pos());
             if (hit != null && hit.getLocation().distanceToSqr(from) < nearest) {
                 nearest = hit.getLocation().distanceToSqr(from);
                 result = cell;
@@ -106,8 +106,8 @@ public final class MultiblockPreviewRenderer {
         Matrix4f guiTransform = graphics.pose().last().pose();
         Vector3f topLeft = guiTransform.transformPosition(new Vector3f(x, y, 0));
         Vector3f bottomRight = guiTransform.transformPosition(new Vector3f(x + width, y + height, 0));
-        graphics.enableScissor(Mth.floor(topLeft.x), Mth.floor(topLeft.y), Mth.ceil(bottomRight.x),
-                               Mth.ceil(bottomRight.y));
+        graphics.enableScissor(
+                Mth.floor(topLeft.x), Mth.floor(topLeft.y), Mth.ceil(bottomRight.x), Mth.ceil(bottomRight.y));
         PoseStack pose = graphics.pose();
         pose.pushPose();
         try {
@@ -115,10 +115,12 @@ public final class MultiblockPreviewRenderer {
             RenderSystem.clear(GL11.GL_DEPTH_BUFFER_BIT, Minecraft.ON_OSX);
             RenderSystem.enableDepthTest();
             pose.mulPoseMatrix(transform());
-            pose.last().normal().mul(new Matrix3f()
-                                             .scaling(1.0F, -1.0F, 1.0F)
-                                             .rotateX(pitch * Mth.DEG_TO_RAD)
-                                             .rotateY(yaw * Mth.DEG_TO_RAD));
+            pose.last()
+                    .normal()
+                    .mul(new Matrix3f()
+                            .scaling(1.0F, -1.0F, 1.0F)
+                            .rotateX(pitch * Mth.DEG_TO_RAD)
+                            .rotateY(yaw * Mth.DEG_TO_RAD));
             var dispatcher = Minecraft.getInstance().getBlockRenderer();
             for (RenderType layer : RenderType.chunkBufferLayers()) {
                 for (MultiblockPreview.Cell cell : preview.cells()) {
@@ -133,21 +135,41 @@ public final class MultiblockPreviewRenderer {
                         continue;
                     }
                     pose.pushPose();
-                    pose.translate(cell.pos().getX(), cell.pos().getY(), cell.pos().getZ());
-                    dispatcher.renderBatched(state, cell.pos(), preview, pose,
-                                             buffers.getBuffer(RenderTypeHelper.getEntityRenderType(layer, false)),
-                                             true, random, data, layer);
+                    pose.translate(
+                            cell.pos().getX(), cell.pos().getY(), cell.pos().getZ());
+                    dispatcher.renderBatched(
+                            state,
+                            cell.pos(),
+                            preview,
+                            pose,
+                            buffers.getBuffer(RenderTypeHelper.getEntityRenderType(layer, false)),
+                            true,
+                            random,
+                            data,
+                            layer);
                     pose.popPose();
                 }
                 buffers.endBatch();
             }
             if (selected != null && preview.isVisible(selected)) {
-                LevelRenderer.renderLineBox(pose, buffers.getBuffer(RenderType.lines()),
-                                            new AABB(selected).inflate(0.006), 0.25F, 0.9F, 1.0F, 1.0F);
+                LevelRenderer.renderLineBox(
+                        pose,
+                        buffers.getBuffer(RenderType.lines()),
+                        new AABB(selected).inflate(0.006),
+                        0.25F,
+                        0.9F,
+                        1.0F,
+                        1.0F);
             }
             if (hovered != null && !hovered.equals(selected)) {
-                LevelRenderer.renderLineBox(pose, buffers.getBuffer(RenderType.lines()),
-                                            new AABB(hovered).inflate(0.004), 1.0F, 1.0F, 1.0F, 0.7F);
+                LevelRenderer.renderLineBox(
+                        pose,
+                        buffers.getBuffer(RenderType.lines()),
+                        new AABB(hovered).inflate(0.004),
+                        1.0F,
+                        1.0F,
+                        1.0F,
+                        0.7F);
             }
             buffers.endBatch();
         } finally {

@@ -1,47 +1,44 @@
 package com.murthinext.ae2pr.machine.crystal_reactor;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.Level;
-
 import appeng.core.definitions.AEBlocks;
-
 import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.api.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
 import com.murthinext.ae2pr.registry.ModMachines;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 
 public final class CrystalReactorStructure {
 
-    public static final MultiblockPattern
-            PATTERN = MultiblockPattern.builder(RelativeDirection.UP, RelativeDirection.BACK, RelativeDirection.RIGHT)
-                              .sliceOrigin(1)
-                              .origin(1, 1)
-                              .slice("CSC", "SSS", "CSC")
-                              .slice("S#S", "#K#", "S#S")
-                              .slice("#S#", "SSS", "#S#")
-                              .where('C', StructurePredicate.blocks(AEBlocks.QUARTZ_BLOCK.block()))
-                              .where('S', StructurePredicate.blocks(AEBlocks.SKY_STONE_BLOCK.block()))
-                              .where('K', StructurePredicate.blocks(ModMachines.CRYSTAL_REACTOR.block()))
-                              .where('#', StructurePredicate.any())
-                              .build();
+    public static final MultiblockPattern PATTERN = MultiblockPattern.builder(
+                    RelativeDirection.UP, RelativeDirection.BACK, RelativeDirection.RIGHT)
+            .sliceOrigin(1)
+            .origin(1, 1)
+            .slice("CSC", "SSS", "CSC")
+            .slice("S#S", "#K#", "S#S")
+            .slice("#S#", "SSS", "#S#")
+            .where('C', StructurePredicate.blocks(AEBlocks.QUARTZ_BLOCK.block()))
+            .where('S', StructurePredicate.blocks(AEBlocks.SKY_STONE_BLOCK.block()))
+            .where('K', StructurePredicate.blocks(ModMachines.CRYSTAL_REACTOR.block()))
+            .where('#', StructurePredicate.any())
+            .build();
 
     private static final List<BlockPos> SHELL_OFFSETS = buildShellOffsets();
 
     private static final Map<Long, List<BlockPos>> EXPANSION_CACHE = new HashMap<>();
 
-    private CrystalReactorStructure() {
-    }
+    private CrystalReactorStructure() {}
 
     public static boolean matches(Level level, BlockPos core) {
-        return PATTERN.match(level, core, Direction.NORTH, Direction.UP, PATTERN.minSlices()).formed();
+        return PATTERN.match(level, core, Direction.NORTH, Direction.UP, PATTERN.minSlices())
+                .formed();
     }
 
     public static List<BlockPos> shellOffsets() {
@@ -92,9 +89,9 @@ public final class CrystalReactorStructure {
             }
         }
         offsets.sort(Comparator.comparingInt((BlockPos pos) -> pos.getX() * pos.getX() + pos.getZ() * pos.getZ())
-                             .thenComparingInt(BlockPos::getY)
-                             .thenComparingInt(BlockPos::getZ)
-                             .thenComparingInt(BlockPos::getX));
+                .thenComparingInt(BlockPos::getY)
+                .thenComparingInt(BlockPos::getZ)
+                .thenComparingInt(BlockPos::getX));
         return List.copyOf(offsets);
     }
 }

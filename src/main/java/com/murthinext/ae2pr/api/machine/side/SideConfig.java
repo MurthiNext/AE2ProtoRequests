@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.api.machine.side;
 
 import java.util.EnumMap;
-
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -52,21 +51,21 @@ public final class SideConfig {
             return true;
         }
         switch (id) {
-        case BUTTON_AUTO_PULL -> {
-            autoPull = !autoPull;
-            return true;
-        }
-        case BUTTON_AUTO_PUSH -> {
-            autoPush = !autoPush;
-            return true;
-        }
-        case BUTTON_CLEAR -> {
-            reset(SideMode.NONE);
-            return true;
-        }
-        default -> {
-            return false;
-        }
+            case BUTTON_AUTO_PULL -> {
+                autoPull = !autoPull;
+                return true;
+            }
+            case BUTTON_AUTO_PUSH -> {
+                autoPush = !autoPush;
+                return true;
+            }
+            case BUTTON_CLEAR -> {
+                reset(SideMode.NONE);
+                return true;
+            }
+            default -> {
+                return false;
+            }
         }
     }
 

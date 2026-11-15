@@ -1,12 +1,18 @@
 package com.murthinext.ae2pr.api.machine;
 
 import com.google.gson.JsonSyntaxException;
-
 import com.murthinext.ae2pr.api.recipe.RecipeDraft;
 
-public record RecipeConstraints(int maxItemInputs, int maxFluidInputs, int maxItemOutputs, int maxFluidOutputs,
-                                int minItemInputs, int minFluidInputs, int minItemOutputs, int minFluidOutputs,
-                                boolean energyRequired) {
+public record RecipeConstraints(
+        int maxItemInputs,
+        int maxFluidInputs,
+        int maxItemOutputs,
+        int maxFluidOutputs,
+        int minItemInputs,
+        int minFluidInputs,
+        int minItemOutputs,
+        int minFluidOutputs,
+        boolean energyRequired) {
 
     public static final RecipeConstraints NONE = builder().build();
 
@@ -45,8 +51,7 @@ public record RecipeConstraints(int maxItemInputs, int maxFluidInputs, int maxIt
         private int minFluidOutputs = -1;
         private boolean energyRequired;
 
-        private Builder() {
-        }
+        private Builder() {}
 
         public Builder itemInputs(int min, int max) {
             minItemInputs = min;
@@ -78,8 +83,16 @@ public record RecipeConstraints(int maxItemInputs, int maxFluidInputs, int maxIt
         }
 
         public RecipeConstraints build() {
-            return new RecipeConstraints(maxItemInputs, maxFluidInputs, maxItemOutputs, maxFluidOutputs, minItemInputs,
-                                         minFluidInputs, minItemOutputs, minFluidOutputs, energyRequired);
+            return new RecipeConstraints(
+                    maxItemInputs,
+                    maxFluidInputs,
+                    maxItemOutputs,
+                    maxFluidOutputs,
+                    minItemInputs,
+                    minFluidInputs,
+                    minItemOutputs,
+                    minFluidOutputs,
+                    energyRequired);
         }
     }
 }

@@ -2,7 +2,6 @@ package com.murthinext.ae2pr.item.proto_terminal;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;

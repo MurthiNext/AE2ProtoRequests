@@ -1,18 +1,16 @@
 package com.murthinext.ae2pr.requester.compat.mixin;
 
+import appeng.client.gui.widgets.IResizableWidget;
+import com.almostreliable.merequester.client.abstraction.RequesterReference;
+import com.almostreliable.merequester.client.widgets.NumberField;
+import com.almostreliable.merequester.client.widgets.RequestWidget;
+import com.almostreliable.merequester.requester.Requests.Request;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import com.almostreliable.merequester.client.abstraction.RequesterReference;
-import com.almostreliable.merequester.client.widgets.NumberField;
-import com.almostreliable.merequester.client.widgets.RequestWidget;
-import com.almostreliable.merequester.requester.Requests.Request;
-
-import appeng.client.gui.widgets.IResizableWidget;
 
 /**
  * 请求器终端中的本模组请求器行：去掉 ME Requester 的“并行大小”栏。
@@ -30,6 +28,7 @@ public abstract class RequestWidgetMixin {
     // 合并并行栏后的宽度：左沿不变，右沿一直伸到提交按钮之前
     @Unique
     private static final int ae2pr$MERGED_AMOUNT_WIDTH = 106;
+
     @Unique
     private static final int ae2pr$FIELD_HEIGHT = 12;
 

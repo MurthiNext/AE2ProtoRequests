@@ -2,13 +2,11 @@ package com.murthinext.ae2pr.requester.compat;
 
 import java.util.List;
 import java.util.Set;
-
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.LoadingModList;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
-
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.LoadingModList;
 
 /**
  * 仅当安装了 ME Requester 时才应用本配置下的兼容 mixin，
@@ -19,8 +17,7 @@ public class MERequesterCompatPlugin implements IMixinConfigPlugin {
     private static final String TARGET_MOD_ID = "merequester";
 
     @Override
-    public void onLoad(String mixinPackage) {
-    }
+    public void onLoad(String mixinPackage) {}
 
     @Override
     public String getRefMapperConfig() {
@@ -39,8 +36,7 @@ public class MERequesterCompatPlugin implements IMixinConfigPlugin {
     }
 
     @Override
-    public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
-    }
+    public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {}
 
     @Override
     public List<String> getMixins() {
@@ -48,10 +44,8 @@ public class MERequesterCompatPlugin implements IMixinConfigPlugin {
     }
 
     @Override
-    public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-    }
+    public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
 
     @Override
-    public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-    }
+    public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
 }

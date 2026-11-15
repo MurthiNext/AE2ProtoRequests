@@ -1,9 +1,8 @@
 package com.murthinext.ae2pr.integration.jei.category;
 
+import com.murthinext.ae2pr.api.Ids;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-
-import com.murthinext.ae2pr.api.Ids;
 
 // 熔岩冶炼炉炉膛贴图与其内部的槽位坐标
 public final class HighReactivityLavaSmelterFurnace {
@@ -24,8 +23,7 @@ public final class HighReactivityLavaSmelterFurnace {
     // 流体列在炉膛第三列
     private static final int FLUID_COL = 2;
 
-    private HighReactivityLavaSmelterFurnace() {
-    }
+    private HighReactivityLavaSmelterFurnace() {}
 
     public static int fluidSlotX(int index) {
         return SLOT_X + FLUID_COL * STEP;

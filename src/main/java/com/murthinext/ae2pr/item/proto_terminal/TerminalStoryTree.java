@@ -1,5 +1,8 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.murthinext.ae2pr.api.Ids;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -10,17 +13,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
-
-import com.murthinext.ae2pr.api.Ids;
 
 // 剧情树
 record TerminalStoryTree(List<Node> nodes, String program) {
@@ -29,16 +26,29 @@ record TerminalStoryTree(List<Node> nodes, String program) {
     private static final int STEP_X = 168;
     private static final int STEP_Y = 70;
 
-    record Node(String id, String entry, int position, List<String> links, int x, int y, Component title,
-                TerminalStoryCondition visibleWhen, TerminalStoryCondition availableWhen, String tip,
-                ResourceLocation image, int imageWidth, int imageHeight) {}
+    record Node(
+            String id,
+            String entry,
+            int position,
+            List<String> links,
+            int x,
+            int y,
+            Component title,
+            TerminalStoryCondition visibleWhen,
+            TerminalStoryCondition availableWhen,
+            String tip,
+            ResourceLocation image,
+            int imageWidth,
+            int imageHeight) {}
 
     private record Layout(Integer x, Integer y, String relativeTo, int dx, int dy) {}
 
     static TerminalStoryTree load() throws IOException {
         Minecraft minecraft = Minecraft.getInstance();
-        return load(minecraft.getResourceManager(), minecraft.getLanguageManager().getSelected(),
-                    TerminalStoryText.playerName());
+        return load(
+                minecraft.getResourceManager(),
+                minecraft.getLanguageManager().getSelected(),
+                TerminalStoryText.playerName());
     }
 
     static TerminalStoryTree load(ResourceManager resources, String selectedLanguage, String playerName)
@@ -59,16 +69,16 @@ record TerminalStoryTree(List<Node> nodes, String program) {
         TerminalStoryRunner runner = new TerminalStoryRunner(program, new TerminalStoryProgress(), playerName);
         Map<String, Node> definitions = new LinkedHashMap<>();
         Map<String, Layout> layouts = new HashMap<>();
-        for (var entry :
-             resources
-                     .listResources(NODE_ROOT,
-                                    id -> id.getPath().startsWith(NODE_ROOT + "/") && id.getPath().endsWith(".json"))
-                     .entrySet()) {
+        for (var entry : resources
+                .listResources(
+                        NODE_ROOT,
+                        id -> id.getPath().startsWith(NODE_ROOT + "/")
+                                && id.getPath().endsWith(".json"))
+                .entrySet()) {
             String path = entry.getKey().getPath();
-            String id = ResourceLocation
-                                .fromNamespaceAndPath(entry.getKey().getNamespace(),
-                                                      path.substring(NODE_ROOT.length() + 1, path.length() - 5))
-                                .toString();
+            String id = ResourceLocation.fromNamespaceAndPath(
+                            entry.getKey().getNamespace(), path.substring(NODE_ROOT.length() + 1, path.length() - 5))
+                    .toString();
             try (Reader reader = entry.getValue().openAsReader()) {
                 JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
                 String knot = GsonHelper.getAsString(json, "entry");
@@ -81,9 +91,8 @@ record TerminalStoryTree(List<Node> nodes, String program) {
                         links.add(link.getAsString());
                     }
                 }
-                ResourceLocation image = json.has("image")
-                        ? ResourceLocation.parse(GsonHelper.getAsString(json, "image"))
-                        : null;
+                ResourceLocation image =
+                        json.has("image") ? ResourceLocation.parse(GsonHelper.getAsString(json, "image")) : null;
                 if (image != null && resources.getResource(image).isEmpty()) {
                     throw new IllegalArgumentException("Story image does not exist: " + image);
                 }
@@ -92,13 +101,22 @@ record TerminalStoryTree(List<Node> nodes, String program) {
                 if (imageWidth < 1 || imageWidth > 4096 || imageHeight < 1 || imageHeight > 4096) {
                     throw new IllegalArgumentException("Invalid story image size");
                 }
-                definitions.put(id,
-                                new Node(id, knot, GsonHelper.getAsInt(json, "position", 0), List.copyOf(links), 0, 0,
-                                         Component.translatable(GsonHelper.getAsString(json, "title")),
-                                         TerminalStoryCondition.parse(json.get("visible_when")),
-                                         TerminalStoryCondition.parse(json.get("available_when")),
-                                         GsonHelper.getAsString(json, "locked_tip", ""), image, imageWidth,
-                                         imageHeight));
+                definitions.put(
+                        id,
+                        new Node(
+                                id,
+                                knot,
+                                GsonHelper.getAsInt(json, "position", 0),
+                                List.copyOf(links),
+                                0,
+                                0,
+                                Component.translatable(GsonHelper.getAsString(json, "title")),
+                                TerminalStoryCondition.parse(json.get("visible_when")),
+                                TerminalStoryCondition.parse(json.get("available_when")),
+                                GsonHelper.getAsString(json, "locked_tip", ""),
+                                image,
+                                imageWidth,
+                                imageHeight));
                 layouts.put(id, parseLayout(GsonHelper.getAsJsonObject(json, "layout", new JsonObject())));
             } catch (RuntimeException exception) {
                 throw new IOException("Invalid story node: " + entry.getKey(), exception);
@@ -118,9 +136,20 @@ record TerminalStoryTree(List<Node> nodes, String program) {
             node.visibleWhen().validate(definitions.keySet(), runner);
             node.availableWhen().validate(definitions.keySet(), runner);
             int[] position = resolve(node.id(), layouts, positions, new HashSet<>());
-            nodes.add(new Node(node.id(), node.entry(), node.position(), node.links(), position[0], position[1],
-                               node.title(), node.visibleWhen(), node.availableWhen(), node.tip(), node.image(),
-                               node.imageWidth(), node.imageHeight()));
+            nodes.add(new Node(
+                    node.id(),
+                    node.entry(),
+                    node.position(),
+                    node.links(),
+                    position[0],
+                    position[1],
+                    node.title(),
+                    node.visibleWhen(),
+                    node.availableWhen(),
+                    node.tip(),
+                    node.image(),
+                    node.imageWidth(),
+                    node.imageHeight()));
         }
         nodes.sort(Comparator.comparingInt(Node::position).thenComparing(Node::id));
         TerminalStoryTree tree = new TerminalStoryTree(List.copyOf(nodes), program);
@@ -132,9 +161,8 @@ record TerminalStoryTree(List<Node> nodes, String program) {
 
     List<String> inventoryKeys() {
         return nodes.stream()
-                .flatMap(node
-                         -> java.util.stream.Stream.concat(node.visibleWhen().inventoryKeys().stream(),
-                                                           node.availableWhen().inventoryKeys().stream()))
+                .flatMap(node -> java.util.stream.Stream.concat(
+                        node.visibleWhen().inventoryKeys().stream(), node.availableWhen().inventoryKeys().stream()))
                 .distinct()
                 .toList();
     }
@@ -149,26 +177,30 @@ record TerminalStoryTree(List<Node> nodes, String program) {
         }
         String anchor = GsonHelper.getAsString(json, "anchor", "center-right");
         int[] direction = switch (anchor) {
-            case "up-left" -> new int[] { -1, -1 };
-            case "up-center" -> new int[] { 0, -1 };
-            case "up-right" -> new int[] { 1, -1 };
-            case "center-left" -> new int[] { -1, 0 };
-            case "center-right" -> new int[] { 1, 0 };
-            case "down-left" -> new int[] { -1, 1 };
-            case "down-center" -> new int[] { 0, 1 };
-            case "down-right" -> new int[] { 1, 1 };
+            case "up-left" -> new int[] {-1, -1};
+            case "up-center" -> new int[] {0, -1};
+            case "up-right" -> new int[] {1, -1};
+            case "center-left" -> new int[] {-1, 0};
+            case "center-right" -> new int[] {1, 0};
+            case "down-left" -> new int[] {-1, 1};
+            case "down-center" -> new int[] {0, 1};
+            case "down-right" -> new int[] {1, 1};
             default -> throw new IllegalArgumentException("Invalid story layout anchor: " + anchor);
         };
         float distance = GsonHelper.getAsFloat(json, "distance", 1);
         if (!Float.isFinite(distance) || distance < 0.25F || distance > 16) {
             throw new IllegalArgumentException("Layout distance must be between 0.25 and 16");
         }
-        return new Layout(x, y, relative, Math.round(direction[0] * STEP_X * distance),
-                          Math.round(direction[1] * STEP_Y * distance));
+        return new Layout(
+                x,
+                y,
+                relative,
+                Math.round(direction[0] * STEP_X * distance),
+                Math.round(direction[1] * STEP_Y * distance));
     }
 
-    private static int[] resolve(String id, Map<String, Layout> layouts, Map<String, int[]> positions,
-                                 Set<String> visiting) {
+    private static int[] resolve(
+            String id, Map<String, Layout> layouts, Map<String, int[]> positions, Set<String> visiting) {
         if (positions.containsKey(id)) {
             return positions.get(id);
         }
@@ -178,12 +210,12 @@ record TerminalStoryTree(List<Node> nodes, String program) {
         }
         int[] position;
         if (layout.x() != null) {
-            position = new int[] { layout.x(), layout.y() };
+            position = new int[] {layout.x(), layout.y()};
         } else if (layout.relativeTo().isBlank()) {
-            position = new int[] { 42, 140 };
+            position = new int[] {42, 140};
         } else {
             int[] parent = resolve(layout.relativeTo(), layouts, positions, visiting);
-            position = new int[] { parent[0] + layout.dx(), parent[1] + layout.dy() };
+            position = new int[] {parent[0] + layout.dx(), parent[1] + layout.dy()};
         }
         if (Math.abs((long) position[0]) > 4096 || Math.abs((long) position[1]) > 4096) {
             throw new IllegalArgumentException("Layout coordinates out of range: " + id);

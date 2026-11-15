@@ -1,5 +1,11 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
+import com.bladecoder.ink.runtime.Story;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress.Line;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress.NodeProgress;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -8,14 +14,6 @@ import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.bladecoder.ink.runtime.Story;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
-
-import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress.Line;
-import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress.NodeProgress;
 
 /**
  * 单玩家的 Ink 运行器。
@@ -61,8 +59,8 @@ public final class TerminalStoryRunner {
 
     public static String programId(String program) {
         try {
-            return HexFormat.of().formatHex(
-                    MessageDigest.getInstance("SHA-256").digest(program.getBytes(StandardCharsets.UTF_8)));
+            return HexFormat.of()
+                    .formatHex(MessageDigest.getInstance("SHA-256").digest(program.getBytes(StandardCharsets.UTF_8)));
         } catch (NoSuchAlgorithmException exception) {
             throw new IllegalStateException(exception);
         }
@@ -133,13 +131,16 @@ public final class TerminalStoryRunner {
         if (story.getCurrentChoices().size() > 12) {
             throw new IllegalStateException("A single choice group must not exceed 12 options");
         }
-        return story.getCurrentChoices()
-                .stream()
+        return story.getCurrentChoices().stream()
                 .map(choice -> {
                     try {
-                        return new Choice(tag(choice.getTags() == null ? List.of() : choice.getTags(), "id",
-                                              choice.getPathStringOnChoice()),
-                                          choice.getText(), choice.getIndex());
+                        return new Choice(
+                                tag(
+                                        choice.getTags() == null ? List.of() : choice.getTags(),
+                                        "id",
+                                        choice.getPathStringOnChoice()),
+                                choice.getText(),
+                                choice.getIndex());
                     } catch (Exception exception) {
                         throw new IllegalStateException(exception);
                     }
@@ -148,12 +149,10 @@ public final class TerminalStoryRunner {
     }
 
     public void choose(String id) {
-        Choice selected = choices()
-                                  .stream()
-                                  .filter(choice -> choice.id().equals(id))
-                                  .findFirst()
-                                  .orElseThrow(
-                                          () -> new IllegalArgumentException("Story choice does not exist: " + id));
+        Choice selected = choices().stream()
+                .filter(choice -> choice.id().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Story choice does not exist: " + id));
         try {
             story.chooseChoiceIndex(selected.index());
             recordChoice(id);
@@ -188,7 +187,8 @@ public final class TerminalStoryRunner {
         try {
             progress.inkState = story.getState().toJson();
             progress.variables.clear();
-            JsonElement variables = JsonParser.parseString(progress.inkState).getAsJsonObject().get("variablesState");
+            JsonElement variables =
+                    JsonParser.parseString(progress.inkState).getAsJsonObject().get("variablesState");
             if (variables != null && variables.isJsonObject()) {
                 for (String name : variables.getAsJsonObject().keySet()) {
                     JsonPrimitive primitive = primitive(variable(name));
@@ -231,8 +231,10 @@ public final class TerminalStoryRunner {
             String id = tag(tags, "id", story.getState().getCurrentPathString());
             String speaker = tag(tags, "speaker", "");
             int separator = output.indexOf(':');
-            if (speaker.isEmpty() && separator > 0 && separator <= 64 &&
-                !output.substring(0, separator).contains("\n")) {
+            if (speaker.isEmpty()
+                    && separator > 0
+                    && separator <= 64
+                    && !output.substring(0, separator).contains("\n")) {
                 speaker = output.substring(0, separator).strip();
                 output = output.substring(separator + 1).stripLeading();
             }
@@ -240,8 +242,12 @@ public final class TerminalStoryRunner {
             if (delay < 0 || delay > 60000) {
                 throw new IllegalArgumentException("Story delay must be between 0 and 60000 ms");
             }
-            Line line = new Line(id == null ? activeNode + "/end" : id, speaker, output.replace("<br/>", "\n"), delay,
-                                 tags.contains("answer"));
+            Line line = new Line(
+                    id == null ? activeNode + "/end" : id,
+                    speaker,
+                    output.replace("<br/>", "\n"),
+                    delay,
+                    tags.contains("answer"));
             TerminalStoryProgress.validate(line);
             return line;
         }
@@ -341,11 +347,10 @@ public final class TerminalStoryRunner {
                     }
                 } else if (decision.startsWith(CHOOSE)) {
                     String choiceId = decision.substring(CHOOSE.length());
-                    Choice selected = choices()
-                                              .stream()
-                                              .filter(choice -> choice.id().equals(choiceId))
-                                              .findFirst()
-                                              .orElse(null);
+                    Choice selected = choices().stream()
+                            .filter(choice -> choice.id().equals(choiceId))
+                            .findFirst()
+                            .orElse(null);
                     if (selected == null) {
                         return false;
                     }
@@ -386,8 +391,9 @@ public final class TerminalStoryRunner {
         }
         if (primitive.isNumber()) {
             String text = primitive.getAsString();
-            return text.contains(".") || text.contains("e") || text.contains("E") ? (Object) primitive.getAsFloat()
-                                                                                  : (Object) primitive.getAsInt();
+            return text.contains(".") || text.contains("e") || text.contains("E")
+                    ? (Object) primitive.getAsFloat()
+                    : (Object) primitive.getAsInt();
         }
         return primitive.getAsString();
     }

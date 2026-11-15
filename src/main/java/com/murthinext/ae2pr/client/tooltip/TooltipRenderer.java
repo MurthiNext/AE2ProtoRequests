@@ -1,10 +1,10 @@
 package com.murthinext.ae2pr.client.tooltip;
 
+import com.mojang.datafixers.util.Either;
+import com.murthinext.ae2pr.api.text.GradientText;
+import com.murthinext.ae2pr.client.tooltip.ColorEffectLine.Segment;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.mojang.datafixers.util.Either;
-
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
@@ -13,13 +13,9 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.util.StringDecomposer;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 
-import com.murthinext.ae2pr.api.text.GradientText;
-import com.murthinext.ae2pr.client.tooltip.ColorEffectLine.Segment;
-
 // 统一物品 Tooltip 文本处理与渲染入口
 public final class TooltipRenderer {
-    private TooltipRenderer() {
-    }
+    private TooltipRenderer() {}
 
     // 流动
     public static MutableComponent flow(String text, int... colors) {
@@ -34,24 +30,24 @@ public final class TooltipRenderer {
     public static boolean containsEffect(List<Either<FormattedText, TooltipComponent>> elements) {
         for (var element : elements) {
             if (element.left()
-                        .filter(Component.class ::isInstance)
-                        .map(Component.class ::cast)
-                        .filter(ColorEffectLine::containsEffect)
-                        .isPresent()) {
+                    .filter(Component.class::isInstance)
+                    .map(Component.class::cast)
+                    .filter(ColorEffectLine::containsEffect)
+                    .isPresent()) {
                 return true;
             }
         }
         return false;
     }
 
-    public static List<Either<FormattedText, TooltipComponent>>
-    prepareElements(List<Either<FormattedText, TooltipComponent>> elements) {
+    public static List<Either<FormattedText, TooltipComponent>> prepareElements(
+            List<Either<FormattedText, TooltipComponent>> elements) {
         return prepareElements(elements, null, 0);
     }
 
     // 携带特效的文本行改由 TooltipComponent 渲染，其余保持原样
-    public static List<Either<FormattedText, TooltipComponent>>
-    prepareElements(List<Either<FormattedText, TooltipComponent>> elements, Font font, int maxWidth) {
+    public static List<Either<FormattedText, TooltipComponent>> prepareElements(
+            List<Either<FormattedText, TooltipComponent>> elements, Font font, int maxWidth) {
         List<Either<FormattedText, TooltipComponent>> result = new ArrayList<>(elements.size());
         for (var element : elements) {
             element.ifLeft(text -> prepareText(text, result, font, maxWidth)).ifRight(component -> result.add(element));
@@ -59,12 +55,12 @@ public final class TooltipRenderer {
         return result;
     }
 
-    private static void prepareText(FormattedText text, List<Either<FormattedText, TooltipComponent>> result, Font font,
-                                    int maxWidth) {
+    private static void prepareText(
+            FormattedText text, List<Either<FormattedText, TooltipComponent>> result, Font font, int maxWidth) {
         if (text instanceof Component component && ColorEffectLine.containsEffect(component)) {
             List<Segment> segments = ColorEffectLine.collect(component);
-            List<List<Segment>> lines = font == null ? ColorEffectLine.split(segments)
-                                                     : ColorEffectLine.wrap(segments, font, maxWidth);
+            List<List<Segment>> lines =
+                    font == null ? ColorEffectLine.split(segments) : ColorEffectLine.wrap(segments, font, maxWidth);
             for (List<Segment> line : lines) {
                 if (ColorEffectLine.hasEffect(line)) {
                     result.add(Either.right(new ColorEffectLine(line)));

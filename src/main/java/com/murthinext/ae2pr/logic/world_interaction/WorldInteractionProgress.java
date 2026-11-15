@@ -1,12 +1,10 @@
 package com.murthinext.ae2pr.logic.world_interaction;
 
-import org.jetbrains.annotations.Nullable;
-
+import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-
-import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
+import org.jetbrains.annotations.Nullable;
 
 // 物品实体的交互计时和产物伤害保护状态
 public final class WorldInteractionProgress {
@@ -15,11 +13,15 @@ public final class WorldInteractionProgress {
 
     @Nullable
     private ComplexWorldInteractionRecipe recipe;
+
     @Nullable
     private BlockPos pos;
+
     private int ticks;
+
     @Nullable
     private Fluid protectedFluid;
+
     private long explosionProtectionTick = Long.MIN_VALUE;
 
     public boolean advance(ComplexWorldInteractionRecipe recipe, BlockPos pos) {

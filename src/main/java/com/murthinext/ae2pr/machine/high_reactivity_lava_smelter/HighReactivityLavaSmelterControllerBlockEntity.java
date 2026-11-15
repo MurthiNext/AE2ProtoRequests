@@ -1,7 +1,9 @@
 package com.murthinext.ae2pr.machine.high_reactivity_lava_smelter;
 
-import org.jetbrains.annotations.Nullable;
-
+import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
+import com.murthinext.ae2pr.registry.ModMachines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,11 +21,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import com.murthinext.ae2pr.ServerConfig;
-import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
-import com.murthinext.ae2pr.registry.ModMachines;
+import org.jetbrains.annotations.Nullable;
 
 public class HighReactivityLavaSmelterControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
@@ -124,8 +122,8 @@ public class HighReactivityLavaSmelterControllerBlockEntity extends AbstractMult
         if (level == null || !isFormed()) {
             return;
         }
-        AABB cavity = HighReactivityLavaSmelterStructure.cavityAabb(worldPosition, getFacing(), mirrorSide,
-                                                                    mirrorFront);
+        AABB cavity =
+                HighReactivityLavaSmelterStructure.cavityAabb(worldPosition, getFacing(), mirrorSide, mirrorFront);
         float damage = LAVA_DAMAGE * (durability > 0 ? 4.0F : 2.0F);
         for (Player player : level.getEntitiesOfClass(Player.class, cavity)) {
             if (!player.fireImmune()) {
@@ -149,8 +147,8 @@ public class HighReactivityLavaSmelterControllerBlockEntity extends AbstractMult
             return;
         }
         powerShortageTicks = 0;
-        if (durability > 0 &&
-            level.random.nextDouble() < ServerConfig.highReactivityLavaSmelterDurabilityLossChance()) {
+        if (durability > 0
+                && level.random.nextDouble() < ServerConfig.highReactivityLavaSmelterDurabilityLossChance()) {
             durability--;
             markStateChanged();
         }

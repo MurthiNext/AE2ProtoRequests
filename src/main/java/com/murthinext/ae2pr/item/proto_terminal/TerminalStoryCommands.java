@@ -1,14 +1,15 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.network.TerminalStorySyncPacket;
+import com.murthinext.ae2pr.registry.ModNetwork;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -19,46 +20,38 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.network.TerminalStorySyncPacket;
-import com.murthinext.ae2pr.registry.ModNetwork;
-
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class TerminalStoryCommands {
 
     private static final int PERMISSION = 2;
 
-    private TerminalStoryCommands() {
-    }
+    private TerminalStoryCommands() {}
 
     @SubscribeEvent
     public static void register(RegisterCommandsEvent event) {
-        event.getDispatcher().register(
-                Commands.literal("ae2pr")
+        event.getDispatcher()
+                .register(Commands.literal("ae2pr")
                         .then(Commands.literal("story")
-                                      .requires(source -> source.hasPermission(PERMISSION))
-                                      .then(Commands.literal("resetAll")
-                                                    .executes(context -> resetAll(context.getSource(), self(context)))
-                                                    .then(targets().executes(
-                                                            context
-                                                            -> resetAll(context.getSource(),
-                                                                        List.copyOf(EntityArgument.getPlayers(
-                                                                                context, "targets"))))))
-                                      .then(Commands.literal("reset").then(
-                                              Commands.argument("block", StringArgumentType.string())
-                                                      .executes(context
-                                                                -> resetBlock(context.getSource(),
-                                                                              StringArgumentType.getString(context,
-                                                                                                           "block"),
-                                                                              self(context)))
-                                                      .then(targets().executes(
-                                                              context
-                                                              -> resetBlock(context.getSource(),
-                                                                            StringArgumentType.getString(context,
-                                                                                                         "block"),
-                                                                            List.copyOf(EntityArgument.getPlayers(
-                                                                                    context, "targets")))))))
-                                      .executes(context -> usage(context.getSource())))
+                                .requires(source -> source.hasPermission(PERMISSION))
+                                .then(Commands.literal("resetAll")
+                                        .executes(context -> resetAll(context.getSource(), self(context)))
+                                        .then(targets()
+                                                .executes(context -> resetAll(
+                                                        context.getSource(),
+                                                        List.copyOf(EntityArgument.getPlayers(context, "targets"))))))
+                                .then(Commands.literal("reset")
+                                        .then(Commands.argument("block", StringArgumentType.string())
+                                                .executes(context -> resetBlock(
+                                                        context.getSource(),
+                                                        StringArgumentType.getString(context, "block"),
+                                                        self(context)))
+                                                .then(targets()
+                                                        .executes(context -> resetBlock(
+                                                                context.getSource(),
+                                                                StringArgumentType.getString(context, "block"),
+                                                                List.copyOf(EntityArgument.getPlayers(
+                                                                        context, "targets")))))))
+                                .executes(context -> usage(context.getSource())))
                         .executes(context -> usage(context.getSource())));
     }
 

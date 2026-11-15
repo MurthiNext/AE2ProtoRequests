@@ -1,19 +1,5 @@
 package com.murthinext.ae2pr.machine.crystal_assembly_line;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraftforge.fluids.FluidStack;
-
 import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.api.machine.MachineStat;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
@@ -26,6 +12,17 @@ import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.registry.ModModules;
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Nullable;
 
 public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
@@ -47,41 +44,47 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
 
     @Override
     protected long parallelBonus() {
-        return (long) Math.max(0, lastSlices - CrystalAssemblyLineStructure.MIN_SLICES) *
-                ServerConfig.assemblyParallelPerSlice() +
-                (long) modules.count(ModModules.PARALLEL) * ServerConfig.assemblyModuleParallelPerUnit();
+        return (long) Math.max(0, lastSlices - CrystalAssemblyLineStructure.MIN_SLICES)
+                        * ServerConfig.assemblyParallelPerSlice()
+                + (long) modules.count(ModModules.PARALLEL) * ServerConfig.assemblyModuleParallelPerUnit();
     }
 
     @Override
     protected double baseSpeedMultiplier() {
-        return (1.0 + modules.count(ModModules.SPEED) * ServerConfig.assemblyModuleSpeedPerUnit()) *
-                super.baseSpeedMultiplier();
+        return (1.0 + modules.count(ModModules.SPEED) * ServerConfig.assemblyModuleSpeedPerUnit())
+                * super.baseSpeedMultiplier();
     }
 
     @Override
     protected void collectBaseStatSources(MachineUpgradeType type, List<MachineStat.Source> sources) {
         if (type == MachineUpgradeType.SPEED && modules.count(ModModules.SPEED) > 0) {
-            sources.add(new MachineStat.Source(Component.translatable("gui.ae2pr.multiblock.data.modules",
-                                                                      Component.translatable("module.ae2pr.speed"),
-                                                                      modules.count(ModModules.SPEED)),
-                                               1, baseSpeedMultiplier()));
+            sources.add(new MachineStat.Source(
+                    Component.translatable(
+                            "gui.ae2pr.multiblock.data.modules",
+                            Component.translatable("module.ae2pr.speed"),
+                            modules.count(ModModules.SPEED)),
+                    1,
+                    baseSpeedMultiplier()));
         } else if (type == MachineUpgradeType.PARALLEL) {
             double base = ModMachines.CRYSTAL_ASSEMBLY_LINE.maxParallel();
-            long slices = (long) Math.max(0, lastSlices - CrystalAssemblyLineStructure.MIN_SLICES) *
-                    ServerConfig.assemblyParallelPerSlice();
+            long slices = (long) Math.max(0, lastSlices - CrystalAssemblyLineStructure.MIN_SLICES)
+                    * ServerConfig.assemblyParallelPerSlice();
             double extended = Math.min(Integer.MAX_VALUE, base + slices);
             if (slices > 0) {
-                sources.add(new MachineStat.Source(Component.translatable("gui.ae2pr.multiblock.data.structure"), base,
-                                                   extended));
+                sources.add(new MachineStat.Source(
+                        Component.translatable("gui.ae2pr.multiblock.data.structure"), base, extended));
             }
             int count = modules.count(ModModules.PARALLEL);
             if (count > 0) {
-                double total = Math.min(Integer.MAX_VALUE,
-                                        extended + (long) count * ServerConfig.assemblyModuleParallelPerUnit());
+                double total = Math.min(
+                        Integer.MAX_VALUE, extended + (long) count * ServerConfig.assemblyModuleParallelPerUnit());
                 sources.add(new MachineStat.Source(
-                        Component.translatable("gui.ae2pr.multiblock.data.modules",
-                                               Component.translatable("module.ae2pr.parallel"), count),
-                        extended, total));
+                        Component.translatable(
+                                "gui.ae2pr.multiblock.data.modules",
+                                Component.translatable("module.ae2pr.parallel"),
+                                count),
+                        extended,
+                        total));
             }
         }
     }
@@ -239,8 +242,8 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
 
         ModuleSnapshot snapshot = result.formed() ? result.modules() : ModuleSnapshot.EMPTY;
         MultiblockRecipe recipe = currentRecipe();
-        if (recipe instanceof CrystalAssemblyLineRecipe lineRecipe &&
-            !snapshot.satisfies(lineRecipe.getModuleRequirements())) {
+        if (recipe instanceof CrystalAssemblyLineRecipe lineRecipe
+                && !snapshot.satisfies(lineRecipe.getModuleRequirements())) {
             cancelJob();
         }
         modules = snapshot;

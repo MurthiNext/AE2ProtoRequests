@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import net.minecraft.util.Mth;
 
 final class TerminalAnimation {
@@ -30,7 +29,9 @@ final class TerminalAnimation {
         for (TerminalStoryTree.Node node : nodes) {
             for (String link : node.links()) {
                 TerminalStoryTree.Node source = byId.get(link);
-                if (source != null && source != node && !neighbors.get(node.id()).contains(source)) {
+                if (source != null
+                        && source != node
+                        && !neighbors.get(node.id()).contains(source)) {
                     neighbors.get(node.id()).add(source);
                     neighbors.get(source.id()).add(node);
                 }
@@ -38,9 +39,9 @@ final class TerminalAnimation {
         }
         List<TerminalStoryTree.Node> ordered = new ArrayList<>(nodes);
         ordered.sort(Comparator.comparingInt(TerminalStoryTree.Node::x)
-                             .thenComparingInt(TerminalStoryTree.Node::position)
-                             .thenComparingInt(TerminalStoryTree.Node::y)
-                             .thenComparing(TerminalStoryTree.Node::id));
+                .thenComparingInt(TerminalStoryTree.Node::position)
+                .thenComparingInt(TerminalStoryTree.Node::y)
+                .thenComparing(TerminalStoryTree.Node::id));
         int column = 0;
         int columnLayer = 0;
         int lastLayer = -1;

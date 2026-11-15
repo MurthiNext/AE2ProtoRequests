@@ -1,22 +1,20 @@
 package com.murthinext.ae2pr.block.level_emitter;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Inventory;
-
 import appeng.api.config.RedstoneMode;
 import appeng.client.gui.NumberEntryType;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.NumberEntryWidget;
-
 import com.murthinext.ae2pr.registry.ModGuide;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 public class MultiLevelEmitterScreen extends AbstractMultiLevelEmitterScreen<MultiLevelEmitterMenu> {
 
     private final NumberEntryWidget level;
 
-    public MultiLevelEmitterScreen(MultiLevelEmitterMenu menu, Inventory playerInventory, Component title,
-                                   ScreenStyle style) {
+    public MultiLevelEmitterScreen(
+            MultiLevelEmitterMenu menu, Inventory playerInventory, Component title, ScreenStyle style) {
         super(menu, playerInventory, title, style, RedstoneMode.LOW_SIGNAL);
 
         this.level = widgets.addNumberEntryWidget("level", NumberEntryType.of(menu.getConfiguredFilter()));

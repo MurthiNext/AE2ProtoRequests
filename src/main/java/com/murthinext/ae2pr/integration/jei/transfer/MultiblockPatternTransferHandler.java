@@ -1,11 +1,18 @@
 package com.murthinext.ae2pr.integration.jei.transfer;
 
+import appeng.api.stacks.GenericStack;
+import appeng.integration.modules.jeirei.EncodingHelper;
+import appeng.menu.me.items.PatternEncodingTermMenu;
+import com.murthinext.ae2pr.integration.jei.category.MultiblockPreviewCategory;
+import com.murthinext.ae2pr.integration.jei.recipe.MultiblockPreviewRecipe;
+import com.murthinext.ae2pr.integration.jei.widget.MultiblockPreviewWidget;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import org.jetbrains.annotations.Nullable;
-
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.transfer.IRecipeTransferError;
+import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -13,19 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-
-import appeng.api.stacks.GenericStack;
-import appeng.integration.modules.jeirei.EncodingHelper;
-import appeng.menu.me.items.PatternEncodingTermMenu;
-
-import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
-import mezz.jei.api.recipe.RecipeType;
-import mezz.jei.api.recipe.transfer.IRecipeTransferError;
-import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
-
-import com.murthinext.ae2pr.integration.jei.category.MultiblockPreviewCategory;
-import com.murthinext.ae2pr.integration.jei.recipe.MultiblockPreviewRecipe;
-import com.murthinext.ae2pr.integration.jei.widget.MultiblockPreviewWidget;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("removal")
 public class MultiblockPatternTransferHandler
@@ -50,9 +45,13 @@ public class MultiblockPatternTransferHandler
 
     @Nullable
     @Override
-    public IRecipeTransferError transferRecipe(PatternEncodingTermMenu menu, MultiblockPreviewRecipe recipe,
-                                               IRecipeSlotsView slotsView, Player player, boolean maxTransfer,
-                                               boolean doTransfer) {
+    public IRecipeTransferError transferRecipe(
+            PatternEncodingTermMenu menu,
+            MultiblockPreviewRecipe recipe,
+            IRecipeSlotsView slotsView,
+            Player player,
+            boolean maxTransfer,
+            boolean doTransfer) {
         if (!doTransfer) {
             return null;
         }
@@ -60,12 +59,11 @@ public class MultiblockPatternTransferHandler
         if (output == null) {
             return null;
         }
-        List<List<GenericStack>> inputs = MultiblockPreviewWidget.materials(recipe)
-                                                  .stream()
-                                                  .map(GenericStack::fromItemStack)
-                                                  .filter(Objects::nonNull)
-                                                  .map(List::of)
-                                                  .toList();
+        List<List<GenericStack>> inputs = MultiblockPreviewWidget.materials(recipe).stream()
+                .map(GenericStack::fromItemStack)
+                .filter(Objects::nonNull)
+                .map(List::of)
+                .toList();
         EncodingHelper.encodeProcessingRecipe(menu, inputs, List.of(output));
         return null;
     }

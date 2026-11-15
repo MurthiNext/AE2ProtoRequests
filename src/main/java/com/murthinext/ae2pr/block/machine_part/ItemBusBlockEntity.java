@@ -1,10 +1,10 @@
 package com.murthinext.ae2pr.block.machine_part;
 
+import com.murthinext.ae2pr.api.machine.part.MachinePart;
+import com.murthinext.ae2pr.registry.ModBlockEntities;
+import com.murthinext.ae2pr.registry.ModBlocks;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -20,10 +20,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
-
-import com.murthinext.ae2pr.api.machine.part.MachinePart;
-import com.murthinext.ae2pr.registry.ModBlockEntities;
-import com.murthinext.ae2pr.registry.ModBlocks;
+import org.jetbrains.annotations.Nullable;
 
 public class ItemBusBlockEntity extends BlockEntity implements MachinePart {
 
@@ -222,9 +219,9 @@ public class ItemBusBlockEntity extends BlockEntity implements MachinePart {
     }
 
     public boolean isOutputBus() {
-        return getBlockState().is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()) ||
-                getBlockState().is(ModBlocks.AEV_OUTPUT_BUS.get()) ||
-                getBlockState().is(ModBlocks.AEV_DUAL_OUTPUT_HATCH.get());
+        return getBlockState().is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get())
+                || getBlockState().is(ModBlocks.AEV_OUTPUT_BUS.get())
+                || getBlockState().is(ModBlocks.AEV_DUAL_OUTPUT_HATCH.get());
     }
 
     public boolean isAutoTransfer() {
@@ -255,7 +252,8 @@ public class ItemBusBlockEntity extends BlockEntity implements MachinePart {
         if (target == null) {
             return;
         }
-        IItemHandler handler = target.getCapability(ForgeCapabilities.ITEM_HANDLER, facing.getOpposite()).orElse(null);
+        IItemHandler handler = target.getCapability(ForgeCapabilities.ITEM_HANDLER, facing.getOpposite())
+                .orElse(null);
         if (handler == null) {
             return;
         }

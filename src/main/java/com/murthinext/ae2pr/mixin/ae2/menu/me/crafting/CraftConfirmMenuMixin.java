@@ -1,20 +1,5 @@
 package com.murthinext.ae2pr.mixin.ae2.menu.me.crafting;
 
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.Set;
-
-import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-
 import appeng.api.features.IPlayerRegistry;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.crafting.ICraftingCPU;
@@ -22,12 +7,23 @@ import appeng.api.networking.crafting.ICraftingPlan;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.GenericStack;
 import appeng.menu.me.crafting.CraftConfirmMenu;
-
 import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrder;
 import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderBinding;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderNotifier;
 import com.murthinext.ae2pr.logic.repeat.ServerRepeatRegistry;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Set;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 // 确认菜单：未命中普通 CPU 时兜底登记通用重复订单
 @Mixin(CraftConfirmMenu.class)
@@ -131,8 +127,8 @@ public abstract class CraftConfirmMenuMixin {
         order.cpu = this.selectedCpu;
         order.displayCpu = newlyBusy != null ? newlyBusy : target;
         GeneralRepeatOrders.register(order);
-        RepeatOrderNotifier.sendRound(order.ownerPlayerId, order.level, order.what, order.totalRounds,
-                                      order.totalRounds);
+        RepeatOrderNotifier.sendRound(
+                order.ownerPlayerId, order.level, order.what, order.totalRounds, order.totalRounds);
         order.notifyCooldownTicks = 20;
     }
 
@@ -142,7 +138,9 @@ public abstract class CraftConfirmMenuMixin {
             return false;
         }
         var status = cpu.getJobStatus();
-        return status != null && status.crafting() != null && status.crafting().what().equals(finalOutput.what());
+        return status != null
+                && status.crafting() != null
+                && status.crafting().what().equals(finalOutput.what());
     }
 
     @Unique

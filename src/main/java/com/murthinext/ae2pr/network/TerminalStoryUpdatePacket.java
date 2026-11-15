@@ -1,16 +1,14 @@
 package com.murthinext.ae2pr.network;
 
-import java.io.IOException;
-import java.util.function.Supplier;
-
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraftforge.network.NetworkEvent;
-
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress;
 import com.murthinext.ae2pr.item.proto_terminal.TerminalStorySavedData;
 import com.murthinext.ae2pr.registry.ModNetwork;
+import java.io.IOException;
+import java.util.function.Supplier;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraftforge.network.NetworkEvent;
 
 // 客户端上报压缩后的剧情快照
 public class TerminalStoryUpdatePacket {
@@ -47,7 +45,8 @@ public class TerminalStoryUpdatePacket {
                 player.sendSystemMessage(Component.translatable("gui.ae2pr.proto_terminal.save_failed"));
                 ModNetwork.sendToPlayer(
                         player,
-                        new TerminalStorySyncPacket(TerminalStorySavedData.get(player.server).get(player.getUUID())));
+                        new TerminalStorySyncPacket(
+                                TerminalStorySavedData.get(player.server).get(player.getUUID())));
             }
         });
         context.setPacketHandled(true);

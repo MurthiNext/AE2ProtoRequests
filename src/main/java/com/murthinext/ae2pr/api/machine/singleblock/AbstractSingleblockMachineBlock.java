@@ -1,9 +1,9 @@
 package com.murthinext.ae2pr.api.machine.singleblock;
 
+import appeng.block.AEBaseEntityBlock;
+import com.murthinext.ae2pr.api.wrench.WrenchTags;
+import com.murthinext.ae2pr.api.wrench.Wrenchable;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -29,11 +29,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
-
-import appeng.block.AEBaseEntityBlock;
-
-import com.murthinext.ae2pr.api.wrench.WrenchTags;
-import com.murthinext.ae2pr.api.wrench.Wrenchable;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractSingleblockMachineBlock<E extends AbstractSingleblockMachineBlockEntity>
         extends AEBaseEntityBlock<E> implements Wrenchable {
@@ -60,7 +56,8 @@ public abstract class AbstractSingleblockMachineBlock<E extends AbstractSinglebl
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+        return defaultBlockState()
+                .setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
@@ -80,8 +77,8 @@ public abstract class AbstractSingleblockMachineBlock<E extends AbstractSinglebl
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
-                                                                  BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+            Level level, BlockState state, BlockEntityType<T> type) {
         if (level.isClientSide) {
             return null;
         }
@@ -99,8 +96,8 @@ public abstract class AbstractSingleblockMachineBlock<E extends AbstractSinglebl
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
-                                 BlockHitResult hit) {
+    public InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         // 扳手交互交给 WrenchInteractions
         if (player.getItemInHand(hand).is(WrenchTags.WRENCH)) {
             return InteractionResult.PASS;
@@ -109,14 +106,14 @@ public abstract class AbstractSingleblockMachineBlock<E extends AbstractSinglebl
         if (custom != null) {
             return custom;
         }
-        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer &&
-            level.getBlockEntity(pos) instanceof AbstractSingleblockMachineBlockEntity machine) {
+        if (!level.isClientSide
+                && player instanceof ServerPlayer serverPlayer
+                && level.getBlockEntity(pos) instanceof AbstractSingleblockMachineBlockEntity machine) {
             NetworkHooks.openScreen(
                     serverPlayer,
-                    new SimpleMenuProvider((id, inventory, p)
-                                                   -> definition.createMenu(id, inventory,
-                                                                            definition.controller(machine)),
-                                           machine.getDisplayName()),
+                    new SimpleMenuProvider(
+                            (id, inventory, p) -> definition.createMenu(id, inventory, definition.controller(machine)),
+                            machine.getDisplayName()),
                     buffer -> buffer.writeBlockPos(pos));
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
@@ -129,8 +126,8 @@ public abstract class AbstractSingleblockMachineBlock<E extends AbstractSinglebl
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip,
-                                TooltipFlag flag) {
+    public void appendHoverText(
+            ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
         tooltip.add(Component.translatable("tooltip.ae2pr." + definition.id() + ".desc"));
     }

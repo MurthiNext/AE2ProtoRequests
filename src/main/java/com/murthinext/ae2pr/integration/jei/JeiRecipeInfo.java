@@ -1,16 +1,14 @@
 package com.murthinext.ae2pr.integration.jei;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-
 import com.murthinext.ae2pr.api.EnergyAmount;
 import com.murthinext.ae2pr.integration.jei.render.ChancedItemStackRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 // JEI 配方信息行的统一构建：时间、能耗与未显示槽位的提示
 public final class JeiRecipeInfo {
 
-    private JeiRecipeInfo() {
-    }
+    private JeiRecipeInfo() {}
 
     public static Component duration(int ticks) {
         return Component.translatable("jei.ae2pr.recipe.duration", ticks);

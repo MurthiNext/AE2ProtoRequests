@@ -1,20 +1,17 @@
 package com.murthinext.ae2pr.item.filter_cell;
 
+import appeng.api.stacks.AEKey;
+import appeng.api.stacks.AEKeyType;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-
-import appeng.api.stacks.AEKey;
-import appeng.api.stacks.AEKeyType;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 标签匹配表达式：以物品标签 id 为操作数，支持布尔运算与 glob 通配。
@@ -80,7 +77,9 @@ public final class TagExpression implements Predicate<AEKey> {
         }
 
         private List<TagKey<?>> matchingTags(AEKeyType type) {
-            return type.getTagNames().filter(tag -> matches(pattern, tag.location().toString())).toList();
+            return type.getTagNames()
+                    .filter(tag -> matches(pattern, tag.location().toString()))
+                    .toList();
         }
 
         private static boolean matches(String glob, String text) {
@@ -235,8 +234,15 @@ public final class TagExpression implements Predicate<AEKey> {
         }
 
         private static boolean isTagChar(char c) {
-            return c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '_' || c == '-' ||
-                    c == '.' || c == ':' || c == '/' || c == '*';
+            return c >= 'a' && c <= 'z'
+                    || c >= 'A' && c <= 'Z'
+                    || c >= '0' && c <= '9'
+                    || c == '_'
+                    || c == '-'
+                    || c == '.'
+                    || c == ':'
+                    || c == '/'
+                    || c == '*';
         }
     }
 }

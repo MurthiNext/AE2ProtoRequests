@@ -1,8 +1,15 @@
 package com.murthinext.ae2pr.mixin.ae2.worldgen.meteorite;
 
+import appeng.worldgen.meteorite.MeteoriteBlockPutter;
+import appeng.worldgen.meteorite.MeteoritePlacer;
+import com.murthinext.ae2pr.block.meteorite.MeteoriteOres;
 import java.util.HashMap;
 import java.util.Map;
-
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -11,17 +18,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
-
-import appeng.worldgen.meteorite.MeteoriteBlockPutter;
-import appeng.worldgen.meteorite.MeteoritePlacer;
-
-import com.murthinext.ae2pr.block.meteorite.MeteoriteOres;
 
 // 修正放大陨石后的循环边界，并按矿脉替换部分陨石为陨石矿石
 @Mixin(value = MeteoritePlacer.class, remap = false)
@@ -33,24 +29,30 @@ public abstract class MeteoritePlacerMixin {
     @Shadow
     @Final
     private RandomSource random;
+
     @Shadow
     @Final
     private double meteoriteSize;
+
     @Shadow
     @Final
     private int x;
+
     @Shadow
     @Final
     private int y;
+
     @Shadow
     @Final
     private int z;
+
     @Shadow
     @Final
     private BoundingBox boundingBox;
 
     @Unique
     private final Map<BlockPos, BlockState> ae2pr$pendingOres = new HashMap<>();
+
     @Unique
     private float ae2pr$oreCredit;
 
@@ -76,14 +78,15 @@ public abstract class MeteoritePlacerMixin {
 
     @Redirect(
             method = "placeMeteoriteSkyStone",
-            at = @At(
-                    value = "INVOKE",
-                    target =
-                            "Lappeng/worldgen/meteorite/MeteoriteBlockPutter;put(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z",
-                    ordinal = 2),
+            at =
+                    @At(
+                            value = "INVOKE",
+                            target =
+                                    "Lappeng/worldgen/meteorite/MeteoriteBlockPutter;put(Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z",
+                            ordinal = 2),
             remap = false)
-    private boolean
-    ae2pr$placeOreOrSkyStone(MeteoriteBlockPutter putter, LevelAccessor level, BlockPos pos, BlockState skyStone) {
+    private boolean ae2pr$placeOreOrSkyStone(
+            MeteoriteBlockPutter putter, LevelAccessor level, BlockPos pos, BlockState skyStone) {
         ae2pr$oreCredit += ORE_FRACTION;
         BlockState ore = ae2pr$pendingOres.remove(pos);
         if (ore == null) {

@@ -1,5 +1,9 @@
 package com.murthinext.ae2pr.tools;
 
+import com.bladecoder.ink.compiler.Compiler;
+import com.bladecoder.ink.compiler.IFileHandler;
+import com.bladecoder.ink.runtime.Error.ErrorType;
+import com.bladecoder.ink.runtime.SimpleJson;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -9,17 +13,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import com.bladecoder.ink.compiler.Compiler;
-import com.bladecoder.ink.compiler.IFileHandler;
-import com.bladecoder.ink.runtime.Error.ErrorType;
-import com.bladecoder.ink.runtime.SimpleJson;
-
 public final class InkStoryCompiler {
 
     private static final Pattern LINE_ID = Pattern.compile("#\\s*id:\\s*([^#\\]\\r\\n]+)");
 
-    private InkStoryCompiler() {
-    }
+    private InkStoryCompiler() {}
 
     public static void main(String[] args) throws Exception {
         Path source = Path.of(args[0]).toAbsolutePath().normalize();
@@ -27,10 +25,11 @@ public final class InkStoryCompiler {
         Path nodes = Path.of(args[2]);
         List<Path> languages;
         try (var directories = Files.list(source)) {
-            languages = directories.filter(Files::isDirectory)
-                                .filter(directory -> Files.isRegularFile(directory.resolve("main.ink")))
-                                .sorted()
-                                .toList();
+            languages = directories
+                    .filter(Files::isDirectory)
+                    .filter(directory -> Files.isRegularFile(directory.resolve("main.ink")))
+                    .sorted()
+                    .toList();
         }
         if (languages.isEmpty()) {
             throw new IllegalArgumentException("At least one story language directory is required: " + source);
@@ -40,9 +39,10 @@ public final class InkStoryCompiler {
             targets.add(compile(language, output, nodes));
         }
         try (var generated = Files.walk(output.resolve("assets/ae2pr/story"))) {
-            for (Path file : generated.filter(path -> path.getFileName().toString().equals("main.ink.json"))
-                                     .filter(path -> !targets.contains(path))
-                                     .toList()) {
+            for (Path file : generated
+                    .filter(path -> path.getFileName().toString().equals("main.ink.json"))
+                    .filter(path -> !targets.contains(path))
+                    .toList()) {
                 Files.delete(file);
             }
         }
@@ -51,7 +51,9 @@ public final class InkStoryCompiler {
     private static Path compile(Path language, Path output, Path nodes) throws Exception {
         Set<String> ids = new HashSet<>();
         try (var sources = Files.walk(language)) {
-            for (Path file : sources.filter(path -> path.toString().endsWith(".ink")).sorted().toList()) {
+            for (Path file : sources.filter(path -> path.toString().endsWith(".ink"))
+                    .sorted()
+                    .toList()) {
                 var matcher = LINE_ID.matcher(Files.readString(file));
                 while (matcher.find()) {
                     String id = matcher.group(1).strip();
@@ -78,8 +80,8 @@ public final class InkStoryCompiler {
             public String resolveInkFilename(String includeName) {
                 Path file = language.resolve(includeName).normalize();
                 if (!file.startsWith(language)) {
-                    throw new IllegalArgumentException("INCLUDE escapes the current language directory: " +
-                                                       includeName);
+                    throw new IllegalArgumentException(
+                            "INCLUDE escapes the current language directory: " + includeName);
                 }
                 return file.toString();
             }
@@ -94,11 +96,15 @@ public final class InkStoryCompiler {
             throw new IllegalStateException("Story compilation failed: " + language);
         }
         try (var definitions = Files.walk(nodes)) {
-            for (Path file : definitions.filter(path -> path.toString().endsWith(".json")).sorted().toList()) {
-                Object entry = SimpleJson.textToDictionary(Files.readString(file)).get("entry");
+            for (Path file : definitions
+                    .filter(path -> path.toString().endsWith(".json"))
+                    .sorted()
+                    .toList()) {
+                Object entry =
+                        SimpleJson.textToDictionary(Files.readString(file)).get("entry");
                 if (!(entry instanceof String knot) || !program.hasFunction(knot)) {
-                    throw new IllegalArgumentException("Story entry does not exist: " + file + " / " +
-                                                       language.getFileName());
+                    throw new IllegalArgumentException(
+                            "Story entry does not exist: " + file + " / " + language.getFileName());
                 }
             }
         }

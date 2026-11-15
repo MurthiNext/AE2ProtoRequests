@@ -1,21 +1,19 @@
 package com.murthinext.ae2pr.requester.platform;
 
+import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.requester.network.DragAndDropPacket;
+import com.murthinext.ae2pr.requester.network.RequestUpdatePacket;
+import com.murthinext.ae2pr.requester.network.RequesterNetwork;
+import com.murthinext.ae2pr.requester.network.RequesterSyncPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.PacketDistributor;
 
-import com.murthinext.ae2pr.ServerConfig;
-import com.murthinext.ae2pr.requester.network.DragAndDropPacket;
-import com.murthinext.ae2pr.requester.network.RequestUpdatePacket;
-import com.murthinext.ae2pr.requester.network.RequesterNetwork;
-import com.murthinext.ae2pr.requester.network.RequesterSyncPacket;
-
 public final class RequesterPlatform {
 
-    private RequesterPlatform() {
-    }
+    private RequesterPlatform() {}
 
     // 单个请求器可标记的物品数量上限（可配置）
     public static int getRequestLimit() {
@@ -44,15 +42,16 @@ public final class RequesterPlatform {
 
     public static void sendClearData(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
-            RequesterNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer),
-                                          RequesterSyncPacket.clearData());
+            RequesterNetwork.CHANNEL.send(
+                    PacketDistributor.PLAYER.with(() -> serverPlayer), RequesterSyncPacket.clearData());
         }
     }
 
     public static void sendInventoryData(Player player, long requesterId, CompoundTag data) {
         if (player instanceof ServerPlayer serverPlayer) {
-            RequesterNetwork.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer),
-                                          RequesterSyncPacket.inventory(requesterId, data));
+            RequesterNetwork.CHANNEL.send(
+                    PacketDistributor.PLAYER.with(() -> serverPlayer),
+                    RequesterSyncPacket.inventory(requesterId, data));
         }
     }
 }

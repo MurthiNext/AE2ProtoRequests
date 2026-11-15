@@ -1,12 +1,10 @@
 package com.murthinext.ae2pr.integration.jei.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-
+import mezz.jei.api.gui.drawable.IDrawable;
 import net.minecraft.Util;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-
-import mezz.jei.api.gui.drawable.IDrawable;
 
 public final class AnimatedTextureDrawable implements IDrawable {
 

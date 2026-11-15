@@ -1,23 +1,12 @@
 package com.murthinext.ae2pr;
 
-import org.slf4j.Logger;
-
-import com.mojang.logging.LogUtils;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-
 import appeng.api.client.StorageCellModels;
 import appeng.api.parts.PartModels;
 import appeng.api.storage.StorageCells;
 import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.items.parts.PartModelsHelper;
-
+import com.mojang.logging.LogUtils;
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.MachineRegistries;
 import com.murthinext.ae2pr.api.machine.MachineTuning;
@@ -35,6 +24,13 @@ import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 import com.murthinext.ae2pr.logic.wrench.WrenchInteractions;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryBlockEntity;
 import com.murthinext.ae2pr.registry.*;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import org.slf4j.Logger;
 
 /**
  * AE2 Proto Requests
@@ -50,8 +46,13 @@ public class ae2pr {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(ServerConfig::onReload);
         // 机器模板的注册表需在 ModMachines.register 前注入
-        MachineRegistries.install(ModBlocks.BLOCKS, ModItems.ITEMS, ModBlockEntities.BLOCK_ENTITIES, ModMenus.MENUS,
-                                  ModRecipes.RECIPE_TYPES, ModRecipes.SERIALIZERS);
+        MachineRegistries.install(
+                ModBlocks.BLOCKS,
+                ModItems.ITEMS,
+                ModBlockEntities.BLOCK_ENTITIES,
+                ModMenus.MENUS,
+                ModRecipes.RECIPE_TYPES,
+                ModRecipes.SERIALIZERS);
         MachineTuning.install(ServerConfig::lossySpeedPerCard, ServerConfig::lossyEnergyMultiplierPerCard);
         // 材质与机器的延迟注册项必须在注册事件触发前全部提交
         ModMaterials.register();
@@ -68,8 +69,8 @@ public class ae2pr {
         ModSounds.SOUNDS.register(modEventBus);
         ModEffects.EFFECTS.register(modEventBus);
         ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
-        context.registerConfig(net.minecraftforge.fml.config.ModConfig.Type.SERVER, ServerConfig.SPEC,
-                               ServerConfig.FILE_NAME);
+        context.registerConfig(
+                net.minecraftforge.fml.config.ModConfig.Type.SERVER, ServerConfig.SPEC, ServerConfig.FILE_NAME);
         // 部件模型必须在预初始化阶段注册
         PartModels.registerModels(PartModelsHelper.createModels(MultiLevelEmitterPart.class));
         PartModels.registerModels(PartModelsHelper.createModels(MultiThresholdLevelEmitterPart.class));
@@ -102,8 +103,8 @@ public class ae2pr {
             // 坍缩物品存储元件：作为只读存储元件接入 ME 网络
             StorageCells.addCellHandler(new CollapsedItemStorageCellHandler());
             StorageCells.addCellGuiHandler(new CollapsedItemStorageCellGuiHandler());
-            StorageCellModels.registerModel(ModItems.COLLAPSED_ITEM_STORAGE_CELL.get(),
-                                            Ids.of("block/drive/collapsed_item_storage_cell"));
+            StorageCellModels.registerModel(
+                    ModItems.COLLAPSED_ITEM_STORAGE_CELL.get(), Ids.of("block/drive/collapsed_item_storage_cell"));
 
             // 通式标准发信器升级
             var emitterItem = ModItems.MULTI_LEVEL_EMITTER.get();
@@ -130,17 +131,22 @@ public class ae2pr {
 
             // 绑定方块实体类型并登记代表物品
             var networkAccessHatchType = ModBlockEntities.ME_NETWORK_ACCESS_HATCH.get();
-            ModBlocks.ME_NETWORK_ACCESS_HATCH.get().setBlockEntity(
-                    com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlockEntity.class,
-                    networkAccessHatchType, null, null);
-            appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(networkAccessHatchType,
-                                                                         ModItems.ME_NETWORK_ACCESS_HATCH.get());
+            ModBlocks.ME_NETWORK_ACCESS_HATCH
+                    .get()
+                    .setBlockEntity(
+                            com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlockEntity.class,
+                            networkAccessHatchType,
+                            null,
+                            null);
+            appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(
+                    networkAccessHatchType, ModItems.ME_NETWORK_ACCESS_HATCH.get());
 
             var namingFactoryType = ModMachines.NAMING_FACTORY.blockEntityType();
-            ModMachines.NAMING_FACTORY.block().setBlockEntity(NamingFactoryBlockEntity.class, namingFactoryType, null,
-                                                              null);
-            appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(namingFactoryType,
-                                                                         ModMachines.NAMING_FACTORY.item());
+            ModMachines.NAMING_FACTORY
+                    .block()
+                    .setBlockEntity(NamingFactoryBlockEntity.class, namingFactoryType, null, null);
+            appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(
+                    namingFactoryType, ModMachines.NAMING_FACTORY.item());
         });
     }
 }

@@ -1,14 +1,12 @@
 package com.murthinext.ae2pr.network;
 
+import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
+import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
 import java.util.function.Supplier;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
-
-import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
-import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
 
 // 客户端 -> 服务端：流体仓槽位点击
 public class HatchTankClickPacket {
@@ -40,9 +38,11 @@ public class HatchTankClickPacket {
             if (player == null || !player.containerMenu.stillValid(player)) {
                 return;
             }
-            if (player.containerMenu instanceof FluidHatchMenu menu && menu.getBlockPos().equals(packet.pos)) {
+            if (player.containerMenu instanceof FluidHatchMenu menu
+                    && menu.getBlockPos().equals(packet.pos)) {
                 menu.handleTankClick(packet.tank, packet.button);
-            } else if (player.containerMenu instanceof ItemBusMenu menu && menu.getBlockPos().equals(packet.pos)) {
+            } else if (player.containerMenu instanceof ItemBusMenu menu
+                    && menu.getBlockPos().equals(packet.pos)) {
                 menu.handleTankClick(packet.tank, packet.button);
             }
         });

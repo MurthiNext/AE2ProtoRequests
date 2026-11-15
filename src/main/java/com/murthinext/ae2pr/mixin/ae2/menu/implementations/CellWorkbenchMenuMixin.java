@@ -1,20 +1,17 @@
 package com.murthinext.ae2pr.mixin.ae2.menu.implementations;
 
+import appeng.blockentity.misc.CellWorkbenchBlockEntity;
+import appeng.menu.implementations.CellWorkbenchMenu;
+import appeng.menu.implementations.UpgradeableMenu;
+import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.ItemStack;
-
-import appeng.blockentity.misc.CellWorkbenchBlockEntity;
-import appeng.menu.implementations.CellWorkbenchMenu;
-import appeng.menu.implementations.UpgradeableMenu;
-
-import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
 
 // 元件工作台菜单：注册白/黑名单表达式同步用的 client action
 @Mixin(value = CellWorkbenchMenu.class, remap = false)
@@ -22,11 +19,12 @@ public abstract class CellWorkbenchMenuMixin extends UpgradeableMenu<CellWorkben
 
     @Unique
     private static final String ae2pr$ACTION_SET_WHITELIST = AdvancedFilterCellItem.ACTION_SET_WHITELIST;
+
     @Unique
     private static final String ae2pr$ACTION_SET_BLACKLIST = AdvancedFilterCellItem.ACTION_SET_BLACKLIST;
 
-    public CellWorkbenchMenuMixin(MenuType<?> menuType, int id, Inventory playerInventory,
-                                  CellWorkbenchBlockEntity host) {
+    public CellWorkbenchMenuMixin(
+            MenuType<?> menuType, int id, Inventory playerInventory, CellWorkbenchBlockEntity host) {
         super(menuType, id, playerInventory, host);
     }
 

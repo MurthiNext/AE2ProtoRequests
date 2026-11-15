@@ -1,24 +1,21 @@
 package com.murthinext.ae2pr.integration.jei.category;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
-
-import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.RecipeType;
-
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.MachineRecipe;
 import com.murthinext.ae2pr.integration.jei.render.AnimatedTextureDrawable;
 import com.murthinext.ae2pr.registry.ModMachines;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
 public class MatterPhaseTransformerCategory extends AbstractMachineCategory<MachineRecipe> {
 
-    public static final RecipeType<MachineRecipe> RECIPE_TYPE = RecipeType.create(ae2pr.MODID,
-                                                                                  "matter_phase_transformer",
-                                                                                  MachineRecipe.class);
+    public static final RecipeType<MachineRecipe> RECIPE_TYPE =
+            RecipeType.create(ae2pr.MODID, "matter_phase_transformer", MachineRecipe.class);
 
     private static final int SLOT = SlotArea.SIZE;
     private static final int PADDING = 4;
@@ -39,8 +36,8 @@ public class MatterPhaseTransformerCategory extends AbstractMachineCategory<Mach
 
     public MatterPhaseTransformerCategory(IGuiHelper guiHelper) {
         super(guiHelper, new ItemStack(ModMachines.MATTER_PHASE_TRANSFORMER.block()), WIDTH, HEIGHT);
-        process = new AnimatedTextureDrawable(Ids.of("textures/gui/jei/matter_phase_transformer_process.png"),
-                                              PROCESS_W, PROCESS_H, 40, 50);
+        process = new AnimatedTextureDrawable(
+                Ids.of("textures/gui/jei/matter_phase_transformer_process.png"), PROCESS_W, PROCESS_H, 40, 50);
     }
 
     @Override

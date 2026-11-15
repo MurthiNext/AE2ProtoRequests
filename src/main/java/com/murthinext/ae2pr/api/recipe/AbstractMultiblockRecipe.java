@@ -1,12 +1,10 @@
 package com.murthinext.ae2pr.api.recipe;
 
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractMultiblockRecipe extends AbstractRecipe implements MultiblockRecipe {
 
@@ -15,6 +13,7 @@ public abstract class AbstractMultiblockRecipe extends AbstractRecipe implements
     private final List<ItemStack> itemOutputStacks;
     private final List<FluidStack> fluidOutputs;
     private final int duration;
+
     @Nullable
     private final Double energy;
 
@@ -22,7 +21,8 @@ public abstract class AbstractMultiblockRecipe extends AbstractRecipe implements
         super(id, draft.itemInputs());
         this.fluidInputs = draft.fluidInputs().stream().map(FluidStack::copy).toList();
         this.itemOutputs = draft.itemOutputs();
-        this.itemOutputStacks = itemOutputs.stream().map(ChancedItemStack::stack).toList();
+        this.itemOutputStacks =
+                itemOutputs.stream().map(ChancedItemStack::stack).toList();
         this.fluidOutputs = draft.fluidOutputs().stream().map(FluidStack::copy).toList();
         this.duration = draft.duration();
         this.energy = draft.energy();

@@ -12,6 +12,5 @@ public final class CtmModelProperties {
     public static final ModelProperty<BlockPos> POS = new ModelProperty<>();
     public static final ModelProperty<ModelData> PARENT = new ModelProperty<>();
 
-    private CtmModelProperties() {
-    }
+    private CtmModelProperties() {}
 }

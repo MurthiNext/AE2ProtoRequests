@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.requester.network;
 
 import java.util.function.Supplier;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraftforge.api.distmarker.Dist;

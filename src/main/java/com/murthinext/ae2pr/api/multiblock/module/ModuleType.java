@@ -1,8 +1,7 @@
 package com.murthinext.ae2pr.api.multiblock.module;
 
-import net.minecraft.resources.ResourceLocation;
-
 import com.murthinext.ae2pr.api.Ids;
+import net.minecraft.resources.ResourceLocation;
 
 public record ModuleType(ResourceLocation id, int maxCount) {
 

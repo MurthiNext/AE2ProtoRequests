@@ -1,5 +1,6 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
+import com.murthinext.ae2pr.ae2pr;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
@@ -8,15 +9,12 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import com.murthinext.ae2pr.ae2pr;
-
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class TerminalFadeOutRenderer {
 
     private static TerminalScreen fadingScreen;
 
-    private TerminalFadeOutRenderer() {
-    }
+    private TerminalFadeOutRenderer() {}
 
     static void begin(TerminalScreen screen) {
         fadingScreen = screen;

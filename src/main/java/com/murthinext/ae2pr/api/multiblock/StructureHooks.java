@@ -2,12 +2,10 @@ package com.murthinext.ae2pr.api.multiblock;
 
 import java.util.List;
 import java.util.function.Supplier;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 结构模板的内容挂钩：由模组在初始化时注入具体仓室，
@@ -22,16 +20,19 @@ public final class StructureHooks {
     }
 
     private static Supplier<List<Block>> parts = List::of;
+
     @Nullable
     private static Supplier<Block> networkAccessHatch;
+
     @Nullable
     private static PartAppearance partAppearance;
 
-    private StructureHooks() {
-    }
+    private StructureHooks() {}
 
-    public static void install(Supplier<List<Block>> parts, @Nullable Supplier<Block> networkAccessHatch,
-                               @Nullable PartAppearance partAppearance) {
+    public static void install(
+            Supplier<List<Block>> parts,
+            @Nullable Supplier<Block> networkAccessHatch,
+            @Nullable PartAppearance partAppearance) {
         if (parts != null) {
             StructureHooks.parts = parts;
         }

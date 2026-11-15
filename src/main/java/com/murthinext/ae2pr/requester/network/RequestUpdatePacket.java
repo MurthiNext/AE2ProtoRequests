@@ -1,11 +1,9 @@
 package com.murthinext.ae2pr.requester.network;
 
+import com.murthinext.ae2pr.requester.abstraction.AbstractRedstoneRequesterMenu;
 import javax.annotation.Nullable;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-
-import com.murthinext.ae2pr.requester.abstraction.AbstractRedstoneRequesterMenu;
 
 public class RequestUpdatePacket extends ClientToServerPacket<RequestUpdatePacket> {
 
@@ -31,8 +29,7 @@ public class RequestUpdatePacket extends ClientToServerPacket<RequestUpdatePacke
         this.updateType = UpdateType.NUMBERS;
     }
 
-    RequestUpdatePacket() {
-    }
+    RequestUpdatePacket() {}
 
     @Override
     public void encode(RequestUpdatePacket packet, FriendlyByteBuf buffer) {
@@ -75,5 +72,8 @@ public class RequestUpdatePacket extends ClientToServerPacket<RequestUpdatePacke
         }
     }
 
-    private enum UpdateType { STATE, NUMBERS }
+    private enum UpdateType {
+        STATE,
+        NUMBERS
+    }
 }

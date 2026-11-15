@@ -1,18 +1,15 @@
 package com.murthinext.ae2pr.machine.naming_factory;
 
-import org.jetbrains.annotations.Nullable;
-
+import appeng.core.definitions.AEItems;
+import com.murthinext.ae2pr.api.machine.MachineDefinition;
+import com.murthinext.ae2pr.api.machine.singleblock.AbstractSingleblockMachineMenu;
+import com.murthinext.ae2pr.registry.ModMachines;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.extensions.IForgeMenuType;
-
-import appeng.core.definitions.AEItems;
-
-import com.murthinext.ae2pr.api.machine.MachineDefinition;
-import com.murthinext.ae2pr.api.machine.singleblock.AbstractSingleblockMachineMenu;
-import com.murthinext.ae2pr.registry.ModMachines;
+import org.jetbrains.annotations.Nullable;
 
 // 名称压印工厂容器菜单
 public class NamingFactoryMenu extends AbstractSingleblockMachineMenu<NamingFactoryBlockEntity> {
@@ -26,14 +23,20 @@ public class NamingFactoryMenu extends AbstractSingleblockMachineMenu<NamingFact
     private static final int OUTPUT_X = 80;
     private static final int OUTPUT_Y = 74;
 
-    public NamingFactoryMenu(MachineDefinition<?, NamingFactoryBlockEntity, NamingFactoryMenu> definition, int id,
-                             Inventory playerInventory, @Nullable NamingFactoryBlockEntity machine) {
+    public NamingFactoryMenu(
+            MachineDefinition<?, NamingFactoryBlockEntity, NamingFactoryMenu> definition,
+            int id,
+            Inventory playerInventory,
+            @Nullable NamingFactoryBlockEntity machine) {
         super(definition, id, playerInventory, machine);
     }
 
     public static NamingFactoryMenu create(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
-        return new NamingFactoryMenu(ModMachines.NAMING_FACTORY, id, playerInventory,
-                                     readMachine(playerInventory.player, buffer, ModMachines.NAMING_FACTORY));
+        return new NamingFactoryMenu(
+                ModMachines.NAMING_FACTORY,
+                id,
+                playerInventory,
+                readMachine(playerInventory.player, buffer, ModMachines.NAMING_FACTORY));
     }
 
     @Override
@@ -47,10 +50,10 @@ public class NamingFactoryMenu extends AbstractSingleblockMachineMenu<NamingFact
     @Override
     protected boolean moveToMachine(ItemStack stack) {
         if (AEItems.NAME_PRESS.isSameAs(stack)) {
-            return moveItemStackTo(stack, NamingFactoryBlockEntity.SLOT_TEMPLATE,
-                                   NamingFactoryBlockEntity.SLOT_TEMPLATE + 1, false);
+            return moveItemStackTo(
+                    stack, NamingFactoryBlockEntity.SLOT_TEMPLATE, NamingFactoryBlockEntity.SLOT_TEMPLATE + 1, false);
         }
-        return moveItemStackTo(stack, NamingFactoryBlockEntity.SLOT_INPUT, NamingFactoryBlockEntity.SLOT_INPUT + 1,
-                               false);
+        return moveItemStackTo(
+                stack, NamingFactoryBlockEntity.SLOT_INPUT, NamingFactoryBlockEntity.SLOT_INPUT + 1, false);
     }
 }

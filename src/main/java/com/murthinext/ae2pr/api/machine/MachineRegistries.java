@@ -18,13 +18,15 @@ public final class MachineRegistries {
     private static DeferredRegister<RecipeType<?>> recipeTypes;
     private static DeferredRegister<RecipeSerializer<?>> recipeSerializers;
 
-    private MachineRegistries() {
-    }
+    private MachineRegistries() {}
 
-    public static void install(DeferredRegister<Block> blocks, DeferredRegister<Item> items,
-                               DeferredRegister<BlockEntityType<?>> blockEntities, DeferredRegister<MenuType<?>> menus,
-                               DeferredRegister<RecipeType<?>> recipeTypes,
-                               DeferredRegister<RecipeSerializer<?>> recipeSerializers) {
+    public static void install(
+            DeferredRegister<Block> blocks,
+            DeferredRegister<Item> items,
+            DeferredRegister<BlockEntityType<?>> blockEntities,
+            DeferredRegister<MenuType<?>> menus,
+            DeferredRegister<RecipeType<?>> recipeTypes,
+            DeferredRegister<RecipeSerializer<?>> recipeSerializers) {
         MachineRegistries.blocks = blocks;
         MachineRegistries.items = items;
         MachineRegistries.blockEntities = blockEntities;

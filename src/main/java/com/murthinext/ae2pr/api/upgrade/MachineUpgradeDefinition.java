@@ -1,9 +1,8 @@
 package com.murthinext.ae2pr.api.upgrade;
 
-import java.util.function.Supplier;
-
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.math.LatexFormula;
+import java.util.function.Supplier;
 
 public final class MachineUpgradeDefinition {
     private final String id;
@@ -13,8 +12,8 @@ public final class MachineUpgradeDefinition {
     private LatexFormula formula;
     private boolean warned;
 
-    public MachineUpgradeDefinition(String id, MachineUpgradeType type, String fallback,
-                                    Supplier<String> configuredFormula) {
+    public MachineUpgradeDefinition(
+            String id, MachineUpgradeType type, String fallback, Supplier<String> configuredFormula) {
         this.id = id;
         this.type = type;
         this.fallback = fallback;
@@ -53,8 +52,8 @@ public final class MachineUpgradeDefinition {
         double result = formula().evaluate(value);
         if (!Double.isFinite(result)) {
             if (!warned) {
-                ae2pr.LOGGER.warn("Upgrade {} produced a non-finite result for x={}; ignoring this application", id,
-                                  value);
+                ae2pr.LOGGER.warn(
+                        "Upgrade {} produced a non-finite result for x={}; ignoring this application", id, value);
                 warned = true;
             }
             return value;

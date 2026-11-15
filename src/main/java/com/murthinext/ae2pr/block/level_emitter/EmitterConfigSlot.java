@@ -1,13 +1,11 @@
 package com.murthinext.ae2pr.block.level_emitter;
 
+import appeng.api.inventories.InternalInventory;
+import appeng.menu.slot.FakeSlot;
+import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-
-import appeng.api.inventories.InternalInventory;
-import appeng.menu.slot.FakeSlot;
-
-import com.murthinext.ae2pr.item.filter_cell.FilterCell;
 
 public class EmitterConfigSlot extends FakeSlot {
 

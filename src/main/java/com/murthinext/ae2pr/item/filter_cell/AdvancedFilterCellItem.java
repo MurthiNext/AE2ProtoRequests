@@ -1,18 +1,15 @@
 package com.murthinext.ae2pr.item.filter_cell;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
-
-import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.world.item.ItemStack;
-
 import appeng.api.config.FuzzyMode;
 import appeng.api.stacks.AEKey;
 import appeng.api.storage.cells.ICellWorkbenchItem;
 import appeng.items.AEBaseItem;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
+import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public class AdvancedFilterCellItem extends AEBaseItem implements ICellWorkbenchItem, FilterCell {
 
@@ -39,8 +36,7 @@ public class AdvancedFilterCellItem extends AEBaseItem implements ICellWorkbench
     }
 
     @Override
-    public void setFuzzyMode(ItemStack is, FuzzyMode fzMode) {
-    }
+    public void setFuzzyMode(ItemStack is, FuzzyMode fzMode) {}
 
     public static String getWhitelist(ItemStack cell) {
         return getString(cell, WHITELIST_TAG);
@@ -93,7 +89,9 @@ public class AdvancedFilterCellItem extends AEBaseItem implements ICellWorkbench
         if (PARSE_CACHE.size() > 512) {
             PARSE_CACHE.clear();
         }
-        return PARSE_CACHE.computeIfAbsent(text, t -> Optional.ofNullable(TagExpression.parse(t))).orElse(null);
+        return PARSE_CACHE
+                .computeIfAbsent(text, t -> Optional.ofNullable(TagExpression.parse(t)))
+                .orElse(null);
     }
 
     private static String getString(ItemStack cell, String key) {

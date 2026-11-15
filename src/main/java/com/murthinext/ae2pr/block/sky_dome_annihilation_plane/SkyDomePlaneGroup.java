@@ -1,14 +1,11 @@
 package com.murthinext.ae2pr.block.sky_dome_annihilation_plane;
 
+import appeng.api.parts.IPartHost;
+import com.murthinext.ae2pr.ServerConfig;
 import java.util.ArrayDeque;
 import java.util.HashSet;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-
-import appeng.api.parts.IPartHost;
-
-import com.murthinext.ae2pr.ServerConfig;
 
 final class SkyDomePlaneGroup {
 
@@ -16,10 +13,9 @@ final class SkyDomePlaneGroup {
     static final int MAX_PLANES = 64;
 
     private static final double TERMINAL_RATIO = 0.75;
-    private static final Direction[] HORIZONTAL = { Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST };
+    private static final Direction[] HORIZONTAL = {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
 
-    private SkyDomePlaneGroup() {
-    }
+    private SkyDomePlaneGroup() {}
 
     // 相连的板超过 MAX_PLANES 后效率已经饱和，只需收集到这个数量。
     static double efficiency(SkyDomeAnnihilationPlanePart origin) {
@@ -41,8 +37,9 @@ final class SkyDomePlaneGroup {
             var pos = queue.poll();
             for (var direction : HORIZONTAL) {
                 var next = pos.relative(direction);
-                if (visited.contains(next) || !(level.getBlockEntity(next) instanceof IPartHost host) ||
-                    !(host.getPart(side) instanceof SkyDomeAnnihilationPlanePart)) {
+                if (visited.contains(next)
+                        || !(level.getBlockEntity(next) instanceof IPartHost host)
+                        || !(host.getPart(side) instanceof SkyDomeAnnihilationPlanePart)) {
                     continue;
                 }
                 visited.add(next);

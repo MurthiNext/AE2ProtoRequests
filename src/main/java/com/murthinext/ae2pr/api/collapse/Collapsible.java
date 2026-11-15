@@ -1,8 +1,7 @@
 package com.murthinext.ae2pr.api.collapse;
 
-import java.util.List;
-
 import appeng.api.stacks.GenericStack;
+import java.util.List;
 
 public interface Collapsible {
 

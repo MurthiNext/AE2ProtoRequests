@@ -1,7 +1,5 @@
 package com.murthinext.ae2pr.item.filter_cell;
 
-import net.minecraft.world.item.ItemStack;
-
 import appeng.api.config.FuzzyMode;
 import appeng.api.config.IncludeExclude;
 import appeng.api.stacks.AEKey;
@@ -13,6 +11,7 @@ import appeng.items.AEBaseItem;
 import appeng.items.contents.CellConfig;
 import appeng.util.ConfigInventory;
 import appeng.util.prioritylist.IPartitionList;
+import net.minecraft.world.item.ItemStack;
 
 public class FilterCellItem extends AEBaseItem implements ICellWorkbenchItem, FilterCell {
 

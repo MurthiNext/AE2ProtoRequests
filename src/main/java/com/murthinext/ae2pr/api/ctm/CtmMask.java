@@ -2,13 +2,11 @@ package com.murthinext.ae2pr.api.ctm;
 
 import java.util.Arrays;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 // 连接掩码：bit 0-5 六面，bit 6-17 十二棱
 public final class CtmMask {
@@ -45,8 +43,7 @@ public final class CtmMask {
         }
     }
 
-    private CtmMask() {
-    }
+    private CtmMask() {}
 
     public static int face(Direction direction) {
         return 1 << direction.ordinal();

@@ -1,16 +1,5 @@
 package com.murthinext.ae2pr.block.machine_part;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
-
-import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.state.BlockState;
-
 import appeng.api.config.Actionable;
 import appeng.api.config.PowerMultiplier;
 import appeng.api.networking.GridFlags;
@@ -20,18 +9,25 @@ import appeng.api.networking.IGridNodeListener;
 import appeng.api.networking.IManagedGridNode;
 import appeng.api.orientation.BlockOrientation;
 import appeng.blockentity.grid.AENetworkBlockEntity;
-
 import com.murthinext.ae2pr.api.EnergyAmount;
 import com.murthinext.ae2pr.api.machine.ControllerHost;
 import com.murthinext.ae2pr.api.machine.part.MachinePart;
 import com.murthinext.ae2pr.registry.ModBlockEntities;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity implements MachinePart {
 
     public static final int MAX_CHANNELS = 8;
 
-    private static final IGridNodeListener<MENetworkAccessHatchBlockEntity> CHANNEL_LISTENER = (hatch, node)
-            -> hatch.setChanged();
+    private static final IGridNodeListener<MENetworkAccessHatchBlockEntity> CHANNEL_LISTENER =
+            (hatch, node) -> hatch.setChanged();
 
     private final List<IManagedGridNode> channelNodes = new ArrayList<>();
     private final NetworkPart networkView = new NetworkPart() {
@@ -70,6 +66,7 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity implem
             return MENetworkAccessHatchBlockEntity.this.isRemoved();
         }
     };
+
     @Nullable
     private ControllerHost controller;
 
@@ -88,8 +85,10 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity implem
     }
 
     public void updateController(ControllerHost controller) {
-        if (this.controller != null && this.controller != controller && !this.controller.isControllerRemoved() &&
-            this.controller.isFormed()) {
+        if (this.controller != null
+                && this.controller != controller
+                && !this.controller.isControllerRemoved()
+                && this.controller.isFormed()) {
             return;
         }
         this.controller = controller;
@@ -115,9 +114,9 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity implem
         // 每个内部节点向 AE2 实际申请一个频道
         while (channelNodes.size() < requested) {
             IManagedGridNode node = GridHelper.createManagedNode(this, CHANNEL_LISTENER)
-                                            .setInWorldNode(false)
-                                            .setFlags(GridFlags.REQUIRE_CHANNEL)
-                                            .setIdlePowerUsage(0);
+                    .setInWorldNode(false)
+                    .setFlags(GridFlags.REQUIRE_CHANNEL)
+                    .setIdlePowerUsage(0);
             node.setOwningPlayerId(mainNode.getOwningPlayerId());
             channelNodes.add(node);
             node.create(level, worldPosition);
@@ -147,8 +146,11 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity implem
 
     public boolean isNetworkConnected(ControllerHost controller) {
         int required = getRequiredChannels();
-        return this.controller == controller && getMainNode().isActive() && required > 0 && required <= MAX_CHANNELS &&
-                getAllocatedChannels() >= required;
+        return this.controller == controller
+                && getMainNode().isActive()
+                && required > 0
+                && required <= MAX_CHANNELS
+                && getAllocatedChannels() >= required;
     }
 
     public double extractAEPower(double amount, boolean simulate) {
@@ -159,8 +161,10 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity implem
         if (clamped <= 0) {
             return 0;
         }
-        return getMainNode().getGrid().getEnergyService().extractAEPower(
-                clamped, simulate ? Actionable.SIMULATE : Actionable.MODULATE, PowerMultiplier.CONFIG);
+        return getMainNode()
+                .getGrid()
+                .getEnergyService()
+                .extractAEPower(clamped, simulate ? Actionable.SIMULATE : Actionable.MODULATE, PowerMultiplier.CONFIG);
     }
 
     public double getAvailableAEPower() {

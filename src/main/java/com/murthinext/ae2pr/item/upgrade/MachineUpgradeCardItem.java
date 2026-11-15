@@ -1,20 +1,15 @@
 package com.murthinext.ae2pr.item.upgrade;
 
+import appeng.items.materials.UpgradeCardItem;
+import com.murthinext.ae2pr.api.text.Voltage;
+import com.murthinext.ae2pr.api.upgrade.MachineUpgradeDefinition;
 import java.util.List;
-import java.util.Locale;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-
-import appeng.items.materials.UpgradeCardItem;
-
-import com.murthinext.ae2pr.api.text.Voltage;
-import com.murthinext.ae2pr.api.upgrade.MachineUpgradeDefinition;
+import org.jetbrains.annotations.Nullable;
 
 public class MachineUpgradeCardItem extends UpgradeCardItem {
     private final MachineUpgradeDefinition definition;
@@ -40,9 +35,12 @@ public class MachineUpgradeCardItem extends UpgradeCardItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lines, TooltipFlag flag) {
-        lines.add(Component.translatable("tooltip.ae2pr.machine_upgrade.inscription").withStyle(ChatFormatting.GRAY));
-        lines.add(Component.translatable("tooltip.ae2pr.machine_upgrade.formula", definition.formula().source())
-                          .withStyle(ChatFormatting.AQUA));
+        lines.add(Component.translatable("tooltip.ae2pr.machine_upgrade.inscription")
+                .withStyle(ChatFormatting.GRAY));
+        lines.add(Component.translatable(
+                        "tooltip.ae2pr.machine_upgrade.formula",
+                        definition.formula().source())
+                .withStyle(ChatFormatting.AQUA));
         super.appendHoverText(stack, level, lines, flag);
     }
 }

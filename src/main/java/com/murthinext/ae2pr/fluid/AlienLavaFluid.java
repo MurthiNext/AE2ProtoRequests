@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.fluid;
 
+import appeng.core.definitions.AEBlocks;
+import com.murthinext.ae2pr.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -20,10 +22,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
-import appeng.core.definitions.AEBlocks;
-
-import com.murthinext.ae2pr.registry.ModBlocks;
-
 public abstract class AlienLavaFluid extends ForgeFlowingFluid {
 
     public static final IntegerProperty CONVERSIONS = IntegerProperty.create("conversions", 0, 32);
@@ -43,13 +41,27 @@ public abstract class AlienLavaFluid extends ForgeFlowingFluid {
                 double y = pos.getY() + 1.0D;
                 double z = pos.getZ() + random.nextDouble();
                 level.addParticle(ParticleTypes.LAVA, x, y, z, 0.0D, 0.0D, 0.0D);
-                level.playLocalSound(x, y, z, SoundEvents.LAVA_POP, SoundSource.BLOCKS,
-                                     0.2F + random.nextFloat() * 0.2F, 0.9F + random.nextFloat() * 0.15F, false);
+                level.playLocalSound(
+                        x,
+                        y,
+                        z,
+                        SoundEvents.LAVA_POP,
+                        SoundSource.BLOCKS,
+                        0.2F + random.nextFloat() * 0.2F,
+                        0.9F + random.nextFloat() * 0.15F,
+                        false);
             }
 
             if (random.nextInt(200) == 0) {
-                level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.LAVA_AMBIENT, SoundSource.BLOCKS,
-                                     0.2F + random.nextFloat() * 0.2F, 0.9F + random.nextFloat() * 0.15F, false);
+                level.playLocalSound(
+                        pos.getX(),
+                        pos.getY(),
+                        pos.getZ(),
+                        SoundEvents.LAVA_AMBIENT,
+                        SoundSource.BLOCKS,
+                        0.2F + random.nextFloat() * 0.2F,
+                        0.9F + random.nextFloat() * 0.15F,
+                        false);
             }
         }
     }
@@ -60,8 +72,8 @@ public abstract class AlienLavaFluid extends ForgeFlowingFluid {
     }
 
     @Override
-    protected void spreadTo(LevelAccessor level, BlockPos pos, BlockState state, Direction direction,
-                            FluidState fluidState) {
+    protected void spreadTo(
+            LevelAccessor level, BlockPos pos, BlockState state, Direction direction, FluidState fluidState) {
         if (direction == Direction.DOWN && level.getFluidState(pos).is(FluidTags.WATER)) {
             if (state.getBlock() instanceof LiquidBlock) {
                 BlockState meteorite = ForgeEventFactory.fireFluidPlaceBlockEvent(
@@ -75,15 +87,16 @@ public abstract class AlienLavaFluid extends ForgeFlowingFluid {
     }
 
     @Override
-    public boolean canBeReplacedWith(FluidState state, BlockGetter level, BlockPos pos, Fluid fluid,
-                                     Direction direction) {
-        return state.getHeight(level, pos) >= 0.44444445F && fluid.defaultFluidState().is(FluidTags.WATER);
+    public boolean canBeReplacedWith(
+            FluidState state, BlockGetter level, BlockPos pos, Fluid fluid, Direction direction) {
+        return state.getHeight(level, pos) >= 0.44444445F
+                && fluid.defaultFluidState().is(FluidTags.WATER);
     }
 
     @Override
     public BlockState createLegacyBlock(FluidState state) {
-        BlockState block = ModBlocks.ALIEN_LAVA.get().defaultBlockState().setValue(LiquidBlock.LEVEL,
-                                                                                   getLegacyLevel(state));
+        BlockState block =
+                ModBlocks.ALIEN_LAVA.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state));
         if (state.isSource()) {
             block = block.setValue(CONVERSIONS, state.getValue(CONVERSIONS));
         }

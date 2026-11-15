@@ -1,23 +1,19 @@
 package com.murthinext.ae2pr.client.repeat;
 
+import appeng.api.stacks.AEKey;
+import appeng.client.gui.me.common.MEStorageScreen;
+import appeng.items.tools.powered.WirelessTerminalItem;
+import appeng.util.SearchInventoryEvent;
+import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.logic.repeat.FailureReason;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import appeng.api.stacks.AEKey;
-import appeng.client.gui.me.common.MEStorageScreen;
-import appeng.items.tools.powered.WirelessTerminalItem;
-import appeng.util.SearchInventoryEvent;
-
-import com.murthinext.ae2pr.ServerConfig;
-import com.murthinext.ae2pr.logic.repeat.FailureReason;
+import org.jetbrains.annotations.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public final class ClientRepeatOrderFailures {
@@ -30,27 +26,30 @@ public final class ClientRepeatOrderFailures {
 
     private static final Map<AEKey, FailedMark> MARKS = new HashMap<>();
 
-    private ClientRepeatOrderFailures() {
-    }
+    private ClientRepeatOrderFailures() {}
 
-    public static void onFailure(@Nullable AEKey what, long amountPerRound, int totalRounds, int completedRounds,
-                                 FailureReason reason) {
+    public static void onFailure(
+            @Nullable AEKey what, long amountPerRound, int totalRounds, int completedRounds, FailureReason reason) {
         if (what == null) {
             return;
         }
         MARKS.put(what, new FailedMark(-1));
 
         var minecraft = Minecraft.getInstance();
-        if (ServerConfig.notifyOnFailure() && !(minecraft.screen instanceof MEStorageScreen<?>) &&
-            minecraft.player != null && hasNotificationEnablingItem(minecraft.player)) {
+        if (ServerConfig.notifyOnFailure()
+                && !(minecraft.screen instanceof MEStorageScreen<?>)
+                && minecraft.player != null
+                && hasNotificationEnablingItem(minecraft.player)) {
             RepeatOrderFailedToast.show(what, amountPerRound, totalRounds, completedRounds, reason);
         }
     }
 
     public static boolean hasNotificationEnablingItem(LocalPlayer player) {
         for (var stack : SearchInventoryEvent.getItems(player)) {
-            if (!stack.isEmpty() && stack.getItem() instanceof WirelessTerminalItem wirelessTerminal &&
-                wirelessTerminal.getAECurrentPower(stack) > 0 && wirelessTerminal.getLinkedPosition(stack) != null) {
+            if (!stack.isEmpty()
+                    && stack.getItem() instanceof WirelessTerminalItem wirelessTerminal
+                    && wirelessTerminal.getAECurrentPower(stack) > 0
+                    && wirelessTerminal.getLinkedPosition(stack) != null) {
                 return true;
             }
         }

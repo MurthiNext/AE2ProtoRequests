@@ -1,21 +1,5 @@
 package com.murthinext.ae2pr.logic.upgrade;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.registries.ForgeRegistries;
-
 import appeng.api.stacks.AEKeyType;
 import appeng.api.stacks.GenericStack;
 import appeng.api.upgrades.IUpgradeInventory;
@@ -26,8 +10,20 @@ import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEParts;
 import appeng.helpers.InterfaceLogic;
 import appeng.helpers.externalstorage.GenericStackInv;
-
 import com.murthinext.ae2pr.registry.ModItems;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 超级堆叠卡的接入点：登记可用机器，并把返回/存储槽的容量放大判定绑到宿主上。
@@ -57,9 +53,9 @@ public final class SuperStackSupport {
     private static final List<String> STORAGE_FIELDS = List.of("returnInv", "storage", "storageInv");
 
     private static final String[] AE2CS_INTERFACES = {
-        "ender_interface",           "extended_ender_interface",
-        "integrated_interface",      "extended_integrated_interface",
-        "ender_interface_part",      "extended_ender_interface_part",
+        "ender_interface", "extended_ender_interface",
+        "integrated_interface", "extended_integrated_interface",
+        "ender_interface_part", "extended_ender_interface_part",
         "integrated_interface_part", "extended_integrated_interface_part",
     };
 
@@ -77,13 +73,10 @@ public final class SuperStackSupport {
     };
 
     private static final String[] EXTENDED_AE_INTERFACES = {
-        "ex_interface",
-        "ex_interface_part",
-        "oversize_interface",
-        "oversize_interface_part",
+        "ex_interface", "ex_interface_part", "oversize_interface", "oversize_interface_part",
     };
 
-    private static final String[] EXTENDED_AE_PROVIDERS = { "ex_pattern_provider", "ex_pattern_provider_part" };
+    private static final String[] EXTENDED_AE_PROVIDERS = {"ex_pattern_provider", "ex_pattern_provider_part"};
 
     private static final String[] ADVANCED_AE_PROVIDERS = {
         "adv_pattern_provider",
@@ -118,8 +111,7 @@ public final class SuperStackSupport {
         IUpgradeInventory ae2pr$getProviderUpgrades();
     }
 
-    private SuperStackSupport() {
-    }
+    private SuperStackSupport() {}
 
     public static void registerUpgrades() {
         ItemLike card = ModItems.SUPER_STACK_CARD.get();

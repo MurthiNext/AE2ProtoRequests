@@ -1,15 +1,13 @@
 package com.murthinext.ae2pr.mixin.ae2.parts.crafting;
 
+import appeng.api.upgrades.IUpgradeInventory;
+import appeng.api.upgrades.IUpgradeableObject;
+import appeng.parts.crafting.PatternProviderPart;
+import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import appeng.api.upgrades.IUpgradeInventory;
-import appeng.api.upgrades.IUpgradeableObject;
-import appeng.parts.crafting.PatternProviderPart;
-
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 
 // 样板供应器线缆部件：支持 Shift+右键插卡，并在入世后绑定返回槽
 @Mixin(value = PatternProviderPart.class, priority = 500, remap = false)

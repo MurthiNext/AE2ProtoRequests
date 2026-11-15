@@ -1,7 +1,15 @@
 package com.murthinext.ae2pr.mixin.ae2.helpers.patternprovider;
 
+import appeng.api.networking.IManagedGridNode;
+import appeng.api.upgrades.IUpgradeInventory;
+import appeng.api.upgrades.IUpgradeableObject;
+import appeng.api.upgrades.UpgradeInventories;
+import appeng.helpers.patternprovider.PatternProviderLogic;
+import appeng.helpers.patternprovider.PatternProviderLogicHost;
+import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 import java.util.List;
-
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,18 +18,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.ItemStack;
-
-import appeng.api.networking.IManagedGridNode;
-import appeng.api.upgrades.IUpgradeInventory;
-import appeng.api.upgrades.IUpgradeableObject;
-import appeng.api.upgrades.UpgradeInventories;
-import appeng.helpers.patternprovider.PatternProviderLogic;
-import appeng.helpers.patternprovider.PatternProviderLogicHost;
-
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 
 // 样板供应器：构造期只绑定返回槽并保存宿主，fallback 升级库存按需创建
 @Mixin(value = PatternProviderLogic.class, priority = 500, remap = false)
@@ -35,11 +31,12 @@ public abstract class PatternProviderLogicUpgradesMixin implements SuperStackSup
     @Nullable
     private IUpgradeInventory ae2pr$upgrades;
 
-    @Inject(method =
+    @Inject(
+            method =
                     "<init>(Lappeng/api/networking/IManagedGridNode;Lappeng/helpers/patternprovider/PatternProviderLogicHost;I)V",
             at = @At("TAIL"))
-    private void
-    ae2pr$bindReturnInv(IManagedGridNode mainNode, PatternProviderLogicHost host, int patternSize, CallbackInfo ci) {
+    private void ae2pr$bindReturnInv(
+            IManagedGridNode mainNode, PatternProviderLogicHost host, int patternSize, CallbackInfo ci) {
         var logic = (PatternProviderLogic) (Object) this;
         SuperStackSupport.bind(logic.getReturnInv(), logic);
     }
@@ -103,7 +100,7 @@ public abstract class PatternProviderLogicUpgradesMixin implements SuperStackSup
     /** 只有生效库存就是本模组 fallback 时才读写/掉落自己的数据。 */
     @Unique
     private boolean ae2pr$fallbackActive() {
-        return this.ae2pr$upgrades != null &&
-                SuperStackSupport.upgradesOf((PatternProviderLogic) (Object) this) == this.ae2pr$upgrades;
+        return this.ae2pr$upgrades != null
+                && SuperStackSupport.upgradesOf((PatternProviderLogic) (Object) this) == this.ae2pr$upgrades;
     }
 }

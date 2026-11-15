@@ -1,9 +1,6 @@
 package com.murthinext.ae2pr.api.ctm;
 
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
@@ -14,6 +11,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.data.ModelData;
+import org.jetbrains.annotations.Nullable;
 
 // 连接纹理的模型包装：注入方块位置，并按绑定规则重写 UV
 public class CtmBakedModel extends BakedModelWrapper<BakedModel> {
@@ -36,8 +34,12 @@ public class CtmBakedModel extends BakedModelWrapper<BakedModel> {
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand,
-                                    ModelData data, @Nullable RenderType renderType) {
+    public List<BakedQuad> getQuads(
+            @Nullable BlockState state,
+            @Nullable Direction side,
+            RandomSource rand,
+            ModelData data,
+            @Nullable RenderType renderType) {
         ModelData parent = data.has(CtmModelProperties.PARENT) ? data.get(CtmModelProperties.PARENT) : data;
         List<BakedQuad> quads = super.getQuads(state, side, rand, parent, renderType);
         if (state == null || quads.isEmpty()) {

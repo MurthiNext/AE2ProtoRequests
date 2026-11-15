@@ -1,21 +1,18 @@
 package com.murthinext.ae2pr.machine.multi_factory;
 
+import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
+import com.murthinext.ae2pr.registry.ModMachines;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-
-import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
-import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
-import com.murthinext.ae2pr.registry.ModMachines;
+import org.jetbrains.annotations.Nullable;
 
 public class MultiFactoryControllerBlockEntity extends ModeMachineBlockEntity<MultiFactoryMode> {
 
@@ -24,14 +21,14 @@ public class MultiFactoryControllerBlockEntity extends ModeMachineBlockEntity<Mu
     }
 
     @Override
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     protected List<MultiblockRecipe> recipes() {
         if (level == null) {
             return List.of();
         }
         List<MultiblockRecipe> wrapped = new ArrayList<>();
-        List<? extends Recipe<?>> all = (List<? extends Recipe<?>>) (List<?>) level.getRecipeManager()
-                .getAllRecipesFor((RecipeType) getMode().recipeType());
+        List<? extends Recipe<?>> all = (List<? extends Recipe<?>>) (List<?>)
+                level.getRecipeManager().getAllRecipesFor((RecipeType) getMode().recipeType());
         for (Recipe<?> recipe : all) {
             MultiFactoryRecipe adapter = MultiFactoryRecipe.wrap(recipe, getMode());
             if (adapter != null) {

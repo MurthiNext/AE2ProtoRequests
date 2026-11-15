@@ -1,16 +1,13 @@
 package com.murthinext.ae2pr.network;
 
+import com.murthinext.ae2pr.api.ClientHooks;
+import com.murthinext.ae2pr.client.effect.ScreenCorruptionImpact;
 import java.util.function.Supplier;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
-import com.murthinext.ae2pr.api.ClientHooks;
-import com.murthinext.ae2pr.client.effect.ScreenCorruptionImpact;
-
 public record ScreenCorruptionImpactPacket() {
-    public static void encode(ScreenCorruptionImpactPacket packet, FriendlyByteBuf buffer) {
-    }
+    public static void encode(ScreenCorruptionImpactPacket packet, FriendlyByteBuf buffer) {}
 
     public static ScreenCorruptionImpactPacket decode(FriendlyByteBuf buffer) {
         return new ScreenCorruptionImpactPacket();

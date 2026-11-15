@@ -1,18 +1,5 @@
 package com.murthinext.ae2pr.requester;
 
-import java.util.EnumSet;
-import java.util.Objects;
-
-import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
-
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.ticking.IGridTickable;
@@ -22,10 +9,19 @@ import appeng.api.orientation.BlockOrientation;
 import appeng.blockentity.grid.AENetworkBlockEntity;
 import appeng.me.helpers.MachineSource;
 import appeng.util.SettingsFrom;
-
 import com.murthinext.ae2pr.requester.abstraction.RequestHost;
 import com.murthinext.ae2pr.requester.crafting.RequestCrafting;
 import com.murthinext.ae2pr.requester.platform.RequesterPlatform;
+import java.util.EnumSet;
+import java.util.Objects;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 public class RedstoneRequesterBlockEntity extends AENetworkBlockEntity implements RequestHost, IGridTickable {
 
@@ -149,8 +145,9 @@ public class RedstoneRequesterBlockEntity extends AENetworkBlockEntity implement
 
     @Override
     public Component getTerminalName() {
-        return hasCustomName() ? Objects.requireNonNull(getCustomName())
-                               : RequesterUtils.translate("block", RequesterConstants.REQUESTER_ID);
+        return hasCustomName()
+                ? Objects.requireNonNull(getCustomName())
+                : RequesterUtils.translate("block", RequesterConstants.REQUESTER_ID);
     }
 
     public long getSortValue() {

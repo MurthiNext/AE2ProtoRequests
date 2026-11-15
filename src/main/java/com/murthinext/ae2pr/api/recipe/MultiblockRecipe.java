@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.api.recipe;
 
 import java.util.List;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;

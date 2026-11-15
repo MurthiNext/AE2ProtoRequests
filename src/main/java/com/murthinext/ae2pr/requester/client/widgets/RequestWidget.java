@@ -1,22 +1,18 @@
 package com.murthinext.ae2pr.requester.client.widgets;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import static com.murthinext.ae2pr.requester.RequesterUtils.f;
 
 import appeng.client.gui.style.ScreenStyle;
-
 import com.murthinext.ae2pr.requester.Requests.Request;
 import com.murthinext.ae2pr.requester.client.abstraction.RequestDisplay;
 import com.murthinext.ae2pr.requester.client.abstraction.RequesterReference;
 import com.murthinext.ae2pr.requester.platform.RequesterPlatform;
-
-import static com.murthinext.ae2pr.requester.RequesterUtils.f;
+import java.util.HashMap;
+import java.util.Map;
+import javax.annotation.Nullable;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class RequestWidget {
@@ -73,15 +69,20 @@ public class RequestWidget {
         stateBox = new StateBox(x, y, style, () -> stateBoxChanged(host.getTargetRequest(index)));
         host.addSubWidget(f("request_state_{}", index), stateBox, subWidgets);
 
-        amountField = new NumberField(x + AMOUNT_FIELD_X, y + 3, AMOUNT_FIELD_WIDTH, "amount", style,
-                                      amount -> amountFieldSubmitted(host.getTargetRequest(index), amount));
+        amountField = new NumberField(
+                x + AMOUNT_FIELD_X,
+                y + 3,
+                AMOUNT_FIELD_WIDTH,
+                "amount",
+                style,
+                amount -> amountFieldSubmitted(host.getTargetRequest(index), amount));
         host.addSubWidget(f("request_amount_{}", index), amountField, subWidgets);
 
         submitButton = new SubmitButton(x + 145, y + 3, style, () -> submitButtonClicked(host.getTargetRequest(index)));
         host.addSubWidget(f("request_submit_{}", index), submitButton, subWidgets);
 
-        statusDisplay = new StatusDisplay(x + AMOUNT_FIELD_X, y + 16, STATUS_WIDTH,
-                                          () -> isInactive(host.getTargetRequest(index)));
+        statusDisplay = new StatusDisplay(
+                x + AMOUNT_FIELD_X, y + 16, STATUS_WIDTH, () -> isInactive(host.getTargetRequest(index)));
         host.addSubWidget(f("request_status_{}", index), statusDisplay, subWidgets);
     }
 

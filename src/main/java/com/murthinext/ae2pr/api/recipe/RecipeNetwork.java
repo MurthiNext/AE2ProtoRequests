@@ -2,18 +2,15 @@ package com.murthinext.ae2pr.api.recipe;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Nullable;
 
 public final class RecipeNetwork {
 
-    private RecipeNetwork() {
-    }
+    private RecipeNetwork() {}
 
     public static void writeDraft(FriendlyByteBuf buffer, RecipeDraft draft) {
         writeItemInputs(buffer, draft.itemInputs());
@@ -25,8 +22,13 @@ public final class RecipeNetwork {
     }
 
     public static RecipeDraft readDraft(FriendlyByteBuf buffer) {
-        return new RecipeDraft(readItemInputs(buffer), readFluidStacks(buffer), readItemOutputs(buffer),
-                               readFluidStacks(buffer), buffer.readVarInt(), readEnergy(buffer));
+        return new RecipeDraft(
+                readItemInputs(buffer),
+                readFluidStacks(buffer),
+                readItemOutputs(buffer),
+                readFluidStacks(buffer),
+                buffer.readVarInt(),
+                readEnergy(buffer));
     }
 
     public static void writeItemInputs(FriendlyByteBuf buffer, List<CountedIngredient> inputs) {

@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.api.machine.client;
 
 import java.util.function.BooleanSupplier;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -10,7 +9,10 @@ import net.minecraft.resources.ResourceLocation;
 
 public class AutoTransferButton extends AbstractWidget {
 
-    public enum Type { PULL, PUSH }
+    public enum Type {
+        PULL,
+        PUSH
+    }
 
     private static final int SIZE = GuiTextures.SIZE;
     private static final int COLOR_TOOLBAR_BACKGROUND = 0xFF101418;

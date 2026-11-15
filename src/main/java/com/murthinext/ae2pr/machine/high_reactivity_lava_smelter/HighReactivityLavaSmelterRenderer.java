@@ -1,12 +1,10 @@
 package com.murthinext.ae2pr.machine.high_reactivity_lava_smelter;
 
-import java.util.List;
-
-import org.joml.Matrix4f;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
+import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.api.machine.MachineBlock;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -18,34 +16,36 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
-
-import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.api.machine.MachineBlock;
+import org.joml.Matrix4f;
 
 // 炉膛渲染异星熔岩
 public class HighReactivityLavaSmelterRenderer
         implements BlockEntityRenderer<HighReactivityLavaSmelterControllerBlockEntity> {
 
     private static final ResourceLocation ALIEN_LAVA_STILL = Ids.of("block/fluid/alien_lava_still");
-    private static final ResourceLocation LAVA_STILL = ResourceLocation.fromNamespaceAndPath("minecraft",
-                                                                                             "block/lava_still");
+    private static final ResourceLocation LAVA_STILL =
+            ResourceLocation.fromNamespaceAndPath("minecraft", "block/lava_still");
 
     private static final float SURFACE_HEIGHT = 0.875F;
     private static final float INSET = 0.02F;
 
-    public HighReactivityLavaSmelterRenderer(BlockEntityRendererProvider.Context context) {
-    }
+    public HighReactivityLavaSmelterRenderer(BlockEntityRendererProvider.Context context) {}
 
     @Override
-    public void render(HighReactivityLavaSmelterControllerBlockEntity controller, float partialTick, PoseStack pose,
-                       MultiBufferSource buffers, int light, int overlay) {
+    public void render(
+            HighReactivityLavaSmelterControllerBlockEntity controller,
+            float partialTick,
+            PoseStack pose,
+            MultiBufferSource buffers,
+            int light,
+            int overlay) {
         if (!controller.isFormed()) {
             return;
         }
         BlockPos pos = controller.getBlockPos();
         Direction facing = controller.getBlockState().getValue(MachineBlock.FACING);
-        List<BlockPos> cells = HighReactivityLavaSmelterStructure.poolCells(pos, facing, controller.isMirrorSide(),
-                                                                            controller.isMirrorFront());
+        List<BlockPos> cells = HighReactivityLavaSmelterStructure.poolCells(
+                pos, facing, controller.isMirrorSide(), controller.isMirrorFront());
 
         int minX = Integer.MAX_VALUE;
         int minZ = Integer.MAX_VALUE;
@@ -85,13 +85,31 @@ public class HighReactivityLavaSmelterRenderer
     }
 
     private static TextureAtlasSprite sprite(ResourceLocation location) {
-        return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(location);
+        return Minecraft.getInstance()
+                .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+                .apply(location);
     }
 
     // 按逆时针（从外侧看）顺序输出四边形
-    private static void quad(VertexConsumer consumer, Matrix4f matrix, TextureAtlasSprite sprite, float ax, float ay,
-                             float az, float bx, float by, float bz, float cx, float cy, float cz, float dx, float dy,
-                             float dz, float nx, float ny, float nz) {
+    private static void quad(
+            VertexConsumer consumer,
+            Matrix4f matrix,
+            TextureAtlasSprite sprite,
+            float ax,
+            float ay,
+            float az,
+            float bx,
+            float by,
+            float bz,
+            float cx,
+            float cy,
+            float cz,
+            float dx,
+            float dy,
+            float dz,
+            float nx,
+            float ny,
+            float nz) {
         float u0 = sprite.getU0();
         float u1 = sprite.getU1();
         float v0 = sprite.getV0();
@@ -102,8 +120,17 @@ public class HighReactivityLavaSmelterRenderer
         vertex(consumer, matrix, dx, dy, dz, u0, v1, nx, ny, nz);
     }
 
-    private static void vertex(VertexConsumer consumer, Matrix4f matrix, float x, float y, float z, float u, float v,
-                               float nx, float ny, float nz) {
+    private static void vertex(
+            VertexConsumer consumer,
+            Matrix4f matrix,
+            float x,
+            float y,
+            float z,
+            float u,
+            float v,
+            float nx,
+            float ny,
+            float nz) {
         consumer.vertex(matrix, x, y, z)
                 .color(255, 255, 255, 255)
                 .uv(u, v)

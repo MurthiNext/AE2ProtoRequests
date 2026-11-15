@@ -6,8 +6,7 @@ import net.minecraft.world.level.material.MapColor;
 
 public final class BlockProperties {
 
-    private BlockProperties() {
-    }
+    private BlockProperties() {}
 
     public static Block.Properties metal() {
         return Block.Properties.of()
@@ -30,7 +29,11 @@ public final class BlockProperties {
     }
 
     public static Block.Properties glass(MapColor mapColor) {
-        return Block.Properties.of().mapColor(mapColor).strength(0.8F).sound(SoundType.GLASS).noOcclusion();
+        return Block.Properties.of()
+                .mapColor(mapColor)
+                .strength(0.8F)
+                .sound(SoundType.GLASS)
+                .noOcclusion();
     }
 
     public static Block.Properties storageBlock(MapColor mapColor) {

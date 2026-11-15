@@ -1,14 +1,12 @@
 package com.murthinext.ae2pr.logic.collapse;
 
+import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.ae2pr;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import net.minecraft.resources.ResourceLocation;
-
-import com.murthinext.ae2pr.ServerConfig;
-import com.murthinext.ae2pr.ae2pr;
 
 public final class CollapseMatcher {
 
@@ -19,8 +17,7 @@ public final class CollapseMatcher {
     private static Set<ResourceLocation> cachedExact = Set.of();
     private static Set<String> cachedNamespaces = Set.of();
 
-    private CollapseMatcher() {
-    }
+    private CollapseMatcher() {}
 
     // 内建兼容
     public static boolean isBuiltIn(ResourceLocation id) {

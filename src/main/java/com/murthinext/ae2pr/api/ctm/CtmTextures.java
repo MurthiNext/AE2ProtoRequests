@@ -1,20 +1,17 @@
 package com.murthinext.ae2pr.api.ctm;
 
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.Ids;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
-
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.api.Ids;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 连接纹理的图集登记表：基础贴图 → 图集贴图，图集路径为底图路径加 {@code _ctm}。
@@ -41,8 +38,7 @@ public final class CtmTextures {
     private static final Map<ResourceLocation, TextureAtlasSprite> ATLASES = new HashMap<>();
     private static final Map<ResourceLocation, Integer> GRIDS_BY_SPRITE = new HashMap<>();
 
-    private CtmTextures() {
-    }
+    private CtmTextures() {}
 
     // 登记 47-tile 连接底图，重复登记以先登记者为准
     public static void registerTile47(String basePath) {
@@ -89,8 +85,8 @@ public final class CtmTextures {
             if (grid == 0) {
                 continue;
             }
-            ResourceLocation ctm = ResourceLocation.fromNamespaceAndPath(base.getNamespace(),
-                                                                         base.getPath() + ATLAS_SUFFIX);
+            ResourceLocation ctm =
+                    ResourceLocation.fromNamespaceAndPath(base.getNamespace(), base.getPath() + ATLAS_SUFFIX);
             TextureAtlasSprite atlasSprite = spriteOrNull(atlas, ctm);
             if (atlasSprite == null) {
                 missing.add(base);
@@ -100,8 +96,8 @@ public final class CtmTextures {
             GRIDS_BY_SPRITE.put(baseSprite.contents().name(), grid);
         }
         if (!missing.isEmpty()) {
-            ae2pr.LOGGER.warn("Connected texture atlas is missing, affected blocks will use plain textures: {}",
-                              missing);
+            ae2pr.LOGGER.warn(
+                    "Connected texture atlas is missing, affected blocks will use plain textures: {}", missing);
         }
     }
 
@@ -110,7 +106,9 @@ public final class CtmTextures {
         try {
             TextureAtlasSprite sprite = atlas.getSprite(location);
             // 缺失时 getSprite 返回 missing 占位贴图，需排除
-            if (sprite == null || MissingTextureAtlasSprite.getLocation().equals(sprite.contents().name())) {
+            if (sprite == null
+                    || MissingTextureAtlasSprite.getLocation()
+                            .equals(sprite.contents().name())) {
                 return null;
             }
             return sprite;

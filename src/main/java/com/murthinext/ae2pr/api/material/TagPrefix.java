@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.api.material;
 
 import java.util.List;
-
 import net.minecraft.world.item.Item;
 
 /**

@@ -1,7 +1,14 @@
 package com.murthinext.ae2pr.data;
 
+import appeng.recipes.handlers.InscriberProcessType;
+import appeng.recipes.handlers.InscriberRecipeBuilder;
+import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.api.material.Material;
+import com.murthinext.ae2pr.api.material.MaterialItems;
+import com.murthinext.ae2pr.api.material.TagPrefix;
+import com.murthinext.ae2pr.registry.ModItems;
+import com.murthinext.ae2pr.registry.ModMaterials;
 import java.util.function.Consumer;
-
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -13,16 +20,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-
-import appeng.recipes.handlers.InscriberProcessType;
-import appeng.recipes.handlers.InscriberRecipeBuilder;
-
-import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.api.material.Material;
-import com.murthinext.ae2pr.api.material.MaterialItems;
-import com.murthinext.ae2pr.api.material.TagPrefix;
-import com.murthinext.ae2pr.registry.ModItems;
-import com.murthinext.ae2pr.registry.ModMaterials;
 
 /**
  * 材料配方：
@@ -72,9 +69,10 @@ public class MaterialRecipeProvider extends RecipeProvider {
         }
 
         // 紫水晶碎片研磨成粉
-        InscriberRecipeBuilder
-                .inscribe(Ingredient.of(Items.AMETHYST_SHARD),
-                          MaterialItems.get(TagPrefix.DUST, ModMaterials.AMETHYST).get(), 1)
+        InscriberRecipeBuilder.inscribe(
+                        Ingredient.of(Items.AMETHYST_SHARD),
+                        MaterialItems.get(TagPrefix.DUST, ModMaterials.AMETHYST).get(),
+                        1)
                 .setMode(InscriberProcessType.INSCRIBE)
                 .save(writer, Ids.of("inscriber/amethyst_dust"));
     }

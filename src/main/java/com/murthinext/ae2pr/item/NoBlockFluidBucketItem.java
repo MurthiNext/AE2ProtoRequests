@@ -1,9 +1,6 @@
 package com.murthinext.ae2pr.item;
 
 import java.util.function.Supplier;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
@@ -19,6 +16,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
+import org.jetbrains.annotations.Nullable;
 
 public class NoBlockFluidBucketItem extends BucketItem {
 
@@ -34,8 +32,8 @@ public class NoBlockFluidBucketItem extends BucketItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         BlockHitResult hit = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
-        if (hit.getType() == HitResult.Type.BLOCK &&
-            FluidUtil.interactWithFluidHandler(player, hand, level, hit.getBlockPos(), hit.getDirection())) {
+        if (hit.getType() == HitResult.Type.BLOCK
+                && FluidUtil.interactWithFluidHandler(player, hand, level, hit.getBlockPos(), hit.getDirection())) {
             return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide());
         }
         return super.use(level, player, hand);
@@ -48,8 +46,8 @@ public class NoBlockFluidBucketItem extends BucketItem {
     }
 
     @Override
-    public boolean emptyContents(@Nullable Player player, Level level, BlockPos pos, @Nullable BlockHitResult result,
-                                 ItemStack container) {
+    public boolean emptyContents(
+            @Nullable Player player, Level level, BlockPos pos, @Nullable BlockHitResult result, ItemStack container) {
         return false;
     }
 }

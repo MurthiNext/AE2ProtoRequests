@@ -1,15 +1,13 @@
 package com.murthinext.ae2pr.network;
 
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryUnlockCondition;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryUnlockTracker;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
-
-import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryUnlockCondition;
-import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryUnlockTracker;
 
 /**
  * 客户端 -> 服务端：登记终端当前用到的解锁条件，由服务端持续判定并推送结果；

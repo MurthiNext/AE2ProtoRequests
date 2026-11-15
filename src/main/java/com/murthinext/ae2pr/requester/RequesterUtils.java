@@ -1,22 +1,18 @@
 package com.murthinext.ae2pr.requester;
 
+import com.mojang.blaze3d.platform.InputConstants;
+import com.murthinext.ae2pr.ae2pr;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import com.mojang.blaze3d.platform.InputConstants;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-
-import com.murthinext.ae2pr.ae2pr;
 
 public final class RequesterUtils {
 
     private static final Pattern PLACEHOLDER = Pattern.compile("\\{}");
 
-    private RequesterUtils() {
-    }
+    private RequesterUtils() {}
 
     public static String f(String input, Object... args) {
         for (var arg : args) {
@@ -43,9 +39,11 @@ public final class RequesterUtils {
 
     public static void addShiftInfoTooltip(List<Component> tooltip) {
         tooltip.add(Component.literal("» ")
-                            .withStyle(ChatFormatting.AQUA)
-                            .append(translate("tooltip", "shift_for_more",
-                                              InputConstants.getKey("key.keyboard.left.shift").getDisplayName())));
+                .withStyle(ChatFormatting.AQUA)
+                .append(translate(
+                        "tooltip",
+                        "shift_for_more",
+                        InputConstants.getKey("key.keyboard.left.shift").getDisplayName())));
     }
 
     public static <T> T cast(Object o, Class<T> clazz) {

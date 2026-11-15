@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.api.machine.client;
 
 import java.util.function.BooleanSupplier;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
@@ -26,11 +25,13 @@ public class ToolbarButton extends AbstractWidget {
 
     @Override
     protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        GuiTextures.frame(graphics,
-                          selected.getAsBoolean() ? GuiTextures.BUTTON_SELECTED
-                                  : isHovered()   ? GuiTextures.BUTTON_HOVER
-                                                  : GuiTextures.BUTTON,
-                          getX(), getY());
+        GuiTextures.frame(
+                graphics,
+                selected.getAsBoolean()
+                        ? GuiTextures.BUTTON_SELECTED
+                        : isHovered() ? GuiTextures.BUTTON_HOVER : GuiTextures.BUTTON,
+                getX(),
+                getY());
         GuiTextures.frame(graphics, icon, getX(), getY());
     }
 

@@ -1,11 +1,9 @@
 package com.murthinext.ae2pr.api.machine.client;
 
+import appeng.core.localization.ButtonToolTips;
 import java.util.List;
-
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-
-import appeng.core.localization.ButtonToolTips;
 
 public class GuideButton extends ToolbarButton {
 
@@ -18,9 +16,12 @@ public class GuideButton extends ToolbarButton {
         if (!isHovered()) {
             return false;
         }
-        GuiTooltips.render(graphics, font,
-                           List.of(ButtonToolTips.OpenGuide.text(), ButtonToolTips.OpenGuideDetail.text()), mouseX,
-                           mouseY);
+        GuiTooltips.render(
+                graphics,
+                font,
+                List.of(ButtonToolTips.OpenGuide.text(), ButtonToolTips.OpenGuideDetail.text()),
+                mouseX,
+                mouseY);
         return true;
     }
 }

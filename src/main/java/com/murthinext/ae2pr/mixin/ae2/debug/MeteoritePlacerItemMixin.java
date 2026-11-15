@@ -1,10 +1,9 @@
 package com.murthinext.ae2pr.mixin.ae2.debug;
 
+import appeng.debug.MeteoritePlacerItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
-
-import appeng.debug.MeteoritePlacerItem;
 
 // 将调试用陨石放置器的半径由 2~8 调整为 8~16
 @Mixin(value = MeteoritePlacerItem.class, remap = false)

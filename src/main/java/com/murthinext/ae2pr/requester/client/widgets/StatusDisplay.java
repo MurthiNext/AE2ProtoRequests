@@ -1,9 +1,13 @@
 package com.murthinext.ae2pr.requester.client.widgets;
 
+import static com.murthinext.ae2pr.requester.RequesterUtils.f;
+
+import appeng.client.gui.widgets.ITooltip;
+import com.murthinext.ae2pr.requester.RequesterUtils;
+import com.murthinext.ae2pr.requester.status.RequestStatus;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -11,13 +15,6 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
-
-import appeng.client.gui.widgets.ITooltip;
-
-import com.murthinext.ae2pr.requester.RequesterUtils;
-import com.murthinext.ae2pr.requester.status.RequestStatus;
-
-import static com.murthinext.ae2pr.requester.RequesterUtils.f;
 
 public class StatusDisplay extends AbstractWidget implements ITooltip {
 
@@ -39,8 +36,8 @@ public class StatusDisplay extends AbstractWidget implements ITooltip {
 
     @Override
     public void renderWidget(GuiGraphics guiGraphics, int mX, int mY, float partialTick) {
-        guiGraphics.fill(getX(), getY(), getX() + width, getY() + height,
-                         RequesterUtils.fillColorAlpha(getStatusColor()));
+        guiGraphics.fill(
+                getX(), getY(), getX() + width, getY() + height, RequesterUtils.fillColorAlpha(getStatusColor()));
     }
 
     @Override
@@ -65,17 +62,29 @@ public class StatusDisplay extends AbstractWidget implements ITooltip {
         if (Screen.hasShiftDown()) {
             tooltip.addAll(List.of(
                     Component.literal(" "),
-                    RequesterUtils.translate("tooltip", RequestStatus.IDLE.toString().toLowerCase()),
-                    RequesterUtils.translate("tooltip", f("{}_desc", RequestStatus.IDLE.toString().toLowerCase())),
+                    RequesterUtils.translate(
+                            "tooltip", RequestStatus.IDLE.toString().toLowerCase()),
+                    RequesterUtils.translate(
+                            "tooltip",
+                            f("{}_desc", RequestStatus.IDLE.toString().toLowerCase())),
                     Component.literal(" "),
-                    RequesterUtils.translate("tooltip", RequestStatus.MISSING.toString().toLowerCase()),
-                    RequesterUtils.translate("tooltip", f("{}_desc", RequestStatus.MISSING.toString().toLowerCase())),
+                    RequesterUtils.translate(
+                            "tooltip", RequestStatus.MISSING.toString().toLowerCase()),
+                    RequesterUtils.translate(
+                            "tooltip",
+                            f("{}_desc", RequestStatus.MISSING.toString().toLowerCase())),
                     Component.literal(" "),
-                    RequesterUtils.translate("tooltip", RequestStatus.LINK.toString().toLowerCase()),
-                    RequesterUtils.translate("tooltip", f("{}_desc", RequestStatus.LINK.toString().toLowerCase())),
+                    RequesterUtils.translate(
+                            "tooltip", RequestStatus.LINK.toString().toLowerCase()),
+                    RequesterUtils.translate(
+                            "tooltip",
+                            f("{}_desc", RequestStatus.LINK.toString().toLowerCase())),
                     Component.literal(" "),
-                    RequesterUtils.translate("tooltip", RequestStatus.EXPORT.toString().toLowerCase()),
-                    RequesterUtils.translate("tooltip", f("{}_desc", RequestStatus.EXPORT.toString().toLowerCase()))));
+                    RequesterUtils.translate(
+                            "tooltip", RequestStatus.EXPORT.toString().toLowerCase()),
+                    RequesterUtils.translate(
+                            "tooltip",
+                            f("{}_desc", RequestStatus.EXPORT.toString().toLowerCase()))));
         } else {
             RequesterUtils.addShiftInfoTooltip(tooltip);
         }

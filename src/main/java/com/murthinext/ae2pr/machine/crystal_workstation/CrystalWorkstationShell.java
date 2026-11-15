@@ -1,10 +1,9 @@
 package com.murthinext.ae2pr.machine.crystal_workstation;
 
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.machine.MachineBlock;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -14,9 +13,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.api.machine.MachineBlock;
+import org.jetbrains.annotations.Nullable;
 
 // 晶能工作站成型外观的客户端缓存
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT)
@@ -24,8 +21,12 @@ public final class CrystalWorkstationShell {
 
     private static final int PRUNE_INTERVAL = 10;
 
-    public record Look(CrystalWorkstationStructure.PartRole role, @Nullable Direction outward,
-                       @Nullable Direction depthAxis, int panelX, int panelY) {}
+    public record Look(
+            CrystalWorkstationStructure.PartRole role,
+            @Nullable Direction outward,
+            @Nullable Direction depthAxis,
+            int panelX,
+            int panelY) {}
 
     private record Snapshot(Map<BlockPos, Look> looks, BlockPos min, BlockPos max, int signature) {}
 
@@ -35,10 +36,10 @@ public final class CrystalWorkstationShell {
 
     @Nullable
     private static ClientLevel level;
+
     private static int pruneTicks;
 
-    private CrystalWorkstationShell() {
-    }
+    private CrystalWorkstationShell() {}
 
     // 单元格的成型外观
     @Nullable
@@ -86,8 +87,11 @@ public final class CrystalWorkstationShell {
         refresh(controllerPos, previous, controller, signature);
     }
 
-    private static void refresh(BlockPos controllerPos, @Nullable Snapshot previous,
-                                CrystalWorkstationControllerBlockEntity controller, int signature) {
+    private static void refresh(
+            BlockPos controllerPos,
+            @Nullable Snapshot previous,
+            CrystalWorkstationControllerBlockEntity controller,
+            int signature) {
         Map<BlockPos, Look> looks = controller.isFormed() ? collect(controller) : Map.of();
         if (looks.isEmpty()) {
             if (previous == null) {
@@ -112,16 +116,17 @@ public final class CrystalWorkstationShell {
         if (controller.isMirrorFront()) {
             signature |= 4;
         }
-        return signature | controller.getBlockState().getValue(MachineBlock.FACING).ordinal() << 3;
+        return signature
+                | controller.getBlockState().getValue(MachineBlock.FACING).ordinal() << 3;
     }
 
     private static Map<BlockPos, Look> collect(CrystalWorkstationControllerBlockEntity controller) {
         Direction facing = controller.getBlockState().getValue(MachineBlock.FACING);
         Map<BlockPos, Look> looks = new HashMap<>();
         for (CrystalWorkstationStructure.Part part : CrystalWorkstationStructure.effectParts(
-                     controller.getBlockPos(), facing, controller.isMirrorSide(), controller.isMirrorFront())) {
-            looks.put(part.pos(),
-                      new Look(part.role(), part.outward(), part.depthAxis(), part.panelX(), part.panelY()));
+                controller.getBlockPos(), facing, controller.isMirrorSide(), controller.isMirrorFront())) {
+            looks.put(
+                    part.pos(), new Look(part.role(), part.outward(), part.depthAxis(), part.panelX(), part.panelY()));
         }
         return looks;
     }
@@ -141,8 +146,8 @@ public final class CrystalWorkstationShell {
             maxY = Math.max(maxY, pos.getY());
             maxZ = Math.max(maxZ, pos.getZ());
         }
-        return new Snapshot(Map.copyOf(looks), new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ),
-                            signature);
+        return new Snapshot(
+                Map.copyOf(looks), new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ), signature);
     }
 
     private static void rebuildIndex() {
@@ -172,7 +177,7 @@ public final class CrystalWorkstationShell {
             return;
         }
         pruneTicks = 0;
-        for (BlockPos pos : MACHINES.keySet().toArray(BlockPos[] ::new)) {
+        for (BlockPos pos : MACHINES.keySet().toArray(BlockPos[]::new)) {
             if (!current.hasChunkAt(pos)) {
                 // 区块未加载，保留缓存等待主机重新上报
                 continue;
@@ -217,10 +222,14 @@ public final class CrystalWorkstationShell {
             min = a.min();
             max = a.max();
         } else {
-            min = new BlockPos(Math.min(a.min().getX(), b.min().getX()), Math.min(a.min().getY(), b.min().getY()),
-                               Math.min(a.min().getZ(), b.min().getZ()));
-            max = new BlockPos(Math.max(a.max().getX(), b.max().getX()), Math.max(a.max().getY(), b.max().getY()),
-                               Math.max(a.max().getZ(), b.max().getZ()));
+            min = new BlockPos(
+                    Math.min(a.min().getX(), b.min().getX()),
+                    Math.min(a.min().getY(), b.min().getY()),
+                    Math.min(a.min().getZ(), b.min().getZ()));
+            max = new BlockPos(
+                    Math.max(a.max().getX(), b.max().getX()),
+                    Math.max(a.max().getY(), b.max().getY()),
+                    Math.max(a.max().getZ(), b.max().getZ()));
         }
         var levelRenderer = Minecraft.getInstance().levelRenderer;
         if (levelRenderer != null) {

@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.data;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,10 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -38,8 +36,8 @@ public class AaeReactionRecipeProvider implements DataProvider {
 
     @Override
     public CompletableFuture<?> run(CachedOutput cache) {
-        Path directory = output.getOutputFolder(PackOutput.Target.DATA_PACK)
-                                 .resolve("ae2pr/recipes/crystal_reaction_chamber");
+        Path directory =
+                output.getOutputFolder(PackOutput.Target.DATA_PACK).resolve("ae2pr/recipes/crystal_reaction_chamber");
         Map<String, Integer> usedIds = new HashMap<>();
         List<CompletableFuture<?>> writes = new ArrayList<>();
         for (AaeReactionRecipes.Reaction reaction : AaeReactionRecipes.readAll()) {
@@ -48,7 +46,7 @@ public class AaeReactionRecipeProvider implements DataProvider {
             JsonObject json = mods.isEmpty() ? recipe : conditional(recipe, mods);
             writes.add(DataProvider.saveStable(cache, json, directory.resolve(nextId(reaction, usedIds) + ".json")));
         }
-        return CompletableFuture.allOf(writes.toArray(CompletableFuture[] ::new));
+        return CompletableFuture.allOf(writes.toArray(CompletableFuture[]::new));
     }
 
     @Override
@@ -72,8 +70,8 @@ public class AaeReactionRecipeProvider implements DataProvider {
         if (reaction.fluid() != null) {
             JsonObject fluid = reaction.fluid().getAsJsonObject("fluidStack");
             JsonArray fluidInputs = new JsonArray();
-            fluidInputs.add(fluidEntry(GsonHelper.getAsString(fluid, "FluidName"),
-                                       GsonHelper.getAsInt(fluid, "Amount")));
+            fluidInputs.add(
+                    fluidEntry(GsonHelper.getAsString(fluid, "FluidName"), GsonHelper.getAsInt(fluid, "Amount")));
             json.add("fluid_inputs", fluidInputs);
         }
 

@@ -1,9 +1,14 @@
 package com.murthinext.ae2pr.integration.jade;
 
+import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.api.machine.MachineBlock;
+import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterControllerBlockEntity;
+import com.murthinext.ae2pr.registry.ModMachines;
 import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -13,16 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import com.murthinext.ae2pr.ServerConfig;
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.api.machine.MachineBlock;
-import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
-import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterControllerBlockEntity;
-import com.murthinext.ae2pr.registry.ModMachines;
-
+import org.jetbrains.annotations.Nullable;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
@@ -54,10 +50,22 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
     private static final String KEY_MODE = "mode";
     private static final String KEY_DURABILITY = "durability";
     private static final Map<String, Integer> PROGRESS_COLORS = Map.of(
-            ModMachines.CRYSTAL_ASSEMBLY_LINE.id(), 0xFF3E9BC8, ModMachines.CRYSTAL_REACTION_CHAMBER.id(), 0xFF55A3A8,
-            ModMachines.CRYSTAL_WORKSTATION.id(), 0xFF55A3A8, ModMachines.JIG.id(), 0xFF7DA9D2,
-            ModMachines.FILTER_PRESS.id(), 0xFF7DA9D2, ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.id(), 0xFFE0681C,
-            ModMachines.MATTER_PHASE_TRANSFORMER.id(), 0xFF62D0DA, ModMachines.MULTI_FACTORY.id(), 0xFFA47BD6);
+            ModMachines.CRYSTAL_ASSEMBLY_LINE.id(),
+            0xFF3E9BC8,
+            ModMachines.CRYSTAL_REACTION_CHAMBER.id(),
+            0xFF55A3A8,
+            ModMachines.CRYSTAL_WORKSTATION.id(),
+            0xFF55A3A8,
+            ModMachines.JIG.id(),
+            0xFF7DA9D2,
+            ModMachines.FILTER_PRESS.id(),
+            0xFF7DA9D2,
+            ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.id(),
+            0xFFE0681C,
+            ModMachines.MATTER_PHASE_TRANSFORMER.id(),
+            0xFF62D0DA,
+            ModMachines.MULTI_FACTORY.id(),
+            0xFFA47BD6);
 
     private final ServerData serverData = new ServerData();
     private final ComponentProvider componentProvider = new ComponentProvider();
@@ -75,8 +83,13 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
     // 作业状态，默认从控制器基类读取
     private JobState jobState(BlockEntity controller) {
         AbstractMultiblockControllerBlockEntity base = (AbstractMultiblockControllerBlockEntity) controller;
-        return new JobState(base.isFormed(), base.isNetworkConnected(), base.getJobElapsed(), base.getJobDuration(),
-                            base.getJobItem(), base.getJobFluid());
+        return new JobState(
+                base.isFormed(),
+                base.isNetworkConnected(),
+                base.getJobElapsed(),
+                base.getJobDuration(),
+                base.getJobItem(),
+                base.getJobFluid());
     }
 
     private void appendExtraServerData(CompoundTag data, BlockEntity controller) {
@@ -89,9 +102,10 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
 
     private void appendExtraTooltip(ITooltip tooltip, CompoundTag data) {
         if (data.contains(KEY_DURABILITY)) {
-            tooltip.add(Component.translatable("gui.ae2pr.high_reactivity_lava_smelter.durability",
-                                               data.getInt(KEY_DURABILITY),
-                                               ServerConfig.highReactivityLavaSmelterMaxDurability()));
+            tooltip.add(Component.translatable(
+                    "gui.ae2pr.high_reactivity_lava_smelter.durability",
+                    data.getInt(KEY_DURABILITY),
+                    ServerConfig.highReactivityLavaSmelterMaxDurability()));
         }
         String mode = data.getString(KEY_MODE);
         if (!mode.isEmpty()) {
@@ -99,17 +113,17 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
         }
     }
 
-    private record JobState(boolean formed, boolean networkConnected, int elapsed, int duration, ItemStack item,
-                            FluidStack fluid) {}
+    private record JobState(
+            boolean formed, boolean networkConnected, int elapsed, int duration, ItemStack item, FluidStack fluid) {}
 
     private final class ServerData implements IServerDataProvider<BlockAccessor> {
 
         @Override
         public void appendServerData(CompoundTag data, BlockAccessor accessor) {
             BlockEntity controller = accessor.getBlockEntity();
-            if (!(controller instanceof AbstractMultiblockControllerBlockEntity base) ||
-                !(controller.getBlockState().getBlock() instanceof MachineBlock<?> block) ||
-                block.definition().controller(controller) == null) {
+            if (!(controller instanceof AbstractMultiblockControllerBlockEntity base)
+                    || !(controller.getBlockState().getBlock() instanceof MachineBlock<?> block)
+                    || block.definition().controller(controller) == null) {
                 return;
             }
             JobState state = jobState(controller);
@@ -121,10 +135,14 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
             data.putInt(KEY_ELAPSED, state.elapsed());
             data.putInt(KEY_DURATION, state.duration());
             if (!state.item().isEmpty()) {
-                data.putString(KEY_ITEM, ForgeRegistries.ITEMS.getKey(state.item().getItem()).toString());
+                data.putString(
+                        KEY_ITEM,
+                        ForgeRegistries.ITEMS.getKey(state.item().getItem()).toString());
                 data.putInt(KEY_COUNT, state.item().getCount());
             } else if (!state.fluid().isEmpty()) {
-                data.putString(KEY_FLUID, ForgeRegistries.FLUIDS.getKey(state.fluid().getFluid()).toString());
+                data.putString(
+                        KEY_FLUID,
+                        ForgeRegistries.FLUIDS.getKey(state.fluid().getFluid()).toString());
                 data.putInt(KEY_AMOUNT, state.fluid().getAmount());
             }
             appendExtraServerData(data, controller);
@@ -144,11 +162,14 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
             if (!data.contains(KEY_FORMED)) {
                 return;
             }
-            tooltip.add(Component.translatable(data.getBoolean(KEY_NETWORK_CONNECTED)
-                                                       ? "gui.ae2pr.multiblock.network.connected"
-                                                       : "gui.ae2pr.multiblock.network.disconnected"));
-            tooltip.add(Component.translatable("gui.ae2pr.multiblock.channels", data.getInt(KEY_ALLOCATED_CHANNELS),
-                                               data.getInt(KEY_REQUIRED_CHANNELS)));
+            tooltip.add(Component.translatable(
+                    data.getBoolean(KEY_NETWORK_CONNECTED)
+                            ? "gui.ae2pr.multiblock.network.connected"
+                            : "gui.ae2pr.multiblock.network.disconnected"));
+            tooltip.add(Component.translatable(
+                    "gui.ae2pr.multiblock.channels",
+                    data.getInt(KEY_ALLOCATED_CHANNELS),
+                    data.getInt(KEY_REQUIRED_CHANNELS)));
             appendJob(tooltip, data);
             appendExtraTooltip(tooltip, data);
         }
@@ -164,11 +185,16 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
             }
             int elapsed = data.getInt(KEY_ELAPSED);
             float progress = Math.min(1.0F, (float) elapsed / duration);
-            IProgressStyle style = tooltip.getElementHelper().progressStyle().color(
-                    PROGRESS_COLORS.getOrDefault(data.getString(KEY_MACHINE), 0xFF7DA9D2), PROGRESS_BACKGROUND);
-            tooltip.add(tooltip.getElementHelper().progress(
-                    progress, Component.translatable("gui.ae2pr.multiblock.job.progress", elapsed, duration), style,
-                    BoxStyle.DEFAULT, false));
+            IProgressStyle style = tooltip.getElementHelper()
+                    .progressStyle()
+                    .color(PROGRESS_COLORS.getOrDefault(data.getString(KEY_MACHINE), 0xFF7DA9D2), PROGRESS_BACKGROUND);
+            tooltip.add(tooltip.getElementHelper()
+                    .progress(
+                            progress,
+                            Component.translatable("gui.ae2pr.multiblock.job.progress", elapsed, duration),
+                            style,
+                            BoxStyle.DEFAULT,
+                            false));
         }
 
         @Nullable
@@ -180,8 +206,8 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
                     return null;
                 }
                 ItemStack output = new ItemStack(item, data.getInt(KEY_COUNT));
-                return Component.translatable("gui.ae2pr.multiblock.job.output", output.getHoverName(),
-                                              output.getCount());
+                return Component.translatable(
+                        "gui.ae2pr.multiblock.job.output", output.getHoverName(), output.getCount());
             }
             String fluidId = data.getString(KEY_FLUID);
             Fluid fluid = fluidId.isEmpty() ? null : ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse(fluidId));
@@ -189,8 +215,8 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
                 return null;
             }
             FluidStack output = new FluidStack(fluid, data.getInt(KEY_AMOUNT));
-            return Component.translatable("gui.ae2pr.multiblock.job.output", output.getDisplayName(),
-                                          output.getAmount());
+            return Component.translatable(
+                    "gui.ae2pr.multiblock.job.output", output.getDisplayName(), output.getAmount());
         }
 
         @Override

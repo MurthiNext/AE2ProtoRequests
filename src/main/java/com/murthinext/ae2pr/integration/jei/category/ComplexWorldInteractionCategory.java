@@ -1,18 +1,15 @@
 package com.murthinext.ae2pr.integration.jei.category;
 
+import appeng.core.definitions.AEItems;
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.api.recipe.CountedIngredient;
+import com.murthinext.ae2pr.integration.jei.render.FluidBlockIngredientRenderer;
+import com.murthinext.ae2pr.integration.jei.render.ItemStackAmountRenderer;
+import com.murthinext.ae2pr.logic.world_interaction.WorldInteractionCatalyst;
+import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraftforge.fluids.FluidType;
-
-import appeng.core.definitions.AEItems;
-
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -24,19 +21,18 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.api.recipe.CountedIngredient;
-import com.murthinext.ae2pr.integration.jei.render.FluidBlockIngredientRenderer;
-import com.murthinext.ae2pr.integration.jei.render.ItemStackAmountRenderer;
-import com.murthinext.ae2pr.logic.world_interaction.WorldInteractionCatalyst;
-import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.fluids.FluidType;
 
 public class ComplexWorldInteractionCategory implements IRecipeCategory<ComplexWorldInteractionRecipe> {
 
-    public static final RecipeType<ComplexWorldInteractionRecipe> RECIPE_TYPE = RecipeType.create(
-            ae2pr.MODID, "complex_world_interaction", ComplexWorldInteractionRecipe.class);
+    public static final RecipeType<ComplexWorldInteractionRecipe> RECIPE_TYPE =
+            RecipeType.create(ae2pr.MODID, "complex_world_interaction", ComplexWorldInteractionRecipe.class);
 
     private static final int WIDTH = 130;
     private static final int HEIGHT = 62;
@@ -108,7 +104,9 @@ public class ComplexWorldInteractionCategory implements IRecipeCategory<ComplexW
         int outputTop = columnTop(results.size() + (recipe.getResultFluid() != null ? 1 : 0));
         int index = 0;
         for (ItemStack result : results) {
-            builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_X - index / ROWS * SLOT,
+            builder.addSlot(
+                            RecipeIngredientRole.OUTPUT,
+                            OUTPUT_X - index / ROWS * SLOT,
                             outputTop + index % ROWS * SLOT)
                     .setStandardSlotBackground()
                     .addItemStack(result)
@@ -116,7 +114,9 @@ public class ComplexWorldInteractionCategory implements IRecipeCategory<ComplexW
             index++;
         }
         if (recipe.getResultFluid() != null) {
-            builder.addSlot(RecipeIngredientRole.OUTPUT, OUTPUT_X - index / ROWS * SLOT,
+            builder.addSlot(
+                            RecipeIngredientRole.OUTPUT,
+                            OUTPUT_X - index / ROWS * SLOT,
                             outputTop + index % ROWS * SLOT)
                     .addFluidStack(recipe.getResultFluid(), FluidType.BUCKET_VOLUME)
                     .setCustomRenderer(ForgeTypes.FLUID_STACK, new FluidBlockIngredientRenderer());
@@ -138,8 +138,8 @@ public class ComplexWorldInteractionCategory implements IRecipeCategory<ComplexW
             view.getDisplayedIngredient(ForgeTypes.FLUID_STACK).ifPresent(stack -> {
                 var state = stack.getFluid().defaultFluidState().createLegacyBlock();
                 if (state.getBlock() instanceof WorldInteractionCatalyst block) {
-                    tooltip.add(Component.translatable("jei.ae2pr.complex_world_interaction.uses",
-                                                       block.getRemainingInteractions(state)));
+                    tooltip.add(Component.translatable(
+                            "jei.ae2pr.complex_world_interaction.uses", block.getRemainingInteractions(state)));
                 }
             });
         });
@@ -151,14 +151,19 @@ public class ComplexWorldInteractionCategory implements IRecipeCategory<ComplexW
     }
 
     @Override
-    public void draw(ComplexWorldInteractionRecipe recipe, IRecipeSlotsView slots, GuiGraphics graphics, double mouseX,
-                     double mouseY) {
+    public void draw(
+            ComplexWorldInteractionRecipe recipe,
+            IRecipeSlotsView slots,
+            GuiGraphics graphics,
+            double mouseX,
+            double mouseY) {
         var font = Minecraft.getInstance().font;
         graphics.blit(ARROW, 25, INTERACTION_Y - 1, 0, 0, 22, 16);
         graphics.blit(ARROW, 76, INTERACTION_Y - 1, 0, 0, 22, 16);
-        Component condition = Component.translatable(recipe.getCircumstance().isExplosion()
-                                                             ? "jei.ae2pr.complex_world_interaction.explosion"
-                                                             : "jei.ae2pr.complex_world_interaction.submerge");
+        Component condition = Component.translatable(
+                recipe.getCircumstance().isExplosion()
+                        ? "jei.ae2pr.complex_world_interaction.explosion"
+                        : "jei.ae2pr.complex_world_interaction.submerge");
         graphics.drawString(font, condition, (WIDTH - font.width(condition)) / 2, 10, COLOR_TEXT, false);
     }
 }

@@ -1,10 +1,5 @@
 package com.murthinext.ae2pr.block.level_emitter;
 
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.ItemStack;
-
 import appeng.api.config.Settings;
 import appeng.api.stacks.AEKey;
 import appeng.api.stacks.GenericStack;
@@ -13,8 +8,11 @@ import appeng.core.definitions.AEItems;
 import appeng.menu.SlotSemantics;
 import appeng.menu.guisync.GuiSync;
 import appeng.menu.implementations.UpgradeableMenu;
-
 import com.murthinext.ae2pr.item.filter_cell.FilterCell;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
 
 // 多条件发信器菜单的公共部分：过滤元件槽、快捷移动与设置同步
 public abstract class AbstractMultiLevelEmitterMenu<T extends AbstractMultiLevelEmitterPart>
@@ -53,7 +51,9 @@ public abstract class AbstractMultiLevelEmitterMenu<T extends AbstractMultiLevel
 
     @Override
     protected void setupConfig() {
-        addSlot(new EmitterConfigSlot(getHost().getConfig().createMenuWrapper(), getHost().getFilterCellInventory()),
+        addSlot(
+                new EmitterConfigSlot(
+                        getHost().getConfig().createMenuWrapper(), getHost().getFilterCellInventory()),
                 SlotSemantics.CONFIG);
     }
 
@@ -78,8 +78,8 @@ public abstract class AbstractMultiLevelEmitterMenu<T extends AbstractMultiLevel
             // 从玩家背包放入过滤元件
             if (source.container instanceof Inventory && source.getItem().getItem() instanceof FilterCell) {
                 for (var configSlot : getSlots(SlotSemantics.CONFIG)) {
-                    if (configSlot instanceof EmitterConfigSlot emitterSlot &&
-                        emitterSlot.insertFromShiftClick(source)) {
+                    if (configSlot instanceof EmitterConfigSlot emitterSlot
+                            && emitterSlot.insertFromShiftClick(source)) {
                         broadcastChanges();
                         return ItemStack.EMPTY;
                     }

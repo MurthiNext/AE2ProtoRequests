@@ -1,13 +1,17 @@
 package com.murthinext.ae2pr.client.multiblock;
 
+import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
+import com.murthinext.ae2pr.api.multiblock.StructureOrientation;
+import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleInstance;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleSnapshot;
+import com.murthinext.ae2pr.block.FilterPressPlateBlock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -25,21 +29,15 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
-
-import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
-import com.murthinext.ae2pr.api.multiblock.StructureOrientation;
-import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
-import com.murthinext.ae2pr.api.multiblock.module.ModuleInstance;
-import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
-import com.murthinext.ae2pr.api.multiblock.module.ModuleSnapshot;
-import com.murthinext.ae2pr.block.FilterPressPlateBlock;
+import org.jetbrains.annotations.Nullable;
 
 // 只读预览世界，保留完整材料并按层提供渲染邻居
 public final class MultiblockPreview implements BlockAndTintGetter {
 
     // 预览统一按未镜像、朝向北方的可成型姿态摆放
-    private static final StructureOrientation ORIENTATION = new StructureOrientation(Direction.NORTH, Direction.UP,
-                                                                                     false, false);
+    private static final StructureOrientation ORIENTATION =
+            new StructureOrientation(Direction.NORTH, Direction.UP, false, false);
+
     public record Cell(BlockPos pos, StructurePredicate predicate, List<Block> candidates) {}
 
     private final MultiblockPattern pattern;
@@ -64,11 +62,13 @@ public final class MultiblockPreview implements BlockAndTintGetter {
         states.clear();
         List<Cell> result = new ArrayList<>();
         for (MultiblockPattern.PatternCell cell :
-             pattern.patternCells(BlockPos.ZERO, Direction.NORTH, Direction.UP, false, false, this.slices)) {
+                pattern.patternCells(BlockPos.ZERO, Direction.NORTH, Direction.UP, false, false, this.slices)) {
             StructurePredicate predicate = pattern.predicate(cell.symbol());
             List<Block> blocks = candidates.computeIfAbsent(
                     predicate,
-                    key -> key.previewBlocks().stream().filter(block -> !block.defaultBlockState().isAir()).toList());
+                    key -> key.previewBlocks().stream()
+                            .filter(block -> !block.defaultBlockState().isAir())
+                            .toList());
             if (blocks.isEmpty()) {
                 continue;
             }
@@ -89,8 +89,9 @@ public final class MultiblockPreview implements BlockAndTintGetter {
         bounds = new AABB(minX, minY, minZ, maxX + 1, maxY + 1, maxZ + 1);
         for (Cell cell : cells) {
             BlockState old = previous.get(cell.pos());
-            Block block = old != null && cell.candidates().contains(old.getBlock()) ? old.getBlock()
-                                                                                    : cell.candidates().get(0);
+            Block block = old != null && cell.candidates().contains(old.getBlock())
+                    ? old.getBlock()
+                    : cell.candidates().get(0);
             states.put(cell.pos(), stateFor(cell, block));
         }
         applyShapes();
@@ -180,7 +181,9 @@ public final class MultiblockPreview implements BlockAndTintGetter {
         Map<StructurePredicate, Integer> counts = new HashMap<>();
         List<ModuleInstance> modules = new ArrayList<>();
         for (Cell cell : cells) {
-            Block current = cell.pos().equals(selected.pos()) ? block : states.get(cell.pos()).getBlock();
+            Block current = cell.pos().equals(selected.pos())
+                    ? block
+                    : states.get(cell.pos()).getBlock();
             for (StructurePredicate leaf : cell.predicate().leaves()) {
                 if (candidates.get(leaf).contains(current)) {
                     int count = counts.merge(leaf, 1, Integer::sum);
@@ -227,8 +230,9 @@ public final class MultiblockPreview implements BlockAndTintGetter {
         if (!cell.pos().equals(BlockPos.ZERO)) {
             double x = cell.pos().getX() + 0.5 - bounds.getCenter().x;
             double z = cell.pos().getZ() + 0.5 - bounds.getCenter().z;
-            facing = Math.abs(x) > Math.abs(z) ? (x < 0 ? Direction.WEST : Direction.EAST)
-                                               : (z < 0 ? Direction.NORTH : Direction.SOUTH);
+            facing = Math.abs(x) > Math.abs(z)
+                    ? (x < 0 ? Direction.WEST : Direction.EAST)
+                    : (z < 0 ? Direction.NORTH : Direction.SOUTH);
         }
         if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
             state = state.setValue(BlockStateProperties.HORIZONTAL_FACING, facing);
@@ -250,7 +254,9 @@ public final class MultiblockPreview implements BlockAndTintGetter {
                 totals.merge(state.getBlock(), 1, Integer::sum);
             }
         }
-        materials = totals.entrySet().stream().map(entry -> new ItemStack(entry.getKey(), entry.getValue())).toList();
+        materials = totals.entrySet().stream()
+                .map(entry -> new ItemStack(entry.getKey(), entry.getValue()))
+                .toList();
     }
 
     @Override

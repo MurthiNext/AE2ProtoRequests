@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.fluid;
 
+import com.murthinext.ae2pr.api.Ids;
 import java.util.function.Consumer;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
@@ -12,22 +12,20 @@ import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.fluids.FluidType;
 
-import com.murthinext.ae2pr.api.Ids;
-
 public class AlienLavaFluidType extends FluidType {
 
     public AlienLavaFluidType() {
         super(FluidType.Properties.create()
-                      .canSwim(false)
-                      .canDrown(false)
-                      .pathType(BlockPathTypes.LAVA)
-                      .adjacentPathType(null)
-                      .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL_LAVA)
-                      .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY_LAVA)
-                      .lightLevel(15)
-                      .density(3000)
-                      .viscosity(6000)
-                      .temperature(1300));
+                .canSwim(false)
+                .canDrown(false)
+                .pathType(BlockPathTypes.LAVA)
+                .adjacentPathType(null)
+                .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL_LAVA)
+                .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY_LAVA)
+                .lightLevel(15)
+                .density(3000)
+                .viscosity(6000)
+                .temperature(1300));
     }
 
     @Override

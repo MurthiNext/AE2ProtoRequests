@@ -1,18 +1,15 @@
 package com.murthinext.ae2pr.requester.client.widgets;
 
-import java.util.List;
-
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.network.chat.Component;
-
 import appeng.client.gui.style.Blitter;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.AECheckbox;
 import appeng.client.gui.widgets.ITooltip;
-
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.requester.RequesterUtils;
+import java.util.List;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.network.chat.Component;
 
 public class StateBox extends AECheckbox implements ITooltip {
 

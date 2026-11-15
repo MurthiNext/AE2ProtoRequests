@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.api.machine.client;
 
 import java.util.function.BooleanSupplier;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
@@ -50,9 +49,13 @@ public final class MachineTabButton extends AbstractButton {
             graphics.fill(x + 8, bottom - 4, right - 8, bottom - 3, accent);
         }
         var font = Minecraft.getInstance().font;
-        graphics.drawString(font, getMessage(), x + (width - font.width(getMessage())) / 2,
-                            getY() + (height - font.lineHeight) / 2 + 1,
-                            current || isHoveredOrFocused() ? accent : COLOR_TEXT, false);
+        graphics.drawString(
+                font,
+                getMessage(),
+                x + (width - font.width(getMessage())) / 2,
+                getY() + (height - font.lineHeight) / 2 + 1,
+                current || isHoveredOrFocused() ? accent : COLOR_TEXT,
+                false);
     }
 
     @Override

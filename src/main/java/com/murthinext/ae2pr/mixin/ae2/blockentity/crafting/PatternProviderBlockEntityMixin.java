@@ -1,18 +1,15 @@
 package com.murthinext.ae2pr.mixin.ae2.blockentity.crafting;
 
+import appeng.api.upgrades.IUpgradeInventory;
+import appeng.api.upgrades.IUpgradeableObject;
+import appeng.blockentity.crafting.PatternProviderBlockEntity;
+import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import net.minecraft.nbt.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import net.minecraft.nbt.CompoundTag;
-
-import appeng.api.upgrades.IUpgradeInventory;
-import appeng.api.upgrades.IUpgradeableObject;
-import appeng.blockentity.crafting.PatternProviderBlockEntity;
-
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 
 // 样板供应器方块：支持 Shift+右键插卡，并在就绪/读档后绑定返回槽
 @Mixin(value = PatternProviderBlockEntity.class, priority = 500, remap = false)

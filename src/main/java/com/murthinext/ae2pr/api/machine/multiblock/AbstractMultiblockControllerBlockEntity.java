@@ -1,35 +1,8 @@
 package com.murthinext.ae2pr.api.machine.multiblock;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.IntPredicate;
-
-import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
-
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.IUpgradeableObject;
 import appeng.api.upgrades.UpgradeInventories;
-
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.EnergyAmount;
 import com.murthinext.ae2pr.api.machine.ControllerHost;
@@ -50,9 +23,32 @@ import com.murthinext.ae2pr.api.recipe.CountedIngredient;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
 import com.murthinext.ae2pr.logic.upgrade.MachineUpgrades;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.IntPredicate;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
+import org.jetbrains.annotations.Nullable;
 
-public abstract class AbstractMultiblockControllerBlockEntity
-        extends BlockEntity implements ControllerHost, IUpgradeableObject {
+public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntity
+        implements ControllerHost, IUpgradeableObject {
 
     public enum Error {
         NONE(null),
@@ -97,6 +93,7 @@ public abstract class AbstractMultiblockControllerBlockEntity
     protected final List<MachinePart.ItemPart> outputBuses = new ArrayList<>();
     protected final List<MachinePart.FluidPart> inputHatches = new ArrayList<>();
     protected final List<MachinePart.FluidPart> outputHatches = new ArrayList<>();
+
     @Nullable
     private MachinePart.NetworkPart networkAccessHatch;
 
@@ -115,13 +112,14 @@ public abstract class AbstractMultiblockControllerBlockEntity
     protected int jobParallel;
     private boolean paused;
     private Error error = Error.NONE;
+
     @Nullable
     private ResourceLocation jobRecipeId;
 
     private final MultiblockMachineDefinition<?, ?> definition;
 
-    protected AbstractMultiblockControllerBlockEntity(MultiblockMachineDefinition<?, ?> definition, BlockPos pos,
-                                                      BlockState state) {
+    protected AbstractMultiblockControllerBlockEntity(
+            MultiblockMachineDefinition<?, ?> definition, BlockPos pos, BlockState state) {
         super(definition.blockEntityType(), pos, state);
         this.definition = definition;
         this.structureFacade = definition.structure();
@@ -170,8 +168,7 @@ public abstract class AbstractMultiblockControllerBlockEntity
         return Error.OUTPUT;
     }
 
-    protected void onJobStarted(Match match) {
-    }
+    protected void onJobStarted(Match match) {}
 
     protected void outputProducts(MultiblockRecipe recipe, int parallel) {
         if (level == null) {
@@ -187,8 +184,8 @@ public abstract class AbstractMultiblockControllerBlockEntity
             }
             if (!remaining.isEmpty()) {
                 // 启动前已检查，兜底掉落避免产物丢失
-                ae2pr.LOGGER.warn("{} output could not be inserted into output buses, dropped {}", machineKey(),
-                                  remaining);
+                ae2pr.LOGGER.warn(
+                        "{} output could not be inserted into output buses, dropped {}", machineKey(), remaining);
                 Block.popResource(level, worldPosition, remaining);
             }
         }
@@ -205,8 +202,8 @@ public abstract class AbstractMultiblockControllerBlockEntity
             }
             if (!remaining.isEmpty()) {
                 // 启动前已检查，兜底记录避免产物丢失
-                ae2pr.LOGGER.warn("{} output could not be stored in output hatches, discarded {}", machineKey(),
-                                  remaining);
+                ae2pr.LOGGER.warn(
+                        "{} output could not be stored in output hatches, discarded {}", machineKey(), remaining);
             }
         }
     }
@@ -222,7 +219,8 @@ public abstract class AbstractMultiblockControllerBlockEntity
         List<ItemStack> produced = new ArrayList<>();
         for (ChancedItemStack output : recipe.getChancedItemOutputs()) {
             if (output.certain()) {
-                produced.add(output.stack().copyWithCount(clampCount((long) output.stack().getCount() * parallel)));
+                produced.add(output.stack()
+                        .copyWithCount(clampCount((long) output.stack().getCount() * parallel)));
                 continue;
             }
             int rolled = 0;
@@ -232,7 +230,8 @@ public abstract class AbstractMultiblockControllerBlockEntity
                 }
             }
             if (rolled > 0) {
-                produced.add(output.stack().copyWithCount(clampCount((long) output.stack().getCount() * rolled)));
+                produced.add(output.stack()
+                        .copyWithCount(clampCount((long) output.stack().getCount() * rolled)));
             }
         }
         return produced;
@@ -251,8 +250,7 @@ public abstract class AbstractMultiblockControllerBlockEntity
         tickJob();
     }
 
-    protected void tickMachine() {
-    }
+    protected void tickMachine() {}
 
     // 作业状态机
 
@@ -355,8 +353,8 @@ public abstract class AbstractMultiblockControllerBlockEntity
 
     protected double energyCost(Match match) {
         double perParallel = match.recipe().getEnergyPerParallel();
-        return EnergyAmount.clamp(MachineUpgrades.apply(upgrades, MachineUpgradeType.ENERGY, perParallel) *
-                                  match.parallel());
+        return EnergyAmount.clamp(
+                MachineUpgrades.apply(upgrades, MachineUpgradeType.ENERGY, perParallel) * match.parallel());
     }
 
     private void finishJob() {
@@ -428,14 +426,14 @@ public abstract class AbstractMultiblockControllerBlockEntity
     }
 
     // 逐个过滤为多方块配方，避免对非本模组配方类型做强转
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     protected List<MultiblockRecipe> recipes() {
         if (level == null) {
             return List.of();
         }
         RecipeManager manager = level.getRecipeManager();
-        List<? extends Recipe<?>> found = (List<? extends Recipe<?>>) (List<?>) manager
-                .getAllRecipesFor((RecipeType) recipeType());
+        List<? extends Recipe<?>> found =
+                (List<? extends Recipe<?>>) (List<?>) manager.getAllRecipesFor((RecipeType) recipeType());
         List<MultiblockRecipe> sorted = new ArrayList<>();
         for (Recipe<?> recipe : found) {
             if (recipe instanceof MultiblockRecipe multiblock) {
@@ -464,7 +462,9 @@ public abstract class AbstractMultiblockControllerBlockEntity
     }
 
     private static int inputKinds(MultiblockRecipe recipe) {
-        return recipe.getItemInputs().size() + recipe.getFluidInputs().size() + recipe.getItemCatalysts().size();
+        return recipe.getItemInputs().size()
+                + recipe.getFluidInputs().size()
+                + recipe.getItemCatalysts().size();
     }
 
     private static long itemInputAmount(MultiblockRecipe recipe) {
@@ -491,8 +491,8 @@ public abstract class AbstractMultiblockControllerBlockEntity
     }
 
     protected int outputParallel(MultiblockRecipe recipe, int maximum) {
-        return searchParallel(recipe, maximum,
-                              parallel -> new PartInventory(outputBuses, outputHatches).insert(recipe, parallel));
+        return searchParallel(
+                recipe, maximum, parallel -> new PartInventory(outputBuses, outputHatches).insert(recipe, parallel));
     }
 
     // 并行数单调可行，二分取最大
@@ -571,8 +571,8 @@ public abstract class AbstractMultiblockControllerBlockEntity
 
     public double getSpeedMultiplier() {
         double base = baseSpeedMultiplier();
-        return MachineUpgrades.apply(upgrades, MachineUpgradeType.SPEED, base, base * MachineTuning.speedPerCard(),
-                                     null);
+        return MachineUpgrades.apply(
+                upgrades, MachineUpgradeType.SPEED, base, base * MachineTuning.speedPerCard(), null);
     }
 
     protected double baseSpeedMultiplier() {
@@ -585,8 +585,10 @@ public abstract class AbstractMultiblockControllerBlockEntity
 
     protected void collectBaseStatSources(MachineUpgradeType type, List<MachineStat.Source> sources) {
         if (type == MachineUpgradeType.PARALLEL && parallelBonus() != 0) {
-            sources.add(new MachineStat.Source(Component.translatable("gui.ae2pr.multiblock.data.structure"),
-                                               definition.maxParallel(), baseParallel()));
+            sources.add(new MachineStat.Source(
+                    Component.translatable("gui.ae2pr.multiblock.data.structure"),
+                    definition.maxParallel(),
+                    baseParallel()));
         }
     }
 
@@ -595,31 +597,37 @@ public abstract class AbstractMultiblockControllerBlockEntity
         List<MachineStat.Source> speedSources = new ArrayList<>();
         speedSources.add(new MachineStat.Source(Component.translatable("gui.ae2pr.multiblock.data.base"), 1, 1));
         collectBaseStatSources(MachineUpgradeType.SPEED, speedSources);
-        double speed = MachineUpgrades.apply(upgrades, MachineUpgradeType.SPEED, speedBase,
-                                             speedBase * MachineTuning.speedPerCard(), speedSources);
+        double speed = MachineUpgrades.apply(
+                upgrades, MachineUpgradeType.SPEED, speedBase, speedBase * MachineTuning.speedPerCard(), speedSources);
 
         List<MachineStat.Source> parallelSources = new ArrayList<>();
-        parallelSources.add(new MachineStat.Source(Component.translatable("gui.ae2pr.multiblock.data.base"),
-                                                   definition.maxParallel(), definition.maxParallel()));
+        parallelSources.add(new MachineStat.Source(
+                Component.translatable("gui.ae2pr.multiblock.data.base"),
+                definition.maxParallel(),
+                definition.maxParallel()));
         collectBaseStatSources(MachineUpgradeType.PARALLEL, parallelSources);
-        double parallel = MachineUpgrades.apply(upgrades, MachineUpgradeType.PARALLEL, baseParallel(), 0,
-                                                parallelSources);
+        double parallel =
+                MachineUpgrades.apply(upgrades, MachineUpgradeType.PARALLEL, baseParallel(), 0, parallelSources);
 
         MultiblockRecipe recipe = currentRecipe();
         boolean recipeBasis = recipe != null && recipe.getEnergyPerParallel() > 0;
         double energyBase = recipeBasis ? recipe.getEnergyPerParallel() : 1;
         List<MachineStat.Source> energySources = new ArrayList<>();
-        energySources.add(new MachineStat.Source(Component.translatable("gui.ae2pr.multiblock.data.base"), energyBase,
-                                                 energyBase));
+        energySources.add(new MachineStat.Source(
+                Component.translatable("gui.ae2pr.multiblock.data.base"), energyBase, energyBase));
         double energy = usesRecipeEnergy()
                 ? MachineUpgrades.apply(upgrades, MachineUpgradeType.ENERGY, energyBase, 0, energySources)
                 : energyBase;
-        Component context = !usesRecipeEnergy() ? Component.translatable("gui.ae2pr.multiblock.data.energy.passive")
-                : recipeBasis ? Component.translatable("gui.ae2pr.multiblock.data.energy.recipe", energyBase)
-                              : null;
-        return new MachineStats(new MachineStat(speed, speedSources),
-                                new MachineStat(energy / energyBase, energySources),
-                                new MachineStat(parallel, parallelSources), energyBase, context, usesRecipeEnergy());
+        Component context = !usesRecipeEnergy()
+                ? Component.translatable("gui.ae2pr.multiblock.data.energy.passive")
+                : recipeBasis ? Component.translatable("gui.ae2pr.multiblock.data.energy.recipe", energyBase) : null;
+        return new MachineStats(
+                new MachineStat(speed, speedSources),
+                new MachineStat(energy / energyBase, energySources),
+                new MachineStat(parallel, parallelSources),
+                energyBase,
+                context,
+                usesRecipeEnergy());
     }
 
     // 速度倍率封顶 INT MAX，单次作业至少 1 tick
@@ -679,8 +687,7 @@ public abstract class AbstractMultiblockControllerBlockEntity
         return structureFacade.maxSlices();
     }
 
-    protected void onStructureChanged(StructureResult result) {
-    }
+    protected void onStructureChanged(StructureResult result) {}
 
     public void validateStructure() {
         if (level == null || level.isClientSide || validating) {
@@ -699,8 +706,8 @@ public abstract class AbstractMultiblockControllerBlockEntity
         if (result.fromCache()) {
             // 结构未变化，但相邻控制器可能重置过部件外观，此处补回
             if (formedCells.isEmpty()) {
-                formedCells = structureFacade.updateFormed(level, worldPosition, facing, result, formedCells,
-                                                           isRunning());
+                formedCells =
+                        structureFacade.updateFormed(level, worldPosition, facing, result, formedCells, isRunning());
             } else {
                 structureFacade.reapply(level, formedCells, isRunning());
             }
@@ -739,8 +746,9 @@ public abstract class AbstractMultiblockControllerBlockEntity
         }
         // 按 片 → 行 → 列 排序，保证部件顺序稳定
         List<BlockPos> cells = new ArrayList<>(result.cells());
-        cells.sort(structureFacade.pattern().posComparator(getFacing(), Direction.UP, result.mirrorSide(),
-                                                           result.mirrorFront()));
+        cells.sort(structureFacade
+                .pattern()
+                .posComparator(getFacing(), Direction.UP, result.mirrorSide(), result.mirrorFront()));
         for (BlockPos pos : cells) {
             BlockEntity entity = level.getBlockEntity(pos);
             if (!(entity instanceof MachinePart part)) {
@@ -766,11 +774,9 @@ public abstract class AbstractMultiblockControllerBlockEntity
         }
     }
 
-    protected void collectExtraPart(BlockPos pos, @Nullable BlockEntity blockEntity) {
-    }
+    protected void collectExtraPart(BlockPos pos, @Nullable BlockEntity blockEntity) {}
 
-    protected void onPartsCleared() {
-    }
+    protected void onPartsCleared() {}
 
     protected Direction getFacing() {
         return getBlockState().getValue(MachineBlock.FACING);
@@ -794,8 +800,8 @@ public abstract class AbstractMultiblockControllerBlockEntity
         boolean showPaused = formed && paused;
         BlockState state = getBlockState();
         BlockState updated = state.setValue(MachineBlock.FORMED, formed)
-                                     .setValue(MachineBlock.RUNNING, showRunning)
-                                     .setValue(MachineBlock.PAUSED, showPaused);
+                .setValue(MachineBlock.RUNNING, showRunning)
+                .setValue(MachineBlock.PAUSED, showPaused);
         if (updated != state) {
             level.setBlock(worldPosition, updated, Block.UPDATE_ALL);
         }
@@ -803,8 +809,7 @@ public abstract class AbstractMultiblockControllerBlockEntity
         onControllerStateChanged(formed, showRunning);
     }
 
-    protected void onControllerStateChanged(boolean formed, boolean running) {
-    }
+    protected void onControllerStateChanged(boolean formed, boolean running) {}
 
     // 核心方块的运行指示灯：由机器定义注入，未配置时不处理
     protected void updateCoreLight(boolean lit) {
@@ -833,8 +838,7 @@ public abstract class AbstractMultiblockControllerBlockEntity
         onControllerRemovedHook();
     }
 
-    protected void onControllerRemovedHook() {
-    }
+    protected void onControllerRemovedHook() {}
 
     @Override
     public void setRemoved() {
@@ -897,7 +901,9 @@ public abstract class AbstractMultiblockControllerBlockEntity
         super.saveAdditional(tag);
         tag.putBoolean(MIRROR_SIDE_ID, mirrorSide);
         tag.putBoolean(MIRROR_FRONT_ID, mirrorFront);
-        tag.putLongArray(FORMED_CELLS_ID, formedCells.stream().mapToLong(BlockPos::asLong).toArray());
+        tag.putLongArray(
+                FORMED_CELLS_ID,
+                formedCells.stream().mapToLong(BlockPos::asLong).toArray());
         upgrades.writeToNBT(tag, TAG_UPGRADES);
         if (jobRecipeId != null && jobTicksLeft > 0) {
             tag.putString(JOB_RECIPE_ID, jobRecipeId.toString());

@@ -1,13 +1,15 @@
 package com.murthinext.ae2pr.recipe;
 
-import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-
+import com.murthinext.ae2pr.api.recipe.AbstractRecipe;
+import com.murthinext.ae2pr.api.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.recipe.RecipeJson;
+import com.murthinext.ae2pr.api.recipe.RecipeNetwork;
+import com.murthinext.ae2pr.api.recipe.WorldInteractionCircumstance;
+import com.murthinext.ae2pr.registry.ModRecipes;
+import java.util.List;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -18,25 +20,23 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import com.murthinext.ae2pr.api.recipe.AbstractRecipe;
-import com.murthinext.ae2pr.api.recipe.CountedIngredient;
-import com.murthinext.ae2pr.api.recipe.RecipeJson;
-import com.murthinext.ae2pr.api.recipe.RecipeNetwork;
-import com.murthinext.ae2pr.api.recipe.WorldInteractionCircumstance;
-import com.murthinext.ae2pr.registry.ModRecipes;
+import org.jetbrains.annotations.Nullable;
 
 // 支持带数量原料、多产物和流体源替换的复杂世界交互配方
 public class ComplexWorldInteractionRecipe extends AbstractRecipe {
 
     private final WorldInteractionCircumstance circumstance;
     private final List<ItemStack> results;
+
     @Nullable
     private final Fluid resultFluid;
 
-    public ComplexWorldInteractionRecipe(ResourceLocation id, List<CountedIngredient> ingredients,
-                                         WorldInteractionCircumstance circumstance, List<ItemStack> results,
-                                         @Nullable Fluid resultFluid) {
+    public ComplexWorldInteractionRecipe(
+            ResourceLocation id,
+            List<CountedIngredient> ingredients,
+            WorldInteractionCircumstance circumstance,
+            List<ItemStack> results,
+            @Nullable Fluid resultFluid) {
         super(id, ingredients);
         this.circumstance = circumstance;
         this.results = results.stream().map(ItemStack::copy).toList();
@@ -83,8 +83,8 @@ public class ComplexWorldInteractionRecipe extends AbstractRecipe {
             if (ingredients.isEmpty()) {
                 throw new JsonSyntaxException("item_inputs must not be empty");
             }
-            WorldInteractionCircumstance circumstance = WorldInteractionCircumstance.fromJson(
-                    GsonHelper.getAsJsonObject(json, "circumstance"));
+            WorldInteractionCircumstance circumstance =
+                    WorldInteractionCircumstance.fromJson(GsonHelper.getAsJsonObject(json, "circumstance"));
             List<ItemStack> results = RecipeJson.readItemStacks(json, "item_outputs");
             JsonArray fluidOutputs = GsonHelper.getAsJsonArray(json, "fluid_outputs", new JsonArray());
             if (fluidOutputs.size() > 1) {
@@ -98,8 +98,10 @@ public class ComplexWorldInteractionRecipe extends AbstractRecipe {
                 JsonObject output = fluidOutputs.get(0).getAsJsonObject();
                 ResourceLocation fluidId = ResourceLocation.parse(GsonHelper.getAsString(output, "fluid"));
                 resultFluid = ForgeRegistries.FLUIDS.getValue(fluidId);
-                if (resultFluid == null || resultFluid == Fluids.EMPTY || !resultFluid.defaultFluidState().isSource() ||
-                    GsonHelper.getAsInt(output, "amount") != FluidType.BUCKET_VOLUME) {
+                if (resultFluid == null
+                        || resultFluid == Fluids.EMPTY
+                        || !resultFluid.defaultFluidState().isSource()
+                        || GsonHelper.getAsInt(output, "amount") != FluidType.BUCKET_VOLUME) {
                     throw new JsonSyntaxException("fluid_outputs requires a source fluid and amount must be 1000");
                 }
             }
@@ -114,8 +116,8 @@ public class ComplexWorldInteractionRecipe extends AbstractRecipe {
             List<CountedIngredient> ingredients = RecipeNetwork.readItemInputs(buffer);
             WorldInteractionCircumstance circumstance = WorldInteractionCircumstance.fromNetwork(buffer);
             List<ItemStack> results = RecipeNetwork.readItemStacks(buffer);
-            Fluid resultFluid = buffer.readBoolean() ? ForgeRegistries.FLUIDS.getValue(buffer.readResourceLocation())
-                                                     : null;
+            Fluid resultFluid =
+                    buffer.readBoolean() ? ForgeRegistries.FLUIDS.getValue(buffer.readResourceLocation()) : null;
             return new ComplexWorldInteractionRecipe(id, ingredients, circumstance, results, resultFluid);
         }
 

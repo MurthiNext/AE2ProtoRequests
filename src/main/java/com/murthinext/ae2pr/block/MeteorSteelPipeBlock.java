@@ -1,5 +1,6 @@
 package com.murthinext.ae2pr.block;
 
+import com.murthinext.ae2pr.api.wrench.Wrenchable;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -10,18 +11,16 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.MapColor;
 
-import com.murthinext.ae2pr.api.wrench.Wrenchable;
-
 public class MeteorSteelPipeBlock extends Block implements Wrenchable {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public MeteorSteelPipeBlock() {
         super(Properties.of()
-                      .mapColor(MapColor.METAL)
-                      .strength(3.5F)
-                      .sound(SoundType.METAL)
-                      .requiresCorrectToolForDrops());
+                .mapColor(MapColor.METAL)
+                .strength(3.5F)
+                .sound(SoundType.METAL)
+                .requiresCorrectToolForDrops());
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
@@ -32,7 +31,8 @@ public class MeteorSteelPipeBlock extends Block implements Wrenchable {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
+        return defaultBlockState()
+                .setValue(FACING, context.getNearestLookingDirection().getOpposite());
     }
 
     @Override

@@ -1,25 +1,21 @@
 package com.murthinext.ae2pr.logic.collapse;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-
 import appeng.api.behaviors.GenericInternalInventory;
 import appeng.api.parts.IPart;
 import appeng.api.parts.IPartHost;
 import appeng.capabilities.Capabilities;
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import org.jetbrains.annotations.Nullable;
 
 // 内容来源探测
 public final class CollapseSources {
 
-    private CollapseSources() {
-    }
+    private CollapseSources() {}
 
     public static List<CollapseSource> of(BlockEntity blockEntity) {
         if (blockEntity instanceof IPartHost partHost) {
@@ -31,21 +27,26 @@ public final class CollapseSources {
 
     @Nullable
     public static CollapseSource of(IPart part) {
-        GenericInternalInventory generic = part.getCapability(Capabilities.GENERIC_INTERNAL_INV).orElse(null);
+        GenericInternalInventory generic =
+                part.getCapability(Capabilities.GENERIC_INTERNAL_INV).orElse(null);
         if (generic == null) {
             return null;
         }
-        return CollapseSource.of(BuiltInRegistries.ITEM.getKey(part.getPartItem().asItem()), generic);
+        return CollapseSource.of(
+                BuiltInRegistries.ITEM.getKey(part.getPartItem().asItem()), generic);
     }
+
     @Nullable
     private static CollapseSource directSource(BlockEntity blockEntity) {
         var id = CollapseHandler.idOf(blockEntity);
-        GenericInternalInventory generic = blockEntity.getCapability(Capabilities.GENERIC_INTERNAL_INV, null)
-                                                   .orElse(null);
+        GenericInternalInventory generic = blockEntity
+                .getCapability(Capabilities.GENERIC_INTERNAL_INV, null)
+                .orElse(null);
         if (generic != null) {
             return CollapseSource.of(id, generic);
         }
-        var handler = blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).orElse(null);
+        var handler =
+                blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).orElse(null);
         return handler == null ? null : CollapseSource.of(id, handler);
     }
 

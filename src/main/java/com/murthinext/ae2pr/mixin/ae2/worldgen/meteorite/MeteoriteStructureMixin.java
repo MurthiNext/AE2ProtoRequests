@@ -1,10 +1,9 @@
 package com.murthinext.ae2pr.mixin.ae2.worldgen.meteorite;
 
+import appeng.worldgen.meteorite.MeteoriteStructure;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
-
-import appeng.worldgen.meteorite.MeteoriteStructure;
 
 // 将陨石半径由 2~8 调整为 8~16
 @Mixin(value = MeteoriteStructure.class, remap = false)

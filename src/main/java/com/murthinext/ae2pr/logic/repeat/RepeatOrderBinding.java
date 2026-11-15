@@ -5,8 +5,7 @@ import org.jetbrains.annotations.Nullable;
 public final class RepeatOrderBinding {
     private static final ThreadLocal<Integer> ROUNDS = new ThreadLocal<>();
 
-    private RepeatOrderBinding() {
-    }
+    private RepeatOrderBinding() {}
 
     public static void set(int rounds) {
         ROUNDS.set(rounds);

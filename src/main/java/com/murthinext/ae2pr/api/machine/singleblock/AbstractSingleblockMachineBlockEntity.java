@@ -1,11 +1,21 @@
 package com.murthinext.ae2pr.api.machine.singleblock;
 
+import appeng.api.config.AccessRestriction;
+import appeng.api.config.Actionable;
+import appeng.api.config.PowerMultiplier;
+import appeng.api.inventories.InternalInventory;
+import appeng.api.networking.IGrid;
+import appeng.api.upgrades.IUpgradeInventory;
+import appeng.api.upgrades.UpgradeInventories;
+import appeng.blockentity.grid.AENetworkPowerBlockEntity;
+import appeng.core.definitions.AEItems;
+import com.murthinext.ae2pr.api.EnergyAmount;
+import com.murthinext.ae2pr.api.machine.MachineTuning;
+import com.murthinext.ae2pr.api.machine.side.SideConfig;
+import com.murthinext.ae2pr.api.machine.side.SideMode;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -24,21 +34,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
-
-import appeng.api.config.AccessRestriction;
-import appeng.api.config.Actionable;
-import appeng.api.config.PowerMultiplier;
-import appeng.api.inventories.InternalInventory;
-import appeng.api.networking.IGrid;
-import appeng.api.upgrades.IUpgradeInventory;
-import appeng.api.upgrades.UpgradeInventories;
-import appeng.blockentity.grid.AENetworkPowerBlockEntity;
-import appeng.core.definitions.AEItems;
-
-import com.murthinext.ae2pr.api.EnergyAmount;
-import com.murthinext.ae2pr.api.machine.MachineTuning;
-import com.murthinext.ae2pr.api.machine.side.SideConfig;
-import com.murthinext.ae2pr.api.machine.side.SideMode;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPowerBlockEntity {
 
@@ -63,8 +59,8 @@ public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPow
 
     private final SideConfig sideConfig = new SideConfig();
 
-    protected AbstractSingleblockMachineBlockEntity(SingleblockMachineDefinition<?, ?, ?> definition, BlockPos pos,
-                                                    BlockState state) {
+    protected AbstractSingleblockMachineBlockEntity(
+            SingleblockMachineDefinition<?, ?, ?> definition, BlockPos pos, BlockState state) {
         super(definition.blockEntityType(), pos, state);
         this.slotCount = definition.slots();
         this.items = NonNullList.withSize(slotCount, ItemStack.EMPTY);
@@ -195,8 +191,9 @@ public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPow
             if (neighbour == null) {
                 continue;
             }
-            IItemHandler handler = neighbour.getCapability(ForgeCapabilities.ITEM_HANDLER, dir.getOpposite())
-                                           .orElse(null);
+            IItemHandler handler = neighbour
+                    .getCapability(ForgeCapabilities.ITEM_HANDLER, dir.getOpposite())
+                    .orElse(null);
             if (handler == null) {
                 continue;
             }
@@ -218,7 +215,8 @@ public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPow
                 continue;
             }
             ItemStack toPush = output.copyWithCount(Math.min(output.getCount(), AUTO_TRANSFER_LIMIT));
-            int leftover = ItemHandlerHelper.insertItemStacked(target, toPush, false).getCount();
+            int leftover =
+                    ItemHandlerHelper.insertItemStacked(target, toPush, false).getCount();
             int movedCount = toPush.getCount() - leftover;
             if (movedCount <= 0) {
                 continue;
@@ -303,8 +301,8 @@ public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPow
         if (grid == null) {
             return false;
         }
-        double fromGrid = grid.getEnergyService().extractAEPower(amount - fromSelf, Actionable.SIMULATE,
-                                                                 PowerMultiplier.CONFIG);
+        double fromGrid =
+                grid.getEnergyService().extractAEPower(amount - fromSelf, Actionable.SIMULATE, PowerMultiplier.CONFIG);
         return fromSelf + fromGrid >= amount - ENERGY_EPSILON;
     }
 
@@ -322,8 +320,8 @@ public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPow
             if (grid == null) {
                 return false;
             }
-            fromGrid = grid.getEnergyService().extractAEPower(amount - fromSelf, Actionable.SIMULATE,
-                                                              PowerMultiplier.CONFIG);
+            fromGrid = grid.getEnergyService()
+                    .extractAEPower(amount - fromSelf, Actionable.SIMULATE, PowerMultiplier.CONFIG);
         }
         if (fromSelf + fromGrid < amount - ENERGY_EPSILON) {
             return false;
@@ -344,8 +342,7 @@ public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPow
     }
 
     @Override
-    public void onChangeInventory(InternalInventory inventory, int slot) {
-    }
+    public void onChangeInventory(InternalInventory inventory, int slot) {}
 
     @Override
     public void addAdditionalDrops(net.minecraft.world.level.Level level, BlockPos pos, List<ItemStack> drops) {
@@ -396,11 +393,9 @@ public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPow
         loadMachineData(tag);
     }
 
-    protected void saveMachineData(CompoundTag tag) {
-    }
+    protected void saveMachineData(CompoundTag tag) {}
 
-    protected void loadMachineData(CompoundTag tag) {
-    }
+    protected void loadMachineData(CompoundTag tag) {}
 
     @Override
     protected void writeToStream(FriendlyByteBuf data) {
@@ -426,11 +421,9 @@ public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPow
         return changed;
     }
 
-    protected void writeMachineStream(FriendlyByteBuf data) {
-    }
+    protected void writeMachineStream(FriendlyByteBuf data) {}
 
-    protected void readMachineStream(FriendlyByteBuf data) {
-    }
+    protected void readMachineStream(FriendlyByteBuf data) {}
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction side) {
@@ -583,9 +576,11 @@ public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPow
             int moved = Math.min(amount, current.getCount());
             ItemStack result = current.copyWithCount(moved);
             if (!simulate) {
-                inventory.setItem(target,
-                                  moved >= current.getCount() ? ItemStack.EMPTY
-                                                              : current.copyWithCount(current.getCount() - moved));
+                inventory.setItem(
+                        target,
+                        moved >= current.getCount()
+                                ? ItemStack.EMPTY
+                                : current.copyWithCount(current.getCount() - moved));
             }
             return result;
         }

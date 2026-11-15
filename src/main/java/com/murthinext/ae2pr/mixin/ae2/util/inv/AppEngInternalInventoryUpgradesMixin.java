@@ -1,7 +1,12 @@
 package com.murthinext.ae2pr.mixin.ae2.util.inv;
 
+import appeng.api.upgrades.IUpgradeInventory;
+import appeng.util.inv.AppEngInternalInventory;
+import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 import java.util.Arrays;
-
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -10,15 +15,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import net.minecraft.core.NonNullList;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.ItemStack;
-
-import appeng.api.upgrades.IUpgradeInventory;
-import appeng.util.inv.AppEngInternalInventory;
-
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 
 // 受支持机器：对已存在的升级库存原地追加一个槽位，保留原对象、过滤与回调
 @Mixin(value = AppEngInternalInventory.class, priority = 500, remap = false)

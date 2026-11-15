@@ -8,8 +8,7 @@ public final class GuiPanels {
     public static final int COLOR_HIGHLIGHT = 0xFF8ABBEF;
     private static final int COLOR_POPUP = 0xFF171D24;
 
-    private GuiPanels() {
-    }
+    private GuiPanels() {}
 
     public static void panel(GuiGraphics graphics, int x, int y, int width, int height, int dividerY) {
         frame(graphics, x, y, width, height, COLOR_BACKGROUND);

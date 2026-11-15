@@ -1,14 +1,12 @@
 package com.murthinext.ae2pr.network;
 
+import com.murthinext.ae2pr.api.ClientHooks;
+import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgressCache;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
-
-import com.murthinext.ae2pr.api.ClientHooks;
-import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgressCache;
 
 // 服务端 -> 客户端：本玩家当前已满足的剧情块解锁条件
 public class TerminalStoryUnlockPacket {

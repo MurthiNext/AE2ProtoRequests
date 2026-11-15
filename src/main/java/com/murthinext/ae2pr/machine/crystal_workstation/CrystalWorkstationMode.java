@@ -1,13 +1,11 @@
 package com.murthinext.ae2pr.machine.crystal_workstation;
 
-import net.minecraft.world.item.crafting.RecipeType;
-
 import com.murthinext.ae2pr.api.machine.MachineRecipe;
 import com.murthinext.ae2pr.api.machine.Mode;
 import com.murthinext.ae2pr.registry.ModMachines;
+import net.minecraft.world.item.crafting.RecipeType;
 
 public enum CrystalWorkstationMode implements Mode {
-
     ETCHING("etching"),
     CUTTING("cutting");
 
@@ -29,7 +27,8 @@ public enum CrystalWorkstationMode implements Mode {
 
     @Override
     public RecipeType<MachineRecipe> recipeType() {
-        return this == ETCHING ? ModMachines.CRYSTAL_WORKSTATION_ETCHING_RECIPE.type()
-                               : ModMachines.CRYSTAL_WORKSTATION_CUTTING_RECIPE.type();
+        return this == ETCHING
+                ? ModMachines.CRYSTAL_WORKSTATION_ETCHING_RECIPE.type()
+                : ModMachines.CRYSTAL_WORKSTATION_CUTTING_RECIPE.type();
     }
 }

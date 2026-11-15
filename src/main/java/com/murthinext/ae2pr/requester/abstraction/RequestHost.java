@@ -1,8 +1,7 @@
 package com.murthinext.ae2pr.requester.abstraction;
 
-import net.minecraft.network.chat.Component;
-
 import com.murthinext.ae2pr.requester.Requests;
+import net.minecraft.network.chat.Component;
 
 public interface RequestHost {
 

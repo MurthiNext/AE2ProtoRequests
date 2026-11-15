@@ -1,15 +1,13 @@
 package com.murthinext.ae2pr.api.machine;
 
 import com.google.gson.JsonObject;
-
+import com.murthinext.ae2pr.api.recipe.AbstractMultiblockRecipe;
+import com.murthinext.ae2pr.api.recipe.AbstractMultiblockRecipeSerializer;
+import com.murthinext.ae2pr.api.recipe.RecipeDraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-
-import com.murthinext.ae2pr.api.recipe.AbstractMultiblockRecipe;
-import com.murthinext.ae2pr.api.recipe.AbstractMultiblockRecipeSerializer;
-import com.murthinext.ae2pr.api.recipe.RecipeDraft;
 
 public final class MachineRecipe extends AbstractMultiblockRecipe {
 
@@ -39,8 +37,8 @@ public final class MachineRecipe extends AbstractMultiblockRecipe {
         private final RecipeDefinition<MachineRecipe> definition;
         private final RecipeConstraints constraints;
 
-        public Serializer(RecipeDefinition<MachineRecipe> definition, int defaultDuration,
-                          RecipeConstraints constraints) {
+        public Serializer(
+                RecipeDefinition<MachineRecipe> definition, int defaultDuration, RecipeConstraints constraints) {
             super(defaultDuration);
             this.definition = definition;
             this.constraints = constraints;

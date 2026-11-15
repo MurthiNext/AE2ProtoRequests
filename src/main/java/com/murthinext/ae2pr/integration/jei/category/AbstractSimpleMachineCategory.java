@@ -1,16 +1,14 @@
 package com.murthinext.ae2pr.integration.jei.category;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
-
-import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.RecipeType;
-
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.MachineRecipe;
 import com.murthinext.ae2pr.integration.jei.render.AnimatedTextureDrawable;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
 // 单一动画贴图 + 固定尺寸的机器分类，子类只描述槽位布局
 public abstract class AbstractSimpleMachineCategory extends AbstractMachineCategory<MachineRecipe> {
@@ -25,8 +23,12 @@ public abstract class AbstractSimpleMachineCategory extends AbstractMachineCateg
     private final String titleKey;
     private final IDrawable process;
 
-    protected AbstractSimpleMachineCategory(IGuiHelper guiHelper, RecipeType<MachineRecipe> recipeType, ItemStack icon,
-                                            String titleKey, String processTexture) {
+    protected AbstractSimpleMachineCategory(
+            IGuiHelper guiHelper,
+            RecipeType<MachineRecipe> recipeType,
+            ItemStack icon,
+            String titleKey,
+            String processTexture) {
         super(guiHelper, icon, WIDTH, HEIGHT);
         this.recipeType = recipeType;
         this.titleKey = titleKey;

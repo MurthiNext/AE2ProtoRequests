@@ -1,21 +1,17 @@
 package com.murthinext.ae2pr.client.repeat;
 
+import appeng.api.stacks.AEKey;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import appeng.api.stacks.AEKey;
+import org.jetbrains.annotations.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public final class ClientRepeatOrderRounds {
     private static final Map<AEKey, RoundInfo> ROUNDS = new HashMap<>();
 
-    private ClientRepeatOrderRounds() {
-    }
+    private ClientRepeatOrderRounds() {}
 
     public static void update(@Nullable AEKey what, int remainingRounds, int totalRounds) {
         if (what == null) {

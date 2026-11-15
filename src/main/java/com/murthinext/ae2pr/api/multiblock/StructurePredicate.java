@@ -1,14 +1,14 @@
 package com.murthinext.ae2pr.api.multiblock;
 
+import com.murthinext.ae2pr.api.multiblock.module.ModuleInstance;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
+import com.murthinext.ae2pr.api.multiblock.module.ModuleType;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -16,10 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-
-import com.murthinext.ae2pr.api.multiblock.module.ModuleInstance;
-import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
-import com.murthinext.ae2pr.api.multiblock.module.ModuleType;
+import org.jetbrains.annotations.Nullable;
 
 // 结构单元格谓词：判断某位置是否匹配，支持整结构数量上下限与可选的朝向要求
 public abstract class StructurePredicate {
@@ -88,8 +85,7 @@ public abstract class StructurePredicate {
         return matched != null && oriented(state, orientation) ? matched : null;
     }
 
-    public void collectModules(BlockPos pos, BlockState state, List<ModuleInstance> modules) {
-    }
+    public void collectModules(BlockPos pos, BlockState state, List<ModuleInstance> modules) {}
 
     // 匹配任意方块，不参与计数与诊断
     public boolean isAny() {
@@ -195,13 +191,14 @@ public abstract class StructurePredicate {
             return allowed.contains(state.getValue(BlockStateProperties.FACING).getAxis());
         }
         if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
-            return allowed.contains(state.getValue(BlockStateProperties.HORIZONTAL_FACING).getAxis());
+            return allowed.contains(
+                    state.getValue(BlockStateProperties.HORIZONTAL_FACING).getAxis());
         }
         return true;
     }
 
-    private static boolean contains(StructureOrientation orientation, List<RelativeDirection> facings,
-                                    Direction value) {
+    private static boolean contains(
+            StructureOrientation orientation, List<RelativeDirection> facings, Direction value) {
         for (RelativeDirection relative : facings) {
             if (orientation.direction(relative) == value) {
                 return true;
@@ -221,7 +218,9 @@ public abstract class StructurePredicate {
             predicate = predicate.or(blocks(part));
         }
         Block networkAccessHatch = StructureHooks.networkAccessHatch();
-        return networkAccessHatch == null ? predicate : predicate.or(blocks(networkAccessHatch).maxCount(1));
+        return networkAccessHatch == null
+                ? predicate
+                : predicate.or(blocks(networkAccessHatch).maxCount(1));
     }
 
     // 模块插槽：接受基础方块或提供允许功能的模块方块
@@ -271,8 +270,8 @@ public abstract class StructurePredicate {
             if (state.is(base)) {
                 return this;
             }
-            return state.getBlock() instanceof ModuleProvider provider &&
-                            allowed.contains(provider.moduleDefinition().type())
+            return state.getBlock() instanceof ModuleProvider provider
+                            && allowed.contains(provider.moduleDefinition().type())
                     ? this
                     : null;
         }
@@ -289,12 +288,12 @@ public abstract class StructurePredicate {
             List<Block> result = new ArrayList<>();
             result.add(base);
             BuiltInRegistries.BLOCK.stream()
-                    .filter(block
-                            -> block instanceof ModuleProvider provider &&
-                                    allowed.contains(provider.moduleDefinition().type()))
-                    .sorted(Comparator
-                                    .comparingInt((Block block) -> ((ModuleProvider) block).moduleDefinition().level())
-                                    .thenComparing(block -> BuiltInRegistries.BLOCK.getKey(block).toString()))
+                    .filter(block -> block instanceof ModuleProvider provider
+                            && allowed.contains(provider.moduleDefinition().type()))
+                    .sorted(Comparator.comparingInt((Block block) ->
+                                    ((ModuleProvider) block).moduleDefinition().level())
+                            .thenComparing(block ->
+                                    BuiltInRegistries.BLOCK.getKey(block).toString()))
                     .forEach(result::add);
             return List.copyOf(result);
         }
@@ -348,7 +347,10 @@ public abstract class StructurePredicate {
 
         @Override
         public List<Block> previewBlocks() {
-            return parts.stream().flatMap(part -> part.previewBlocks().stream()).distinct().toList();
+            return parts.stream()
+                    .flatMap(part -> part.previewBlocks().stream())
+                    .distinct()
+                    .toList();
         }
 
         @Override

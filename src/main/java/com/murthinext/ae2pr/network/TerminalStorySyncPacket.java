@@ -1,14 +1,12 @@
 package com.murthinext.ae2pr.network;
 
-import java.io.IOException;
-import java.util.function.Supplier;
-
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
-
 import com.murthinext.ae2pr.api.ClientHooks;
 import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgress;
 import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgressCache;
+import java.io.IOException;
+import java.util.function.Supplier;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
 
 // 服务端 -> 客户端：本玩家在当前存档里的源始终端阅读进度
 public class TerminalStorySyncPacket {

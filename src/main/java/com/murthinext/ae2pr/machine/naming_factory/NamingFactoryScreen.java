@@ -1,10 +1,9 @@
 package com.murthinext.ae2pr.machine.naming_factory;
 
+import com.murthinext.ae2pr.api.machine.singleblock.AbstractSingleblockMachineScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-
-import com.murthinext.ae2pr.api.machine.singleblock.AbstractSingleblockMachineScreen;
 
 public class NamingFactoryScreen extends AbstractSingleblockMachineScreen<NamingFactoryMenu> {
 
@@ -54,10 +53,16 @@ public class NamingFactoryScreen extends AbstractSingleblockMachineScreen<Naming
         NamingFactoryBlockEntity machine = menu.getMachine();
         String name = machine != null ? machine.getImprintName() : null;
         if (name == null) {
-            graphics.drawString(font, Component.translatable("gui.ae2pr.naming_factory.name.none"), TEXT_X, NAME_Y,
-                                COLOR_GRAY, false);
+            graphics.drawString(
+                    font,
+                    Component.translatable("gui.ae2pr.naming_factory.name.none"),
+                    TEXT_X,
+                    NAME_Y,
+                    COLOR_GRAY,
+                    false);
         } else {
-            String text = Component.translatable("gui.ae2pr.naming_factory.name", name).getString();
+            String text = Component.translatable("gui.ae2pr.naming_factory.name", name)
+                    .getString();
             graphics.drawString(font, clip(text, imageWidth - TEXT_X * 2), TEXT_X, NAME_Y, COLOR_VALUE, false);
         }
     }

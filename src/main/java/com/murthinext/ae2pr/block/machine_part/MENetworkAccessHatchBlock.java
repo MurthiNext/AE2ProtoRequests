@@ -1,9 +1,8 @@
 package com.murthinext.ae2pr.block.machine_part;
 
+import appeng.block.AEBaseEntityBlock;
+import com.murthinext.ae2pr.api.wrench.Wrenchable;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -21,13 +20,10 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.MapColor;
+import org.jetbrains.annotations.Nullable;
 
-import appeng.block.AEBaseEntityBlock;
-
-import com.murthinext.ae2pr.api.wrench.Wrenchable;
-
-public class MENetworkAccessHatchBlock
-        extends AEBaseEntityBlock<MENetworkAccessHatchBlockEntity> implements Wrenchable {
+public class MENetworkAccessHatchBlock extends AEBaseEntityBlock<MENetworkAccessHatchBlockEntity>
+        implements Wrenchable {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty FORMED = BooleanProperty.create("formed");
@@ -35,14 +31,15 @@ public class MENetworkAccessHatchBlock
 
     public MENetworkAccessHatchBlock() {
         super(Properties.of()
-                      .mapColor(MapColor.METAL)
-                      .strength(3.0F)
-                      .sound(SoundType.METAL)
-                      .requiresCorrectToolForDrops());
-        registerDefaultState(stateDefinition.any()
-                                     .setValue(FACING, Direction.NORTH)
-                                     .setValue(FORMED, false)
-                                     .setValue(STYLE, MachinePartBlock.DEFAULT_STYLE));
+                .mapColor(MapColor.METAL)
+                .strength(3.0F)
+                .sound(SoundType.METAL)
+                .requiresCorrectToolForDrops());
+        registerDefaultState(stateDefinition
+                .any()
+                .setValue(FACING, Direction.NORTH)
+                .setValue(FORMED, false)
+                .setValue(STYLE, MachinePartBlock.DEFAULT_STYLE));
     }
 
     @Override
@@ -77,8 +74,8 @@ public class MENetworkAccessHatchBlock
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip,
-                                TooltipFlag flag) {
+    public void appendHoverText(
+            ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
         tooltip.add(Component.translatable("tooltip.ae2pr.me_network_access_hatch"));
     }

@@ -1,7 +1,14 @@
 package com.murthinext.ae2pr.mixin.advanced_ae.common.logic;
 
+import appeng.api.upgrades.IUpgradeInventory;
+import appeng.api.upgrades.IUpgradeableObject;
+import appeng.api.upgrades.UpgradeInventories;
+import appeng.helpers.patternprovider.PatternProviderReturnInventory;
+import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 import java.util.List;
-
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
+import net.pedroksl.advanced_ae.common.logic.AdvPatternProviderLogicHost;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -10,17 +17,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.ItemStack;
-import net.pedroksl.advanced_ae.common.logic.AdvPatternProviderLogicHost;
-
-import appeng.api.upgrades.IUpgradeInventory;
-import appeng.api.upgrades.IUpgradeableObject;
-import appeng.api.upgrades.UpgradeInventories;
-import appeng.helpers.patternprovider.PatternProviderReturnInventory;
-
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 
 // AdvancedAE 样板供应器：补一个升级槽，宿主装卡时返回槽扩容
 @Pseudo
@@ -37,14 +33,16 @@ public abstract class AdvancedPatternProviderLogicMixin implements SuperStackSup
 
     @Unique
     private IUpgradeInventory ae2pr$upgrades = UpgradeInventories.empty();
+
     @Unique
     private boolean ae2pr$upgradesCreated;
 
-    @Inject(method =
+    @Inject(
+            method =
                     "<init>(Lappeng/api/networking/IManagedGridNode;Lnet/pedroksl/advanced_ae/common/logic/AdvPatternProviderLogicHost;I)V",
-            at = @At("TAIL"), remap = false)
-    private void
-    ae2pr$initUpgrades(CallbackInfo ci) {
+            at = @At("TAIL"),
+            remap = false)
+    private void ae2pr$initUpgrades(CallbackInfo ci) {
         SuperStackSupport.bind(this.getReturnInv(), this);
     }
 
@@ -56,8 +54,8 @@ public abstract class AdvancedPatternProviderLogicMixin implements SuperStackSup
         }
         if (!this.ae2pr$upgradesCreated && this.host != null) {
             this.ae2pr$upgradesCreated = true;
-            this.ae2pr$upgrades = UpgradeInventories.forMachine(this.host.getTerminalIcon().getItem(), 1,
-                                                                this.host::saveChanges);
+            this.ae2pr$upgrades =
+                    UpgradeInventories.forMachine(this.host.getTerminalIcon().getItem(), 1, this.host::saveChanges);
         }
         return this.ae2pr$upgrades;
     }

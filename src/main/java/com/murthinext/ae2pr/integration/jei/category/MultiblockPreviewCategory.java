@@ -1,9 +1,9 @@
 package com.murthinext.ae2pr.integration.jei.category;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.integration.jei.recipe.MultiblockPreviewRecipe;
+import com.murthinext.ae2pr.integration.jei.widget.MultiblockPreviewWidget;
+import com.murthinext.ae2pr.registry.ModMachines;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
@@ -12,16 +12,14 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.integration.jei.recipe.MultiblockPreviewRecipe;
-import com.murthinext.ae2pr.integration.jei.widget.MultiblockPreviewWidget;
-import com.murthinext.ae2pr.registry.ModMachines;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 public class MultiblockPreviewCategory implements IRecipeCategory<MultiblockPreviewRecipe> {
 
-    public static final RecipeType<MultiblockPreviewRecipe> RECIPE_TYPE = RecipeType.create(
-            ae2pr.MODID, "multiblock_preview", MultiblockPreviewRecipe.class);
+    public static final RecipeType<MultiblockPreviewRecipe> RECIPE_TYPE =
+            RecipeType.create(ae2pr.MODID, "multiblock_preview", MultiblockPreviewRecipe.class);
     public static final int WIDTH = 160;
     public static final int HEIGHT = 220;
 

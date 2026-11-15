@@ -1,9 +1,7 @@
 package com.murthinext.ae2pr.requester.network;
 
 import java.util.function.Supplier;
-
 import javax.annotation.Nullable;
-
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 

@@ -1,11 +1,10 @@
 package com.murthinext.ae2pr.machine.matter_phase_transformer;
 
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.registry.ModMachines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-
-import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.registry.ModMachines;
 
 public class MatterPhaseTransformerControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 

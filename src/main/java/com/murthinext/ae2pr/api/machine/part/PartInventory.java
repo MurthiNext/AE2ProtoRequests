@@ -1,17 +1,15 @@
 package com.murthinext.ae2pr.api.machine.part;
 
+import com.murthinext.ae2pr.api.recipe.ChancedItemStack;
+import com.murthinext.ae2pr.api.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.IItemHandlerModifiable;
-
-import com.murthinext.ae2pr.api.recipe.ChancedItemStack;
-import com.murthinext.ae2pr.api.recipe.CountedIngredient;
-import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 
 /**
  * 总线与流体仓的事务快照，用于模拟扣料与产物容纳。
@@ -118,7 +116,8 @@ public final class PartInventory {
             for (int i = 0; i < inputs.size(); i++) {
                 deducted += capacity[slotNode][i];
             }
-            items.get(j).stack.shrink((int) Math.min(deducted, items.get(j).stack.getCount()));
+            items.get(j).stack.shrink((int)
+                    Math.min(deducted, items.get(j).stack.getCount()));
         }
         return true;
     }
@@ -130,7 +129,7 @@ public final class PartInventory {
             ItemStack output = chanced.stack();
             long remaining = (long) output.getCount() * parallel;
             // 先在同类物品槽位堆叠，再占用空槽位
-            for (boolean sameItem : new boolean[] { true, false }) {
+            for (boolean sameItem : new boolean[] {true, false}) {
                 for (ItemSlot slot : items) {
                     if (remaining <= 0) {
                         break;
@@ -152,7 +151,7 @@ public final class PartInventory {
         }
         for (FluidStack output : recipe.getFluidOutputs()) {
             long remaining = (long) output.getAmount() * parallel;
-            for (boolean sameFluid : new boolean[] { true, false }) {
+            for (boolean sameFluid : new boolean[] {true, false}) {
                 for (TankSlot slot : fluids) {
                     if (remaining <= 0) {
                         break;
@@ -160,8 +159,8 @@ public final class PartInventory {
                     if (sameFluid ? !slot.stack.isFluidEqual(output) : !slot.stack.isEmpty()) {
                         continue;
                     }
-                    int moved = (int) Math.min(remaining,
-                                               Math.max(0, slot.tank.getCapacity() - slot.stack.getAmount()));
+                    int moved =
+                            (int) Math.min(remaining, Math.max(0, slot.tank.getCapacity() - slot.stack.getAmount()));
                     if (moved > 0) {
                         int amount = slot.stack.getAmount() + moved;
                         slot.stack = output.copy();

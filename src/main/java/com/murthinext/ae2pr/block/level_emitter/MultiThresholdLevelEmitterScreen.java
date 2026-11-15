@@ -1,16 +1,13 @@
 package com.murthinext.ae2pr.block.level_emitter;
 
-import java.util.function.Consumer;
-
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Inventory;
-
 import appeng.api.config.RedstoneMode;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.AETextField;
-
 import com.murthinext.ae2pr.registry.ModGuide;
+import java.util.function.Consumer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 
 public class MultiThresholdLevelEmitterScreen extends AbstractMultiLevelEmitterScreen<MultiThresholdLevelEmitterMenu> {
 
@@ -18,8 +15,8 @@ public class MultiThresholdLevelEmitterScreen extends AbstractMultiLevelEmitterS
     private final AETextField lowerField;
     private boolean updatingFields;
 
-    public MultiThresholdLevelEmitterScreen(MultiThresholdLevelEmitterMenu menu, Inventory playerInventory,
-                                            Component title, ScreenStyle style) {
+    public MultiThresholdLevelEmitterScreen(
+            MultiThresholdLevelEmitterMenu menu, Inventory playerInventory, Component title, ScreenStyle style) {
         super(menu, playerInventory, title, style, RedstoneMode.HIGH_SIGNAL);
 
         this.upperField = createValueField(menu.getCurrentUpper(), this::onUpperChanged);

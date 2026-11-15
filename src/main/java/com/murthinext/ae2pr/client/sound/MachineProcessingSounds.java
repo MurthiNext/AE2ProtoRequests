@@ -1,11 +1,13 @@
 package com.murthinext.ae2pr.client.sound;
 
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.machine.MachineBlock;
+import com.murthinext.ae2pr.registry.ModSounds;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
@@ -19,10 +21,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.api.machine.MachineBlock;
-import com.murthinext.ae2pr.registry.ModSounds;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT)
 public final class MachineProcessingSounds {
@@ -64,13 +62,14 @@ public final class MachineProcessingSounds {
 
         private boolean isRunning(BlockEntity controller) {
             BlockState state = controller.getBlockState();
-            return state.hasProperty(MachineBlock.FORMED) && state.hasProperty(MachineBlock.RUNNING) &&
-                    state.getValue(MachineBlock.FORMED) && state.getValue(MachineBlock.RUNNING);
+            return state.hasProperty(MachineBlock.FORMED)
+                    && state.hasProperty(MachineBlock.RUNNING)
+                    && state.getValue(MachineBlock.FORMED)
+                    && state.getValue(MachineBlock.RUNNING);
         }
     }
 
-    private MachineProcessingSounds() {
-    }
+    private MachineProcessingSounds() {}
 
     public static void tick(BlockEntity controller, Type type) {
         Minecraft minecraft = Minecraft.getInstance();
@@ -97,11 +96,14 @@ public final class MachineProcessingSounds {
     }
 
     private static boolean isAudible(Minecraft minecraft, BlockEntity controller) {
-        return minecraft.level != null && minecraft.level == controller.getLevel() && minecraft.player != null &&
-                !controller.isRemoved() && minecraft.level.hasChunkAt(controller.getBlockPos()) &&
-                controller.getBlockPos().distToCenterSqr(minecraft.player.position()) < RANGE_SQUARED &&
-                minecraft.options.getSoundSourceVolume(SoundSource.MASTER) > 0.0F &&
-                minecraft.options.getSoundSourceVolume(SoundSource.BLOCKS) > 0.0F;
+        return minecraft.level != null
+                && minecraft.level == controller.getLevel()
+                && minecraft.player != null
+                && !controller.isRemoved()
+                && minecraft.level.hasChunkAt(controller.getBlockPos())
+                && controller.getBlockPos().distToCenterSqr(minecraft.player.position()) < RANGE_SQUARED
+                && minecraft.options.getSoundSourceVolume(SoundSource.MASTER) > 0.0F
+                && minecraft.options.getSoundSourceVolume(SoundSource.BLOCKS) > 0.0F;
     }
 
     @SubscribeEvent
@@ -153,8 +155,10 @@ public final class MachineProcessingSounds {
         @Override
         public boolean canPlaySound() {
             Minecraft minecraft = Minecraft.getInstance();
-            return !isStopped() && type.isRunning(controller) && isAudible(minecraft, controller) &&
-                    minecraft.level.getBlockEntity(controller.getBlockPos()) == controller;
+            return !isStopped()
+                    && type.isRunning(controller)
+                    && isAudible(minecraft, controller)
+                    && minecraft.level.getBlockEntity(controller.getBlockPos()) == controller;
         }
 
         // 刷新字幕
@@ -163,8 +167,9 @@ public final class MachineProcessingSounds {
                 return;
             }
             subtitleTicks = 0;
-            WeighedSoundEvents events = minecraft.getSoundManager().getSoundEvent(
-                    type.subtitleSource.get().getLocation());
+            WeighedSoundEvents events = minecraft
+                    .getSoundManager()
+                    .getSoundEvent(type.subtitleSource.get().getLocation());
             if (events == null || events.getSubtitle() == null) {
                 return;
             }
@@ -213,8 +218,10 @@ public final class MachineProcessingSounds {
         private int age;
 
         private LavaSplashSound(ProcessingSound owner) {
-            super(ModSounds.HIGH_REACTIVITY_LAVA_SMELTER.get(), SoundSource.BLOCKS,
-                  SoundInstance.createUnseededRandom());
+            super(
+                    ModSounds.HIGH_REACTIVITY_LAVA_SMELTER.get(),
+                    SoundSource.BLOCKS,
+                    SoundInstance.createUnseededRandom());
             this.owner = owner;
             this.volume = 0.22F + random.nextFloat() * 0.18F;
             this.pitch = 0.6F + random.nextFloat() * 0.55F;

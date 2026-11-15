@@ -1,5 +1,16 @@
 package com.murthinext.ae2pr.requester.client.widgets;
 
+import appeng.api.stacks.AEFluidKey;
+import appeng.api.stacks.AEKey;
+import appeng.client.gui.MathExpressionParser;
+import appeng.client.gui.NumberEntryType;
+import appeng.client.gui.style.PaletteColor;
+import appeng.client.gui.style.ScreenStyle;
+import appeng.client.gui.widgets.ITooltip;
+import appeng.core.localization.GuiText;
+import com.mojang.blaze3d.platform.InputConstants;
+import com.murthinext.ae2pr.requester.RequesterUtils;
+import com.murthinext.ae2pr.requester.mixin.EditBoxMixin;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -12,31 +23,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.function.Consumer;
-
 import javax.annotation.Nullable;
-
-import org.lwjgl.glfw.GLFW;
-
-import com.mojang.blaze3d.platform.InputConstants;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
-
-import appeng.api.stacks.AEFluidKey;
-import appeng.api.stacks.AEKey;
-import appeng.client.gui.MathExpressionParser;
-import appeng.client.gui.NumberEntryType;
-import appeng.client.gui.style.PaletteColor;
-import appeng.client.gui.style.ScreenStyle;
-import appeng.client.gui.widgets.ITooltip;
-import appeng.core.localization.GuiText;
-
-import com.murthinext.ae2pr.requester.RequesterUtils;
-import com.murthinext.ae2pr.requester.mixin.EditBoxMixin;
+import org.lwjgl.glfw.GLFW;
 
 public class NumberField extends EditBox implements ITooltip {
 
@@ -66,8 +60,13 @@ public class NumberField extends EditBox implements ITooltip {
     private boolean isFluid;
 
     NumberField(int x, int y, int width, String name, ScreenStyle style, Consumer<Long> onConfirm) {
-        super(Minecraft.getInstance().font, x + PADDING, y + PADDING,
-              width - 2 * PADDING - Minecraft.getInstance().font.width("_"), HEIGHT - 2 * PADDING, Component.empty());
+        super(
+                Minecraft.getInstance().font,
+                x + PADDING,
+                y + PADDING,
+                width - 2 * PADDING - Minecraft.getInstance().font.width("_"),
+                HEIGHT - 2 * PADDING,
+                Component.empty());
         this.name = name;
         this.visualWidth = width;
         this.normalTextColor = style.getColor(PaletteColor.TEXTFIELD_TEXT).toARGB();
@@ -121,8 +120,10 @@ public class NumberField extends EditBox implements ITooltip {
     @Override
     public boolean isMouseOver(double mouseX, double mouseY) {
         var bounds = getVisualBounds();
-        return mouseX >= bounds.getX() && mouseX < bounds.getX() + bounds.getWidth() && mouseY >= bounds.getY() &&
-                mouseY < bounds.getY() + bounds.getHeight();
+        return mouseX >= bounds.getX()
+                && mouseX < bounds.getX() + bounds.getWidth()
+                && mouseY >= bounds.getY()
+                && mouseY < bounds.getY() + bounds.getHeight();
     }
 
     @Override
@@ -224,12 +225,15 @@ public class NumberField extends EditBox implements ITooltip {
     public void setTooltipMessage(List<Component> tooltipMessage) {
         tooltipMessage.add(0, RequesterUtils.translate("tooltip", name));
         this.tooltipMessage = tooltipMessage;
-        if (!isFocused() || (tooltipMessage.size() > 1 && !tooltipMessage.get(1).getString().startsWith("="))) return;
+        if (!isFocused()
+                || (tooltipMessage.size() > 1
+                        && !tooltipMessage.get(1).getString().startsWith("="))) return;
         tooltipMessage.add(Component.literal("» ")
-                                   .withStyle(ChatFormatting.AQUA)
-                                   .append(RequesterUtils.translate(
-                                           "tooltip", "enter_to_submit",
-                                           InputConstants.getKey("key.keyboard.enter").getDisplayName())));
+                .withStyle(ChatFormatting.AQUA)
+                .append(RequesterUtils.translate(
+                        "tooltip",
+                        "enter_to_submit",
+                        InputConstants.getKey("key.keyboard.enter").getDisplayName())));
     }
 
     @Override

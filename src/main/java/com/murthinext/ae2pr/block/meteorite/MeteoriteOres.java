@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.block.meteorite;
 
+import com.murthinext.ae2pr.registry.ModBlocks;
 import java.util.List;
-
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -9,8 +9,6 @@ import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.registries.RegistryObject;
-
-import com.murthinext.ae2pr.registry.ModBlocks;
 
 public final class MeteoriteOres {
 
@@ -22,10 +20,10 @@ public final class MeteoriteOres {
             new OreEntry(ModBlocks.METEORITE_GOLD_ORE, 15), new OreEntry(ModBlocks.METEORITE_LAPIS_ORE, 15),
             new OreEntry(ModBlocks.METEORITE_DIAMOND_ORE, 5), new OreEntry(ModBlocks.METEORITE_EMERALD_ORE, 5));
 
-    private static final int WEIGHT_SUM = VANILLA_ORES.stream().mapToInt(OreEntry::weight).sum();
+    private static final int WEIGHT_SUM =
+            VANILLA_ORES.stream().mapToInt(OreEntry::weight).sum();
 
-    private MeteoriteOres() {
-    }
+    private MeteoriteOres() {}
 
     // 锆英石：原版矿石=1:1
     public static BlockState randomOre(RandomSource random) {

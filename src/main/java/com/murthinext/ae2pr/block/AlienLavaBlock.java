@@ -1,8 +1,9 @@
 package com.murthinext.ae2pr.block;
 
+import com.murthinext.ae2pr.fluid.AlienLavaFluid;
+import com.murthinext.ae2pr.logic.world_interaction.WorldInteractionCatalyst;
 import java.util.Optional;
 import java.util.function.Supplier;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -27,9 +28,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.fluids.FluidInteractionRegistry;
 
-import com.murthinext.ae2pr.fluid.AlienLavaFluid;
-import com.murthinext.ae2pr.logic.world_interaction.WorldInteractionCatalyst;
-
 public class AlienLavaBlock extends LiquidBlock implements WorldInteractionCatalyst {
 
     private static final float DAMAGE = 8.0F;
@@ -50,8 +48,8 @@ public class AlienLavaBlock extends LiquidBlock implements WorldInteractionCatal
         int level = state.getValue(LEVEL);
         FlowingFluid fluid = getFluid();
         if (level == 0) {
-            return fluid.getSource(false).setValue(AlienLavaFluid.CONVERSIONS,
-                                                   state.getValue(AlienLavaFluid.CONVERSIONS));
+            return fluid.getSource(false)
+                    .setValue(AlienLavaFluid.CONVERSIONS, state.getValue(AlienLavaFluid.CONVERSIONS));
         }
         if (level >= 8) {
             return fluid.getFlowing(8, true);
@@ -86,8 +84,8 @@ public class AlienLavaBlock extends LiquidBlock implements WorldInteractionCatal
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos,
-                                boolean isMoving) {
+    public void neighborChanged(
+            BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean isMoving) {
         if (!FluidInteractionRegistry.canInteract(level, pos)) {
             level.scheduleTick(pos, state.getFluidState().getType(), getFluid().getTickDelay(level));
         }
@@ -95,8 +93,9 @@ public class AlienLavaBlock extends LiquidBlock implements WorldInteractionCatal
 
     @Override
     public int getRemainingInteractions(BlockState state) {
-        return state.getValue(LEVEL) == 0 ? AlienLavaFluid.MAX_CONVERSIONS - state.getValue(AlienLavaFluid.CONVERSIONS)
-                                          : 0;
+        return state.getValue(LEVEL) == 0
+                ? AlienLavaFluid.MAX_CONVERSIONS - state.getValue(AlienLavaFluid.CONVERSIONS)
+                : 0;
     }
 
     @Override

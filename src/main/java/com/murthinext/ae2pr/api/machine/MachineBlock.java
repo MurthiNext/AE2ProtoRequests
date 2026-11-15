@@ -1,9 +1,9 @@
 package com.murthinext.ae2pr.api.machine;
 
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.api.wrench.WrenchTags;
+import com.murthinext.ae2pr.api.wrench.Wrenchable;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -32,13 +32,10 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.Nullable;
 
-import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.api.wrench.WrenchTags;
-import com.murthinext.ae2pr.api.wrench.Wrenchable;
-
-public final class MachineBlock<E extends AbstractMultiblockControllerBlockEntity>
-        extends Block implements EntityBlock, Wrenchable {
+public final class MachineBlock<E extends AbstractMultiblockControllerBlockEntity> extends Block
+        implements EntityBlock, Wrenchable {
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty FORMED = BooleanProperty.create("formed");
@@ -50,11 +47,12 @@ public final class MachineBlock<E extends AbstractMultiblockControllerBlockEntit
     public MachineBlock(MultiblockMachineDefinition<E, ?> definition, Properties properties) {
         super(properties);
         this.definition = definition;
-        registerDefaultState(stateDefinition.any()
-                                     .setValue(FACING, Direction.NORTH)
-                                     .setValue(FORMED, false)
-                                     .setValue(RUNNING, false)
-                                     .setValue(PAUSED, false));
+        registerDefaultState(stateDefinition
+                .any()
+                .setValue(FACING, Direction.NORTH)
+                .setValue(FORMED, false)
+                .setValue(RUNNING, false)
+                .setValue(PAUSED, false));
     }
 
     public MultiblockMachineDefinition<E, ?> definition() {
@@ -68,7 +66,8 @@ public final class MachineBlock<E extends AbstractMultiblockControllerBlockEntit
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+        return defaultBlockState()
+                .setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @Override
@@ -89,8 +88,8 @@ public final class MachineBlock<E extends AbstractMultiblockControllerBlockEntit
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state,
-                                                                  BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+            Level level, BlockState state, BlockEntityType<T> type) {
         if (type != definition.blockEntityType()) {
             return null;
         }
@@ -125,21 +124,22 @@ public final class MachineBlock<E extends AbstractMultiblockControllerBlockEntit
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip,
-                                TooltipFlag flag) {
+    public void appendHoverText(
+            ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("tooltip.ae2pr." + definition.id() + ".desc"));
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
-                                 BlockHitResult hit) {
+    public InteractionResult use(
+            BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (player.getItemInHand(hand).is(WrenchTags.WRENCH)) {
             return InteractionResult.PASS;
         }
-        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer &&
-            level.getBlockEntity(pos) instanceof AbstractMultiblockControllerBlockEntity controller) {
-            NetworkHooks.openScreen(serverPlayer, menuProvider(definition.controller(controller)),
-                                    buffer -> buffer.writeBlockPos(pos));
+        if (!level.isClientSide
+                && player instanceof ServerPlayer serverPlayer
+                && level.getBlockEntity(pos) instanceof AbstractMultiblockControllerBlockEntity controller) {
+            NetworkHooks.openScreen(
+                    serverPlayer, menuProvider(definition.controller(controller)), buffer -> buffer.writeBlockPos(pos));
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
@@ -150,19 +150,20 @@ public final class MachineBlock<E extends AbstractMultiblockControllerBlockEntit
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos,
-                                boolean isMoving) {
+    public void neighborChanged(
+            BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         super.neighborChanged(state, level, pos, block, fromPos, isMoving);
-        if (!level.isClientSide &&
-            level.getBlockEntity(pos) instanceof AbstractMultiblockControllerBlockEntity controller) {
+        if (!level.isClientSide
+                && level.getBlockEntity(pos) instanceof AbstractMultiblockControllerBlockEntity controller) {
             controller.validateStructure();
         }
     }
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.is(newState.getBlock()) && !level.isClientSide &&
-            level.getBlockEntity(pos) instanceof AbstractMultiblockControllerBlockEntity controller) {
+        if (!state.is(newState.getBlock())
+                && !level.isClientSide
+                && level.getBlockEntity(pos) instanceof AbstractMultiblockControllerBlockEntity controller) {
             controller.onControllerRemoved();
         }
         super.onRemove(state, level, pos, newState, isMoving);

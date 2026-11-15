@@ -1,14 +1,11 @@
 package com.murthinext.ae2pr.api.machine;
 
+import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 import java.util.List;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
-
-import com.murthinext.ae2pr.api.machine.Mode;
-import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 
 // 带工作模式的控制器，模式列表由机器定义提供
 public abstract class ModeMachineBlockEntity<T extends Enum<T> & Mode> extends AbstractMultiblockControllerBlockEntity {
@@ -18,8 +15,8 @@ public abstract class ModeMachineBlockEntity<T extends Enum<T> & Mode> extends A
     private final List<T> modes;
     private T mode;
 
-    protected ModeMachineBlockEntity(MultiblockMachineDefinition<?, ?> definition, BlockPos pos, BlockState state,
-                                     List<T> modes) {
+    protected ModeMachineBlockEntity(
+            MultiblockMachineDefinition<?, ?> definition, BlockPos pos, BlockState state, List<T> modes) {
         super(definition, pos, state);
         this.modes = List.copyOf(modes);
         this.mode = this.modes.get(0);

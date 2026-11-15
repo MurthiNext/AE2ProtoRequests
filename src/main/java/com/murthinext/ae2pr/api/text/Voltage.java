@@ -1,11 +1,9 @@
 package com.murthinext.ae2pr.api.text;
 
 import java.util.Locale;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 电压字样统一格式：颜色表、字样组件与语言键注入。
@@ -15,7 +13,6 @@ import net.minecraft.network.chat.MutableComponent;
  * 语言键最后一段以电压名开头即可自动注入，如 {@code block.ae2pr.aev_input_bus}。
  */
 public enum Voltage {
-
     AEV(0x00FFFF),
     XPV(0xB8E4FF, 0x6FA2F2, 0x22409E);
 
@@ -51,8 +48,8 @@ public enum Voltage {
 
     // 电路 Tooltip 行
     public MutableComponent circuit(int downgrade) {
-        MutableComponent label = Component.empty().append(MutableComponent.create(GradientText.gradient(name(), SPEED,
-                                                                                                        colors)));
+        MutableComponent label =
+                Component.empty().append(MutableComponent.create(GradientText.gradient(name(), SPEED, colors)));
         if (downgrade > 0) {
             label.append(Component.literal("-" + downgrade).withStyle(style -> style.withColor(DOWNGRADE_COLOR)));
         }
@@ -63,8 +60,9 @@ public enum Voltage {
 
     public static MutableComponent name(String descriptionId) {
         Voltage voltage = of(descriptionId);
-        return voltage == null ? Component.translatable(descriptionId)
-                               : Component.translatable(descriptionId, voltage.label());
+        return voltage == null
+                ? Component.translatable(descriptionId)
+                : Component.translatable(descriptionId, voltage.label());
     }
 
     public static MutableComponent circuit(String tier) {

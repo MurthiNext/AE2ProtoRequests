@@ -1,11 +1,12 @@
 package com.murthinext.ae2pr.block.machine_part;
 
+import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
+import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
+import com.murthinext.ae2pr.network.HatchTankClickPacket;
+import com.murthinext.ae2pr.registry.ModNetwork;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
@@ -13,11 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.fluids.FluidStack;
-
-import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
-import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
-import com.murthinext.ae2pr.network.HatchTankClickPacket;
-import com.murthinext.ae2pr.registry.ModNetwork;
+import org.jetbrains.annotations.Nullable;
 
 public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> implements CustomIngredientSource {
 
@@ -31,8 +28,8 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
     }
 
     // 客户端同步入口，仅由同步包调用
-    public static void applyFluidSync(BlockPos pos, List<FluidStack> fluids, boolean autoTransfer,
-                                      boolean recipeIsolated) {
+    public static void applyFluidSync(
+            BlockPos pos, List<FluidStack> fluids, boolean autoTransfer, boolean recipeIsolated) {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level != null && minecraft.level.getBlockEntity(pos) instanceof FluidHatchBlockEntity hatch) {
             for (int i = 0; i < fluids.size() && i < hatch.getTankCount(); i++) {
@@ -40,8 +37,8 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
             }
             hatch.setAutoTransfer(autoTransfer);
             hatch.setRecipeIsolated(recipeIsolated);
-        } else if (minecraft.level != null &&
-                   minecraft.level.getBlockEntity(pos) instanceof DualHatchBlockEntity dual) {
+        } else if (minecraft.level != null
+                && minecraft.level.getBlockEntity(pos) instanceof DualHatchBlockEntity dual) {
             var storage = dual.getFluidStorage();
             for (int i = 0; i < fluids.size() && i < storage.getTankCount(); i++) {
                 storage.applyClientFluid(i, fluids.get(i));
@@ -111,12 +108,16 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
         int tank = hoveredTank(mouseX, mouseY);
         if (tank >= 0) {
             FluidStack fluid = clientFluid(tank);
-            GuiTooltips.render(graphics, font,
-                               List.of(fluid.isEmpty() ? Component.translatable("gui.ae2pr.machine_part.tank.empty")
-                                                       : fluid.getDisplayName(),
-                                       Component.translatable("gui.ae2pr.machine_part.tank.mb",
-                                                              NUMBER.format(fluid.getAmount()))),
-                               mouseX, mouseY);
+            GuiTooltips.render(
+                    graphics,
+                    font,
+                    List.of(
+                            fluid.isEmpty()
+                                    ? Component.translatable("gui.ae2pr.machine_part.tank.empty")
+                                    : fluid.getDisplayName(),
+                            Component.translatable("gui.ae2pr.machine_part.tank.mb", NUMBER.format(fluid.getAmount()))),
+                    mouseX,
+                    mouseY);
             return;
         }
         super.renderTooltip(graphics, mouseX, mouseY);
@@ -134,20 +135,28 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
     }
 
     private void renderFluid(GuiGraphics graphics, int tank) {
-        drawFluid(graphics, clientFluid(tank), leftPos + TANK_X0 + 2 + tank * TANK_STEP, topPos + TANK_Y + 2,
-                  TANK_INNER_WIDTH, TANK_INNER_HEIGHT, menu.getCapacityPerTank());
+        drawFluid(
+                graphics,
+                clientFluid(tank),
+                leftPos + TANK_X0 + 2 + tank * TANK_STEP,
+                topPos + TANK_Y + 2,
+                TANK_INNER_WIDTH,
+                TANK_INNER_HEIGHT,
+                menu.getCapacityPerTank());
     }
 
     private FluidStack clientFluid(int tank) {
         FluidHatchBlockEntity hatch = clientHatch();
-        return hatch != null && tank < hatch.getTankCount() ? hatch.getTank(tank).getFluid() : FluidStack.EMPTY;
+        return hatch != null && tank < hatch.getTankCount()
+                ? hatch.getTank(tank).getFluid()
+                : FluidStack.EMPTY;
     }
 
     @Nullable
     private FluidHatchBlockEntity clientHatch() {
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.level != null &&
-            minecraft.level.getBlockEntity(menu.getBlockPos()) instanceof FluidHatchBlockEntity hatch) {
+        if (minecraft.level != null
+                && minecraft.level.getBlockEntity(menu.getBlockPos()) instanceof FluidHatchBlockEntity hatch) {
             return hatch;
         }
         return null;

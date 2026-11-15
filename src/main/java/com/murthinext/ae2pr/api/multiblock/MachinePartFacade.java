@@ -1,14 +1,11 @@
 package com.murthinext.ae2pr.api.multiblock;
 
+import com.murthinext.ae2pr.api.Ids;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.resources.ResourceLocation;
-
-import com.murthinext.ae2pr.api.Ids;
+import org.jetbrains.annotations.Nullable;
 
 public final class MachinePartFacade {
 
@@ -22,7 +19,8 @@ public final class MachinePartFacade {
 
     public static final MachinePartFacade ZIRCONIUM_IRON = register(4, "block/zirconium_iron_alloy_machine_casing", 11);
 
-    public static final int MAX_STYLE = BY_STYLE.keySet().stream().mapToInt(Integer::intValue).max().orElse(1);
+    public static final int MAX_STYLE =
+            BY_STYLE.keySet().stream().mapToInt(Integer::intValue).max().orElse(1);
 
     private final int style;
     private final ResourceLocation texture;

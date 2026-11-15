@@ -1,18 +1,14 @@
 package com.murthinext.ae2pr.registry;
 
+import com.murthinext.ae2pr.api.multiblock.module.ModuleType;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.resources.ResourceLocation;
-
-import com.murthinext.ae2pr.api.multiblock.module.ModuleType;
+import org.jetbrains.annotations.Nullable;
 
 public final class ModModules {
 
-    private ModModules() {
-    }
+    private ModModules() {}
 
     public static final ModuleType CHARGING = ModuleType.of("charging", 1);
 

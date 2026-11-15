@@ -1,23 +1,19 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.murthinext.ae2pr.ae2pr;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
-
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
-
-import com.murthinext.ae2pr.ae2pr;
+import org.lwjgl.opengl.GL11;
 
 // 终端界面主要渲染
 public final class TerminalScreen extends Screen {
@@ -60,11 +56,10 @@ public final class TerminalScreen extends Screen {
 
     private final TerminalStoryTree story;
     private final TerminalAnimation animation;
-    private final TerminalOpeningPixelRenderer openingPixels = new TerminalOpeningPixelRenderer(MAIN_X, MAIN_Y,
-                                                                                                MAIN_WIDTH,
-                                                                                                MAIN_HEIGHT);
-    private final TerminalStarfieldRenderer starfield = new TerminalStarfieldRenderer(MAIN_X, MAIN_Y, MAIN_WIDTH,
-                                                                                      MAIN_HEIGHT);
+    private final TerminalOpeningPixelRenderer openingPixels =
+            new TerminalOpeningPixelRenderer(MAIN_X, MAIN_Y, MAIN_WIDTH, MAIN_HEIGHT);
+    private final TerminalStarfieldRenderer starfield =
+            new TerminalStarfieldRenderer(MAIN_X, MAIN_Y, MAIN_WIDTH, MAIN_HEIGHT);
     private final List<Star> stars = new ArrayList<>();
     private final List<TerminalButton> nodeButtons = new ArrayList<>();
     // 每个剧情块连线动画相对终端展开起点的开始时间；父块读完后才登记
@@ -106,8 +101,12 @@ public final class TerminalScreen extends Screen {
         this.animation = new TerminalAnimation(story.nodes());
         Random random = new Random(0xAE2C1257L);
         for (int i = 0; i < 90; i++) {
-            stars.add(new Star(MAIN_X + random.nextFloat() * MAIN_WIDTH, MAIN_Y + random.nextFloat() * MAIN_HEIGHT,
-                               random.nextFloat() * 6.28F, 0.3F + random.nextFloat() * 0.6F, i % 11 == 0));
+            stars.add(new Star(
+                    MAIN_X + random.nextFloat() * MAIN_WIDTH,
+                    MAIN_Y + random.nextFloat() * MAIN_HEIGHT,
+                    random.nextFloat() * 6.28F,
+                    0.3F + random.nextFloat() * 0.6F,
+                    i % 11 == 0));
         }
         // 星空与初始缩放保持一致，后续缩放按同一基准换算
         starfield.zoom(DEFAULT_ZOOM, MAIN_X + MAIN_WIDTH / 2.0F, MAIN_Y + MAIN_HEIGHT / 2.0F);
@@ -172,20 +171,21 @@ public final class TerminalScreen extends Screen {
         framebufferHeight = minecraft.getWindow().getHeight();
         nodeButtons.clear();
         for (TerminalStoryTree.Node node : story.nodes()) {
-            nodeButtons.add(addRenderableWidget(new TerminalButton(0, 0, NODE_WIDTH, NODE_HEIGHT, node.title(),
-                                                                   button -> showNode(node))));
+            nodeButtons.add(addRenderableWidget(
+                    new TerminalButton(0, 0, NODE_WIDTH, NODE_HEIGHT, node.title(), button -> showNode(node))));
         }
-        backButton = addRenderableWidget(new TerminalButton(BACK_X, DETAIL_Y, CONTROL_SIZE, TerminalButton.Icon.BACK,
-                                                            label("back"), button -> closeDetail()));
-        closeButton = addRenderableWidget(new TerminalButton(CLOSE_X, MAIN_Y, CONTROL_SIZE, TerminalButton.Icon.CLOSE,
-                                                             label("close"), button -> closeTerminal()));
+        backButton = addRenderableWidget(new TerminalButton(
+                BACK_X, DETAIL_Y, CONTROL_SIZE, TerminalButton.Icon.BACK, label("back"), button -> closeDetail()));
+        closeButton = addRenderableWidget(new TerminalButton(
+                CLOSE_X, MAIN_Y, CONTROL_SIZE, TerminalButton.Icon.CLOSE, label("close"), button -> closeTerminal()));
         updateNodePositions(0);
         updateVisibility();
     }
 
     private boolean isInteractive() {
-        return terminalClosingStarted < 0 && openingStarted >= 0 &&
-                Util.getMillis() - openingStarted >= TerminalAnimation.OPEN_DURATION;
+        return terminalClosingStarted < 0
+                && openingStarted >= 0
+                && Util.getMillis() - openingStarted >= TerminalAnimation.OPEN_DURATION;
     }
 
     // 平滑缩放
@@ -206,23 +206,24 @@ public final class TerminalScreen extends Screen {
             return;
         }
         float progress = (now - zoomStarted) / (float) ZOOM_DURATION;
-        float zoom = progress >= 1 ? zoomTarget
-                                   : Mth.lerp(TerminalGraphicsRenderer.ease(progress), zoomFrom, zoomTarget);
-        panX = (float) Mth.clamp(zoomAnchorX - TREE_LEFT - (zoomAnchorX - TREE_LEFT - panX) / contentZoom * zoom, -4352,
-                                 4352);
-        panY = (float) Mth.clamp(zoomAnchorY - TREE_TOP - (zoomAnchorY - TREE_TOP - panY) / contentZoom * zoom, -4352,
-                                 4352);
+        float zoom =
+                progress >= 1 ? zoomTarget : Mth.lerp(TerminalGraphicsRenderer.ease(progress), zoomFrom, zoomTarget);
+        panX = (float)
+                Mth.clamp(zoomAnchorX - TREE_LEFT - (zoomAnchorX - TREE_LEFT - panX) / contentZoom * zoom, -4352, 4352);
+        panY = (float)
+                Mth.clamp(zoomAnchorY - TREE_TOP - (zoomAnchorY - TREE_TOP - panY) / contentZoom * zoom, -4352, 4352);
         starfield.zoom(zoom, zoomAnchorX, zoomAnchorY);
         contentZoom = zoom;
     }
 
     private void updateTreeClipBands() {
         double guiScale = minecraft.getWindow().getGuiScale();
-        treeClipBands = TerminalParallelogramClip.bands((canvasLeft + MAIN_X * canvasScale) * guiScale,
-                                                        (canvasTop + MAIN_Y * canvasScale) * guiScale,
-                                                        MAIN_WIDTH * canvasScale * guiScale,
-                                                        MAIN_HEIGHT * canvasScale * guiScale,
-                                                        MAIN_SLANT * canvasScale * guiScale);
+        treeClipBands = TerminalParallelogramClip.bands(
+                (canvasLeft + MAIN_X * canvasScale) * guiScale,
+                (canvasTop + MAIN_Y * canvasScale) * guiScale,
+                MAIN_WIDTH * canvasScale * guiScale,
+                MAIN_HEIGHT * canvasScale * guiScale,
+                MAIN_SLANT * canvasScale * guiScale);
     }
 
     @Override
@@ -258,8 +259,15 @@ public final class TerminalScreen extends Screen {
                 renderTree(graphics, localMouseX, localMouseY, partialTick, elapsed);
                 renderTitle(graphics, elapsed);
                 if (detail != null) {
-                    TerminalGraphicsRenderer.panel(graphics, MAIN_X, MAIN_Y, MAIN_WIDTH, MAIN_HEIGHT, MAIN_SLANT,
-                                                   TerminalGraphicsRenderer.alpha(0x020712, detailOpacity * 0.72F), 0);
+                    TerminalGraphicsRenderer.panel(
+                            graphics,
+                            MAIN_X,
+                            MAIN_Y,
+                            MAIN_WIDTH,
+                            MAIN_HEIGHT,
+                            MAIN_SLANT,
+                            TerminalGraphicsRenderer.alpha(0x020712, detailOpacity * 0.72F),
+                            0);
                     renderDetail(graphics, now, detailOpacity, localMouseX, localMouseY);
                     backButton.render(graphics, localMouseX, localMouseY, partialTick);
                 }
@@ -268,10 +276,14 @@ public final class TerminalScreen extends Screen {
             if (progress < 1) {
                 openingPixels.renderFrontier(graphics, progress, seconds);
             } else {
-                graphics.drawManaged(()
-                                             -> TerminalGraphicsRenderer.outline(graphics, MAIN_X, MAIN_Y, MAIN_WIDTH,
-                                                                                 MAIN_HEIGHT, MAIN_SLANT,
-                                                                                 TerminalGraphicsRenderer.BORDER));
+                graphics.drawManaged(() -> TerminalGraphicsRenderer.outline(
+                        graphics,
+                        MAIN_X,
+                        MAIN_Y,
+                        MAIN_WIDTH,
+                        MAIN_HEIGHT,
+                        MAIN_SLANT,
+                        TerminalGraphicsRenderer.BORDER));
             }
         } finally {
             graphics.setColor(1, 1, 1, 1);
@@ -284,11 +296,14 @@ public final class TerminalScreen extends Screen {
     }
 
     void renderFadeOut(GuiGraphics graphics, float partialTick) {
-        if (width != minecraft.getWindow().getGuiScaledWidth() ||
-            height != minecraft.getWindow().getGuiScaledHeight() ||
-            framebufferWidth != minecraft.getWindow().getWidth() ||
-            framebufferHeight != minecraft.getWindow().getHeight()) {
-            resize(minecraft, minecraft.getWindow().getGuiScaledWidth(), minecraft.getWindow().getGuiScaledHeight());
+        if (width != minecraft.getWindow().getGuiScaledWidth()
+                || height != minecraft.getWindow().getGuiScaledHeight()
+                || framebufferWidth != minecraft.getWindow().getWidth()
+                || framebufferHeight != minecraft.getWindow().getHeight()) {
+            resize(
+                    minecraft,
+                    minecraft.getWindow().getGuiScaledWidth(),
+                    minecraft.getWindow().getGuiScaledHeight());
         }
         render(graphics, -10000, -10000, partialTick);
     }
@@ -300,8 +315,16 @@ public final class TerminalScreen extends Screen {
         } else {
             starfield.renderNebula(graphics, MAIN_X, MAIN_Y, MAIN_WIDTH, MAIN_HEIGHT, MAIN_SLANT, seconds);
         }
-        starfield.renderStars(graphics, MAIN_X, MAIN_Y, MAIN_WIDTH, MAIN_HEIGHT, MAIN_SLANT, seconds,
-                              TerminalGraphicsRenderer.ease(progress), progress < 1 ? openingPixels : null);
+        starfield.renderStars(
+                graphics,
+                MAIN_X,
+                MAIN_Y,
+                MAIN_WIDTH,
+                MAIN_HEIGHT,
+                MAIN_SLANT,
+                seconds,
+                TerminalGraphicsRenderer.ease(progress),
+                progress < 1 ? openingPixels : null);
     }
 
     private void renderTitle(GuiGraphics graphics, long elapsed) {
@@ -309,15 +332,35 @@ public final class TerminalScreen extends Screen {
         if (opacity < 4.0F / 255) {
             return;
         }
-        TerminalGraphicsRenderer.panel(graphics, TITLE_X, MAIN_Y, TITLE_WIDTH, TITLE_HEIGHT, TITLE_SLANT,
-                                       TerminalGraphicsRenderer.alpha(0xFF0D1D35, opacity),
-                                       TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.BORDER, opacity));
-        TerminalTitleRenderer.render(graphics, TITLE_X, MAIN_Y, TITLE_WIDTH, TITLE_HEIGHT, TITLE_SLANT, opacity,
-                                     elapsed - TerminalAnimation.HEADER_START);
+        TerminalGraphicsRenderer.panel(
+                graphics,
+                TITLE_X,
+                MAIN_Y,
+                TITLE_WIDTH,
+                TITLE_HEIGHT,
+                TITLE_SLANT,
+                TerminalGraphicsRenderer.alpha(0xFF0D1D35, opacity),
+                TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.BORDER, opacity));
+        TerminalTitleRenderer.render(
+                graphics,
+                TITLE_X,
+                MAIN_Y,
+                TITLE_WIDTH,
+                TITLE_HEIGHT,
+                TITLE_SLANT,
+                opacity,
+                elapsed - TerminalAnimation.HEADER_START);
     }
 
-    private void renderStarlight(GuiGraphics graphics, int x, int y, int panelWidth, int panelHeight, float slant,
-                                 float seconds, float opacity) {
+    private void renderStarlight(
+            GuiGraphics graphics,
+            int x,
+            int y,
+            int panelWidth,
+            int panelHeight,
+            float slant,
+            float seconds,
+            float opacity) {
         if (panelWidth <= slant || panelHeight <= 0) {
             return;
         }
@@ -328,12 +371,12 @@ public final class TerminalScreen extends Screen {
                 if (!TerminalGraphicsRenderer.contains(px, py, x + 2, y + 2, panelWidth - 4, panelHeight - 4, slant)) {
                     continue;
                 }
-                float light = (0.08F + 0.19F * (0.5F + 0.5F * Mth.sin(seconds * star.speed() + star.phase()))) *
-                        opacity;
+                float light =
+                        (0.08F + 0.19F * (0.5F + 0.5F * Mth.sin(seconds * star.speed() + star.phase()))) * opacity;
                 graphics.fill(px, py, px + 1, py + 1, TerminalGraphicsRenderer.alpha(0xB0CDED, light));
-                if (star.cross() &&
-                    TerminalGraphicsRenderer.contains(px - 2, py - 2, x, y, panelWidth, panelHeight, slant) &&
-                    TerminalGraphicsRenderer.contains(px + 2, py + 2, x, y, panelWidth, panelHeight, slant)) {
+                if (star.cross()
+                        && TerminalGraphicsRenderer.contains(px - 2, py - 2, x, y, panelWidth, panelHeight, slant)
+                        && TerminalGraphicsRenderer.contains(px + 2, py + 2, x, y, panelWidth, panelHeight, slant)) {
                     int glow = TerminalGraphicsRenderer.alpha(0x77A7D3, light * 0.3F);
                     graphics.fill(px - 2, py, px + 3, py + 1, glow);
                     graphics.fill(px, py - 2, px + 1, py + 3, glow);
@@ -351,8 +394,11 @@ public final class TerminalScreen extends Screen {
         graphics.flush();
         try {
             for (TerminalParallelogramClip.Band band : clipBands) {
-                RenderSystem.enableScissor(band.left(), minecraft.getWindow().getHeight() - band.bottom(),
-                                           band.right() - band.left(), band.bottom() - band.top());
+                RenderSystem.enableScissor(
+                        band.left(),
+                        minecraft.getWindow().getHeight() - band.bottom(),
+                        band.right() - band.left(),
+                        band.bottom() - band.top());
                 float top = (float) (band.top() / guiScale - canvasTop) / canvasScale;
                 float bottom = (float) (band.bottom() / guiScale - canvasTop) / canvasScale;
                 float left = (float) (band.left() / guiScale - canvasLeft) / canvasScale;
@@ -362,8 +408,8 @@ public final class TerminalScreen extends Screen {
             }
         } finally {
             if (wasScissored) {
-                RenderSystem.enableScissor(previousScissor[0], previousScissor[1], previousScissor[2],
-                                           previousScissor[3]);
+                RenderSystem.enableScissor(
+                        previousScissor[0], previousScissor[1], previousScissor[2], previousScissor[3]);
             } else {
                 RenderSystem.disableScissor();
             }
@@ -387,8 +433,16 @@ public final class TerminalScreen extends Screen {
         return clipBands;
     }
 
-    private void renderTreeBand(GuiGraphics graphics, int mouseX, int mouseY, float partialTick, long elapsed,
-                                float left, float top, float right, float bottom) {
+    private void renderTreeBand(
+            GuiGraphics graphics,
+            int mouseX,
+            int mouseY,
+            float partialTick,
+            long elapsed,
+            float left,
+            float top,
+            float right,
+            float bottom) {
         graphics.drawManaged(() -> {
             for (TerminalStoryTree.Node node : story.nodes()) {
                 float progress = connectionProgress(elapsed, node);
@@ -401,10 +455,9 @@ public final class TerminalScreen extends Screen {
                         continue;
                     }
                     connected = true;
-                    if (TREE_TOP + panY + (Math.max(source.y(), node.y()) + NODE_HEIGHT / 2.0F) * contentZoom + 1 >=
-                                top &&
-                        TREE_TOP + panY + (Math.min(source.y(), node.y()) + NODE_HEIGHT / 2.0F) * contentZoom - 1 <
-                                bottom) {
+                    if (TREE_TOP + panY + (Math.max(source.y(), node.y()) + NODE_HEIGHT / 2.0F) * contentZoom + 1 >= top
+                            && TREE_TOP + panY + (Math.min(source.y(), node.y()) + NODE_HEIGHT / 2.0F) * contentZoom - 1
+                                    < bottom) {
                         renderConnection(graphics, source, node, progress);
                     }
                 }
@@ -415,29 +468,36 @@ public final class TerminalScreen extends Screen {
                         float x2 = treeX(node.x() + TerminalGraphicsRenderer.slant(NODE_HEIGHT) / 2);
                         float edge = MAIN_X + MAIN_SLANT * (1 - (y - MAIN_Y) / MAIN_HEIGHT);
                         float x1 = Math.min(edge, x2 - 36 * contentZoom);
-                        TerminalGraphicsRenderer.line(graphics, x1, y, Mth.lerp(progress, x1, x2), y,
-                                                      TerminalGraphicsRenderer.alpha(0xFF3B5D83, 1 - reveal),
-                                                      Math.max(1, contentZoom));
+                        TerminalGraphicsRenderer.line(
+                                graphics,
+                                x1,
+                                y,
+                                Mth.lerp(progress, x1, x2),
+                                y,
+                                TerminalGraphicsRenderer.alpha(0xFF3B5D83, 1 - reveal),
+                                Math.max(1, contentZoom));
                     }
                 }
             }
         });
         boolean mouseInside = (detail == null || detailClosingStarted >= 0) && insideTree(mouseX, mouseY);
         for (TerminalButton button : nodeButtons) {
-            if (button.getY() + button.getHeight() * contentZoom >= top && button.getY() < bottom &&
-                button.getX() + button.getWidth() * contentZoom >= left && button.getX() < right) {
+            if (button.getY() + button.getHeight() * contentZoom >= top
+                    && button.getY() < bottom
+                    && button.getX() + button.getWidth() * contentZoom >= left
+                    && button.getX() < right) {
                 button.render(graphics, mouseInside ? mouseX : -10000, mouseInside ? mouseY : -10000, partialTick);
             }
         }
     }
 
-    private void renderConnection(GuiGraphics graphics, TerminalStoryTree.Node source, TerminalStoryTree.Node target,
-                                  float progress) {
+    private void renderConnection(
+            GuiGraphics graphics, TerminalStoryTree.Node source, TerminalStoryTree.Node target, float progress) {
         float nodeSlant = TerminalGraphicsRenderer.slant(NODE_HEIGHT);
         float stepX = target.x() - source.x();
         float stepY = target.y() - source.y();
-        boolean vertical = Math.abs(stepX) - NODE_WIDTH + nodeSlant < Math.abs(stepY) * nodeSlant / NODE_HEIGHT &&
-                Math.abs(stepY) - NODE_HEIGHT >= Math.abs(stepX) * NODE_HEIGHT / nodeSlant;
+        boolean vertical = Math.abs(stepX) - NODE_WIDTH + nodeSlant < Math.abs(stepY) * nodeSlant / NODE_HEIGHT
+                && Math.abs(stepY) - NODE_HEIGHT >= Math.abs(stepX) * NODE_HEIGHT / nodeSlant;
         float x1;
         float y1;
         float x2;
@@ -456,9 +516,20 @@ public final class TerminalScreen extends Screen {
             x2 = treeX(target.x() + (forward ? leftEdge : rightEdge));
             y2 = treeY(target.y() + NODE_HEIGHT / 2.0F);
         }
-        TerminalGraphicsRenderer.connection(graphics, x1, y1, x2, y2, nodeSlant, NODE_HEIGHT, vertical, progress,
-                                            0xFF3B5D83, Math.max(1, contentZoom));
+        TerminalGraphicsRenderer.connection(
+                graphics,
+                x1,
+                y1,
+                x2,
+                y2,
+                nodeSlant,
+                NODE_HEIGHT,
+                vertical,
+                progress,
+                0xFF3B5D83,
+                Math.max(1, contentZoom));
     }
+
     private float treeX(float contentX) {
         return snap(TREE_LEFT + panX + contentX * contentZoom, deviceScale());
     }
@@ -473,14 +544,32 @@ public final class TerminalScreen extends Screen {
         }
         int x = DETAIL_X + detailShift;
         TerminalGraphicsRenderer.panel(
-                graphics, x + 5, DETAIL_Y + 6, DETAIL_WIDTH, DETAIL_HEIGHT, DETAIL_SLANT,
-                TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.DETAIL_BACKGROUND, reveal * 0.4F), 0);
-        TerminalGraphicsRenderer.panel(graphics, x, DETAIL_Y, DETAIL_WIDTH, DETAIL_HEIGHT, DETAIL_SLANT,
-                                       TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.DETAIL_BACKGROUND,
-                                                                      reveal),
-                                       TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.BORDER, reveal));
-        renderStarlight(graphics, x, DETAIL_Y, DETAIL_WIDTH, DETAIL_HEIGHT, DETAIL_SLANT,
-                        (now - openingStarted) / 1000.0F, reveal * 0.7F);
+                graphics,
+                x + 5,
+                DETAIL_Y + 6,
+                DETAIL_WIDTH,
+                DETAIL_HEIGHT,
+                DETAIL_SLANT,
+                TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.DETAIL_BACKGROUND, reveal * 0.4F),
+                0);
+        TerminalGraphicsRenderer.panel(
+                graphics,
+                x,
+                DETAIL_Y,
+                DETAIL_WIDTH,
+                DETAIL_HEIGHT,
+                DETAIL_SLANT,
+                TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.DETAIL_BACKGROUND, reveal),
+                TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.BORDER, reveal));
+        renderStarlight(
+                graphics,
+                x,
+                DETAIL_Y,
+                DETAIL_WIDTH,
+                DETAIL_HEIGHT,
+                DETAIL_SLANT,
+                (now - openingStarted) / 1000.0F,
+                reveal * 0.7F);
         detail.render(graphics, now, reveal, detailShift, windowOpacity, mouseX, mouseY, detailClosingStarted < 0);
     }
 
@@ -536,26 +625,29 @@ public final class TerminalScreen extends Screen {
             if (!root && (showingDetail || !TerminalStoryProgressCache.isSynced())) {
                 continue;
             }
-            revealAt.put(node.id(),
-                         root ? animation.connectionStart(node)
-                              : elapsed + POST_FINISH_DELAY +
-                                         Math.min(animation.layer(node), 3) *
-                                                 (TerminalAnimation.CONNECTION_DURATION +
-                                                  TerminalAnimation.NODE_DURATION));
+            revealAt.put(
+                    node.id(),
+                    root
+                            ? animation.connectionStart(node)
+                            : elapsed
+                                    + POST_FINISH_DELAY
+                                    + Math.min(animation.layer(node), 3)
+                                            * (TerminalAnimation.CONNECTION_DURATION
+                                                    + TerminalAnimation.NODE_DURATION));
         }
     }
 
     private boolean isNodeVisible(TerminalStoryTree.Node node) {
-        return runner != null &&
-                (node.visibleWhen().inventoryKeys().isEmpty() || TerminalStoryProgressCache.areUnlocksSynced()) &&
-                node.visibleWhen().matches(runner, TerminalStoryProgressCache::isUnlocked);
+        return runner != null
+                && (node.visibleWhen().inventoryKeys().isEmpty() || TerminalStoryProgressCache.areUnlocksSynced())
+                && node.visibleWhen().matches(runner, TerminalStoryProgressCache::isUnlocked);
     }
 
     // 剧情块是否已解锁
     private boolean isNodeUnlocked(TerminalStoryTree.Node node) {
-        return runner != null &&
-                (node.availableWhen().inventoryKeys().isEmpty() || TerminalStoryProgressCache.areUnlocksSynced()) &&
-                node.availableWhen().matches(runner, TerminalStoryProgressCache::isUnlocked);
+        return runner != null
+                && (node.availableWhen().inventoryKeys().isEmpty() || TerminalStoryProgressCache.areUnlocksSynced())
+                && node.availableWhen().matches(runner, TerminalStoryProgressCache::isUnlocked);
     }
 
     private void showTree() {
@@ -639,8 +731,11 @@ public final class TerminalScreen extends Screen {
             boolean locked = progress > 0 && !isNodeUnlocked(node);
             button.setLocked(locked);
             button.visible = progress > 0;
-            button.active = button.visible && !showingDetail && interactive && TerminalStoryProgressCache.isSynced() &&
-                    runner != null;
+            button.active = button.visible
+                    && !showingDetail
+                    && interactive
+                    && TerminalStoryProgressCache.isSynced()
+                    && runner != null;
         }
         backButton.visible = detail != null;
         backButton.active = detail != null && interactive;
@@ -658,8 +753,8 @@ public final class TerminalScreen extends Screen {
             TerminalStoryTree.Node node = story.nodes().get(i);
             TerminalButton button = nodeButtons.get(i);
             float progress = nodeReveal(elapsed, node);
-            float x = snap(TREE_LEFT + panX + (node.x() - NODE_ENTER_DISTANCE * (1 - progress)) * contentZoom,
-                           deviceScale);
+            float x = snap(
+                    TREE_LEFT + panX + (node.x() - NODE_ENTER_DISTANCE * (1 - progress)) * contentZoom, deviceScale);
             float y = snap(TREE_TOP + panY + node.y() * contentZoom, deviceScale);
             button.setScale(contentZoom);
             button.setX(Math.round(x));
@@ -759,8 +854,10 @@ public final class TerminalScreen extends Screen {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
-        if (detail != null && detailClosingStarted < 0 && terminalClosingStarted < 0 &&
-            insideTree(localX(mouseX), localY(mouseY))) {
+        if (detail != null
+                && detailClosingStarted < 0
+                && terminalClosingStarted < 0
+                && insideTree(localX(mouseX), localY(mouseY))) {
             detail.scroll(delta);
             return true;
         }

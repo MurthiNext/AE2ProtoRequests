@@ -2,7 +2,6 @@ package com.murthinext.ae2pr.client.effect;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.Direction;
@@ -13,10 +12,9 @@ public final class EmissiveCubeRenderer {
 
     private static final float HALF = 0.5F;
     private static final float OUTSET = 0.002F;
-    private static final float[] WHITE = { 1.0F, 1.0F, 1.0F };
+    private static final float[] WHITE = {1.0F, 1.0F, 1.0F};
 
-    private EmissiveCubeRenderer() {
-    }
+    private EmissiveCubeRenderer() {}
 
     public static void render(PoseStack pose, VertexConsumer consumer, float alpha) {
         for (Direction direction : Direction.values()) {
@@ -33,8 +31,8 @@ public final class EmissiveCubeRenderer {
         }
     }
 
-    private static void vertex(VertexConsumer consumer, PoseStack.Pose pose, Vec3 position, float u, float v,
-                               float alpha, Vec3 normal) {
+    private static void vertex(
+            VertexConsumer consumer, PoseStack.Pose pose, Vec3 position, float u, float v, float alpha, Vec3 normal) {
         consumer.vertex(pose.pose(), (float) position.x, (float) position.y, (float) position.z)
                 .color(WHITE[0], WHITE[1], WHITE[2], alpha)
                 .uv(u, v)

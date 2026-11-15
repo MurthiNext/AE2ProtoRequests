@@ -1,18 +1,5 @@
 package com.murthinext.ae2pr.mixin.ae2.crafting.execution;
 
-import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
-
 import appeng.api.features.IPlayerRegistry;
 import appeng.api.networking.IGrid;
 import appeng.api.networking.crafting.CalculationStrategy;
@@ -26,7 +13,6 @@ import appeng.crafting.execution.CraftingCpuLogic;
 import appeng.crafting.execution.ExecutingCraftingJob;
 import appeng.me.cluster.implementations.CraftingCPUCluster;
 import appeng.me.service.CraftingService;
-
 import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.logic.repeat.FailureReason;
@@ -35,6 +21,17 @@ import com.murthinext.ae2pr.logic.repeat.RepeatOrderContext;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderHost;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderNotifier;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderState;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 // 重复订单核心状态机：轮次推进、异步重算与失败重试
 @Mixin(value = CraftingCpuLogic.class, remap = false)
@@ -64,8 +61,12 @@ public abstract class CraftingCpuLogicMixin implements RepeatOrderHost {
     }
 
     @Inject(method = "trySubmitJob", at = @At("RETURN"))
-    private void ae2pr$bindRepeatOrder(IGrid grid, ICraftingPlan plan, IActionSource src, ICraftingRequester requester,
-                                       CallbackInfoReturnable<ICraftingSubmitResult> cir) {
+    private void ae2pr$bindRepeatOrder(
+            IGrid grid,
+            ICraftingPlan plan,
+            IActionSource src,
+            ICraftingRequester requester,
+            CallbackInfoReturnable<ICraftingSubmitResult> cir) {
         var rounds = RepeatOrderBinding.consume();
         if (rounds == null || rounds <= 1) {
             return;
@@ -137,8 +138,9 @@ public abstract class CraftingCpuLogicMixin implements RepeatOrderHost {
             if (context.state == RepeatOrderState.RUNNING && context.currentJob == this.job) {
                 return;
             }
-            if (context.state == RepeatOrderState.PENDING_NEXT || context.state == RepeatOrderState.PLANNING ||
-                context.state == RepeatOrderState.RUNNING) {
+            if (context.state == RepeatOrderState.PENDING_NEXT
+                    || context.state == RepeatOrderState.PLANNING
+                    || context.state == RepeatOrderState.RUNNING) {
                 // 两轮之间 CPU 被其他任务占用（或本任务异常消失）
                 context.recalc = null;
                 this.ae2pr$retryOrFail(context, FailureReason.CPU_BUSY);
@@ -147,16 +149,15 @@ public abstract class CraftingCpuLogicMixin implements RepeatOrderHost {
         }
 
         switch (context.state) {
-        case PENDING_NEXT -> this.ae2pr$beginRecalc(context);
-        case PLANNING -> this.ae2pr$pollRecalc(context);
-        case RETRY_WAIT -> {
-            if (--context.retryCooldownTicks <= 0) {
-                this.ae2pr$beginRecalc(context);
+            case PENDING_NEXT -> this.ae2pr$beginRecalc(context);
+            case PLANNING -> this.ae2pr$pollRecalc(context);
+            case RETRY_WAIT -> {
+                if (--context.retryCooldownTicks <= 0) {
+                    this.ae2pr$beginRecalc(context);
+                }
             }
-        }
-        case RUNNING -> this.ae2pr$retryOrFail(context, FailureReason.UNKNOWN);
-        default -> {
-        }
+            case RUNNING -> this.ae2pr$retryOrFail(context, FailureReason.UNKNOWN);
+            default -> {}
         }
     }
 
@@ -235,11 +236,13 @@ public abstract class CraftingCpuLogicMixin implements RepeatOrderHost {
             return;
         }
         try {
-            context.recalc = grid.getCraftingService().beginCraftingCalculation(level,
-                                                                                ()
-                                                                                        -> ae2pr$contextSource(context),
-                                                                                context.what, context.amountPerRound,
-                                                                                CalculationStrategy.CRAFT_LESS);
+            context.recalc = grid.getCraftingService()
+                    .beginCraftingCalculation(
+                            level,
+                            () -> ae2pr$contextSource(context),
+                            context.what,
+                            context.amountPerRound,
+                            CalculationStrategy.CRAFT_LESS);
             context.state = RepeatOrderState.PLANNING;
         } catch (Throwable t) {
             ae2pr.LOGGER.warn("Failed to recalculate repeat order plan", t);
@@ -302,8 +305,12 @@ public abstract class CraftingCpuLogicMixin implements RepeatOrderHost {
     private void ae2pr$retryOrFail(RepeatOrderContext context, FailureReason reason) {
         context.recalc = null;
         if (++context.retryCount > ServerConfig.retryCount()) {
-            ae2pr.LOGGER.info("Repeat order failed: {}x{} after {} retries (reason: {})", context.amountPerRound,
-                              context.what, context.retryCount - 1, reason);
+            ae2pr.LOGGER.info(
+                    "Repeat order failed: {}x{} after {} retries (reason: {})",
+                    context.amountPerRound,
+                    context.what,
+                    context.retryCount - 1,
+                    reason);
             context.state = RepeatOrderState.FAILED;
             this.ae2pr$sendRoundNotify(context, 0);
             this.ae2pr$notifyFailure(context, reason);
@@ -322,20 +329,30 @@ public abstract class CraftingCpuLogicMixin implements RepeatOrderHost {
     // 通知所有者轮次开始（remainingRounds 含当前轮）；<= 1 表示清除中间轮标记
     @Unique
     private void ae2pr$sendRoundNotify(RepeatOrderContext context, int remainingRounds) {
-        RepeatOrderNotifier.sendRound(context.ownerPlayerId, this.cluster.getLevel(), context.what, context.totalRounds,
-                                      remainingRounds);
+        RepeatOrderNotifier.sendRound(
+                context.ownerPlayerId, this.cluster.getLevel(), context.what, context.totalRounds, remainingRounds);
     }
 
     @Unique
     private void ae2pr$sendFinishedNotify(RepeatOrderContext context) {
-        RepeatOrderNotifier.sendFinished(context.ownerPlayerId, this.cluster.getLevel(), context.what,
-                                         context.amountPerRound, context.totalRounds);
+        RepeatOrderNotifier.sendFinished(
+                context.ownerPlayerId,
+                this.cluster.getLevel(),
+                context.what,
+                context.amountPerRound,
+                context.totalRounds);
     }
 
     @Unique
     private void ae2pr$notifyFailure(RepeatOrderContext context, FailureReason reason) {
-        RepeatOrderNotifier.sendFailure(context.ownerPlayerId, this.cluster.getLevel(), context.what,
-                                        context.amountPerRound, context.totalRounds, context.completedRounds, reason);
+        RepeatOrderNotifier.sendFailure(
+                context.ownerPlayerId,
+                this.cluster.getLevel(),
+                context.what,
+                context.amountPerRound,
+                context.totalRounds,
+                context.completedRounds,
+                reason);
     }
 
     @Unique

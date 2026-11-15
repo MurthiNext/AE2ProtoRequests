@@ -1,21 +1,18 @@
 package com.murthinext.ae2pr.mixin.ae2.menu.slot;
 
+import appeng.api.stacks.GenericStack;
+import appeng.helpers.externalstorage.GenericStackInv;
+import appeng.menu.AEBaseMenu;
+import appeng.menu.slot.AppEngSlot;
+import appeng.util.ConfigMenuInventory;
+import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import net.minecraft.world.item.ItemStack;
-
-import appeng.api.stacks.GenericStack;
-import appeng.helpers.externalstorage.GenericStackInv;
-import appeng.menu.AEBaseMenu;
-import appeng.menu.slot.AppEngSlot;
-import appeng.util.ConfigMenuInventory;
-
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 
 // 客户端按服务器权威值写入返回/存储槽，避免本地未同步的升级卡状态把超量存量截断
 @Mixin(value = AppEngSlot.class, priority = 500, remap = false)

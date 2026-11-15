@@ -1,5 +1,8 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.network.TerminalStoryUnlockPacket;
+import com.murthinext.ae2pr.registry.ModNetwork;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,16 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
-import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.network.TerminalStoryUnlockPacket;
-import com.murthinext.ae2pr.registry.ModNetwork;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class TerminalStoryUnlockTracker {
@@ -37,8 +35,7 @@ public final class TerminalStoryUnlockTracker {
     private static final Map<UUID, Watch> watches = new HashMap<>();
     private static int tick;
 
-    private TerminalStoryUnlockTracker() {
-    }
+    private TerminalStoryUnlockTracker() {}
 
     public static void watch(ServerPlayer player, List<String> keys) {
         if (keys.isEmpty()) {

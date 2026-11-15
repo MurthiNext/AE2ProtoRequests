@@ -1,11 +1,10 @@
 package com.murthinext.ae2pr.block.molecular_assembly_core;
 
+import com.murthinext.ae2pr.registry.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-
-import com.murthinext.ae2pr.registry.ModBlockEntities;
 
 public class MolecularAssemblyCoreBlockEntity extends BlockEntity {
 

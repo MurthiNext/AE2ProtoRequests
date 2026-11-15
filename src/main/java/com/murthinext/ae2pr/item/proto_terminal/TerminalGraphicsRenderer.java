@@ -1,12 +1,10 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
-import org.joml.Matrix4f;
-
 import com.mojang.blaze3d.vertex.VertexConsumer;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.Mth;
+import org.joml.Matrix4f;
 
 // 终端面板
 final class TerminalGraphicsRenderer {
@@ -25,15 +23,14 @@ final class TerminalGraphicsRenderer {
     static final int LOCKED_TEXT = 0xFF7C90A6;
     static final float EDGE_SLOPE = 38.0F / 324;
 
-    private TerminalGraphicsRenderer() {
-    }
+    private TerminalGraphicsRenderer() {}
 
     static float slant(float height) {
         return height * EDGE_SLOPE;
     }
 
-    static void panel(GuiGraphics graphics, float x, float y, int width, int height, float slant, int fill,
-                      int border) {
+    static void panel(
+            GuiGraphics graphics, float x, float y, int width, int height, float slant, int fill, int border) {
         if (width <= slant || height <= 0) {
             return;
         }
@@ -43,19 +40,36 @@ final class TerminalGraphicsRenderer {
         });
     }
 
-    static void cosmicPanel(GuiGraphics graphics, int x, int y, int width, int height, float slant, float progress,
-                            int spaceY, int spaceHeight) {
+    static void cosmicPanel(
+            GuiGraphics graphics,
+            int x,
+            int y,
+            int width,
+            int height,
+            float slant,
+            float progress,
+            int spaceY,
+            int spaceHeight) {
         if (width <= slant || height <= 0 || progress <= 0) {
             return;
         }
         graphics.drawManaged(() -> {
-            for (int top = y; top < y + height;) {
+            for (int top = y; top < y + height; ) {
                 int bottom = Math.min(y + height, spaceY + (Math.floorDiv(top - spaceY, 8) + 1) * 8);
                 float leftTop = x + slant * (1 - (top - y) / (float) height);
                 float leftBottom = x + slant * (1 - (bottom - y) / (float) height);
-                quad(graphics, leftTop, top, leftBottom, bottom, leftBottom + width - slant, bottom,
-                     leftTop + width - slant, top, spaceColor(top, spaceY, spaceHeight),
-                     spaceColor(bottom, spaceY, spaceHeight));
+                quad(
+                        graphics,
+                        leftTop,
+                        top,
+                        leftBottom,
+                        bottom,
+                        leftBottom + width - slant,
+                        bottom,
+                        leftTop + width - slant,
+                        top,
+                        spaceColor(top, spaceY, spaceHeight),
+                        spaceColor(bottom, spaceY, spaceHeight));
                 top = bottom;
             }
             if (progress >= 1) {
@@ -67,22 +81,36 @@ final class TerminalGraphicsRenderer {
     static int spaceColor(int y, int spaceY, int spaceHeight) {
         float position = Mth.clamp((y - spaceY) / (float) Math.max(1, spaceHeight - 1), 0, 1);
         float glow = Mth.sin(position * (float) Math.PI);
-        return 0xFF000000 | (3 + Math.round(glow * 3)) << 16 | (7 + Math.round(glow * 7)) << 8 |
-                (19 + Math.round(glow * 13));
+        return 0xFF000000
+                | (3 + Math.round(glow * 3)) << 16
+                | (7 + Math.round(glow * 7)) << 8
+                | (19 + Math.round(glow * 13));
     }
 
     // 沿水平段与斜段逐步绘制剧情连线；vertical 指示是否走上下竖直段
-    static void connection(GuiGraphics graphics, float x1, float y1, float x2, float y2, float nodeSlant,
-                           int nodeHeight, boolean vertical, float progress, int color, float width) {
+    static void connection(
+            GuiGraphics graphics,
+            float x1,
+            float y1,
+            float x2,
+            float y2,
+            float nodeSlant,
+            int nodeHeight,
+            boolean vertical,
+            float progress,
+            int color,
+            float width) {
         if (progress <= 0) {
             return;
         }
         float middle = vertical ? (y1 + y2) / 2.0F : (x1 + x2) / 2.0F;
         float diagonal = vertical ? -(x2 - x1) * nodeHeight / nodeSlant : -(y2 - y1) * nodeSlant / nodeHeight;
-        float[] xs = vertical ? new float[] { x1, x1, x2, x2 }
-                              : new float[] { x1, middle - diagonal / 2, middle + diagonal / 2, x2 };
-        float[] ys = vertical ? new float[] { y1, middle - diagonal / 2, middle + diagonal / 2, y2 }
-                              : new float[] { y1, y1, y2, y2 };
+        float[] xs = vertical
+                ? new float[] {x1, x1, x2, x2}
+                : new float[] {x1, middle - diagonal / 2, middle + diagonal / 2, x2};
+        float[] ys = vertical
+                ? new float[] {y1, middle - diagonal / 2, middle + diagonal / 2, y2}
+                : new float[] {y1, y1, y2, y2};
         float[] lengths = new float[3];
         float total = 0;
         for (int i = 0; i < 3; i++) {
@@ -95,8 +123,14 @@ final class TerminalGraphicsRenderer {
                 continue;
             }
             float fraction = Math.min(1, remaining / lengths[i]);
-            line(graphics, xs[i], ys[i], xs[i] + (xs[i + 1] - xs[i]) * fraction, ys[i] + (ys[i + 1] - ys[i]) * fraction,
-                 color, width);
+            line(
+                    graphics,
+                    xs[i],
+                    ys[i],
+                    xs[i] + (xs[i + 1] - xs[i]) * fraction,
+                    ys[i] + (ys[i + 1] - ys[i]) * fraction,
+                    color,
+                    width);
             remaining -= lengths[i];
         }
     }
@@ -121,15 +155,45 @@ final class TerminalGraphicsRenderer {
         }
         float slope = slant / (float) Math.max(1, height);
         quad(graphics, x + slant, y, x + slant - slope, y + 1, x + width - slope, y + 1, x + width, y, color, color);
-        quad(graphics, x + slope, y + height - 1, x, y + height, x + width - slant, y + height,
-             x + width - slant + slope, y + height - 1, color, color);
+        quad(
+                graphics,
+                x + slope,
+                y + height - 1,
+                x,
+                y + height,
+                x + width - slant,
+                y + height,
+                x + width - slant + slope,
+                y + height - 1,
+                color,
+                color);
         quad(graphics, x + slant, y, x, y + height, x + 1, y + height, x + slant + 1, y, color, color);
-        quad(graphics, x + width - 1, y, x + width - slant - 1, y + height, x + width - slant, y + height, x + width, y,
-             color, color);
+        quad(
+                graphics,
+                x + width - 1,
+                y,
+                x + width - slant - 1,
+                y + height,
+                x + width - slant,
+                y + height,
+                x + width,
+                y,
+                color,
+                color);
     }
 
-    private static void quad(GuiGraphics graphics, float x1, float y1, float x2, float y2, float x3, float y3, float x4,
-                             float y4, int topColor, int bottomColor) {
+    private static void quad(
+            GuiGraphics graphics,
+            float x1,
+            float y1,
+            float x2,
+            float y2,
+            float x3,
+            float y3,
+            float x4,
+            float y4,
+            int topColor,
+            int bottomColor) {
         Matrix4f matrix = graphics.pose().last().pose();
         VertexConsumer vertices = graphics.bufferSource().getBuffer(RenderType.gui());
         vertex(vertices, matrix, x1, y1, topColor);

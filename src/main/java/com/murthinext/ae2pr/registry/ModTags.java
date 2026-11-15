@@ -1,17 +1,15 @@
 package com.murthinext.ae2pr.registry;
 
+import com.murthinext.ae2pr.api.Ids;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.material.Fluid;
 
-import com.murthinext.ae2pr.api.Ids;
-
 public final class ModTags {
 
-    private ModTags() {
-    }
+    private ModTags() {}
 
     public static final TagKey<Fluid> ALIEN_LAVA = TagKey.create(Registries.FLUID, Ids.of("alien_lava"));
 

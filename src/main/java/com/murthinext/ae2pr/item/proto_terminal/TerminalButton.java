@@ -8,7 +8,10 @@ import net.minecraft.network.chat.Component;
 // 终端按钮
 final class TerminalButton extends Button {
 
-    enum Icon { CLOSE, BACK }
+    enum Icon {
+        CLOSE,
+        BACK
+    }
 
     private final float slant;
     private final Icon icon;
@@ -42,17 +45,19 @@ final class TerminalButton extends Button {
             return;
         }
         isHovered = isMouseOver(mouseX, mouseY);
-        boolean highlighted = isHovered || isFocused() && Minecraft.getInstance().getLastInputType().isKeyboard();
-        int border = TerminalGraphicsRenderer.alpha(highlighted      ? (locked ? TerminalGraphicsRenderer.LOCKED_ACCENT
-                                                                               : TerminalGraphicsRenderer.ACCENT)
-                                                            : locked ? TerminalGraphicsRenderer.LOCKED_BORDER
-                                                                     : TerminalGraphicsRenderer.BORDER,
-                                                    opacity);
+        boolean highlighted = isHovered
+                || isFocused() && Minecraft.getInstance().getLastInputType().isKeyboard();
+        int border = TerminalGraphicsRenderer.alpha(
+                highlighted
+                        ? (locked ? TerminalGraphicsRenderer.LOCKED_ACCENT : TerminalGraphicsRenderer.ACCENT)
+                        : locked ? TerminalGraphicsRenderer.LOCKED_BORDER : TerminalGraphicsRenderer.BORDER,
+                opacity);
         int text = TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.TEXT, opacity);
-        int fill = TerminalGraphicsRenderer.alpha(highlighted      ? (locked ? 0xFF08111F : 0xFF10233D)
-                                                          : locked ? TerminalGraphicsRenderer.LOCKED_PANEL
-                                                                   : TerminalGraphicsRenderer.PANEL,
-                                                  opacity);
+        int fill = TerminalGraphicsRenderer.alpha(
+                highlighted
+                        ? (locked ? 0xFF08111F : 0xFF10233D)
+                        : locked ? TerminalGraphicsRenderer.LOCKED_PANEL : TerminalGraphicsRenderer.PANEL,
+                opacity);
         graphics.pose().pushPose();
         graphics.pose().translate(getX() + offsetX, getY() + offsetY, 0);
         graphics.pose().scale(scale, scale, 1);
@@ -82,8 +87,13 @@ final class TerminalButton extends Button {
                 int count = Math.min(2, lines.size());
                 for (int i = 0; i < count; i++) {
                     var line = lines.get(i);
-                    graphics.drawString(font, line, (width - font.width(line)) / 2,
-                                        (height - count * 12) / 2 + i * 12 + 2, text, false);
+                    graphics.drawString(
+                            font,
+                            line,
+                            (width - font.width(line)) / 2,
+                            (height - count * 12) / 2 + i * 12 + 2,
+                            text,
+                            false);
                 }
                 graphics.fill(14, height - 7, 24, height - 6, border);
             } else {
@@ -121,7 +131,7 @@ final class TerminalButton extends Button {
         if (!active || !visible) {
             return false;
         }
-        return TerminalGraphicsRenderer.contains((mouseX - getX() - offsetX) / scale,
-                                                 (mouseY - getY() - offsetY) / scale, 0, 0, width, height, slant);
+        return TerminalGraphicsRenderer.contains(
+                (mouseX - getX() - offsetX) / scale, (mouseY - getY() - offsetY) / scale, 0, 0, width, height, slant);
     }
 }
