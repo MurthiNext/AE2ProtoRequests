@@ -7,7 +7,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.client.model.data.ModelData;
 
 import appeng.api.config.Actionable;
 import appeng.api.networking.GridFlags;
@@ -27,6 +29,8 @@ import appeng.items.parts.PartModels;
 import appeng.me.helpers.MachineSource;
 import appeng.parts.AEBasePart;
 import appeng.parts.PartModel;
+import appeng.parts.automation.PlaneConnectionHelper;
+import appeng.parts.automation.PlaneModelData;
 
 import com.murthinext.ae2pr.api.Ids;
 
@@ -44,12 +48,21 @@ public class SkyDomeAnnihilationPlanePart extends AEBasePart implements IGridTic
     public static final ResourceLocation MODEL_POWERED = Ids.of("part/sky_dome_annihilation_plane_powered");
     @PartModels
     public static final ResourceLocation MODEL_ACTIVE = Ids.of("part/sky_dome_annihilation_plane_active");
+    @PartModels
+    public static final ResourceLocation MODEL_SURFACE_OFF = Ids.of("part/sky_dome_annihilation_plane_surface");
+    @PartModels
+    public static final ResourceLocation MODEL_SURFACE_POWERED = Ids.of(
+            "part/sky_dome_annihilation_plane_surface_powered");
+    @PartModels
+    public static final ResourceLocation MODEL_SURFACE_ACTIVE = Ids.of(
+            "part/sky_dome_annihilation_plane_surface_active");
 
-    private static final IPartModel OFF = new PartModel(MODEL_OFF);
-    private static final IPartModel POWERED = new PartModel(MODEL_POWERED);
-    private static final IPartModel ACTIVE = new PartModel(MODEL_ACTIVE);
+    private static final IPartModel OFF = new PartModel(MODEL_OFF, MODEL_SURFACE_OFF);
+    private static final IPartModel POWERED = new PartModel(MODEL_POWERED, MODEL_SURFACE_POWERED);
+    private static final IPartModel ACTIVE = new PartModel(MODEL_ACTIVE, MODEL_SURFACE_ACTIVE);
 
     private final IActionSource actionSource = new MachineSource(this);
+    private final PlaneConnectionHelper connectionHelper = new PlaneConnectionHelper(this);
     private int productionRate;
     private int minuteTicks;
     private int progress;
@@ -129,8 +142,24 @@ public class SkyDomeAnnihilationPlanePart extends AEBasePart implements IGridTic
 
     @Override
     public void getBoxes(IPartCollisionHelper helper) {
-        helper.addBox(1, 1, 15, 15, 15, 16);
-        helper.addBox(5, 5, 14, 11, 11, 15);
+        connectionHelper.getBoxes(helper);
+    }
+
+    @Override
+    public void onNeighborChanged(BlockGetter level, BlockPos pos, BlockPos neighbor) {
+        connectionHelper.updateConnections();
+    }
+
+    @Override
+    public void onUpdateShape(Direction side) {
+        if (side.getAxis() != getSide().getAxis()) {
+            connectionHelper.updateConnections();
+        }
+    }
+
+    @Override
+    public ModelData getModelData() {
+        return ModelData.builder().with(PlaneModelData.CONNECTIONS, connectionHelper.getConnections()).build();
     }
 
     @Override

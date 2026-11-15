@@ -4,80 +4,9 @@
         "sides": "ae2pr:part/sky_dome_annihilation_plane_connector",
         "back": "ae2pr:part/sky_dome_annihilation_plane_back",
         "indicator": "ae2pr:part/sky_dome_annihilation_plane_indicator_powered",
-        "particle": "ae2pr:part/sky_dome_annihilation_plane_powered",
-        "plane": "ae2pr:part/sky_dome_annihilation_plane_powered",
-        "plane_sides": "ae2pr:part/sky_dome_annihilation_plane_sides"
+        "particle": "ae2pr:part/sky_dome_annihilation_plane_powered"
     },
     "elements": [
-        {
-            "name": "Front",
-            "from": [
-                1,
-                1,
-                0
-            ],
-            "to": [
-                15,
-                15,
-                1
-            ],
-            "faces": {
-                "north": {
-                    "uv": [
-                        1,
-                        1,
-                        15,
-                        15
-                    ],
-                    "texture": "#plane"
-                },
-                "east": {
-                    "uv": [
-                        15,
-                        1,
-                        16,
-                        15
-                    ],
-                    "texture": "#plane_sides"
-                },
-                "south": {
-                    "uv": [
-                        1,
-                        1,
-                        15,
-                        15
-                    ],
-                    "texture": "#back"
-                },
-                "west": {
-                    "uv": [
-                        0,
-                        1,
-                        1,
-                        15
-                    ],
-                    "texture": "#plane_sides"
-                },
-                "up": {
-                    "uv": [
-                        1,
-                        0,
-                        15,
-                        1
-                    ],
-                    "texture": "#plane_sides"
-                },
-                "down": {
-                    "uv": [
-                        1,
-                        15,
-                        15,
-                        16
-                    ],
-                    "texture": "#plane_sides"
-                }
-            }
-        },
         {
             "from": [
                 5,

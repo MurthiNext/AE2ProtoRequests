@@ -28,6 +28,7 @@ import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterScreen
 import com.murthinext.ae2pr.block.machine_part.FluidHatchScreen;
 import com.murthinext.ae2pr.block.machine_part.ItemBusScreen;
 import com.murthinext.ae2pr.block.molecular_assembly_core.MolecularAssemblyCoreRenderer;
+import com.murthinext.ae2pr.client.model.SkyDomeAnnihilationPlaneModel;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectClientTooltip;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectLine;
 import com.murthinext.ae2pr.client.tooltip.FormulaClientTooltip;
@@ -75,6 +76,11 @@ public final class ClientSetup {
                                      .map(set -> (ItemLike) set.bucket().get())
                                      .toArray(ItemLike[] ::new);
         event.register(new DynamicFluidContainerModel.Colors(), buckets);
+    }
+
+    @SubscribeEvent
+    public static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
+        event.register("sky_dome_annihilation_plane", SkyDomeAnnihilationPlaneModel.LOADER);
     }
 
     @SubscribeEvent

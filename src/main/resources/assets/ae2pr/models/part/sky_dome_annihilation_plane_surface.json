@@ -1,0 +1,9 @@
+{
+    "loader": "ae2pr:sky_dome_annihilation_plane",
+    "textures": {
+        "plane": "ae2pr:part/sky_dome_annihilation_plane_off",
+        "sides": "ae2pr:part/sky_dome_annihilation_plane_sides",
+        "back": "ae2pr:part/sky_dome_annihilation_plane_back",
+        "particle": "ae2pr:part/sky_dome_annihilation_plane_off"
+    }
+}
