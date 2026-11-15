@@ -1,12 +1,15 @@
-KaTeX fonts (assets/ae2pr/font/katex_roman.ttf, katex_math.ttf)
+KaTeX fonts (assets/ae2pr/font/katex_roman.ttf, katex_math.ttf,
+katex_size1.ttf to katex_size4.ttf)
 https://github.com/KaTeX/KaTeX
 
 Copyright (c) 2009-2010, Design Science, Inc. (<www.mathjax.org>)
 Copyright (c) 2014-2018 Khan Academy (<www.khanacademy.org>),
-with Reserved Font Name KaTeX_Main, KaTeX_Math.
+with Reserved Font Name KaTeX_Main, KaTeX_Math, KaTeX_Size1, KaTeX_Size2,
+KaTeX_Size3, KaTeX_Size4.
 
-These files are renamed copies of KaTeX_Main-Regular.ttf and KaTeX_Math-Italic.ttf,
-unmodified in content. They are used in-game as the LaTeX formula faces.
+These files are renamed copies of KaTeX_Main-Regular.ttf, KaTeX_Math-Italic.ttf
+and KaTeX_Size1-Regular.ttf to KaTeX_Size4-Regular.ttf, unmodified in content.
+They are used in-game as the LaTeX formula faces.
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:

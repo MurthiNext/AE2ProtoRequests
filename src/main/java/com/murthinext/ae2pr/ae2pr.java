@@ -45,16 +45,13 @@ public class ae2pr {
         var modEventBus = context.getModEventBus();
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(ServerConfig::onReload);
-        // 机器模板的注册表需在 ModMachines.register 前注入
+
         MachineRegistries.install(
-                ModBlocks.BLOCKS,
-                ModItems.ITEMS,
-                ModBlockEntities.BLOCK_ENTITIES,
-                ModMenus.MENUS,
-                ModRecipes.RECIPE_TYPES,
-                ModRecipes.SERIALIZERS);
+                ModBlocks.BLOCKS, ModItems.ITEMS,
+                ModBlockEntities.BLOCK_ENTITIES, ModMenus.MENUS,
+                ModRecipes.RECIPE_TYPES, ModRecipes.SERIALIZERS);
         MachineTuning.install(ServerConfig::lossySpeedPerCard, ServerConfig::lossyEnergyMultiplierPerCard);
-        // 材质与机器的延迟注册项必须在注册事件触发前全部提交
+
         ModMaterials.register();
         ModMachines.register();
         ModBlocks.installStructureHooks();
@@ -69,21 +66,19 @@ public class ae2pr {
         ModSounds.SOUNDS.register(modEventBus);
         ModEffects.EFFECTS.register(modEventBus);
         ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
+
         context.registerConfig(
                 net.minecraftforge.fml.config.ModConfig.Type.SERVER, ServerConfig.SPEC, ServerConfig.FILE_NAME);
-        // 部件模型必须在预初始化阶段注册
+
         PartModels.registerModels(PartModelsHelper.createModels(MultiLevelEmitterPart.class));
         PartModels.registerModels(PartModelsHelper.createModels(MultiThresholdLevelEmitterPart.class));
         PartModels.registerModels(PartModelsHelper.createModels(SkyDomeAnnihilationPlanePart.class));
         ModNetwork.register();
-        // 通用重复订单：由服务端 tick 驱动
+
         MinecraftForge.EVENT_BUS.addListener(GeneralRepeatOrders::onServerTick);
         MinecraftForge.EVENT_BUS.addListener(GeneralRepeatOrders::onServerStopped);
-        // 扳手交互：右键旋转，Shift+右键拆除
         MinecraftForge.EVENT_BUS.addListener(WrenchInteractions::onRightClickBlock);
-        // 陨石矿石：铁镐以上挖掘速度同天空石
         MinecraftForge.EVENT_BUS.addListener(MeteoriteOres::onBreakSpeed);
-        // 坍缩物品存储元件：第三方机器的通用破坏入口
         MinecraftForge.EVENT_BUS.addListener(CollapseEvents::onBlockBreak);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
@@ -94,27 +89,16 @@ public class ae2pr {
     private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("AE2 Proto Requests initialized");
         event.enqueueWork(() -> {
-            // 过滤元件升级
+            var multiLevelEmitterItem = ModItems.MULTI_LEVEL_EMITTER.get();
+            var multiThresholdLevelEmitterItem = ModItems.MULTI_THRESHOLD_LEVEL_EMITTER.get();
+            var networkAccessHatchType = ModBlockEntities.ME_NETWORK_ACCESS_HATCH.get();
+            var namingFactoryType = ModMachines.NAMING_FACTORY.blockEntityType();
+
             Upgrades.add(AEItems.FUZZY_CARD, ModItems.FILTER_CELL.get(), 1);
-
-            // 超级堆叠卡：接口与样板供应器
-            SuperStackSupport.registerUpgrades();
-
-            // 坍缩物品存储元件：作为只读存储元件接入 ME 网络
-            StorageCells.addCellHandler(new CollapsedItemStorageCellHandler());
-            StorageCells.addCellGuiHandler(new CollapsedItemStorageCellGuiHandler());
-            StorageCellModels.registerModel(
-                    ModItems.COLLAPSED_ITEM_STORAGE_CELL.get(), Ids.of("block/drive/collapsed_item_storage_cell"));
-
-            // 通式标准发信器升级
-            var emitterItem = ModItems.MULTI_LEVEL_EMITTER.get();
-            Upgrades.add(AEItems.FUZZY_CARD, emitterItem, 1);
-            Upgrades.add(AEItems.CRAFTING_CARD, emitterItem, 1);
-            var thresholdEmitterItem = ModItems.MULTI_THRESHOLD_LEVEL_EMITTER.get();
-            Upgrades.add(AEItems.FUZZY_CARD, thresholdEmitterItem, 1);
-            Upgrades.add(AEItems.CRAFTING_CARD, thresholdEmitterItem, 1);
-
-            // 多方块机器升级
+            Upgrades.add(AEItems.FUZZY_CARD, multiLevelEmitterItem, 1);
+            Upgrades.add(AEItems.CRAFTING_CARD, multiLevelEmitterItem, 1);
+            Upgrades.add(AEItems.FUZZY_CARD, multiThresholdLevelEmitterItem, 1);
+            Upgrades.add(AEItems.CRAFTING_CARD, multiThresholdLevelEmitterItem, 1);
             for (var machine : ModMachines.ALL) {
                 if (machine.speedUpgrades() > 0) {
                     Upgrades.add(AEItems.SPEED_CARD, machine.block(), machine.speedUpgrades());
@@ -126,11 +110,15 @@ public class ae2pr {
                 }
             }
 
-            // 异星熔岩遇水凝结为陨石
+            SuperStackSupport.registerUpgrades();
+
+            StorageCells.addCellHandler(new CollapsedItemStorageCellHandler());
+            StorageCells.addCellGuiHandler(new CollapsedItemStorageCellGuiHandler());
+            StorageCellModels.registerModel(
+                    ModItems.COLLAPSED_ITEM_STORAGE_CELL.get(), Ids.of("block/drive/collapsed_item_storage_cell"));
+
             AlienLavaInteractions.register();
 
-            // 绑定方块实体类型并登记代表物品
-            var networkAccessHatchType = ModBlockEntities.ME_NETWORK_ACCESS_HATCH.get();
             ModBlocks.ME_NETWORK_ACCESS_HATCH
                     .get()
                     .setBlockEntity(
@@ -140,8 +128,6 @@ public class ae2pr {
                             null);
             appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(
                     networkAccessHatchType, ModItems.ME_NETWORK_ACCESS_HATCH.get());
-
-            var namingFactoryType = ModMachines.NAMING_FACTORY.blockEntityType();
             ModMachines.NAMING_FACTORY
                     .block()
                     .setBlockEntity(NamingFactoryBlockEntity.class, namingFactoryType, null, null);

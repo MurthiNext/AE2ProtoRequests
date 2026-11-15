@@ -1,0 +1,15 @@
+{
+    "providers": [
+        {
+            "type": "ttf",
+            "file": "ae2pr:katex_size2.ttf",
+            "size": 22.6928,
+            "oversample": 2,
+            "shift": [0, -3.8894]
+        },
+        {
+            "type": "reference",
+            "id": "ae2pr:latex_roman"
+        }
+    ]
+}
