@@ -66,6 +66,10 @@ public final class ServerConfig {
     private static final ForgeConfigSpec.DoubleValue MULTI_FACTORY_INSCRIBING_ENERGY;
     private static final ForgeConfigSpec.DoubleValue MULTI_FACTORY_CHARGING_ENERGY;
 
+    private static final ForgeConfigSpec.DoubleValue SKY_DOME_MIN_EFFICIENCY;
+    private static final ForgeConfigSpec.DoubleValue SKY_DOME_MAX_EFFICIENCY;
+    private static final ForgeConfigSpec.IntValue SKY_DOME_STANDARD_YIELD;
+
     private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_RADIUS;
     private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_DEPTH;
     private static final ForgeConfigSpec.IntValue CRYSTAL_REACTOR_DURATION_TICKS;
@@ -186,6 +190,15 @@ public final class ServerConfig {
                                                 .defineInRange("chargingEnergyPerParallel",
                                                                ChargerBlockEntity.POWER_MAXIMUM_AMOUNT, 0.0,
                                                                EnergyAmount.MAX);
+        BUILDER.pop();
+
+        BUILDER.push("skyDomeAnnihilationPlane");
+        SKY_DOME_MIN_EFFICIENCY = BUILDER.comment("穹顶破坏面板的最低效率（%）")
+                                          .defineInRange("minEfficiency", 25.0, 0.0, 100.0);
+        SKY_DOME_MAX_EFFICIENCY = BUILDER.comment("穹顶破坏面板的最高效率（%）")
+                                          .defineInRange("maxEfficiency", 100.0, 0.0, 100.0);
+        SKY_DOME_STANDARD_YIELD = BUILDER.comment("穹顶破坏面板的标准陨石粉产出量")
+                                          .defineInRange("standardYieldPerMinute", 256, 0, 1_000_000);
         BUILDER.pop();
 
         BUILDER.push("crystalReactor");
@@ -407,6 +420,18 @@ public final class ServerConfig {
 
     public static double multiFactoryChargingEnergyPerParallel() {
         return read(MULTI_FACTORY_CHARGING_ENERGY);
+    }
+
+    public static double skyDomeMinEfficiency() {
+        return read(SKY_DOME_MIN_EFFICIENCY) / 100.0;
+    }
+
+    public static double skyDomeMaxEfficiency() {
+        return read(SKY_DOME_MAX_EFFICIENCY) / 100.0;
+    }
+
+    public static int skyDomeStandardYieldPerMinute() {
+        return read(SKY_DOME_STANDARD_YIELD);
     }
 
     public static int crystalReactorRadius() {

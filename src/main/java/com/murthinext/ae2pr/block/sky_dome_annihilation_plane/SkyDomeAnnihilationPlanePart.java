@@ -32,15 +32,14 @@ import appeng.parts.PartModel;
 import appeng.parts.automation.PlaneConnectionHelper;
 import appeng.parts.automation.PlaneModelData;
 
+import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.api.Ids;
 
 public class SkyDomeAnnihilationPlanePart extends AEBasePart implements IGridTickable {
 
-    public static final int MIN_PRODUCTION = 32;
-    public static final int MAX_PRODUCTION = 128;
-
     private static final int TICKS_PER_MINUTE = 1200;
     private static final int TICK_INTERVAL = 5;
+    private static final int EFFICIENCY_INTERVAL = 20;
 
     @PartModels
     public static final ResourceLocation MODEL_OFF = Ids.of("part/sky_dome_annihilation_plane");
@@ -63,9 +62,9 @@ public class SkyDomeAnnihilationPlanePart extends AEBasePart implements IGridTic
 
     private final IActionSource actionSource = new MachineSource(this);
     private final PlaneConnectionHelper connectionHelper = new PlaneConnectionHelper(this);
-    private int productionRate;
-    private int minuteTicks;
-    private int progress;
+    private int efficiencyCooldown;
+    private double efficiency;
+    private double pendingDust;
 
     public SkyDomeAnnihilationPlanePart(IPartItem<?> partItem) {
         super(partItem);
@@ -91,34 +90,25 @@ public class SkyDomeAnnihilationPlanePart extends AEBasePart implements IGridTic
             return TickRateModulation.SAME;
         }
 
-        var grid = node.getGrid();
-        var dust = AEItemKey.of(AEItems.SKY_DUST);
-        var energy = grid.getEnergyService();
-        var inventory = grid.getStorageService().getInventory();
-        if (StorageHelper.poweredInsert(energy, inventory, dust, 1, actionSource, Actionable.SIMULATE) != 1) {
-            return TickRateModulation.SAME;
+        int elapsedTicks = Math.min(ticksSinceLastCall, TICK_INTERVAL);
+        if (efficiencyCooldown <= 0) {
+            efficiency = SkyDomePlaneGroup.efficiency(this);
+            efficiencyCooldown = EFFICIENCY_INTERVAL;
+        }
+        efficiencyCooldown -= elapsedTicks;
+
+        pendingDust += ServerConfig.skyDomeStandardYieldPerMinute() * efficiency * elapsedTicks / TICKS_PER_MINUTE;
+        long amount = (long) pendingDust;
+        if (amount > 0) {
+            var grid = node.getGrid();
+            long inserted = StorageHelper.poweredInsert(grid.getEnergyService(),
+                                                        grid.getStorageService().getInventory(),
+                                                        AEItemKey.of(AEItems.SKY_DUST), amount, actionSource,
+                                                        Actionable.MODULATE);
+            // 网络阻塞期间最多保留 1 个陨石粉，不做补算。
+            pendingDust = Math.min(pendingDust - inserted, 1.0);
         }
 
-        if (productionRate == 0) {
-            productionRate = MIN_PRODUCTION + level.random.nextInt(MAX_PRODUCTION - MIN_PRODUCTION + 1);
-        }
-
-        // 不补算断电、卸载或网络阻塞期间的产量。
-        int elapsedTicks = Math.min(Math.min(ticksSinceLastCall, TICK_INTERVAL), TICKS_PER_MINUTE - minuteTicks);
-        int nextProgress = progress + productionRate * elapsedTicks;
-        if (nextProgress >= TICKS_PER_MINUTE) {
-            if (StorageHelper.poweredInsert(energy, inventory, dust, 1, actionSource, Actionable.MODULATE) != 1) {
-                return TickRateModulation.SAME;
-            }
-            nextProgress -= TICKS_PER_MINUTE;
-        }
-
-        progress = nextProgress;
-        minuteTicks += elapsedTicks;
-        if (minuteTicks == TICKS_PER_MINUTE) {
-            minuteTicks = 0;
-            productionRate = MIN_PRODUCTION + level.random.nextInt(MAX_PRODUCTION - MIN_PRODUCTION + 1);
-        }
         getHost().markForSave();
         return TickRateModulation.SAME;
     }
@@ -126,18 +116,13 @@ public class SkyDomeAnnihilationPlanePart extends AEBasePart implements IGridTic
     @Override
     public void readFromNBT(CompoundTag data) {
         super.readFromNBT(data);
-        int rate = data.getInt("productionRate");
-        productionRate = rate == 0 ? 0 : Mth.clamp(rate, MIN_PRODUCTION, MAX_PRODUCTION);
-        minuteTicks = Mth.clamp(data.getInt("minuteTicks"), 0, TICKS_PER_MINUTE - 1);
-        progress = Mth.clamp(data.getInt("progress"), 0, TICKS_PER_MINUTE - 1);
+        pendingDust = Mth.clamp(data.getDouble("pendingDust"), 0.0, 1.0);
     }
 
     @Override
     public void writeToNBT(CompoundTag data) {
         super.writeToNBT(data);
-        data.putInt("productionRate", productionRate);
-        data.putInt("minuteTicks", minuteTicks);
-        data.putInt("progress", progress);
+        data.putDouble("pendingDust", pendingDust);
     }
 
     @Override
@@ -148,6 +133,7 @@ public class SkyDomeAnnihilationPlanePart extends AEBasePart implements IGridTic
     @Override
     public void onNeighborChanged(BlockGetter level, BlockPos pos, BlockPos neighbor) {
         connectionHelper.updateConnections();
+        efficiencyCooldown = 0;
     }
 
     @Override
