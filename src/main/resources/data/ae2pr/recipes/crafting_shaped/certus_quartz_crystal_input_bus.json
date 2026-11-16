@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CAC",
+    "ABA",
+    "CAC"
+  ],
+  "key": {
+    "A": {
+      "item": "ae2:import_bus"
+    },
+    "B": {
+      "item": "ae2pr:crystal_reinforced_composite_machine_casing"
+    },
+    "C": {
+      "item": "ae2:spatial_cell_component_2"
+    }
+  },
+  "result": {
+    "item": "ae2pr:certus_quartz_crystal_input_bus"
+  }
+}

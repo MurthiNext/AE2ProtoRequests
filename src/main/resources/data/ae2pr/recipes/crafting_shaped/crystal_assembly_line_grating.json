@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "BBB",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "tag": "ae2:all_certus_quartz"
+    },
+    "B": {
+      "item": "ae2pr:crystal_assembly_line_casing"
+    }
+  },
+  "result": {
+    "item": "ae2pr:crystal_assembly_line_grating",
+    "count": 3
+  }
+}

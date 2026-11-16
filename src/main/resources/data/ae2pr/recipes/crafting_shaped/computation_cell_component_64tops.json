@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BAB",
+    "DCD",
+    "BDB"
+  ],
+  "key": {
+    "A": {
+      "item": "ae2:calculation_processor"
+    },
+    "B": {
+      "item": "ae2:singularity"
+    },
+    "C": {
+      "item": "ae2:spatial_cell_component_128"
+    },
+    "D": {
+      "item": "ae2pr:computation_cell_component_16tops"
+    }
+  },
+  "result": {
+    "item": "ae2pr:computation_cell_component_64tops"
+  }
+}

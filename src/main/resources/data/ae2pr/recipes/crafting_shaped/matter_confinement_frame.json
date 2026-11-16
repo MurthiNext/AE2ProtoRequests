@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BCB",
+    "CAC",
+    "BCB"
+  ],
+  "key": {
+    "A": {
+      "item": "ae2pr:uncharged_singularity"
+    },
+    "B": {
+      "tag": "forge:plates/meteor_steel"
+    },
+    "C": {
+      "tag": "forge:plates/zirconium"
+    }
+  },
+  "result": {
+    "item": "ae2pr:matter_confinement_frame"
+  }
+}

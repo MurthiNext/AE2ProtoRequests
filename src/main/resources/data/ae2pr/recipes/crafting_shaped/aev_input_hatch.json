@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DCD",
+    "ABA",
+    "DCD"
+  ],
+  "key": {
+    "A": {
+      "item": "ae2:import_bus"
+    },
+    "B": {
+      "item": "ae2pr:aev_machine_casing"
+    },
+    "C": {
+      "item": "minecraft:bucket"
+    },
+    "D": {
+      "item": "ae2:cell_component_1k"
+    }
+  },
+  "result": {
+    "item": "ae2pr:aev_input_hatch"
+  }
+}

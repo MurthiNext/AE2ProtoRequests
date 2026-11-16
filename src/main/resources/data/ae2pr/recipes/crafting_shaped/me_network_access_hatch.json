@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BAB",
+    "ACA",
+    "BAB"
+  ],
+  "key": {
+    "A": {
+      "item": "ae2:energy_acceptor"
+    },
+    "B": {
+      "tag": "ae2pr:circuits/aev_d2"
+    },
+    "C": {
+      "item": "ae2pr:crystal_reinforced_composite_machine_casing"
+    }
+  },
+  "result": {
+    "item": "ae2pr:me_network_access_hatch"
+  }
+}

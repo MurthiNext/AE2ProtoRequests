@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ADA",
+    "CBC",
+    "ADA"
+  ],
+  "key": {
+    "A": {
+      "item": "ae2:inscriber"
+    },
+    "B": {
+      "item": "ae2pr:aev_machine_casing"
+    },
+    "C": {
+      "tag": "ae2pr:circuits/aev_d1"
+    },
+    "D": {
+      "item": "ae2pr:single_plate_press"
+    }
+  },
+  "result": {
+    "item": "ae2pr:naming_factory"
+  }
+}

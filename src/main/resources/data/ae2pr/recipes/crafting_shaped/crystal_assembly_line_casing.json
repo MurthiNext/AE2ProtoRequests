@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "ABA",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "item": "ae2:quartz_block"
+    },
+    "B": {
+      "item": "ae2pr:crystal_reinforced_composite_machine_casing"
+    }
+  },
+  "result": {
+    "item": "ae2pr:crystal_assembly_line_casing",
+    "count": 4
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ACA",
+    "CBC",
+    "ACA"
+  ],
+  "key": {
+    "A": {
+      "item": "ae2:logic_processor"
+    },
+    "B": {
+      "item": "ae2:smooth_sky_stone_block"
+    },
+    "C": {
+      "item": "ae2pr:meteor_steel_ingot"
+    }
+  },
+  "result": {
+    "item": "ae2pr:logistics_control_casing"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "ABA",
+    "CCC"
+  ],
+  "key": {
+    "A": {
+      "tag": "ae2pr:circuits/aev"
+    },
+    "B": {
+      "item": "ae2pr:high_energy_core"
+    },
+    "C": {
+      "item": "ae2pr:zirconia_corundum_bricks"
+    }
+  },
+  "result": {
+    "item": "ae2pr:matter_phase_transformer"
+  }
+}
