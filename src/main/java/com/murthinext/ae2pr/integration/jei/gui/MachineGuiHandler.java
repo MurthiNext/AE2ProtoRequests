@@ -1,16 +1,13 @@
 package com.murthinext.ae2pr.integration.jei.gui;
 
-import com.murthinext.ae2pr.api.machine.MachineDefinition;
 import com.murthinext.ae2pr.api.machine.MachineMenu;
+import com.murthinext.ae2pr.api.machine.Mode;
+import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
 import com.murthinext.ae2pr.api.machine.client.GuiExtraAreas;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerScreen;
-import com.murthinext.ae2pr.integration.jei.category.FilterPressCategory;
-import com.murthinext.ae2pr.integration.jei.category.JigCategory;
-import com.murthinext.ae2pr.integration.jei.plugin.Ae2prJeiPlugin;
-import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryMode;
-import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.integration.jei.plugin.AE2PRJeiPlugin;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -43,19 +40,11 @@ public class MachineGuiHandler implements IGuiContainerHandler<AbstractContainer
     }
 
     private static RecipeType<?> recipeType(AbstractMultiblockControllerMenu<?> menu) {
-        MachineDefinition<?, ?, ?> definition = menu.definition();
-        if (definition == ModMachines.FILTER_PRESS) {
-            return FilterPressCategory.RECIPE_TYPE;
+        if (!(menu.definition() instanceof MultiblockMachineDefinition<?, ?> definition)) {
+            return null;
         }
-        if (definition == ModMachines.JIG) {
-            return JigCategory.RECIPE_TYPE;
-        }
-        if (definition == ModMachines.MULTI_FACTORY
-                && menu instanceof MachineMenu<?> machineMenu
-                && machineMenu.getMode() instanceof MultiFactoryMode mode) {
-            return Ae2prJeiPlugin.multiFactoryRecipeType(mode);
-        }
-        return null;
+        Mode mode = menu instanceof MachineMenu<?> machineMenu ? machineMenu.getMode() : null;
+        return AE2PRJeiPlugin.recipeTypeFor(mode != null ? mode.recipeType() : definition.recipeType());
     }
 
     @Override

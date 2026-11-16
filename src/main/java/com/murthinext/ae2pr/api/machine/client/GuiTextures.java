@@ -23,6 +23,9 @@ public final class GuiTextures {
     public static final ResourceLocation PUSH_ON = Ids.of("textures/gui/push_on.png");
     public static final ResourceLocation PUSH_OFF = Ids.of("textures/gui/push_off.png");
 
+    public static final ResourceLocation TAB_HOME = Ids.of("textures/gui/tab_home.png");
+    public static final ResourceLocation TAB_DATA = Ids.of("textures/gui/tab_data.png");
+
     // 纯色块的描边，取 AE2 的深钢色
     public static final int COLOR_SOLID_BORDER = 0xFF413F54;
     // 面模式语义色：红=输入（拉取），蓝=输出（推出），紫=均可，灰=无

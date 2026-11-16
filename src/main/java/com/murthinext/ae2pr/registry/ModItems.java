@@ -11,6 +11,7 @@ import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
 import com.murthinext.ae2pr.item.filter_cell.FilterCellItem;
 import com.murthinext.ae2pr.item.level_emitter.MultiLevelEmitterPartItem;
 import com.murthinext.ae2pr.item.level_emitter.MultiThresholdLevelEmitterPartItem;
+import com.murthinext.ae2pr.item.matter_confinement_frame.MatterConfinementFrameItem;
 import com.murthinext.ae2pr.item.proto_terminal.ProtoTerminalItem;
 import com.murthinext.ae2pr.item.sky_dome_annihilation_plane.SkyDomeAnnihilationPlanePartItem;
 import com.murthinext.ae2pr.item.upgrade.MachineUpgradeCardItem;
@@ -201,6 +202,9 @@ public final class ModItems {
 
     public static final RegistryObject<Item> HIGH_ENERGY_SINGULARITY =
             ITEMS.register("high_energy_singularity", () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<MatterConfinementFrameItem> MATTER_CONFINEMENT_FRAME =
+            ITEMS.register("matter_confinement_frame", () -> new MatterConfinementFrameItem(new Item.Properties()));
 
     public static final RegistryObject<BucketItem> ALIEN_LAVA_BUCKET = ITEMS.register(
             "alien_lava_bucket",

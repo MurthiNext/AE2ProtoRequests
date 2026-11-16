@@ -43,6 +43,8 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.DIAMOND_SOC_WAFER.get());
                         output.accept(ModItems.DIAMOND_SOC.get());
                         output.accept(ModItems.FINE_FLUIX_WIRE.get());
+                        output.accept(ModItems.MATTER_CONFINEMENT_FRAME.get());
+                        output.accept(ModItems.CRYSTALINE.get());
 
                         // 电路板
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_1TOPS.get());
@@ -63,9 +65,6 @@ public final class ModCreativeTabs {
                         acceptMaterials(output, TagPrefix.INGOT);
                         output.accept(ModItems.ZIRCON_BRICK.get());
                         output.accept(ModItems.ZIRCON.get());
-
-                        // 特殊物品
-                        output.accept(ModItems.CRYSTALINE.get());
 
                         // 粉末
                         acceptMaterials(output, TagPrefix.DUST);

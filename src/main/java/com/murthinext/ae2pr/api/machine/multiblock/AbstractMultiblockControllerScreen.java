@@ -5,6 +5,7 @@ import com.murthinext.ae2pr.api.machine.MachineStat;
 import com.murthinext.ae2pr.api.machine.MachineStats;
 import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
+import com.murthinext.ae2pr.api.machine.client.GuiTextures;
 import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
 import com.murthinext.ae2pr.api.machine.client.MachineStyles;
 import com.murthinext.ae2pr.api.machine.client.MachineTabButton;
@@ -46,7 +47,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     private static final int JOB_TAIL_GAP = 4;
     private static final double JOB_NAME_SCROLL_SPEED = 12.0D;
     private static final int JOB_NAME_SCROLL_GAP = 24;
-    private static final int TAB_Y = 1 - MachineTabButton.HEIGHT;
+    private static final int TAB_Y = 1 - MachineTabButton.SIZE;
     private static final int DATA_Y = 30;
     private static final int DATA_STEP = 11;
 
@@ -68,13 +69,15 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
         addRenderableWidget(new MachineTabButton(
                 leftPos,
                 topPos + TAB_Y,
+                GuiTextures.TAB_HOME,
                 Component.translatable("gui.ae2pr.multiblock.tab.home"),
                 separatorAccent(),
                 () -> !dataPage,
                 () -> dataPage = false));
         addRenderableWidget(new MachineTabButton(
-                leftPos + MachineTabButton.WIDTH,
+                leftPos + MachineTabButton.SIZE,
                 topPos + TAB_Y,
+                GuiTextures.TAB_DATA,
                 Component.translatable("gui.ae2pr.multiblock.tab.data"),
                 separatorAccent(),
                 () -> dataPage,
@@ -93,7 +96,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     @Override
     public List<Rect2i> getGuiExtraAreas() {
         List<Rect2i> areas = new ArrayList<>(super.getGuiExtraAreas());
-        areas.add(new Rect2i(leftPos, topPos + TAB_Y, MachineTabButton.WIDTH * 2, MachineTabButton.HEIGHT));
+        areas.add(new Rect2i(leftPos, topPos + TAB_Y, MachineTabButton.SIZE * 2, MachineTabButton.SIZE));
         return areas;
     }
 

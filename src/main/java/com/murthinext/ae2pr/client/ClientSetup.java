@@ -11,11 +11,12 @@ import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterScreen
 import com.murthinext.ae2pr.block.machine_part.FluidHatchScreen;
 import com.murthinext.ae2pr.block.machine_part.ItemBusScreen;
 import com.murthinext.ae2pr.block.molecular_assembly_core.MolecularAssemblyCoreRenderer;
-import com.murthinext.ae2pr.client.model.SkyDomeAnnihilationPlaneModel;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectClientTooltip;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectLine;
 import com.murthinext.ae2pr.client.tooltip.FormulaClientTooltip;
 import com.murthinext.ae2pr.client.tooltip.FormulaTooltip;
+import com.murthinext.ae2pr.item.matter_confinement_frame.MatterConfinementFrameModel;
+import com.murthinext.ae2pr.item.sky_dome_annihilation_plane.SkyDomeAnnihilationPlaneModel;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryRenderer;
 import com.murthinext.ae2pr.registry.ModBlockEntities;
 import com.murthinext.ae2pr.registry.ModMenus;
@@ -81,6 +82,7 @@ public final class ClientSetup {
     @SubscribeEvent
     public static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
         event.register("sky_dome_annihilation_plane", SkyDomeAnnihilationPlaneModel.LOADER);
+        event.register("matter_confinement_frame", MatterConfinementFrameModel.LOADER);
     }
 
     @SubscribeEvent

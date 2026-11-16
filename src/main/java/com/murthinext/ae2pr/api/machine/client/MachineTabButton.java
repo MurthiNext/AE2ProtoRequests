@@ -1,25 +1,33 @@
 package com.murthinext.ae2pr.api.machine.client;
 
 import java.util.function.BooleanSupplier;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 public final class MachineTabButton extends AbstractButton {
-    public static final int HEIGHT = 24;
-    public static final int WIDTH = (int) Math.round(HEIGHT * Math.sqrt(2));
+    // 页签为正方形，边长取按钮边长的 √2 倍。
+    public static final int SIZE = (int) Math.round(GuiTextures.SIZE * Math.sqrt(2));
     private static final int COLOR_INACTIVE = 0xFF171D24;
     private static final int COLOR_HOVER = 0xFF202D39;
-    private static final int COLOR_TEXT = 0xFFAAB8C6;
 
+    private final ResourceLocation icon;
     private final BooleanSupplier selected;
     private final Runnable onPress;
     private final int accent;
 
-    public MachineTabButton(int x, int y, Component label, int accent, BooleanSupplier selected, Runnable onPress) {
-        super(x, y, WIDTH, HEIGHT, label);
+    public MachineTabButton(
+            int x,
+            int y,
+            ResourceLocation icon,
+            Component narration,
+            int accent,
+            BooleanSupplier selected,
+            Runnable onPress) {
+        super(x, y, SIZE, SIZE, narration);
+        this.icon = icon;
         this.accent = accent;
         this.selected = selected;
         this.onPress = onPress;
@@ -45,17 +53,17 @@ public final class MachineTabButton extends AbstractButton {
         if (current || isHoveredOrFocused()) {
             graphics.fill(x + 1, y + 1, right - 1, y + 2, current ? accent : GuiPanels.COLOR_HIGHLIGHT);
         }
-        if (isFocused()) {
-            graphics.fill(x + 8, bottom - 4, right - 8, bottom - 3, accent);
-        }
-        var font = Minecraft.getInstance().font;
-        graphics.drawString(
-                font,
-                getMessage(),
-                x + (width - font.width(getMessage())) / 2,
-                getY() + (height - font.lineHeight) / 2 + 1,
-                current || isHoveredOrFocused() ? accent : COLOR_TEXT,
-                false);
+        graphics.blit(
+                icon,
+                x + Math.round((width - GuiTextures.SIZE) / 2.0F),
+                y + Math.round((height - GuiTextures.SIZE) / 2.0F),
+                0,
+                0.0F,
+                0.0F,
+                GuiTextures.SIZE,
+                GuiTextures.SIZE,
+                GuiTextures.SIZE,
+                GuiTextures.SIZE);
     }
 
     @Override

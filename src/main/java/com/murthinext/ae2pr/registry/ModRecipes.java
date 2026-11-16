@@ -3,9 +3,11 @@ package com.murthinext.ae2pr.registry;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
+import com.murthinext.ae2pr.recipe.MatterConfinementFrameFillingRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -26,4 +28,9 @@ public final class ModRecipes {
 
     public static final RegistryObject<ComplexWorldInteractionRecipe.Serializer> COMPLEX_WORLD_INTERACTION =
             SERIALIZERS.register("complex_world_interaction", ComplexWorldInteractionRecipe.Serializer::new);
+
+    public static final RegistryObject<SimpleCraftingRecipeSerializer<MatterConfinementFrameFillingRecipe>>
+            MATTER_CONFINEMENT_FRAME_FILLING = SERIALIZERS.register(
+                    "matter_confinement_frame_filling",
+                    () -> new SimpleCraftingRecipeSerializer<>(MatterConfinementFrameFillingRecipe::new));
 }

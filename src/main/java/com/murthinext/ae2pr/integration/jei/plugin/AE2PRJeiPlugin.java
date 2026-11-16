@@ -4,48 +4,41 @@ import appeng.recipes.handlers.ChargerRecipe;
 import appeng.recipes.handlers.InscriberRecipe;
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
-import com.murthinext.ae2pr.integration.jei.category.ComplexWorldInteractionCategory;
-import com.murthinext.ae2pr.integration.jei.category.CrystalAssemblyLineCategory;
-import com.murthinext.ae2pr.integration.jei.category.CrystalReactionChamberCategory;
-import com.murthinext.ae2pr.integration.jei.category.CrystalWorkstationCategory;
-import com.murthinext.ae2pr.integration.jei.category.FilterPressCategory;
-import com.murthinext.ae2pr.integration.jei.category.HighReactivityLavaSmelterCategory;
-import com.murthinext.ae2pr.integration.jei.category.JigCategory;
-import com.murthinext.ae2pr.integration.jei.category.MatterPhaseTransformerCategory;
-import com.murthinext.ae2pr.integration.jei.category.MultiblockPreviewCategory;
+import com.murthinext.ae2pr.integration.jei.category.*;
 import com.murthinext.ae2pr.integration.jei.gui.MachineGuiHandler;
 import com.murthinext.ae2pr.integration.jei.recipe.MultiblockPreviewRecipe;
 import com.murthinext.ae2pr.integration.jei.transfer.CrystalAssemblyLinePatternTransferHandler;
 import com.murthinext.ae2pr.integration.jei.transfer.MultiblockPatternTransferHandler;
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationMode;
-import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryMode;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.registry.ModRecipes;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import mezz.jei.api.registration.IGuiHandlerRegistration;
-import mezz.jei.api.registration.IRecipeCatalystRegistration;
-import mezz.jei.api.registration.IRecipeCategoryRegistration;
-import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.registration.IRecipeTransferRegistration;
+import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
+import org.jetbrains.annotations.Nullable;
 
 // 机器分类共用同一条注册流程，差异集中在 machines 数据表
 @JeiPlugin
-public class Ae2prJeiPlugin implements IModPlugin {
+public class AE2PRJeiPlugin implements IModPlugin {
 
     private static final mezz.jei.api.recipe.RecipeType<InscriberRecipe> AE2_INSCRIBER =
             mezz.jei.api.recipe.RecipeType.create("ae2", "inscriber", InscriberRecipe.class);
     private static final mezz.jei.api.recipe.RecipeType<ChargerRecipe> AE2_CHARGER =
             mezz.jei.api.recipe.RecipeType.create("ae2", "charger", ChargerRecipe.class);
+
+    @Nullable
+    private static Map<RecipeType<?>, mezz.jei.api.recipe.RecipeType<?>> recipeTypes;
 
     private record MachineCategory(
             mezz.jei.api.recipe.RecipeType<?> jeiType,
@@ -146,8 +139,29 @@ public class Ae2prJeiPlugin implements IModPlugin {
         registration.addGenericGuiContainerHandler(AbstractMachineScreen.class, new MachineGuiHandler());
     }
 
-    public static mezz.jei.api.recipe.RecipeType<?> multiFactoryRecipeType(MultiFactoryMode mode) {
-        return mode == MultiFactoryMode.CHARGING ? AE2_CHARGER : AE2_INSCRIBER;
+    // 原版配方类型到 JEI 分类的映射
+    @Nullable
+    public static mezz.jei.api.recipe.RecipeType<?> recipeTypeFor(@Nullable RecipeType<?> vanillaType) {
+        if (vanillaType == null) {
+            return null;
+        }
+        if (recipeTypes == null) {
+            recipeTypes = buildRecipeTypes();
+        }
+        return recipeTypes.get(vanillaType);
+    }
+
+    private static Map<RecipeType<?>, mezz.jei.api.recipe.RecipeType<?>> buildRecipeTypes() {
+        Map<RecipeType<?>, mezz.jei.api.recipe.RecipeType<?>> types = new HashMap<>();
+        for (MachineCategory machine : machines()) {
+            types.put(machine.vanillaType(), machine.jeiType());
+        }
+        for (CrystalWorkstationMode mode : CrystalWorkstationMode.values()) {
+            types.put(mode.recipeType(), CrystalWorkstationCategory.recipeType(mode));
+        }
+        types.put(InscriberRecipe.TYPE, AE2_INSCRIBER);
+        types.put(ChargerRecipe.TYPE, AE2_CHARGER);
+        return types;
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

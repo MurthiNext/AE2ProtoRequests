@@ -1,14 +1,10 @@
-package com.murthinext.ae2pr.client.model;
+package com.murthinext.ae2pr.item.sky_dome_annihilation_plane;
 
 import appeng.client.render.cablebus.CubeBuilder;
 import appeng.parts.automation.PlaneConnections;
 import appeng.parts.automation.PlaneModel;
 import appeng.parts.automation.PlaneModelData;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
