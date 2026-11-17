@@ -3,7 +3,9 @@ package com.murthinext.ae2pr.integration.jei.transfer;
 import appeng.api.stacks.GenericStack;
 import appeng.integration.modules.jeirei.EncodingHelper;
 import appeng.menu.me.items.PatternEncodingTermMenu;
-import com.murthinext.ae2pr.api.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.recipe.FluidInput;
+import com.murthinext.ae2pr.api.recipe.ItemInput;
+import com.murthinext.ae2pr.api.recipe.ItemOutput;
 import com.murthinext.ae2pr.integration.jei.category.CrystalAssemblyLineCategory;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineRecipe;
 import java.util.ArrayList;
@@ -16,8 +18,6 @@ import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("removal")
@@ -57,26 +57,30 @@ public class CrystalAssemblyLinePatternTransferHandler
 
     private static List<List<GenericStack>> inputs(CrystalAssemblyLineRecipe recipe) {
         List<List<GenericStack>> inputs = new ArrayList<>();
-        for (CountedIngredient input : recipe.getItemInputs()) {
-            List<GenericStack> candidates = new ArrayList<>();
-            for (ItemStack stack : input.ingredient().getItems()) {
-                GenericStack candidate = GenericStack.fromItemStack(stack.copyWithCount(input.count()));
-                if (candidate != null) {
-                    candidates.add(candidate);
-                }
+        for (ItemInput input : recipe.getItemInputs()) {
+            if (input.catalyst()) {
+                continue;
             }
+            List<GenericStack> candidates = input.stacks().stream()
+                    .map(GenericStack::fromItemStack)
+                    .filter(Objects::nonNull)
+                    .toList();
             if (!candidates.isEmpty()) {
                 inputs.add(candidates);
             }
         }
-        for (FluidStack fluid : recipe.getFluidInputs()) {
-            inputs.add(List.of(GenericStack.fromFluidStack(fluid)));
+        for (FluidInput fluid : recipe.getFluidInputs()) {
+            if (fluid.catalyst()) {
+                continue;
+            }
+            inputs.add(List.of(GenericStack.fromFluidStack(fluid.stack())));
         }
         return inputs;
     }
 
     private static List<GenericStack> outputs(CrystalAssemblyLineRecipe recipe) {
         return recipe.getItemOutputs().stream()
+                .map(ItemOutput::stack)
                 .map(GenericStack::fromItemStack)
                 .filter(Objects::nonNull)
                 .toList();

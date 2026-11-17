@@ -1,10 +1,11 @@
 package com.murthinext.ae2pr.recipe;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.murthinext.ae2pr.api.recipe.AbstractRecipe;
-import com.murthinext.ae2pr.api.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.recipe.FluidOutput;
+import com.murthinext.ae2pr.api.recipe.ItemInput;
+import com.murthinext.ae2pr.api.recipe.ItemOutput;
 import com.murthinext.ae2pr.api.recipe.RecipeJson;
 import com.murthinext.ae2pr.api.recipe.RecipeNetwork;
 import com.murthinext.ae2pr.api.recipe.WorldInteractionCircumstance;
@@ -26,20 +27,20 @@ import org.jetbrains.annotations.Nullable;
 public class ComplexWorldInteractionRecipe extends AbstractRecipe {
 
     private final WorldInteractionCircumstance circumstance;
-    private final List<ItemStack> results;
+    private final List<ItemOutput> results;
 
     @Nullable
     private final Fluid resultFluid;
 
     public ComplexWorldInteractionRecipe(
             ResourceLocation id,
-            List<CountedIngredient> ingredients,
+            List<ItemInput> ingredients,
             WorldInteractionCircumstance circumstance,
-            List<ItemStack> results,
+            List<ItemOutput> results,
             @Nullable Fluid resultFluid) {
         super(id, ingredients);
         this.circumstance = circumstance;
-        this.results = results.stream().map(ItemStack::copy).toList();
+        this.results = List.copyOf(results);
         this.resultFluid = resultFluid;
     }
 
@@ -52,7 +53,7 @@ public class ComplexWorldInteractionRecipe extends AbstractRecipe {
     }
 
     @Override
-    public List<ItemStack> getItemOutputs() {
+    public List<ItemOutput> getItemOutputs() {
         return results;
     }
 
@@ -79,14 +80,14 @@ public class ComplexWorldInteractionRecipe extends AbstractRecipe {
 
         @Override
         public ComplexWorldInteractionRecipe fromJson(ResourceLocation id, JsonObject json) {
-            List<CountedIngredient> ingredients = RecipeJson.readItemInputs(json, "item_inputs");
+            List<ItemInput> ingredients = RecipeJson.readItemInputs(json, "item_inputs");
             if (ingredients.isEmpty()) {
                 throw new JsonSyntaxException("item_inputs must not be empty");
             }
             WorldInteractionCircumstance circumstance =
                     WorldInteractionCircumstance.fromJson(GsonHelper.getAsJsonObject(json, "circumstance"));
-            List<ItemStack> results = RecipeJson.readItemStacks(json, "item_outputs");
-            JsonArray fluidOutputs = GsonHelper.getAsJsonArray(json, "fluid_outputs", new JsonArray());
+            List<ItemOutput> results = RecipeJson.readItemOutputs(json, "item_outputs");
+            List<FluidOutput> fluidOutputs = RecipeJson.readFluidOutputs(json, "fluid_outputs");
             if (fluidOutputs.size() > 1) {
                 throw new JsonSyntaxException("fluid_outputs allows at most one output");
             }
@@ -95,15 +96,16 @@ public class ComplexWorldInteractionRecipe extends AbstractRecipe {
                 if (circumstance.isExplosion() || !circumstance.sourceOnly()) {
                     throw new JsonSyntaxException("fluid_outputs requires a source-only fluid circumstance");
                 }
-                JsonObject output = fluidOutputs.get(0).getAsJsonObject();
-                ResourceLocation fluidId = ResourceLocation.parse(GsonHelper.getAsString(output, "fluid"));
-                resultFluid = ForgeRegistries.FLUIDS.getValue(fluidId);
-                if (resultFluid == null
-                        || resultFluid == Fluids.EMPTY
-                        || !resultFluid.defaultFluidState().isSource()
-                        || GsonHelper.getAsInt(output, "amount") != FluidType.BUCKET_VOLUME) {
-                    throw new JsonSyntaxException("fluid_outputs requires a source fluid and amount must be 1000");
+                FluidOutput output = fluidOutputs.get(0);
+                Fluid fluid = output.stack().getFluid();
+                if (!output.certain()
+                        || fluid == Fluids.EMPTY
+                        || !fluid.defaultFluidState().isSource()
+                        || output.stack().getAmount() != FluidType.BUCKET_VOLUME) {
+                    throw new JsonSyntaxException(
+                            "fluid_outputs requires a certain source fluid and amount must be 1000");
                 }
+                resultFluid = fluid;
             }
             if (results.isEmpty() && resultFluid == null) {
                 throw new JsonSyntaxException("World interaction recipes must have at least one output");
@@ -113,9 +115,9 @@ public class ComplexWorldInteractionRecipe extends AbstractRecipe {
 
         @Override
         public ComplexWorldInteractionRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer) {
-            List<CountedIngredient> ingredients = RecipeNetwork.readItemInputs(buffer);
+            List<ItemInput> ingredients = RecipeNetwork.readItemInputs(buffer);
             WorldInteractionCircumstance circumstance = WorldInteractionCircumstance.fromNetwork(buffer);
-            List<ItemStack> results = RecipeNetwork.readItemStacks(buffer);
+            List<ItemOutput> results = RecipeNetwork.readItemOutputs(buffer);
             Fluid resultFluid =
                     buffer.readBoolean() ? ForgeRegistries.FLUIDS.getValue(buffer.readResourceLocation()) : null;
             return new ComplexWorldInteractionRecipe(id, ingredients, circumstance, results, resultFluid);
@@ -125,7 +127,7 @@ public class ComplexWorldInteractionRecipe extends AbstractRecipe {
         public void toNetwork(FriendlyByteBuf buffer, ComplexWorldInteractionRecipe recipe) {
             RecipeNetwork.writeItemInputs(buffer, recipe.getItemInputs());
             recipe.circumstance.toNetwork(buffer);
-            RecipeNetwork.writeItemStacks(buffer, recipe.results);
+            RecipeNetwork.writeItemOutputs(buffer, recipe.results);
             buffer.writeBoolean(recipe.resultFluid != null);
             if (recipe.resultFluid != null) {
                 buffer.writeResourceLocation(ForgeRegistries.FLUIDS.getKey(recipe.resultFluid));

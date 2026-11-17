@@ -301,6 +301,7 @@
   "jei.ae2pr.recipe.more_io": "%s more inputs and %s more outputs not shown",
   "jei.ae2pr.recipe.extra_inputs": "More inputs:",
   "jei.ae2pr.recipe.extra_outputs": "More outputs:",
+  "jei.ae2pr.recipe.catalyst": "Catalyst",
   "jei.ae2pr.recipe.title_with_mode": "%s · %s",
   "jei.ae2pr.multiblock.title": "Multiblock Structure Preview",
   "jei.ae2pr.multiblock.structure.crystal_assembly_line": "Crystal Assembly Line",

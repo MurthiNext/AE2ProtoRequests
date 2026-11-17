@@ -7,7 +7,8 @@ import com.murthinext.ae2pr.api.machine.part.InputGroup;
 import com.murthinext.ae2pr.api.machine.part.MachinePart;
 import com.murthinext.ae2pr.api.multiblock.StructureResult;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleSnapshot;
-import com.murthinext.ae2pr.api.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.recipe.FluidInput;
+import com.murthinext.ae2pr.api.recipe.ItemInput;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
 import com.murthinext.ae2pr.registry.ModMachines;
@@ -132,7 +133,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
     // 物品输入匹配，一仓一种原料，返回选中的总线
     @Nullable
     private List<MachinePart.ItemPart> matchItems(CrystalAssemblyLineRecipe recipe, InputGroup group) {
-        List<CountedIngredient> inputs = recipe.getItemInputs();
+        List<ItemInput> inputs = recipe.getItemInputs();
         List<MachinePart.ItemPart> buses = group.buses();
         List<MachinePart.ItemPart> matched = new ArrayList<>(inputs.size());
         if (inputs.isEmpty()) {
@@ -153,7 +154,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
             return matched;
         }
         boolean[] used = new boolean[buses.size()];
-        for (CountedIngredient input : inputs) {
+        for (ItemInput input : inputs) {
             int found = -1;
             for (int i = 0; i < buses.size(); i++) {
                 if (!used[i] && hasItems(buses.get(i), input)) {
@@ -170,14 +171,14 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
         return matched;
     }
 
-    private static boolean hasItems(MachinePart.ItemPart bus, CountedIngredient input) {
+    private static boolean hasItems(MachinePart.ItemPart bus, ItemInput input) {
         return input.test(bus.storage().getStackInSlot(0));
     }
 
     // 流体输入匹配，一仓一种原料，返回选中的仓
     @Nullable
     private List<MachinePart.FluidPart> matchFluids(CrystalAssemblyLineRecipe recipe, InputGroup group) {
-        List<FluidStack> inputs = recipe.getFluidInputs();
+        List<FluidInput> inputs = recipe.getFluidInputs();
         List<MachinePart.FluidPart> hatches = group.hatches();
         List<MachinePart.FluidPart> matched = new ArrayList<>(inputs.size());
         if (inputs.isEmpty()) {
@@ -189,7 +190,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
             }
             for (int i = 0; i < inputs.size(); i++) {
                 MachinePart.FluidPart hatch = inputHatches.get(i);
-                if (!hatches.contains(hatch) || !hasFluid(hatch, inputs.get(i))) {
+                if (!hatches.contains(hatch) || !hasFluid(hatch, inputs.get(i).stack())) {
                     return null;
                 }
                 matched.add(hatch);
@@ -197,10 +198,10 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
             return matched;
         }
         boolean[] used = new boolean[hatches.size()];
-        for (FluidStack input : inputs) {
+        for (FluidInput input : inputs) {
             int found = -1;
             for (int i = 0; i < hatches.size(); i++) {
-                if (!used[i] && hasFluid(hatches.get(i), input)) {
+                if (!used[i] && hasFluid(hatches.get(i), input.stack())) {
                     found = i;
                     break;
                 }

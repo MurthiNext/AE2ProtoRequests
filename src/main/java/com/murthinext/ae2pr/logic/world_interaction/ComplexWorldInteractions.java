@@ -1,6 +1,7 @@
 package com.murthinext.ae2pr.logic.world_interaction;
 
-import com.murthinext.ae2pr.api.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.recipe.ItemInput;
+import com.murthinext.ae2pr.api.recipe.ItemOutput;
 import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
 import com.murthinext.ae2pr.registry.ModRecipes;
 import java.util.List;
@@ -131,9 +132,9 @@ public final class ComplexWorldInteractions {
 
     private static WorldInteractionInputPlan plan(
             ComplexWorldInteractionRecipe recipe, List<ItemEntity> nearby, int limit) {
-        List<CountedIngredient> ingredients = recipe.getItemInputs();
+        List<ItemInput> ingredients = recipe.getItemInputs();
         int[] available = new int[nearby.size()];
-        int[] required = ingredients.stream().mapToInt(CountedIngredient::count).toArray();
+        int[] required = ingredients.stream().mapToInt(ItemInput::count).toArray();
         boolean[][] matches = new boolean[nearby.size()][ingredients.size()];
         for (int item = 0; item < nearby.size(); item++) {
             ItemStack stack = nearby.get(item).getItem();
@@ -143,6 +144,20 @@ public final class ComplexWorldInteractions {
             }
         }
         return WorldInteractionInputPlan.find(available, required, matches, limit);
+    }
+
+    // 确定产物按批次取满，概率产物逐批判定
+    private static int rolled(ItemOutput output, int batches, Level level) {
+        if (output.certain()) {
+            return batches;
+        }
+        int rolled = 0;
+        for (int i = 0; i < batches; i++) {
+            if (output.roll(level.random)) {
+                rolled++;
+            }
+        }
+        return rolled;
     }
 
     private static void apply(
@@ -179,12 +194,14 @@ public final class ComplexWorldInteractions {
                 catalyst.consumeInteractions(level, pos, state, plan.batches());
             }
         }
-        for (ItemStack result : recipe.getItemOutputs()) {
-            long total = (long) result.getCount() * plan.batches();
+        for (ItemOutput result : recipe.getItemOutputs()) {
+            ItemStack stack = result.stack();
+            long total = (long) stack.getCount() * rolled(result, plan.batches(), level);
             while (total > 0) {
-                ItemStack stack = result.copyWithCount((int) Math.min(total, result.getMaxStackSize()));
-                total -= stack.getCount();
-                ItemEntity output = new ItemEntity(level, source.getX(), source.getY() + 0.25D, source.getZ(), stack);
+                ItemStack outputStack = stack.copyWithCount((int) Math.min(total, stack.getMaxStackSize()));
+                total -= outputStack.getCount();
+                ItemEntity output =
+                        new ItemEntity(level, source.getX(), source.getY() + 0.25D, source.getZ(), outputStack);
                 output.setDeltaMovement(
                         level.random.nextDouble() * 0.25D - 0.125D,
                         level.random.nextDouble() * 0.25D - 0.125D,

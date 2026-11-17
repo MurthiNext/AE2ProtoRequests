@@ -2,26 +2,18 @@ package com.murthinext.ae2pr.api.recipe;
 
 import java.util.List;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 public interface MultiblockRecipe {
 
     ResourceLocation getId();
 
-    List<CountedIngredient> getItemInputs();
+    List<ItemInput> getItemInputs();
 
-    default List<CountedIngredient> getItemCatalysts() {
-        return List.of();
-    }
+    List<FluidInput> getFluidInputs();
 
-    List<FluidStack> getFluidInputs();
+    List<ItemOutput> getItemOutputs();
 
-    List<ItemStack> getItemOutputs();
-
-    List<ChancedItemStack> getChancedItemOutputs();
-
-    List<FluidStack> getFluidOutputs();
+    List<FluidOutput> getFluidOutputs();
 
     int getDuration();
 

@@ -2,16 +2,13 @@ package com.murthinext.ae2pr.api.recipe;
 
 import java.util.List;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractMultiblockRecipe extends AbstractRecipe implements MultiblockRecipe {
 
-    private final List<FluidStack> fluidInputs;
-    private final List<ChancedItemStack> itemOutputs;
-    private final List<ItemStack> itemOutputStacks;
-    private final List<FluidStack> fluidOutputs;
+    private final List<FluidInput> fluidInputs;
+    private final List<ItemOutput> itemOutputs;
+    private final List<FluidOutput> fluidOutputs;
     private final int duration;
 
     @Nullable
@@ -19,11 +16,9 @@ public abstract class AbstractMultiblockRecipe extends AbstractRecipe implements
 
     protected AbstractMultiblockRecipe(ResourceLocation id, RecipeDraft draft) {
         super(id, draft.itemInputs());
-        this.fluidInputs = draft.fluidInputs().stream().map(FluidStack::copy).toList();
+        this.fluidInputs = draft.fluidInputs();
         this.itemOutputs = draft.itemOutputs();
-        this.itemOutputStacks =
-                itemOutputs.stream().map(ChancedItemStack::stack).toList();
-        this.fluidOutputs = draft.fluidOutputs().stream().map(FluidStack::copy).toList();
+        this.fluidOutputs = draft.fluidOutputs();
         this.duration = draft.duration();
         this.energy = draft.energy();
     }
@@ -33,22 +28,17 @@ public abstract class AbstractMultiblockRecipe extends AbstractRecipe implements
     }
 
     @Override
-    public final List<FluidStack> getFluidInputs() {
+    public final List<FluidInput> getFluidInputs() {
         return fluidInputs;
     }
 
     @Override
-    public final List<ItemStack> getItemOutputs() {
-        return itemOutputStacks;
-    }
-
-    @Override
-    public final List<ChancedItemStack> getChancedItemOutputs() {
+    public final List<ItemOutput> getItemOutputs() {
         return itemOutputs;
     }
 
     @Override
-    public final List<FluidStack> getFluidOutputs() {
+    public final List<FluidOutput> getFluidOutputs() {
         return fluidOutputs;
     }
 

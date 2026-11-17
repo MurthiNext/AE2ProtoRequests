@@ -1,6 +1,5 @@
 package com.murthinext.ae2pr.integration.jei.render;
 
-import com.murthinext.ae2pr.api.recipe.ChancedItemStack;
 import com.murthinext.ae2pr.integration.jei.JeiRecipeInfo;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,36 +11,35 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.Nullable;
 
-public class ChancedItemStackRenderer implements IIngredientRenderer<ItemStack> {
+/**
+ * 在任意原料渲染器上叠加概率角标，物品与流体共用。
+ */
+public class ChancedRenderer<T> implements IIngredientRenderer<T> {
 
     private static final float TEXT_SCALE = 0.5F;
     // 概率颜色
     private static final float MIN_HUE = 29.0F;
     private static final float MAX_HUE = 167.0F;
 
+    private final IIngredientRenderer<T> delegate;
     private final float chance;
 
-    public ChancedItemStackRenderer(float chance) {
+    public ChancedRenderer(IIngredientRenderer<T> delegate, float chance) {
+        this.delegate = delegate;
         this.chance = chance;
     }
 
-    public static ChancedItemStackRenderer of(List<ChancedItemStack> outputs, int index) {
-        return new ChancedItemStackRenderer(
-                index < outputs.size() ? outputs.get(index).chance() : 1.0F);
+    @Override
+    public void render(GuiGraphics graphics, T ingredient) {
+        delegate.render(graphics, ingredient);
     }
 
     @Override
-    public void render(GuiGraphics graphics, ItemStack ingredient) {
-        render(graphics, ingredient, 0, 0);
-    }
-
-    @Override
-    public void render(GuiGraphics graphics, ItemStack ingredient, int posX, int posY) {
-        ItemStackAmountRenderer.INSTANCE.render(graphics, ingredient, posX, posY);
+    public void render(GuiGraphics graphics, T ingredient, int posX, int posY) {
+        delegate.render(graphics, ingredient, posX, posY);
         if (chance >= 1.0F) {
             return;
         }
@@ -56,9 +54,8 @@ public class ChancedItemStackRenderer implements IIngredientRenderer<ItemStack> 
     }
 
     @Override
-    public List<Component> getTooltip(ItemStack ingredient, @Nullable Player player, TooltipFlag tooltipFlag) {
-        List<Component> lines =
-                new ArrayList<>(ItemStackAmountRenderer.INSTANCE.getTooltip(ingredient, player, tooltipFlag));
+    public List<Component> getTooltip(T ingredient, @Nullable Player player, TooltipFlag tooltipFlag) {
+        List<Component> lines = new ArrayList<>(delegate.getTooltip(ingredient, player, tooltipFlag));
         if (chance < 1.0F) {
             lines.add(chanceTooltip(chance));
         }
@@ -68,7 +65,7 @@ public class ChancedItemStackRenderer implements IIngredientRenderer<ItemStack> 
     @Override
     @Deprecated(since = "15.54.0", forRemoval = true)
     @SuppressWarnings("removal")
-    public List<Component> getTooltip(ItemStack ingredient, TooltipFlag tooltipFlag) {
+    public List<Component> getTooltip(T ingredient, TooltipFlag tooltipFlag) {
         return getTooltip(ingredient, Minecraft.getInstance().player, tooltipFlag);
     }
 

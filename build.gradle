@@ -68,8 +68,6 @@ minecraft {
         }
         data {
             workingDirectory project.file('run-data')
-
-            // 反应仓配方的转写源
             lazyToken 'recipeSources', { configurations.recipeSource.asPath }
             property 'ae2pr.recipeSources', '{recipeSources}'
             args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
@@ -84,14 +82,6 @@ mixin {
     config "${mod_id}.merequester.mixins.json"
     config "${mod_id}.requester.mixins.json"
 }
-
-// refmap
-tasks.named('compileJava', JavaCompile).configure {
-    options.incremental = false
-    outputs.file(layout.buildDirectory.file("tmp/${name}/${mod_id}.refmap.json"))
-}
-
-sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     mavenCentral()
@@ -160,6 +150,8 @@ def compileStories = tasks.register('compileStories', JavaExec) {
     outputs.dir(storyResources)
     args storySource.absolutePath, storyResources.get().asFile.absolutePath, storyNodes.absolutePath
 }
+
+sourceSets.main.resources.srcDir('src/generated/resources')
 sourceSets.main.resources.srcDir(storyResources)
 
 tasks.named('processResources', ProcessResources).configure {
@@ -188,9 +180,9 @@ tasks.named('processResources', ProcessResources).configure {
     from('licenses') { into 'META-INF/licenses' }
 }
 
-tasks.named('test', Test).configure {
-    dependsOn compileStories
-    systemProperty 'ae2pr.storyResources', storyResources.get().asFile.absolutePath
+tasks.named('compileJava', JavaCompile).configure {
+    options.incremental = false
+    outputs.file(layout.buildDirectory.file("tmp/${name}/${mod_id}.refmap.json"))
 }
 
 tasks.named('jarJar').configure {

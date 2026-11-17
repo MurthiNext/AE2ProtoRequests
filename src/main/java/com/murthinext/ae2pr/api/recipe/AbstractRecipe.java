@@ -13,18 +13,18 @@ import net.minecraft.world.level.Level;
 public abstract class AbstractRecipe implements Recipe<Container> {
 
     private final ResourceLocation id;
-    private final List<CountedIngredient> itemInputs;
+    private final List<ItemInput> itemInputs;
 
-    protected AbstractRecipe(ResourceLocation id, List<CountedIngredient> itemInputs) {
+    protected AbstractRecipe(ResourceLocation id, List<ItemInput> itemInputs) {
         this.id = id;
         this.itemInputs = List.copyOf(itemInputs);
     }
 
-    public final List<CountedIngredient> getItemInputs() {
+    public final List<ItemInput> getItemInputs() {
         return itemInputs;
     }
 
-    public abstract List<ItemStack> getItemOutputs();
+    public abstract List<ItemOutput> getItemOutputs();
 
     @Override
     public ResourceLocation getId() {
@@ -55,8 +55,8 @@ public abstract class AbstractRecipe implements Recipe<Container> {
 
     @Override
     public ItemStack getResultItem(RegistryAccess registries) {
-        List<ItemStack> outputs = getItemOutputs();
-        return outputs.isEmpty() ? ItemStack.EMPTY : outputs.get(0);
+        List<ItemOutput> outputs = getItemOutputs();
+        return outputs.isEmpty() ? ItemStack.EMPTY : outputs.get(0).stack();
     }
 
     @Override

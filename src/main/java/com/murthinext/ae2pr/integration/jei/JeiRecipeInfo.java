@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.integration.jei;
 
 import com.murthinext.ae2pr.api.EnergyAmount;
-import com.murthinext.ae2pr.integration.jei.render.ChancedItemStackRenderer;
+import com.murthinext.ae2pr.integration.jei.render.ChancedRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -19,7 +19,7 @@ public final class JeiRecipeInfo {
     }
 
     public static MutableComponent chance(float chance) {
-        return Component.translatable("jei.ae2pr.recipe.chance", ChancedItemStackRenderer.percent(chance));
+        return Component.translatable("jei.ae2pr.recipe.chance", ChancedRenderer.percent(chance));
     }
 
     // 同时有输入与产物超出可见槽位

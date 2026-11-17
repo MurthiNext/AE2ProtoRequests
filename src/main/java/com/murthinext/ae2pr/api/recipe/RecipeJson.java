@@ -24,13 +24,16 @@ public final class RecipeJson {
 
     public static RecipeDraft readDraft(JsonObject json, int defaultDuration) {
         return new RecipeDraft(
-                readItemInputs(json, "item_inputs"), readFluidStacks(json, "fluid_inputs"),
-                readItemOutputs(json, "item_outputs"), readFluidStacks(json, "fluid_outputs"),
-                readDuration(json, defaultDuration), readEnergy(json));
+                readItemInputs(json, "item_inputs"),
+                readFluidInputs(json, "fluid_inputs"),
+                readItemOutputs(json, "item_outputs"),
+                readFluidOutputs(json, "fluid_outputs"),
+                readDuration(json, defaultDuration),
+                readEnergy(json));
     }
 
-    public static List<CountedIngredient> readItemInputs(JsonObject json, String key) {
-        List<CountedIngredient> inputs = new ArrayList<>();
+    public static List<ItemInput> readItemInputs(JsonObject json, String key) {
+        List<ItemInput> inputs = new ArrayList<>();
         for (JsonElement element : GsonHelper.getAsJsonArray(json, key, new JsonArray())) {
             JsonObject entry = element.getAsJsonObject();
             int count = GsonHelper.getAsInt(entry, "count", 1);
@@ -38,32 +41,36 @@ public final class RecipeJson {
             if (count < 1 || ingredient.isEmpty()) {
                 throw new JsonSyntaxException(key + " requires non-empty ingredients and positive counts");
             }
-            inputs.add(new CountedIngredient(ingredient, count));
+            inputs.add(new ItemInput(ingredient, count, GsonHelper.getAsBoolean(entry, "catalyst", false)));
         }
         return inputs;
     }
 
-    public static List<ChancedItemStack> readItemOutputs(JsonObject json, String key) {
-        List<ChancedItemStack> outputs = new ArrayList<>();
+    public static List<FluidInput> readFluidInputs(JsonObject json, String key) {
+        List<FluidInput> inputs = new ArrayList<>();
         for (JsonElement element : GsonHelper.getAsJsonArray(json, key, new JsonArray())) {
             JsonObject entry = element.getAsJsonObject();
-            ItemStack stack = readItemStack(entry, key);
-            float chance = GsonHelper.getAsFloat(entry, "chance", 1.0F);
-            if (!(chance > 0.0F) || chance > 1.0F) {
-                throw new JsonSyntaxException(key + " chance must be in (0, 1]");
-            }
-            outputs.add(new ChancedItemStack(stack, chance));
+            inputs.add(new FluidInput(readFluidStack(entry, key), GsonHelper.getAsBoolean(entry, "catalyst", false)));
+        }
+        return inputs;
+    }
+
+    public static List<ItemOutput> readItemOutputs(JsonObject json, String key) {
+        List<ItemOutput> outputs = new ArrayList<>();
+        for (JsonElement element : GsonHelper.getAsJsonArray(json, key, new JsonArray())) {
+            JsonObject entry = element.getAsJsonObject();
+            outputs.add(new ItemOutput(readItemStack(entry, key), readChance(entry, key)));
         }
         return outputs;
     }
 
-    // 不带概率的物品产物
-    public static List<ItemStack> readItemStacks(JsonObject json, String key) {
-        List<ItemStack> stacks = new ArrayList<>();
+    public static List<FluidOutput> readFluidOutputs(JsonObject json, String key) {
+        List<FluidOutput> outputs = new ArrayList<>();
         for (JsonElement element : GsonHelper.getAsJsonArray(json, key, new JsonArray())) {
-            stacks.add(readItemStack(element.getAsJsonObject(), key));
+            JsonObject entry = element.getAsJsonObject();
+            outputs.add(new FluidOutput(readFluidStack(entry, key), readChance(entry, key)));
         }
-        return stacks;
+        return outputs;
     }
 
     private static ItemStack readItemStack(JsonObject entry, String key) {
@@ -74,19 +81,22 @@ public final class RecipeJson {
         return stack;
     }
 
-    public static List<FluidStack> readFluidStacks(JsonObject json, String key) {
-        List<FluidStack> stacks = new ArrayList<>();
-        for (JsonElement element : GsonHelper.getAsJsonArray(json, key, new JsonArray())) {
-            JsonObject entry = element.getAsJsonObject();
-            ResourceLocation fluidId = ResourceLocation.parse(GsonHelper.getAsString(entry, "fluid"));
-            Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidId);
-            int amount = GsonHelper.getAsInt(entry, "amount", 1000);
-            if (fluid == null || fluid == Fluids.EMPTY || amount < 1) {
-                throw new JsonSyntaxException("Invalid fluid in " + key + ": " + fluidId);
-            }
-            stacks.add(new FluidStack(fluid, amount));
+    private static FluidStack readFluidStack(JsonObject entry, String key) {
+        ResourceLocation fluidId = ResourceLocation.parse(GsonHelper.getAsString(entry, "fluid"));
+        Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidId);
+        int amount = GsonHelper.getAsInt(entry, "amount", 1000);
+        if (fluid == null || fluid == Fluids.EMPTY || amount < 1) {
+            throw new JsonSyntaxException("Invalid fluid in " + key + ": " + fluidId);
         }
-        return stacks;
+        return new FluidStack(fluid, amount);
+    }
+
+    private static float readChance(JsonObject entry, String key) {
+        float chance = GsonHelper.getAsFloat(entry, "chance", 1.0F);
+        if (!(chance > 0.0F) || chance > 1.0F) {
+            throw new JsonSyntaxException(key + " chance must be in (0, 1]");
+        }
+        return chance;
     }
 
     public static int readDuration(JsonObject json, int defaultDuration) {

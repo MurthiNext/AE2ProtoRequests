@@ -4,6 +4,13 @@
     {
       "item": "ae2pr:diamond_wafer",
       "count": 1
+    },
+    {
+      "type": "forge:nbt",
+      "item": "ae2pr:matter_confinement_frame",
+      "count": 1,
+      "catalyst": true,
+      "nbt": "{Matter:{lime:6,purple:5,blue:8}}"
     }
   ],
   "fluid_inputs": [

@@ -3,12 +3,13 @@ package com.murthinext.ae2pr.integration.jei.category;
 import appeng.core.definitions.AEItems;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.api.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.recipe.ItemInput;
+import com.murthinext.ae2pr.api.recipe.ItemOutput;
+import com.murthinext.ae2pr.integration.jei.render.ChancedRenderer;
 import com.murthinext.ae2pr.integration.jei.render.FluidBlockIngredientRenderer;
 import com.murthinext.ae2pr.integration.jei.render.ItemStackAmountRenderer;
 import com.murthinext.ae2pr.logic.world_interaction.WorldInteractionCatalyst;
 import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
-import java.util.ArrayList;
 import java.util.List;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.forge.ForgeTypes;
@@ -84,14 +85,10 @@ public class ComplexWorldInteractionCategory implements IRecipeCategory<ComplexW
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, ComplexWorldInteractionRecipe recipe, IFocusGroup focuses) {
-        List<CountedIngredient> inputs = recipe.getItemInputs();
+        List<ItemInput> inputs = recipe.getItemInputs();
         int inputTop = columnTop(inputs.size());
         for (int index = 0; index < inputs.size(); index++) {
-            CountedIngredient input = inputs.get(index);
-            List<ItemStack> stacks = new ArrayList<>();
-            for (ItemStack stack : input.ingredient().getItems()) {
-                stacks.add(stack.copyWithCount(input.count()));
-            }
+            List<ItemStack> stacks = inputs.get(index).stacks();
             builder.addSlot(RecipeIngredientRole.INPUT, INPUT_X + index / ROWS * SLOT, inputTop + index % ROWS * SLOT)
                     .setStandardSlotBackground()
                     .addItemStacks(stacks)
@@ -100,17 +97,19 @@ public class ComplexWorldInteractionCategory implements IRecipeCategory<ComplexW
 
         addCatalyst(builder, recipe);
 
-        List<ItemStack> results = recipe.getItemOutputs();
+        List<ItemOutput> results = recipe.getItemOutputs();
         int outputTop = columnTop(results.size() + (recipe.getResultFluid() != null ? 1 : 0));
         int index = 0;
-        for (ItemStack result : results) {
+        for (ItemOutput result : results) {
             builder.addSlot(
                             RecipeIngredientRole.OUTPUT,
                             OUTPUT_X - index / ROWS * SLOT,
                             outputTop + index % ROWS * SLOT)
                     .setStandardSlotBackground()
-                    .addItemStack(result)
-                    .setCustomRenderer(VanillaTypes.ITEM_STACK, ItemStackAmountRenderer.INSTANCE);
+                    .addItemStack(result.stack())
+                    .setCustomRenderer(
+                            VanillaTypes.ITEM_STACK,
+                            new ChancedRenderer<>(ItemStackAmountRenderer.INSTANCE, result.chance()));
             index++;
         }
         if (recipe.getResultFluid() != null) {

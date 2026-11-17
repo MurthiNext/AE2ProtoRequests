@@ -18,8 +18,11 @@ import com.murthinext.ae2pr.api.machine.part.PartInventory;
 import com.murthinext.ae2pr.api.multiblock.AbstractStructureFacade;
 import com.murthinext.ae2pr.api.multiblock.StructureResult;
 import com.murthinext.ae2pr.api.multiblock.StructureValidator;
-import com.murthinext.ae2pr.api.recipe.ChancedItemStack;
-import com.murthinext.ae2pr.api.recipe.CountedIngredient;
+import com.murthinext.ae2pr.api.recipe.ChancedOutput;
+import com.murthinext.ae2pr.api.recipe.FluidInput;
+import com.murthinext.ae2pr.api.recipe.FluidOutput;
+import com.murthinext.ae2pr.api.recipe.ItemInput;
+import com.murthinext.ae2pr.api.recipe.ItemOutput;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
 import com.murthinext.ae2pr.logic.upgrade.MachineUpgrades;
@@ -189,9 +192,13 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
                 Block.popResource(level, worldPosition, remaining);
             }
         }
-        for (FluidStack output : recipe.getFluidOutputs()) {
-            FluidStack remaining = output.copy();
-            remaining.setAmount(clampCount((long) output.getAmount() * parallel));
+        for (FluidOutput output : recipe.getFluidOutputs()) {
+            int rolled = rollCount(output, parallel);
+            if (rolled <= 0) {
+                continue;
+            }
+            FluidStack remaining = output.stack().copy();
+            remaining.setAmount(clampCount((long) output.stack().getAmount() * rolled));
             for (MachinePart.FluidPart hatch : outputHatches) {
                 for (int tank = 0; tank < hatch.tankCount() && !remaining.isEmpty(); tank++) {
                     int filled = hatch.tank(tank).fill(remaining, IFluidHandler.FluidAction.EXECUTE);
@@ -217,24 +224,28 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             return List.of();
         }
         List<ItemStack> produced = new ArrayList<>();
-        for (ChancedItemStack output : recipe.getChancedItemOutputs()) {
-            if (output.certain()) {
-                produced.add(output.stack()
-                        .copyWithCount(clampCount((long) output.stack().getCount() * parallel)));
-                continue;
-            }
-            int rolled = 0;
-            for (int i = 0; i < parallel; i++) {
-                if (output.roll(level.random)) {
-                    rolled++;
-                }
-            }
+        for (ItemOutput output : recipe.getItemOutputs()) {
+            int rolled = rollCount(output, parallel);
             if (rolled > 0) {
                 produced.add(output.stack()
                         .copyWithCount(clampCount((long) output.stack().getCount() * rolled)));
             }
         }
         return produced;
+    }
+
+    // 确定产物直接按并行取满，概率产物逐份判定
+    private int rollCount(ChancedOutput output, int parallel) {
+        if (output.certain() || level == null) {
+            return parallel;
+        }
+        int rolled = 0;
+        for (int i = 0; i < parallel; i++) {
+            if (output.roll(level.random)) {
+                rolled++;
+            }
+        }
+        return rolled;
     }
 
     public void serverTick() {
@@ -462,26 +473,21 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     private static int inputKinds(MultiblockRecipe recipe) {
-        return recipe.getItemInputs().size()
-                + recipe.getFluidInputs().size()
-                + recipe.getItemCatalysts().size();
+        return recipe.getItemInputs().size() + recipe.getFluidInputs().size();
     }
 
     private static long itemInputAmount(MultiblockRecipe recipe) {
         long total = 0;
-        for (CountedIngredient input : recipe.getItemInputs()) {
+        for (ItemInput input : recipe.getItemInputs()) {
             total += input.count();
-        }
-        for (CountedIngredient catalyst : recipe.getItemCatalysts()) {
-            total += catalyst.count();
         }
         return total;
     }
 
     private static long fluidInputAmount(MultiblockRecipe recipe) {
         long total = 0;
-        for (FluidStack input : recipe.getFluidInputs()) {
-            total += input.getAmount();
+        for (FluidInput input : recipe.getFluidInputs()) {
+            total += input.stack().getAmount();
         }
         return total;
     }
@@ -556,11 +562,11 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
 
     private static int outputCountBound(MultiblockRecipe recipe, int maximum) {
         int high = maximum;
-        for (ItemStack output : recipe.getItemOutputs()) {
-            high = Math.min(high, Integer.MAX_VALUE / Math.max(1, output.getCount()));
+        for (ItemOutput output : recipe.getItemOutputs()) {
+            high = Math.min(high, Integer.MAX_VALUE / Math.max(1, output.stack().getCount()));
         }
-        for (FluidStack output : recipe.getFluidOutputs()) {
-            high = Math.min(high, Integer.MAX_VALUE / Math.max(1, output.getAmount()));
+        for (FluidOutput output : recipe.getFluidOutputs()) {
+            high = Math.min(high, Integer.MAX_VALUE / Math.max(1, output.stack().getAmount()));
         }
         return Math.max(0, high);
     }
@@ -977,7 +983,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         if (recipe == null || jobTicksLeft <= 0 || recipe.getItemOutputs().isEmpty()) {
             return ItemStack.EMPTY;
         }
-        ItemStack output = recipe.getItemOutputs().get(0);
+        ItemStack output = recipe.getItemOutputs().get(0).stack();
         return output.copyWithCount(clampCount((long) output.getCount() * Math.max(1, jobParallel)));
     }
 
@@ -986,7 +992,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         if (recipe == null || jobTicksLeft <= 0 || recipe.getFluidOutputs().isEmpty()) {
             return FluidStack.EMPTY;
         }
-        FluidStack output = recipe.getFluidOutputs().get(0).copy();
+        FluidStack output = recipe.getFluidOutputs().get(0).stack().copy();
         output.setAmount(clampCount((long) output.getAmount() * Math.max(1, jobParallel)));
         return output;
     }

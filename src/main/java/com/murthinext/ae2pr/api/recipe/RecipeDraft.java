@@ -1,14 +1,13 @@
 package com.murthinext.ae2pr.api.recipe;
 
 import java.util.List;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 public record RecipeDraft(
-        List<CountedIngredient> itemInputs,
-        List<FluidStack> fluidInputs,
-        List<ChancedItemStack> itemOutputs,
-        List<FluidStack> fluidOutputs,
+        List<ItemInput> itemInputs,
+        List<FluidInput> fluidInputs,
+        List<ItemOutput> itemOutputs,
+        List<FluidOutput> fluidOutputs,
         int duration,
         @Nullable Double energy) {
 

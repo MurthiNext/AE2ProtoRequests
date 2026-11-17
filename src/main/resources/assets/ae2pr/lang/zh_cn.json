@@ -301,6 +301,7 @@
   "jei.ae2pr.recipe.more_io": "另有 %s 个输入与 %s 个产物未显示",
   "jei.ae2pr.recipe.extra_inputs": "更多输入：",
   "jei.ae2pr.recipe.extra_outputs": "更多产物：",
+  "jei.ae2pr.recipe.catalyst": "催化剂",
   "jei.ae2pr.recipe.title_with_mode": "%s · %s",
   "jei.ae2pr.multiblock.title": "多方块结构预览",
   "jei.ae2pr.multiblock.structure.crystal_assembly_line": "水晶装配线",
