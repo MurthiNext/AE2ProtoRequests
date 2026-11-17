@@ -3,7 +3,7 @@ navigation:
   title: 源始终端
   parent: devices/devices_index.md
   icon: ae2pr:proto_terminal
-  position: 4
+  position: 1
 item_ids:
   - ae2pr:proto_terminal
 ---

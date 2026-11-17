@@ -12,7 +12,7 @@ item_ids:
 
 <BlockImage id="ae2pr:multi_factory" scale="3" />
 
-在一台机器中批量执行 AE2 的压印与充能配方，默认最多 **64 并行**。
+在一台机器中批量执行 AE2 的压印与充能配方，默认 **64 并行**。
 
 <GameScene zoom="3">
   <ImportStructure src="multi_factory.nbt" />

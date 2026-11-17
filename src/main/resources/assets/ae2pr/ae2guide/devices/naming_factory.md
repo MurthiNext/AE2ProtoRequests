@@ -1,9 +1,9 @@
 ---
 navigation:
   title: 名称压印工厂
-  parent: machines/machines_index.md
+  parent: devices/devices_index.md
   icon: ae2pr:naming_factory
-  position: 10
+  position: 40
 item_ids:
   - ae2pr:naming_factory
 ---

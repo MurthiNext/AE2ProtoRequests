@@ -1,9 +1,9 @@
 ---
 navigation:
-  title: ME穹顶破坏面板
+  title: ME 穹顶破坏面板
   parent: devices/devices_index.md
   icon: ae2pr:sky_dome_annihilation_plane
-  position: 5
+  position: 50
 item_ids:
   - ae2pr:sky_dome_annihilation_plane
 ---

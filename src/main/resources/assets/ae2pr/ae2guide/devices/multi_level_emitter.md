@@ -3,7 +3,7 @@ navigation:
   title: ME 通式标准发信器
   parent: devices/devices_index.md
   icon: ae2pr:multi_level_emitter
-  position: 2
+  position: 20
 item_ids:
   - ae2pr:multi_level_emitter
 ---

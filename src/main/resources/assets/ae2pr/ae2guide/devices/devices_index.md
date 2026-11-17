@@ -8,16 +8,13 @@ navigation:
 
 # 设备与元件
 
-AE2 Proto Requests 添加了许多基于原版 AE2 或其他附属模组，功能进一步延伸强化的 ME 网络元件。
+这里是一些更关乎 AE2 模组本身的物品。
 
-包括用于物流的元件，用于调度网络的元件等等……
+包括一些用于改进网络调度的元件、或者单纯的小机器。
 
-[过滤元件](filter_cell.md)
-
-[ME 通式标准发信器](multi_level_emitter.md)
-
-[ME 通式阈值发信器](multi_threshold_level_emitter.md)
-
-[源始终端](proto_terminal.md)
-
-[ME穹顶破坏面板](sky_dome_annihilation_plane.md)
+- [源始终端](proto_terminal.md)
+- [过滤元件](filter_cell.md)
+- [ME 通式标准发信器](multi_level_emitter.md)
+- [ME 通式阈值发信器](multi_threshold_level_emitter.md)
+- [ME 穹顶破坏面板](sky_dome_annihilation_plane.md)
+- [名称压印工厂](naming_factory.md)
