@@ -3,6 +3,8 @@ package com.murthinext.ae2pr.api.machine.client;
 import com.murthinext.ae2pr.api.machine.MachineMenu;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerScreen;
+import com.murthinext.nextui.client.GuiSidebar;
+import com.murthinext.nextui.client.GuiTooltips;
 import java.util.List;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -26,9 +28,10 @@ public final class MachineScreen<M extends AbstractMultiblockControllerMenu<?>>
     protected void init() {
         super.init();
         if (menu instanceof MachineMenu<?> machineMenu && machineMenu.getMode() != null) {
+            GuiSidebar toolbar = toolbar();
             modeButton = new MachineModeButton(
-                    leftPos + TOOLBAR_X + 1,
-                    topPos + TOOLBAR_Y + 1 + TOOLBAR_ROW_STEP,
+                    toolbar.cellX(),
+                    toolbar.cellY(1),
                     machineMenu.getMode(),
                     MachineStyles.of(menu.definition()).modeIcons(),
                     () -> {
@@ -61,7 +64,7 @@ public final class MachineScreen<M extends AbstractMultiblockControllerMenu<?>>
         if (super.renderToolbarTooltip(graphics, mouseX, mouseY)) {
             return true;
         }
-        if (modeButton == null || !modeButton.isHovered() || modeLabel() == null) {
+        if (modeButton == null || !GuiTooltips.isTooltipTarget(modeButton) || modeLabel() == null) {
             return false;
         }
         GuiTooltips.render(

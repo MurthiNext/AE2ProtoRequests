@@ -1,70 +1,53 @@
 package com.murthinext.ae2pr.block.machine_part;
 
 import com.murthinext.ae2pr.api.machine.client.GuiTextures;
-import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
+import com.murthinext.nextui.client.GuiTooltips;
+import com.murthinext.nextui.client.IconButton;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-public class RecipeIsolationButton extends AbstractWidget {
-
-    private static final int SIZE = GuiTextures.SIZE;
+public class RecipeIsolationButton extends IconButton {
 
     private static final ResourceLocation ICON_ON = GuiTextures.ISOLATION_ON;
     private static final ResourceLocation ICON_OFF = GuiTextures.ISOLATION_OFF;
 
     private final BooleanSupplier state;
-    private final Runnable onPress;
 
     public RecipeIsolationButton(int x, int y, BooleanSupplier state, Runnable onPress) {
-        super(x, y, SIZE, SIZE, Component.translatable("gui.ae2pr.machine_part.isolation.title"));
+        super(
+                x,
+                y,
+                Component.translatable("gui.ae2pr.machine_part.isolation.title"),
+                GuiTextures.BUTTON_SKIN,
+                () -> state.getAsBoolean() ? ICON_ON : ICON_OFF,
+                () -> false,
+                onPress);
         this.state = state;
-        this.onPress = onPress;
     }
 
-    public boolean renderTooltipIfHovered(GuiGraphics graphics, Font font, int mouseX, int mouseY) {
-        if (!isHovered()) {
+    public boolean renderTooltipIfTarget(GuiGraphics graphics, Font font, int mouseX, int mouseY) {
+        if (!GuiTooltips.isTooltipTarget(this)) {
             return false;
         }
-        GuiTooltips.render(
-                graphics,
-                font,
-                List.of(
-                        Component.translatable("gui.ae2pr.machine_part.isolation.title"),
-                        Component.translatable(
-                                state.getAsBoolean()
-                                        ? "gui.ae2pr.machine_part.isolation.enabled"
-                                        : "gui.ae2pr.machine_part.isolation.disabled")),
-                mouseX,
-                mouseY);
+        GuiTooltips.render(graphics, font, List.of(getMessage(), stateLabel()), mouseX, mouseY);
         return true;
     }
 
     @Override
-    protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        // 边框只看鼠标悬停，避免点击后焦点残留高亮
-        GuiTextures.frame(graphics, isHovered() ? GuiTextures.BUTTON_HOVER : GuiTextures.BUTTON, getX(), getY());
-        GuiTextures.frame(graphics, state.getAsBoolean() ? ICON_ON : ICON_OFF, getX(), getY());
-    }
-
-    @Override
-    public void onClick(double mouseX, double mouseY) {
-        onPress.run();
-    }
-
-    @Override
     protected void updateWidgetNarration(NarrationElementOutput narration) {
-        setMessage(Component.translatable("gui.ae2pr.machine_part.isolation.title")
-                .append(": ")
-                .append(Component.translatable(
-                        state.getAsBoolean()
-                                ? "gui.ae2pr.machine_part.isolation.enabled"
-                                : "gui.ae2pr.machine_part.isolation.disabled")));
         defaultButtonNarrationText(narration);
+        narration.add(net.minecraft.client.gui.narration.NarratedElementType.HINT, stateLabel());
+    }
+
+    private Component stateLabel() {
+        return Component.translatable(
+                state.getAsBoolean()
+                        ? "gui.ae2pr.machine_part.isolation.enabled"
+                        : "gui.ae2pr.machine_part.isolation.disabled");
     }
 }

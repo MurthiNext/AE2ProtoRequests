@@ -1,6 +1,7 @@
 package com.murthinext.ae2pr.machine.naming_factory;
 
 import com.murthinext.ae2pr.api.machine.singleblock.AbstractSingleblockMachineScreen;
+import com.murthinext.nextui.client.GuiProgressBar;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -18,6 +19,13 @@ public class NamingFactoryScreen extends AbstractSingleblockMachineScreen<Naming
     // 箭头右侧的竖向进度条
     private static final int PROGRESS_X = 96;
     private static final int PROGRESS_Y = 49;
+    private static final GuiProgressBar PROGRESS_BAR = new GuiProgressBar(
+            texture("components/progress_bar"),
+            26,
+            36,
+            new GuiProgressBar.Region(0, 0, 6, 18),
+            new GuiProgressBar.Region(0, 20, 4, 16),
+            GuiProgressBar.Direction.UP);
 
     private static final int TEXT_X = 7;
     private static final int NAME_Y = 103;
@@ -39,7 +47,7 @@ public class NamingFactoryScreen extends AbstractSingleblockMachineScreen<Naming
         drawArrow(graphics, leftPos + PRESS_ARROW_X, topPos + PRESS_ARROW_Y, true, true);
         NamingFactoryBlockEntity machine = menu.getMachine();
         float progress = machine != null ? machine.getWorkProgress(partialTick) : 0;
-        drawProgressBar(graphics, leftPos + PROGRESS_X, topPos + PROGRESS_Y, progress);
+        PROGRESS_BAR.draw(graphics, leftPos + PROGRESS_X, topPos + PROGRESS_Y, progress);
     }
 
     @Override

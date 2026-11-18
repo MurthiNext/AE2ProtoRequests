@@ -5,6 +5,7 @@ import com.murthinext.ae2pr.api.machine.client.MachineStyles;
 import com.murthinext.ae2pr.api.machine.client.SideConfigButton;
 import com.murthinext.ae2pr.api.machine.client.SideConfigPanel;
 import com.murthinext.ae2pr.api.machine.side.SideConfig;
+import com.murthinext.nextui.client.GuiSidebar;
 import com.murthinext.nextui.client.GuiTheme;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,11 +69,9 @@ public abstract class AbstractSingleblockMachineScreen<M extends AbstractSingleb
                 ? machine.getBlockState().getValue(AbstractSingleblockMachineBlock.FACING)
                 : Direction.NORTH;
         sideConfigPanel = new SideConfigPanel(config, facing, this::pressSideConfigButton);
-        sideConfigButton = new SideConfigButton(
-                leftPos + TOOLBAR_X + 1,
-                topPos + TOOLBAR_Y + 1 + TOOLBAR_ROW_STEP,
-                () -> sideConfigOpen,
-                this::toggleSideConfig);
+        GuiSidebar toolbar = toolbar();
+        sideConfigButton =
+                new SideConfigButton(toolbar.cellX(), toolbar.cellY(1), () -> sideConfigOpen, this::toggleSideConfig);
         addRenderableWidget(sideConfigButton);
     }
 
@@ -80,14 +79,14 @@ public abstract class AbstractSingleblockMachineScreen<M extends AbstractSingleb
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
         if (sideConfigOpen) {
-            sideConfigPanel().render(graphics, font, panelX(), panelY(), mouseX, mouseY);
+            sideConfigPanel().render(graphics, font, panelBounds(), mouseX, mouseY);
         }
     }
 
     // 面配置窗口独立于主界面，点击优先交给它处理
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (sideConfigOpen && sideConfigPanel().mouseClicked(mouseX, mouseY, button, panelX(), panelY())) {
+        if (sideConfigOpen && sideConfigPanel().mouseClicked(mouseX, mouseY, button, panelBounds())) {
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
@@ -107,7 +106,7 @@ public abstract class AbstractSingleblockMachineScreen<M extends AbstractSingleb
     public List<Rect2i> getGuiExtraAreas() {
         List<Rect2i> areas = new ArrayList<>(super.getGuiExtraAreas());
         if (sideConfigOpen) {
-            areas.add(new Rect2i(panelX(), panelY(), SideConfigPanel.WIDTH, SideConfigPanel.HEIGHT));
+            areas.add(panelBounds());
         }
         return areas;
     }
@@ -117,19 +116,17 @@ public abstract class AbstractSingleblockMachineScreen<M extends AbstractSingleb
         if (super.renderToolbarTooltip(graphics, mouseX, mouseY)) {
             return true;
         }
-        return sideConfigButton != null && sideConfigButton.renderTooltipIfHovered(graphics, font, mouseX, mouseY);
+        return sideConfigButton != null && sideConfigButton.renderTooltipIfTarget(graphics, font, mouseX, mouseY);
     }
 
     private SideConfigPanel sideConfigPanel() {
         return Objects.requireNonNull(sideConfigPanel);
     }
 
-    private int panelX() {
-        return Math.max(2, leftPos + TOOLBAR_X - PANEL_MARGIN - SideConfigPanel.WIDTH);
-    }
-
-    private int panelY() {
-        return topPos + TOOLBAR_Y;
+    private Rect2i panelBounds() {
+        GuiSidebar toolbar = toolbar();
+        int x = Math.max(2, toolbar.x() - PANEL_MARGIN - SideConfigPanel.WIDTH);
+        return new Rect2i(x, toolbar.y(), SideConfigPanel.WIDTH, SideConfigPanel.HEIGHT);
     }
 
     private void toggleSideConfig() {

@@ -2,10 +2,11 @@ package com.murthinext.ae2pr.block.machine_part;
 
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
 import com.murthinext.ae2pr.api.machine.client.DisplaySlot;
-import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 import com.murthinext.ae2pr.registry.ModNetwork;
+import com.murthinext.nextui.client.GuiFluids;
+import com.murthinext.nextui.client.GuiTooltips;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +104,7 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
                 int y = topPos + TANK_Y;
                 drawTank(graphics, x, y);
                 drawTankArrow(graphics, x, y, !menu.isOutputBus());
-                drawFluid(
+                GuiFluids.drawTankFill(
                         graphics,
                         storage.getTank(tank).getFluid(),
                         x + 2,

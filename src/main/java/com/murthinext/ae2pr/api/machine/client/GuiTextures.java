@@ -1,17 +1,17 @@
 package com.murthinext.ae2pr.api.machine.client;
 
 import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.nextui.client.IconButton;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
 // 界面通用贴图与配色：贴图全部集中在 textures/gui 下，按钮框统一 18x18
 public final class GuiTextures {
 
-    public static final int SIZE = 18;
-
-    public static final ResourceLocation BUTTON = Ids.of("textures/gui/button.png");
-    public static final ResourceLocation BUTTON_HOVER = Ids.of("textures/gui/button_hover.png");
-    public static final ResourceLocation BUTTON_SELECTED = Ids.of("textures/gui/button_selected.png");
+    public static final IconButton.Skin BUTTON_SKIN = new IconButton.Skin(
+            Ids.of("textures/gui/button.png"),
+            Ids.of("textures/gui/button_hover.png"),
+            Ids.of("textures/gui/button_selected.png"));
 
     public static final ResourceLocation CLEAR = Ids.of("textures/gui/clear.png");
     public static final ResourceLocation GUIDE = Ids.of("textures/gui/guide.png");
@@ -36,18 +36,15 @@ public final class GuiTextures {
 
     private GuiTextures() {}
 
-    public static void frame(GuiGraphics graphics, ResourceLocation texture, int x, int y) {
-        graphics.blit(texture, x, y, 0, 0.0F, 0.0F, SIZE, SIZE, SIZE, SIZE);
-    }
-
     // 纯色立体块：深色描边 + 顶面亮边 + 底部压边，配色由调用方按语义给定
     public static void solidBlock(GuiGraphics graphics, int x, int y, int color, boolean hovered) {
+        int size = IconButton.SIZE;
         int rim = lighten(color, hovered ? 0.45F : 0.28F);
         int shade = darken(color, 0.22F);
-        graphics.fill(x, y, x + SIZE, y + SIZE, COLOR_SOLID_BORDER);
-        graphics.fill(x + 1, y + 1, x + SIZE - 1, y + SIZE - 1, color);
-        graphics.fill(x + 1, y + 1, x + SIZE - 1, y + 2, rim);
-        graphics.fill(x + 1, y + SIZE - 2, x + SIZE - 1, y + SIZE - 1, shade);
+        graphics.fill(x, y, x + size, y + size, COLOR_SOLID_BORDER);
+        graphics.fill(x + 1, y + 1, x + size - 1, y + size - 1, color);
+        graphics.fill(x + 1, y + 1, x + size - 1, y + 2, rim);
+        graphics.fill(x + 1, y + size - 2, x + size - 1, y + size - 1, shade);
     }
 
     // 把颜色朝白色提亮，amount 为 0~1

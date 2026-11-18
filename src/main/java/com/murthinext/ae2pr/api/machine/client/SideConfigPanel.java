@@ -2,11 +2,15 @@ package com.murthinext.ae2pr.api.machine.client;
 
 import com.murthinext.ae2pr.api.machine.side.SideConfig;
 import com.murthinext.ae2pr.api.machine.side.SideMode;
+import com.murthinext.nextui.client.GuiExtraAreas;
 import com.murthinext.nextui.client.GuiPanels;
+import com.murthinext.nextui.client.GuiTooltips;
+import com.murthinext.nextui.client.IconButton;
 import java.util.List;
 import java.util.function.IntConsumer;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -17,7 +21,6 @@ public final class SideConfigPanel {
     public static final int WIDTH = 104;
     public static final int HEIGHT = 84;
 
-    private static final int BUTTON = GuiTextures.SIZE;
     private static final int STEP = 22;
     private static final int ORIGIN_X = 6;
     private static final int ORIGIN_Y = 18;
@@ -45,12 +48,10 @@ public final class SideConfigPanel {
         this.clickHandler = clickHandler;
     }
 
-    public static boolean contains(double mouseX, double mouseY, int x, int y) {
-        return mouseX >= x && mouseX < x + WIDTH && mouseY >= y && mouseY < y + HEIGHT;
-    }
-
-    public void render(GuiGraphics graphics, Font font, int x, int y, int mouseX, int mouseY) {
-        GuiPanels.popup(graphics, x, y, WIDTH, HEIGHT);
+    public void render(GuiGraphics graphics, Font font, Rect2i bounds, int mouseX, int mouseY) {
+        int x = bounds.getX();
+        int y = bounds.getY();
+        GuiPanels.popup(graphics, x, y, bounds.getWidth(), bounds.getHeight());
         graphics.drawString(
                 font, Component.translatable("gui.ae2pr.side_config.title"), x + ORIGIN_X, y + 5, COLOR_TITLE, false);
 
@@ -68,10 +69,12 @@ public final class SideConfigPanel {
     }
 
     // 返回 true 表示点击已被窗口消费
-    public boolean mouseClicked(double mouseX, double mouseY, int button, int x, int y) {
-        if (button != 0 || !contains(mouseX, mouseY, x, y)) {
+    public boolean mouseClicked(double mouseX, double mouseY, int button, Rect2i bounds) {
+        if (button != 0 || !GuiExtraAreas.contains(bounds, mouseX, mouseY)) {
             return false;
         }
+        int x = bounds.getX();
+        int y = bounds.getY();
         for (int index = 0; index < FACE_CELLS.length; index++) {
             int bx = x + cellX(FACE_CELLS[index]);
             int by = y + cellY(FACE_CELLS[index]);
@@ -127,13 +130,8 @@ public final class SideConfigPanel {
     }
 
     private static void drawIcon(GuiGraphics graphics, int bx, int by, ResourceLocation icon, int mouseX, int mouseY) {
-        drawFrame(graphics, bx, by, mouseX, mouseY);
-        graphics.blit(icon, bx, by, 0, 0.0F, 0.0F, BUTTON, BUTTON, BUTTON, BUTTON);
-    }
-
-    private static void drawFrame(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
-        GuiTextures.frame(
-                graphics, isInside(mouseX, mouseY, x, y) ? GuiTextures.BUTTON_HOVER : GuiTextures.BUTTON, x, y);
+        GuiTextures.BUTTON_SKIN.drawFrame(graphics, bx, by, isInside(mouseX, mouseY, bx, by), false);
+        IconButton.drawTexture(graphics, icon, bx, by);
     }
 
     private void renderTooltip(GuiGraphics graphics, Font font, int x, int y, int mouseX, int mouseY) {
@@ -228,6 +226,6 @@ public final class SideConfigPanel {
     }
 
     private static boolean isInside(double mouseX, double mouseY, int x, int y) {
-        return mouseX >= x && mouseX < x + BUTTON && mouseY >= y && mouseY < y + BUTTON;
+        return GuiExtraAreas.contains(mouseX, mouseY, x, y, IconButton.SIZE, IconButton.SIZE);
     }
 }

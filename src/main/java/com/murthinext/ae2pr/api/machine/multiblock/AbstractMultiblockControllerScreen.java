@@ -6,28 +6,25 @@ import com.murthinext.ae2pr.api.machine.MachineStats;
 import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
 import com.murthinext.ae2pr.api.machine.client.GuiTextures;
-import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
 import com.murthinext.ae2pr.api.machine.client.MachineStyles;
-import com.murthinext.ae2pr.api.machine.client.MachineTabButton;
 import com.murthinext.ae2pr.api.machine.part.MachinePart;
+import com.murthinext.nextui.client.GuiFluids;
 import com.murthinext.nextui.client.GuiTheme;
+import com.murthinext.nextui.client.GuiTooltips;
+import com.murthinext.nextui.client.TabButton;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,7 +45,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     private static final int JOB_TAIL_GAP = 4;
     private static final double JOB_NAME_SCROLL_SPEED = 12.0D;
     private static final int JOB_NAME_SCROLL_GAP = 24;
-    private static final int TAB_Y = 1 - MachineTabButton.SIZE;
+    private static final int TAB_Y = 1 - TabButton.SIZE;
     private static final int DATA_Y = 30;
     private static final int DATA_STEP = 11;
 
@@ -67,17 +64,18 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     @Override
     protected void init() {
         super.init();
-        addRenderableWidget(new MachineTabButton(
-                leftPos,
-                topPos + TAB_Y,
+        Rect2i tabs = tabArea();
+        addRenderableWidget(new TabButton(
+                tabs.getX(),
+                tabs.getY(),
                 GuiTextures.TAB_HOME,
                 Component.translatable("gui.ae2pr.multiblock.tab.home"),
                 theme().accent(),
                 () -> !dataPage,
                 () -> dataPage = false));
-        addRenderableWidget(new MachineTabButton(
-                leftPos + MachineTabButton.SIZE,
-                topPos + TAB_Y,
+        addRenderableWidget(new TabButton(
+                tabs.getX() + TabButton.SIZE,
+                tabs.getY(),
                 GuiTextures.TAB_DATA,
                 Component.translatable("gui.ae2pr.multiblock.tab.data"),
                 theme().accent(),
@@ -97,21 +95,12 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     @Override
     public List<Rect2i> getGuiExtraAreas() {
         List<Rect2i> areas = new ArrayList<>(super.getGuiExtraAreas());
-        areas.add(new Rect2i(leftPos, topPos + TAB_Y, MachineTabButton.SIZE * 2, MachineTabButton.SIZE));
+        areas.add(tabArea());
         return areas;
     }
 
-    @Override
-    protected boolean hasClickedOutside(double mouseX, double mouseY, int guiLeft, int guiTop, int button) {
-        for (Rect2i area : getGuiExtraAreas()) {
-            if (mouseX >= area.getX()
-                    && mouseX < area.getX() + area.getWidth()
-                    && mouseY >= area.getY()
-                    && mouseY < area.getY() + area.getHeight()) {
-                return false;
-            }
-        }
-        return super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop, button);
+    private Rect2i tabArea() {
+        return new Rect2i(leftPos, topPos + TAB_Y, TabButton.SIZE * 2, TabButton.SIZE);
     }
 
     @Override
@@ -274,7 +263,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
             if (fluid.isEmpty()) {
                 return;
             }
-            renderFluidIcon(graphics, fluid);
+            GuiFluids.drawIcon(graphics, fluid, JOB_ITEM_X, JOB_ITEM_Y);
             name = fluid.getDisplayName();
             amount = NumberFormat.getIntegerInstance().format(fluid.getAmount()) + " mB";
         }
@@ -283,21 +272,6 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
         int tailX = imageWidth - 2 - font.width(tail);
         renderJobName(graphics, name.getString(), tailX - JOB_TAIL_GAP - JOB_TEXT_X);
         graphics.drawString(font, tail, tailX, JOB_TEXT_Y, COLOR_RUNNING, false);
-    }
-
-    private void renderFluidIcon(GuiGraphics graphics, FluidStack fluid) {
-        IClientFluidTypeExtensions extensions = IClientFluidTypeExtensions.of(fluid.getFluid());
-        TextureAtlasSprite sprite = Minecraft.getInstance()
-                .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                .apply(extensions.getStillTexture(fluid));
-        int color = extensions.getTintColor(fluid);
-        graphics.setColor(
-                ((color >> 16) & 0xFF) / 255.0F,
-                ((color >> 8) & 0xFF) / 255.0F,
-                (color & 0xFF) / 255.0F,
-                ((color >>> 24) & 0xFF) / 255.0F);
-        graphics.blit(JOB_ITEM_X, JOB_ITEM_Y, 0, 16, 16, sprite);
-        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     private void renderJobName(GuiGraphics graphics, String name, int maxWidth) {

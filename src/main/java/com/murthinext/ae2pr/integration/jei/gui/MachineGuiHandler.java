@@ -4,10 +4,10 @@ import com.murthinext.ae2pr.api.machine.MachineMenu;
 import com.murthinext.ae2pr.api.machine.Mode;
 import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
-import com.murthinext.ae2pr.api.machine.client.GuiExtraAreas;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerScreen;
 import com.murthinext.ae2pr.integration.jei.plugin.AE2PRJeiPlugin;
+import com.murthinext.nextui.client.GuiExtraAreas;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -60,7 +60,7 @@ public class MachineGuiHandler implements IGuiContainerHandler<AbstractContainer
         }
         for (CustomIngredientSource.Area area : source.getCustomAreas()) {
             Rect2i bounds = area.bounds();
-            if (!contains(bounds, mouseX, mouseY)) {
+            if (!GuiExtraAreas.contains(bounds, mouseX, mouseY)) {
                 continue;
             }
             ItemStack item = area.item();
@@ -75,12 +75,5 @@ public class MachineGuiHandler implements IGuiContainerHandler<AbstractContainer
             }
         }
         return Optional.empty();
-    }
-
-    private static boolean contains(Rect2i bounds, double mouseX, double mouseY) {
-        return mouseX >= bounds.getX()
-                && mouseX < bounds.getX() + bounds.getWidth()
-                && mouseY >= bounds.getY()
-                && mouseY < bounds.getY() + bounds.getHeight();
     }
 }

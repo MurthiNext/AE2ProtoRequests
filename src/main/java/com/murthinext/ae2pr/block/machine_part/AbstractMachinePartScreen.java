@@ -2,19 +2,16 @@ package com.murthinext.ae2pr.block.machine_part;
 
 import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 import com.murthinext.ae2pr.api.machine.client.AutoTransferButton;
-import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
 import com.murthinext.ae2pr.registry.ModGuide;
+import com.murthinext.nextui.client.GuiSidebar;
+import com.murthinext.nextui.client.GuiTooltips;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu> extends AbstractMachineScreen<M> {
@@ -56,9 +53,10 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
     @Override
     protected void init() {
         super.init();
+        GuiSidebar toolbar = toolbar();
         autoTransferButton = new AutoTransferButton(
-                leftPos + TOOLBAR_X + 1,
-                topPos + TOOLBAR_Y + 1 + TOOLBAR_ROW_STEP,
+                toolbar.cellX(),
+                toolbar.cellY(1),
                 isOutput() ? AutoTransferButton.Type.PUSH : AutoTransferButton.Type.PULL,
                 this::autoTransferEnabled,
                 () -> Minecraft.getInstance().gameMode.handleInventoryButtonClick(menu.containerId, 0));
@@ -66,8 +64,8 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
         recipeIsolationButton = null;
         if (!isOutput()) {
             recipeIsolationButton = new RecipeIsolationButton(
-                    leftPos + TOOLBAR_X + 1,
-                    topPos + TOOLBAR_Y + 1 + 2 * TOOLBAR_ROW_STEP,
+                    toolbar.cellX(),
+                    toolbar.cellY(2),
                     this::recipeIsolationEnabled,
                     () -> Minecraft.getInstance().gameMode.handleInventoryButtonClick(menu.containerId, 1));
             addRenderableWidget(recipeIsolationButton);
@@ -80,18 +78,17 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
             return true;
         }
         if (recipeIsolationButton != null
-                && recipeIsolationButton.renderTooltipIfHovered(graphics, font, mouseX, mouseY)) {
+                && recipeIsolationButton.renderTooltipIfTarget(graphics, font, mouseX, mouseY)) {
             return true;
         }
-        if (autoTransferButton == null || !autoTransferButton.isHovered()) {
+        if (autoTransferButton == null || !GuiTooltips.isTooltipTarget(autoTransferButton)) {
             return false;
         }
         GuiTooltips.render(
                 graphics,
                 font,
                 List.of(
-                        Component.translatable(
-                                isOutput() ? "gui.ae2pr.machine_part.auto.push" : "gui.ae2pr.machine_part.auto.pull"),
+                        autoTransferButton.getMessage(),
                         Component.translatable(
                                 autoTransferEnabled()
                                         ? "gui.ae2pr.machine_part.auto.enabled"
@@ -108,32 +105,5 @@ public abstract class AbstractMachinePartScreen<M extends AbstractContainerMenu>
     protected void drawTankArrow(GuiGraphics graphics, int x, int y, boolean down) {
         int inner = TANK_WIDTH - 4;
         drawArrow(graphics, x + 2 + (inner - ARROW_WIDTH) / 2, y + 4, down, false);
-    }
-
-    protected void drawFluid(
-            GuiGraphics graphics, FluidStack fluid, int x, int y, int innerWidth, int innerHeight, int capacity) {
-        if (fluid.isEmpty() || capacity <= 0) {
-            return;
-        }
-        int fill = (int) Math.min(innerHeight, Math.max(1L, (long) fluid.getAmount() * innerHeight / capacity));
-        IClientFluidTypeExtensions extensions = IClientFluidTypeExtensions.of(fluid.getFluid());
-        TextureAtlasSprite sprite = Minecraft.getInstance()
-                .getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                .apply(extensions.getStillTexture(fluid));
-        int color = extensions.getTintColor(fluid);
-        graphics.setColor(
-                ((color >> 16) & 0xFF) / 255.0F,
-                ((color >> 8) & 0xFF) / 255.0F,
-                (color & 0xFF) / 255.0F,
-                ((color >>> 24) & 0xFF) / 255.0F);
-        int fillTop = y + innerHeight - fill;
-        graphics.enableScissor(x, fillTop, x + innerWidth, y + innerHeight);
-        for (int ty = y + innerHeight - 16; ty + 16 > fillTop; ty -= 16) {
-            for (int tx = x; tx < x + innerWidth; tx += 16) {
-                graphics.blit(tx, ty, 0, 16, 16, sprite);
-            }
-        }
-        graphics.disableScissor();
-        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

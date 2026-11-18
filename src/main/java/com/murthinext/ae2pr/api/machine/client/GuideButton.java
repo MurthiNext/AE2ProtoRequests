@@ -1,19 +1,27 @@
 package com.murthinext.ae2pr.api.machine.client;
 
 import appeng.core.localization.ButtonToolTips;
+import com.murthinext.nextui.client.GuiTooltips;
+import com.murthinext.nextui.client.IconButton;
 import java.util.List;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 
-public class GuideButton extends ToolbarButton {
+public class GuideButton extends IconButton {
 
     public GuideButton(int x, int y, Runnable onPress) {
-        super(x, y, GuiTextures.GUIDE, () -> false, onPress);
-        setMessage(ButtonToolTips.OpenGuide.text());
+        super(
+                x,
+                y,
+                ButtonToolTips.OpenGuide.text(),
+                GuiTextures.BUTTON_SKIN,
+                () -> GuiTextures.GUIDE,
+                () -> false,
+                onPress);
     }
 
-    public boolean renderTooltipIfHovered(GuiGraphics graphics, Font font, int mouseX, int mouseY) {
-        if (!isHovered()) {
+    public boolean renderTooltipIfTarget(GuiGraphics graphics, Font font, int mouseX, int mouseY) {
+        if (!GuiTooltips.isTooltipTarget(this)) {
             return false;
         }
         GuiTooltips.render(

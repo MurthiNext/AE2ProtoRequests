@@ -1,9 +1,10 @@
 package com.murthinext.ae2pr.block.machine_part;
 
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
-import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 import com.murthinext.ae2pr.registry.ModNetwork;
+import com.murthinext.nextui.client.GuiFluids;
+import com.murthinext.nextui.client.GuiTooltips;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -135,7 +136,7 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
     }
 
     private void renderFluid(GuiGraphics graphics, int tank) {
-        drawFluid(
+        GuiFluids.drawTankFill(
                 graphics,
                 clientFluid(tank),
                 leftPos + TANK_X0 + 2 + tank * TANK_STEP,
