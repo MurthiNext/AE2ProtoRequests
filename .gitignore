@@ -1,4 +1,3 @@
-.DS_Store
 .gradle/
 .idea/
 .idea_modules/
@@ -10,6 +9,8 @@ run-data/
 src/generated/resources/.cache/
 bin/
 logs/
+
+.DS_Store
 *.iml
 hs_err_pid*
 .classpath

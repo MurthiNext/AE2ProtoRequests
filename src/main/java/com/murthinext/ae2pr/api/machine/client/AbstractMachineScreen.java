@@ -3,6 +3,10 @@ package com.murthinext.ae2pr.api.machine.client;
 import appeng.api.upgrades.Upgrades;
 import appeng.core.localization.GuiText;
 import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.nextui.client.ContainerChrome;
+import com.murthinext.nextui.client.GuiSlots;
+import com.murthinext.nextui.client.GuiTheme;
+import com.murthinext.nextui.layout.PlayerInventoryLayout;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.gui.GuiGraphics;
@@ -20,16 +24,6 @@ import org.jetbrains.annotations.Nullable;
 public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> extends AbstractContainerScreen<M>
         implements GuiExtraAreas {
 
-    protected static final int WIDTH = 176;
-    protected static final int HEIGHT = 200;
-    protected static final int SLOT = 18;
-    protected static final int INV_X = 8;
-    protected static final int INV_Y = 122;
-    protected static final int HOTBAR_Y = 180;
-    protected static final int INV_COLS = 9;
-    protected static final int INV_ROWS = 3;
-    protected static final int TITLE_X = 7;
-    protected static final int TITLE_Y = 9;
     protected static final int TOOLBAR_X = -22;
     protected static final int TOOLBAR_Y = 2;
     protected static final int TOOLBAR_ROW_STEP = 20;
@@ -38,17 +32,6 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
     private static final int UPGRADE_PANEL_Y = 2;
     private static final int UPGRADE_SLOTS = 4;
     private static final int UPGRADE_SLOT_STEP = 20;
-
-    private static final int SEPARATOR_Y = 21;
-    private static final int SEPARATOR_LEFT = 7;
-    private static final int SEPARATOR_RIGHT = 8;
-    private static final int SEPARATOR_ACCENT_WIDTH = 12;
-    private static final int COLOR_SEPARATOR = 0xFF2C3A46;
-
-    public static final int ACCENT_CRYSTAL = 0xFF8ABBEF;
-    public static final int ACCENT_CRYSTAL_DARK = 0x80294057;
-    public static final int ACCENT_EMBER = 0xFFE6AF50;
-    public static final int ACCENT_EMBER_DARK = 0x808A5A20;
 
     private static final int BAR_WIDTH = 6;
     private static final int BAR_HEIGHT = 18;
@@ -65,7 +48,6 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
     protected static final int ARROW_WIDTH = 10;
     protected static final int ARROW_HEIGHT = 12;
 
-    public static final ResourceLocation SLOT_TEXTURE = texture("components/slot");
     private static final ResourceLocation PROGRESS_BAR_TEXTURE = texture("components/progress_bar");
     private static final ResourceLocation ARROW_ITEM_DOWN = texture("components/arrow_item_down");
     private static final ResourceLocation ARROW_ITEM_UP = texture("components/arrow_item_up");
@@ -77,8 +59,8 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
 
     protected AbstractMachineScreen(M menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
-        this.imageWidth = WIDTH;
-        this.imageHeight = HEIGHT;
+        this.imageWidth = ContainerChrome.DEFAULT_WIDTH;
+        this.imageHeight = ContainerChrome.DEFAULT_HEIGHT;
     }
 
     protected static ResourceLocation texture(String path) {
@@ -107,16 +89,8 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
         return areas;
     }
 
-    protected int separatorAccent() {
-        return ACCENT_CRYSTAL;
-    }
-
-    protected int separatorAccentDark() {
-        return ACCENT_CRYSTAL_DARK;
-    }
-
-    protected int titleColor() {
-        return 0x55FFFF;
+    protected GuiTheme theme() {
+        return GuiTheme.DEFAULT;
     }
 
     protected int topExtension() {
@@ -141,9 +115,8 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        drawPanel(graphics);
-        drawSeparator(graphics);
-        drawInventorySlots(graphics);
+        ContainerChrome.drawBackground(
+                graphics, leftPos, topPos, imageWidth, imageHeight, PlayerInventoryLayout.STANDARD, theme());
         renderToolbar(graphics);
         if (upgradeMachine() != null) {
             renderUpgradeSlots(graphics);
@@ -152,43 +125,11 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.drawString(font, title, TITLE_X, TITLE_Y, titleColor(), false);
-    }
-
-    protected void drawPanel(GuiGraphics graphics) {
-        GuiPanels.panel(graphics, leftPos, topPos, imageWidth, imageHeight, INV_Y - 3);
-    }
-
-    protected void drawSeparator(GuiGraphics graphics) {
-        int y = topPos + SEPARATOR_Y;
-        graphics.fill(leftPos + SEPARATOR_LEFT, y, leftPos + imageWidth - SEPARATOR_RIGHT, y + 1, COLOR_SEPARATOR);
-        graphics.fill(
-                leftPos + SEPARATOR_LEFT,
-                y,
-                leftPos + SEPARATOR_LEFT + SEPARATOR_ACCENT_WIDTH,
-                y + 1,
-                separatorAccent());
-        graphics.fill(
-                leftPos + SEPARATOR_LEFT,
-                y + 1,
-                leftPos + SEPARATOR_LEFT + SEPARATOR_ACCENT_WIDTH,
-                y + 2,
-                separatorAccentDark());
+        ContainerChrome.drawTitle(graphics, font, title, theme());
     }
 
     protected void drawSlot(GuiGraphics graphics, int x, int y) {
-        graphics.blit(SLOT_TEXTURE, x - 1, y - 1, 0, 0.0F, 0.0F, SLOT, SLOT, SLOT, SLOT);
-    }
-
-    protected void drawInventorySlots(GuiGraphics graphics) {
-        for (int row = 0; row < INV_ROWS; row++) {
-            for (int col = 0; col < INV_COLS; col++) {
-                drawSlot(graphics, leftPos + INV_X + col * SLOT, topPos + INV_Y + row * SLOT);
-            }
-        }
-        for (int col = 0; col < INV_COLS; col++) {
-            drawSlot(graphics, leftPos + INV_X + col * SLOT, topPos + HOTBAR_Y);
-        }
+        GuiSlots.draw(graphics, x, y);
     }
 
     protected void drawArrow(GuiGraphics graphics, int x, int y, boolean down, boolean item) {

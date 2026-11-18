@@ -1,11 +1,12 @@
 package com.murthinext.ae2pr.integration.jei.widget;
 
-import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 import com.murthinext.ae2pr.client.multiblock.MultiblockPreview;
 import com.murthinext.ae2pr.client.multiblock.MultiblockPreviewRenderer;
 import com.murthinext.ae2pr.integration.jei.category.MultiblockPreviewCategory;
 import com.murthinext.ae2pr.integration.jei.recipe.MultiblockPreviewRecipe;
 import com.murthinext.ae2pr.integration.jei.render.ItemStackAmountRenderer;
+import com.murthinext.nextui.client.GuiPanels;
+import com.murthinext.nextui.client.GuiSlots;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
@@ -43,10 +44,10 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
     private static final int MATERIAL_COLUMNS = 7;
     private static final int MATERIAL_PAGE_SIZE = MATERIAL_COLUMNS - 1;
     private static final int REPLACEMENT_ROWS = 7;
-    private static final int SLOT = 18;
+    private static final int SLOT = GuiSlots.SIZE;
     private static final int TEXT = 0xFF404850;
     private static final int MUTED = 0xFF687987;
-    private static final int ACCENT = AbstractMachineScreen.ACCENT_CRYSTAL;
+    private static final int ACCENT = GuiPanels.COLOR_HIGHLIGHT;
 
     private static final Map<ResourceLocation, WeakReference<MultiblockPreviewWidget>> OPEN_WIDGETS = new HashMap<>();
 
@@ -139,8 +140,7 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
             }
             ItemStack stack = materials.get(index);
             int x = MATERIAL_X + i * SLOT;
-            graphics.blit(
-                    AbstractMachineScreen.SLOT_TEXTURE, x - 1, MATERIAL_Y - 1, 0, 0.0F, 0.0F, SLOT, SLOT, SLOT, SLOT);
+            GuiSlots.draw(graphics, x, MATERIAL_Y);
             ItemStackAmountRenderer.INSTANCE.render(graphics, stack, x, MATERIAL_Y);
         }
         drawButton(graphics, MATERIAL_PREV, "<", materialOffset > 0, mouseX, mouseY);

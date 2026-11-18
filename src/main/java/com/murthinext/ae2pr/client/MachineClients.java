@@ -5,7 +5,6 @@ import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.MachineDefinition;
 import com.murthinext.ae2pr.api.machine.Mode;
 import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
-import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 import com.murthinext.ae2pr.api.machine.client.GuideOpener;
 import com.murthinext.ae2pr.api.machine.client.MachineModeButton;
 import com.murthinext.ae2pr.api.machine.client.MachineScreen;
@@ -28,6 +27,7 @@ import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryRenderer;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryScreen;
 import com.murthinext.ae2pr.registry.ModGuide;
 import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.nextui.client.GuiTheme;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -151,37 +151,25 @@ public final class MachineClients {
         event.registerBlockEntityRenderer(ModMachines.MULTI_FACTORY.blockEntityType(), MultiFactoryRenderer::new);
     }
 
-    public record Style(
-            ResourceLocation guidePage,
-            int titleColor,
-            int accent,
-            int accentDark,
-            Map<Mode, MachineModeButton.Icon> modeIcons)
+    public record Style(ResourceLocation guidePage, GuiTheme theme, Map<Mode, MachineModeButton.Icon> modeIcons)
             implements MachineStyle {
+        private static final int EMBER_ACCENT = 0xFFE6AF50;
+        private static final int EMBER_ACCENT_SHADE = 0x808A5A20;
+
         public Style {
             modeIcons = Map.copyOf(modeIcons);
         }
 
         public static Style crystal(ResourceLocation guidePage, int titleColor) {
-            return new Style(
-                    guidePage,
-                    titleColor,
-                    AbstractMachineScreen.ACCENT_CRYSTAL,
-                    AbstractMachineScreen.ACCENT_CRYSTAL_DARK,
-                    Map.of());
+            return new Style(guidePage, GuiTheme.DEFAULT.withTitleColor(titleColor), Map.of());
         }
 
         public static Style ember(ResourceLocation guidePage, int titleColor) {
-            return new Style(
-                    guidePage,
-                    titleColor,
-                    AbstractMachineScreen.ACCENT_EMBER,
-                    AbstractMachineScreen.ACCENT_EMBER_DARK,
-                    Map.of());
+            return new Style(guidePage, new GuiTheme(titleColor, EMBER_ACCENT, EMBER_ACCENT_SHADE), Map.of());
         }
 
         public Style withModeIcons(Map<Mode, MachineModeButton.Icon> icons) {
-            return new Style(guidePage, titleColor, accent, accentDark, icons);
+            return new Style(guidePage, theme, icons);
         }
     }
 

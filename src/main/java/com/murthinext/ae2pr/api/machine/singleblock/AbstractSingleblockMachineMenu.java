@@ -3,6 +3,7 @@ package com.murthinext.ae2pr.api.machine.singleblock;
 import appeng.api.upgrades.Upgrades;
 import com.murthinext.ae2pr.api.machine.MachineDefinition;
 import com.murthinext.ae2pr.api.machine.side.SideConfig;
+import com.murthinext.nextui.layout.PlayerInventoryLayout;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -17,17 +18,9 @@ import org.jetbrains.annotations.Nullable;
 public abstract class AbstractSingleblockMachineMenu<E extends AbstractSingleblockMachineBlockEntity>
         extends AbstractContainerMenu {
 
-    protected static final int INV_COLS = 9;
-    protected static final int INV_ROWS = 3;
-    protected static final int SLOT_SIZE = 18;
-    protected static final int INV_X = 8;
-    protected static final int INV_Y = 122;
-    protected static final int HOTBAR_Y = 180;
     protected static final int UPGRADE_X = 180;
     protected static final int UPGRADE_Y = 4;
     protected static final int UPGRADE_STEP = 20;
-
-    private static final int PLAYER_SLOTS = INV_COLS * (INV_ROWS + 1);
 
     @Nullable
     protected final E machine;
@@ -52,18 +45,7 @@ public abstract class AbstractSingleblockMachineMenu<E extends AbstractSingleblo
                 addSlot(new SlotItemHandler(upgrades, i, UPGRADE_X, UPGRADE_Y + i * UPGRADE_STEP));
             }
         }
-        for (int row = 0; row < INV_ROWS; row++) {
-            for (int col = 0; col < INV_COLS; col++) {
-                addSlot(new Slot(
-                        playerInventory,
-                        col + row * INV_COLS + INV_COLS,
-                        INV_X + col * SLOT_SIZE,
-                        INV_Y + row * SLOT_SIZE));
-            }
-        }
-        for (int col = 0; col < INV_COLS; col++) {
-            addSlot(new Slot(playerInventory, col, INV_X + col * SLOT_SIZE, HOTBAR_Y));
-        }
+        PlayerInventoryLayout.STANDARD.forEachSlot((index, x, y) -> addSlot(new Slot(playerInventory, index, x, y)));
     }
 
     // 子类按机器布局添加机器自身的槽位
@@ -113,7 +95,7 @@ public abstract class AbstractSingleblockMachineMenu<E extends AbstractSingleblo
         ItemStack original = stack.copy();
         boolean moved;
         if (index < playerSlotStart) {
-            moved = moveItemStackTo(stack, playerSlotStart, playerSlotStart + PLAYER_SLOTS, true);
+            moved = moveItemStackTo(stack, playerSlotStart, playerSlotStart + PlayerInventoryLayout.SLOT_COUNT, true);
         } else if (Upgrades.isUpgradeCardItem(stack)) {
             moved = moveItemStackTo(stack, upgradeSlotStart, playerSlotStart, false);
         } else {

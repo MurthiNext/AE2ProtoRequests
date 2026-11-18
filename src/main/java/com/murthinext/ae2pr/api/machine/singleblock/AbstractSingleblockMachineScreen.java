@@ -5,6 +5,7 @@ import com.murthinext.ae2pr.api.machine.client.MachineStyles;
 import com.murthinext.ae2pr.api.machine.client.SideConfigButton;
 import com.murthinext.ae2pr.api.machine.client.SideConfigPanel;
 import com.murthinext.ae2pr.api.machine.side.SideConfig;
+import com.murthinext.nextui.client.GuiTheme;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -48,18 +49,8 @@ public abstract class AbstractSingleblockMachineScreen<M extends AbstractSingleb
     }
 
     @Override
-    protected int titleColor() {
-        return MachineStyles.of(menu.definition()).titleColor();
-    }
-
-    @Override
-    protected int separatorAccent() {
-        return MachineStyles.of(menu.definition()).accent();
-    }
-
-    @Override
-    protected int separatorAccentDark() {
-        return MachineStyles.of(menu.definition()).accentDark();
+    protected GuiTheme theme() {
+        return MachineStyles.of(menu.definition()).theme();
     }
 
     // 指南 + 面配置

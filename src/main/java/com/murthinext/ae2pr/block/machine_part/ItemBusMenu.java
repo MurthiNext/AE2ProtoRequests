@@ -4,6 +4,7 @@ import com.murthinext.ae2pr.api.machine.client.DisplaySlot;
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 import com.murthinext.ae2pr.network.MachinePartStackPacket;
 import com.murthinext.ae2pr.registry.ModNetwork;
+import com.murthinext.nextui.layout.PlayerInventoryLayout;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -25,11 +26,6 @@ public class ItemBusMenu extends AbstractContainerMenu {
 
     public static final MenuType<ItemBusMenu> TYPE = IForgeMenuType.create(ItemBusMenu::create);
 
-    private static final int INV_COLS = 9;
-    private static final int SLOT_SIZE = 18;
-    private static final int INV_X = 8;
-    private static final int INV_Y = 122;
-    private static final int HOTBAR_Y = 180;
     // 单次点击搬运上限
     private static final int MAX_CLICK_TRANSFER = 64;
 
@@ -60,18 +56,7 @@ public class ItemBusMenu extends AbstractContainerMenu {
                     MachinePartLayout.itemSlotX(dual, playerSlotFirst, slot),
                     MachinePartLayout.itemSlotY(dual, slot)));
         }
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < INV_COLS; col++) {
-                addSlot(new Slot(
-                        playerInventory,
-                        col + row * INV_COLS + INV_COLS,
-                        INV_X + col * SLOT_SIZE,
-                        INV_Y + row * SLOT_SIZE));
-            }
-        }
-        for (int col = 0; col < INV_COLS; col++) {
-            addSlot(new Slot(playerInventory, col, INV_X + col * SLOT_SIZE, HOTBAR_Y));
-        }
+        PlayerInventoryLayout.STANDARD.forEachSlot((index, x, y) -> addSlot(new Slot(playerInventory, index, x, y)));
     }
 
     public ItemBusMenu(int id, Inventory playerInventory, ItemBusBlockEntity blockEntity) {

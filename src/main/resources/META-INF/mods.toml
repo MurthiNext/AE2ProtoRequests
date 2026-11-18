@@ -24,6 +24,13 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies."${mod_id}"]]
+modId = "nextui"
+mandatory = true
+versionRange = "${nextui_version_range}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies."${mod_id}"]]
 modId = "ae2"
 mandatory = true
 versionRange = "[15.1.0,16.0.0)"

@@ -5,6 +5,7 @@ import com.murthinext.ae2pr.api.machine.MachineDefinition;
 import com.murthinext.ae2pr.api.machine.MachineStats;
 import com.murthinext.ae2pr.network.MachineStatsPacket;
 import com.murthinext.ae2pr.registry.ModNetwork;
+import com.murthinext.nextui.layout.PlayerInventoryLayout;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -40,13 +41,6 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
     protected static final int DATA_ALLOCATED_CHANNELS = 11;
     protected static final int DATA_REQUIRED_CHANNELS_LO = 12;
     protected static final int DATA_COUNT = 14;
-
-    private static final int INV_COLS = 9;
-    private static final int INV_ROWS = 3;
-    private static final int SLOT = 18;
-    private static final int INV_X = 8;
-    private static final int INV_Y = 122;
-    private static final int HOTBAR_Y = 180;
 
     private static final int FLAG_FORMED = 1;
     private static final int FLAG_RUNNING = 2;
@@ -84,15 +78,7 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
             }
             addExtraSlots(controller);
         }
-        for (int row = 0; row < INV_ROWS; row++) {
-            for (int col = 0; col < INV_COLS; col++) {
-                addSlot(new Slot(
-                        playerInventory, col + row * INV_COLS + INV_COLS, INV_X + col * SLOT, INV_Y + row * SLOT));
-            }
-        }
-        for (int col = 0; col < INV_COLS; col++) {
-            addSlot(new Slot(playerInventory, col, INV_X + col * SLOT, HOTBAR_Y));
-        }
+        PlayerInventoryLayout.STANDARD.forEachSlot((index, x, y) -> addSlot(new Slot(playerInventory, index, x, y)));
         addDataSlots(data);
     }
 

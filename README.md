@@ -2,8 +2,14 @@
 
 Working still...
 
+## Build
+
+Before first build, run `.\gradlew.bat publishToMavenLocal` in the repo `NextUI`.
+Then run `.\gradlew.bat assemble` in this repo.
+
 ## LICENSES
-- Original: [MIT License](LICENSE), except for the package covered below
+- Original: [MIT License](LICENSE).
+  - Except for the content covered below.
 - Ink Runtime：[MIT License](licenses/ink)
 - blade-ink-java: [MIT License](licenses/blade-ink-java)
 - Requester package: [LGPL-3.0](licenses/me-requester)

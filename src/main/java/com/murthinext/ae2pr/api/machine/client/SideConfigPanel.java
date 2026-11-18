@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.api.machine.client;
 
 import com.murthinext.ae2pr.api.machine.side.SideConfig;
 import com.murthinext.ae2pr.api.machine.side.SideMode;
+import com.murthinext.nextui.client.GuiPanels;
 import java.util.List;
 import java.util.function.IntConsumer;
 import net.minecraft.client.gui.Font;

@@ -10,6 +10,7 @@ import com.murthinext.ae2pr.api.machine.client.GuiTooltips;
 import com.murthinext.ae2pr.api.machine.client.MachineStyles;
 import com.murthinext.ae2pr.api.machine.client.MachineTabButton;
 import com.murthinext.ae2pr.api.machine.part.MachinePart;
+import com.murthinext.nextui.client.GuiTheme;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
                 topPos + TAB_Y,
                 GuiTextures.TAB_HOME,
                 Component.translatable("gui.ae2pr.multiblock.tab.home"),
-                separatorAccent(),
+                theme().accent(),
                 () -> !dataPage,
                 () -> dataPage = false));
         addRenderableWidget(new MachineTabButton(
@@ -79,7 +80,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
                 topPos + TAB_Y,
                 GuiTextures.TAB_DATA,
                 Component.translatable("gui.ae2pr.multiblock.tab.data"),
-                separatorAccent(),
+                theme().accent(),
                 () -> dataPage,
                 () -> dataPage = true));
     }
@@ -124,18 +125,8 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     }
 
     @Override
-    protected int titleColor() {
-        return MachineStyles.of(menu.definition()).titleColor();
-    }
-
-    @Override
-    protected int separatorAccent() {
-        return MachineStyles.of(menu.definition()).accent();
-    }
-
-    @Override
-    protected int separatorAccentDark() {
-        return MachineStyles.of(menu.definition()).accentDark();
+    protected GuiTheme theme() {
+        return MachineStyles.of(menu.definition()).theme();
     }
 
     @Nullable

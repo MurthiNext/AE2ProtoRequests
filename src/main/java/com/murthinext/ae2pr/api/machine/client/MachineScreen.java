@@ -52,7 +52,7 @@ public final class MachineScreen<M extends AbstractMultiblockControllerMenu<?>>
     @Override
     protected void renderExtraLabels(GuiGraphics graphics, int mouseX, int mouseY) {
         if (modeLabel() != null) {
-            graphics.drawString(font, modeLabel(), TEXT_X, EXTRA_Y, titleColor(), false);
+            graphics.drawString(font, modeLabel(), TEXT_X, EXTRA_Y, theme().titleColor(), false);
         }
     }
 

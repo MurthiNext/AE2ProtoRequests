@@ -39,6 +39,10 @@ configurations {
     }
 }
 
+def nextUi = "com.murthinext:nextui-forge-${minecraft_version}:${nextui_version}".toString()
+def nextUiRange = "[${nextui_version},${nextui_version_limit})".toString()
+def nextUiMavenUrl = providers.gradleProperty('nextui_maven_url').orNull
+
 jarJar.enable()
 
 minecraft {
@@ -84,6 +88,19 @@ mixin {
 }
 
 repositories {
+    if (nextUiMavenUrl) {
+        maven {
+            url = uri(nextUiMavenUrl)
+            content {
+                includeModule 'com.murthinext', "nextui-forge-${minecraft_version}"
+            }
+        }
+    }
+    mavenLocal {
+        content {
+            includeModule 'com.murthinext', "nextui-forge-${minecraft_version}"
+        }
+    }
     mavenCentral()
     maven {
         name = 'Modmaven'
@@ -113,8 +130,12 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     implementation fg.deobf("appeng:appliedenergistics2-forge:${ae2_version}")
+    implementation fg.deobf(nextUi)
     implementation "com.bladecoder.ink:blade-ink:${ink_version}"
 
+    jarJar(nextUi) {
+        jarJar.ranged(it, nextUiRange)
+    }
     jarJar("com.bladecoder.ink:blade-ink:[$ink_version]")
     storyCompilerImplementation "com.bladecoder.ink:blade-ink-compiler:${ink_version}"
     storyCompilerImplementation "com.bladecoder.ink:blade-ink:${ink_version}"
@@ -161,6 +182,7 @@ tasks.named('processResources', ProcessResources).configure {
                              minecraft_version_range: minecraft_version_range,
                              forge_version: forge_version,
                              forge_version_range: forge_version_range,
+                             nextui_version_range: nextUiRange,
                              loader_version_range: loader_version_range,
                              mod_id: mod_id,
                              mod_name: mod_name,

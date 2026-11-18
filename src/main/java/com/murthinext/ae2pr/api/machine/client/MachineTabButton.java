@@ -1,5 +1,6 @@
 package com.murthinext.ae2pr.api.machine.client;
 
+import com.murthinext.nextui.client.GuiPanels;
 import java.util.function.BooleanSupplier;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;

@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.block.machine_part;
 
 import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 import com.murthinext.ae2pr.registry.ModNetwork;
+import com.murthinext.nextui.layout.PlayerInventoryLayout;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -27,12 +28,6 @@ public class FluidHatchMenu extends AbstractContainerMenu {
 
     public static final MenuType<FluidHatchMenu> TYPE = IForgeMenuType.create(FluidHatchMenu::create);
 
-    private static final int INV_COLS = 9;
-    private static final int SLOT_SIZE = 18;
-    private static final int INV_X = 8;
-    private static final int INV_Y = 122;
-    private static final int HOTBAR_Y = 180;
-
     private final BlockPos pos;
     private final Player owner;
     private final boolean serverSide;
@@ -49,18 +44,7 @@ public class FluidHatchMenu extends AbstractContainerMenu {
         this.owner = playerInventory.player;
         this.serverSide = !playerInventory.player.level().isClientSide;
         this.blockEntity = blockEntity;
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < INV_COLS; col++) {
-                addSlot(new Slot(
-                        playerInventory,
-                        col + row * INV_COLS + INV_COLS,
-                        INV_X + col * SLOT_SIZE,
-                        INV_Y + row * SLOT_SIZE));
-            }
-        }
-        for (int col = 0; col < INV_COLS; col++) {
-            addSlot(new Slot(playerInventory, col, INV_X + col * SLOT_SIZE, HOTBAR_Y));
-        }
+        PlayerInventoryLayout.STANDARD.forEachSlot((index, x, y) -> addSlot(new Slot(playerInventory, index, x, y)));
     }
 
     public FluidHatchMenu(int id, Inventory playerInventory, FluidHatchBlockEntity blockEntity) {
