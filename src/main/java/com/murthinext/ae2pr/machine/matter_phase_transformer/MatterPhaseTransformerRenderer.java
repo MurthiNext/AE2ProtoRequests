@@ -1,34 +1,39 @@
 package com.murthinext.ae2pr.machine.matter_phase_transformer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.client.effect.EmissiveCubeRenderer;
-import com.murthinext.ae2pr.client.effect.RoundedBeamRenderer;
+import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
 import com.murthinext.ae2pr.registry.ModMachines;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Quaternionf;
 
-// 相变仪空腔粒子、蓄能光柱与中央核心自发光
 public class MatterPhaseTransformerRenderer
         implements BlockEntityRenderer<MatterPhaseTransformerControllerBlockEntity> {
 
-    // 三层统一使用原版信标光束层
-    private static final RenderType PARTICLE =
+    private static final RenderType FLARE =
             RenderType.beaconBeam(Ids.of("textures/particle/matter_particle.png"), true);
-    private static final RenderType CORE =
-            RenderType.beaconBeam(Ids.of("textures/block/high_energy_core_glow.png"), true);
     private static final RenderType BEAM = RenderType.beaconBeam(Ids.of("textures/entity/matter_beam.png"), true);
-    private static final int PARTICLES_PER_CHAMBER = 96;
-    private static final float[] WHITE = {1.0F, 1.0F, 1.0F};
+    private static final RenderType APERTURE =
+            RenderType.beaconBeam(Ids.of("textures/entity/matter_aperture.png"), true);
+    private static final double PACKET_TICKS = 9;
+    private static final double LENS_HALF = 0.45;
+    private static final Vec3 EMITTER = new Vec3(0, MatterPhaseTransformerStructure.EMITTER_Y - 0.008, 0);
+    private static final Vec3 COLLECTOR = new Vec3(0, PhaseMeltRenderer.FLOOR, 0);
+    private static final Vec3[] POLES = new Vec3[3];
+
+    static {
+        for (int i = 0; i < POLES.length; i++) {
+            double angle = i * 2 * Math.PI / POLES.length;
+            POLES[i] = EMITTER.add(0.64 * LENS_HALF * Math.cos(angle), 0, 0.64 * LENS_HALF * Math.sin(angle));
+        }
+    }
 
     public MatterPhaseTransformerRenderer(BlockEntityRendererProvider.Context context) {}
 
@@ -40,100 +45,122 @@ public class MatterPhaseTransformerRenderer
             MultiBufferSource buffers,
             int light,
             int overlay) {
-        if (!controller.isFormed() || controller.getLevel() == null) {
+        var level = controller.getLevel();
+        if (!controller.isFormed() || level == null) {
             return;
         }
         BlockPos core = controller.getCorePos();
-        if (!controller.getLevel().getBlockState(core).is(ModMachines.CRYSTAL_REACTOR.block())) {
+        var coreState = level.getBlockState(core);
+        if (!coreState.is(ModMachines.CRYSTAL_REACTOR.block())
+                || !coreState.getValue(HighEnergyCoreBlock.PHASE_HIDDEN)) {
             return;
         }
         BlockPos origin = controller.getBlockPos();
+        var animation = controller.animation();
+        float power = animation.power(partialTick);
+        float heat = animation.heat(partialTick);
+        double pourTime = animation.pourTime(partialTick);
+        double time = (double) level.getGameTime() + partialTick + (core.hashCode() & 255);
+        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+        Vec3 eye = camera.getPosition().subtract(Vec3.atBottomCenterOf(core));
+
         pose.pushPose();
         pose.translate(
                 core.getX() - origin.getX() + 0.5, core.getY() - origin.getY(), core.getZ() - origin.getZ() + 0.5);
-        double time = controller.getParticleTime(partialTick);
-        float activity = controller.getEffectActivity(partialTick);
-        float beamStrength = controller.getBeamStrength(partialTick);
-        VertexConsumer particles = buffers.getBuffer(PARTICLE);
-        renderChamber(pose, particles, time, activity, beamStrength, false);
-        renderChamber(pose, particles, time, activity, beamStrength, true);
-        if (beamStrength > 0.001F) {
-            double ticks = controller.getLevel().getGameTime() + partialTick;
-            renderBeams(pose, buffers.getBuffer(BEAM), core, ticks, beamStrength);
-        }
-        if (activity > 0.001F) {
-            renderCore(pose, buffers.getBuffer(CORE), activity);
+        var apertures = new PhaseChamberMesh(pose.last(), buffers.getBuffer(APERTURE));
+        Vec3 across = new Vec3(LENS_HALF, 0, 0);
+        Vec3 along = new Vec3(0, 0, LENS_HALF);
+        apertures.sprite(EMITTER, across, along, 0xFFFFFFFF);
+        apertures.sprite(COLLECTOR, across, along.scale(-1), 0xFFFFD9B3);
+        PhaseMeltRenderer.crystal(pose, buffers, heat);
+        Vec3 focus = PhaseMeltRenderer.IMPACT;
+        PhaseMeltRenderer.pour(pose, buffers, controller.melt(), pourTime, heat);
+        float phase = (float) Mth.frac(time / PACKET_TICKS);
+        beams(new PhaseChamberMesh(pose.last(), buffers.getBuffer(BEAM)), eye, focus, phase, power);
+        var flares = new PhaseChamberMesh(pose.last(), buffers.getBuffer(FLARE));
+        discharge(flares, camera, eye, focus, phase, power);
+        if (power > 0) {
+            sparks(flares, eye, focus, time, power);
         }
         pose.popPose();
     }
 
-    private static void renderChamber(
-            PoseStack pose, VertexConsumer consumer, double time, float activity, float beamStrength, boolean upper) {
-        if (beamStrength >= 0.999F) {
-            return;
-        }
-        double focus = activity * activity * (3.0 - 2.0 * activity);
-        Quaternionf cameraOrientation =
-                Minecraft.getInstance().getEntityRenderDispatcher().cameraOrientation();
-        for (int i = 0; i < PARTICLES_PER_CHAMBER; i++) {
-            double seed = i * 2.399963229728653 + (upper ? 1.7 : 0.0);
-            double progress = time * (0.0045 + (i % 5) * 0.0004) + i * 0.618033988749895;
-            progress -= Math.floor(progress);
-            double travel = progress * progress * (3.0 - 2.0 * progress);
-            double angle = seed + (time * 0.018 + travel * focus * Math.PI) * (upper ? -1.0 : 1.0);
-            double radius = 0.12 + (Math.sin(seed * 3.0) + 1.0) * 0.13;
-            radius *= 1.0 - focus * (0.72 + travel * 0.24);
-            double y = upper ? 3.9 - progress * 2.8 : -2.9 + progress * 2.8;
-            float size = (0.01F + (i % 4) * 0.01F) * (1.0F - activity * 0.25F);
-            double fade = Math.min(1.0, Math.min(progress, 1.0 - progress) * 8.0);
-            float alpha = (float) (fade * fade * (3.0 - 2.0 * fade) * (0.4 + (i % 3) * 0.1) * (1.0 - beamStrength));
-            pose.pushPose();
-            pose.translate(Math.cos(angle) * radius, y, Math.sin(angle) * radius);
-            pose.mulPose(cameraOrientation);
-            renderParticle(consumer, pose.last(), size * 1.8F, alpha * 0.18F);
-            renderParticle(consumer, pose.last(), size, alpha);
-            pose.popPose();
+    private static void beams(PhaseChamberMesh mesh, Vec3 eye, Vec3 focus, float phase, float power) {
+        mesh.ribbon(
+                eye,
+                EMITTER,
+                focus,
+                0.07 + 0.12 * power,
+                0.04 + 0.065 * power,
+                -phase,
+                2 - phase,
+                tint(0xFFFFFF, 0.18 + 0.82 * power));
+        if (power > 0) {
+            for (Vec3 pole : POLES) {
+                mesh.ribbon(
+                        eye,
+                        pole,
+                        focus,
+                        0.080 * power,
+                        0.037 * power,
+                        -phase,
+                        2 - phase,
+                        tint(0xB3C8FF, 0.83 * power));
+            }
         }
     }
 
-    private static void renderParticle(VertexConsumer consumer, PoseStack.Pose pose, float size, float alpha) {
-        // 信标层开启了背面剔除，而广告牌朝向取决于视角；正反两种绕序各写一遍，
-        // 被剔除的总是其中一半，结果仍是一张可见的四边形
-        vertex(consumer, pose, -size, -size, 0, 0, 1, alpha);
-        vertex(consumer, pose, size, -size, 0, 1, 1, alpha);
-        vertex(consumer, pose, size, size, 0, 1, 0, alpha);
-        vertex(consumer, pose, -size, size, 0, 0, 0, alpha);
-        vertex(consumer, pose, -size, -size, 0, 0, 1, alpha);
-        vertex(consumer, pose, -size, size, 0, 0, 0, alpha);
-        vertex(consumer, pose, size, size, 0, 1, 0, alpha);
-        vertex(consumer, pose, size, -size, 0, 1, 1, alpha);
+    private static void discharge(
+            PhaseChamberMesh mesh, Camera camera, Vec3 eye, Vec3 focus, float phase, float power) {
+        Vec3 right = new Vec3(camera.getLeftVector()).scale(-1);
+        Vec3 up = new Vec3(camera.getUpVector());
+        for (Vec3 pole : POLES) {
+            mesh.sprite(pole.add(0, -0.05, 0), right.scale(0.10), up.scale(0.046), tint(0x8CEBFF, 0.37 + 0.57 * power));
+            for (int i = 0; i < 2; i++) {
+                double head = (phase + i) * 0.5;
+                Vec3 tail = pole.lerp(focus, Math.max(0, head - 0.025 - 0.072 * power));
+                mesh.ribbon(
+                        eye,
+                        tail,
+                        pole.lerp(focus, head),
+                        0.009,
+                        0.026 + 0.013 * power,
+                        0,
+                        1,
+                        tint(0xD9FAFF, 0.32 + 0.68 * power));
+            }
+        }
+        double pulse = Math.pow(0.5 + 0.5 * Math.cos(2 * Math.PI * phase), 4);
+        double size = 0.11 + 0.11 * power + 0.045 * pulse * power;
+        mesh.sprite(
+                focus.add(0, 0.009, 0),
+                right.scale(size),
+                up.scale(size * 0.65),
+                tint(0xFF9C39, power * (0.72 + 0.28 * pulse)));
+        mesh.sprite(
+                focus.add(0, 0.015, 0),
+                right.scale(size * 0.72),
+                up.scale(size * 0.27),
+                tint(0xFFF6D8, 0.2 + 0.8 * power));
     }
 
-    private static void renderBeams(
-            PoseStack pose, VertexConsumer consumer, BlockPos core, double ticks, float strength) {
-        Vec3 camera = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
-        Vec3 view = new Vec3(camera.x - (core.getX() + 0.5), 0, camera.z - (core.getZ() + 0.5));
-        view = view.lengthSqr() < 1.0E-6 ? new Vec3(0, 0, 1) : view.normalize();
-        // 核心方块本体遮挡中段，光柱分上下两截
-        RoundedBeamRenderer.renderColumn(pose, consumer, view, -3.0, 0.0, true, ticks, strength, WHITE);
-        RoundedBeamRenderer.renderColumn(pose, consumer, view, 1.0, 4.0, false, ticks, strength, WHITE);
+    private static void sparks(PhaseChamberMesh mesh, Vec3 eye, Vec3 focus, double time, float power) {
+        for (int i = 0; i < 8; i++) {
+            double beat = time / PACKET_TICKS - i * 0.037;
+            double f = Mth.frac(beat);
+            double tail = Math.max(0, f - 0.17);
+            double angle = ((long) Math.floor(beat) & 255) * 1.73 + i * 2.39996;
+            double reach = 0.21 + 0.045 * (i % 3);
+            double x = Math.cos(angle) * reach;
+            double z = Math.sin(angle) * reach;
+            double rise = 1.18 + 0.23 * (i % 4);
+            Vec3 a = focus.add(tail * x, rise * tail * (1 - tail), tail * z);
+            Vec3 b = focus.add(f * x, rise * f * (1 - f), f * z);
+            mesh.ribbon(eye, a, b, 0.009, 0.023, 0, 1, tint(i % 3 == 0 ? 0xFF8839 : 0xFFE6A3, power * (1 - f * f)));
+        }
     }
 
-    private static void renderCore(PoseStack pose, VertexConsumer consumer, float alpha) {
-        pose.pushPose();
-        pose.translate(0, 0.5, 0);
-        EmissiveCubeRenderer.render(pose, consumer, alpha);
-        pose.popPose();
-    }
-
-    private static void vertex(
-            VertexConsumer consumer, PoseStack.Pose pose, float x, float y, float z, float u, float v, float alpha) {
-        consumer.vertex(pose.pose(), x, y, z)
-                .color(WHITE[0], WHITE[1], WHITE[2], alpha)
-                .uv(u, v)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(LightTexture.FULL_BRIGHT)
-                .normal(pose.normal(), 0.0F, 0.0F, 1.0F)
-                .endVertex();
+    private static int tint(int rgb, double alpha) {
+        return (int) (255 * alpha) << 24 | rgb;
     }
 }

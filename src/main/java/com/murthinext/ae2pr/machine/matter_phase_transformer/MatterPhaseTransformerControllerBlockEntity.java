@@ -1,14 +1,19 @@
 package com.murthinext.ae2pr.machine.matter_phase_transformer;
 
+import com.murthinext.ae2pr.api.machine.MachineBlock;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 import com.murthinext.ae2pr.registry.ModMachines;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.fluids.FluidStack;
 
 public class MatterPhaseTransformerControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
     private final MatterPhaseTransformerAnimation animation = new MatterPhaseTransformerAnimation();
+    private FluidStack melt = FluidStack.EMPTY;
+    private boolean refreshMelt = true;
 
     public MatterPhaseTransformerControllerBlockEntity(BlockPos pos, BlockState state) {
         super(ModMachines.MATTER_PHASE_TRANSFORMER, pos, state);
@@ -22,24 +27,34 @@ public class MatterPhaseTransformerControllerBlockEntity extends AbstractMultibl
     @Override
     public AABB getRenderBoundingBox() {
         BlockPos core = getCorePos();
-        return new AABB(core.getX(), core.getY() - 3, core.getZ(), core.getX() + 1, core.getY() + 4, core.getZ() + 1);
+        return new AABB(
+                core.offset(0, MatterPhaseTransformerStructure.COLLECTOR_Y, 0),
+                core.offset(1, MatterPhaseTransformerStructure.EMITTER_Y, 1));
     }
 
-    // 客户端动画
+    @Override
+    public void load(CompoundTag tag) {
+        super.load(tag);
+        refreshMelt = true;
+    }
 
     public void clientTick() {
-        animation.tick(isFormed(), isRunning());
+        boolean formed = isFormed();
+        animation.tick(formed, getBlockState().getValue(MachineBlock.RUNNING));
+        if (!formed) {
+            melt = FluidStack.EMPTY;
+            refreshMelt = true;
+        } else if (refreshMelt && isBusy()) {
+            melt = getJobFluid();
+            refreshMelt = melt.isEmpty();
+        }
     }
 
-    public double getParticleTime(float partialTick) {
-        return animation.getParticleTime(partialTick);
+    MatterPhaseTransformerAnimation animation() {
+        return animation;
     }
 
-    public float getEffectActivity(float partialTick) {
-        return animation.getActivity(partialTick);
-    }
-
-    public float getBeamStrength(float partialTick) {
-        return animation.getBeamStrength(partialTick);
+    FluidStack melt() {
+        return melt;
     }
 }

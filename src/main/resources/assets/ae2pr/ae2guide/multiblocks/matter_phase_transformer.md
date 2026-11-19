@@ -18,4 +18,5 @@ item_ids:
 
 <GameScene zoom="3">
   <ImportStructure src="matter_phase_transformer.nbt" />
+  <Block id="ae2pr:high_energy_core" x="2" y="5" z="2" p:phase_hidden="true" />
 </GameScene>

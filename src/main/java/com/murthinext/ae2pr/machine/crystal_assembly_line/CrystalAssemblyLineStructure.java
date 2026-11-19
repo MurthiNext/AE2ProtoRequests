@@ -61,7 +61,7 @@ public final class CrystalAssemblyLineStructure extends AbstractStructureFacade 
     }
 
     @Override
-    protected void onPartCell(Level level, BlockPos pos, boolean active) {
+    protected void onPartCell(Level level, BlockPos pos, boolean formed, boolean active) {
         updateUnitActive(level, pos, active);
     }
 

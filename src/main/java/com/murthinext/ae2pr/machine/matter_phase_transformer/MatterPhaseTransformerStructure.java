@@ -5,13 +5,20 @@ import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
 import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.api.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
+import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
 import com.murthinext.ae2pr.registry.ModBlocks;
 import com.murthinext.ae2pr.registry.ModMachines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 
 // 物质相变仪结构定义
 public final class MatterPhaseTransformerStructure extends AbstractStructureFacade {
+
+    // 相对于中央反应器底面的两个腔室端面
+    static final int EMITTER_Y = 4;
+    static final int COLLECTOR_Y = -3;
 
     public static final MultiblockPattern PATTERN = MultiblockPattern.builder(
                     RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.RIGHT)
@@ -33,6 +40,15 @@ public final class MatterPhaseTransformerStructure extends AbstractStructureFaca
 
     private MatterPhaseTransformerStructure() {
         super(PATTERN, MachinePartFacade.ZIRCONIA);
+    }
+
+    @Override
+    protected void onPartCell(Level level, BlockPos pos, boolean formed, boolean active) {
+        var state = level.getBlockState(pos);
+        if (state.is(ModMachines.CRYSTAL_REACTOR.block())
+                && state.getValue(HighEnergyCoreBlock.PHASE_HIDDEN) != formed) {
+            level.setBlock(pos, state.setValue(HighEnergyCoreBlock.PHASE_HIDDEN, formed), Block.UPDATE_CLIENTS);
+        }
     }
 
     public static BlockPos corePos(BlockPos controllerPos, Direction facing, boolean mirrorFront) {

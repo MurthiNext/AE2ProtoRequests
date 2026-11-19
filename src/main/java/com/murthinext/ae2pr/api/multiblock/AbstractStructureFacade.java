@@ -82,10 +82,10 @@ public abstract class AbstractStructureFacade {
     protected void applyParts(Level level, List<BlockPos> cells, boolean formed, boolean active) {
         int style = facade.style();
         for (BlockPos pos : cells) {
-            onPartCell(level, pos, active);
+            onPartCell(level, pos, formed, active);
             StructureHooks.applyPartAppearance(level, pos, formed, style, active);
         }
     }
 
-    protected void onPartCell(Level level, BlockPos pos, boolean active) {}
+    protected void onPartCell(Level level, BlockPos pos, boolean formed, boolean active) {}
 }

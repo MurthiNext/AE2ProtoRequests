@@ -5,6 +5,7 @@ Working still...
 ## Build
 
 Before first build, run `.\gradlew.bat publishToMavenLocal` in the repo `NextUI`.
+
 Then run `.\gradlew.bat assemble` in this repo.
 
 ## LICENSES

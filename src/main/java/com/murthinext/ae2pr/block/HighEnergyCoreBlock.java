@@ -14,6 +14,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -23,21 +24,34 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 // 高能核心，可作为结构方块/水晶反应器触发器
 public class HighEnergyCoreBlock extends DisassemblableBlock implements EntityBlock {
 
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
+    public static final BooleanProperty PHASE_HIDDEN = BooleanProperty.create("phase_hidden");
 
     public HighEnergyCoreBlock(Properties properties) {
         super(properties.lightLevel(state -> state.getValue(LIT) ? 15 : 0));
-        registerDefaultState(stateDefinition.any().setValue(LIT, false));
+        registerDefaultState(stateDefinition.any().setValue(LIT, false).setValue(PHASE_HIDDEN, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(LIT);
+        builder.add(LIT, PHASE_HIDDEN);
+    }
+
+    @Override
+    public RenderShape getRenderShape(BlockState state) {
+        return state.getValue(PHASE_HIDDEN) ? RenderShape.INVISIBLE : super.getRenderShape(state);
+    }
+
+    @Override
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+        return state.getValue(PHASE_HIDDEN) ? Shapes.empty() : super.getOcclusionShape(state, level, pos);
     }
 
     @Override

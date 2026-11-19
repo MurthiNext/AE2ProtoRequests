@@ -1,42 +1,43 @@
 package com.murthinext.ae2pr.machine.matter_phase_transformer;
 
-// 相变仪特效的渐进汇聚与缓慢衰减
-public final class MatterPhaseTransformerAnimation {
+import net.minecraft.util.Mth;
 
-    private static final float CHARGE_STEP = 1.0F / 60;
-    private static final float RELEASE_STEP = 1.0F / 80;
-    private static final double MAX_SPEED = 4.0;
+final class MatterPhaseTransformerAnimation {
 
-    private float activity;
-    private float previousActivity;
-    private double particleTime;
-    private double previousParticleTime;
+    private float power;
+    private float previousPower;
+    private float heat;
+    private float previousHeat;
+    private long pourTicks;
 
-    public void tick(boolean formed, boolean running) {
+    void tick(boolean formed, boolean running) {
         if (!formed) {
-            activity = 0.0F;
-            previousActivity = 0.0F;
-            particleTime = 0.0;
-            previousParticleTime = 0.0;
+            previousPower = power = 0;
+            previousHeat = heat = 0;
+            pourTicks = 0;
             return;
         }
-        previousActivity = activity;
-        previousParticleTime = particleTime;
-        activity = running ? Math.min(1.0F, activity + CHARGE_STEP) : Math.max(0.0F, activity - RELEASE_STEP);
-        double acceleration = activity * activity * (3.0 - 2.0 * activity);
-        particleTime += 1.0 + (MAX_SPEED - 1.0) * acceleration;
+        previousPower = power;
+        previousHeat = heat;
+        power = Mth.approach(power, running ? 1 : 0, running ? 1 / 10F : 1 / 5F);
+        float targetHeat = power * power;
+        heat = Mth.approach(heat, targetHeat, targetHeat > heat ? 1 / 24F : 1 / 54F);
+        if (heat >= 0.32F || (pourTicks > 0 && heat > 0)) {
+            pourTicks++;
+        } else {
+            pourTicks = 0;
+        }
     }
 
-    public float getActivity(float partialTick) {
-        return previousActivity + (activity - previousActivity) * partialTick;
+    float power(float partialTick) {
+        return Mth.lerp(partialTick, previousPower, power);
     }
 
-    public double getParticleTime(float partialTick) {
-        return previousParticleTime + (particleTime - previousParticleTime) * partialTick;
+    float heat(float partialTick) {
+        return Mth.lerp(partialTick, previousHeat, heat);
     }
 
-    public float getBeamStrength(float partialTick) {
-        float strength = Math.max(0.0F, Math.min(1.0F, (getActivity(partialTick) - 0.3F) / 0.7F));
-        return strength * strength * (3.0F - 2.0F * strength);
+    double pourTime(float partialTick) {
+        return pourTicks == 0 ? 0 : (double) (pourTicks - 1) + partialTick;
     }
 }
