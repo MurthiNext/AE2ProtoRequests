@@ -4,102 +4,144 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.util.FastColor.ARGB32;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
-record PhaseChamberMesh(PoseStack.Pose pose, VertexConsumer vertices) {
+record PhaseChamberMesh(PoseStack.Pose pose, VertexConsumer vertices, float surfaceOffset) {
 
-    record Rim(float y, float radius, float v, int color) {
-        Rim(float y, float radius, int color) {
-            this(y, radius, 0, color);
+    PhaseChamberMesh(PoseStack.Pose pose, VertexConsumer vertices) {
+        this(pose, vertices, 0);
+    }
+
+    record Rim(float y, float radius, int color) {}
+
+    record Edge(Vec3 left, Vec3 right, int color) {
+        Edge lerp(Edge other, float t) {
+            return new Edge(left.lerp(other.left, t), right.lerp(other.right, t), ARGB32.lerp(t, color, other.color));
         }
     }
 
-    record Edge(Vec3 left, Vec3 right, float v, int color) {}
+    private enum Mapping {
+        CRYSTAL(0.25F), // 64 像素的晶面贴图覆盖 4 格
+        LIQUID(1),
+        POOL(1);
+
+        final float scale;
+
+        Mapping(float scale) {
+            this.scale = scale;
+        }
+    }
+
+    private record Face(Vec3 left, Vec3 right, Vec3 tangent, float centerU) {
+        Vec3 point(float y, float radius, double across) {
+            return new Vec3(radius * Mth.lerp(across, left.x, right.x), y, radius * Mth.lerp(across, left.z, right.z));
+        }
+
+        Edge edge(Rim rim) {
+            return new Edge(point(rim.y, rim.radius, 0), point(rim.y, rim.radius, 1), rim.color);
+        }
+    }
 
     static final int CRYSTAL_FACES = 6;
-    private static final int SIDES = 2 * CRYSTAL_FACES;
-    private static final float[] X = new float[SIDES + 1];
-    private static final float[] Z = new float[SIDES + 1];
+    private static final Face[] HEXAGON = faces(CRYSTAL_FACES);
+    private static final Face[] ROUND = faces(12);
 
-    static {
-        for (int i = 0; i <= SIDES; i++) {
-            double angle = (i % SIDES + 0.5) * (2 * Math.PI / SIDES);
-            X[i] = (float) Math.cos(angle);
-            Z[i] = (float) Math.sin(angle);
+    private static Face[] faces(int count) {
+        Vec3[] corners = new Vec3[count];
+        for (int i = 0; i < count; i++) {
+            double angle = Math.PI / 12 + i * (2 * Math.PI / count);
+            corners[i] = new Vec3(Math.cos(angle), 0, Math.sin(angle));
         }
-    }
-
-    void body(Rim... profile) {
-        bands(1, 0, profile);
-    }
-
-    void crystal(Rim... profile) {
-        bands(2, 0, profile);
+        Face[] faces = new Face[count];
+        for (int i = 0; i < count; i++) {
+            Vec3 left = corners[i];
+            Vec3 right = corners[(i + 1) % count];
+            faces[i] = new Face(left, right, right.subtract(left).normalize(), 0.2F + 0.6F * (i + 0.5F) / count);
+        }
+        return faces;
     }
 
     static Vec3 onCrystalFace(int face, float y, float radius, double across) {
-        int i = face * 2;
-        return new Vec3(radius * Mth.lerp(across, X[i], X[i + 2]), y, radius * Mth.lerp(across, Z[i], Z[i + 2]));
+        return HEXAGON[face].point(y, radius, across);
     }
 
-    void pool(float radius, Rim... profile) {
-        bands(1, 0.49F / radius, profile);
+    void crystal(Rim[] profile) {
+        bands(HEXAGON, Mapping.CRYSTAL, profile);
     }
 
-    private void bands(int stride, float planarScale, Rim[] profile) {
-        for (int row = 1; row < profile.length; row++) {
-            Rim a = profile[row - 1];
-            Rim b = profile[row];
-            float dy = b.y - a.y;
-            float dr = a.radius - b.radius;
-            float length = (float) Math.hypot(dy, dr);
-            if (length < 1.0E-6F) {
-                continue;
-            }
-            for (int i = 0; i < SIDES; i += stride) {
-                int j = i + stride;
-                float nx = (X[i] + X[j]) * 0.5F * dy / length;
-                float nz = (Z[i] + Z[j]) * 0.5F * dy / length;
-                float ny = dr / length;
-                rimVertex(a, i, nx, ny, nz, planarScale);
-                rimVertex(b, i, nx, ny, nz, planarScale);
-                rimVertex(b, j, nx, ny, nz, planarScale);
-                rimVertex(a, j, nx, ny, nz, planarScale);
+    void body(Rim... profile) {
+        bands(ROUND, Mapping.LIQUID, profile);
+    }
+
+    void pool(Rim... profile) {
+        bands(ROUND, Mapping.POOL, profile);
+    }
+
+    float film(int face, Edge top, Edge bottom, float v) {
+        return strip(HEXAGON[face], Mapping.LIQUID, top, bottom, v);
+    }
+
+    private void bands(Face[] faces, Mapping mapping, Rim[] profile) {
+        for (Face face : faces) {
+            Edge top = face.edge(profile[profile.length - 1]);
+            float v = 0;
+            for (int row = profile.length - 2; row >= 0; row--) {
+                Edge bottom = face.edge(profile[row]);
+                v = strip(face, mapping, top, bottom, v);
+                top = bottom;
             }
         }
     }
 
-    private void rimVertex(Rim rim, int i, float nx, float ny, float nz, float planarScale) {
-        float x = X[i] * rim.radius;
-        float z = Z[i] * rim.radius;
-        float u = planarScale > 0 ? 0.5F + x * planarScale : (float) i / SIDES;
-        float v = planarScale > 0 ? 0.5F + z * planarScale : rim.v;
-        vertex(x, rim.y, z, u, v, rim.color, nx, ny, nz);
+    private float strip(Face face, Mapping mapping, Edge top, Edge bottom, float v0) {
+        Vec3 tangent = face.tangent;
+        double dy = top.left.y - bottom.left.y;
+        double dr = (bottom.left.x - top.left.x) * tangent.z - (bottom.left.z - top.left.z) * tangent.x;
+        double slant = Math.hypot(dy, dr);
+        if (slant < 1.0E-6) {
+            return v0;
+        }
+        Vec3 normal = new Vec3(tangent.z * dy / slant, dr / slant, -tangent.x * dy / slant);
+        float v1 = v0 + (float) slant * mapping.scale;
+        if (mapping == Mapping.LIQUID) {
+            // 图集不能直接平铺：在整格 UV 处切开，避免插值跨到相邻流体贴图。
+            int tile = Mth.floor(v0);
+            Edge start = top;
+            float startV = v0 - tile;
+            while (tile + 1 < v1) {
+                Edge cut = top.lerp(bottom, (++tile - v0) / (v1 - v0));
+                quad(face, mapping, start, cut, startV, 1, normal);
+                start = cut;
+                startV = 0;
+            }
+            quad(face, mapping, start, bottom, startV, v1 - tile, normal);
+        } else {
+            quad(face, mapping, top, bottom, v0, v1, normal);
+        }
+        return v1;
     }
 
-    void film(Edge top, Edge bottom) {
-        Vec3 normal = top.right
-                .subtract(bottom.left)
-                .cross(bottom.right.subtract(top.left))
-                .normalize();
-        filmVertex(bottom.left, 0.08F, bottom, normal);
-        filmVertex(top.left, 0.08F, top, normal);
-        filmVertex(top.right, 0.92F, top, normal);
-        filmVertex(bottom.right, 0.92F, bottom, normal);
+    private void quad(Face face, Mapping mapping, Edge top, Edge bottom, float v0, float v1, Vec3 normal) {
+        materialVertex(face, mapping, bottom.left, v1, bottom.color, normal);
+        materialVertex(face, mapping, top.left, v0, top.color, normal);
+        materialVertex(face, mapping, top.right, v0, top.color, normal);
+        materialVertex(face, mapping, bottom.right, v1, bottom.color, normal);
     }
 
-    private void filmVertex(Vec3 point, float u, Edge edge, Vec3 normal) {
-        vertex(
-                (float) point.x,
-                (float) point.y,
-                (float) point.z,
-                u,
-                edge.v,
-                edge.color,
-                (float) normal.x,
-                (float) normal.y,
-                (float) normal.z);
+    private void materialVertex(Face face, Mapping mapping, Vec3 p, float v, int color, Vec3 normal) {
+        float u = face.centerU + (float) face.tangent.dot(p) * mapping.scale;
+        if (mapping == Mapping.POOL) {
+            u = 0.5F + (float) p.x;
+            v = 0.5F + (float) p.z;
+        } else if (mapping == Mapping.LIQUID) {
+            v = Mth.clamp(v, 0.001F, 0.999F);
+        }
+        float x = (float) (p.x + normal.x * surfaceOffset);
+        float y = (float) (p.y + normal.y * surfaceOffset);
+        float z = (float) (p.z + normal.z * surfaceOffset);
+        vertex(x, y, z, u, v, color, (float) normal.x, (float) normal.y, (float) normal.z);
     }
 
     void ribbon(Vec3 eye, Vec3 start, Vec3 end, double startWidth, double endWidth, float v0, float v1, int color) {

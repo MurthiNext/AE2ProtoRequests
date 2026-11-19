@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.machine.matter_phase_transformer.PhaseChamberMesh.Edge;
 import com.murthinext.ae2pr.machine.matter_phase_transformer.PhaseChamberMesh.Rim;
+import java.util.Arrays;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -18,6 +19,9 @@ import net.minecraftforge.fluids.FluidStack;
 final class PhaseMeltRenderer {
 
     private static final RenderType CRUST = RenderType.entitySolid(Ids.of("textures/entity/matter_crust.png"));
+    private static final RenderType MELT_OVERLAY =
+            RenderType.beaconBeam(Ids.of("textures/entity/matter_melt_overlay.png"), true);
+    private static final float OVERLAY_OUTSET = 0.001F;
     private static final RenderType LIQUID = RenderType.entityTranslucentCull(InventoryMenu.BLOCK_ATLAS);
     private static final ResourceLocation UNTINTED_LIQUID = Ids.of("block/material_sets/metallic/liquid");
     private static final float HEIGHT = 2.6F;
@@ -25,29 +29,40 @@ final class PhaseMeltRenderer {
     private static final float CROWN_Y = TIP_Y + HEIGHT;
     static final Vec3 IMPACT = new Vec3(0, CROWN_Y, 0);
     private static final Section[] CRYSTAL = {
-        new Section(TIP_Y, 0, 0.86F, 0.48F),
-        new Section(-0.38F, 0.37F, 0.98F, 0.77F),
-        new Section(1.16F, 0.455F, 0.86F, 0.34F),
-        new Section(CROWN_Y, 0, 0.75F, 0.025F)
+        new Section(TIP_Y, 0, 0.42F),
+        new Section(-0.38F, 0.37F, 0.22F),
+        new Section(1.16F, 0.455F, 0.82F),
+        new Section(CROWN_Y, 0, 1)
     };
     static final float FLOOR = MatterPhaseTransformerStructure.COLLECTOR_Y + 0.007F;
     private static final int INCANDESCENT = 0xFFFFBD5A;
     private static final int WHITE = 0xFFFFFFFF;
+    private static final Rim[] BASE =
+            Arrays.stream(CRYSTAL).map(section -> section.rim(WHITE)).toArray(Rim[]::new);
     private static final int SURFACE_TICKS = 20;
     private static final int FALL_TICKS = 16;
     private static final int FLOW_BEAT = 15;
 
-    private record Section(float y, float radius, float coldV, float hotV) {}
+    private record Section(float y, float radius, float heatWeight) {
+        Rim rim(int color) {
+            return new Rim(y, radius, color);
+        }
+    }
 
     private PhaseMeltRenderer() {}
 
     static void crystal(PoseStack pose, MultiBufferSource buffers, float heat) {
-        Rim[] profile = new Rim[CRYSTAL.length];
+        new PhaseChamberMesh(pose.last(), buffers.getBuffer(CRUST)).crystal(BASE);
+        if (heat <= 0) {
+            return;
+        }
+        Rim[] overlay = new Rim[CRYSTAL.length];
         for (int i = 0; i < CRYSTAL.length; i++) {
             Section section = CRYSTAL[i];
-            profile[i] = new Rim(section.y, section.radius, Mth.lerp(heat, section.coldV, section.hotV), WHITE);
+            int alpha = Math.round(255 * Math.max(0, section.heatWeight - (1 - heat)));
+            overlay[i] = section.rim(alpha << 24 | 0xFFFFFF);
         }
-        new PhaseChamberMesh(pose.last(), buffers.getBuffer(CRUST)).crystal(profile);
+        new PhaseChamberMesh(pose.last(), buffers.getBuffer(MELT_OVERLAY), OVERLAY_OUTSET).crystal(overlay);
     }
 
     static void pour(PoseStack pose, MultiBufferSource buffers, FluidStack product, double time, float heat) {
@@ -86,6 +101,7 @@ final class PhaseMeltRenderer {
         float front = Mth.lerp((float) Math.min(1, time / SURFACE_TICKS), CROWN_Y, TIP_Y);
         for (int face = 0; face < PhaseChamberMesh.CRYSTAL_FACES; face += 2) {
             Edge previous = filmEdge(face, CROWN_Y, 0, time, flow, hot, outlet);
+            float v = 0;
             for (int i = CRYSTAL.length - 1; i > 0 && CRYSTAL[i].y > front; i--) {
                 Section upper = CRYSTAL[i];
                 Section lower = CRYSTAL[i - 1];
@@ -94,7 +110,7 @@ final class PhaseMeltRenderer {
                     float y = Math.max(front, Mth.lerp((float) row / rows, upper.y, lower.y));
                     float radius = Mth.lerp((upper.y - y) / (upper.y - lower.y), upper.radius, lower.radius);
                     Edge next = filmEdge(face, y, radius, time, flow, hot, outlet);
-                    mesh.film(previous, next);
+                    v = mesh.film(face, previous, next, v);
                     previous = next;
                     if (y <= front) {
                         break;
@@ -111,11 +127,11 @@ final class PhaseMeltRenderer {
         double width = (0.10 + 0.04 * glint + 0.035 * (1 - depth)) * flow;
         float skin = radius * 1.022F;
         int color = ARGB32.lerp(0.18F * glint, ARGB32.lerp(depth, hot, outlet), WHITE);
+        int alpha = Math.round(ARGB32.alpha(color) * flow * (0.69F + 0.19F * glint));
         return new Edge(
                 PhaseChamberMesh.onCrystalFace(face, y, skin, center - width),
                 PhaseChamberMesh.onCrystalFace(face, y, skin, center + width),
-                0.04F + 0.92F * depth,
-                color);
+                alpha << 24 | (color & 0xFFFFFF));
     }
 
     private static void stream(PhaseChamberMesh mesh, double time, float flow, float surface, int outlet, int tint) {
@@ -130,11 +146,11 @@ final class PhaseMeltRenderer {
             float radius =
                     width * (0.057F - 0.029F * fall + 0.01F * glint + 0.049F * Mth.clamp((fall - 0.86F) / 0.14F, 0, 1));
             int color = ARGB32.lerp(0.18F * glint, ARGB32.lerp(fall, outlet, tint), WHITE);
-            profile[rows + 1 - i] = new Rim(Mth.lerp(fall, TIP_Y, surface), radius, 0.04F + 0.92F * fall, color);
+            profile[rows + 1 - i] = new Rim(Mth.lerp(fall, TIP_Y, surface), radius, color);
         }
         Rim head = profile[1];
-        profile[0] = new Rim(head.y() - 0.035F * width * (1 - front), 0, head.v(), head.color());
-        profile[rows + 2] = new Rim(TIP_Y + 0.054F, 0.045F * width, 0.02F, outlet);
+        profile[0] = new Rim(head.y() - 0.035F * width * (1 - front), 0, head.color());
+        profile[rows + 2] = new Rim(TIP_Y + 0.054F, 0.045F * width, outlet);
         mesh.body(profile);
     }
 
@@ -150,11 +166,10 @@ final class PhaseMeltRenderer {
         float lift = 0.05F * (1 - wave) * fill;
         float landingY = surface - lift * 0.4F;
         int reflection = ARGB32.lerp(0.46F * (1 - wave), tint, WHITE);
+        Rim lip = new Rim(surface, radius * 0.93F, tint);
+        mesh.body(new Rim(FLOOR, radius * 0.88F, tint), new Rim(surface - 0.035F * fill, radius, tint), lip);
         mesh.pool(
-                radius,
-                new Rim(FLOOR, radius * 0.88F, tint),
-                new Rim(surface - 0.035F * fill, radius, tint),
-                new Rim(surface, radius * 0.93F, tint),
+                lip,
                 new Rim(surface, crest + 0.09F * radius, tint),
                 new Rim(surface + lift, crest, reflection),
                 new Rim(surface, crest - 0.09F * radius, tint),
