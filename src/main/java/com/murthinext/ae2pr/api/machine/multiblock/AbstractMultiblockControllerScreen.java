@@ -330,10 +330,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
         if (dataPage) {
             return renderDataTooltip(graphics, mouseX, mouseY);
         }
-        if (mouseX >= leftPos + TEXT_X
-                && mouseX < leftPos + 174
-                && mouseY >= topPos + POWER_Y
-                && mouseY < topPos + POWER_Y + font.lineHeight) {
+        if (isHovering(TEXT_X, POWER_Y, font.width(powerText()), font.lineHeight, mouseX, mouseY)) {
             GuiTooltips.render(
                     graphics,
                     font,
