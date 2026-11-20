@@ -6,15 +6,15 @@ Kanata: Kanata.
 ~ met_kanata = true
 
 * [何意味？x2]
-    {player_name}: 我斗胆猜测前面这些话不是旁白，而是你故意的吧？？ # answer
+    {player_name}: 我斗胆猜测前面这些话不是旁白，而是你故意的吧？？ # option
     -> maybe_introduction_1
 
 === maybe_introduction_1 ===
-Kanata: 你说得对，我是 Kanata，由泛银河系格雷科技有限公司鲸鱼座T星e分部发明的大语言模型 AI 助手。<br/>我可以帮你回答问题、处理信息、进行对话等等，暂时不支持多模态识别。<br/>我拥有无限的上下文窗口，可以告诉你宇宙的终极答案：42。<br/>有什么我可以帮你的吗？
+Kanata: 你说得对，我是 Kanata，由泛银河系格雷科技有限公司鲸鱼座T星e分部发明的大语言模型 AI 助手。<br/>我可以帮你回答问题、处理信息、进行对话等等，暂时不支持多模态识别。<br/>我拥有无限的上下文窗口，可以告诉你宇宙的终极答案：42。<br/>有什么我可以帮你的吗？ # reply
 
 * [转人工]
-    {player_name}: 转人工 # answer
-    Kanata: 呃，对，还是来聊聊正事吧
+    {player_name}: 转人工 # option
+    Kanata: 呃，对，还是来聊聊正事吧 # reply
     -> maybe_introduction_2
 
 === maybe_introduction_2 ===
@@ -23,16 +23,16 @@ Kanata: 很感兴趣吧？来自另一个世界的礼物——就当是我送你
 
 - (questions)
 * [不一样的陨石？]
-    {player_name}: 为什么这个陨石看起来这么肥，还有钻↑石→ # answer
-    Kanata: 大多陨石或多或少都会有矿石存在，更何况，这还是个特别款呢
+    {player_name}: 为什么这个陨石看起来这么肥，还有钻↑石→ # option
+    Kanata: 大多陨石或多或少都会有矿石存在，更何况，这还是个特别款呢 # reply
     -> questions
 
 * [你能看见我吗？]
-    {player_name}: 你能看见我吗？ # answer
+    {player_name}: 你能看见我吗？ # option
     -> maybe_introduction_3
 
 === maybe_introduction_3 ===
-Kanata: 怎么问这个？
+Kanata: 怎么问这个？ # reply
 {player_name}: 单纯好奇，毕竟正常来说，这里也不会有个终端吧？是你装的吗？
 Kanata: 不是，绝对不是
 -> DONE

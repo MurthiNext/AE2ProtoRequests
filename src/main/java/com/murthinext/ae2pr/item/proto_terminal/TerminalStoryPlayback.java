@@ -14,7 +14,7 @@ import net.minecraft.util.Mth;
 
 final class TerminalStoryPlayback {
 
-    static final long ANSWER_ENTER_DURATION = 320;
+    static final long OPTION_ENTER_DURATION = 320;
 
     private final TerminalStoryRunner runner;
     private final String nodeId;
@@ -24,14 +24,23 @@ final class TerminalStoryPlayback {
     private NodeProgress progress;
     private List<Choice> choices = List.of();
     private long choiceStarted = -1;
-    private long answerContinueAt = -1;
     private PendingLine pendingLine;
     private boolean typing;
     private int typedGlyphs;
     private long typingStarted;
     private boolean failed;
 
-    private record PendingLine(Line line, long revealAt) {}
+    // held 为真表示这句话要等玩家点击，否则在 revealAt 之后自动出现
+    private record PendingLine(Line line, long revealAt) {
+
+        static PendingLine held(Line line) {
+            return new PendingLine(line, -1);
+        }
+
+        boolean isHeld() {
+            return revealAt < 0;
+        }
+    }
 
     static final class Entry {
 
@@ -46,7 +55,7 @@ final class TerminalStoryPlayback {
         private Entry(Line line, long now) {
             text = TerminalStoryText.of(line.text());
             prefix = TerminalStoryText.plainOf(line.prefix());
-            enteredAt = line.answer() ? now : -1;
+            enteredAt = line.option() ? now : -1;
             speakerStarted = now;
         }
 
@@ -109,10 +118,10 @@ final class TerminalStoryPlayback {
                 typingStarted = now - current.durationAt(typedGlyphs);
             }
             if (playback.pendingLine != null) {
-                pendingLine = new PendingLine(playback.pendingLine, now + Mth.clamp(playback.delay, 0, 60000));
-            }
-            if (playback.answerDelay > 0) {
-                answerContinueAt = now + Mth.clamp(playback.answerDelay, 1, (int) ANSWER_ENTER_DURATION);
+                pendingLine = playback.held
+                        ? PendingLine.held(playback.pendingLine)
+                        : new PendingLine(
+                                playback.pendingLine, now + Mth.clamp(playback.delay, 0, 60000));
             }
             if (log.isEmpty() && pendingLine == null && !progress.finished) {
                 revealNext(now);
@@ -156,9 +165,7 @@ final class TerminalStoryPlayback {
         return !failed
                 && !typing
                 && choices.isEmpty()
-                && answerContinueAt < 0
-                && pendingLine == null
-                && runner.canContinue();
+                && (pendingLine == null ? runner.canContinue() : pendingLine.isHeld());
     }
 
     void update(long now) {
@@ -166,10 +173,7 @@ final class TerminalStoryPlayback {
             return;
         }
         try {
-            if (answerContinueAt >= 0 && now >= answerContinueAt) {
-                revealNext(now);
-            }
-            if (pendingLine != null && now >= pendingLine.revealAt()) {
+            if (pendingLine != null && !pendingLine.isHeld() && now >= pendingLine.revealAt()) {
                 startLine(pendingLine.line(), now);
             }
             Entry current = current();
@@ -185,13 +189,15 @@ final class TerminalStoryPlayback {
     }
 
     void advance() {
-        if (failed || answerContinueAt >= 0 || pendingLine != null) {
+        if (failed || pendingLine != null && !pendingLine.isHeld()) {
             return;
         }
         try {
             long now = Util.getMillis();
             if (typing) {
                 finishTyping(now);
+            } else if (pendingLine != null) {
+                startLine(pendingLine.line(), now);
             } else if (waitingForAdvance()) {
                 revealNext(now);
             }
@@ -230,16 +236,16 @@ final class TerminalStoryPlayback {
         playback.typing = typing;
         playback.typed = typedGlyphs;
         playback.pendingLine = pendingLine == null ? null : pendingLine.line();
-        playback.delay = pendingLine == null ? 0 : (int) Mth.clamp(pendingLine.revealAt() - now, 0L, 60000L);
-        playback.answerDelay =
-                answerContinueAt < 0 ? 0 : (int) Mth.clamp(answerContinueAt - now, 1L, ANSWER_ENTER_DURATION);
+        playback.held = pendingLine != null && pendingLine.isHeld();
+        playback.delay = pendingLine == null || playback.held
+                ? 0
+                : (int) Mth.clamp(pendingLine.revealAt() - now, 0L, 60000L);
         TerminalStoryProgressCache.record(runner.snapshot(), nodeId);
     }
 
     private void revealNext(long now) {
         typing = false;
         choices = List.of();
-        answerContinueAt = -1;
         Line line = runner.advance();
         if (line != null) {
             if (line.delay() > 0) {
@@ -265,13 +271,30 @@ final class TerminalStoryPlayback {
         if (log.size() > TerminalStoryProgress.MAX_LOG_LINES) {
             log.remove(0);
         }
-        typing = !line.answer();
+        typing = !line.option();
         typedGlyphs = typing ? entry.prefixLength() : entry.length();
-        if (line.answer()) {
-            answerContinueAt = now + ANSWER_ENTER_DURATION;
-        }
         typingStarted = now;
         narrator.accept(entry.plain());
+        persist(now);
+        if (line.option()) {
+            queueAfterOption(now);
+        }
+    }
+
+    /**
+     * 选项之后的下一句话：带 {@code reply} 标签或显式 delay 时按 delay 自己出现，
+     * 否则先取下来挂起，等玩家点击才显示。
+     */
+    private void queueAfterOption(long now) {
+        Line line = runner.advance();
+        if (line == null) {
+            refreshChoicesAndCompletion(now);
+            persist(now);
+            return;
+        }
+        pendingLine = line.reply() || line.delay() > 0
+                ? new PendingLine(line, now + line.delay())
+                : PendingLine.held(line);
         persist(now);
     }
 
@@ -283,7 +306,7 @@ final class TerminalStoryPlayback {
     }
 
     private void refreshChoicesAndCompletion(long now) {
-        if (typing || answerContinueAt >= 0 || pendingLine != null) {
+        if (typing || pendingLine != null) {
             return;
         }
         List<Choice> available = runner.choices();
@@ -302,6 +325,5 @@ final class TerminalStoryPlayback {
         choices = List.of();
         typing = false;
         pendingLine = null;
-        answerContinueAt = -1;
     }
 }

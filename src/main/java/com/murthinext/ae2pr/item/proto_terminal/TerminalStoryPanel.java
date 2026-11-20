@@ -36,7 +36,7 @@ final class TerminalStoryPanel {
     private static final int CHOICE_MAX_WIDTH = 244;
     private static final long CHOICE_REVEAL_DURATION = 360;
     private static final long CHOICE_REVEAL_STAGGER = 38;
-    private static final float ANSWER_ENTER_DISTANCE = 32;
+    private static final float OPTION_ENTER_DISTANCE = 32;
     private static final long SPEAKER_FADE_DURATION = 220;
     private static final long LINE_COLOR_DURATION = 420;
 
@@ -258,13 +258,13 @@ final class TerminalStoryPanel {
             float enter = entry.enteredAt() < 0
                     ? 1
                     : TerminalGraphicsRenderer.ease(
-                            (now - entry.enteredAt()) / (float) TerminalStoryPlayback.ANSWER_ENTER_DURATION);
+                            (now - entry.enteredAt()) / (float) TerminalStoryPlayback.OPTION_ENTER_DURATION);
             if (reveal * enter < 4.0F / 255) {
                 continue;
             }
             graphics.pose().pushPose();
             try {
-                graphics.pose().translate((1 - enter) * ANSWER_ENTER_DISTANCE, 0, 0);
+                graphics.pose().translate((1 - enter) * OPTION_ENTER_DISTANCE, 0, 0);
                 String speaker = row.text().substring(0, row.speakerGlyphs());
                 float speakerFade = entry.speakerStarted() < 0
                         ? 1

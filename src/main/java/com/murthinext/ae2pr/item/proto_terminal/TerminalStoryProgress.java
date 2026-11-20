@@ -29,7 +29,7 @@ import java.util.zip.GZIPOutputStream;
  */
 public final class TerminalStoryProgress {
 
-    public static final int SCHEMA_VERSION = 3;
+    public static final int SCHEMA_VERSION = 4;
     public static final int MAX_JSON_BYTES = 1048576;
     public static final int MAX_UPDATE_BYTES = 30000;
     public static final int MAX_SNAPSHOT_BYTES = 1000000;
@@ -46,7 +46,7 @@ public final class TerminalStoryProgress {
     public Map<String, JsonPrimitive> variables = new LinkedHashMap<>();
     public Map<String, NodeProgress> nodes = new LinkedHashMap<>();
 
-    public record Line(String id, String speaker, String text, int delay, boolean answer) {
+    public record Line(String id, String speaker, String text, int delay, boolean option, boolean reply) {
 
         public String prefix() {
             return speaker.isBlank() ? "" : "<" + speaker + "> ";
@@ -68,7 +68,7 @@ public final class TerminalStoryProgress {
         public int typed;
         public int delay;
         public Line pendingLine;
-        public int answerDelay;
+        public boolean held;
     }
 
     public static TerminalStoryProgress fromJson(String json) {
@@ -123,11 +123,10 @@ public final class TerminalStoryProgress {
             Playback playback = node.playback;
             if (playback.delay < 0
                     || playback.delay > 60000
-                    || playback.answerDelay < 0
-                    || playback.answerDelay > 320
                     || playback.typed < 0
                     || playback.typed > 17000
-                    || playback.pendingLine != null && playback.typing) {
+                    || playback.pendingLine != null && playback.typing
+                    || playback.pendingLine == null && playback.held) {
                 throw new IllegalArgumentException("Invalid story playback state: " + entry.getKey());
             }
             if (playback.pendingLine != null) {

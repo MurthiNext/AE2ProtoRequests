@@ -238,7 +238,8 @@ public final class TerminalStoryRunner {
                 speaker = output.substring(0, separator).strip();
                 output = output.substring(separator + 1).stripLeading();
             }
-            int delay = Integer.parseInt(tag(tags, "delay", "0"));
+            boolean reply = hasTag(tags, "reply");
+            int delay = Integer.parseInt(tag(tags, "delay", reply ? "500" : "0"));
             if (delay < 0 || delay > 60000) {
                 throw new IllegalArgumentException("Story delay must be between 0 and 60000 ms");
             }
@@ -247,7 +248,8 @@ public final class TerminalStoryRunner {
                     speaker,
                     output.replace("<br/>", "\n"),
                     delay,
-                    tags.contains("answer"));
+                    hasTag(tags, "option"),
+                    reply);
             TerminalStoryProgress.validate(line);
             return line;
         }
@@ -261,6 +263,10 @@ public final class TerminalStoryRunner {
                 .map(tag -> tag.substring(key.length() + 1).strip())
                 .findFirst()
                 .orElse(fallback);
+    }
+
+    private static boolean hasTag(List<String> tags, String name) {
+        return tags.stream().map(String::strip).anyMatch(name::equals);
     }
 
     private void recordAdvance() {

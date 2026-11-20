@@ -1,6 +1,6 @@
 === about_kanata ===
 * [关于你……]
-    {player_name}: 那么，你真的是大语言模型吗？ # answer
+    {player_name}: 那么，你真的是大语言模型吗？ # option
 
 {player_name}: 这块终端连接着远程服务器？还是跑在本地的？
 Kanata: 姑且算是前者吧……

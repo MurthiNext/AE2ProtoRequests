@@ -1,6 +1,6 @@
 === about_otherside ===
 * [关于另一个世界……]
-    {player_name}: 也就是说，另一个世界是存在的吧？ # answer
+    {player_name}: 也就是说，另一个世界是存在的吧？ # option
 
 {player_name}: 尤其是这颗陨石……这块终端的存在
 {player_name}: 可行吗？
