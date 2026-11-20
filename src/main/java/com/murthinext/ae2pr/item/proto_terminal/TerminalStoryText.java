@@ -16,6 +16,10 @@ final class TerminalStoryText {
     private static final Pattern DELAY =
             Pattern.compile("<delay\\s*=\\s*(\\d{1,5})\\s*/?\\s*>", Pattern.CASE_INSENSITIVE);
     private static final int MAX_DELAY = 60000;
+    // 断行时优先落在这些标点之后
+    private static final String BREAK_PUNCTUATION = "，。、；：！？…～·,.;:!?)]}\"'》」』】〕〉”）’";
+    // 标点断点至少要落在半行之后
+    private static final float MIN_BREAK_FRACTION = 0.5F;
 
     private final String plain;
     // timeline[i] 为显示完前 i 个字符所需的秒数
@@ -68,10 +72,7 @@ final class TerminalStoryText {
                 if (piece.isEmpty()) {
                     piece = rest.substring(0, 1);
                 } else if (piece.length() < rest.length()) {
-                    int space = piece.lastIndexOf(' ');
-                    if (space > 0) {
-                        piece = piece.substring(0, space);
-                    }
+                    piece = breakAtPunctuation(font, piece, width);
                 }
                 lines.add(piece);
                 rest = rest.substring(piece.length());
@@ -81,6 +82,16 @@ final class TerminalStoryText {
             }
         }
         return List.copyOf(lines);
+    }
+
+    private static String breakAtPunctuation(Font font, String piece, int width) {
+        int cut = piece.length();
+        while (cut > 0 && BREAK_PUNCTUATION.indexOf(piece.charAt(cut - 1)) < 0) {
+            cut--;
+        }
+        return cut > 0 && font.width(piece.substring(0, cut)) >= width * MIN_BREAK_FRACTION
+                ? piece.substring(0, cut)
+                : piece;
     }
 
     String plain() {
