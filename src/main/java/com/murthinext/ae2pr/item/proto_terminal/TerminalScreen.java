@@ -47,6 +47,7 @@ public final class TerminalScreen extends Screen {
     private static final long TERMINAL_EXIT_DURATION = 260;
     // 父块读完后，子块连线的起始停顿
     private static final long POST_FINISH_DELAY = 340;
+    private static final float PAN_LIMIT = 4352;
     // Ctrl 滚轮缩放的范围、步进与缓动时长
     private static final float ZOOM_STEP = 0.2F;
     private static final float DEFAULT_ZOOM = 0.7F;
@@ -208,10 +209,10 @@ public final class TerminalScreen extends Screen {
         float progress = (now - zoomStarted) / (float) ZOOM_DURATION;
         float zoom =
                 progress >= 1 ? zoomTarget : Mth.lerp(TerminalGraphicsRenderer.ease(progress), zoomFrom, zoomTarget);
-        panX = (float)
-                Mth.clamp(zoomAnchorX - TREE_LEFT - (zoomAnchorX - TREE_LEFT - panX) / contentZoom * zoom, -4352, 4352);
-        panY = (float)
-                Mth.clamp(zoomAnchorY - TREE_TOP - (zoomAnchorY - TREE_TOP - panY) / contentZoom * zoom, -4352, 4352);
+        panX = Mth.clamp(
+                zoomAnchorX - TREE_LEFT - (zoomAnchorX - TREE_LEFT - panX) / contentZoom * zoom, -PAN_LIMIT, PAN_LIMIT);
+        panY = Mth.clamp(
+                zoomAnchorY - TREE_TOP - (zoomAnchorY - TREE_TOP - panY) / contentZoom * zoom, -PAN_LIMIT, PAN_LIMIT);
         starfield.zoom(zoom, zoomAnchorX, zoomAnchorY);
         contentZoom = zoom;
     }
@@ -833,8 +834,11 @@ public final class TerminalScreen extends Screen {
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
         if (panning && button == 0) {
-            panX = Mth.clamp(panX + (float) (dragX / canvasScale), -4352, 4352);
-            panY = Mth.clamp(panY + (float) (dragY / canvasScale), -4352, 4352);
+            float nextPanX = Mth.clamp(panX + (float) (dragX / canvasScale), -PAN_LIMIT, PAN_LIMIT);
+            float nextPanY = Mth.clamp(panY + (float) (dragY / canvasScale), -PAN_LIMIT, PAN_LIMIT);
+            starfield.pan(nextPanX - panX, nextPanY - panY);
+            panX = nextPanX;
+            panY = nextPanY;
             updateNodePositions(Util.getMillis() - openingStarted);
             return true;
         }

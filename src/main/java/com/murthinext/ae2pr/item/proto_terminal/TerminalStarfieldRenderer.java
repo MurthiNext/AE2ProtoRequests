@@ -33,7 +33,7 @@ final class TerminalStarfieldRenderer {
         centerY = y + halfHeight;
     }
 
-    // 星云与星层的鼠标锚点变换
+    // 星云与星层的视差变换
     private static final class Layer {
         private final float depth;
         private final int spacing;
@@ -50,12 +50,24 @@ final class TerminalStarfieldRenderer {
             this.size = size;
         }
 
+        private void pan(float deltaX, float deltaY) {
+            offsetX += deltaX * depth;
+            offsetY += deltaY * depth;
+        }
+
         private void zoom(float zoom, float anchorX, float anchorY) {
             float target = (float) Math.pow(zoom, depth);
             float ratio = target / scale;
             offsetX = anchorX - (anchorX - offsetX) * ratio;
             offsetY = anchorY - (anchorY - offsetY) * ratio;
             scale = target;
+        }
+    }
+
+    void pan(float deltaX, float deltaY) {
+        nebula.pan(deltaX, deltaY);
+        for (Layer layer : stars) {
+            layer.pan(deltaX, deltaY);
         }
     }
 
