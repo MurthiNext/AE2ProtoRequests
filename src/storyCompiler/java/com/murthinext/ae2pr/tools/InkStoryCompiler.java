@@ -22,7 +22,6 @@ public final class InkStoryCompiler {
     public static void main(String[] args) throws Exception {
         Path source = Path.of(args[0]).toAbsolutePath().normalize();
         Path output = Path.of(args[1]);
-        Path nodes = Path.of(args[2]);
         List<Path> languages;
         try (var directories = Files.list(source)) {
             languages = directories
@@ -36,7 +35,7 @@ public final class InkStoryCompiler {
         }
         Set<Path> targets = new HashSet<>();
         for (Path language : languages) {
-            targets.add(compile(language, output, nodes));
+            targets.add(compile(language, output));
         }
         try (var generated = Files.walk(output.resolve("assets/ae2pr/story"))) {
             for (Path file : generated
@@ -48,7 +47,7 @@ public final class InkStoryCompiler {
         }
     }
 
-    private static Path compile(Path language, Path output, Path nodes) throws Exception {
+    private static Path compile(Path language, Path output) throws Exception {
         Set<String> ids = new HashSet<>();
         try (var sources = Files.walk(language)) {
             for (Path file : sources.filter(path -> path.toString().endsWith(".ink"))
@@ -95,6 +94,7 @@ public final class InkStoryCompiler {
         if (program == null) {
             throw new IllegalStateException("Story compilation failed: " + language);
         }
+        Path nodes = language.resolve("nodes");
         try (var definitions = Files.walk(nodes)) {
             for (Path file : definitions
                     .filter(path -> path.toString().endsWith(".json"))

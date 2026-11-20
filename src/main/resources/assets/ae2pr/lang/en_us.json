@@ -240,8 +240,6 @@
   "gui.ae2pr.proto_terminal.locked.condition": "Requires in inventory: %s x%s",
   "gui.ae2pr.proto_terminal.locked.requires": "Certain conditions must be met before this record can be read.",
   "gui.ae2pr.proto_terminal.locked.tag": "%s (item tag)",
-  "story.ae2pr.welcome": "Nice to meet you. Welcome back.",
-  "story.ae2pr.maybe_introduction": "An introduction?",
   "gui.ae2pr.redstone_requester": "ME Redstone Requester",
   "gui.ae2pr.repeat_order.button": "Repeat Order",
   "gui.ae2pr.repeat_order.button.enabled": "Repeat Order: %s Rounds",

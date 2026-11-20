@@ -1,5 +1,6 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.murthinext.ae2pr.api.Ids;
@@ -22,7 +23,6 @@ import net.minecraft.util.GsonHelper;
 // 剧情树
 record TerminalStoryTree(List<Node> nodes, String program) {
 
-    private static final String NODE_ROOT = "story/nodes";
     private static final int STEP_X = 168;
     private static final int STEP_Y = 70;
 
@@ -53,31 +53,34 @@ record TerminalStoryTree(List<Node> nodes, String program) {
 
     static TerminalStoryTree load(ResourceManager resources, String selectedLanguage, String playerName)
             throws IOException {
+        String language = null;
         String program = null;
-        for (String language : List.of(selectedLanguage, "en_us", "zh_cn")) {
-            var resource = resources.getResource(Ids.of("story/" + language + "/main.ink.json"));
+        for (String candidate : List.of(selectedLanguage, "en_us", "zh_cn")) {
+            var resource = resources.getResource(Ids.of("story/" + candidate + "/main.ink.json"));
             if (resource.isPresent()) {
                 try (Reader reader = resource.get().openAsReader()) {
                     program = JsonParser.parseReader(reader).toString();
                 }
+                language = candidate;
                 break;
             }
         }
         if (program == null) {
             throw new IOException("No compiled Ink story found, run compileStories first");
         }
+        String nodeRoot = "story/" + language + "/nodes";
         TerminalStoryRunner runner = new TerminalStoryRunner(program, new TerminalStoryProgress(), playerName);
         Map<String, Node> definitions = new LinkedHashMap<>();
         Map<String, Layout> layouts = new HashMap<>();
         for (var entry : resources
                 .listResources(
-                        NODE_ROOT,
-                        id -> id.getPath().startsWith(NODE_ROOT + "/")
+                        nodeRoot,
+                        id -> id.getPath().startsWith(nodeRoot + "/")
                                 && id.getPath().endsWith(".json"))
                 .entrySet()) {
             String path = entry.getKey().getPath();
             String id = ResourceLocation.fromNamespaceAndPath(
-                            entry.getKey().getNamespace(), path.substring(NODE_ROOT.length() + 1, path.length() - 5))
+                            entry.getKey().getNamespace(), path.substring(nodeRoot.length() + 1, path.length() - 5))
                     .toString();
             try (Reader reader = entry.getValue().openAsReader()) {
                 JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
@@ -110,7 +113,7 @@ record TerminalStoryTree(List<Node> nodes, String program) {
                                 List.copyOf(links),
                                 0,
                                 0,
-                                Component.translatable(GsonHelper.getAsString(json, "title")),
+                                Component.literal(GsonHelper.getAsString(json, "title", knot)),
                                 TerminalStoryCondition.parse(json.get("visible_when")),
                                 TerminalStoryCondition.parse(json.get("available_when")),
                                 GsonHelper.getAsString(json, "locked_tip", ""),
@@ -187,16 +190,29 @@ record TerminalStoryTree(List<Node> nodes, String program) {
             case "down-right" -> new int[] {1, 1};
             default -> throw new IllegalArgumentException("Invalid story layout anchor: " + anchor);
         };
-        float distance = GsonHelper.getAsFloat(json, "distance", 1);
-        if (!Float.isFinite(distance) || distance < 0.25F || distance > 16) {
-            throw new IllegalArgumentException("Layout distance must be between 0.25 and 16");
+        float distanceX = 1;
+        float distanceY = 1;
+        if (json.has("distance")) {
+            JsonArray distance = GsonHelper.getAsJsonArray(json, "distance");
+            if (distance.size() != 2) {
+                throw new IllegalArgumentException("Layout distance must be [x, y]");
+            }
+            distanceX = parseDistance(distance.get(0).getAsFloat(), "x");
+            distanceY = parseDistance(distance.get(1).getAsFloat(), "y");
         }
         return new Layout(
                 x,
                 y,
                 relative,
-                Math.round(direction[0] * STEP_X * distance),
-                Math.round(direction[1] * STEP_Y * distance));
+                Math.round(direction[0] * STEP_X * distanceX),
+                Math.round(direction[1] * STEP_Y * distanceY));
+    }
+
+    private static float parseDistance(float distance, String axis) {
+        if (!Float.isFinite(distance) || distance < 0.25F || distance > 16) {
+            throw new IllegalArgumentException("Layout distance " + axis + " must be between 0.25 and 16");
+        }
+        return distance;
     }
 
     private static int[] resolve(

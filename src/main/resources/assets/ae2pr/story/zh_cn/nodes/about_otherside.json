@@ -1,0 +1,17 @@
+{
+  "entry": "about_otherside",
+  "title": "关于：另一个世界",
+  "position": 1,
+  "links": ["ae2pr:maybe_introduction"],
+  "layout": {
+    "relative_to": "ae2pr:maybe_introduction",
+    "anchor": "down-right",
+    "distance": [1, 0.75]
+  },
+  "visible_when": {
+    "all": [
+      { "completed": "ae2pr:maybe_introduction" },
+      { "completed": "ae2pr:about_kanata" }
+    ]
+  }
+}

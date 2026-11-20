@@ -240,8 +240,6 @@
   "gui.ae2pr.proto_terminal.locked.condition": "需要背包内持有：%s × %s",
   "gui.ae2pr.proto_terminal.locked.requires": "需要先满足特定条件，才能读取这段记录。",
   "gui.ae2pr.proto_terminal.locked.tag": "%s（物品标签）",
-  "story.ae2pr.welcome": "初次见面，欢迎回来",
-  "story.ae2pr.maybe_introduction": "背景介绍？",
   "gui.ae2pr.redstone_requester": "ME红石请求器",
   "gui.ae2pr.repeat_order.button": "重复下单",
   "gui.ae2pr.repeat_order.button.enabled": "重复下单：%s 次",
