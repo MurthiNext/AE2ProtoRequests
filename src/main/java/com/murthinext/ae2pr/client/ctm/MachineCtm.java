@@ -62,7 +62,7 @@ public final class MachineCtm implements CtmBinding {
                 CtmTextures.registerQuadrant("block/" + casing + "/" + face);
             }
         }
-        CtmTextures.registerTile47("block/meteor_steel_pipe_side");
+        CtmTextures.registerTile47("block/meteor_steel_pipe_block/side");
         // 仅换装用的底图，不参与连接
         for (ResourceLocation base : List.of(
                 HIGH_REACTIVITY_LAVA_SMELTER_CONTROLLER_CASING,

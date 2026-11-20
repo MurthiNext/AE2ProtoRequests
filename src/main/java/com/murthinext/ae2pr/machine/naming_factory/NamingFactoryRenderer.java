@@ -24,9 +24,9 @@ import net.minecraftforge.client.model.data.ModelData;
 
 public class NamingFactoryRenderer implements BlockEntityRenderer<NamingFactoryBlockEntity> {
 
-    public static final ResourceLocation FORGE_MODEL = Ids.of("block/naming_factory_forge");
+    public static final ResourceLocation FORGE_MODEL = Ids.of("block/naming_factory/naming_factory_forge");
 
-    private static final ResourceLocation ROD_TEXTURE = Ids.of("block/naming_factory_rod");
+    private static final ResourceLocation ROD_TEXTURE = Ids.of("block/naming_factory/rod");
 
     private static final float ROD_MIN = 4.0F;
     private static final float ROD_MAX = 12.0F;

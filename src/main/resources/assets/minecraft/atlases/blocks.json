@@ -70,7 +70,7 @@
     },
     {
       "type": "single",
-      "resource": "ae2pr:block/meteor_steel_pipe_side_ctm"
+      "resource": "ae2pr:block/meteor_steel_pipe_block/side_ctm"
     },
     {
       "type": "single",
@@ -78,19 +78,19 @@
     },
     {
       "type": "single",
-      "resource": "ae2pr:block/naming_factory"
+      "resource": "ae2pr:block/naming_factory/machine"
     },
     {
       "type": "single",
-      "resource": "ae2pr:block/naming_factory_rod"
+      "resource": "ae2pr:block/naming_factory/rod"
     },
     {
       "type": "single",
-      "resource": "ae2pr:block/naming_factory_glass"
+      "resource": "ae2pr:block/naming_factory/glass"
     },
     {
       "type": "directory",
-      "source": "block/multi_factory",
+      "source": "block/multi_factory/multi_factory",
       "prefix": "block/multi_factory/"
     }
   ]

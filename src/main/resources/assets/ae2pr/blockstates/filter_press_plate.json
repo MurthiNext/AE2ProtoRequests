@@ -1,10 +1,10 @@
 {
     "variants": {
         "axis=z,left=false,right=false,down=false,up=false": {
-            "model": "ae2pr:block/filter_press_plate"
+            "model": "ae2pr:block/filter_press_plate/filter_press_plate"
         },
         "axis=x,left=false,right=false,down=false,up=false": {
-            "model": "ae2pr:block/filter_press_plate",
+            "model": "ae2pr:block/filter_press_plate/filter_press_plate",
             "y": 90
         },
         "axis=z,left=true,right=false,down=false,up=false": {

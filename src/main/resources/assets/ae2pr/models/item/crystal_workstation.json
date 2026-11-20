@@ -1,3 +1,1 @@
-{
-  "parent": "ae2pr:block/crystal_workstation"
-}
+{ "parent": "ae2pr:block/crystal_workstation/crystal_workstation" }

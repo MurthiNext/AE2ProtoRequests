@@ -99,7 +99,7 @@ public final class ClientSetup {
 
     private static void logNamingFactorySprites(ModelManager modelManager) {
         var atlas = modelManager.getAtlas(InventoryMenu.BLOCK_ATLAS);
-        for (String path : new String[] {"naming_factory", "naming_factory_rod", "naming_factory_glass"}) {
+        for (String path : new String[] {"naming_factory/machine", "naming_factory/rod", "naming_factory/glass"}) {
             var sprite = atlas.getSprite(Ids.of("block/" + path));
             ae2pr.LOGGER.info("atlas sprite {} -> {}", path, sprite.contents().name());
         }

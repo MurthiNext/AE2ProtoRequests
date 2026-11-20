@@ -1,6 +1,6 @@
 {
   "textures": {
-    "indicator": "ae2pr:part/monitor_sides_status_has_channel"
+    "indicator": "ae2pr:part/level_emitter_sides_status_has_channel"
   },
   "elements": [
     {
