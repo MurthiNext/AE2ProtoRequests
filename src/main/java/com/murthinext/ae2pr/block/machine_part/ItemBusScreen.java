@@ -24,10 +24,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implements CustomIngredientSource {
 
-    private static final int ARROW_X = 83;
     private static final int ARROW_Y = 27;
-    private static final int DUAL_SLOT_X = 98;
     private static final int DUAL_TANK_X = 42;
+    private static final int DUAL_WIDE_TANK_X = 18;
     private static final int TANK_Y = 34;
 
     private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
@@ -66,9 +65,7 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
             if (fluid.isEmpty()) {
                 continue;
             }
-            areas.add(Area.ofFluid(
-                    fluid,
-                    new Rect2i(leftPos + DUAL_TANK_X + tank * TANK_STEP, topPos + TANK_Y, TANK_WIDTH, TANK_HEIGHT)));
+            areas.add(Area.ofFluid(fluid, new Rect2i(tankX(storage, tank), topPos + TANK_Y, TANK_WIDTH, TANK_HEIGHT)));
         }
         return areas;
     }
@@ -94,13 +91,13 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
         MachinePartFluidStorage storage = menu.getFluidStorage();
         drawArrow(
                 graphics,
-                leftPos + (storage != null ? DUAL_SLOT_X + 12 : ARROW_X),
+                leftPos + MachinePartLayout.itemCenterX(storage != null, menu.getSlotCount()) - ARROW_WIDTH / 2,
                 topPos + ARROW_Y,
                 !menu.isOutputBus(),
                 true);
         if (storage != null) {
             for (int tank = 0; tank < storage.getTankCount(); tank++) {
-                int x = leftPos + DUAL_TANK_X + tank * TANK_STEP;
+                int x = tankX(storage, tank);
                 int y = topPos + TANK_Y;
                 drawTank(graphics, x, y);
                 drawTankArrow(graphics, x, y, !menu.isOutputBus());
@@ -142,7 +139,7 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
     }
 
     private int slotY(int slot) {
-        return topPos + MachinePartLayout.itemSlotY(menu.getFluidStorage() != null, slot);
+        return topPos + MachinePartLayout.itemSlotY(menu.getFluidStorage() != null, menu.getSlotCount(), slot);
     }
 
     @Override
@@ -202,7 +199,7 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
         MachinePartFluidStorage storage = menu.getFluidStorage();
         if (storage != null) {
             for (int tank = 0; tank < storage.getTankCount(); tank++) {
-                int x = leftPos + DUAL_TANK_X + tank * TANK_STEP;
+                int x = tankX(storage, tank);
                 int y = topPos + TANK_Y;
                 if (mouseX >= x && mouseX < x + TANK_WIDTH && mouseY >= y && mouseY < y + TANK_HEIGHT) {
                     return tank;
@@ -210,6 +207,11 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
             }
         }
         return -1;
+    }
+
+    private int tankX(MachinePartFluidStorage storage, int tank) {
+        int start = storage.getTankCount() > 2 ? DUAL_WIDE_TANK_X : DUAL_TANK_X;
+        return leftPos + start + tank * TANK_STEP;
     }
 
     @Nullable

@@ -54,7 +54,7 @@ public class ItemBusMenu extends AbstractContainerMenu {
             addSlot(new DisplaySlot(
                     () -> getStoredStack(index),
                     MachinePartLayout.itemSlotX(dual, playerSlotFirst, slot),
-                    MachinePartLayout.itemSlotY(dual, slot)));
+                    MachinePartLayout.itemSlotY(dual, playerSlotFirst, slot)));
         }
         PlayerInventoryLayout.STANDARD.forEachSlot((index, x, y) -> addSlot(new Slot(playerInventory, index, x, y)));
     }

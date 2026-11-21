@@ -131,6 +131,7 @@ public final class ModCreativeTabs {
                         // 多方块结构 - 普通结构方块
                         output.accept(ModItems.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get());
                         output.accept(ModItems.AEV_MACHINE_CASING.get());
+                        output.accept(ModItems.XPV_MACHINE_CASING.get());
                         output.accept(ModItems.CRYSTAL_ENERGY_CASING.get());
                         output.accept(ModItems.HIGH_ENERGY_STABILITY_CASING.get());
                         output.accept(ModItems.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING.get());
@@ -166,6 +167,12 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.AEV_OUTPUT_HATCH.get());
                         output.accept(ModItems.AEV_DUAL_INPUT_HATCH.get());
                         output.accept(ModItems.AEV_DUAL_OUTPUT_HATCH.get());
+                        output.accept(ModItems.XPV_INPUT_BUS.get());
+                        output.accept(ModItems.XPV_INPUT_HATCH.get());
+                        output.accept(ModItems.XPV_OUTPUT_BUS.get());
+                        output.accept(ModItems.XPV_OUTPUT_HATCH.get());
+                        output.accept(ModItems.XPV_DUAL_INPUT_HATCH.get());
+                        output.accept(ModItems.XPV_DUAL_OUTPUT_HATCH.get());
                     })
                     .build());
 

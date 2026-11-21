@@ -29,7 +29,10 @@ public final class MachineCtm implements CtmBinding {
 
     public static final MachineCtm INSTANCE = new MachineCtm();
 
-    public static final ResourceLocation AEV_PART_CASING = Ids.of("block/aev_machine_casing");
+    private static final ResourceLocation AEV_PART_CASING = Ids.of("block/aev_machine_casing");
+    private static final ResourceLocation XPV_PART_CASING = Ids.of("block/xpv_machine_casing");
+    private static final int AEV_FAMILY = 9;
+    private static final int XPV_FAMILY = 14;
     public static final ResourceLocation HIGH_REACTIVITY_LAVA_SMELTER_CONTROLLER_CASING =
             Ids.of("block/controller_casing/high_reactivity_lava_smelter");
     public static final ResourceLocation MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING =
@@ -53,7 +56,8 @@ public final class MachineCtm implements CtmBinding {
         CtmTextures.registerTile47("block/crystal_reinforced_composite_machine_casing");
         CtmTextures.registerTile47("block/crystal_glass");
         CtmTextures.registerTile47("block/fireproof_crystal_glass");
-        CtmTextures.registerTile47("block/aev_machine_casing");
+        CtmTextures.registerTile47(AEV_PART_CASING);
+        CtmTextures.registerTile47(XPV_PART_CASING);
         CtmTextures.registerTile47("block/crystal_energy_casing");
         CtmTextures.registerTile47("block/zirconia_corundum_bricks");
         CtmTextures.registerQuadrant("block/zirconium_iron_alloy_machine_casing");
@@ -149,26 +153,27 @@ public final class MachineCtm implements CtmBinding {
         if (block == ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()) {
             return 1;
         }
-        if (block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get()
-                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()
-                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get()
-                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()) {
-
-            return partFamily(state, 1);
+        if (block instanceof MachinePartBlock part) {
+            return partFamily(
+                    state,
+                    switch (part.tier()) {
+                        case QUARTZ -> 1;
+                        case AEV -> AEV_FAMILY;
+                        case XPV -> XPV_FAMILY;
+                    });
         }
         if (block == ModBlocks.ME_NETWORK_ACCESS_HATCH.get()) {
             // 接入仓仅成型后加入结构机壳的连接族
             return partFamily(state, 0);
         }
         if (block == ModBlocks.AEV_MACHINE_CASING.get()) {
-            return 9;
+            return AEV_FAMILY;
+        }
+        if (block == ModBlocks.XPV_MACHINE_CASING.get()) {
+            return XPV_FAMILY;
         }
         if (block == ModBlocks.CRYSTAL_ENERGY_CASING.get()) {
             return 10;
-        }
-        if (MachinePartBlock.isAevPart(block)) {
-
-            return partFamily(state, 9);
         }
         if (block == ModBlocks.CRYSTAL_GLASS.get()) {
             return 3;
@@ -274,11 +279,14 @@ public final class MachineCtm implements CtmBinding {
             // 接入仓成型外壳以水晶强化复合机壳为基础贴图
             return CtmTextures.baseSprite(MachinePartFacade.CRYSTAL.texture());
         }
-        if (!(block instanceof MachinePartBlock)) {
+        if (!(block instanceof MachinePartBlock part)) {
             return null;
         }
-        return MachinePartBlock.isAevPart(block)
-                ? CtmTextures.baseSprite(AEV_PART_CASING)
-                : CtmTextures.baseSprite(MachinePartFacade.CRYSTAL.texture());
+        return CtmTextures.baseSprite(
+                switch (part.tier()) {
+                    case QUARTZ -> MachinePartFacade.CRYSTAL.texture();
+                    case AEV -> AEV_PART_CASING;
+                    case XPV -> XPV_PART_CASING;
+                });
     }
 }

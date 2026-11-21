@@ -147,7 +147,7 @@ public final class MachinePartFluidStorage {
     }
 
     public boolean isOutputHatch() {
-        return FluidHatchBlockEntity.isOutputHatch(owner.getBlockState());
+        return MachinePartBlock.isOutput(owner.getBlockState());
     }
 
     public boolean acceptsPlayerInsert() {

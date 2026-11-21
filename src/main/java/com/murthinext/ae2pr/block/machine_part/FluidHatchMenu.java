@@ -71,7 +71,7 @@ public class FluidHatchMenu extends AbstractContainerMenu {
     }
 
     public int getCapacityPerTank() {
-        return blockEntity != null ? blockEntity.getCapacityPerTank() : FluidHatchBlockEntity.CAPACITY;
+        return blockEntity != null ? blockEntity.getCapacityPerTank() : MachinePartBlock.Tier.QUARTZ.fluidCapacity;
     }
 
     // 流体/开关/隔离变化或首次广播时向打开界面的玩家同步

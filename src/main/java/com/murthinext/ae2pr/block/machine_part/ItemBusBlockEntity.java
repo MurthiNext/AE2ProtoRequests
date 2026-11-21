@@ -2,7 +2,6 @@ package com.murthinext.ae2pr.block.machine_part;
 
 import com.murthinext.ae2pr.api.machine.part.MachinePart;
 import com.murthinext.ae2pr.registry.ModBlockEntities;
-import com.murthinext.ae2pr.registry.ModBlocks;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -23,9 +22,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 public class ItemBusBlockEntity extends BlockEntity implements MachinePart {
-
-    public static final int CAPACITY = 32 * 1024;
-    public static final int AEV_CAPACITY = 2048;
 
     private static final String STORAGE_ID = "storage";
     private static final String AUTO_TRANSFER_ID = "autoTransfer";
@@ -219,9 +215,7 @@ public class ItemBusBlockEntity extends BlockEntity implements MachinePart {
     }
 
     public boolean isOutputBus() {
-        return getBlockState().is(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get())
-                || getBlockState().is(ModBlocks.AEV_OUTPUT_BUS.get())
-                || getBlockState().is(ModBlocks.AEV_DUAL_OUTPUT_HATCH.get());
+        return MachinePartBlock.isOutput(getBlockState());
     }
 
     public boolean isAutoTransfer() {

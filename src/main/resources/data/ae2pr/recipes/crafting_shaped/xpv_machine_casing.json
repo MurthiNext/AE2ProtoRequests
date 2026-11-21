@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "BAB",
+    "BBB"
+  ],
+  "key": {
+    "A": {
+      "item": "ae2pr:dense_sky_stone_block"
+    },
+    "B": {
+      "tag": "forge:plates/strontium"
+    }
+  },
+  "result": {
+    "item": "ae2pr:xpv_machine_casing",
+    "count": 2
+  }
+}

@@ -131,6 +131,8 @@ public final class ModItems {
 
     public static final RegistryObject<BlockItem> AEV_MACHINE_CASING = blockItem(ModBlocks.AEV_MACHINE_CASING);
 
+    public static final RegistryObject<BlockItem> XPV_MACHINE_CASING = blockItem(ModBlocks.XPV_MACHINE_CASING);
+
     public static final RegistryObject<BlockItem> CRYSTAL_ENERGY_CASING = blockItem(ModBlocks.CRYSTAL_ENERGY_CASING);
 
     public static final RegistryObject<BlockItem> HIGH_ENERGY_STABILITY_CASING =
@@ -155,6 +157,18 @@ public final class ModItems {
     public static final RegistryObject<BlockItem> AEV_DUAL_INPUT_HATCH = blockItem(ModBlocks.AEV_DUAL_INPUT_HATCH);
 
     public static final RegistryObject<BlockItem> AEV_DUAL_OUTPUT_HATCH = blockItem(ModBlocks.AEV_DUAL_OUTPUT_HATCH);
+
+    public static final RegistryObject<BlockItem> XPV_INPUT_BUS = blockItem(ModBlocks.XPV_INPUT_BUS);
+
+    public static final RegistryObject<BlockItem> XPV_OUTPUT_BUS = blockItem(ModBlocks.XPV_OUTPUT_BUS);
+
+    public static final RegistryObject<BlockItem> XPV_INPUT_HATCH = blockItem(ModBlocks.XPV_INPUT_HATCH);
+
+    public static final RegistryObject<BlockItem> XPV_OUTPUT_HATCH = blockItem(ModBlocks.XPV_OUTPUT_HATCH);
+
+    public static final RegistryObject<BlockItem> XPV_DUAL_INPUT_HATCH = blockItem(ModBlocks.XPV_DUAL_INPUT_HATCH);
+
+    public static final RegistryObject<BlockItem> XPV_DUAL_OUTPUT_HATCH = blockItem(ModBlocks.XPV_DUAL_OUTPUT_HATCH);
 
     public static final RegistryObject<BlockItem> ME_NETWORK_ACCESS_HATCH =
             blockItem(ModBlocks.ME_NETWORK_ACCESS_HATCH);

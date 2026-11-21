@@ -11,6 +11,8 @@ import com.murthinext.ae2pr.block.FilterPressPlateBlock;
 import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
+import com.murthinext.ae2pr.block.machine_part.MachinePartBlock.Storage;
+import com.murthinext.ae2pr.block.machine_part.MachinePartBlock.Tier;
 import com.murthinext.ae2pr.block.meteorite.MeteoriteOreBlock;
 import com.murthinext.ae2pr.block.molecular_assembly_core.MolecularAssemblyCoreBlock;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineModuleBlock;
@@ -73,19 +75,22 @@ public final class ModBlocks {
             () -> new DisassemblableGlassBlock(BlockProperties.glass(MapColor.COLOR_ORANGE)));
 
     public static final RegistryObject<MachinePartBlock> CERTUS_QUARTZ_CRYSTAL_INPUT_BUS =
-            BLOCKS.register("certus_quartz_crystal_input_bus", MachinePartBlock::new);
+            registerPart("certus_quartz_crystal_input_bus", Tier.QUARTZ, Storage.ITEMS, false);
 
     public static final RegistryObject<MachinePartBlock> CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH =
-            BLOCKS.register("certus_quartz_crystal_input_hatch", MachinePartBlock::new);
+            registerPart("certus_quartz_crystal_input_hatch", Tier.QUARTZ, Storage.FLUIDS, false);
 
     public static final RegistryObject<MachinePartBlock> CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS =
-            BLOCKS.register("certus_quartz_crystal_output_bus", MachinePartBlock::new);
+            registerPart("certus_quartz_crystal_output_bus", Tier.QUARTZ, Storage.ITEMS, true);
 
     public static final RegistryObject<MachinePartBlock> CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH =
-            BLOCKS.register("certus_quartz_crystal_output_hatch", MachinePartBlock::new);
+            registerPart("certus_quartz_crystal_output_hatch", Tier.QUARTZ, Storage.FLUIDS, true);
 
     public static final RegistryObject<Block> AEV_MACHINE_CASING =
             BLOCKS.register("aev_machine_casing", () -> new DisassemblableBlock(casingProperties()));
+
+    public static final RegistryObject<Block> XPV_MACHINE_CASING =
+            BLOCKS.register("xpv_machine_casing", () -> new DisassemblableBlock(casingProperties()));
 
     public static final RegistryObject<Block> CRYSTAL_ENERGY_CASING =
             BLOCKS.register("crystal_energy_casing", () -> new DisassemblableBlock(casingProperties()));
@@ -103,22 +108,40 @@ public final class ModBlocks {
             BLOCKS.register("me_advanced_computer_casing", () -> new ComputerCasingBlock(casingProperties()));
 
     public static final RegistryObject<MachinePartBlock> AEV_INPUT_BUS =
-            BLOCKS.register("aev_input_bus", MachinePartBlock::new);
+            registerPart("aev_input_bus", Tier.AEV, Storage.ITEMS, false);
 
     public static final RegistryObject<MachinePartBlock> AEV_OUTPUT_BUS =
-            BLOCKS.register("aev_output_bus", MachinePartBlock::new);
+            registerPart("aev_output_bus", Tier.AEV, Storage.ITEMS, true);
 
     public static final RegistryObject<MachinePartBlock> AEV_INPUT_HATCH =
-            BLOCKS.register("aev_input_hatch", MachinePartBlock::new);
+            registerPart("aev_input_hatch", Tier.AEV, Storage.FLUIDS, false);
 
     public static final RegistryObject<MachinePartBlock> AEV_OUTPUT_HATCH =
-            BLOCKS.register("aev_output_hatch", MachinePartBlock::new);
+            registerPart("aev_output_hatch", Tier.AEV, Storage.FLUIDS, true);
 
     public static final RegistryObject<MachinePartBlock> AEV_DUAL_INPUT_HATCH =
-            BLOCKS.register("aev_dual_input_hatch", MachinePartBlock::new);
+            registerPart("aev_dual_input_hatch", Tier.AEV, Storage.BOTH, false);
 
     public static final RegistryObject<MachinePartBlock> AEV_DUAL_OUTPUT_HATCH =
-            BLOCKS.register("aev_dual_output_hatch", MachinePartBlock::new);
+            registerPart("aev_dual_output_hatch", Tier.AEV, Storage.BOTH, true);
+
+    public static final RegistryObject<MachinePartBlock> XPV_INPUT_BUS =
+            registerPart("xpv_input_bus", Tier.XPV, Storage.ITEMS, false);
+
+    public static final RegistryObject<MachinePartBlock> XPV_OUTPUT_BUS =
+            registerPart("xpv_output_bus", Tier.XPV, Storage.ITEMS, true);
+
+    public static final RegistryObject<MachinePartBlock> XPV_INPUT_HATCH =
+            registerPart("xpv_input_hatch", Tier.XPV, Storage.FLUIDS, false);
+
+    public static final RegistryObject<MachinePartBlock> XPV_OUTPUT_HATCH =
+            registerPart("xpv_output_hatch", Tier.XPV, Storage.FLUIDS, true);
+
+    public static final RegistryObject<MachinePartBlock> XPV_DUAL_INPUT_HATCH =
+            registerPart("xpv_dual_input_hatch", Tier.XPV, Storage.BOTH, false);
+
+    public static final RegistryObject<MachinePartBlock> XPV_DUAL_OUTPUT_HATCH =
+            registerPart("xpv_dual_output_hatch", Tier.XPV, Storage.BOTH, true);
 
     public static final RegistryObject<MENetworkAccessHatchBlock> ME_NETWORK_ACCESS_HATCH =
             BLOCKS.register("me_network_access_hatch", MENetworkAccessHatchBlock::new);
@@ -134,7 +157,13 @@ public final class ModBlocks {
             AEV_OUTPUT_BUS,
             AEV_OUTPUT_HATCH,
             AEV_DUAL_INPUT_HATCH,
-            AEV_DUAL_OUTPUT_HATCH);
+            AEV_DUAL_OUTPUT_HATCH,
+            XPV_INPUT_BUS,
+            XPV_INPUT_HATCH,
+            XPV_OUTPUT_BUS,
+            XPV_OUTPUT_HATCH,
+            XPV_DUAL_INPUT_HATCH,
+            XPV_DUAL_OUTPUT_HATCH);
 
     public static final RegistryObject<Block> LOGISTICS_CONTROL_CASING = BLOCKS.register(
             "logistics_control_casing", () -> new DisassemblableBlock(BlockProperties.metal(MapColor.COLOR_PURPLE)));
@@ -203,6 +232,11 @@ public final class ModBlocks {
     // 结构模板无法静态引用具体仓室，初始化时注入
     public static void installStructureHooks() {
         MachinePartAppearance.install();
+    }
+
+    private static RegistryObject<MachinePartBlock> registerPart(
+            String name, Tier tier, Storage storage, boolean output) {
+        return BLOCKS.register(name, () -> new MachinePartBlock(tier, storage, output));
     }
 
     private static Block.Properties storageBlockProperties(MapColor mapColor) {

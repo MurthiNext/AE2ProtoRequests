@@ -62,8 +62,7 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
             if (fluid.isEmpty()) {
                 continue;
             }
-            areas.add(Area.ofFluid(
-                    fluid, new Rect2i(leftPos + TANK_X0 + tank * TANK_STEP, topPos + TANK_Y, TANK_WIDTH, TANK_HEIGHT)));
+            areas.add(Area.ofFluid(fluid, new Rect2i(tankX(tank), topPos + TANK_Y, TANK_WIDTH, TANK_HEIGHT)));
         }
         return areas;
     }
@@ -84,8 +83,9 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         super.renderBg(graphics, partialTick, mouseX, mouseY);
         for (int tank = 0; tank < menu.getTankCount(); tank++) {
-            drawTank(graphics, leftPos + TANK_X0 + tank * TANK_STEP, topPos + TANK_Y);
-            drawTankArrow(graphics, leftPos + TANK_X0 + tank * TANK_STEP, topPos + TANK_Y, !menu.isOutputHatch());
+            int x = tankX(tank);
+            drawTank(graphics, x, topPos + TANK_Y);
+            drawTankArrow(graphics, x, topPos + TANK_Y, !menu.isOutputHatch());
             renderFluid(graphics, tank);
         }
     }
@@ -126,7 +126,7 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
 
     private int hoveredTank(int mouseX, int mouseY) {
         for (int tank = 0; tank < menu.getTankCount(); tank++) {
-            int x = leftPos + TANK_X0 + tank * TANK_STEP;
+            int x = tankX(tank);
             int y = topPos + TANK_Y;
             if (mouseX >= x && mouseX < x + TANK_WIDTH && mouseY >= y && mouseY < y + TANK_HEIGHT) {
                 return tank;
@@ -135,11 +135,17 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
         return -1;
     }
 
+    private int tankX(int tank) {
+        int count = menu.getTankCount();
+        int start = count > 2 ? (imageWidth - TANK_WIDTH - (count - 1) * TANK_STEP) / 2 : TANK_X0;
+        return leftPos + start + tank * TANK_STEP;
+    }
+
     private void renderFluid(GuiGraphics graphics, int tank) {
         GuiFluids.drawTankFill(
                 graphics,
                 clientFluid(tank),
-                leftPos + TANK_X0 + 2 + tank * TANK_STEP,
+                tankX(tank) + 2,
                 topPos + TANK_Y + 2,
                 TANK_INNER_WIDTH,
                 TANK_INNER_HEIGHT,

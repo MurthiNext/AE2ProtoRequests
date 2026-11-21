@@ -5,7 +5,6 @@ import com.murthinext.ae2pr.api.text.Voltage;
 import com.murthinext.ae2pr.api.wrench.WrenchTags;
 import com.murthinext.ae2pr.api.wrench.Wrenchable;
 import com.murthinext.ae2pr.logic.collapse.CollapseHandler;
-import com.murthinext.ae2pr.registry.ModBlocks;
 import java.text.NumberFormat;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -44,6 +43,30 @@ import org.jetbrains.annotations.Nullable;
 
 public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
 
+    public enum Tier {
+        QUARTZ(1, 32 * 1024, 1, 16 * 1024 * 1000),
+        AEV(4, 2048, 2, 1024 * 1000),
+        XPV(9, 4096, 4, 4096 * 1000);
+
+        private final int itemSlots;
+        private final int itemCapacity;
+        private final int fluidTanks;
+        final int fluidCapacity;
+
+        Tier(int itemSlots, int itemCapacity, int fluidTanks, int fluidCapacity) {
+            this.itemSlots = itemSlots;
+            this.itemCapacity = itemCapacity;
+            this.fluidTanks = fluidTanks;
+            this.fluidCapacity = fluidCapacity;
+        }
+    }
+
+    public enum Storage {
+        ITEMS,
+        FLUIDS,
+        BOTH
+    }
+
     private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -51,12 +74,19 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
     public static final IntegerProperty STYLE = IntegerProperty.create("style", 1, MachinePartFacade.MAX_STYLE);
     public static final int DEFAULT_STYLE = 1;
 
-    public MachinePartBlock() {
+    private final Tier tier;
+    private final Storage storage;
+    private final boolean output;
+
+    public MachinePartBlock(Tier tier, Storage storage, boolean output) {
         super(Properties.of()
                 .mapColor(MapColor.METAL)
                 .strength(3.0F)
                 .sound(SoundType.METAL)
                 .requiresCorrectToolForDrops());
+        this.tier = tier;
+        this.storage = storage;
+        this.output = output;
         registerDefaultState(stateDefinition
                 .any()
                 .setValue(FACING, Direction.NORTH)
@@ -89,49 +119,39 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
     }
 
     public static BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        if (isDualPart(state.getBlock())) {
-            return new DualHatchBlockEntity(pos, state);
-        }
-        return isFluidPart(state) ? new FluidHatchBlockEntity(pos, state) : new ItemBusBlockEntity(pos, state);
+        return switch (part(state).storage) {
+            case ITEMS -> new ItemBusBlockEntity(pos, state);
+            case FLUIDS -> new FluidHatchBlockEntity(pos, state);
+            case BOTH -> new DualHatchBlockEntity(pos, state);
+        };
     }
 
-    public static boolean isDualPart(Block block) {
-        return block == ModBlocks.AEV_DUAL_INPUT_HATCH.get() || block == ModBlocks.AEV_DUAL_OUTPUT_HATCH.get();
+    public Tier tier() {
+        return tier;
     }
 
-    public static boolean isFluidPart(BlockState state) {
-        return isFluidPart(state.getBlock());
+    private static MachinePartBlock part(BlockState state) {
+        return (MachinePartBlock) state.getBlock();
     }
 
-    public static boolean isFluidPart(Block block) {
-        return block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()
-                || block == ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get()
-                || block == ModBlocks.AEV_INPUT_HATCH.get()
-                || block == ModBlocks.AEV_OUTPUT_HATCH.get();
+    static boolean isOutput(BlockState state) {
+        return part(state).output;
     }
 
-    public static boolean isAevPart(Block block) {
-        return block == ModBlocks.AEV_INPUT_BUS.get()
-                || block == ModBlocks.AEV_OUTPUT_BUS.get()
-                || block == ModBlocks.AEV_INPUT_HATCH.get()
-                || block == ModBlocks.AEV_OUTPUT_HATCH.get()
-                || isDualPart(block);
+    static int fluidTankCount(BlockState state) {
+        return part(state).tier.fluidTanks;
     }
 
-    public static int fluidTankCount(BlockState state) {
-        return isAevPart(state.getBlock()) ? 2 : 1;
+    static int fluidCapacity(BlockState state) {
+        return part(state).tier.fluidCapacity;
     }
 
-    public static int fluidCapacity(BlockState state) {
-        return isAevPart(state.getBlock()) ? FluidHatchBlockEntity.AEV_CAPACITY : FluidHatchBlockEntity.CAPACITY;
+    static int itemSlotCount(BlockState state) {
+        return part(state).tier.itemSlots;
     }
 
-    public static int itemSlotCount(BlockState state) {
-        return isAevPart(state.getBlock()) ? 4 : 1;
-    }
-
-    public static int itemCapacity(BlockState state) {
-        return isAevPart(state.getBlock()) ? ItemBusBlockEntity.AEV_CAPACITY : ItemBusBlockEntity.CAPACITY;
+    static int itemCapacity(BlockState state) {
+        return part(state).tier.itemCapacity;
     }
 
     @Nullable
@@ -214,31 +234,17 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
     @Override
     public void appendHoverText(
             ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
-        Block block = Block.byItem(stack.getItem());
-        if (isDualPart(block)) {
+        if (storage != Storage.FLUIDS) {
             tooltip.add(Component.translatable(
-                    "tooltip.ae2pr.machine_part.stack_limit.items", NUMBER.format(ItemBusBlockEntity.AEV_CAPACITY)));
+                    "tooltip.ae2pr.machine_part.stack_limit.items", NUMBER.format(tier.itemCapacity)));
             tooltip.add(Component.translatable(
-                    "tooltip.ae2pr.machine_part.item_type_count",
-                    NUMBER.format(itemSlotCount(block.defaultBlockState()))));
-            tooltip.add(Component.translatable(
-                    "tooltip.ae2pr.machine_part.stack_limit.fluid", NUMBER.format(FluidHatchBlockEntity.AEV_CAPACITY)));
-            tooltip.add(Component.translatable(
-                    "tooltip.ae2pr.machine_part.fluid_type_count",
-                    NUMBER.format(fluidTankCount(block.defaultBlockState()))));
-            return;
+                    "tooltip.ae2pr.machine_part.item_type_count", NUMBER.format(tier.itemSlots)));
         }
-        boolean fluid = isFluidPart(block);
-        boolean aev = isAevPart(block);
-        int types = fluid ? (aev ? 2 : 1) : (aev ? 4 : 1);
-        int capacity = fluid
-                ? (aev ? FluidHatchBlockEntity.AEV_CAPACITY : FluidHatchBlockEntity.CAPACITY)
-                : (aev ? ItemBusBlockEntity.AEV_CAPACITY : ItemBusBlockEntity.CAPACITY);
-        tooltip.add(Component.translatable(
-                fluid ? "tooltip.ae2pr.machine_part.stack_limit.fluid" : "tooltip.ae2pr.machine_part.stack_limit.items",
-                NUMBER.format(capacity)));
-        tooltip.add(Component.translatable(
-                fluid ? "tooltip.ae2pr.machine_part.fluid_type_count" : "tooltip.ae2pr.machine_part.item_type_count",
-                NUMBER.format(types)));
+        if (storage != Storage.ITEMS) {
+            tooltip.add(Component.translatable(
+                    "tooltip.ae2pr.machine_part.stack_limit.fluid", NUMBER.format(tier.fluidCapacity)));
+            tooltip.add(Component.translatable(
+                    "tooltip.ae2pr.machine_part.fluid_type_count", NUMBER.format(tier.fluidTanks)));
+        }
     }
 }
