@@ -19,13 +19,13 @@ public class MatterPhaseTransformerRenderer
 
     private static final RenderType FLARE =
             RenderType.beaconBeam(Ids.of("textures/particle/matter_particle.png"), true);
-    private static final RenderType BEAM = RenderType.beaconBeam(Ids.of("textures/entity/matter_beam.png"), true);
-    private static final RenderType APERTURE =
-            RenderType.beaconBeam(Ids.of("textures/entity/matter_aperture.png"), true);
+    private static final RenderType BEAM = RenderType.beaconBeam(Ids.of("textures/vfx/matter_beam.png"), true);
+    private static final RenderType APERTURE_FACE =
+            RenderType.entityTranslucent(Ids.of("textures/vfx/matter_aperture.png"));
     private static final double PACKET_TICKS = 9;
+    private static final float APERTURE_INSET = 0.002F;
     private static final double LENS_HALF = 0.45;
     private static final Vec3 EMITTER = new Vec3(0, MatterPhaseTransformerStructure.EMITTER_Y - 0.008, 0);
-    private static final Vec3 COLLECTOR = new Vec3(0, PhaseMeltRenderer.FLOOR, 0);
     private static final Vec3[] POLES = new Vec3[3];
 
     static {
@@ -67,11 +67,8 @@ public class MatterPhaseTransformerRenderer
         pose.pushPose();
         pose.translate(
                 core.getX() - origin.getX() + 0.5, core.getY() - origin.getY(), core.getZ() - origin.getZ() + 0.5);
-        var apertures = new PhaseChamberMesh(pose.last(), buffers.getBuffer(APERTURE));
-        Vec3 across = new Vec3(LENS_HALF, 0, 0);
-        Vec3 along = new Vec3(0, 0, LENS_HALF);
-        apertures.sprite(EMITTER, across, along, 0xFFFFFFFF);
-        apertures.sprite(COLLECTOR, across, along.scale(-1), 0xFFFFD9B3);
+        var cap = new PhaseChamberMesh(pose.last(), buffers.getBuffer(APERTURE_FACE), APERTURE_INSET);
+        cap.panel(MatterPhaseTransformerStructure.EMITTER_Y, 0xFFFFFFFF);
         PhaseMeltRenderer.crystal(pose, buffers, heat);
         Vec3 focus = PhaseMeltRenderer.IMPACT;
         PhaseMeltRenderer.pour(pose, buffers, controller.melt(), pourTime, heat);

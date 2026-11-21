@@ -15,7 +15,7 @@ import org.joml.Vector3f;
 final class CrystalWorkstationTideSurface {
 
     static final RenderType MATERIAL =
-            RenderType.entityTranslucentEmissive(Ids.of("textures/block/crystal_workstation/portal_liquid.png"), false);
+            RenderType.entityTranslucentEmissive(Ids.of("textures/vfx/portal_liquid.png"), false);
     private static final int GRID = 20;
     private static final float HALF_SPAN = CrystalWorkstationStructure.PANEL_SIZE * 0.5F - 0.125F;
     private static final float PANEL_FACE = 3.48F;

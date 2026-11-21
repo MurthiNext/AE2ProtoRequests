@@ -3,7 +3,7 @@
   "parent": "block/block",
   "textures": {
     "particle": "#all",
-    "all": "ae2pr:block/high_reactivity_lava_smelter/controller_casing",
+    "all": "ae2pr:block/controller_casing/high_reactivity_lava_smelter",
     "overlay_front": "ae2pr:block/controller_front/lava_process",
     "overlay_front_emissive": "ae2pr:block/controller_front/lava_process_emissive"
   },

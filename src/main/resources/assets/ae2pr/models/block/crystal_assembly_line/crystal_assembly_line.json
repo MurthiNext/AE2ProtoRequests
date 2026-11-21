@@ -3,7 +3,7 @@
   "parent": "block/block",
   "textures": {
     "particle": "#all",
-    "all": "ae2pr:block/crystal_assembly_line/controller_casing",
+    "all": "ae2pr:block/controller_casing/crystal_assembly_line",
     "overlay_front": "ae2pr:block/controller_front/amethyst_process",
     "overlay_front_emissive": "ae2pr:block/controller_front/amethyst_process_emissive"
   },

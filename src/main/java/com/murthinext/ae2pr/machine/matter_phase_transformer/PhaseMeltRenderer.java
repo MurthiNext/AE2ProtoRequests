@@ -18,9 +18,9 @@ import net.minecraftforge.fluids.FluidStack;
 
 final class PhaseMeltRenderer {
 
-    private static final RenderType CRUST = RenderType.entitySolid(Ids.of("textures/entity/matter_crust.png"));
+    private static final RenderType CRUST = RenderType.entitySolid(Ids.of("textures/vfx/matter_crust.png"));
     private static final RenderType MELT_OVERLAY =
-            RenderType.beaconBeam(Ids.of("textures/entity/matter_melt_overlay.png"), true);
+            RenderType.beaconBeam(Ids.of("textures/vfx/matter_melt_overlay.png"), true);
     private static final float OVERLAY_OUTSET = 0.001F;
     private static final RenderType LIQUID = RenderType.entityTranslucentCull(InventoryMenu.BLOCK_ATLAS);
     private static final ResourceLocation UNTINTED_LIQUID = Ids.of("block/material_sets/metallic/liquid");

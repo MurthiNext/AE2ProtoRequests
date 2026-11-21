@@ -31,20 +31,20 @@ public final class MachineCtm implements CtmBinding {
 
     public static final ResourceLocation AEV_PART_CASING = Ids.of("block/aev_machine_casing");
     public static final ResourceLocation HIGH_REACTIVITY_LAVA_SMELTER_CONTROLLER_CASING =
-            Ids.of("block/high_reactivity_lava_smelter/controller_casing");
+            Ids.of("block/controller_casing/high_reactivity_lava_smelter");
     public static final ResourceLocation MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING =
-            Ids.of("block/matter_phase_transformer/controller_casing");
+            Ids.of("block/controller_casing/matter_phase_transformer");
     public static final ResourceLocation CRYSTAL_REACTION_CONTROLLER_CASING =
-            Ids.of("block/crystal_reaction_chamber/controller_casing");
+            Ids.of("block/controller_casing/crystal_reaction_chamber");
     public static final ResourceLocation CRYSTAL_ASSEMBLY_LINE_CONTROLLER_CASING =
-            Ids.of("block/crystal_assembly_line/controller_casing");
+            Ids.of("block/controller_casing/crystal_assembly_line");
     public static final ResourceLocation CRYSTAL_WORKSTATION_CONTROLLER_CASING =
-            Ids.of("block/crystal_workstation/controller_casing");
-    public static final ResourceLocation JIG_CONTROLLER_CASING = Ids.of("block/jig/controller_casing");
+            Ids.of("block/controller_casing/crystal_workstation");
+    public static final ResourceLocation JIG_CONTROLLER_CASING = Ids.of("block/controller_casing/jig");
     public static final ResourceLocation MULTI_FACTORY_CONTROLLER_CASING =
-            Ids.of("block/multi_factory/controller_casing");
+            Ids.of("block/controller_casing/multi_factory");
     public static final ResourceLocation FILTER_PRESS_CONTROLLER_CASING =
-            Ids.of("block/filter_press/controller_casing");
+            Ids.of("block/controller_casing/filter_press");
     public static final ResourceLocation WORKSTATION_PANEL_INNER = Ids.of("block/crystal_workstation/panel_face");
 
     private MachineCtm() {}

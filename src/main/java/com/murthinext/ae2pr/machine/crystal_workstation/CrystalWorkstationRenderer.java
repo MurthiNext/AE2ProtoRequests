@@ -21,7 +21,7 @@ import org.joml.Vector3f;
 public class CrystalWorkstationRenderer implements BlockEntityRenderer<CrystalWorkstationControllerBlockEntity> {
 
     private static final RenderType CORE =
-            RenderType.entityTranslucentEmissive(Ids.of("textures/block/crystal_workstation/core_cube.png"), false);
+            RenderType.entityTranslucentEmissive(Ids.of("textures/vfx/core_cube.png"), false);
 
     // 内腔半深
     private static final float CAVITY_HALF = 1.49F;

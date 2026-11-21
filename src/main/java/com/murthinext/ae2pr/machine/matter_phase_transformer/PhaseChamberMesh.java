@@ -168,6 +168,14 @@ record PhaseChamberMesh(PoseStack.Pose pose, VertexConsumer vertices, float surf
         vertex(left.add(up), 0, 0, color);
     }
 
+    void panel(float y, int color) {
+        float face = y - surfaceOffset;
+        vertex(-0.5F, face, 0.5F, 0, 1, color, 0, -1, 0);
+        vertex(-0.5F, face, -0.5F, 0, 0, color, 0, -1, 0);
+        vertex(0.5F, face, -0.5F, 1, 0, color, 0, -1, 0);
+        vertex(0.5F, face, 0.5F, 1, 1, color, 0, -1, 0);
+    }
+
     private void vertex(Vec3 point, float u, float v, int color) {
         vertex((float) point.x, (float) point.y, (float) point.z, u, v, color, 0, 0, 1);
     }

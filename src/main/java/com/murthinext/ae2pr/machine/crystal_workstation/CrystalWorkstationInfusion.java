@@ -15,7 +15,7 @@ import net.minecraft.world.phys.Vec3;
 record CrystalWorkstationInfusion(Direction outward, float sourceReach, float beat) {
 
     private static final RenderType BEAM =
-            RenderType.beaconBeam(Ids.of("textures/block/crystal_workstation/infusion_beam.png"), true);
+            RenderType.beaconBeam(Ids.of("textures/vfx/infusion_beam.png"), true);
     private static final RenderType FLARE =
             RenderType.beaconBeam(Ids.of("textures/particle/workstation_mote.png"), true);
     private static final int SECTIONS = 16;
