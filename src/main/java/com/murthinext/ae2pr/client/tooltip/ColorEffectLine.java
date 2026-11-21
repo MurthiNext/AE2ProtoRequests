@@ -6,12 +6,25 @@ import java.util.List;
 import java.util.Optional;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 
 public record ColorEffectLine(List<Segment> segments) implements TooltipComponent {
+
+    private static final GradientText.StyledEffectConsumer<Boolean> EFFECT_FINDER =
+            new GradientText.StyledEffectConsumer<>() {
+                @Override
+                public Optional<Boolean> accept(Style style, String text) {
+                    return Optional.empty();
+                }
+
+                @Override
+                public Optional<Boolean> acceptEffect(Style style, GradientText effect) {
+                    return Optional.of(true);
+                }
+            };
 
     public ColorEffectLine(List<Segment> segments) {
         this.segments = List.copyOf(segments);
@@ -25,17 +38,8 @@ public record ColorEffectLine(List<Segment> segments) implements TooltipComponen
         }
     }
 
-    // 组件树中是否携带特效内容
-    public static boolean containsEffect(Component component) {
-        if (component.getContents() instanceof GradientText) {
-            return true;
-        }
-        for (Component sibling : component.getSiblings()) {
-            if (containsEffect(sibling)) {
-                return true;
-            }
-        }
-        return false;
+    public static boolean containsEffect(FormattedText text) {
+        return text.visit(EFFECT_FINDER, Style.EMPTY).isPresent();
     }
 
     public static boolean hasEffect(List<Segment> segments) {
@@ -47,28 +51,23 @@ public record ColorEffectLine(List<Segment> segments) implements TooltipComponen
         return false;
     }
 
-    // 展开组件树
-    public static List<Segment> collect(Component component) {
+    public static List<Segment> collect(FormattedText text) {
         List<Segment> segments = new ArrayList<>();
-        collect(component, Style.EMPTY, segments);
+        text.visit(new SegmentCollector(segments), Style.EMPTY);
         return segments;
     }
 
-    private static void collect(Component component, Style parent, List<Segment> segments) {
-        Style style = component.getStyle().applyTo(parent);
-        ComponentContents contents = component.getContents();
-        if (contents instanceof GradientText effect) {
-            segments.add(new Segment(effect.text(), style, effect));
-        } else {
-            contents.visit(
-                    (segmentStyle, text) -> {
-                        segments.add(new Segment(text, segmentStyle, null));
-                        return Optional.empty();
-                    },
-                    style);
+    private record SegmentCollector(List<Segment> segments) implements GradientText.StyledEffectConsumer<Void> {
+        @Override
+        public Optional<Void> accept(Style style, String text) {
+            segments.add(new Segment(text, style, null));
+            return Optional.empty();
         }
-        for (Component sibling : component.getSiblings()) {
-            collect(sibling, style, segments);
+
+        @Override
+        public Optional<Void> acceptEffect(Style style, GradientText effect) {
+            segments.add(new Segment(effect.text(), style, effect));
+            return Optional.empty();
         }
     }
 

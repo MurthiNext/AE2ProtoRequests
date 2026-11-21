@@ -37,6 +37,9 @@ public final class ClientEvents {
         if (!ours && !TooltipRenderer.containsEffect(elements)) {
             return;
         }
+        if (ours && !stack.hasCustomHoverName()) {
+            TooltipRenderer.animateTitle(elements, stack.getDescriptionId());
+        }
         // 特效行由自定义组件渲染，需在此处自行折行
         int maxWidth = event.getMaxWidth() > 0 ? event.getMaxWidth() : event.getScreenWidth() - 32;
         if (stack.getItem() instanceof MachineUpgradeCardItem card) {

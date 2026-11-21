@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
  * 电压字样统一格式：颜色表、字样组件与语言键注入。
  * <p>
  * 名称类文本会被同步到客户端，只能用逐字符着色的纯原版组件；
- * 物品 Tooltip 由客户端自行渲染，才可以用 {@link #circuit(int)} 拿到动态渐变。
+ * 物品 Tooltip 由客户端自行渲染，可以使用 {@link #gradientLabel()} 启用动态渐变。
  * 语言键最后一段以电压名开头即可自动注入，如 {@code block.ae2pr.aev_input_bus}。
  */
 public enum Voltage {
@@ -46,10 +46,13 @@ public enum Voltage {
         return label;
     }
 
+    public MutableComponent gradientLabel() {
+        return MutableComponent.create(GradientText.gradient(name(), SPEED, colors));
+    }
+
     // 电路 Tooltip 行
     public MutableComponent circuit(int downgrade) {
-        MutableComponent label =
-                Component.empty().append(MutableComponent.create(GradientText.gradient(name(), SPEED, colors)));
+        MutableComponent label = Component.empty().append(gradientLabel());
         if (downgrade > 0) {
             label.append(Component.literal("-" + downgrade).withStyle(style -> style.withColor(DOWNGRADE_COLOR)));
         }

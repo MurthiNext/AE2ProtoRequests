@@ -2,11 +2,13 @@ package com.murthinext.ae2pr.client.tooltip;
 
 import com.mojang.datafixers.util.Either;
 import com.murthinext.ae2pr.api.text.GradientText;
+import com.murthinext.ae2pr.api.text.Voltage;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectLine.Segment;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
@@ -26,14 +28,49 @@ public final class TooltipRenderer {
         return MutableComponent.create(GradientText.flow(text, speed, colors));
     }
 
+    public static void animateTitle(List<Either<FormattedText, TooltipComponent>> elements, String descriptionId) {
+        Voltage voltage = Voltage.of(descriptionId);
+        if (voltage == null
+                || elements.isEmpty()
+                || !(elements.get(0).left().orElse(null) instanceof Component title)) {
+            return;
+        }
+        ComponentContents original =
+                Component.translatable(descriptionId, voltage.label()).getContents();
+        ComponentContents animated =
+                Component.translatable(descriptionId, voltage.gradientLabel()).getContents();
+        Component result = replaceTitleName(title, original, animated);
+        if (result != title) {
+            elements.set(0, Either.left(result));
+        }
+    }
+
+    private static Component replaceTitleName(
+            Component component, ComponentContents original, ComponentContents animated) {
+        if (original.equals(component.getContents())) {
+            MutableComponent result = MutableComponent.create(animated).setStyle(component.getStyle());
+            component.getSiblings().forEach(result::append);
+            return result;
+        }
+        MutableComponent result = null;
+        List<Component> siblings = component.getSiblings();
+        for (int i = 0; i < siblings.size(); i++) {
+            Component sibling = siblings.get(i);
+            Component replacement = replaceTitleName(sibling, original, animated);
+            if (replacement != sibling) {
+                if (result == null) {
+                    result = component.copy();
+                }
+                result.getSiblings().set(i, replacement);
+            }
+        }
+        return result == null ? component : result;
+    }
+
     // 元素列表中是否包含特效文本
     public static boolean containsEffect(List<Either<FormattedText, TooltipComponent>> elements) {
         for (var element : elements) {
-            if (element.left()
-                    .filter(Component.class::isInstance)
-                    .map(Component.class::cast)
-                    .filter(ColorEffectLine::containsEffect)
-                    .isPresent()) {
+            if (element.left().filter(ColorEffectLine::containsEffect).isPresent()) {
                 return true;
             }
         }
@@ -57,8 +94,8 @@ public final class TooltipRenderer {
 
     private static void prepareText(
             FormattedText text, List<Either<FormattedText, TooltipComponent>> result, Font font, int maxWidth) {
-        if (text instanceof Component component && ColorEffectLine.containsEffect(component)) {
-            List<Segment> segments = ColorEffectLine.collect(component);
+        if (ColorEffectLine.containsEffect(text)) {
+            List<Segment> segments = ColorEffectLine.collect(text);
             List<List<Segment>> lines =
                     font == null ? ColorEffectLine.split(segments) : ColorEffectLine.wrap(segments, font, maxWidth);
             for (List<Segment> line : lines) {

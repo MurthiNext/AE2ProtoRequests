@@ -15,6 +15,10 @@ public record GradientText(String text, int[] colors, float speed, boolean flow)
 
     public static final float DEFAULT_SPEED = 1.0F;
 
+    public interface StyledEffectConsumer<T> extends FormattedText.StyledContentConsumer<T> {
+        Optional<T> acceptEffect(Style style, GradientText effect);
+    }
+
     public GradientText {
         colors = normalize(colors);
         speed = speed > 0.0F ? speed : DEFAULT_SPEED;
@@ -77,6 +81,9 @@ public record GradientText(String text, int[] colors, float speed, boolean flow)
 
     @Override
     public <T> Optional<T> visit(FormattedText.StyledContentConsumer<T> consumer, Style style) {
+        if (consumer instanceof StyledEffectConsumer<T> effectConsumer) {
+            return effectConsumer.acceptEffect(style, this);
+        }
         int count = Math.max(text.codePointCount(0, text.length()) - 1, 1);
         int offset = 0;
         for (int step = 0; offset < text.length(); step++) {
