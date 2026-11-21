@@ -93,6 +93,7 @@ public final class MachineClients {
                                 new MachineModeButton.TextureIcon(Ids.of("textures/gui/cutting.png")))),
                 MachineScreen::new,
                 controller -> {
+                    controller.tickTide();
                     CrystalWorkstationShell.update(controller);
                     MachineProcessingSounds.tick(
                             controller,
