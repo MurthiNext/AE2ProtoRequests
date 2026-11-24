@@ -10,6 +10,7 @@ import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterScreen;
 import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterScreen;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchScreen;
 import com.murthinext.ae2pr.block.machine_part.ItemBusScreen;
+import com.murthinext.ae2pr.block.machine_part.MEPatternBufferScreen;
 import com.murthinext.ae2pr.block.molecular_assembly_core.MolecularAssemblyCoreRenderer;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectClientTooltip;
 import com.murthinext.ae2pr.client.tooltip.ColorEffectLine;
@@ -55,6 +56,7 @@ public final class ClientSetup {
         event.enqueueWork(MachineClients::registerScreens);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_ITEM_BUS.get(), ItemBusScreen::new);
         MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), FluidHatchScreen::new);
+        MenuScreens.register(ModMenus.ME_PATTERN_BUFFER.get(), MEPatternBufferScreen::new);
     }
 
     @SubscribeEvent

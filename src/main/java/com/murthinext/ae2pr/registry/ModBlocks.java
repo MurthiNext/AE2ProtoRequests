@@ -10,6 +10,7 @@ import com.murthinext.ae2pr.block.DisassemblableGlassBlock;
 import com.murthinext.ae2pr.block.FilterPressPlateBlock;
 import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
+import com.murthinext.ae2pr.block.machine_part.MEPatternBufferBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock.Storage;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock.Tier;
@@ -145,6 +146,9 @@ public final class ModBlocks {
 
     public static final RegistryObject<MENetworkAccessHatchBlock> ME_NETWORK_ACCESS_HATCH =
             BLOCKS.register("me_network_access_hatch", MENetworkAccessHatchBlock::new);
+
+    public static final RegistryObject<MEPatternBufferBlock> ME_PATTERN_BUFFER =
+            BLOCKS.register("me_pattern_buffer", MEPatternBufferBlock::new);
 
     // 全部仓室方块，供方块实体注册与结构判定共用
     public static final List<RegistryObject<MachinePartBlock>> MACHINE_PARTS = List.of(

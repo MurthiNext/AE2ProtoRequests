@@ -162,7 +162,7 @@ public final class MachineCtm implements CtmBinding {
                         case XPV -> XPV_FAMILY;
                     });
         }
-        if (block == ModBlocks.ME_NETWORK_ACCESS_HATCH.get()) {
+        if (block == ModBlocks.ME_NETWORK_ACCESS_HATCH.get() || block == ModBlocks.ME_PATTERN_BUFFER.get()) {
             // 接入仓仅成型后加入结构机壳的连接族
             return partFamily(state, 0);
         }
@@ -239,6 +239,9 @@ public final class MachineCtm implements CtmBinding {
         if (state.is(ModBlocks.ME_NETWORK_ACCESS_HATCH.get()) && state.getValue(MENetworkAccessHatchBlock.FORMED)) {
             return MachinePartFacade.byStyle(state.getValue(MENetworkAccessHatchBlock.STYLE));
         }
+        if (state.is(ModBlocks.ME_PATTERN_BUFFER.get()) && state.getValue(MachinePartBlock.FORMED)) {
+            return MachinePartFacade.byStyle(state.getValue(MachinePartBlock.STYLE));
+        }
         return null;
     }
 
@@ -275,7 +278,7 @@ public final class MachineCtm implements CtmBinding {
         if (block == ModMachines.CRYSTAL_REACTION_CHAMBER.block()) {
             return CtmTextures.baseSprite(CRYSTAL_REACTION_CONTROLLER_CASING);
         }
-        if (block == ModBlocks.ME_NETWORK_ACCESS_HATCH.get()) {
+        if (block == ModBlocks.ME_NETWORK_ACCESS_HATCH.get() || block == ModBlocks.ME_PATTERN_BUFFER.get()) {
             // 接入仓成型外壳以水晶强化复合机壳为基础贴图
             return CtmTextures.baseSprite(MachinePartFacade.CRYSTAL.texture());
         }

@@ -161,6 +161,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get());
                         output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get());
                         output.accept(ModItems.ME_NETWORK_ACCESS_HATCH.get());
+                        output.accept(ModItems.ME_PATTERN_BUFFER.get());
                         output.accept(ModItems.AEV_INPUT_BUS.get());
                         output.accept(ModItems.AEV_INPUT_HATCH.get());
                         output.accept(ModItems.AEV_OUTPUT_BUS.get());

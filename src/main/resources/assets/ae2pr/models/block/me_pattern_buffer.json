@@ -1,0 +1,7 @@
+{
+    "parent": "ae2pr:block/me_network_access_hatch/me_network_access_hatch",
+    "textures": {
+        "overlay": "ae2pr:block/overlay/pattern_buffer",
+        "overlay_emissive": "ae2pr:block/overlay/pattern_buffer_emissive"
+    }
+}

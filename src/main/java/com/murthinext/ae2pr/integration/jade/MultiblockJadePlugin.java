@@ -38,6 +38,7 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
     private static final String KEY_NETWORK_CONNECTED = "networkConnected";
     private static final String KEY_ALLOCATED_CHANNELS = "allocatedChannels";
     private static final String KEY_REQUIRED_CHANNELS = "requiredChannels";
+    private static final String KEY_CHANNEL_CAPACITY = "channelCapacity";
     private static final String KEY_ELAPSED = "elapsed";
     private static final String KEY_DURATION = "duration";
     private static final String KEY_ITEM = "item";
@@ -130,8 +131,10 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
             data.putString(KEY_MACHINE, base.machineKey());
             data.putBoolean(KEY_FORMED, state.formed());
             data.putBoolean(KEY_NETWORK_CONNECTED, state.networkConnected());
-            data.putInt(KEY_ALLOCATED_CHANNELS, base.getAllocatedChannels());
-            data.putInt(KEY_REQUIRED_CHANNELS, base.getRequiredChannels());
+            var channels = base.getChannelStatus();
+            data.putInt(KEY_ALLOCATED_CHANNELS, channels.allocated());
+            data.putInt(KEY_REQUIRED_CHANNELS, channels.required());
+            data.putInt(KEY_CHANNEL_CAPACITY, channels.capacity());
             data.putInt(KEY_ELAPSED, state.elapsed());
             data.putInt(KEY_DURATION, state.duration());
             if (!state.item().isEmpty()) {
@@ -166,10 +169,16 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
                     data.getBoolean(KEY_NETWORK_CONNECTED)
                             ? "gui.ae2pr.multiblock.network.connected"
                             : "gui.ae2pr.multiblock.network.disconnected"));
-            tooltip.add(Component.translatable(
-                    "gui.ae2pr.multiblock.channels",
-                    data.getInt(KEY_ALLOCATED_CHANNELS),
-                    data.getInt(KEY_REQUIRED_CHANNELS)));
+            int capacity = data.getInt(KEY_CHANNEL_CAPACITY);
+            if (capacity > 0) {
+                tooltip.add(Component.translatable(
+                        "gui.ae2pr.multiblock.channels",
+                        data.getInt(KEY_ALLOCATED_CHANNELS),
+                        data.getInt(KEY_REQUIRED_CHANNELS)));
+                tooltip.add(Component.translatable("gui.ae2pr.multiblock.channels.limit", capacity));
+            } else {
+                tooltip.add(Component.translatable("gui.ae2pr.multiblock.channels.no_hatch"));
+            }
             appendJob(tooltip, data);
             appendExtraTooltip(tooltip, data);
         }

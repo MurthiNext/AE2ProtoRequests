@@ -26,7 +26,7 @@ public class MENetworkAccessHatchBlock extends AEBaseEntityBlock<MENetworkAccess
         implements Wrenchable {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
-    public static final BooleanProperty FORMED = BooleanProperty.create("formed");
+    public static final BooleanProperty FORMED = MachinePartBlock.FORMED;
     public static final IntegerProperty STYLE = MachinePartBlock.STYLE;
 
     public MENetworkAccessHatchBlock() {

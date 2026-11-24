@@ -173,6 +173,8 @@ public final class ModItems {
     public static final RegistryObject<BlockItem> ME_NETWORK_ACCESS_HATCH =
             blockItem(ModBlocks.ME_NETWORK_ACCESS_HATCH);
 
+    public static final RegistryObject<BlockItem> ME_PATTERN_BUFFER = blockItem(ModBlocks.ME_PATTERN_BUFFER);
+
     public static final RegistryObject<BlockItem> LOGISTICS_CONTROL_CASING =
             blockItem(ModBlocks.LOGISTICS_CONTROL_CASING);
 

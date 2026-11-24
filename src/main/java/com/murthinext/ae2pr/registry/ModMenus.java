@@ -5,6 +5,7 @@ import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterMenu;
 import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterMenu;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
 import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
+import com.murthinext.ae2pr.block.machine_part.MEPatternBufferMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -28,4 +29,7 @@ public final class ModMenus {
 
     public static final RegistryObject<MenuType<FluidHatchMenu>> CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH =
             MENUS.register("certus_quartz_crystal_input_hatch", () -> FluidHatchMenu.TYPE);
+
+    public static final RegistryObject<MenuType<MEPatternBufferMenu>> ME_PATTERN_BUFFER =
+            MENUS.register("me_pattern_buffer", () -> MEPatternBufferMenu.TYPE);
 }

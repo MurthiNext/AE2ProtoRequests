@@ -1,5 +1,9 @@
 package com.murthinext.ae2pr.api.machine.multiblock;
 
+import appeng.api.stacks.AEFluidKey;
+import appeng.api.stacks.AEItemKey;
+import appeng.api.stacks.AEKey;
+import appeng.api.stacks.GenericStack;
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.IUpgradeableObject;
 import appeng.api.upgrades.UpgradeInventories;
@@ -12,6 +16,8 @@ import com.murthinext.ae2pr.api.machine.MachineStat;
 import com.murthinext.ae2pr.api.machine.MachineStats;
 import com.murthinext.ae2pr.api.machine.MachineTuning;
 import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
+import com.murthinext.ae2pr.api.machine.part.ChannelRequest;
+import com.murthinext.ae2pr.api.machine.part.ChannelStatus;
 import com.murthinext.ae2pr.api.machine.part.InputGroup;
 import com.murthinext.ae2pr.api.machine.part.MachinePart;
 import com.murthinext.ae2pr.api.machine.part.PartInventory;
@@ -25,15 +31,21 @@ import com.murthinext.ae2pr.api.recipe.ItemInput;
 import com.murthinext.ae2pr.api.recipe.ItemOutput;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
+import com.murthinext.ae2pr.logic.collapse.CollapseHandler;
 import com.murthinext.ae2pr.logic.upgrade.MachineUpgrades;
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.IntPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -80,6 +92,8 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     private static final String JOB_TICKS_ID = "jobTicks";
     private static final String JOB_TOTAL_TICKS_ID = "jobTotalTicks";
     private static final String JOB_PARALLEL_ID = "jobParallel";
+    private static final String JOB_ME_OUTPUT = "jobMeOutput";
+    private static final String ME_OUTPUT_QUEUE = "meOutputQueue";
     private static final String MIRROR_SIDE_ID = "mirrorSide";
     private static final String MIRROR_FRONT_ID = "mirrorFront";
     private static final String FORMED_CELLS_ID = "formedCells";
@@ -96,6 +110,10 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     protected final List<MachinePart.ItemPart> outputBuses = new ArrayList<>();
     protected final List<MachinePart.FluidPart> inputHatches = new ArrayList<>();
     protected final List<MachinePart.FluidPart> outputHatches = new ArrayList<>();
+    private final List<MachinePart.PatternPart> patternBuffers = new ArrayList<>();
+    private final ChannelRequest channelRequest = new ChannelRequest(this, 1);
+    private final List<ChannelRequest> partChannelRequests = new ArrayList<>();
+    private final List<GenericStack> meOutput = new ArrayList<>();
 
     @Nullable
     private MachinePart.NetworkPart networkAccessHatch;
@@ -113,6 +131,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     protected int jobTicksLeft;
     protected int jobTotalTicks;
     protected int jobParallel;
+    private boolean jobMeOutput;
     private boolean paused;
     private Error error = Error.NONE;
 
@@ -257,6 +276,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             validateStructure();
         }
         updateNetworkAccess();
+        flushMEOutput();
         tickMachine();
         tickJob();
     }
@@ -308,7 +328,10 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             pause(Error.NETWORK);
             return;
         }
-        Match match = findMatch();
+        Match match = findBufferedMatch();
+        if (match == null) {
+            match = findMatch();
+        }
         if (match == null) {
             clearPause();
             return;
@@ -321,7 +344,8 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         }
         match = new Match(match.recipe(), capped, match.group());
         // 输入够但产物放不下时单独提示，避免与“没有可用配方”混淆
-        int parallel = outputParallel(match.recipe(), match.parallel());
+        boolean meJob = match.group().pattern() != null;
+        int parallel = meJob ? match.parallel() : outputParallel(match.recipe(), match.parallel());
         if (parallel <= 0) {
             pause(Error.OUTPUT);
             return;
@@ -344,6 +368,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
 
         jobRecipeId = match.recipe().getId();
         jobParallel = match.parallel();
+        jobMeOutput = meJob;
         jobTotalTicks = scaledDuration(match.recipe().getDuration());
         jobTicksLeft = jobTotalTicks;
         paused = false;
@@ -354,6 +379,10 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     protected boolean consumeInputs(Match match) {
+        var pattern = match.group().pattern();
+        if (pattern != null) {
+            return pattern.consume(match.recipe(), match.parallel(), false);
+        }
         PartInventory inputs = match.group().inventory();
         if (!inputs.consume(match.recipe(), match.parallel())) {
             return false;
@@ -371,9 +400,15 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     private void finishJob() {
         MultiblockRecipe recipe = currentRecipe();
         int parallel = jobParallel;
+        boolean returnToME = jobMeOutput;
         clearJobFields();
         if (recipe != null) {
-            outputProducts(recipe, parallel);
+            if (returnToME) {
+                queueMEProducts(recipe, parallel);
+                flushMEOutput();
+            } else {
+                outputProducts(recipe, parallel);
+            }
         }
         // 先清空客户端的作业内容，再尝试开始下一个
         markStateChanged();
@@ -395,6 +430,59 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         jobTotalTicks = 0;
         jobParallel = 0;
         jobRecipeId = null;
+        jobMeOutput = false;
+    }
+
+    private void queueMEProducts(MultiblockRecipe recipe, int parallel) {
+        for (ItemStack stack : rolledItemOutputs(recipe, parallel)) {
+            var key = AEItemKey.of(stack);
+            if (key != null) {
+                meOutput.add(new GenericStack(key, stack.getCount()));
+            }
+        }
+        for (FluidOutput output : recipe.getFluidOutputs()) {
+            int rolled = rollCount(output, parallel);
+            var key = AEFluidKey.of(output.stack());
+            if (rolled > 0 && key != null) {
+                meOutput.add(new GenericStack(key, (long) output.stack().getAmount() * rolled));
+            }
+        }
+    }
+
+    private void flushMEOutput() {
+        var hatch = networkAccessHatch;
+        if (meOutput.isEmpty() || hatch == null || !hatch.isNetworkConnected(this)) {
+            return;
+        }
+        for (var it = meOutput.listIterator(); it.hasNext(); ) {
+            GenericStack stack = it.next();
+            long inserted = hatch.insertProduct(stack.what(), stack.amount());
+            if (inserted <= 0) {
+                continue;
+            }
+            if (inserted >= stack.amount()) {
+                it.remove();
+            } else {
+                it.set(new GenericStack(stack.what(), stack.amount() - inserted));
+            }
+            setChanged();
+        }
+    }
+
+    private void dropMEOutput() {
+        if (level == null || meOutput.isEmpty()) {
+            return;
+        }
+        var drops = new LinkedHashMap<AEKey, BigInteger>();
+        for (GenericStack stack : meOutput) {
+            drops.merge(stack.what(), BigInteger.valueOf(stack.amount()), BigInteger::add);
+        }
+        CollapseHandler.dropBufferedContents(
+                level,
+                worldPosition,
+                BuiltInRegistries.BLOCK.getKey(getBlockState().getBlock()),
+                drops);
+        meOutput.clear();
     }
 
     private void pause(Error reason) {
@@ -499,6 +587,35 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     protected int outputParallel(MultiblockRecipe recipe, int maximum) {
         return searchParallel(
                 recipe, maximum, parallel -> new PartInventory(outputBuses, outputHatches).insert(recipe, parallel));
+    }
+
+    @Nullable
+    private Match findBufferedMatch() {
+        if (patternBuffers.isEmpty() || !meOutput.isEmpty()) {
+            return null;
+        }
+        var pending = new ArrayList<MachinePart.BufferedPattern>();
+        for (var buffer : patternBuffers) {
+            pending.addAll(buffer.bufferedPatterns(this));
+        }
+        if (pending.isEmpty()) {
+            return null;
+        }
+        int maximum = maxParallel();
+        for (MultiblockRecipe recipe : recipes()) {
+            if (!isRecipeApplicable(recipe)) {
+                continue;
+            }
+            for (var pattern : pending) {
+                if (pattern.matchesOutputs(recipe)) {
+                    int parallel = searchParallel(recipe, maximum, count -> pattern.consume(recipe, count, true));
+                    if (parallel > 0) {
+                        return new Match(recipe, parallel, new InputGroup(pattern));
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     // 并行数单调可行，二分取最大
@@ -654,13 +771,19 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
                 : 0;
     }
 
-    public int getRequiredChannels() {
-        return 1;
+    @Override
+    public ChannelRequest channelRequest() {
+        return channelRequest;
     }
 
-    public int getAllocatedChannels() {
+    @Override
+    public List<ChannelRequest> partChannelRequests() {
+        return Collections.unmodifiableList(partChannelRequests);
+    }
+
+    public ChannelStatus getChannelStatus() {
         var hatch = networkAccessHatch;
-        return hatch != null ? hatch.getAllocatedChannels() : 0;
+        return hatch != null ? hatch.getChannelStatus(this) : ChannelStatus.NONE;
     }
 
     public boolean isNetworkConnected() {
@@ -741,6 +864,8 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         outputBuses.clear();
         inputHatches.clear();
         outputHatches.clear();
+        patternBuffers.clear();
+        partChannelRequests.clear();
         MachinePart.NetworkPart previousAccessHatch = networkAccessHatch;
         networkAccessHatch = null;
         onPartsCleared();
@@ -772,6 +897,14 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             MachinePart.NetworkPart network = part.network();
             if (network != null) {
                 networkAccessHatch = network;
+            }
+            MachinePart.PatternPart pattern = part.patternBuffer();
+            if (pattern != null) {
+                patternBuffers.add(pattern);
+            }
+            ChannelRequest request = part.channelRequest();
+            if (request != null) {
+                partChannelRequests.add(request);
             }
             collectExtraPart(pos, entity);
         }
@@ -834,6 +967,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             return;
         }
         structure.invalidate();
+        dropMEOutput();
         detachNetworkAccess();
         updateCoreLight(false);
         structureFacade.reset(level, formedCells);
@@ -881,6 +1015,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         CompoundTag tag = saveWithoutMetadata();
         // 部件位置仅服务端撤销外观时使用，不同步到客户端
         tag.remove(FORMED_CELLS_ID);
+        tag.remove(ME_OUTPUT_QUEUE);
         tag.putBoolean(MIRROR_SIDE_ID, mirrorSide);
         tag.putBoolean(MIRROR_FRONT_ID, mirrorFront);
         return tag;
@@ -911,11 +1046,23 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
                 FORMED_CELLS_ID,
                 formedCells.stream().mapToLong(BlockPos::asLong).toArray());
         upgrades.writeToNBT(tag, TAG_UPGRADES);
+        writeJob(tag);
+        if (!meOutput.isEmpty()) {
+            var queue = new ListTag();
+            meOutput.forEach(stack -> queue.add(GenericStack.writeTag(stack)));
+            tag.put(ME_OUTPUT_QUEUE, queue);
+        }
+    }
+
+    private void writeJob(CompoundTag tag) {
         if (jobRecipeId != null && jobTicksLeft > 0) {
             tag.putString(JOB_RECIPE_ID, jobRecipeId.toString());
             tag.putInt(JOB_TICKS_ID, jobTicksLeft);
             tag.putInt(JOB_TOTAL_TICKS_ID, jobTotalTicks);
             tag.putInt(JOB_PARALLEL_ID, jobParallel);
+            if (jobMeOutput) {
+                tag.putBoolean(JOB_ME_OUTPUT, true);
+            }
         }
     }
 
@@ -935,6 +1082,15 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         jobParallel = Math.max(1, tag.getInt(JOB_PARALLEL_ID));
         jobTicksLeft = Math.max(0, tag.getInt(JOB_TICKS_ID));
         jobTotalTicks = Math.max(1, tag.getInt(JOB_TOTAL_TICKS_ID));
+        jobMeOutput = tag.getBoolean(JOB_ME_OUTPUT);
+        meOutput.clear();
+        ListTag queue = tag.getList(ME_OUTPUT_QUEUE, Tag.TAG_COMPOUND);
+        for (int i = 0; i < queue.size(); i++) {
+            GenericStack stack = GenericStack.readTag(queue.getCompound(i));
+            if (stack != null && stack.amount() > 0) {
+                meOutput.add(stack);
+            }
+        }
         error = Error.NONE;
     }
 

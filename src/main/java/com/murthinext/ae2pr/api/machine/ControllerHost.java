@@ -1,5 +1,7 @@
 package com.murthinext.ae2pr.api.machine;
 
+import com.murthinext.ae2pr.api.machine.part.ChannelRequest;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 
 public interface ControllerHost {
@@ -8,7 +10,9 @@ public interface ControllerHost {
 
     boolean isControllerRemoved();
 
-    int getRequiredChannels();
+    ChannelRequest channelRequest();
+
+    List<ChannelRequest> partChannelRequests();
 
     BlockPos getControllerPos();
 }

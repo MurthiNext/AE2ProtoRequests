@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.registry;
 
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlockEntity;
+import com.murthinext.ae2pr.block.machine_part.MEPatternBufferBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.block.molecular_assembly_core.MolecularAssemblyCoreBlockEntity;
 import net.minecraft.world.level.block.Block;
@@ -33,6 +34,12 @@ public final class ModBlockEntities {
                     "me_network_access_hatch",
                     () -> BlockEntityType.Builder.of(
                                     MENetworkAccessHatchBlockEntity::new, ModBlocks.ME_NETWORK_ACCESS_HATCH.get())
+                            .build(null));
+
+    public static final RegistryObject<BlockEntityType<MEPatternBufferBlockEntity>> ME_PATTERN_BUFFER =
+            BLOCK_ENTITIES.register(
+                    "me_pattern_buffer",
+                    () -> BlockEntityType.Builder.of(MEPatternBufferBlockEntity::new, ModBlocks.ME_PATTERN_BUFFER.get())
                             .build(null));
 
     public static final RegistryObject<BlockEntityType<MolecularAssemblyCoreBlockEntity>> MOLECULAR_ASSEMBLY_CORE =

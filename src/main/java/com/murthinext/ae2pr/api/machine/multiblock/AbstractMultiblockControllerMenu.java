@@ -40,7 +40,8 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
     protected static final int DATA_PARALLEL_HI = 10;
     protected static final int DATA_ALLOCATED_CHANNELS = 11;
     protected static final int DATA_REQUIRED_CHANNELS_LO = 12;
-    protected static final int DATA_COUNT = 14;
+    protected static final int DATA_CHANNEL_CAPACITY = 14;
+    protected static final int DATA_COUNT = 15;
 
     private static final int FLAG_FORMED = 1;
     private static final int FLAG_RUNNING = 2;
@@ -117,8 +118,10 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
             setIntData(data, DATA_ELAPSED_LO, controller.getJobElapsed());
             setIntData(data, DATA_DURATION_LO, controller.getJobDuration());
             data.set(DATA_NETWORK_CONNECTED, controller.isNetworkConnected() ? 1 : 0);
-            data.set(DATA_ALLOCATED_CHANNELS, controller.getAllocatedChannels());
-            setIntData(data, DATA_REQUIRED_CHANNELS_LO, controller.getRequiredChannels());
+            var channels = controller.getChannelStatus();
+            data.set(DATA_ALLOCATED_CHANNELS, channels.allocated());
+            setIntData(data, DATA_REQUIRED_CHANNELS_LO, channels.required());
+            data.set(DATA_CHANNEL_CAPACITY, channels.capacity());
             long power = (long) Math.min(Math.max(controller.getNetworkStoredPower(), 0), Long.MAX_VALUE);
             data.set(DATA_POWER_LO, (int) (power & 0xFFFFFFFFL));
             data.set(DATA_POWER_HI, (int) (power >>> 32));
@@ -178,6 +181,10 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
 
     public int getRequiredChannels() {
         return getIntData(data, DATA_REQUIRED_CHANNELS_LO);
+    }
+
+    public int getChannelCapacity() {
+        return data.get(DATA_CHANNEL_CAPACITY);
     }
 
     public long getNetworkStoredPower() {

@@ -7,7 +7,6 @@ import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
 import com.murthinext.ae2pr.api.machine.client.GuiTextures;
 import com.murthinext.ae2pr.api.machine.client.MachineStyles;
-import com.murthinext.ae2pr.api.machine.part.MachinePart;
 import com.murthinext.nextui.client.GuiFluids;
 import com.murthinext.nextui.client.GuiTheme;
 import com.murthinext.nextui.client.GuiTooltips;
@@ -331,16 +330,18 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
             return renderDataTooltip(graphics, mouseX, mouseY);
         }
         if (isHovering(TEXT_X, POWER_Y, font.width(powerText()), font.lineHeight, mouseX, mouseY)) {
+            int capacity = menu.getChannelCapacity();
             GuiTooltips.render(
                     graphics,
                     font,
-                    List.of(
-                            Component.translatable(
-                                    "gui.ae2pr.multiblock.channels",
-                                    menu.getAllocatedChannels(),
-                                    menu.getRequiredChannels()),
-                            Component.translatable(
-                                    "gui.ae2pr.multiblock.channels.limit", MachinePart.NetworkPart.MAX_CHANNELS)),
+                    capacity == 0
+                            ? List.of(Component.translatable("gui.ae2pr.multiblock.channels.no_hatch"))
+                            : List.of(
+                                    Component.translatable(
+                                            "gui.ae2pr.multiblock.channels",
+                                            menu.getAllocatedChannels(),
+                                            menu.getRequiredChannels()),
+                                    Component.translatable("gui.ae2pr.multiblock.channels.limit", capacity)),
                     mouseX,
                     mouseY);
             return true;

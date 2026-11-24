@@ -92,6 +92,12 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
 
     // 配方匹配
 
+    @Override
+    protected boolean isRecipeApplicable(MultiblockRecipe recipe) {
+        return recipe instanceof CrystalAssemblyLineRecipe lineRecipe
+                && modules.satisfies(lineRecipe.getModuleRequirements());
+    }
+
     @Nullable
     @Override
     protected Match findMatch() {

@@ -1,8 +1,8 @@
 package com.murthinext.ae2pr.registry;
 
 import com.murthinext.ae2pr.api.multiblock.StructureHooks;
-import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
+import java.util.stream.Stream;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -14,8 +14,9 @@ final class MachinePartAppearance {
 
     static void install() {
         StructureHooks.install(
-                () -> ModBlocks.MACHINE_PARTS.stream()
-                        .map(entry -> (Block) entry.get())
+                () -> Stream.concat(
+                                ModBlocks.MACHINE_PARTS.stream().map(entry -> (Block) entry.get()),
+                                Stream.of(ModBlocks.ME_PATTERN_BUFFER.get()))
                         .toList(),
                 ModBlocks.ME_NETWORK_ACCESS_HATCH::get,
                 MachinePartAppearance::apply);
@@ -25,14 +26,9 @@ final class MachinePartAppearance {
         int targetStyle = formed ? style : MachinePartBlock.DEFAULT_STYLE;
         BlockState state = level.getBlockState(pos);
         BlockState updated = state;
-        if (state.is(ModBlocks.ME_NETWORK_ACCESS_HATCH.get())) {
-            if (state.getValue(MENetworkAccessHatchBlock.FORMED) != formed) {
-                updated = updated.setValue(MENetworkAccessHatchBlock.FORMED, formed);
-            }
-            if (updated.getValue(MENetworkAccessHatchBlock.STYLE) != targetStyle) {
-                updated = updated.setValue(MENetworkAccessHatchBlock.STYLE, targetStyle);
-            }
-        } else if (state.getBlock() instanceof MachinePartBlock) {
+        if (state.getBlock() instanceof MachinePartBlock
+                || state.is(ModBlocks.ME_NETWORK_ACCESS_HATCH.get())
+                || state.is(ModBlocks.ME_PATTERN_BUFFER.get())) {
             if (state.getValue(MachinePartBlock.FORMED) != formed) {
                 updated = updated.setValue(MachinePartBlock.FORMED, formed);
             }

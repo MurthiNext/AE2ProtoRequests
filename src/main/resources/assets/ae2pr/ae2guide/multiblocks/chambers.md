@@ -16,6 +16,7 @@ item_ids:
   - ae2pr:aev_output_hatch
   - ae2pr:aev_dual_input_hatch
   - ae2pr:aev_dual_output_hatch
+  - ae2pr:me_pattern_buffer
 ---
 
 # 仓室与总线
@@ -62,3 +63,13 @@ item_ids:
 实际分配受接入线缆及沿途网络的剩余频道限制：若最多只能分配 6 频道，机器就不可能获得超过 6 频道；频道不足、断线或网络断电时，机器暂停工作，网络恢复后继续。
 
 每台多方块机器最多安装 **1 个**接入仓，多装会导致结构无法成型。
+
+## ME 样板总成仓
+
+<BlockImage id="ae2pr:me_pattern_buffer" scale="3" />
+
+XPV 阶段解锁的便携式样板发配仓室，只需要放入处理样板并确保其联网，即可通过 AE 网络发配材料来实现自动化合成。不再需要<ItemLink id="ae2:pattern_provider" />、<ItemLink id="ae2:storage_bus" />或其它什么东西了！
+
+*Q: 既然是 AE2 附属，为什么不开局就能做这个？非得搞一大堆仓室吗？*
+
+*A: 当然，你也可以大幅增难此仓室的获取手段……以及我确信，被动化产线也是 AE2 的特色之一。*

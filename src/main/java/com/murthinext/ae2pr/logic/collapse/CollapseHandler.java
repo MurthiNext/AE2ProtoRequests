@@ -6,18 +6,25 @@ import appeng.api.stacks.AEKey;
 import appeng.api.stacks.GenericStack;
 import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.item.collapsed_storage_cell.CollapsedItemStorageCellItem;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 public final class CollapseHandler {
+
+    private static final BigInteger MAX_CELL_AMOUNT = BigInteger.valueOf(Long.MAX_VALUE);
 
     private CollapseHandler() {}
 
@@ -29,6 +36,73 @@ public final class CollapseHandler {
     @Nullable
     public static ItemStack tryCollapse(ResourceLocation id, IItemHandler handler) {
         return CollapseMatcher.allows(id) ? collapse(List.of(CollapseSource.of(id, handler))) : null;
+    }
+
+    public static void dropBufferedContents(
+            Level level, BlockPos pos, ResourceLocation id, Map<AEKey, BigInteger> keys) {
+        boolean collapsed = collapseBufferedItems(id, keys, stack -> Block.popResource(level, pos, stack));
+        for (var entry : keys.entrySet()) {
+            var key = entry.getKey();
+            var amount = entry.getValue();
+            if (key instanceof AEItemKey item) {
+                if (collapsed) {
+                    continue;
+                }
+                var limit = BigInteger.valueOf(Math.max(1, item.getMaxStackSize()));
+                while (amount.signum() > 0) {
+                    var taken = amount.min(limit);
+                    Block.popResource(level, pos, item.toStack(taken.intValueExact()));
+                    amount = amount.subtract(taken);
+                }
+            } else {
+                while (amount.signum() > 0) {
+                    var taken = amount.min(MAX_CELL_AMOUNT);
+                    var drops = new ArrayList<ItemStack>();
+                    key.addDrops(taken.longValueExact(), drops, level, pos);
+                    drops.forEach(stack -> Block.popResource(level, pos, stack));
+                    amount = amount.subtract(taken);
+                }
+            }
+        }
+    }
+
+    private static boolean collapseBufferedItems(
+            ResourceLocation id, Map<AEKey, BigInteger> keys, Consumer<ItemStack> drop) {
+        if (!ServerConfig.collapseEnabled() || !CollapseMatcher.allows(id)) {
+            return false;
+        }
+        BigInteger total = BigInteger.ZERO;
+        for (var entry : keys.entrySet()) {
+            if (entry.getKey() instanceof AEItemKey) {
+                total = total.add(entry.getValue());
+            }
+        }
+        if (total.compareTo(BigInteger.valueOf(ServerConfig.collapseThreshold())) < 0) {
+            return false;
+        }
+        var contents = new ArrayList<GenericStack>();
+        long remaining = Long.MAX_VALUE;
+        for (var entry : keys.entrySet()) {
+            if (!(entry.getKey() instanceof AEItemKey item)) {
+                continue;
+            }
+            var amount = entry.getValue();
+            while (amount.signum() > 0) {
+                var taken = amount.min(BigInteger.valueOf(remaining));
+                contents.add(new GenericStack(item, taken.longValueExact()));
+                amount = amount.subtract(taken);
+                remaining -= taken.longValueExact();
+                if (remaining == 0) {
+                    drop.accept(CollapsedItemStorageCellItem.create(contents));
+                    contents.clear();
+                    remaining = Long.MAX_VALUE;
+                }
+            }
+        }
+        if (!contents.isEmpty()) {
+            drop.accept(CollapsedItemStorageCellItem.create(contents));
+        }
+        return true;
     }
 
     public static boolean collapseInto(BlockEntity blockEntity, List<ItemStack> drops) {

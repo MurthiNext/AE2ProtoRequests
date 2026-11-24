@@ -27,6 +27,7 @@ public final class CrystalAssemblyLineStructure extends AbstractStructureFacade 
             .where(
                     'F',
                     StructurePredicate.blocks(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get())
+                            .or(StructurePredicate.blocks(ModBlocks.ME_PATTERN_BUFFER.get()))
                             .or(StructurePredicate.blocks(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get()))
                             .or(StructurePredicate.blocks(ModBlocks.ME_NETWORK_ACCESS_HATCH.get())
                                     .maxCount(1)))

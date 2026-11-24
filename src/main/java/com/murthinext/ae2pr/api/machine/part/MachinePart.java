@@ -1,6 +1,9 @@
 package com.murthinext.ae2pr.api.machine.part;
 
+import appeng.api.stacks.AEKey;
 import com.murthinext.ae2pr.api.machine.ControllerHost;
+import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -18,6 +21,16 @@ public interface MachinePart {
 
     @Nullable
     NetworkPart network();
+
+    @Nullable
+    default ChannelRequest channelRequest() {
+        return null;
+    }
+
+    @Nullable
+    default PatternPart patternBuffer() {
+        return null;
+    }
 
     boolean isRecipeIsolated();
 
@@ -51,13 +64,11 @@ public interface MachinePart {
 
     interface NetworkPart {
 
-        int MAX_CHANNELS = 8;
-
         void updateController(ControllerHost controller);
 
         void detachController(ControllerHost controller);
 
-        int getAllocatedChannels();
+        ChannelStatus getChannelStatus(ControllerHost controller);
 
         boolean isNetworkConnected(ControllerHost controller);
 
@@ -65,6 +76,20 @@ public interface MachinePart {
 
         double getAvailableAEPower();
 
+        long insertProduct(AEKey key, long amount);
+
         boolean isHatchRemoved();
+    }
+
+    interface PatternPart {
+
+        List<BufferedPattern> bufferedPatterns(ControllerHost host);
+    }
+
+    interface BufferedPattern {
+
+        boolean matchesOutputs(MultiblockRecipe recipe);
+
+        boolean consume(MultiblockRecipe recipe, int parallel, boolean simulate);
     }
 }
