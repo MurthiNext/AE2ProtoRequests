@@ -51,7 +51,7 @@ public final class SideConfigPanel {
     public void render(GuiGraphics graphics, Font font, Rect2i bounds, int mouseX, int mouseY) {
         int x = bounds.getX();
         int y = bounds.getY();
-        GuiPanels.popup(graphics, x, y, bounds.getWidth(), bounds.getHeight());
+        GuiPanels.panel(graphics, x, y, bounds.getWidth(), bounds.getHeight(), 0);
         graphics.drawString(
                 font, Component.translatable("gui.ae2pr.side_config.title"), x + ORIGIN_X, y + 5, COLOR_TITLE, false);
 

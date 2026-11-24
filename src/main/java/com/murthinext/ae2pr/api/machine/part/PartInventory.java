@@ -21,7 +21,9 @@ import java.util.function.ToIntFunction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 总线与流体仓的事务快照，用于模拟扣料与产物容纳。
@@ -67,10 +69,24 @@ public final class PartInventory {
             MultiblockRecipe recipe,
             int parallel,
             Map<AEKey, BigInteger> keys,
+            IItemHandler sharedItems,
+            List<FluidTank> sharedFluids,
             boolean simulate,
             ObjLongConsumer<AEKey> extract) {
         var itemSources = new ArrayList<InputSlot<ItemStack>>();
         var fluidSources = new ArrayList<InputSlot<FluidStack>>();
+        for (int i = 0; i < sharedItems.getSlots(); i++) {
+            ItemStack stack = sharedItems.getStackInSlot(i);
+            if (!stack.isEmpty()) {
+                itemSources.add(new InputSlot<>(stack, stack.getCount(), null));
+            }
+        }
+        for (FluidTank tank : sharedFluids) {
+            FluidStack stack = tank.getFluid();
+            if (!stack.isEmpty()) {
+                fluidSources.add(new InputSlot<>(stack, stack.getAmount(), null));
+            }
+        }
         for (var entry : keys.entrySet()) {
             AEKey key = entry.getKey();
             long amount = entry.getValue().min(MAX_INPUT).longValueExact();
@@ -143,7 +159,8 @@ public final class PartInventory {
             connect(graph, source, i, amount);
             boolean found = false;
             for (int j = 0; j < slots.size(); j++) {
-                if (matches.test(input, slots.get(j).stack())) {
+                var slot = slots.get(j);
+                if ((isCatalyst[i] || slot.extract() != null) && matches.test(input, slot.stack())) {
                     connect(graph, i, requirements + j, amount);
                     found = true;
                 }
@@ -191,8 +208,8 @@ public final class PartInventory {
                     deducted += edge.capacity;
                 }
             }
-            if (deducted > 0) {
-                LongConsumer extract = slots.get(j).extract();
+            LongConsumer extract = slots.get(j).extract();
+            if (deducted > 0 && extract != null) {
                 long amount = deducted;
                 deductions.add(() -> extract.accept(amount));
             }
@@ -220,7 +237,8 @@ public final class PartInventory {
         }
     }
 
-    private record InputSlot<S>(S stack, long amount, LongConsumer extract) {}
+    private record InputSlot<S>(
+            S stack, long amount, @Nullable LongConsumer extract) {}
 
     // 模拟写入产物，返回全部放得下时为 true；快照需 {@link #commit()} 才生效
     public boolean insert(MultiblockRecipe recipe, int parallel) {

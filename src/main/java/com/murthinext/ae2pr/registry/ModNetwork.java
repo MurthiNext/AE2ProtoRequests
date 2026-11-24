@@ -7,6 +7,7 @@ import com.murthinext.ae2pr.network.MachinePartFluidPacket;
 import com.murthinext.ae2pr.network.MachinePartStackPacket;
 import com.murthinext.ae2pr.network.MachineStatsPacket;
 import com.murthinext.ae2pr.network.NamingFactoryRenamePacket;
+import com.murthinext.ae2pr.network.PatternBufferFluidPacket;
 import com.murthinext.ae2pr.network.RepeatOrderFailedPacket;
 import com.murthinext.ae2pr.network.RepeatOrderFinishedPacket;
 import com.murthinext.ae2pr.network.RepeatOrderRoundPacket;
@@ -26,7 +27,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public final class ModNetwork {
-    private static final String PROTOCOL_VERSION = "1";
+    private static final String PROTOCOL_VERSION = "2";
 
     public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder.named(Ids.of("main"))
             .networkProtocolVersion(() -> PROTOCOL_VERSION)
@@ -164,6 +165,14 @@ public final class ModNetwork {
                 MachineStatsPacket::encode,
                 MachineStatsPacket::decode,
                 MachineStatsPacket::handle,
+                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        CHANNEL.registerMessage(
+                nextMessageId++,
+                PatternBufferFluidPacket.class,
+                PatternBufferFluidPacket::encode,
+                PatternBufferFluidPacket::decode,
+                PatternBufferFluidPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 

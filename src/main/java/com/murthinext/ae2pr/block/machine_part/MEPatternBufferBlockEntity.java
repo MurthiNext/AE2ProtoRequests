@@ -30,6 +30,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,9 +42,14 @@ public final class MEPatternBufferBlockEntity extends BlockEntity
     static final int ROWS = 4;
     static final int COLUMNS = 9;
     static final int SIZE = ROWS * COLUMNS;
+    static final int SHARED_COLUMNS = 3;
+    static final int SHARED_SIZE = SHARED_COLUMNS * SHARED_COLUMNS;
+    static final int SHARED_TANK_CAPACITY = FluidType.BUCKET_VOLUME;
 
     private static final String PATTERNS = "patterns";
     private static final String BUFFERS = "buffers";
+    private static final String SHARED_ITEMS = "shared_items";
+    private static final String SHARED_FLUIDS = "shared_fluids";
     private static final String SLOT = "slot";
     private static final String KEYS = "keys";
     private static final String KEY = "key";
@@ -76,6 +84,13 @@ public final class MEPatternBufferBlockEntity extends BlockEntity
             channelRequest.refreshServices();
         }
     };
+    private final ItemStackHandler sharedItems = new ItemStackHandler(SHARED_SIZE) {
+        @Override
+        protected void onContentsChanged(int slot) {
+            setChanged();
+        }
+    };
+    private final List<FluidTank> sharedFluids = new ArrayList<>(SHARED_SIZE);
 
     private int nextSlot;
 
@@ -83,6 +98,14 @@ public final class MEPatternBufferBlockEntity extends BlockEntity
         super(ModBlockEntities.ME_PATTERN_BUFFER.get(), pos, state);
         for (int i = 0; i < SIZE; i++) {
             buffers[i] = new PatternSlot();
+        }
+        for (int i = 0; i < SHARED_SIZE; i++) {
+            sharedFluids.add(new FluidTank(SHARED_TANK_CAPACITY) {
+                @Override
+                protected void onContentsChanged() {
+                    setChanged();
+                }
+            });
         }
     }
 
@@ -97,6 +120,14 @@ public final class MEPatternBufferBlockEntity extends BlockEntity
 
     ItemStackHandler patterns() {
         return patterns;
+    }
+
+    ItemStackHandler sharedItems() {
+        return sharedItems;
+    }
+
+    FluidTank sharedTank(int slot) {
+        return sharedFluids.get(slot);
     }
 
     boolean isLocked(int slot) {
@@ -185,12 +216,23 @@ public final class MEPatternBufferBlockEntity extends BlockEntity
                 CollapseHandler.dropBufferedContents(level, worldPosition, id, buffers[i].keys);
             }
         }
+        for (int i = 0; i < SHARED_SIZE; i++) {
+            Block.popResource(level, worldPosition, sharedItems.getStackInSlot(i));
+        }
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put(PATTERNS, patterns.serializeNBT());
+        tag.put(SHARED_ITEMS, sharedItems.serializeNBT());
+        if (sharedFluids.stream().anyMatch(tank -> !tank.isEmpty())) {
+            var fluids = new ListTag();
+            for (FluidTank tank : sharedFluids) {
+                fluids.add(tank.writeToNBT(new CompoundTag()));
+            }
+            tag.put(SHARED_FLUIDS, fluids);
+        }
         var list = new ListTag();
         for (int i = 0; i < SIZE; i++) {
             if (!isLocked(i)) {
@@ -214,9 +256,12 @@ public final class MEPatternBufferBlockEntity extends BlockEntity
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        var savedPatterns = tag.getCompound(PATTERNS).copy();
-        savedPatterns.putInt("Size", SIZE);
-        patterns.deserializeNBT(savedPatterns);
+        loadItems(tag, PATTERNS, patterns);
+        loadItems(tag, SHARED_ITEMS, sharedItems);
+        var fluids = tag.getList(SHARED_FLUIDS, Tag.TAG_COMPOUND);
+        for (int i = 0; i < SHARED_SIZE; i++) {
+            sharedTank(i).setFluid(FluidStack.loadFluidStackFromNBT(fluids.getCompound(i)));
+        }
         for (var buffer : buffers) {
             buffer.keys.clear();
             buffer.details = null;
@@ -238,6 +283,12 @@ public final class MEPatternBufferBlockEntity extends BlockEntity
                 }
             }
         }
+    }
+
+    private static void loadItems(CompoundTag tag, String name, ItemStackHandler inventory) {
+        var saved = tag.getCompound(name).copy();
+        saved.putInt("Size", inventory.getSlots());
+        inventory.deserializeNBT(saved);
     }
 
     @Override
@@ -308,6 +359,8 @@ public final class MEPatternBufferBlockEntity extends BlockEntity
                     recipe,
                     parallel,
                     keys,
+                    sharedItems,
+                    sharedFluids,
                     simulate,
                     (key, amount) -> keys.computeIfPresent(key, (ignored, stock) -> {
                         var remaining = stock.subtract(BigInteger.valueOf(amount));

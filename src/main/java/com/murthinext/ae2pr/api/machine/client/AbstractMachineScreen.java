@@ -90,9 +90,14 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
         return 0;
     }
 
+    protected int minimumLeftMargin() {
+        return 0;
+    }
+
     @Override
     protected void init() {
         super.init();
+        leftPos = Math.max(leftPos, Math.min(minimumLeftMargin(), width - imageWidth));
         topPos += topExtension() / 2;
         GuiSidebar toolbar = toolbar();
         guideButton = new GuideButton(toolbar.cellX(), toolbar.cellY(0), () -> GuideOpener.open(guidePage()));
