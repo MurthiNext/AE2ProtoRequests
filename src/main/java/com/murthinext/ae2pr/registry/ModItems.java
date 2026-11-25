@@ -183,6 +183,12 @@ public final class ModItems {
     public static final RegistryObject<Item> FINE_FLUIX_WIRE =
             ITEMS.register("fine_fluix_wire", () -> new Item(new Item.Properties()));
 
+    public static final RegistryObject<Item> CARBON_FIBER =
+            ITEMS.register("carbon_fiber", () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> CARBON_FIBER_PLATE =
+            ITEMS.register("carbon_fiber_plate", () -> new Item(new Item.Properties()));
+
     public static final RegistryObject<Item> SINGLE_PLATE_PRESS =
             ITEMS.register("single_plate_press", () -> new Item(new Item.Properties()));
 
