@@ -1,5 +1,6 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryPlayback.Entry;
 import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryRunner.Choice;
 import java.util.ArrayList;
@@ -449,7 +450,9 @@ final class TerminalStoryPanel {
         if (condition instanceof TerminalStoryCondition.Inventory inventory) {
             TerminalStoryUnlockCondition unlock = TerminalStoryUnlockCondition.parse(inventory.key());
             return Component.translatable(
-                            "gui.ae2pr.proto_terminal.locked.condition", unlockName(unlock), unlock.count())
+                            "gui.ae2pr.proto_terminal.locked.condition",
+                            unlockName(unlock),
+                            AmountText.exact(unlock.count()))
                     .getString();
         }
         return label("locked.requires").getString();

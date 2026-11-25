@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.integration.jei;
 
-import com.murthinext.ae2pr.api.EnergyAmount;
-import com.murthinext.ae2pr.integration.jei.render.ChancedRenderer;
+import com.murthinext.ae2pr.api.text.AmountText;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -11,21 +10,22 @@ public final class JeiRecipeInfo {
     private JeiRecipeInfo() {}
 
     public static Component duration(int ticks) {
-        return Component.translatable("jei.ae2pr.recipe.duration", ticks);
+        return Component.translatable("jei.ae2pr.recipe.duration", AmountText.exact(ticks));
     }
 
     public static Component energy(double energy) {
-        return Component.translatable("jei.ae2pr.recipe.energy", JeiAmountFormat.exact(EnergyAmount.toLong(energy)));
+        return Component.translatable("jei.ae2pr.recipe.energy", AmountText.exact(energy, 2));
     }
 
     public static MutableComponent chance(float chance) {
-        return Component.translatable("jei.ae2pr.recipe.chance", ChancedRenderer.percent(chance));
+        return Component.translatable("jei.ae2pr.recipe.chance", AmountText.percent(chance, 1));
     }
 
     // 同时有输入与产物超出可见槽位
     public static Component moreIo(int hiddenInputs, int hiddenOutputs) {
         if (hiddenInputs > 0 && hiddenOutputs > 0) {
-            return Component.translatable("jei.ae2pr.recipe.more_io", hiddenInputs, hiddenOutputs);
+            return Component.translatable(
+                    "jei.ae2pr.recipe.more_io", AmountText.exact(hiddenInputs), AmountText.exact(hiddenOutputs));
         }
         if (hiddenInputs > 0) {
             return moreInputs(hiddenInputs);
@@ -34,11 +34,11 @@ public final class JeiRecipeInfo {
     }
 
     public static Component moreInputs(int hidden) {
-        return Component.translatable("jei.ae2pr.recipe.more_inputs", hidden);
+        return Component.translatable("jei.ae2pr.recipe.more_inputs", AmountText.exact(hidden));
     }
 
     public static Component moreOutputs(int hidden) {
-        return Component.translatable("jei.ae2pr.recipe.more_outputs", hidden);
+        return Component.translatable("jei.ae2pr.recipe.more_outputs", AmountText.exact(hidden));
     }
 
     public static Component extraInputs() {

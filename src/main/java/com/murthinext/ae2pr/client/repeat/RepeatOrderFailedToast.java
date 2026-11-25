@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.client.repeat;
 
 import appeng.api.client.AEKeyRendering;
 import appeng.api.stacks.AEKey;
-import appeng.api.stacks.AmountFormat;
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.logic.repeat.FailureReason;
 import java.util.List;
 import net.minecraft.client.Minecraft;
@@ -26,10 +26,10 @@ public final class RepeatOrderFailedToast extends AbstractRepeatOrderToast {
                 List.of(
                         Component.translatable(
                                 "gui.ae2pr.repeat_order.failed.text",
-                                what.formatAmount(amount, AmountFormat.SLOT),
+                                amountText(what, amount),
                                 AEKeyRendering.getDisplayName(what),
-                                completedRounds,
-                                totalRounds),
+                                AmountText.exact(completedRounds),
+                                AmountText.exact(totalRounds)),
                         Component.translatable(
                                 "gui.ae2pr.repeat_order.failed.reason", Component.translatable(reasonKey(reason)))));
     }

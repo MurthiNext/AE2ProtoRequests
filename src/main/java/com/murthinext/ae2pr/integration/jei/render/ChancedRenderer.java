@@ -1,9 +1,9 @@
 package com.murthinext.ae2pr.integration.jei.render;
 
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.integration.jei.JeiRecipeInfo;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -44,7 +44,7 @@ public class ChancedRenderer<T> implements IIngredientRenderer<T> {
             return;
         }
         Font font = Minecraft.getInstance().font;
-        String text = percent(chance);
+        String text = AmountText.percent(chance, 1);
         var pose = graphics.pose();
         pose.pushPose();
         pose.translate(posX + 16, posY + 2, 300);
@@ -76,13 +76,5 @@ public class ChancedRenderer<T> implements IIngredientRenderer<T> {
     public static int color(float chance) {
         float hue = Mth.lerp(Mth.clamp(chance, 0.0F, 1.0F), MIN_HUE, MAX_HUE) / 360.0F;
         return 0xFF000000 | (Mth.hsvToRgb(hue, 1.0F, 1.0F) & 0xFFFFFF);
-    }
-
-    public static String percent(float chance) {
-        float value = chance * 100.0F;
-        if (Math.abs(value - Math.round(value)) < 0.05F) {
-            return Math.round(value) + "%";
-        }
-        return String.format(Locale.ROOT, "%.1f%%", value);
     }
 }

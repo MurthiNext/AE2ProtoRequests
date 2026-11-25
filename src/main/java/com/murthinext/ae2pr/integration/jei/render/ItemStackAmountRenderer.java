@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.integration.jei.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.murthinext.ae2pr.integration.jei.JeiAmountFormat;
+import com.murthinext.ae2pr.api.text.AmountText;
 import java.util.ArrayList;
 import java.util.List;
 import mezz.jei.api.ingredients.IIngredientRenderer;
@@ -18,6 +18,8 @@ public class ItemStackAmountRenderer implements IIngredientRenderer<ItemStack> {
 
     public static final ItemStackAmountRenderer INSTANCE = new ItemStackAmountRenderer();
 
+    private static final int AMOUNT_MAX_CHARS = 5;
+
     @Override
     public void render(GuiGraphics graphics, ItemStack ingredient) {
         render(graphics, ingredient, 0, 0);
@@ -33,7 +35,7 @@ public class ItemStackAmountRenderer implements IIngredientRenderer<ItemStack> {
                 ingredient,
                 posX,
                 posY,
-                JeiAmountFormat.abbreviated(count) ? JeiAmountFormat.item(count) : null);
+                count > 1 ? AmountText.compact(count, AMOUNT_MAX_CHARS) : null);
         RenderSystem.disableBlend();
     }
 
@@ -41,11 +43,12 @@ public class ItemStackAmountRenderer implements IIngredientRenderer<ItemStack> {
     public List<Component> getTooltip(ItemStack ingredient, @Nullable Player player, TooltipFlag tooltipFlag) {
         List<Component> lines = ingredient.getTooltipLines(player, tooltipFlag);
         int count = ingredient.getCount();
-        if (!JeiAmountFormat.abbreviated(count)) {
+        if (!AmountText.abbreviated(count)) {
             return lines;
         }
         List<Component> exact = new ArrayList<>(lines);
-        exact.add(Component.literal("x" + JeiAmountFormat.exact(count)).withStyle(ChatFormatting.GRAY));
+        exact.add(Component.translatable("gui.ae2pr.amount.count", AmountText.exact(count))
+                .withStyle(ChatFormatting.GRAY));
         return exact;
     }
 

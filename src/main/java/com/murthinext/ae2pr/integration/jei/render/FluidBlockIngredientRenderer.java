@@ -1,6 +1,6 @@
 package com.murthinext.ae2pr.integration.jei.render;
 
-import com.murthinext.ae2pr.integration.jei.JeiAmountFormat;
+import com.murthinext.ae2pr.api.text.AmountText;
 import java.util.List;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.Minecraft;
@@ -24,7 +24,7 @@ public class FluidBlockIngredientRenderer implements IIngredientRenderer<FluidSt
     public List<Component> getTooltip(FluidStack fluidStack, @Nullable Player player, TooltipFlag tooltipFlag) {
         return List.of(
                 fluidStack.getDisplayName(),
-                Component.translatable("jei.tooltip.liquid.amount", JeiAmountFormat.exact(fluidStack.getAmount())));
+                Component.translatable("jei.tooltip.liquid.amount", AmountText.exact(fluidStack.getAmount())));
     }
 
     @Override

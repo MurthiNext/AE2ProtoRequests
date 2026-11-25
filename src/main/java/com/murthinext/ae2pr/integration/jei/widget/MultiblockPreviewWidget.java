@@ -1,5 +1,6 @@
 package com.murthinext.ae2pr.integration.jei.widget;
 
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.client.multiblock.MultiblockPreview;
 import com.murthinext.ae2pr.client.multiblock.MultiblockPreviewRenderer;
 import com.murthinext.ae2pr.integration.jei.category.MultiblockPreviewCategory;
@@ -154,14 +155,15 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
             return;
         }
         if (contains(LAYER, mouseX, mouseY)) {
-            tooltip.add(preview.layer() < 0 ? text("all_layers") : text("layer", preview.layer() + 1));
+            tooltip.add(
+                    preview.layer() < 0 ? text("all_layers") : text("layer", AmountText.exact(preview.layer() + 1)));
             return;
         }
         if (hasVariableLength() && contains(LENGTH, mouseX, mouseY)) {
             tooltip.add(text(
                     "length_hint",
-                    recipe.pattern().minSlices(),
-                    recipe.maxSlices().getAsInt()));
+                    AmountText.exact(recipe.pattern().minSlices()),
+                    AmountText.exact(recipe.maxSlices().getAsInt())));
             return;
         }
         if (contains(MATERIAL_PREV, mouseX, mouseY) && materialOffset > 0) {
@@ -177,7 +179,7 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
         if (material >= 0) {
             ItemStack stack = preview.materials().get(material);
             addItemTooltip(tooltip, stack);
-            tooltip.add(text("total", stack.getCount()));
+            tooltip.add(text("total", AmountText.exact(stack.getCount())));
             return;
         }
         int replacement = replacementIndex(mouseX, mouseY);

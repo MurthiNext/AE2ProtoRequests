@@ -1,11 +1,11 @@
 package com.murthinext.ae2pr.block.machine_part;
 
 import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.api.text.Voltage;
 import com.murthinext.ae2pr.api.wrench.WrenchTags;
 import com.murthinext.ae2pr.api.wrench.Wrenchable;
 import com.murthinext.ae2pr.logic.collapse.CollapseHandler;
-import java.text.NumberFormat;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -66,8 +66,6 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
         FLUIDS,
         BOTH
     }
-
-    private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty FORMED = BooleanProperty.create("formed");
@@ -236,15 +234,15 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
             ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
         if (storage != Storage.FLUIDS) {
             tooltip.add(Component.translatable(
-                    "tooltip.ae2pr.machine_part.stack_limit.items", NUMBER.format(tier.itemCapacity)));
+                    "tooltip.ae2pr.machine_part.stack_limit.items", AmountText.exact(tier.itemCapacity)));
             tooltip.add(Component.translatable(
-                    "tooltip.ae2pr.machine_part.item_type_count", NUMBER.format(tier.itemSlots)));
+                    "tooltip.ae2pr.machine_part.item_type_count", AmountText.exact(tier.itemSlots)));
         }
         if (storage != Storage.ITEMS) {
             tooltip.add(Component.translatable(
-                    "tooltip.ae2pr.machine_part.stack_limit.fluid", NUMBER.format(tier.fluidCapacity)));
+                    "tooltip.ae2pr.machine_part.stack_limit.fluid", AmountText.exact(tier.fluidCapacity)));
             tooltip.add(Component.translatable(
-                    "tooltip.ae2pr.machine_part.fluid_type_count", NUMBER.format(tier.fluidTanks)));
+                    "tooltip.ae2pr.machine_part.fluid_type_count", AmountText.exact(tier.fluidTanks)));
         }
     }
 }

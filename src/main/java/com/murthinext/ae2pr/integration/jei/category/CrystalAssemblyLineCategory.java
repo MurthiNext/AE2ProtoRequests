@@ -5,6 +5,7 @@ import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleDefinition;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleRequirement;
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.integration.jei.JeiRecipeInfo;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineRecipe;
 import com.murthinext.ae2pr.registry.ModMachines;
@@ -169,7 +170,7 @@ public class CrystalAssemblyLineCategory extends AbstractMachineCategory<Crystal
     private static Component requirementHint(ModuleRequirement requirement) {
         return Component.translatable(
                 "jei.ae2pr.crystal_assembly_line.module_requirement.hint",
-                requirement.minLevel(),
+                AmountText.exact(requirement.minLevel()),
                 Component.translatable(requirement.type().translationKey()));
     }
 }

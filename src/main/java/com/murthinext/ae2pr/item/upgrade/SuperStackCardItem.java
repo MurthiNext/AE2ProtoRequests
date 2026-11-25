@@ -1,6 +1,7 @@
 package com.murthinext.ae2pr.item.upgrade;
 
 import appeng.items.materials.UpgradeCardItem;
+import com.murthinext.ae2pr.api.text.AmountText;
 import java.util.List;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -17,7 +18,7 @@ public class SuperStackCardItem extends UpgradeCardItem {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> lines, TooltipFlag flag) {
-        lines.add(Component.translatable("tooltip.ae2pr.super_stack_card.desc"));
+        lines.add(Component.translatable("tooltip.ae2pr.super_stack_card.desc", AmountText.exact(Integer.MAX_VALUE)));
         super.appendHoverText(stack, level, lines, flag);
     }
 }

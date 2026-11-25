@@ -5,6 +5,7 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.recipe.ItemInput;
 import com.murthinext.ae2pr.api.recipe.ItemOutput;
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.integration.jei.render.ChancedRenderer;
 import com.murthinext.ae2pr.integration.jei.render.FluidBlockIngredientRenderer;
 import com.murthinext.ae2pr.integration.jei.render.ItemStackAmountRenderer;
@@ -138,7 +139,8 @@ public class ComplexWorldInteractionCategory implements IRecipeCategory<ComplexW
                 var state = stack.getFluid().defaultFluidState().createLegacyBlock();
                 if (state.getBlock() instanceof WorldInteractionCatalyst block) {
                     tooltip.add(Component.translatable(
-                            "jei.ae2pr.complex_world_interaction.uses", block.getRemainingInteractions(state)));
+                            "jei.ae2pr.complex_world_interaction.uses",
+                            AmountText.exact(block.getRemainingInteractions(state))));
                 }
             });
         });

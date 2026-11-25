@@ -10,6 +10,7 @@ import com.murthinext.ae2pr.api.multiblock.module.ModuleSnapshot;
 import com.murthinext.ae2pr.api.recipe.FluidInput;
 import com.murthinext.ae2pr.api.recipe.ItemInput;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.registry.ModModules;
@@ -63,7 +64,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
                     Component.translatable(
                             "gui.ae2pr.multiblock.data.modules",
                             Component.translatable("module.ae2pr.speed"),
-                            modules.count(ModModules.SPEED)),
+                            AmountText.exact(modules.count(ModModules.SPEED))),
                     1,
                     baseSpeedMultiplier()));
         } else if (type == MachineUpgradeType.PARALLEL) {
@@ -83,7 +84,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
                         Component.translatable(
                                 "gui.ae2pr.multiblock.data.modules",
                                 Component.translatable("module.ae2pr.parallel"),
-                                count),
+                                AmountText.exact(count)),
                         extended,
                         total));
             }

@@ -4,6 +4,7 @@ import appeng.api.upgrades.IUpgradeInventory;
 import appeng.core.definitions.AEItems;
 import com.murthinext.ae2pr.api.machine.MachineStat;
 import com.murthinext.ae2pr.api.machine.MachineTuning;
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
 import com.murthinext.ae2pr.item.upgrade.MachineUpgradeCardItem;
 import java.util.List;
@@ -45,7 +46,10 @@ public final class MachineUpgrades {
             if (sources != null) {
                 sources.add(new MachineStat.Source(
                         Component.translatable(
-                                "gui.ae2pr.multiblock.data.slot", slot + 1, stack.getHoverName(), stack.getCount()),
+                                "gui.ae2pr.multiblock.data.slot",
+                                AmountText.exact(slot + 1),
+                                stack.getHoverName(),
+                                AmountText.exact(stack.getCount())),
                         before,
                         value));
             }

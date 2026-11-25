@@ -2,10 +2,10 @@ package com.murthinext.ae2pr.client.repeat;
 
 import appeng.api.client.AEKeyRendering;
 import appeng.api.stacks.AEKey;
-import appeng.api.stacks.AmountFormat;
 import appeng.client.gui.me.common.MEStorageScreen;
 import appeng.core.AEConfig;
 import appeng.core.localization.GuiText;
+import com.murthinext.ae2pr.api.text.AmountText;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -31,8 +31,8 @@ public final class RepeatOrderFinishedToast extends AbstractRepeatOrderToast {
                 TITLE_COLOR,
                 List.of(Component.translatable(
                         "gui.ae2pr.repeat_order.finished.text",
-                        what.formatAmount(amountPerRound, AmountFormat.SLOT),
+                        amountText(what, amountPerRound),
                         AEKeyRendering.getDisplayName(what),
-                        totalRounds)));
+                        AmountText.exact(totalRounds))));
     }
 }

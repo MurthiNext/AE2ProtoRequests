@@ -6,6 +6,7 @@ import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
 import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterControllerBlockEntity;
 import com.murthinext.ae2pr.registry.ModMachines;
 import java.util.Map;
@@ -105,8 +106,8 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
         if (data.contains(KEY_DURABILITY)) {
             tooltip.add(Component.translatable(
                     "gui.ae2pr.high_reactivity_lava_smelter.durability",
-                    data.getInt(KEY_DURABILITY),
-                    ServerConfig.highReactivityLavaSmelterMaxDurability()));
+                    AmountText.exact(data.getInt(KEY_DURABILITY)),
+                    AmountText.exact(ServerConfig.highReactivityLavaSmelterMaxDurability())));
         }
         String mode = data.getString(KEY_MODE);
         if (!mode.isEmpty()) {
@@ -173,9 +174,9 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
             if (capacity > 0) {
                 tooltip.add(Component.translatable(
                         "gui.ae2pr.multiblock.channels",
-                        data.getInt(KEY_ALLOCATED_CHANNELS),
-                        data.getInt(KEY_REQUIRED_CHANNELS)));
-                tooltip.add(Component.translatable("gui.ae2pr.multiblock.channels.limit", capacity));
+                        AmountText.exact(data.getInt(KEY_ALLOCATED_CHANNELS)),
+                        AmountText.exact(data.getInt(KEY_REQUIRED_CHANNELS))));
+                tooltip.add(Component.translatable("gui.ae2pr.multiblock.channels.limit", AmountText.exact(capacity)));
             } else {
                 tooltip.add(Component.translatable("gui.ae2pr.multiblock.channels.no_hatch"));
             }
@@ -200,7 +201,10 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
             tooltip.add(tooltip.getElementHelper()
                     .progress(
                             progress,
-                            Component.translatable("gui.ae2pr.multiblock.job.progress", elapsed, duration),
+                            Component.translatable(
+                                    "gui.ae2pr.multiblock.job.progress",
+                                    AmountText.exact(elapsed),
+                                    AmountText.exact(duration)),
                             style,
                             BoxStyle.DEFAULT,
                             false));
@@ -216,7 +220,7 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
                 }
                 ItemStack output = new ItemStack(item, data.getInt(KEY_COUNT));
                 return Component.translatable(
-                        "gui.ae2pr.multiblock.job.output", output.getHoverName(), output.getCount());
+                        "gui.ae2pr.multiblock.job.output", output.getHoverName(), AmountText.exact(output.getCount()));
             }
             String fluidId = data.getString(KEY_FLUID);
             Fluid fluid = fluidId.isEmpty() ? null : ForgeRegistries.FLUIDS.getValue(ResourceLocation.parse(fluidId));
@@ -225,7 +229,9 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
             }
             FluidStack output = new FluidStack(fluid, data.getInt(KEY_AMOUNT));
             return Component.translatable(
-                    "gui.ae2pr.multiblock.job.output", output.getDisplayName(), output.getAmount());
+                    "gui.ae2pr.multiblock.job.output",
+                    output.getDisplayName(),
+                    Component.translatable("gui.ae2pr.unit.mb", AmountText.exact(output.getAmount())));
         }
 
         @Override

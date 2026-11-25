@@ -5,6 +5,7 @@ import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerB
 import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.api.multiblock.StructureOrientation;
 import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
+import com.murthinext.ae2pr.api.text.AmountText;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -297,7 +298,8 @@ public final class MultiblockAssembler {
         }
         if (placed > 0) {
             player.displayClientMessage(
-                    Component.translatable("message.ae2pr.multiblock.assemble.placed", name, placed), true);
+                    Component.translatable("message.ae2pr.multiblock.assemble.placed", name, AmountText.exact(placed)),
+                    true);
         }
         if (!plan.missing.isEmpty()) {
             player.displayClientMessage(
@@ -306,11 +308,14 @@ public final class MultiblockAssembler {
         }
         if (plan.blocked > 0) {
             player.displayClientMessage(
-                    Component.translatable("message.ae2pr.multiblock.assemble.blocked", plan.blocked), false);
+                    Component.translatable("message.ae2pr.multiblock.assemble.blocked", AmountText.exact(plan.blocked)),
+                    false);
         }
         if (plan.misoriented > 0) {
             player.displayClientMessage(
-                    Component.translatable("message.ae2pr.multiblock.assemble.misoriented", plan.misoriented), false);
+                    Component.translatable(
+                            "message.ae2pr.multiblock.assemble.misoriented", AmountText.exact(plan.misoriented)),
+                    false);
         }
     }
 
@@ -322,7 +327,8 @@ public final class MultiblockAssembler {
                 list.append(Component.literal(", "));
             }
             first = false;
-            list.append(entry.getKey().getName().copy()).append(Component.literal(" x" + entry.getValue()));
+            list.append(Component.translatable(
+                    "gui.ae2pr.amount.count_named", entry.getKey().getName(), AmountText.exact(entry.getValue())));
         }
         return list;
     }

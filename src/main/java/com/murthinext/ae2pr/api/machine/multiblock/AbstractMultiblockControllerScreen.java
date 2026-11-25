@@ -1,18 +1,17 @@
 package com.murthinext.ae2pr.api.machine.multiblock;
 
-import appeng.util.ReadableNumberConverter;
+import com.murthinext.ae2pr.api.EnergyAmount;
 import com.murthinext.ae2pr.api.machine.MachineStat;
 import com.murthinext.ae2pr.api.machine.MachineStats;
 import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
 import com.murthinext.ae2pr.api.machine.client.GuiTextures;
 import com.murthinext.ae2pr.api.machine.client.MachineStyles;
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.nextui.client.GuiFluids;
 import com.murthinext.nextui.client.GuiTheme;
 import com.murthinext.nextui.client.GuiTooltips;
 import com.murthinext.nextui.client.TabButton;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.Util;
@@ -146,7 +145,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
                 font, powerText(), TEXT_X, POWER_Y, menu.isNetworkConnected() ? COLOR_INFO : COLOR_GRAY, false);
         graphics.drawString(
                 font,
-                Component.translatable("gui.ae2pr.multiblock.parallel", menu.getMaxParallel()),
+                Component.translatable("gui.ae2pr.multiblock.parallel", AmountText.exact(menu.getMaxParallel())),
                 TEXT_X,
                 PARALLEL_Y,
                 COLOR_INFO,
@@ -203,12 +202,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
     }
 
     private static String formatStat(double value, boolean multiplier) {
-        double magnitude = Math.abs(value);
-        NumberFormat format = magnitude != 0 && (magnitude < 0.0001 || magnitude >= 1_000_000_000)
-                ? new DecimalFormat("0.####E0")
-                : NumberFormat.getNumberInstance();
-        format.setMaximumFractionDigits(4);
-        return format.format(value) + (multiplier ? "×" : "");
+        return AmountText.stat(value) + (multiplier ? "×" : "");
     }
 
     private boolean renderDataTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
@@ -236,8 +230,13 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
                                             "gui.ae2pr.multiblock.data.source.change", source.name(), before, after));
                 }
             }
-            if (row == 1 && stats.energyContext() != null) {
-                lines.add(stats.energyContext());
+            if (row == 1) {
+                if (!stats.recipeEnergy()) {
+                    lines.add(Component.translatable("gui.ae2pr.multiblock.data.energy.passive"));
+                } else if (stats.recipeBasis()) {
+                    lines.add(Component.translatable(
+                            "gui.ae2pr.multiblock.data.energy.recipe", AmountText.exact(stats.energyBase(), 2)));
+                }
             }
             GuiTooltips.render(graphics, font, lines, mouseX, mouseY);
             return true;
@@ -251,12 +250,12 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
             return;
         }
         Component name;
-        String amount;
+        Component amount;
         ItemStack output = menu.getJobItem();
         if (!output.isEmpty()) {
             graphics.renderItem(output, JOB_ITEM_X, JOB_ITEM_Y);
             name = output.getHoverName();
-            amount = "x" + NumberFormat.getIntegerInstance().format(output.getCount());
+            amount = Component.translatable("gui.ae2pr.amount.count", AmountText.exact(output.getCount()));
         } else {
             FluidStack fluid = menu.getJobFluid();
             if (fluid.isEmpty()) {
@@ -264,10 +263,13 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
             }
             GuiFluids.drawIcon(graphics, fluid, JOB_ITEM_X, JOB_ITEM_Y);
             name = fluid.getDisplayName();
-            amount = NumberFormat.getIntegerInstance().format(fluid.getAmount()) + " mB";
+            amount = Component.translatable("gui.ae2pr.unit.mb", AmountText.exact(fluid.getAmount()));
         }
-        Component tail = Component.literal(amount)
-                .append(Component.translatable("gui.ae2pr.multiblock.job.time", menu.getJobElapsed(), duration));
+        Component tail = amount.copy()
+                .append(Component.translatable(
+                        "gui.ae2pr.multiblock.job.time",
+                        AmountText.exact(menu.getJobElapsed()),
+                        AmountText.exact(duration)));
         int tailX = imageWidth - 2 - font.width(tail);
         renderJobName(graphics, name.getString(), tailX - JOB_TAIL_GAP - JOB_TEXT_X);
         graphics.drawString(font, tail, tailX, JOB_TEXT_Y, COLOR_RUNNING, false);
@@ -301,10 +303,9 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
         if (!menu.isNetworkConnected()) {
             return Component.translatable("gui.ae2pr.multiblock.network.disconnected");
         }
-        double power = menu.getNetworkStoredPower();
         return Component.translatable(
                 "gui.ae2pr.multiblock.power.stored",
-                ReadableNumberConverter.format((long) Math.min(Math.max(power, 0), Long.MAX_VALUE), 5) + " AE");
+                AmountText.compact(EnergyAmount.toLong(menu.getNetworkStoredPower()), 5));
     }
 
     private String statusKey() {
@@ -339,9 +340,10 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
                             : List.of(
                                     Component.translatable(
                                             "gui.ae2pr.multiblock.channels",
-                                            menu.getAllocatedChannels(),
-                                            menu.getRequiredChannels()),
-                                    Component.translatable("gui.ae2pr.multiblock.channels.limit", capacity)),
+                                            AmountText.exact(menu.getAllocatedChannels()),
+                                            AmountText.exact(menu.getRequiredChannels())),
+                                    Component.translatable(
+                                            "gui.ae2pr.multiblock.channels.limit", AmountText.exact(capacity))),
                     mouseX,
                     mouseY);
             return true;
@@ -360,9 +362,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
                         font,
                         List.of(
                                 fluid.getDisplayName(),
-                                Component.translatable(
-                                        "gui.ae2pr.machine_part.tank.mb",
-                                        String.format(java.util.Locale.ROOT, "%,d", fluid.getAmount()))),
+                                Component.translatable("gui.ae2pr.unit.mb", AmountText.exact(fluid.getAmount()))),
                         mouseX,
                         mouseY);
                 return true;

@@ -1,22 +1,20 @@
 package com.murthinext.ae2pr.api.machine;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.Nullable;
 
 public record MachineStats(
         MachineStat speed,
         MachineStat energy,
         MachineStat parallel,
         double energyBase,
-        @Nullable Component energyContext,
+        boolean recipeBasis,
         boolean recipeEnergy) {
     public void write(FriendlyByteBuf buffer) {
         speed.write(buffer);
         energy.write(buffer);
         parallel.write(buffer);
         buffer.writeDouble(energyBase);
-        buffer.writeNullable(energyContext, FriendlyByteBuf::writeComponent);
+        buffer.writeBoolean(recipeBasis);
         buffer.writeBoolean(recipeEnergy);
     }
 
@@ -26,7 +24,7 @@ public record MachineStats(
                 MachineStat.read(buffer),
                 MachineStat.read(buffer),
                 buffer.readDouble(),
-                buffer.readNullable(FriendlyByteBuf::readComponent),
+                buffer.readBoolean(),
                 buffer.readBoolean());
     }
 }

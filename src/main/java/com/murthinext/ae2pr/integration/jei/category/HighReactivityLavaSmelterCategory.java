@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.integration.jei.category;
 
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.machine.MachineRecipe;
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.integration.jei.JeiRecipeInfo;
 import com.murthinext.ae2pr.registry.ModMachines;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -84,7 +85,7 @@ public class HighReactivityLavaSmelterCategory extends AbstractMachineCategory<M
         var font = Minecraft.getInstance().font;
         graphics.drawString(
                 font,
-                Component.translatable("jei.ae2pr.high_reactivity_lava_smelter.durability_cost", 1),
+                Component.translatable("jei.ae2pr.high_reactivity_lava_smelter.durability_cost", AmountText.exact(1)),
                 4,
                 INFO_Y,
                 COLOR_TEXT,

@@ -4,6 +4,7 @@ import appeng.client.Point;
 import appeng.client.gui.Tooltip;
 import appeng.client.gui.widgets.CPUSelectionList;
 import appeng.menu.me.crafting.CraftingStatusMenu;
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderState;
 import com.murthinext.ae2pr.mixin.ae2.accessor.CPUSelectionListAccessor;
 import java.util.ArrayList;
@@ -27,7 +28,8 @@ public abstract class CPUSelectionListMixin {
         }
         cir.setReturnValue(cir.getReturnValue()
                 .copy()
-                .append(Component.literal(" (" + info.round() + "/" + info.total() + ")")
+                .append(Component.literal(
+                                " (" + AmountText.exact(info.round()) + "/" + AmountText.exact(info.total()) + ")")
                         .withStyle(ChatFormatting.GOLD)));
     }
 
@@ -47,7 +49,10 @@ public abstract class CPUSelectionListMixin {
         }
 
         var lines = new ArrayList<>(tooltip.getContent());
-        lines.add(Component.translatable("gui.ae2pr.repeat_order.tooltip.round", info.round(), info.total()));
+        lines.add(Component.translatable(
+                "gui.ae2pr.repeat_order.tooltip.round",
+                AmountText.exact(info.round()),
+                AmountText.exact(info.total())));
 
         cir.setReturnValue(new Tooltip(lines));
     }

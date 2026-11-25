@@ -6,6 +6,7 @@ import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.AETextField;
 import appeng.menu.me.crafting.CraftAmountMenu;
 import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.client.repeat.RepeatOrderButton;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderConstants;
 import com.murthinext.ae2pr.logic.repeat.RepeatRoundsHolder;
@@ -162,8 +163,8 @@ public abstract class CraftAmountScreenMixin extends AEBaseScreen<CraftAmountMen
             return;
         }
         if (this.ae2pr$rounds > 1) {
-            this.ae2pr$repeatButton.setMessage(
-                    Component.translatable("gui.ae2pr.repeat_order.button.enabled", this.ae2pr$rounds));
+            this.ae2pr$repeatButton.setMessage(Component.translatable(
+                    "gui.ae2pr.repeat_order.button.enabled", AmountText.exact(this.ae2pr$rounds)));
         } else {
             this.ae2pr$repeatButton.setMessage(Component.translatable("gui.ae2pr.repeat_order.button"));
         }

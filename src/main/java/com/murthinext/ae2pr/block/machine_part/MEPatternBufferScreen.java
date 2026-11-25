@@ -13,6 +13,7 @@ import static com.murthinext.ae2pr.block.machine_part.MEPatternBufferMenu.SHARED
 import static com.murthinext.ae2pr.block.machine_part.MEPatternBufferMenu.SHARED_PANEL_Y;
 
 import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
+import com.murthinext.ae2pr.api.machine.client.FluidStackDisplay;
 import com.murthinext.ae2pr.api.machine.client.GuiTextures;
 import com.murthinext.ae2pr.registry.ModGuide;
 import com.murthinext.nextui.client.GuiExtraAreas;
@@ -23,7 +24,6 @@ import com.murthinext.nextui.client.GuiSlots;
 import com.murthinext.nextui.client.GuiTheme;
 import com.murthinext.nextui.client.GuiTooltips;
 import com.murthinext.nextui.client.IconButton;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.Minecraft;
@@ -47,7 +47,6 @@ public final class MEPatternBufferScreen extends AbstractMachineScreen<MEPattern
     private static final int SLOT_INNER_SIZE = GuiSlots.SIZE - 2;
     private static final ResourceLocation SHARED_ITEMS_ICON = texture("shared_items");
     private static final ResourceLocation SHARED_FLUIDS_ICON = texture("shared_fluids");
-    private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
     @Nullable
     private IconButton itemsButton;
@@ -143,8 +142,12 @@ public final class MEPatternBufferScreen extends AbstractMachineScreen<MEPattern
             int y = topPos + MEPatternBufferMenu.sharedY(i);
             drawSlot(graphics, x, y);
             if (fluidPanel) {
-                GuiFluids.drawTankFill(
-                        graphics, menu.sharedFluid(i), x, y, SLOT_INNER_SIZE, SLOT_INNER_SIZE, SHARED_TANK_CAPACITY);
+                var fluid = menu.sharedFluid(i);
+                GuiFluids.drawTankFill(graphics, fluid, x, y, SLOT_INNER_SIZE, SLOT_INNER_SIZE, SHARED_TANK_CAPACITY);
+                if (!fluid.isEmpty()) {
+                    FluidStackDisplay.drawAmount(
+                            graphics, font, fluid.getAmount(), x + SLOT_INNER_SIZE, y + SLOT_INNER_SIZE);
+                }
                 if (hovered == i) {
                     graphics.renderOutline(x - 1, y - 1, GuiSlots.SIZE, GuiSlots.SIZE, THEME.accent());
                 }
@@ -212,20 +215,7 @@ public final class MEPatternBufferScreen extends AbstractMachineScreen<MEPattern
         if (tank < 0) {
             return super.renderCustomTooltip(graphics, mouseX, mouseY);
         }
-        var fluid = menu.sharedFluid(tank);
-        GuiTooltips.render(
-                graphics,
-                font,
-                List.of(
-                        fluid.isEmpty()
-                                ? Component.translatable("gui.ae2pr.machine_part.tank.empty")
-                                : fluid.getDisplayName(),
-                        Component.translatable(
-                                LANG + "fluid_amount",
-                                NUMBER.format(fluid.getAmount()),
-                                NUMBER.format(SHARED_TANK_CAPACITY))),
-                mouseX,
-                mouseY);
+        FluidStackDisplay.renderTankTooltip(graphics, font, menu.sharedFluid(tank), mouseX, mouseY);
         return true;
     }
 

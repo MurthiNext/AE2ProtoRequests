@@ -6,7 +6,7 @@ import com.murthinext.ae2pr.api.recipe.FluidOutput;
 import com.murthinext.ae2pr.api.recipe.ItemInput;
 import com.murthinext.ae2pr.api.recipe.ItemOutput;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
-import com.murthinext.ae2pr.integration.jei.JeiAmountFormat;
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.integration.jei.JeiRecipeInfo;
 import com.murthinext.ae2pr.integration.jei.render.CatalystLabelDrawable;
 import com.murthinext.ae2pr.integration.jei.render.ChancedRenderer;
@@ -307,12 +307,14 @@ public abstract class AbstractMachineCategory<T extends MultiblockRecipe> implem
     }
 
     private static Component fluidLine(FluidStack stack) {
-        return Component.literal(JeiAmountFormat.exact(stack.getAmount()) + " mB ")
-                .append(stack.getDisplayName());
+        return Component.translatable(
+                "gui.ae2pr.amount.count_named",
+                stack.getDisplayName(),
+                Component.translatable("gui.ae2pr.unit.mb", AmountText.exact(stack.getAmount())));
     }
 
     private static Component itemLine(ItemStack stack) {
-        return Component.literal(JeiAmountFormat.exact(stack.getCount()) + " × ")
-                .append(stack.getHoverName());
+        return Component.translatable(
+                "gui.ae2pr.amount.count_named", stack.getHoverName(), AmountText.exact(stack.getCount()));
     }
 }

@@ -4,9 +4,9 @@ import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleDefinition;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleType;
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.api.wrench.Wrenchable;
 import com.murthinext.ae2pr.registry.ModModules;
-import java.text.NumberFormat;
 import java.util.List;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -21,8 +21,6 @@ import net.minecraft.world.level.material.MapColor;
 import org.jetbrains.annotations.Nullable;
 
 public class CrystalAssemblyLineUnitBlock extends Block implements Wrenchable {
-
-    private static final NumberFormat NUMBER = NumberFormat.getNumberInstance();
 
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
@@ -54,16 +52,16 @@ public class CrystalAssemblyLineUnitBlock extends Block implements Wrenchable {
         if (type == ModModules.PARALLEL) {
             return Component.translatable(
                     "tooltip.ae2pr.crystal_assembly_line_module.parallel",
-                    NUMBER.format(ServerConfig.assemblyModuleParallelPerUnit()));
+                    AmountText.exact(ServerConfig.assemblyModuleParallelPerUnit()));
         }
         if (type == ModModules.SPEED) {
             return Component.translatable(
                     "tooltip.ae2pr.crystal_assembly_line_module.speed",
-                    NUMBER.format(ServerConfig.assemblyModuleSpeedPerUnit() * 100.0) + "%");
+                    AmountText.percent(ServerConfig.assemblyModuleSpeedPerUnit(), 3));
         }
         return Component.translatable(
                 "tooltip.ae2pr.crystal_assembly_line_module",
                 Component.translatable(type.translationKey()),
-                definition.level());
+                AmountText.exact(definition.level()));
     }
 }

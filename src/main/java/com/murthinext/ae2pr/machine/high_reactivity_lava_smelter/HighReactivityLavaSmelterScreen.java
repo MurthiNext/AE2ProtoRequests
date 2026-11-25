@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.machine.high_reactivity_lava_smelter;
 
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerScreen;
+import com.murthinext.ae2pr.api.text.AmountText;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -30,7 +31,9 @@ public class HighReactivityLavaSmelterScreen extends AbstractMultiblockControlle
         graphics.drawString(
                 font,
                 Component.translatable(
-                        "gui.ae2pr.high_reactivity_lava_smelter.durability", durability, menu.getMaxDurability()),
+                        "gui.ae2pr.high_reactivity_lava_smelter.durability",
+                        AmountText.exact(durability),
+                        AmountText.exact(menu.getMaxDurability())),
                 TEXT_X,
                 EXTRA_Y,
                 durability > 0 ? COLOR_DURABILITY : COLOR_FAIL,

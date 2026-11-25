@@ -1,7 +1,11 @@
 package com.murthinext.ae2pr.client.repeat;
 
 import appeng.api.client.AEKeyRendering;
+import appeng.api.stacks.AEFluidKey;
+import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.AEKey;
+import appeng.api.stacks.AmountFormat;
+import com.murthinext.ae2pr.api.text.AmountText;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -20,6 +24,9 @@ abstract class AbstractRepeatOrderToast implements Toast {
     private static final int TITLE_Y = 7;
     private static final int TEXT_Y = 18;
 
+    private static final int ITEM_AMOUNT_MAX_CHARS = 5;
+    private static final int FLUID_AMOUNT_MAX_CHARS = 6;
+
     protected final AEKey what;
     private final Component title;
     private final int titleColor;
@@ -37,6 +44,16 @@ abstract class AbstractRepeatOrderToast implements Toast {
         }
         this.lines = wrapped;
         this.height = Toast.super.height() + (lines.size() - 1) * font.lineHeight;
+    }
+
+    protected static String amountText(AEKey what, long amount) {
+        if (what instanceof AEFluidKey) {
+            return AmountText.compactFluid(amount, FLUID_AMOUNT_MAX_CHARS);
+        }
+        if (what instanceof AEItemKey) {
+            return AmountText.compact(amount, ITEM_AMOUNT_MAX_CHARS);
+        }
+        return what.formatAmount(amount, AmountFormat.SLOT);
     }
 
     @Override

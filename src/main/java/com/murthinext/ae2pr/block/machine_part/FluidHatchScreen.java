@@ -1,11 +1,10 @@
 package com.murthinext.ae2pr.block.machine_part;
 
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
+import com.murthinext.ae2pr.api.machine.client.FluidStackDisplay;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.nextui.client.GuiFluids;
-import com.murthinext.nextui.client.GuiTooltips;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.Minecraft;
@@ -21,8 +20,6 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
 
     private static final int TANK_X0 = 20;
     private static final int TANK_Y = 34;
-
-    private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
     public FluidHatchScreen(FluidHatchMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -108,17 +105,7 @@ public class FluidHatchScreen extends AbstractMachinePartScreen<FluidHatchMenu> 
         }
         int tank = hoveredTank(mouseX, mouseY);
         if (tank >= 0) {
-            FluidStack fluid = clientFluid(tank);
-            GuiTooltips.render(
-                    graphics,
-                    font,
-                    List.of(
-                            fluid.isEmpty()
-                                    ? Component.translatable("gui.ae2pr.machine_part.tank.empty")
-                                    : fluid.getDisplayName(),
-                            Component.translatable("gui.ae2pr.machine_part.tank.mb", NUMBER.format(fluid.getAmount()))),
-                    mouseX,
-                    mouseY);
+            FluidStackDisplay.renderTankTooltip(graphics, font, clientFluid(tank), mouseX, mouseY);
             return;
         }
         super.renderTooltip(graphics, mouseX, mouseY);

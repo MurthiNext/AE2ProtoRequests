@@ -2,12 +2,12 @@ package com.murthinext.ae2pr.block.machine_part;
 
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
 import com.murthinext.ae2pr.api.machine.client.DisplaySlot;
+import com.murthinext.ae2pr.api.machine.client.FluidStackDisplay;
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.network.BusSlotClickPacket;
 import com.murthinext.ae2pr.network.HatchTankClickPacket;
 import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.nextui.client.GuiFluids;
-import com.murthinext.nextui.client.GuiTooltips;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.Minecraft;
@@ -28,8 +28,6 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
     private static final int DUAL_TANK_X = 42;
     private static final int DUAL_WIDE_TANK_X = 18;
     private static final int TANK_Y = 34;
-
-    private static final NumberFormat NUMBER = NumberFormat.getIntegerInstance();
 
     public ItemBusScreen(ItemBusMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -122,7 +120,7 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
             if (stored.isEmpty()) {
                 continue;
             }
-            String text = String.valueOf(stored.getCount());
+            String text = AmountText.exact(stored.getCount());
             int x = slotX(slot) - leftPos;
             int y = slotY(slot) - topPos;
             float scale = Math.min(1.0F, 16.0F / font.width(text));
@@ -179,16 +177,7 @@ public class ItemBusScreen extends AbstractMachinePartScreen<ItemBusMenu> implem
         MachinePartFluidStorage storage = menu.getFluidStorage();
         if (tank >= 0 && storage != null) {
             var fluid = storage.getTank(tank).getFluid();
-            GuiTooltips.render(
-                    graphics,
-                    font,
-                    List.of(
-                            fluid.isEmpty()
-                                    ? Component.translatable("gui.ae2pr.machine_part.tank.empty")
-                                    : fluid.getDisplayName(),
-                            Component.translatable("gui.ae2pr.machine_part.tank.mb", NUMBER.format(fluid.getAmount()))),
-                    mouseX,
-                    mouseY);
+            FluidStackDisplay.renderTankTooltip(graphics, font, fluid, mouseX, mouseY);
             return;
         }
         // 展示槽的物品提示由原版槽位渲染

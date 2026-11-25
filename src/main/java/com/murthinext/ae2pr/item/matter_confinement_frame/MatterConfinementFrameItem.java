@@ -1,6 +1,7 @@
 package com.murthinext.ae2pr.item.matter_confinement_frame;
 
 import appeng.api.util.AEColor;
+import com.murthinext.ae2pr.api.text.AmountText;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +68,7 @@ public final class MatterConfinementFrameItem extends Item {
                     tooltip.add(Component.translatable(
                                     "tooltip.ae2pr.matter_confinement_frame.content",
                                     Component.translatable(color.translationKey),
-                                    count)
+                                    AmountText.exact(count))
                             .withStyle(style -> style.withColor(color.whiteVariant)));
                 }
             }

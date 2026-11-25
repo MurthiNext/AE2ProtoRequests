@@ -1,13 +1,13 @@
 package com.murthinext.ae2pr.integration.jei.render;
 
-import com.murthinext.ae2pr.integration.jei.JeiAmountFormat;
+import com.murthinext.ae2pr.api.machine.client.FluidStackDisplay;
+import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.nextui.client.GuiFluids;
 import java.util.ArrayList;
 import java.util.List;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,8 +22,6 @@ public class FluidStackAmountRenderer implements IIngredientRenderer<FluidStack>
 
     public static final FluidStackAmountRenderer INSTANCE = new FluidStackAmountRenderer();
 
-    private static final float TEXT_SCALE = 0.5F;
-
     @Override
     public void render(GuiGraphics graphics, FluidStack ingredient) {
         render(graphics, ingredient, 0, 0);
@@ -32,14 +30,8 @@ public class FluidStackAmountRenderer implements IIngredientRenderer<FluidStack>
     @Override
     public void render(GuiGraphics graphics, FluidStack ingredient, int posX, int posY) {
         GuiFluids.drawIcon(graphics, ingredient, posX, posY);
-        Font font = Minecraft.getInstance().font;
-        String amount = JeiAmountFormat.fluid(ingredient.getAmount());
-        var pose = graphics.pose();
-        pose.pushPose();
-        pose.translate(posX + 17, posY + 17, 0);
-        pose.scale(TEXT_SCALE, TEXT_SCALE, 1.0F);
-        graphics.drawString(font, amount, -font.width(amount), -font.lineHeight, 0xFFFFFF, true);
-        pose.popPose();
+        FluidStackDisplay.drawAmount(
+                graphics, Minecraft.getInstance().font, ingredient.getAmount(), posX + 17, posY + 17);
     }
 
     @Override
@@ -52,7 +44,7 @@ public class FluidStackAmountRenderer implements IIngredientRenderer<FluidStack>
                 lines.add(Component.literal(id.toString()).withStyle(ChatFormatting.DARK_GRAY));
             }
         }
-        lines.add(Component.translatable("jei.tooltip.liquid.amount", JeiAmountFormat.exact(ingredient.getAmount()))
+        lines.add(Component.translatable("jei.tooltip.liquid.amount", AmountText.exact(ingredient.getAmount()))
                 .withStyle(ChatFormatting.GRAY));
         return lines;
     }
