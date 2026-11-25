@@ -172,9 +172,18 @@ public class MENetworkAccessHatchBlockEntity extends AENetworkBlockEntity
 
     @Override
     public ChannelStatus getChannelStatus(ControllerHost host) {
-        return isServing(host)
-                ? new ChannelStatus(requiredChannels, allocatedChannels(), MAX_CHANNELS)
-                : ChannelStatus.NONE;
+        if (!isServing(host)) {
+            return ChannelStatus.NONE;
+        }
+        int allocated = allocatedChannels();
+        Claim hostClaim = claims.get(host.channelRequest());
+        ChannelStatus.Supply supply;
+        if (hostClaim == null || allocated < hostClaim.requiredThrough) {
+            supply = ChannelStatus.Supply.HOST_MISSING;
+        } else {
+            supply = allocated < requiredChannels ? ChannelStatus.Supply.INSUFFICIENT : ChannelStatus.Supply.NORMAL;
+        }
+        return new ChannelStatus(requiredChannels, allocated, MAX_CHANNELS, supply);
     }
 
     @Override

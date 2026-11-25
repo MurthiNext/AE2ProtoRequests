@@ -6,6 +6,7 @@ import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
 import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
+import com.murthinext.ae2pr.api.machine.part.ChannelStatus;
 import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterControllerBlockEntity;
 import com.murthinext.ae2pr.registry.ModMachines;
@@ -37,9 +38,7 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
 
     private static final String KEY_FORMED = "formed";
     private static final String KEY_NETWORK_CONNECTED = "networkConnected";
-    private static final String KEY_ALLOCATED_CHANNELS = "allocatedChannels";
-    private static final String KEY_REQUIRED_CHANNELS = "requiredChannels";
-    private static final String KEY_CHANNEL_CAPACITY = "channelCapacity";
+    private static final String KEY_CHANNEL_SUPPLY = "channelSupply";
     private static final String KEY_ELAPSED = "elapsed";
     private static final String KEY_DURATION = "duration";
     private static final String KEY_ITEM = "item";
@@ -132,10 +131,8 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
             data.putString(KEY_MACHINE, base.machineKey());
             data.putBoolean(KEY_FORMED, state.formed());
             data.putBoolean(KEY_NETWORK_CONNECTED, state.networkConnected());
-            var channels = base.getChannelStatus();
-            data.putInt(KEY_ALLOCATED_CHANNELS, channels.allocated());
-            data.putInt(KEY_REQUIRED_CHANNELS, channels.required());
-            data.putInt(KEY_CHANNEL_CAPACITY, channels.capacity());
+            data.putByte(
+                    KEY_CHANNEL_SUPPLY, (byte) base.getChannelStatus().supply().ordinal());
             data.putInt(KEY_ELAPSED, state.elapsed());
             data.putInt(KEY_DURATION, state.duration());
             if (!state.item().isEmpty()) {
@@ -170,16 +167,8 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
                     data.getBoolean(KEY_NETWORK_CONNECTED)
                             ? "gui.ae2pr.multiblock.network.connected"
                             : "gui.ae2pr.multiblock.network.disconnected"));
-            int capacity = data.getInt(KEY_CHANNEL_CAPACITY);
-            if (capacity > 0) {
-                tooltip.add(Component.translatable(
-                        "gui.ae2pr.multiblock.channels",
-                        AmountText.exact(data.getInt(KEY_ALLOCATED_CHANNELS)),
-                        AmountText.exact(data.getInt(KEY_REQUIRED_CHANNELS))));
-                tooltip.add(Component.translatable("gui.ae2pr.multiblock.channels.limit", AmountText.exact(capacity)));
-            } else {
-                tooltip.add(Component.translatable("gui.ae2pr.multiblock.channels.no_hatch"));
-            }
+            tooltip.add(
+                    ChannelStatus.Supply.byId(data.getByte(KEY_CHANNEL_SUPPLY)).text());
             appendJob(tooltip, data);
             appendExtraTooltip(tooltip, data);
         }

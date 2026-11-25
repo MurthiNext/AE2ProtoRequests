@@ -11,9 +11,6 @@ public class HighReactivityLavaSmelterScreen extends AbstractMultiblockControlle
     private static final int COLOR_FAIL = 0xFF5555;
     private static final int COLOR_DURABILITY = 0xFFC46B;
 
-    private static final int DUST_SLOT_X = 151;
-    private static final int DUST_SLOT_Y = 95;
-
     public HighReactivityLavaSmelterScreen(
             HighReactivityLavaSmelterMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -22,7 +19,10 @@ public class HighReactivityLavaSmelterScreen extends AbstractMultiblockControlle
     @Override
     protected void renderBg(net.minecraft.client.gui.GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         super.renderBg(graphics, partialTick, mouseX, mouseY);
-        drawSlot(graphics, leftPos + DUST_SLOT_X, topPos + DUST_SLOT_Y);
+        drawSlot(
+                graphics,
+                leftPos + HighReactivityLavaSmelterMenu.DUST_SLOT_X,
+                topPos + HighReactivityLavaSmelterMenu.DUST_SLOT_Y);
     }
 
     @Override

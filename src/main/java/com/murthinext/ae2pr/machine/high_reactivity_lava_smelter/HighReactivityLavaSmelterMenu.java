@@ -16,8 +16,8 @@ public class HighReactivityLavaSmelterMenu
     public static final MenuType<HighReactivityLavaSmelterMenu> TYPE =
             IForgeMenuType.create(HighReactivityLavaSmelterMenu::new);
 
-    private static final int DUST_SLOT_X = 151;
-    private static final int DUST_SLOT_Y = 95;
+    static final int DUST_SLOT_X = 151;
+    static final int DUST_SLOT_Y = 25;
 
     private static final int DATA_DURABILITY = DATA_COUNT;
 

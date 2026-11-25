@@ -30,16 +30,18 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
         extends AbstractMachineScreen<M> implements CustomIngredientSource {
 
     protected static final int TEXT_X = 7;
-    protected static final int EXTRA_Y = 104;
+    private static final int LABEL_STEP = 11;
     private static final int STATUS_Y = 30;
-    private static final int POWER_Y = 41;
-    private static final int PARALLEL_Y = 52;
-    private static final int JOB_Y = 63;
+    private static final int CHANNEL_Y = STATUS_Y + LABEL_STEP;
+    private static final int POWER_Y = CHANNEL_Y + LABEL_STEP;
+    private static final int PARALLEL_Y = POWER_Y + LABEL_STEP;
+    private static final int JOB_Y = PARALLEL_Y + LABEL_STEP;
     private static final int JOB_ITEM_X = 7;
-    private static final int JOB_ITEM_Y = 74;
+    private static final int JOB_ITEM_Y = JOB_Y + 11;
     private static final int JOB_TEXT_X = 27;
-    private static final int JOB_TEXT_Y = 78;
-    private static final int ERROR_Y = 92;
+    private static final int JOB_TEXT_Y = JOB_ITEM_Y + 4;
+    private static final int ERROR_Y = JOB_ITEM_Y + 18;
+    protected static final int EXTRA_Y = ERROR_Y + LABEL_STEP;
     private static final int JOB_TAIL_GAP = 4;
     private static final double JOB_NAME_SCROLL_SPEED = 12.0D;
     private static final int JOB_NAME_SCROLL_GAP = 24;
@@ -141,6 +143,7 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
                 STATUS_Y,
                 menu.isFormed() ? COLOR_OK : COLOR_FAIL,
                 false);
+        graphics.drawString(font, menu.getChannelSupply().coloredText(), TEXT_X, CHANNEL_Y, COLOR_INFO, false);
         graphics.drawString(
                 font, powerText(), TEXT_X, POWER_Y, menu.isNetworkConnected() ? COLOR_INFO : COLOR_GRAY, false);
         graphics.drawString(
@@ -330,19 +333,22 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
         if (dataPage) {
             return renderDataTooltip(graphics, mouseX, mouseY);
         }
-        if (isHovering(TEXT_X, POWER_Y, font.width(powerText()), font.lineHeight, mouseX, mouseY)) {
+        if (isHovering(
+                TEXT_X, CHANNEL_Y, font.width(menu.getChannelSupply().text()), font.lineHeight, mouseX, mouseY)) {
             int capacity = menu.getChannelCapacity();
             GuiTooltips.render(
                     graphics,
                     font,
-                    capacity == 0
-                            ? List.of(Component.translatable("gui.ae2pr.multiblock.channels.no_hatch"))
-                            : List.of(
-                                    Component.translatable(
-                                            "gui.ae2pr.multiblock.channels",
-                                            AmountText.exact(menu.getAllocatedChannels()),
-                                            AmountText.exact(menu.getRequiredChannels())),
-                                    Component.translatable(
+                    List.of(
+                            Component.translatable(
+                                    "gui.ae2pr.multiblock.channels.allocated",
+                                    AmountText.exact(menu.getAllocatedChannels())),
+                            Component.translatable(
+                                    "gui.ae2pr.multiblock.channels.required",
+                                    AmountText.exact(menu.getRequiredChannels())),
+                            capacity == 0
+                                    ? Component.translatable("gui.ae2pr.multiblock.channels.no_hatch")
+                                    : Component.translatable(
                                             "gui.ae2pr.multiblock.channels.limit", AmountText.exact(capacity))),
                     mouseX,
                     mouseY);

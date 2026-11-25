@@ -3,6 +3,7 @@ package com.murthinext.ae2pr.api.machine.multiblock;
 import appeng.api.upgrades.Upgrades;
 import com.murthinext.ae2pr.api.machine.MachineDefinition;
 import com.murthinext.ae2pr.api.machine.MachineStats;
+import com.murthinext.ae2pr.api.machine.part.ChannelStatus;
 import com.murthinext.ae2pr.network.MachineStatsPacket;
 import com.murthinext.ae2pr.registry.ModNetwork;
 import com.murthinext.nextui.layout.PlayerInventoryLayout;
@@ -41,7 +42,8 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
     protected static final int DATA_ALLOCATED_CHANNELS = 11;
     protected static final int DATA_REQUIRED_CHANNELS_LO = 12;
     protected static final int DATA_CHANNEL_CAPACITY = 14;
-    protected static final int DATA_COUNT = 15;
+    private static final int DATA_CHANNEL_SUPPLY = 15;
+    protected static final int DATA_COUNT = 16;
 
     private static final int FLAG_FORMED = 1;
     private static final int FLAG_RUNNING = 2;
@@ -122,6 +124,7 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
             data.set(DATA_ALLOCATED_CHANNELS, channels.allocated());
             setIntData(data, DATA_REQUIRED_CHANNELS_LO, channels.required());
             data.set(DATA_CHANNEL_CAPACITY, channels.capacity());
+            data.set(DATA_CHANNEL_SUPPLY, channels.supply().ordinal());
             long power = (long) Math.min(Math.max(controller.getNetworkStoredPower(), 0), Long.MAX_VALUE);
             data.set(DATA_POWER_LO, (int) (power & 0xFFFFFFFFL));
             data.set(DATA_POWER_HI, (int) (power >>> 32));
@@ -185,6 +188,10 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
 
     public int getChannelCapacity() {
         return data.get(DATA_CHANNEL_CAPACITY);
+    }
+
+    public ChannelStatus.Supply getChannelSupply() {
+        return ChannelStatus.Supply.byId(data.get(DATA_CHANNEL_SUPPLY));
     }
 
     public long getNetworkStoredPower() {
