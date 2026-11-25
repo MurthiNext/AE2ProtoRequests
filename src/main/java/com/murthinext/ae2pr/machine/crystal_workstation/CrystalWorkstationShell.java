@@ -47,9 +47,9 @@ public final class CrystalWorkstationShell {
         return index.get(pos);
     }
 
-    public static boolean isStability(BlockPos pos) {
+    public static boolean isInjection(BlockPos pos) {
         Look look = index.get(pos);
-        return look != null && look.role() == CrystalWorkstationStructure.PartRole.STABILITY;
+        return look != null && look.role() == CrystalWorkstationStructure.PartRole.INJECTION;
     }
 
     public static boolean isCore(BlockPos pos) {
@@ -57,12 +57,12 @@ public final class CrystalWorkstationShell {
         return look != null && look.role() == CrystalWorkstationStructure.PartRole.CORE;
     }
 
-    public static boolean bordersStability(BlockPos pos) {
+    public static boolean bordersInjection(BlockPos pos) {
         if (index.isEmpty()) {
             return false;
         }
         for (Direction direction : Direction.values()) {
-            if (isStability(pos.relative(direction))) {
+            if (isInjection(pos.relative(direction))) {
                 return true;
             }
         }

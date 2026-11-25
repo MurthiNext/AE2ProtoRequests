@@ -132,7 +132,7 @@
   "gui.ae2pr.me_pattern_buffer.shared_hint": "Catalysts only. Move by hand.",
   "tooltip.ae2pr.me_network_access_hatch": "§9 Provides:\n§r- Allow network access\n- Allow the use of AE energy\n- Provide up to 8 channels",
   "block.ae2pr.high_energy_core": "High Energy Core",
-  "block.ae2pr.high_energy_stability_casing": "High Energy Stability Casing",
+  "block.ae2pr.crystal_energy_injection_casing": "Crystal Energy-Injection Casing",
   "block.ae2pr.stability_casing": "Stability Casing",
   "block.ae2pr.high_reactivity_lava_smelter": "High Reactivity Lava Smelter",
   "block.ae2pr.logistics_control_casing": "Logistics Control Casing",

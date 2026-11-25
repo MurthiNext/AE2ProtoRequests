@@ -132,7 +132,7 @@
   "gui.ae2pr.me_pattern_buffer.shared_hint": "仅供催化剂匹配，须手动存取",
   "tooltip.ae2pr.me_network_access_hatch": "§9提供：§r\n- 允许接入网络\n- 允许使用AE能量\n- 提供至多8频道",
   "block.ae2pr.high_energy_core": "高能核心",
-  "block.ae2pr.high_energy_stability_casing": "高能稳定机械方块",
+  "block.ae2pr.crystal_energy_injection_casing": "晶能—压射机械方块",
   "block.ae2pr.stability_casing": "稳定机械方块",
   "block.ae2pr.high_reactivity_lava_smelter": "高反应性熔岩冶炼炉",
   "block.ae2pr.logistics_control_casing": "物流控制机械方块",

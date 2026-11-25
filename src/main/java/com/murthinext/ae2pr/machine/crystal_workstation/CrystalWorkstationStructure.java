@@ -27,7 +27,7 @@ public final class CrystalWorkstationStructure extends AbstractStructureFacade {
             .where('K', StructurePredicate.blocks(ModMachines.CRYSTAL_WORKSTATION.block()))
             .where('A', StructurePredicate.casingWithParts(ModBlocks.CRYSTAL_ENERGY_CASING.get()))
             .where('B', StructurePredicate.blocks(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()))
-            .where('C', StructurePredicate.blocks(ModBlocks.HIGH_ENERGY_STABILITY_CASING.get()))
+            .where('C', StructurePredicate.blocks(ModBlocks.CRYSTAL_ENERGY_INJECTION_CASING.get()))
             .where('D', StructurePredicate.blocks(ModBlocks.CRYSTAL_GLASS.get()))
             .where('G', StructurePredicate.blocks(ModMachines.CRYSTAL_REACTOR.block()))
             .where('#', StructurePredicate.any())
@@ -36,7 +36,7 @@ public final class CrystalWorkstationStructure extends AbstractStructureFacade {
     public static final CrystalWorkstationStructure INSTANCE = new CrystalWorkstationStructure();
 
     public enum PartRole {
-        STABILITY,
+        INJECTION,
         GLASS,
         CORE
     }
@@ -84,7 +84,7 @@ public final class CrystalWorkstationStructure extends AbstractStructureFacade {
         List<Part> parts = new ArrayList<>(cells.size());
         for (MultiblockPattern.PatternCell cell : cells) {
             PartRole role = switch (cell.symbol()) {
-                case 'C' -> PartRole.STABILITY;
+                case 'C' -> PartRole.INJECTION;
                 case 'D' -> PartRole.GLASS;
                 case 'G' -> PartRole.CORE;
                 default -> null;
@@ -93,8 +93,8 @@ public final class CrystalWorkstationStructure extends AbstractStructureFacade {
                 continue;
             }
             Direction outward = switch (role) {
-                // 稳定机械方块按结构左右轴朝外，玻璃按深度轴朝外
-                case STABILITY -> cell.col() < core.col() ? side.getOpposite() : side;
+                // 压射机械方块按结构左右轴朝外，玻璃按深度轴朝外
+                case INJECTION -> cell.col() < core.col() ? side.getOpposite() : side;
                 case GLASS -> cell.slice() < core.slice() ? depth.getOpposite() : depth;
                 case CORE -> null;
             };

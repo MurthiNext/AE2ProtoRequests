@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 // 晶能工作站成型外观：主机换装、隐藏核心、玻璃单面化与两侧 3x3 面板换装连纹
 public final class CrystalWorkstationCtm {
 
-    private static final ResourceLocation STABILITY_SKIN = Ids.of("block/high_energy_stability_casing");
+    private static final ResourceLocation INJECTION_SKIN = Ids.of("block/crystal_energy_injection_casing");
     private static final int STRIDE = 8;
     private static final int UV_OFFSET = 4;
 
@@ -40,7 +40,7 @@ public final class CrystalWorkstationCtm {
         // 与面板或成型主机相邻的机壳并入工作站外观
         boolean shell = look == null
                 && state.is(ModBlocks.CRYSTAL_ENERGY_CASING.get())
-                && (CrystalWorkstationShell.bordersStability(pos) || bordersController(level, pos));
+                && (CrystalWorkstationShell.bordersInjection(pos) || bordersController(level, pos));
         if (look == null && !shell) {
             return null;
         }
@@ -54,7 +54,7 @@ public final class CrystalWorkstationCtm {
         if (pane && side == look.outward().getOpposite()) {
             return List.of();
         }
-        boolean panel = look != null && look.role() == CrystalWorkstationStructure.PartRole.STABILITY;
+        boolean panel = look != null && look.role() == CrystalWorkstationStructure.PartRole.INJECTION;
         boolean outer = side == null || (look != null && side == look.outward());
         // 面板外侧换成晶能外壳，内侧换成独立的 3x3 面板纹理
         if (panel) {
@@ -67,7 +67,7 @@ public final class CrystalWorkstationCtm {
             worldMask = outer
                     ? MachineCtm.mask(level, pos, CrystalWorkstationCtm::connectsShell)
                     : MachineCtm.mask(
-                            level, pos, (neighbor, neighborState) -> CrystalWorkstationShell.isStability(neighbor));
+                            level, pos, (neighbor, neighborState) -> CrystalWorkstationShell.isInjection(neighbor));
         } else if (shell) {
             worldMask = MachineCtm.mask(level, pos, CrystalWorkstationCtm::connectsShell);
         } else {
@@ -104,7 +104,7 @@ public final class CrystalWorkstationCtm {
         }
         List<BakedQuad> result = new ArrayList<>(quads.size());
         for (BakedQuad quad : quads) {
-            if (!STABILITY_SKIN.equals(quad.getSprite().contents().name())) {
+            if (!INJECTION_SKIN.equals(quad.getSprite().contents().name())) {
                 result.add(quad);
                 continue;
             }
@@ -165,7 +165,7 @@ public final class CrystalWorkstationCtm {
     }
 
     private static boolean connectsShell(BlockPos neighbor, BlockState neighborState) {
-        if (CrystalWorkstationShell.isStability(neighbor)) {
+        if (CrystalWorkstationShell.isInjection(neighbor)) {
             return true;
         }
         if (neighborState.is(ModMachines.CRYSTAL_WORKSTATION.block())) {

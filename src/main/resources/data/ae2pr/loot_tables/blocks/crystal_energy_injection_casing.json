@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "ae2pr:high_energy_stability_casing"
+          "name": "ae2pr:crystal_energy_injection_casing"
         }
       ],
       "conditions": [

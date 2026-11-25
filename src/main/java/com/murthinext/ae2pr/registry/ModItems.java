@@ -135,8 +135,8 @@ public final class ModItems {
 
     public static final RegistryObject<BlockItem> CRYSTAL_ENERGY_CASING = blockItem(ModBlocks.CRYSTAL_ENERGY_CASING);
 
-    public static final RegistryObject<BlockItem> HIGH_ENERGY_STABILITY_CASING =
-            blockItem(ModBlocks.HIGH_ENERGY_STABILITY_CASING);
+    public static final RegistryObject<BlockItem> CRYSTAL_ENERGY_INJECTION_CASING =
+            blockItem(ModBlocks.CRYSTAL_ENERGY_INJECTION_CASING);
 
     public static final RegistryObject<BlockItem> STABILITY_CASING = blockItem(ModBlocks.STABILITY_CASING);
 
