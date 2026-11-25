@@ -137,6 +137,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CRYSTAL_ENERGY_CASING.get());
                         output.accept(ModItems.CRYSTAL_ENERGY_INJECTION_CASING.get());
                         output.accept(ModItems.STABILITY_CASING.get());
+                        output.accept(ModItems.ENTANGLED_CASING.get());
                         output.accept(ModItems.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING.get());
                         output.accept(ModItems.ME_COMPUTER_CASING.get());
                         output.accept(ModItems.ME_ADVANCED_COMPUTER_CASING.get());

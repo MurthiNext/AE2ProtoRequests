@@ -62,6 +62,7 @@ public final class MachineCtm implements CtmBinding {
         CtmTextures.registerTile47("block/zirconia_corundum_bricks");
         CtmTextures.registerQuadrant("block/zirconium_iron_alloy_machine_casing");
         CtmTextures.registerQuadrant("block/stability_casing");
+        CtmTextures.registerQuadrant("block/entangled_casing");
         for (String casing : List.of("me_computer_casing", "me_advanced_computer_casing")) {
             for (String face : List.of("front", "back", "side", "top", "bottom")) {
                 CtmTextures.registerQuadrant("block/" + casing + "/" + face);
@@ -200,6 +201,9 @@ public final class MachineCtm implements CtmBinding {
         }
         if (block == ModBlocks.STABILITY_CASING.get()) {
             return 15;
+        }
+        if (block == ModBlocks.ENTANGLED_CASING.get()) {
+            return 16;
         }
         if (block == ModBlocks.METEOR_STEEL_PIPE_BLOCK.get()) {
             // 管道按轴向分族

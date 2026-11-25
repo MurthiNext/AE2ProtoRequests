@@ -140,6 +140,8 @@ public final class ModItems {
 
     public static final RegistryObject<BlockItem> STABILITY_CASING = blockItem(ModBlocks.STABILITY_CASING);
 
+    public static final RegistryObject<BlockItem> ENTANGLED_CASING = blockItem(ModBlocks.ENTANGLED_CASING);
+
     public static final RegistryObject<BlockItem> ZIRCONIUM_IRON_ALLOY_MACHINE_CASING =
             blockItem(ModBlocks.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING);
 
