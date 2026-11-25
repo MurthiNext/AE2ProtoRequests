@@ -84,25 +84,53 @@ final class TerminalStarfieldRenderer {
         }
         graphics.drawManaged(() -> {
             Matrix4f matrix = graphics.pose().last().pose();
-            VertexConsumer vertices = graphics.bufferSource().getBuffer(RenderType.gui());
+            boolean antialias = TerminalShapeRenderer.isReady();
+            VertexConsumer vertices = antialias
+                    ? TerminalShapeRenderer.buffer(graphics)
+                    : graphics.bufferSource().getBuffer(RenderType.gui());
             float span = width - slant;
+            float slope = slant / height;
+            float padV = antialias ? TerminalShapeRenderer.pixelSize(matrix) : 0;
+            float padU = padV * (1 + Math.abs(slope));
+            float originX = x + slant;
             for (int row = 0; row < height; row += MESH_STEP) {
                 int bottom = Math.min(row + MESH_STEP, height);
-                float leftTop = x + slant * (1 - row / (float) height);
-                float leftBottom = x + slant * (1 - bottom / (float) height);
+                float topV = row == 0 ? -padV : row;
+                float bottomV = bottom == height ? height + padV : bottom;
                 for (int column = 0; column < span; column += MESH_STEP) {
                     float right = Math.min(column + MESH_STEP, span);
-                    nebulaVertex(vertices, matrix, leftTop + column, y + row, seconds);
-                    nebulaVertex(vertices, matrix, leftBottom + column, y + bottom, seconds);
-                    nebulaVertex(vertices, matrix, leftBottom + right, y + bottom, seconds);
-                    nebulaVertex(vertices, matrix, leftTop + right, y + row, seconds);
+                    float leftU = column == 0 ? -padU : column;
+                    float rightU = right == span ? span + padU : right;
+                    nebulaVertex(vertices, matrix, antialias, originX, y, slope, leftU, topV, span, height, seconds);
+                    nebulaVertex(vertices, matrix, antialias, originX, y, slope, leftU, bottomV, span, height, seconds);
+                    nebulaVertex(
+                            vertices, matrix, antialias, originX, y, slope, rightU, bottomV, span, height, seconds);
+                    nebulaVertex(vertices, matrix, antialias, originX, y, slope, rightU, topV, span, height, seconds);
                 }
             }
         });
     }
 
-    private void nebulaVertex(VertexConsumer vertices, Matrix4f matrix, float x, float y, float seconds) {
-        vertex(vertices, matrix, x, y, nebulaColor(x, y, seconds), 255);
+    private void nebulaVertex(
+            VertexConsumer vertices,
+            Matrix4f matrix,
+            boolean antialias,
+            float originX,
+            float originY,
+            float slope,
+            float u,
+            float v,
+            float span,
+            float height,
+            float seconds) {
+        float x = originX + u - slope * v;
+        float y = originY + v;
+        int color = nebulaColor(x, y, seconds);
+        if (antialias) {
+            TerminalShapeRenderer.vertex(vertices, matrix, x, y, u, v, span, height, color, 0);
+        } else {
+            vertex(vertices, matrix, x, y, color, 255);
+        }
     }
 
     // 采样缩放、漂移与暗角下的星云底色

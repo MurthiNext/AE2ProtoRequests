@@ -67,7 +67,7 @@ final class TerminalTitleRenderer {
                                 TerminalGraphicsRenderer.TEXT,
                                 TerminalGraphicsRenderer.ACCENT,
                                 row * 0.035F + (1 - reveal) * 0.5F);
-                        TerminalGraphicsRenderer.line(
+                        TerminalGraphicsRenderer.pixelLine(
                                 graphics,
                                 px,
                                 py + pixelSize / 2,

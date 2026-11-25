@@ -444,6 +444,8 @@ public final class TerminalScreen extends Screen {
             float top,
             float right,
             float bottom) {
+        float fringe = 1 / deviceScale();
+        float lineMargin = Math.max(1, contentZoom) / 2 + fringe;
         graphics.drawManaged(() -> {
             for (TerminalStoryTree.Node node : story.nodes()) {
                 float progress = connectionProgress(elapsed, node);
@@ -456,16 +458,15 @@ public final class TerminalScreen extends Screen {
                         continue;
                     }
                     connected = true;
-                    if (TREE_TOP + panY + (Math.max(source.y(), node.y()) + NODE_HEIGHT / 2.0F) * contentZoom + 1 >= top
-                            && TREE_TOP + panY + (Math.min(source.y(), node.y()) + NODE_HEIGHT / 2.0F) * contentZoom - 1
-                                    < bottom) {
+                    if (treeY(Math.max(source.y(), node.y()) + NODE_HEIGHT / 2.0F) + lineMargin >= top
+                            && treeY(Math.min(source.y(), node.y()) + NODE_HEIGHT / 2.0F) - lineMargin < bottom) {
                         renderConnection(graphics, source, node, progress);
                     }
                 }
                 float reveal = nodeReveal(elapsed, node);
                 if (!connected && reveal < 1) {
                     float y = treeY(node.y() + NODE_HEIGHT / 2.0F);
-                    if (y + 1 >= top && y - 1 < bottom) {
+                    if (y + lineMargin >= top && y - lineMargin < bottom) {
                         float x2 = treeX(node.x() + TerminalGraphicsRenderer.slant(NODE_HEIGHT) / 2);
                         float edge = MAIN_X + MAIN_SLANT * (1 - (y - MAIN_Y) / MAIN_HEIGHT);
                         float x1 = Math.min(edge, x2 - 36 * contentZoom);
@@ -482,11 +483,12 @@ public final class TerminalScreen extends Screen {
             }
         });
         boolean mouseInside = (detail == null || detailClosingStarted >= 0) && insideTree(mouseX, mouseY);
+        float buttonMargin = 0.5F + fringe;
         for (TerminalButton button : nodeButtons) {
-            if (button.getY() + button.getHeight() * contentZoom >= top
-                    && button.getY() < bottom
-                    && button.getX() + button.getWidth() * contentZoom >= left
-                    && button.getX() < right) {
+            if (button.getY() + button.getHeight() * contentZoom + buttonMargin >= top
+                    && button.getY() - buttonMargin < bottom
+                    && button.getX() + button.getWidth() * contentZoom + buttonMargin >= left
+                    && button.getX() - buttonMargin < right) {
                 button.render(graphics, mouseInside ? mouseX : -10000, mouseInside ? mouseY : -10000, partialTick);
             }
         }

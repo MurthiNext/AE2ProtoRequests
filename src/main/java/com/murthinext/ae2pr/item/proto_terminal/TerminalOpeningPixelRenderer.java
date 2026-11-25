@@ -257,7 +257,7 @@ final class TerminalOpeningPixelRenderer {
                         energy * (0.28F + pulse * 0.55F));
                 glow(vertices, matrix, edge, 3 + energy * 5, energy * (0.14F + pulse * 0.12F));
                 glow(vertices, matrix, edge, 1.4F, energy * 0.22F);
-                TerminalGraphicsRenderer.line(
+                TerminalGraphicsRenderer.pixelLine(
                         graphics,
                         edge.x1(),
                         edge.y1(),
@@ -271,7 +271,7 @@ final class TerminalOpeningPixelRenderer {
             float radius = Math.min(halfSpan * 0.85F, 48);
             Edge seam = new Edge(centerX - radius, centerY, centerX + radius, centerY);
             glow(vertices, matrix, seam, Math.min(halfHeight, 6), ignition * 0.25F);
-            TerminalGraphicsRenderer.line(
+            TerminalGraphicsRenderer.pixelLine(
                     graphics,
                     seam.x1(),
                     seam.y1(),
@@ -306,7 +306,7 @@ final class TerminalOpeningPixelRenderer {
             float x = mote.x() + (horizontal > vertical ? Math.signum(dx) * drift : 0);
             float y = mote.y() + (horizontal > vertical ? 0 : Math.signum(dy) * drift);
             int color = TerminalGraphicsRenderer.alpha(TerminalGraphicsRenderer.ACCENT, opacity);
-            TerminalGraphicsRenderer.line(graphics, x, y, x + mote.size(), y, color, mote.size());
+            TerminalGraphicsRenderer.pixelLine(graphics, x, y, x + mote.size(), y, color, mote.size());
         }
     }
 

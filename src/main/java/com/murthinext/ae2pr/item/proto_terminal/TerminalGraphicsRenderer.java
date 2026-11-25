@@ -31,12 +31,16 @@ final class TerminalGraphicsRenderer {
 
     static void panel(
             GuiGraphics graphics, float x, float y, int width, int height, float slant, int fill, int border) {
-        if (width <= slant || height <= 0) {
+        if (width <= slant || height <= 0 || (fill | border) >>> 24 == 0) {
             return;
         }
         graphics.drawManaged(() -> {
-            quad(graphics, x + slant, y, x, y + height, x + width - slant, y + height, x + width, y, fill, fill);
-            outline(graphics, x, y, width, height, slant, border);
+            if (TerminalShapeRenderer.isReady()) {
+                TerminalShapeRenderer.panel(graphics, x, y, width, height, slant, fill, border);
+            } else {
+                quad(graphics, x + slant, y, x, y + height, x + width - slant, y + height, x + width, y, fill, fill);
+                outline(graphics, x, y, width, height, slant, border);
+            }
         });
     }
 
@@ -140,6 +144,14 @@ final class TerminalGraphicsRenderer {
     }
 
     static void line(GuiGraphics graphics, float x1, float y1, float x2, float y2, int color, float width) {
+        if (TerminalShapeRenderer.isReady()) {
+            TerminalShapeRenderer.line(graphics, x1, y1, x2, y2, color, width);
+        } else {
+            pixelLine(graphics, x1, y1, x2, y2, color, width);
+        }
+    }
+
+    static void pixelLine(GuiGraphics graphics, float x1, float y1, float x2, float y2, int color, float width) {
         float length = (float) Math.hypot(x2 - x1, y2 - y1);
         if (length <= 0 || color >>> 24 == 0) {
             return;
@@ -150,7 +162,11 @@ final class TerminalGraphicsRenderer {
     }
 
     static void outline(GuiGraphics graphics, float x, float y, int width, int height, float slant, int color) {
-        if (color >>> 24 == 0) {
+        if (width <= slant || height <= 0 || color >>> 24 == 0) {
+            return;
+        }
+        if (TerminalShapeRenderer.isReady()) {
+            TerminalShapeRenderer.panel(graphics, x, y, width, height, slant, 0, color);
             return;
         }
         float slope = slant / (float) Math.max(1, height);
