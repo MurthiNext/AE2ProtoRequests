@@ -47,22 +47,22 @@ public final class MultiblockPreview implements BlockAndTintGetter {
     private List<Cell> cells = List.of();
     private List<ItemStack> materials = List.of();
     private AABB bounds = new AABB(BlockPos.ZERO);
-    private int slices;
+    private int repeatSlices;
     private int layer = -1;
 
     public MultiblockPreview(MultiblockPattern pattern, LevelLightEngine lightEngine) {
         this.pattern = pattern;
         this.lightEngine = lightEngine;
-        setSlices(pattern.minSlices());
+        setRepeatSlices(pattern.minRepeatSlices());
     }
 
-    public void setSlices(int slices) {
-        this.slices = Mth.clamp(slices, pattern.minSlices(), pattern.maxSlices());
+    public void setRepeatSlices(int repeatSlices) {
+        this.repeatSlices = Mth.clamp(repeatSlices, pattern.minRepeatSlices(), pattern.maxRepeatSlices());
         Map<BlockPos, BlockState> previous = new HashMap<>(states);
         states.clear();
         List<Cell> result = new ArrayList<>();
         for (MultiblockPattern.PatternCell cell :
-                pattern.patternCells(BlockPos.ZERO, Direction.NORTH, Direction.UP, false, false, this.slices)) {
+                pattern.patternCells(BlockPos.ZERO, Direction.NORTH, Direction.UP, false, false, this.repeatSlices)) {
             StructurePredicate predicate = pattern.predicate(cell.symbol());
             List<Block> blocks = candidates.computeIfAbsent(
                     predicate,
@@ -150,8 +150,8 @@ public final class MultiblockPreview implements BlockAndTintGetter {
         return cells;
     }
 
-    public int slices() {
-        return slices;
+    public int repeatSlices() {
+        return repeatSlices;
     }
 
     public AABB bounds() {

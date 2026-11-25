@@ -25,7 +25,11 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
 public record MultiblockPreviewRecipe(
-        ResourceLocation id, Component title, Block controller, MultiblockPattern pattern, IntSupplier maxSlices) {
+        ResourceLocation id,
+        Component title,
+        Block controller,
+        MultiblockPattern pattern,
+        IntSupplier maxRepeatSlices) {
 
     public static List<MultiblockPreviewRecipe> recipes() {
         return List.of(
@@ -33,48 +37,29 @@ public record MultiblockPreviewRecipe(
                         "crystal_assembly_line",
                         ModMachines.CRYSTAL_ASSEMBLY_LINE.block(),
                         CrystalAssemblyLineStructure.PATTERN,
-                        CrystalAssemblyLineStructure.INSTANCE::maxSlices),
+                        CrystalAssemblyLineStructure.INSTANCE::maxRepeatSlices),
                 of(
                         "crystal_reaction_chamber",
                         ModMachines.CRYSTAL_REACTION_CHAMBER.block(),
-                        CrystalReactionChamberStructure.PATTERN,
-                        CrystalReactionChamberStructure.PATTERN::maxSlices),
-                of(
-                        "crystal_workstation",
-                        ModMachines.CRYSTAL_WORKSTATION.block(),
-                        CrystalWorkstationStructure.PATTERN,
-                        CrystalWorkstationStructure.PATTERN::maxSlices),
-                of("jig", ModMachines.JIG.block(), JigStructure.PATTERN, JigStructure.PATTERN::maxSlices),
-                of(
-                        "filter_press",
-                        ModMachines.FILTER_PRESS.block(),
-                        FilterPressStructure.PATTERN,
-                        FilterPressStructure.PATTERN::maxSlices),
+                        CrystalReactionChamberStructure.PATTERN),
+                of("crystal_workstation", ModMachines.CRYSTAL_WORKSTATION.block(), CrystalWorkstationStructure.PATTERN),
+                of("jig", ModMachines.JIG.block(), JigStructure.PATTERN),
+                of("filter_press", ModMachines.FILTER_PRESS.block(), FilterPressStructure.PATTERN),
                 of(
                         "high_reactivity_lava_smelter",
                         ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.block(),
-                        HighReactivityLavaSmelterStructure.PATTERN,
-                        HighReactivityLavaSmelterStructure.PATTERN::maxSlices),
+                        HighReactivityLavaSmelterStructure.PATTERN),
                 of(
                         "matter_phase_transformer",
                         ModMachines.MATTER_PHASE_TRANSFORMER.block(),
-                        MatterPhaseTransformerStructure.PATTERN,
-                        MatterPhaseTransformerStructure.PATTERN::maxSlices),
-                of(
-                        "multi_factory",
-                        ModMachines.MULTI_FACTORY.block(),
-                        MultiFactoryStructure.PATTERN,
-                        MultiFactoryStructure.PATTERN::maxSlices),
-                of(
-                        "crystal_reactor",
-                        ModMachines.CRYSTAL_REACTOR.block(),
-                        CrystalReactorStructure.PATTERN,
-                        CrystalReactorStructure.PATTERN::maxSlices));
+                        MatterPhaseTransformerStructure.PATTERN),
+                of("multi_factory", ModMachines.MULTI_FACTORY.block(), MultiFactoryStructure.PATTERN),
+                of("crystal_reactor", ModMachines.CRYSTAL_REACTOR.block(), CrystalReactorStructure.PATTERN));
     }
 
     public List<ItemStack> ingredients() {
         return pattern
-                .patternCells(BlockPos.ZERO, Direction.NORTH, Direction.UP, false, false, pattern.minSlices())
+                .patternCells(BlockPos.ZERO, Direction.NORTH, Direction.UP, false, false, pattern.minRepeatSlices())
                 .stream()
                 .map(cell -> pattern.predicate(cell.symbol()))
                 .distinct()
@@ -87,8 +72,8 @@ public record MultiblockPreviewRecipe(
 
     public List<ItemStack> defaultMaterials() {
         Map<Block, Integer> totals = new LinkedHashMap<>();
-        for (MultiblockPattern.PatternCell cell :
-                pattern.patternCells(BlockPos.ZERO, Direction.NORTH, Direction.UP, false, false, pattern.minSlices())) {
+        for (MultiblockPattern.PatternCell cell : pattern.patternCells(
+                BlockPos.ZERO, Direction.NORTH, Direction.UP, false, false, pattern.minRepeatSlices())) {
             List<Block> candidates = pattern.predicate(cell.symbol()).previewBlocks();
             if (!candidates.isEmpty() && candidates.get(0).asItem() != Items.AIR) {
                 totals.merge(candidates.get(0), 1, Integer::sum);
@@ -99,14 +84,17 @@ public record MultiblockPreviewRecipe(
                 .toList();
     }
 
-    // 结构预览统一使用结构名，key 与结构 id 一一对应
+    private static MultiblockPreviewRecipe of(String name, Block controller, MultiblockPattern pattern) {
+        return of(name, controller, pattern, pattern::maxRepeatSlices);
+    }
+
     private static MultiblockPreviewRecipe of(
-            String name, Block controller, MultiblockPattern pattern, IntSupplier maxSlices) {
+            String name, Block controller, MultiblockPattern pattern, IntSupplier maxRepeatSlices) {
         return new MultiblockPreviewRecipe(
                 Ids.of("multiblock/" + name),
                 Component.translatable("jei.ae2pr.multiblock.structure." + name),
                 controller,
                 pattern,
-                maxSlices);
+                maxRepeatSlices);
     }
 }

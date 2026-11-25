@@ -26,6 +26,7 @@ public final class MultiblockMachineDefinition<
     private final Supplier<? extends AbstractStructureFacade> structure;
     private final IntSupplier parallel;
     private final Supplier<? extends RecipeType<?>> recipeType;
+    private IntSupplier parallelPerRepeatSlice = () -> 0;
     private Consumer<E> clientTicker = controller -> {};
     // 核心方块运行指示灯谓词，未配置表示不处理
     @Nullable
@@ -181,6 +182,15 @@ public final class MultiblockMachineDefinition<
 
     public int maxParallel() {
         return parallel.getAsInt();
+    }
+
+    public MultiblockMachineDefinition<E, M> parallelPerRepeatSlice(IntSupplier parallel) {
+        this.parallelPerRepeatSlice = parallel;
+        return this;
+    }
+
+    public int parallelPerRepeatSlice() {
+        return parallelPerRepeatSlice.getAsInt();
     }
 
     public RecipeType<?> recipeType() {

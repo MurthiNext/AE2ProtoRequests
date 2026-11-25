@@ -36,7 +36,7 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
     private static final ScreenRectangle VIEW = new ScreenRectangle(4, 22, 124, 148);
     private static final ScreenRectangle REPLACEMENTS = new ScreenRectangle(132, 34, 24, 126);
     private static final ScreenRectangle LAYER = new ScreenRectangle(86, 2, 42, 14);
-    private static final ScreenRectangle LENGTH = new ScreenRectangle(36, 2, 46, 14);
+    private static final ScreenRectangle REPEAT_SLICES = new ScreenRectangle(36, 2, 46, 14);
     private static final ScreenRectangle RESET = new ScreenRectangle(132, 2, 24, 14);
     private static final ScreenRectangle MATERIAL_PREV = new ScreenRectangle(2, 200, 12, 18);
     private static final ScreenRectangle MATERIAL_NEXT = new ScreenRectangle(144, 200, 12, 18);
@@ -99,8 +99,13 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
         OPEN_WIDGETS.put(recipe.id(), new WeakReference<>(this));
         drawButton(graphics, RESET, "R", true, mouseX, mouseY);
         drawButton(graphics, LAYER, preview.layer() < 0 ? "L: *" : "L:" + (preview.layer() + 1), true, mouseX, mouseY);
-        if (hasVariableLength()) {
-            drawButton(graphics, LENGTH, "LEN: " + preview.slices(), true, mouseX, mouseY);
+        if (hasRepeatSlices()) {
+            int maxRepeatSlices = recipe.maxRepeatSlices().getAsInt();
+            if (preview.repeatSlices() > maxRepeatSlices) {
+                changeRepeatSlices(0);
+            }
+            drawButton(
+                    graphics, REPEAT_SLICES, "LEN: " + preview.repeatSlices(), canChangeRepeatSlices(), mouseX, mouseY);
         }
 
         graphics.fill(VIEW.left() - 1, VIEW.top() - 1, VIEW.right() + 1, VIEW.bottom() + 1, 0xFF8B9AA6);
@@ -159,11 +164,11 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
                     preview.layer() < 0 ? text("all_layers") : text("layer", AmountText.exact(preview.layer() + 1)));
             return;
         }
-        if (hasVariableLength() && contains(LENGTH, mouseX, mouseY)) {
+        if (hasRepeatSlices() && contains(REPEAT_SLICES, mouseX, mouseY)) {
             tooltip.add(text(
-                    "length_hint",
-                    AmountText.exact(recipe.pattern().minSlices()),
-                    AmountText.exact(recipe.maxSlices().getAsInt())));
+                    "repeat_slices_hint",
+                    AmountText.exact(recipe.pattern().minRepeatSlices()),
+                    AmountText.exact(recipe.maxRepeatSlices().getAsInt())));
             return;
         }
         if (contains(MATERIAL_PREV, mouseX, mouseY) && materialOffset > 0) {
@@ -209,9 +214,9 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
             changeLayer(button == 0 ? 1 : -1);
             return true;
         }
-        if (hasVariableLength() && contains(LENGTH, mouseX, mouseY)) {
+        if (canChangeRepeatSlices() && contains(REPEAT_SLICES, mouseX, mouseY)) {
             int step = Screen.hasShiftDown() ? 5 : 1;
-            changeLength(button == 0 ? step : -step);
+            changeRepeatSlices(button == 0 ? step : -step);
             return true;
         }
         if (button != 0) {
@@ -304,21 +309,25 @@ public final class MultiblockPreviewWidget implements IRecipeWidget, IJeiGuiEven
         }
     }
 
-    private void changeLength(int delta) {
-        int length = Mth.clamp(
-                preview.slices() + delta,
-                recipe.pattern().minSlices(),
-                recipe.maxSlices().getAsInt());
-        if (length != preview.slices()) {
-            preview.setSlices(length);
+    private void changeRepeatSlices(int delta) {
+        int repeatSlices = Mth.clamp(
+                preview.repeatSlices() + delta,
+                recipe.pattern().minRepeatSlices(),
+                recipe.maxRepeatSlices().getAsInt());
+        if (repeatSlices != preview.repeatSlices()) {
+            preview.setRepeatSlices(repeatSlices);
             selected = null;
             replacementOffset = 0;
             materialOffset = 0;
         }
     }
 
-    private boolean hasVariableLength() {
-        return recipe.maxSlices().getAsInt() > recipe.pattern().minSlices();
+    private boolean canChangeRepeatSlices() {
+        return recipe.maxRepeatSlices().getAsInt() > recipe.pattern().minRepeatSlices();
+    }
+
+    private boolean hasRepeatSlices() {
+        return recipe.pattern().maxRepeatSlices() > 0;
     }
 
     private List<Block> replacements() {

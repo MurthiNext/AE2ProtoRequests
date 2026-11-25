@@ -11,13 +11,14 @@ import com.murthinext.ae2pr.registry.ModMachines;
 public final class FilterPressStructure extends AbstractStructureFacade {
 
     public static final MultiblockPattern PATTERN = MultiblockPattern.builder(
-                    RelativeDirection.BACK, RelativeDirection.UP, RelativeDirection.RIGHT)
-            .origin(1, 10)
-            .slice("#SSSSSSSSSS#", "#SAAAAAAAAK#", "#SAAAAAAAAS#", "#SAAAAAAAAS#")
-            .slice("SSSSSSSSSSSS", "SSSSSSSSSSSS", "SLAAAAAAAALS", "SSAAAAAAAASS")
-            .slice("SSSSSSSSSSSS", "SLAAAAAAAALS", "SLPPPPPPPPLS", "SSPPPPPPPPSS")
-            .slice("SSSSSSSSSSSS", "SSSSSSSSSSSS", "SLAAAAAAAALS", "SSAAAAAAAASS")
-            .slice("#SSSSSSSSSS#", "#SAAAAAAAAS#", "#SAAAAAAAAS#", "#SAAAAAAAAS#")
+                    RelativeDirection.LEFT, RelativeDirection.UP, RelativeDirection.BACK)
+            .sliceOrigin(1)
+            .origin(1, 0)
+            .slice("#SSS#", "#SSS#", "#SSS#", "#SSS#")
+            .slice("SSSSS", "KSLSS", "SLLLS", "SSSSS")
+            .sliceRepeatable(5, 32, "SSSSS", "ASASA", "AAPAA", "AAPAA")
+            .slice("SSSSS", "SSLSS", "SLLLS", "SSSSS")
+            .slice("#SSS#", "#SSS#", "#SSS#", "#SSS#")
             .where('K', StructurePredicate.blocks(ModMachines.FILTER_PRESS.block()))
             .where('S', StructurePredicate.casingWithParts(ModBlocks.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING.get()))
             .where('L', StructurePredicate.blocks(ModBlocks.LOGISTICS_CONTROL_CASING.get()))

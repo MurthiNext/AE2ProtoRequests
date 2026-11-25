@@ -69,8 +69,8 @@ public final class CrystalWorkstationStructure extends AbstractStructureFacade {
             BlockPos controllerPos, Direction facing, boolean mirrorSide, boolean mirrorFront) {
         Direction side = sideAxis(facing, mirrorSide, mirrorFront);
         Direction depth = depthAxis(facing, mirrorSide, mirrorFront);
-        List<MultiblockPattern.PatternCell> cells =
-                PATTERN.patternCells(controllerPos, facing, Direction.UP, mirrorSide, mirrorFront, PATTERN.minSlices());
+        List<MultiblockPattern.PatternCell> cells = PATTERN.patternCells(
+                controllerPos, facing, Direction.UP, mirrorSide, mirrorFront, PATTERN.minRepeatSlices());
         MultiblockPattern.PatternCell core = null;
         for (MultiblockPattern.PatternCell cell : cells) {
             if (cell.symbol() == 'G') {

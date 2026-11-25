@@ -336,7 +336,7 @@
   "jei.ae2pr.multiblock.structure.crystal_reactor": "水晶反应器",
   "jei.ae2pr.multiblock.all_layers": "所有层",
   "jei.ae2pr.multiblock.layer": "第%s层",
-  "jei.ae2pr.multiblock.length_hint": "结构长度：%s～%s",
+  "jei.ae2pr.multiblock.repeat_slices_hint": "重复片数：%s～%s；按住 Shift 每次调整 5 片",
   "jei.ae2pr.multiblock.replace": "替换",
   "jei.ae2pr.multiblock.materials": "所需方块：",
   "jei.ae2pr.multiblock.total": "×%s",

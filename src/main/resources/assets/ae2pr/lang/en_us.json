@@ -336,7 +336,7 @@
   "jei.ae2pr.multiblock.structure.crystal_reactor": "Crystal Reactor",
   "jei.ae2pr.multiblock.all_layers": "All layers",
   "jei.ae2pr.multiblock.layer": "Layer %s",
-  "jei.ae2pr.multiblock.length_hint": "Structure length: %s–%s; hold Shift to change by 5",
+  "jei.ae2pr.multiblock.repeat_slices_hint": "Repeated slices: %s–%s; hold Shift to change by 5",
   "jei.ae2pr.multiblock.replace": "Swap",
   "jei.ae2pr.multiblock.materials": "Required blocks:",
   "jei.ae2pr.multiblock.total": "×%s",

@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 
 public abstract class AbstractStructureFacade {
@@ -26,8 +25,8 @@ public abstract class AbstractStructureFacade {
         return facade;
     }
 
-    public int maxSlices() {
-        return pattern.minSlices();
+    public int maxRepeatSlices() {
+        return pattern.maxRepeatSlices();
     }
 
     /**
@@ -38,16 +37,8 @@ public abstract class AbstractStructureFacade {
      * @return 本次成型覆盖的方块，未成型时为空
      */
     public List<BlockPos> updateFormed(
-            Level level,
-            BlockPos controllerPos,
-            Direction facing,
-            StructureResult result,
-            List<BlockPos> previousCells,
-            boolean active) {
-        List<BlockPos> cells = result.formed()
-                ? pattern.cells(
-                        controllerPos, facing, Direction.UP, result.mirrorSide(), result.mirrorFront(), result.slices())
-                : List.of();
+            Level level, StructureResult result, List<BlockPos> previousCells, boolean active) {
+        List<BlockPos> cells = result.cells();
         // 撤销已不在当前结构内的旧方块
         if (!previousCells.isEmpty()) {
             Set<BlockPos> current = new HashSet<>(cells);

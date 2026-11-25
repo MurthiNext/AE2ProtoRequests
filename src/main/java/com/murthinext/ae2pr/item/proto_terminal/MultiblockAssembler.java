@@ -163,13 +163,13 @@ public final class MultiblockAssembler {
         int bestScore = -1;
         for (boolean[] mirror : MultiblockPattern.MIRRORS) {
             int score = pattern.score(
-                    level, controllerPos, facing, Direction.UP, mirror[0], mirror[1], pattern.minSlices());
+                    level, controllerPos, facing, Direction.UP, mirror[0], mirror[1], pattern.minRepeatSlices());
             if (score > bestScore) {
                 bestScore = score;
                 best = new Layout(
                         pattern,
                         pattern.patternCells(
-                                controllerPos, facing, Direction.UP, mirror[0], mirror[1], pattern.minSlices()),
+                                controllerPos, facing, Direction.UP, mirror[0], mirror[1], pattern.minRepeatSlices()),
                         new StructureOrientation(facing, Direction.UP, mirror[0], mirror[1]));
             }
         }

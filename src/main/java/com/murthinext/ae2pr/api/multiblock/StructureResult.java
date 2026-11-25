@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 public record StructureResult(
         boolean formed,
-        int slices,
+        int repeatSlices,
         boolean mirrorSide,
         boolean mirrorFront,
         int mismatches,
@@ -25,7 +25,7 @@ public record StructureResult(
     public StructureResult asCached() {
         return new StructureResult(
                 formed,
-                slices,
+                repeatSlices,
                 mirrorSide,
                 mirrorFront,
                 mismatches,

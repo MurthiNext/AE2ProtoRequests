@@ -53,11 +53,12 @@ public final class StructureValidator {
     }
 
     // 验证结构；{@link StructureResult#fromCache()} 为 true 时无需刷新外观与部件引用
-    public StructureResult validate(Level level, BlockPos controllerPos, Direction front, Direction up, int maxSlices) {
-        if (lastFormed != null && verified(level)) {
+    public StructureResult validate(
+            Level level, BlockPos controllerPos, Direction front, Direction up, int maxRepeatSlices) {
+        if (lastFormed != null && lastFormed.repeatSlices() <= maxRepeatSlices && verified(level)) {
             return lastFormed.asCached();
         }
-        StructureResult result = pattern.match(level, controllerPos, front, up, maxSlices);
+        StructureResult result = pattern.match(level, controllerPos, front, up, maxRepeatSlices);
         if (result.formed()) {
             lastFormed = result;
             capture(level, result.cells());

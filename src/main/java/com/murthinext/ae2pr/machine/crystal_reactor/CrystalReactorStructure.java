@@ -37,7 +37,7 @@ public final class CrystalReactorStructure {
     private CrystalReactorStructure() {}
 
     public static boolean matches(Level level, BlockPos core) {
-        return PATTERN.match(level, core, Direction.NORTH, Direction.UP, PATTERN.minSlices())
+        return PATTERN.match(level, core, Direction.NORTH, Direction.UP, PATTERN.maxRepeatSlices())
                 .formed();
     }
 

@@ -139,11 +139,12 @@ public final class ModMachines {
                 RecipeDefinition.custom("crystal_assembly_line", CrystalAssemblyLineRecipe.Serializer::new);
 
         FILTER_PRESS = MultiblockMachineDefinition.standard(
-                "filter_press",
-                ModMachines::metalProperties,
-                () -> FilterPressStructure.INSTANCE,
-                ServerConfig::filterPressBaseParallel,
-                FILTER_PRESS_RECIPE::type);
+                        "filter_press",
+                        ModMachines::metalProperties,
+                        () -> FilterPressStructure.INSTANCE,
+                        ServerConfig::filterPressBaseParallel,
+                        FILTER_PRESS_RECIPE::type)
+                .parallelPerRepeatSlice(ServerConfig::filterPressParallelPerRepeatSlice);
         JIG = MultiblockMachineDefinition.standard(
                 "jig",
                 JigControllerBlockEntity.class,
@@ -162,13 +163,14 @@ public final class ModMachines {
                         CRYSTAL_REACTION_CHAMBER_RECIPE::type)
                 .coreLight(ModMachines.CRYSTAL_REACTOR_CORE);
         CRYSTAL_ASSEMBLY_LINE = MultiblockMachineDefinition.standard(
-                "crystal_assembly_line",
-                CrystalAssemblyLineControllerBlockEntity.class,
-                CrystalAssemblyLineControllerBlockEntity::new,
-                ModMachines::metalProperties,
-                () -> CrystalAssemblyLineStructure.INSTANCE,
-                ServerConfig::assemblyBaseParallel,
-                CRYSTAL_ASSEMBLY_LINE_RECIPE::type);
+                        "crystal_assembly_line",
+                        CrystalAssemblyLineControllerBlockEntity.class,
+                        CrystalAssemblyLineControllerBlockEntity::new,
+                        ModMachines::metalProperties,
+                        () -> CrystalAssemblyLineStructure.INSTANCE,
+                        ServerConfig::assemblyBaseParallel,
+                        CRYSTAL_ASSEMBLY_LINE_RECIPE::type)
+                .parallelPerRepeatSlice(ServerConfig::assemblyParallelPerRepeatSlice);
         MATTER_PHASE_TRANSFORMER = MultiblockMachineDefinition.standard(
                         "matter_phase_transformer",
                         MatterPhaseTransformerControllerBlockEntity.class,

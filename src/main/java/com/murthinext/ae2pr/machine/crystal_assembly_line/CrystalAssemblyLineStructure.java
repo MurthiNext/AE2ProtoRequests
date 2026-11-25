@@ -17,11 +17,14 @@ import net.minecraft.world.level.block.state.BlockState;
 // 水晶装配线结构定义与外观同步
 public final class CrystalAssemblyLineStructure extends AbstractStructureFacade {
 
+    public static final int MIN_REPEAT_SLICES = 3;
+    public static final int MAX_REPEAT_SLICES = 32;
+
     public static final MultiblockPattern PATTERN = MultiblockPattern.builder(
                     RelativeDirection.RIGHT, RelativeDirection.UP, RelativeDirection.BACK)
             .origin(2, 0)
             .slice("FIF", "RTR", "SAG", "#Y#")
-            .sliceRepeatable(3, Integer.MAX_VALUE, "FIF", "RTR", "DAG", "#Y#")
+            .sliceRepeatable(MIN_REPEAT_SLICES, MAX_REPEAT_SLICES, "FIF", "RTR", "DAG", "#Y#")
             .slice("FOF", "RTR", "DAG", "#Y#")
             .where('S', StructurePredicate.blocks(ModMachines.CRYSTAL_ASSEMBLY_LINE.block()))
             .where(
@@ -50,15 +53,13 @@ public final class CrystalAssemblyLineStructure extends AbstractStructureFacade 
 
     public static final CrystalAssemblyLineStructure INSTANCE = new CrystalAssemblyLineStructure();
 
-    public static final int MIN_SLICES = PATTERN.minSlices();
-
     private CrystalAssemblyLineStructure() {
         super(PATTERN, MachinePartFacade.CRYSTAL);
     }
 
     @Override
-    public int maxSlices() {
-        return Math.max(MIN_SLICES, ServerConfig.crystalAssemblyLineMaxSlices());
+    public int maxRepeatSlices() {
+        return ServerConfig.crystalAssemblyLineMaxRepeatSlices();
     }
 
     @Override

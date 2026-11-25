@@ -123,6 +123,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
 
     // 上一次成型时覆盖的方块
     private List<BlockPos> formedCells = List.of();
+    private int repeatSlices;
 
     private int tickCounter;
     private int retryTicks;
@@ -168,7 +169,12 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     protected long parallelBonus() {
-        return 0L;
+        return repeatSliceParallelBonus();
+    }
+
+    protected final long repeatSliceParallelBonus() {
+        return (long) Math.max(0, repeatSlices - structureFacade.pattern().minRepeatSlices())
+                * definition.parallelPerRepeatSlice();
     }
 
     @Nullable
@@ -809,10 +815,6 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
 
     // 结构检测
 
-    protected int maxSlices() {
-        return structureFacade.maxSlices();
-    }
-
     protected void onStructureChanged(StructureResult result) {}
 
     public void validateStructure() {
@@ -828,18 +830,19 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     private void validateStructure(Direction facing) {
-        StructureResult result = structure.validate(level, worldPosition, facing, Direction.UP, maxSlices());
+        StructureResult result =
+                structure.validate(level, worldPosition, facing, Direction.UP, structureFacade.maxRepeatSlices());
         if (result.fromCache()) {
             // 结构未变化，但相邻控制器可能重置过部件外观，此处补回
             if (formedCells.isEmpty()) {
-                formedCells =
-                        structureFacade.updateFormed(level, worldPosition, facing, result, formedCells, isRunning());
+                formedCells = structureFacade.updateFormed(level, result, formedCells, isRunning());
             } else {
                 structureFacade.reapply(level, formedCells, isRunning());
             }
             refreshParts(result);
             return;
         }
+        repeatSlices = result.repeatSlices();
         onStructureChanged(result);
         boolean mirrorChanged = mirrorSide != result.mirrorSide() || mirrorFront != result.mirrorFront();
         if (result.formed()) {
@@ -847,7 +850,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             mirrorFront = result.mirrorFront();
         }
         boolean active = result.formed() && jobTicksLeft > 0 && !paused;
-        formedCells = structureFacade.updateFormed(level, worldPosition, facing, result, formedCells, active);
+        formedCells = structureFacade.updateFormed(level, result, formedCells, active);
         refreshParts(result);
         applyControllerState(result.formed());
         // 镜像状态变化时通知客户端更新渲染基准

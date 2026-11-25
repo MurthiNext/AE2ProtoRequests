@@ -7,6 +7,7 @@ import com.murthinext.ae2pr.api.EnergyAmount;
 import com.murthinext.ae2pr.api.math.LatexFormula;
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeDefinition;
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
+import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineStructure;
 import com.murthinext.ae2pr.network.ServerConfigSyncPacket;
 import com.murthinext.ae2pr.registry.ModNetwork;
 import java.nio.charset.StandardCharsets;
@@ -33,8 +34,8 @@ public final class ServerConfig {
     private static final ForgeConfigSpec.BooleanValue ASSEMBLY_ITEMS_ORDERED;
     private static final ForgeConfigSpec.BooleanValue ASSEMBLY_FLUIDS_ORDERED;
     private static final ForgeConfigSpec.IntValue ASSEMBLY_BASE_PARALLEL;
-    private static final ForgeConfigSpec.IntValue ASSEMBLY_PARALLEL_PER_SLICE;
-    private static final ForgeConfigSpec.IntValue ASSEMBLY_MAX_SLICES;
+    private static final ForgeConfigSpec.IntValue ASSEMBLY_PARALLEL_PER_REPEAT_SLICE;
+    private static final ForgeConfigSpec.IntValue ASSEMBLY_MAX_REPEAT_SLICES;
     private static final ForgeConfigSpec.IntValue ASSEMBLY_MODULE_PARALLEL_PER_UNIT;
     private static final ForgeConfigSpec.DoubleValue ASSEMBLY_MODULE_SPEED_PER_UNIT;
 
@@ -55,6 +56,7 @@ public final class ServerConfig {
     private static final ForgeConfigSpec.IntValue JIG_BASE_PARALLEL;
 
     private static final ForgeConfigSpec.IntValue FILTER_PRESS_BASE_PARALLEL;
+    private static final ForgeConfigSpec.IntValue FILTER_PRESS_PARALLEL_PER_REPEAT_SLICE;
 
     private static final ForgeConfigSpec.IntValue MULTI_FACTORY_BASE_PARALLEL;
     private static final ForgeConfigSpec.IntValue MULTI_FACTORY_INSCRIBING_DURATION;
@@ -113,9 +115,14 @@ public final class ServerConfig {
         ASSEMBLY_FLUIDS_ORDERED = BUILDER.comment("水晶装配线流体输入是否有序").define("fluidInputsOrdered", false);
         ASSEMBLY_BASE_PARALLEL =
                 BUILDER.comment("水晶装配线最短结构的默认并行数").defineInRange("baseParallel", 16, 1, Integer.MAX_VALUE);
-        ASSEMBLY_PARALLEL_PER_SLICE =
-                BUILDER.comment("结构每超出最短长度1片增加的并行数").defineInRange("parallelPerSlice", 8, 0, Integer.MAX_VALUE);
-        ASSEMBLY_MAX_SLICES = BUILDER.comment("水晶装配线结构允许的最大片数").defineInRange("maxSlices", 31, 5, 1024);
+        ASSEMBLY_PARALLEL_PER_REPEAT_SLICE =
+                BUILDER.comment("每超出最少重复片数一片增加的并行数").defineInRange("parallelPerSlice", 8, 0, Integer.MAX_VALUE);
+        ASSEMBLY_MAX_REPEAT_SLICES = BUILDER.comment("水晶装配线最多允许的重复片数，不含首尾固定片")
+                .defineInRange(
+                        "maxRepeatSlices",
+                        CrystalAssemblyLineStructure.MAX_REPEAT_SLICES,
+                        CrystalAssemblyLineStructure.MIN_REPEAT_SLICES,
+                        CrystalAssemblyLineStructure.MAX_REPEAT_SLICES);
         ASSEMBLY_MODULE_PARALLEL_PER_UNIT =
                 BUILDER.comment("水晶装配线每个并行控制外壳增加的并行数").defineInRange("moduleParallelPerUnit", 16, 0, Integer.MAX_VALUE);
         ASSEMBLY_MODULE_SPEED_PER_UNIT =
@@ -163,7 +170,9 @@ public final class ServerConfig {
 
         BUILDER.push("filterPress");
         FILTER_PRESS_BASE_PARALLEL =
-                BUILDER.comment("压滤机默认并行数").defineInRange("baseParallel", 64, 1, Integer.MAX_VALUE);
+                BUILDER.comment("压滤机最短结构的默认并行数").defineInRange("baseParallel", 64, 1, Integer.MAX_VALUE);
+        FILTER_PRESS_PARALLEL_PER_REPEAT_SLICE =
+                BUILDER.comment("每超出最少重复片数一片增加的并行数").defineInRange("parallelPerSlice", 8, 0, Integer.MAX_VALUE);
         BUILDER.pop();
 
         BUILDER.push("multiFactory");
@@ -322,12 +331,12 @@ public final class ServerConfig {
         return read(ASSEMBLY_BASE_PARALLEL);
     }
 
-    public static int assemblyParallelPerSlice() {
-        return read(ASSEMBLY_PARALLEL_PER_SLICE);
+    public static int assemblyParallelPerRepeatSlice() {
+        return read(ASSEMBLY_PARALLEL_PER_REPEAT_SLICE);
     }
 
-    public static int crystalAssemblyLineMaxSlices() {
-        return read(ASSEMBLY_MAX_SLICES);
+    public static int crystalAssemblyLineMaxRepeatSlices() {
+        return read(ASSEMBLY_MAX_REPEAT_SLICES);
     }
 
     public static int assemblyModuleParallelPerUnit() {
@@ -384,6 +393,10 @@ public final class ServerConfig {
 
     public static int filterPressBaseParallel() {
         return read(FILTER_PRESS_BASE_PARALLEL);
+    }
+
+    public static int filterPressParallelPerRepeatSlice() {
+        return read(FILTER_PRESS_PARALLEL_PER_REPEAT_SLICE);
     }
 
     public static int multiFactoryBaseParallel() {

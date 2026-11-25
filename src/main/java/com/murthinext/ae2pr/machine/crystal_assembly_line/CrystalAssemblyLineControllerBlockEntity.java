@@ -30,8 +30,6 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
 
     private static final BooleanProperty ACTIVE = CrystalAssemblyLineUnitBlock.ACTIVE;
 
-    private int lastSlices;
-
     private ModuleSnapshot modules = ModuleSnapshot.EMPTY;
     private final List<UnitCell> unitCells = new ArrayList<>();
 
@@ -40,14 +38,8 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
     }
 
     @Override
-    protected int maxSlices() {
-        return CrystalAssemblyLineStructure.INSTANCE.maxSlices();
-    }
-
-    @Override
     protected long parallelBonus() {
-        return (long) Math.max(0, lastSlices - CrystalAssemblyLineStructure.MIN_SLICES)
-                        * ServerConfig.assemblyParallelPerSlice()
+        return repeatSliceParallelBonus()
                 + (long) modules.count(ModModules.PARALLEL) * ServerConfig.assemblyModuleParallelPerUnit();
     }
 
@@ -69,10 +61,9 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
                     baseSpeedMultiplier()));
         } else if (type == MachineUpgradeType.PARALLEL) {
             double base = ModMachines.CRYSTAL_ASSEMBLY_LINE.maxParallel();
-            long slices = (long) Math.max(0, lastSlices - CrystalAssemblyLineStructure.MIN_SLICES)
-                    * ServerConfig.assemblyParallelPerSlice();
-            double extended = Math.min(Integer.MAX_VALUE, base + slices);
-            if (slices > 0) {
+            long repeatBonus = repeatSliceParallelBonus();
+            double extended = Math.min(Integer.MAX_VALUE, base + repeatBonus);
+            if (repeatBonus > 0) {
                 sources.add(new MachineStat.Source(
                         Component.translatable("gui.ae2pr.multiblock.data.structure"), base, extended));
             }
@@ -246,8 +237,6 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
 
     @Override
     protected void onStructureChanged(StructureResult result) {
-        lastSlices = result.slices();
-
         ModuleSnapshot snapshot = result.formed() ? result.modules() : ModuleSnapshot.EMPTY;
         MultiblockRecipe recipe = currentRecipe();
         if (recipe instanceof CrystalAssemblyLineRecipe lineRecipe
