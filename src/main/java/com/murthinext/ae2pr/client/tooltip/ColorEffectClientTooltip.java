@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
@@ -16,9 +16,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Matrix4f;
 
 @OnlyIn(Dist.CLIENT)
-public final class ColorEffectClientTooltip implements ClientTooltipComponent {
+public final class ColorEffectClientTooltip extends ClientTextTooltip {
 
-    private static final int LINE_HEIGHT = 10;
     private static final int TRANSPARENT_LIGHT = 15728880;
 
     private static final float SWITCH_STEPS_PER_SECOND = 4.0F;
@@ -27,12 +26,9 @@ public final class ColorEffectClientTooltip implements ClientTooltipComponent {
     private final ColorEffectLine line;
 
     public ColorEffectClientTooltip(ColorEffectLine line) {
+        // 保留原版文本及样式，供 Modern UI 等识别标题。
+        super(ColorEffectLine.toComponent(line.segments()).getVisualOrderText());
         this.line = line;
-    }
-
-    @Override
-    public int getHeight() {
-        return LINE_HEIGHT;
     }
 
     @Override

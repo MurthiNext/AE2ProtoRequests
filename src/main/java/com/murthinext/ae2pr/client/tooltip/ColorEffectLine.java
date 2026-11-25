@@ -174,12 +174,14 @@ public record ColorEffectLine(List<Segment> segments) implements TooltipComponen
         return builder.toString();
     }
 
-    // 把无特效的片段重新拼回单个组件，保留原有样式
     public static Component toComponent(List<Segment> segments) {
         MutableComponent result = Component.empty();
         for (Segment segment : segments) {
             if (!segment.text().isEmpty()) {
-                result.append(Component.literal(segment.text()).setStyle(segment.style()));
+                Style style = segment.effect() == null
+                        ? segment.style()
+                        : segment.style().withColor(segment.effect().fallbackColor());
+                result.append(Component.literal(segment.text()).setStyle(style));
             }
         }
         return result;
