@@ -12,6 +12,7 @@ import com.murthinext.nextui.client.GuiFluids;
 import com.murthinext.nextui.client.GuiTheme;
 import com.murthinext.nextui.client.GuiTooltips;
 import com.murthinext.nextui.client.TabButton;
+import com.murthinext.nextui.layout.PlayerInventoryLayout;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.Util;
@@ -59,6 +60,12 @@ public abstract class AbstractMultiblockControllerScreen<M extends AbstractMulti
 
     protected AbstractMultiblockControllerScreen(M menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
+        this.imageHeight += AbstractMultiblockControllerMenu.EXTRA_CONTENT_HEIGHT;
+    }
+
+    @Override
+    protected PlayerInventoryLayout playerInventoryLayout() {
+        return AbstractMultiblockControllerMenu.INVENTORY_LAYOUT;
     }
 
     @Override

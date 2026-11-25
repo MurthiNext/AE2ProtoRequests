@@ -111,10 +111,14 @@ public abstract class AbstractMachineScreen<M extends AbstractContainerMenu> ext
         renderTooltip(graphics, mouseX, mouseY);
     }
 
+    protected PlayerInventoryLayout playerInventoryLayout() {
+        return PlayerInventoryLayout.STANDARD;
+    }
+
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         ContainerChrome.drawBackground(
-                graphics, leftPos, topPos, imageWidth, imageHeight, PlayerInventoryLayout.STANDARD, theme());
+                graphics, leftPos, topPos, imageWidth, imageHeight, playerInventoryLayout(), theme());
         toolbar().draw(graphics);
         if (upgradeMachine() != null) {
             renderUpgradeSlots(graphics);

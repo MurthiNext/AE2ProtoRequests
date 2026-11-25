@@ -3,6 +3,7 @@ package com.murthinext.ae2pr.machine.high_reactivity_lava_smelter;
 import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
 import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.nextui.layout.PlayerInventoryLayout;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
@@ -16,8 +17,9 @@ public class HighReactivityLavaSmelterMenu
     public static final MenuType<HighReactivityLavaSmelterMenu> TYPE =
             IForgeMenuType.create(HighReactivityLavaSmelterMenu::new);
 
-    static final int DUST_SLOT_X = 151;
-    static final int DUST_SLOT_Y = 25;
+    private static final int INVENTORY_COLUMNS = PlayerInventoryLayout.SLOT_COUNT - PlayerInventoryLayout.MAIN_SLOTS;
+    static final int DUST_SLOT_X = INVENTORY_LAYOUT.x() + (INVENTORY_COLUMNS - 1) * PlayerInventoryLayout.SLOT_SIZE;
+    static final int DUST_SLOT_Y = INVENTORY_LAYOUT.y() - PlayerInventoryLayout.SLOT_SIZE - 3;
 
     private static final int DATA_DURABILITY = DATA_COUNT;
 

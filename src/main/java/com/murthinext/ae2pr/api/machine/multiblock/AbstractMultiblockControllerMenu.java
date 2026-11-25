@@ -23,6 +23,12 @@ import org.jetbrains.annotations.Nullable;
 public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultiblockControllerBlockEntity>
         extends AbstractContainerMenu {
 
+    static final int EXTRA_CONTENT_HEIGHT = 12;
+    protected static final PlayerInventoryLayout INVENTORY_LAYOUT = new PlayerInventoryLayout(
+            PlayerInventoryLayout.STANDARD.x(),
+            PlayerInventoryLayout.STANDARD.y() + EXTRA_CONTENT_HEIGHT,
+            PlayerInventoryLayout.STANDARD.hotbarY() + EXTRA_CONTENT_HEIGHT);
+
     protected static final int UPGRADE_SLOTS = 4;
     private static final int UPGRADE_X = 180;
     private static final int UPGRADE_Y = 4;
@@ -81,7 +87,7 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
             }
             addExtraSlots(controller);
         }
-        PlayerInventoryLayout.STANDARD.forEachSlot((index, x, y) -> addSlot(new Slot(playerInventory, index, x, y)));
+        INVENTORY_LAYOUT.forEachSlot((index, x, y) -> addSlot(new Slot(playerInventory, index, x, y)));
         addDataSlots(data);
     }
 
