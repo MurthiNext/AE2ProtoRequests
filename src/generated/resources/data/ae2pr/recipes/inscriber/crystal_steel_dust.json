@@ -1,0 +1,12 @@
+{
+  "type": "ae2:inscriber",
+  "ingredients": {
+    "middle": {
+      "tag": "forge:ingots/crystal_steel"
+    }
+  },
+  "mode": "inscribe",
+  "result": {
+    "item": "ae2pr:crystal_steel_dust"
+  }
+}

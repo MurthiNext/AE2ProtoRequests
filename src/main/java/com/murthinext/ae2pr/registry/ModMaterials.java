@@ -13,6 +13,7 @@ public final class ModMaterials {
     public static Material ZIRCONIUM_IRON_ALLOY;
     public static Material AMETHYST;
     public static Material AMETHYST_STEEL;
+    public static Material CRYSTAL_STEEL;
     public static Material STRONTIUM;
     public static Material BARIUM;
     public static Material COAL;
@@ -71,6 +72,14 @@ public final class ModMaterials {
                         .plate()
                         .dust()
                         .color(0x9C93C8)
+                        .build());
+        CRYSTAL_STEEL = MaterialItems.register(
+                ModItems.ITEMS,
+                Material.builder("crystal_steel")
+                        .ingot()
+                        .plate()
+                        .dust()
+                        .color(0xB7C8D8)
                         .build());
         STRONTIUM = MaterialItems.register(
                 ModItems.ITEMS,
@@ -142,6 +151,7 @@ public final class ModMaterials {
                 ZIRCONIUM,
                 ZIRCONIUM_IRON_ALLOY,
                 AMETHYST_STEEL,
+                CRYSTAL_STEEL,
                 STRONTIUM,
                 BARIUM,
                 AMETHYST,

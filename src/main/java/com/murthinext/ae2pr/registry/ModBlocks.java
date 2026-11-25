@@ -99,6 +99,9 @@ public final class ModBlocks {
     public static final RegistryObject<Block> HIGH_ENERGY_STABILITY_CASING =
             BLOCKS.register("high_energy_stability_casing", () -> new DisassemblableBlock(casingProperties()));
 
+    public static final RegistryObject<Block> STABILITY_CASING =
+            BLOCKS.register("stability_casing", () -> new DisassemblableBlock(casingProperties()));
+
     public static final RegistryObject<Block> ZIRCONIUM_IRON_ALLOY_MACHINE_CASING =
             BLOCKS.register("zirconium_iron_alloy_machine_casing", () -> new DisassemblableBlock(casingProperties()));
 

@@ -34,6 +34,10 @@
     },
     {
       "type": "single",
+      "resource": "ae2pr:block/stability_casing_ctm"
+    },
+    {
+      "type": "single",
       "resource": "ae2pr:block/me_computer_casing/front_ctm"
     },
     {
