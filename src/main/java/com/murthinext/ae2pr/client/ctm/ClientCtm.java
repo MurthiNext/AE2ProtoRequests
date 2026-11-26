@@ -3,6 +3,7 @@ package com.murthinext.ae2pr.client.ctm;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.ctm.CtmBakedModel;
 import com.murthinext.ae2pr.api.ctm.CtmTextures;
+import com.murthinext.ae2pr.block.entangled_casing.EntangledCasingPulseRenderer;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,6 +29,7 @@ public final class ClientCtm {
             return;
         }
         CtmTextures.stitch(event.getAtlas());
+        EntangledCasingPulseRenderer.stitch(event.getAtlas());
     }
 
     @SubscribeEvent

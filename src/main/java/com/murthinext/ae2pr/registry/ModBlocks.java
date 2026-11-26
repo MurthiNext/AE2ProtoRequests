@@ -9,6 +9,7 @@ import com.murthinext.ae2pr.block.DisassemblableBlock;
 import com.murthinext.ae2pr.block.DisassemblableGlassBlock;
 import com.murthinext.ae2pr.block.FilterPressPlateBlock;
 import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
+import com.murthinext.ae2pr.block.entangled_casing.EntangledCasingBlock;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MEPatternBufferBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
@@ -103,7 +104,7 @@ public final class ModBlocks {
             BLOCKS.register("stability_casing", () -> new DisassemblableBlock(casingProperties()));
 
     public static final RegistryObject<Block> ENTANGLED_CASING =
-            BLOCKS.register("entangled_casing", () -> new DisassemblableBlock(casingProperties()));
+            BLOCKS.register("entangled_casing", () -> new EntangledCasingBlock(casingProperties()));
 
     public static final RegistryObject<Block> ZIRCONIUM_IRON_ALLOY_MACHINE_CASING =
             BLOCKS.register("zirconium_iron_alloy_machine_casing", () -> new DisassemblableBlock(casingProperties()));

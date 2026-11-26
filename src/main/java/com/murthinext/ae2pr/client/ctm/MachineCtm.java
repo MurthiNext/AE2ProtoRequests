@@ -7,6 +7,7 @@ import com.murthinext.ae2pr.api.ctm.CtmTextures;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
 import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
 import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
+import com.murthinext.ae2pr.block.entangled_casing.EntangledCasingPulseRenderer;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
 import com.murthinext.ae2pr.client.multiblock.MultiblockPreview;
@@ -62,7 +63,7 @@ public final class MachineCtm implements CtmBinding {
         CtmTextures.registerTile47("block/zirconia_corundum_bricks");
         CtmTextures.registerQuadrant("block/zirconium_iron_alloy_machine_casing");
         CtmTextures.registerQuadrant("block/stability_casing");
-        CtmTextures.registerQuadrant("block/entangled_casing");
+        CtmTextures.registerQuadrant(EntangledCasingPulseRenderer.BASE);
         for (String casing : List.of("me_computer_casing", "me_advanced_computer_casing")) {
             for (String face : List.of("front", "back", "side", "top", "bottom")) {
                 CtmTextures.registerQuadrant("block/" + casing + "/" + face);

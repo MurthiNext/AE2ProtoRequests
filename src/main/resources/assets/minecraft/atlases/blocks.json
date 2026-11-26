@@ -37,8 +37,44 @@
       "resource": "ae2pr:block/stability_casing_ctm"
     },
     {
-      "type": "single",
-      "resource": "ae2pr:block/entangled_casing_ctm"
+      "type": "unstitch",
+      "resource": "ae2pr:block/entangled_casing",
+      "divisor_y": 8,
+      "regions": [
+        { "sprite": "ae2pr:block/entangled_casing_idle", "x": 0, "y": 0, "width": 1, "height": 1 }
+      ]
+    },
+    {
+      "type": "unstitch",
+      "resource": "ae2pr:block/entangled_casing_ctm",
+      "divisor_y": 8,
+      "regions": [
+        { "sprite": "ae2pr:block/entangled_casing_idle_ctm", "x": 0, "y": 0, "width": 1, "height": 1 }
+      ]
+    },
+    {
+      "type": "unstitch",
+      "resource": "ae2pr:ctm/entangled_casing_pulse",
+      "divisor_x": 4,
+      "divisor_y": 16,
+      "regions": [
+        { "sprite": "ae2pr:block/entangled_casing_pulse/0", "x": 0, "y": 0, "width": 1, "height": 1 },
+        { "sprite": "ae2pr:block/entangled_casing_pulse/1", "x": 0, "y": 2, "width": 1, "height": 1 },
+        { "sprite": "ae2pr:block/entangled_casing_pulse/2", "x": 0, "y": 4, "width": 1, "height": 1 },
+        { "sprite": "ae2pr:block/entangled_casing_pulse/3", "x": 0, "y": 6, "width": 1, "height": 1 },
+        { "sprite": "ae2pr:block/entangled_casing_pulse/4", "x": 0, "y": 8, "width": 1, "height": 1 },
+        { "sprite": "ae2pr:block/entangled_casing_pulse/5", "x": 0, "y": 10, "width": 1, "height": 1 },
+        { "sprite": "ae2pr:block/entangled_casing_pulse/6", "x": 0, "y": 12, "width": 1, "height": 1 },
+        { "sprite": "ae2pr:block/entangled_casing_pulse/7", "x": 0, "y": 14, "width": 1, "height": 1 },
+        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_0", "x": 2, "y": 0, "width": 2, "height": 2 },
+        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_1", "x": 2, "y": 2, "width": 2, "height": 2 },
+        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_2", "x": 2, "y": 4, "width": 2, "height": 2 },
+        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_3", "x": 2, "y": 6, "width": 2, "height": 2 },
+        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_4", "x": 2, "y": 8, "width": 2, "height": 2 },
+        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_5", "x": 2, "y": 10, "width": 2, "height": 2 },
+        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_6", "x": 2, "y": 12, "width": 2, "height": 2 },
+        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_7", "x": 2, "y": 14, "width": 2, "height": 2 }
+      ]
     },
     {
       "type": "single",
