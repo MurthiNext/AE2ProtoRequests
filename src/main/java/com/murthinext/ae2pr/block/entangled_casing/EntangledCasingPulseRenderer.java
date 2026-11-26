@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class EntangledCasingPulseRenderer {
 
-    static final ResourceLocation BASE = Ids.of("block/entangled_casing_idle");
+    public static final ResourceLocation BASE = Ids.of("block/entangled_casing_idle");
     private static final ResourceLocation CTM = Ids.of(BASE.getPath() + CtmTextures.ATLAS_SUFFIX);
 
     private static final double RENDER_DISTANCE = 64;

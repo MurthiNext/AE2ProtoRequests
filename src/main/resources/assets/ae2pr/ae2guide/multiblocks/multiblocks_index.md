@@ -40,8 +40,10 @@ navigation:
 
 [压滤机](filter_press.md)，第二步。
 
+[集成式质量发生器](integrated_mass_fabricator.md)，跨步有点大，但确实实用。
+
 ## 支线内容
 
 [通式加工厂](multi_factory.md)，批量处理压印与充能配方。
 
-[水晶反应器](crystal_reactor.md)，下界反应器：现代版.
+[水晶反应器](crystal_reactor.md)，下界反应器：现代版。

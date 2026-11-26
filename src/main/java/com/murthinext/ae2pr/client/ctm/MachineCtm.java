@@ -49,6 +49,8 @@ public final class MachineCtm implements CtmBinding {
             Ids.of("block/controller_casing/multi_factory");
     public static final ResourceLocation FILTER_PRESS_CONTROLLER_CASING =
             Ids.of("block/controller_casing/filter_press");
+    private static final ResourceLocation INTEGRATED_MASS_FABRICATOR_CONTROLLER_CASING =
+            Ids.of("block/controller_casing/integrated_mass_fabricator");
     public static final ResourceLocation WORKSTATION_PANEL_INNER = Ids.of("block/crystal_workstation/panel_face");
 
     private MachineCtm() {}
@@ -62,7 +64,6 @@ public final class MachineCtm implements CtmBinding {
         CtmTextures.registerTile47("block/crystal_energy_casing");
         CtmTextures.registerTile47("block/zirconia_corundum_bricks");
         CtmTextures.registerQuadrant("block/zirconium_iron_alloy_machine_casing");
-        CtmTextures.registerQuadrant("block/stability_casing");
         CtmTextures.registerQuadrant(EntangledCasingPulseRenderer.BASE);
         for (String casing : List.of("me_computer_casing", "me_advanced_computer_casing")) {
             for (String face : List.of("front", "back", "side", "top", "bottom")) {
@@ -80,12 +81,15 @@ public final class MachineCtm implements CtmBinding {
                 JIG_CONTROLLER_CASING,
                 MULTI_FACTORY_CONTROLLER_CASING,
                 FILTER_PRESS_CONTROLLER_CASING,
+                INTEGRATED_MASS_FABRICATOR_CONTROLLER_CASING,
                 WORKSTATION_PANEL_INNER)) {
             CtmTextures.registerSprite(base);
         }
         // 成型外观贴图随注册表自动登记
         for (MachinePartFacade facade : MachinePartFacade.all()) {
-            if (facade.ctmFamily() != 0) {
+            if (facade == MachinePartFacade.STABILITY) {
+                CtmTextures.registerQuadrant(facade.texture());
+            } else if (facade.ctmFamily() != 0) {
                 CtmTextures.registerTile47(facade.texture());
             } else {
                 CtmTextures.registerSprite(facade.texture());
@@ -201,7 +205,7 @@ public final class MachineCtm implements CtmBinding {
             return 13;
         }
         if (block == ModBlocks.STABILITY_CASING.get()) {
-            return 15;
+            return MachinePartFacade.STABILITY.ctmFamily();
         }
         if (block == ModBlocks.ENTANGLED_CASING.get()) {
             return 16;
@@ -225,6 +229,9 @@ public final class MachineCtm implements CtmBinding {
         }
         if (state.is(ModMachines.FILTER_PRESS.block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIUM_IRON;
+        }
+        if (state.is(ModMachines.INTEGRATED_MASS_FABRICATOR.block()) && state.getValue(MachineBlock.FORMED)) {
+            return MachinePartFacade.STABILITY;
         }
         if ((state.is(ModMachines.CRYSTAL_WORKSTATION.block()) || state.is(ModMachines.MULTI_FACTORY.block()))
                 && state.getValue(MachineBlock.FORMED)) {
@@ -271,6 +278,9 @@ public final class MachineCtm implements CtmBinding {
         }
         if (block == ModMachines.FILTER_PRESS.block()) {
             return CtmTextures.baseSprite(FILTER_PRESS_CONTROLLER_CASING);
+        }
+        if (block == ModMachines.INTEGRATED_MASS_FABRICATOR.block()) {
+            return CtmTextures.baseSprite(INTEGRATED_MASS_FABRICATOR_CONTROLLER_CASING);
         }
         if (block == ModMachines.CRYSTAL_WORKSTATION.block()) {
             return CtmTextures.baseSprite(CRYSTAL_WORKSTATION_CONTROLLER_CASING);

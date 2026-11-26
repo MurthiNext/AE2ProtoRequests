@@ -61,6 +61,7 @@
     "ae2pr:jig",
     "ae2pr:filter_press",
     "ae2pr:multi_factory",
+    "ae2pr:integrated_mass_fabricator",
     "ae2pr:molecular_assembly_core",
     "ae2pr:zirconia_corundum_bricks",
     "ae2pr:zirconium_iron_alloy_machine_casing"

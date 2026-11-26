@@ -25,6 +25,7 @@ import com.murthinext.ae2pr.machine.filter_press.FilterPressStructure;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterControllerBlockEntity;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterMenu;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterStructure;
+import com.murthinext.ae2pr.machine.integrated_mass_fabricator.IntegratedMassFabricatorStructure;
 import com.murthinext.ae2pr.machine.jig.JigControllerBlockEntity;
 import com.murthinext.ae2pr.machine.jig.JigStructure;
 import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerControllerBlockEntity;
@@ -70,6 +71,7 @@ public final class ModMachines {
     public static RecipeDefinition<MachineRecipe> CRYSTAL_WORKSTATION_ETCHING_RECIPE;
     public static RecipeDefinition<MachineRecipe> CRYSTAL_WORKSTATION_CUTTING_RECIPE;
     public static RecipeDefinition<CrystalAssemblyLineRecipe> CRYSTAL_ASSEMBLY_LINE_RECIPE;
+    public static RecipeDefinition<MachineRecipe> INTEGRATED_MASS_FABRICATOR_RECIPE;
 
     public static MultiblockMachineDefinition<MachineControllerBlockEntity, MachineMenu<MachineControllerBlockEntity>>
             FILTER_PRESS;
@@ -94,6 +96,8 @@ public final class ModMachines {
     public static MultiblockMachineDefinition<
                     MultiFactoryControllerBlockEntity, MachineMenu<MultiFactoryControllerBlockEntity>>
             MULTI_FACTORY;
+    public static MultiblockMachineDefinition<MachineControllerBlockEntity, MachineMenu<MachineControllerBlockEntity>>
+            INTEGRATED_MASS_FABRICATOR;
     public static SingleblockMachineDefinition<NamingFactoryBlock, NamingFactoryBlockEntity, NamingFactoryMenu>
             NAMING_FACTORY;
     public static MachineDefinition<HighEnergyCoreBlock, CrystalReactorCoreBlockEntity, AbstractContainerMenu>
@@ -137,6 +141,16 @@ public final class ModMachines {
                 RecipeDefinition.simple("crystal_workstation_cutting", 200, workstationConstraints());
         CRYSTAL_ASSEMBLY_LINE_RECIPE =
                 RecipeDefinition.custom("crystal_assembly_line", CrystalAssemblyLineRecipe.Serializer::new);
+        INTEGRATED_MASS_FABRICATOR_RECIPE = RecipeDefinition.simple(
+                "integrated_mass_fabricator",
+                200,
+                RecipeConstraints.builder()
+                        .itemInputs(0, 4)
+                        .fluidInputs(0, 1)
+                        .itemOutputs(1, 2)
+                        .fluidOutputs(0, 0)
+                        .requireEnergy()
+                        .build());
 
         FILTER_PRESS = MultiblockMachineDefinition.standard(
                         "filter_press",
@@ -210,6 +224,12 @@ public final class ModMachines {
                 ServerConfig::multiFactoryBaseParallel,
                 MultiFactoryMode.INSCRIBING::recipeType,
                 List.of(MultiFactoryMode.values()));
+        INTEGRATED_MASS_FABRICATOR = MultiblockMachineDefinition.standard(
+                "integrated_mass_fabricator",
+                ModMachines::metalProperties,
+                () -> IntegratedMassFabricatorStructure.INSTANCE,
+                () -> 1,
+                INTEGRATED_MASS_FABRICATOR_RECIPE::type);
         NAMING_FACTORY = SingleblockMachineDefinition.create(
                 "naming_factory",
                 NamingFactoryBlockEntity.class,
@@ -240,6 +260,7 @@ public final class ModMachines {
                 HIGH_REACTIVITY_LAVA_SMELTER,
                 CRYSTAL_WORKSTATION,
                 MULTI_FACTORY,
+                INTEGRATED_MASS_FABRICATOR,
                 NAMING_FACTORY,
                 CRYSTAL_REACTOR);
     }

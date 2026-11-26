@@ -24,6 +24,8 @@ public final class ModGuide {
     public static final ResourceLocation JIG_PAGE = Ids.of("multiblocks/jig.md");
     public static final ResourceLocation FILTER_PRESS_PAGE = Ids.of("multiblocks/filter_press.md");
     public static final ResourceLocation MULTI_FACTORY_PAGE = Ids.of("multiblocks/multi_factory.md");
+    public static final ResourceLocation INTEGRATED_MASS_FABRICATOR_PAGE =
+            Ids.of("multiblocks/integrated_mass_fabricator.md");
     public static final ResourceLocation NAMING_FACTORY_PAGE = Ids.of("machines/naming_factory.md");
     public static final ResourceLocation CHAMBERS_PAGE = Ids.of("multiblocks/chambers.md");
 

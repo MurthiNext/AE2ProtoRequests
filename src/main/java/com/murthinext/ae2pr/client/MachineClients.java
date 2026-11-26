@@ -115,6 +115,11 @@ public final class MachineClients {
                         controller.getMode() == MultiFactoryMode.INSCRIBING
                                 ? MachineProcessingSounds.Type.MULTI_FACTORY_INSCRIBING
                                 : MachineProcessingSounds.Type.MULTI_FACTORY_CHARGING));
+        register(
+                ModMachines.INTEGRATED_MASS_FABRICATOR,
+                Style.crystal(ModGuide.INTEGRATED_MASS_FABRICATOR_PAGE, 0xCDA6F0),
+                MachineScreen::new,
+                controller -> {});
         MenuScreens.register(ModMachines.NAMING_FACTORY.menuType(), NamingFactoryScreen::new);
         STYLES.put(ModMachines.NAMING_FACTORY, Style.crystal(ModGuide.NAMING_FACTORY_PAGE, 0x55FFFF));
     }

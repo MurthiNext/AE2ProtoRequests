@@ -1,0 +1,6 @@
+{
+  "parent": "ae2pr:block/multi_factory/multi_factory",
+  "textures": {
+    "all": "ae2pr:block/controller_casing/integrated_mass_fabricator"
+  }
+}

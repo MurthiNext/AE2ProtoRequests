@@ -74,6 +74,11 @@ public class AE2PRJeiPlugin implements IModPlugin {
                         MatterPhaseTransformerCategory::new,
                         ModMachines.MATTER_PHASE_TRANSFORMER.item().getDefaultInstance()),
                 new MachineCategory(
+                        IntegratedMassFabricatorCategory.RECIPE_TYPE,
+                        ModMachines.INTEGRATED_MASS_FABRICATOR_RECIPE.type(),
+                        IntegratedMassFabricatorCategory::new,
+                        ModMachines.INTEGRATED_MASS_FABRICATOR.item().getDefaultInstance()),
+                new MachineCategory(
                         CrystalAssemblyLineCategory.RECIPE_TYPE,
                         ModMachines.CRYSTAL_ASSEMBLY_LINE_RECIPE.type(),
                         CrystalAssemblyLineCategory::new,

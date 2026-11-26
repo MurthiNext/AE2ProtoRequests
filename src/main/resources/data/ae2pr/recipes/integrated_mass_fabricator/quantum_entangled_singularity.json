@@ -1,0 +1,39 @@
+{
+  "type": "ae2pr:integrated_mass_fabricator",
+  "duration": 200,
+  "energy": 100000,
+  "item_inputs": [
+    {
+      "item": "ae2:singularity",
+      "count": 1
+    },
+    {
+      "item": "ae2:ender_dust",
+      "count": 1
+    },
+    {
+      "item": "ae2:fluix_dust",
+      "count": 1
+    },
+    {
+      "item": "ae2:certus_quartz_dust",
+      "count": 1
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "ae2pr:liquid_fluix_crystal",
+      "amount": 144
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2:quantum_entangled_singularity",
+      "count": 2
+    },
+    {
+      "item": "ae2:fluix_crystal",
+      "count": 1
+    }
+  ]
+}

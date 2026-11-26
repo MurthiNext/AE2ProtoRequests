@@ -19,6 +19,8 @@ public final class MachinePartFacade {
 
     public static final MachinePartFacade ZIRCONIUM_IRON = register(4, "block/zirconium_iron_alloy_machine_casing", 11);
 
+    public static final MachinePartFacade STABILITY = register(5, "block/stability_casing", 15);
+
     public static final int MAX_STYLE =
             BY_STYLE.keySet().stream().mapToInt(Integer::intValue).max().orElse(1);
 

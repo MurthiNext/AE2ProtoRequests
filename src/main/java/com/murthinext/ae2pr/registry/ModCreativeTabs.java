@@ -129,6 +129,7 @@ public final class ModCreativeTabs {
                         output.accept(ModMachines.JIG.item());
                         output.accept(ModMachines.FILTER_PRESS.item());
                         output.accept(ModMachines.MULTI_FACTORY.item());
+                        output.accept(ModMachines.INTEGRATED_MASS_FABRICATOR.item());
 
                         // 多方块结构 - 普通结构方块
                         output.accept(ModItems.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get());

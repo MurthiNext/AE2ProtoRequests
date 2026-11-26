@@ -8,6 +8,7 @@ import com.murthinext.ae2pr.machine.crystal_reactor.CrystalReactorStructure;
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationStructure;
 import com.murthinext.ae2pr.machine.filter_press.FilterPressStructure;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterStructure;
+import com.murthinext.ae2pr.machine.integrated_mass_fabricator.IntegratedMassFabricatorStructure;
 import com.murthinext.ae2pr.machine.jig.JigStructure;
 import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerStructure;
 import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryStructure;
@@ -54,6 +55,10 @@ public record MultiblockPreviewRecipe(
                         ModMachines.MATTER_PHASE_TRANSFORMER.block(),
                         MatterPhaseTransformerStructure.PATTERN),
                 of("multi_factory", ModMachines.MULTI_FACTORY.block(), MultiFactoryStructure.PATTERN),
+                of(
+                        "integrated_mass_fabricator",
+                        ModMachines.INTEGRATED_MASS_FABRICATOR.block(),
+                        IntegratedMassFabricatorStructure.PATTERN),
                 of("crystal_reactor", ModMachines.CRYSTAL_REACTOR.block(), CrystalReactorStructure.PATTERN));
     }
 
