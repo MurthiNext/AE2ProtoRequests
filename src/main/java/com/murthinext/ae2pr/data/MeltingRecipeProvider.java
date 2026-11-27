@@ -2,8 +2,8 @@ package com.murthinext.ae2pr.data;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.material.Material;
-import com.murthinext.ae2pr.api.material.MaterialFluids;
 import com.murthinext.ae2pr.api.material.MaterialForm;
 import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerMode;
 import com.murthinext.ae2pr.registry.ModMaterials;
@@ -13,13 +13,14 @@ import java.util.concurrent.CompletableFuture;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.conditions.NotCondition;
 import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
 
 public final class MeltingRecipeProvider implements DataProvider {
 
-    private static final int AMOUNT_PER_UNIT = 144;
+    private static final int MB_PER_UNIT = 144;
     private static final int ENERGY_PER_UNIT = 50_000;
     private static final MatterPhaseTransformerMode MODE = MatterPhaseTransformerMode.MELTING;
 
@@ -44,11 +45,11 @@ public final class MeltingRecipeProvider implements DataProvider {
     }
 
     private CompletableFuture<?> save(CachedOutput cache, Material material, MaterialForm form) {
-        var fluid = MaterialFluids.get(material).source().getId();
+        ResourceLocation fluid = Ids.of(material.fluid().orElseThrow().id());
         JsonObject recipe = new JsonObject();
         recipe.addProperty("type", MODE.recipeTypeId().toString());
-        recipe.addProperty("energy", form.units() * ENERGY_PER_UNIT);
-        if (form.optionalTag()) {
+        recipe.addProperty("energy", (long) form.amountMb() * ENERGY_PER_UNIT / MB_PER_UNIT);
+        if (form.optional()) {
             var condition = new NotCondition(new TagEmptyCondition(form.ingredientId()));
             recipe.add("conditions", array(CraftingHelper.serialize(condition)));
         }
@@ -60,10 +61,10 @@ public final class MeltingRecipeProvider implements DataProvider {
 
         JsonObject output = new JsonObject();
         output.addProperty("fluid", fluid.toString());
-        output.addProperty("amount", form.units() * AMOUNT_PER_UNIT);
+        output.addProperty("amount", form.amountMb());
         recipe.add("fluid_outputs", array(output));
 
-        var id = MODE.recipeId(fluid.getPath() + "_from_" + form.prefix().name());
+        var id = MODE.recipeId(fluid.getPath() + "_from_" + form.form().name());
         return DataProvider.saveStable(cache, recipe, recipes.json(id));
     }
 

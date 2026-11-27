@@ -3,9 +3,8 @@ package com.murthinext.ae2pr.data;
 import appeng.recipes.handlers.InscriberProcessType;
 import appeng.recipes.handlers.InscriberRecipeBuilder;
 import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.api.material.Form;
 import com.murthinext.ae2pr.api.material.Material;
-import com.murthinext.ae2pr.api.material.MaterialItems;
-import com.murthinext.ae2pr.api.material.TagPrefix;
 import com.murthinext.ae2pr.registry.ModItems;
 import com.murthinext.ae2pr.registry.ModMaterials;
 import java.util.function.Consumer;
@@ -33,43 +32,49 @@ public class MaterialRecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> writer) {
         for (Material material : ModMaterials.ALL) {
-            if (!material.registersItem(TagPrefix.INGOT)) {
+            var ingot = material.item(Form.INGOT);
+            if (ingot.isEmpty()) {
                 continue;
             }
 
-            Item ingot = MaterialItems.get(TagPrefix.INGOT, material).get();
-            TagKey<Item> ingotTag = TagPrefix.INGOT.tag(material.id());
+            TagKey<Item> ingotTag = Form.INGOT.tag(material.id());
 
-            if (material.registersItem(TagPrefix.DUST)) {
-                Item dust = MaterialItems.get(TagPrefix.DUST, material).get();
-                TagKey<Item> dustTag = TagPrefix.DUST.tag(material.id());
+            material.item(Form.DUST).ifPresent(dust -> {
+                TagKey<Item> dustTag = Form.DUST.tag(material.id());
 
-                SimpleCookingRecipeBuilder.smelting(Ingredient.of(dustTag), RecipeCategory.MISC, ingot, 0.7F, 200)
+                SimpleCookingRecipeBuilder.smelting(
+                                Ingredient.of(dustTag),
+                                RecipeCategory.MISC,
+                                ingot.get().get(),
+                                0.7F,
+                                200)
                         .unlockedBy("has_dust", has(dustTag))
                         .save(writer, Ids.of("smelting/" + material.id() + "_dust"));
-                SimpleCookingRecipeBuilder.blasting(Ingredient.of(dustTag), RecipeCategory.MISC, ingot, 0.7F, 100)
+                SimpleCookingRecipeBuilder.blasting(
+                                Ingredient.of(dustTag),
+                                RecipeCategory.MISC,
+                                ingot.get().get(),
+                                0.7F,
+                                100)
                         .unlockedBy("has_dust", has(dustTag))
                         .save(writer, Ids.of("blasting/" + material.id() + "_dust"));
 
-                InscriberRecipeBuilder.inscribe(ingotTag, dust, 1)
+                InscriberRecipeBuilder.inscribe(ingotTag, dust.get(), 1)
                         .setMode(InscriberProcessType.INSCRIBE)
                         .save(writer, Ids.of("inscriber/" + material.id() + "_dust"));
-            }
+            });
 
-            if (material.registersItem(TagPrefix.PLATE)) {
-                Item plate = MaterialItems.get(TagPrefix.PLATE, material).get();
-
-                InscriberRecipeBuilder.inscribe(ingotTag, plate, 1)
-                        .setTop(Ingredient.of(ModItems.SINGLE_PLATE_PRESS.get()))
-                        .setMode(InscriberProcessType.INSCRIBE)
-                        .save(writer, Ids.of("inscriber/" + material.id() + "_plate"));
-            }
+            material.item(Form.PLATE)
+                    .ifPresent(plate -> InscriberRecipeBuilder.inscribe(ingotTag, plate.get(), 1)
+                            .setTop(Ingredient.of(ModItems.SINGLE_PLATE_PRESS.get()))
+                            .setMode(InscriberProcessType.INSCRIBE)
+                            .save(writer, Ids.of("inscriber/" + material.id() + "_plate")));
         }
 
         // 紫水晶碎片研磨成粉
         InscriberRecipeBuilder.inscribe(
                         Ingredient.of(Items.AMETHYST_SHARD),
-                        MaterialItems.get(TagPrefix.DUST, ModMaterials.AMETHYST).get(),
+                        ModMaterials.AMETHYST.item(Form.DUST).orElseThrow().get(),
                         1)
                 .setMode(InscriberProcessType.INSCRIBE)
                 .save(writer, Ids.of("inscriber/amethyst_dust"));

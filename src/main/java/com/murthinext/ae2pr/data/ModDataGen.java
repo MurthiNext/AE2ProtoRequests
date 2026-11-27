@@ -11,11 +11,20 @@ public final class ModDataGen {
 
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
+        var generator = event.getGenerator();
+        var output = generator.getPackOutput();
+        var existingFileHelper = event.getExistingFileHelper();
+
         if (event.includeServer()) {
-            var generator = event.getGenerator();
-            generator.addProvider(true, new MaterialRecipeProvider(generator.getPackOutput()));
-            generator.addProvider(true, new MeltingRecipeProvider(generator.getPackOutput()));
-            generator.addProvider(true, new ReactionRecipeProvider(generator.getPackOutput()));
+            generator.addProvider(true, new MaterialRecipeProvider(output));
+            generator.addProvider(true, new MeltingRecipeProvider(output));
+            generator.addProvider(
+                    true, new MaterialTagProvider(output, event.getLookupProvider(), ae2pr.MODID, existingFileHelper));
+            generator.addProvider(true, new ReactionRecipeProvider(output));
+        }
+
+        if (event.includeClient()) {
+            generator.addProvider(true, new MaterialModelProvider(output, ae2pr.MODID, existingFileHelper));
         }
     }
 

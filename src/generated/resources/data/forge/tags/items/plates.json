@@ -1,0 +1,12 @@
+{
+  "values": [
+    "#forge:plates/meteor_steel",
+    "#forge:plates/zirconium",
+    "#forge:plates/zirconium_iron_alloy",
+    "#forge:plates/amethyst_steel",
+    "#forge:plates/crystal_steel",
+    "#forge:plates/strontium",
+    "#forge:plates/barium",
+    "ae2pr:carbon_fiber_plate"
+  ]
+}

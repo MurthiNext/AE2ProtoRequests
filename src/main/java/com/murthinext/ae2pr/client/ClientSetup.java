@@ -3,9 +3,7 @@ package com.murthinext.ae2pr.client;
 import appeng.init.client.InitScreens;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.api.material.MaterialFluids;
 import com.murthinext.ae2pr.api.material.MaterialItem;
-import com.murthinext.ae2pr.api.material.MaterialItems;
 import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterScreen;
 import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterScreen;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchScreen;
@@ -20,6 +18,7 @@ import com.murthinext.ae2pr.item.matter_confinement_frame.MatterConfinementFrame
 import com.murthinext.ae2pr.item.sky_dome_annihilation_plane.SkyDomeAnnihilationPlaneModel;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryRenderer;
 import com.murthinext.ae2pr.registry.ModBlockEntities;
+import com.murthinext.ae2pr.registry.ModMaterials;
 import com.murthinext.ae2pr.registry.ModMenus;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.resources.model.ModelManager;
@@ -35,7 +34,6 @@ import net.minecraftforge.client.model.DynamicFluidContainerModel;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.registries.RegistryObject;
 
 @Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientSetup {
@@ -67,7 +65,11 @@ public final class ClientSetup {
 
     @SubscribeEvent
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-        ItemLike[] items = MaterialItems.all().stream().map(RegistryObject::get).toArray(ItemLike[]::new);
+        ItemLike[] items = ModMaterials.ALL.stream()
+                .flatMap(material -> material.forms().stream())
+                .flatMap(form -> form.ownItem().stream())
+                .map(item -> (ItemLike) item.get())
+                .toArray(ItemLike[]::new);
         event.register(
                 (stack, layer) -> stack.getItem() instanceof MaterialItem item
                         ? item.material().argb(layer)
@@ -75,7 +77,8 @@ public final class ClientSetup {
                 items);
 
         // 材质流体的桶共用灰度贴图，颜色来自流体的 tint
-        ItemLike[] buckets = MaterialFluids.all().stream()
+        ItemLike[] buckets = ModMaterials.ALL.stream()
+                .flatMap(material -> material.fluid().stream())
                 .map(set -> (ItemLike) set.bucket().get())
                 .toArray(ItemLike[]::new);
         event.register(new DynamicFluidContainerModel.Colors(), buckets);

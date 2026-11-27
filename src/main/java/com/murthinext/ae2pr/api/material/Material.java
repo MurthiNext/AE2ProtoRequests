@@ -1,29 +1,31 @@
 package com.murthinext.ae2pr.api.material;
 
+import com.murthinext.ae2pr.api.FluidSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import net.minecraft.resources.ResourceLocation;
+import java.util.Optional;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.RegistryObject;
 
 /**
  * 材质数据：描述“这个材质存在哪些形态”以及运行时着色。
- * 仅本模组声明生成的物品由 {@link MaterialItems} 注册。
+ * 物品与流体的注册由 {@link MaterialBuilder} 在 {@link MaterialRegistry} 中完成。
  */
 public final class Material {
 
     private final String id;
-    private final Map<TagPrefix, MaterialForm> forms;
+    private final Map<Form, MaterialForm> forms;
     private final int color;
     private final String modelSet;
-    private final FluidSpec fluid;
+    private FluidSet fluidSet;
 
-    private Material(String id, Map<TagPrefix, MaterialForm> forms, int color, String modelSet, FluidSpec fluid) {
+    Material(String id, Map<Form, MaterialForm> forms, int color, String modelSet) {
         this.id = id;
         this.forms = Collections.unmodifiableMap(new LinkedHashMap<>(forms));
         this.color = color;
         this.modelSet = modelSet;
-        this.fluid = fluid;
     }
 
     public String id() {
@@ -34,9 +36,20 @@ public final class Material {
         return forms.values();
     }
 
-    public boolean registersItem(TagPrefix prefix) {
-        MaterialForm form = forms.get(prefix);
-        return form != null && form.registersItem();
+    public Optional<MaterialForm> form(Form form) {
+        return Optional.ofNullable(forms.get(form));
+    }
+
+    public boolean has(Form form) {
+        return forms.containsKey(form);
+    }
+
+    public boolean owns(Form form) {
+        return form(form).map(MaterialForm::ownsItem).orElse(false);
+    }
+
+    public Optional<RegistryObject<Item>> item(Form form) {
+        return form(form).flatMap(MaterialForm::ownItem);
     }
 
     public String modelSet() {
@@ -47,12 +60,19 @@ public final class Material {
         return color;
     }
 
-    public FluidSpec fluid() {
-        return fluid;
+    public boolean hasFluid() {
+        return fluidSet != null;
     }
 
-    public boolean hasFluid() {
-        return fluid != null;
+    public Optional<FluidSet> fluid() {
+        return Optional.ofNullable(fluidSet);
+    }
+
+    void attachFluid(FluidSet fluidSet) {
+        if (this.fluidSet != null) {
+            throw new IllegalStateException("Fluid already attached to material " + id);
+        }
+        this.fluidSet = fluidSet;
     }
 
     /**
@@ -74,81 +94,5 @@ public final class Material {
         int sg = Math.min(255, (int) (g * 0.55) + 9);
         int sb = Math.min(255, (int) (b * 0.55) + 10);
         return (sr << 16) | (sg << 8) | sb;
-    }
-
-    public static Builder builder(String id) {
-        return new Builder(id);
-    }
-
-    public static final class Builder {
-
-        private final String id;
-        private final Map<TagPrefix, MaterialForm> forms = new LinkedHashMap<>();
-        private int color = 0xFFFFFF;
-        private String modelSet = "metallic";
-        private FluidSpec fluid;
-
-        private Builder(String id) {
-            this.id = id;
-        }
-
-        public Builder ingot() {
-            return registerItem(TagPrefix.INGOT);
-        }
-
-        public Builder plate() {
-            return registerItem(TagPrefix.PLATE);
-        }
-
-        public Builder dust() {
-            return registerItem(TagPrefix.DUST);
-        }
-
-        public Builder item(TagPrefix prefix, String itemId, int units) {
-            return addForm(prefix, ResourceLocation.parse(itemId), units, MaterialForm.Source.EXISTING_ITEM);
-        }
-
-        public Builder tag(TagPrefix prefix, String tagId) {
-            return tag(prefix, tagId, 1);
-        }
-
-        public Builder tag(TagPrefix prefix, String tagId, int units) {
-            return addForm(prefix, ResourceLocation.parse(tagId), units, MaterialForm.Source.ITEM_TAG);
-        }
-
-        public Builder optionalStorageBlock() {
-            return addForm(TagPrefix.BLOCK, TagPrefix.BLOCK.tag(id).location(), 9, MaterialForm.Source.OPTIONAL_TAG);
-        }
-
-        private Builder registerItem(TagPrefix prefix) {
-            return addForm(prefix, prefix.tag(id).location(), 1, MaterialForm.Source.REGISTERED_ITEM);
-        }
-
-        private Builder addForm(
-                TagPrefix prefix, ResourceLocation ingredientId, int units, MaterialForm.Source source) {
-            if (forms.putIfAbsent(prefix, new MaterialForm(prefix, ingredientId, units, source)) != null) {
-                throw new IllegalArgumentException("Duplicate material form %s for %s".formatted(prefix.name(), id));
-            }
-            return this;
-        }
-
-        public Builder color(int rgb) {
-            this.color = rgb & 0xFFFFFF;
-            return this;
-        }
-
-        public Builder modelSet(String modelSet) {
-            this.modelSet = modelSet;
-            return this;
-        }
-
-        public Builder fluid(FluidSpec fluid) {
-            this.fluid = fluid;
-            return this;
-        }
-
-        public Material build() {
-            return new Material(id, forms, color, modelSet, fluid);
-        }
     }
 }

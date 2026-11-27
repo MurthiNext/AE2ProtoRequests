@@ -1,10 +1,8 @@
 package com.murthinext.ae2pr.registry;
 
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.material.Form;
 import com.murthinext.ae2pr.api.material.Material;
-import com.murthinext.ae2pr.api.material.MaterialFluids;
-import com.murthinext.ae2pr.api.material.MaterialItems;
-import com.murthinext.ae2pr.api.material.TagPrefix;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -69,36 +67,23 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.HIGH_ENERGY_SINGULARITY.get());
 
                         // 锭
-                        acceptMaterials(output, TagPrefix.INGOT);
+                        acceptMaterials(output, Form.INGOT);
                         output.accept(ModItems.ZIRCON_BRICK.get());
                         output.accept(ModItems.ZIRCON.get());
 
                         // 粉末
-                        acceptMaterials(output, TagPrefix.DUST);
+                        acceptMaterials(output, Form.DUST);
 
                         // 单层板
-                        acceptMaterials(output, TagPrefix.PLATE);
+                        acceptMaterials(output, Form.PLATE);
 
                         // 桶
                         output.accept(ModItems.ALIEN_LAVA_BUCKET.get());
-                        output.accept(MaterialFluids.get(ModMaterials.LIQUID_CERTUS_QUARTZ)
-                                .bucket()
-                                .get());
-                        output.accept(MaterialFluids.get(ModMaterials.LIQUID_FLUIX_CRYSTAL)
-                                .bucket()
-                                .get());
-                        output.accept(MaterialFluids.get(ModMaterials.AMETHYST)
-                                .bucket()
-                                .get());
-                        output.accept(MaterialFluids.get(ModMaterials.LIQUID_CRYSTALINE)
-                                .bucket()
-                                .get());
-                        output.accept(MaterialFluids.get(ModMaterials.CRYSTAL_ADHESIVE)
-                                .bucket()
-                                .get());
-                        output.accept(MaterialFluids.get(ModMaterials.ZIRCONIUM)
-                                .bucket()
-                                .get());
+                        for (Material material : ModMaterials.ALL) {
+                            material.fluid()
+                                    .ifPresent(fluid ->
+                                            output.accept(fluid.bucket().get()));
+                        }
                         output.accept(ModFluids.COARSE_METEORITE_SLURRY.bucket().get());
                         output.accept(
                                 ModFluids.COARSE_METEORITE_SOLUTION.bucket().get());
@@ -188,11 +173,9 @@ public final class ModCreativeTabs {
                     })
                     .build());
 
-    private static void acceptMaterials(CreativeModeTab.Output output, TagPrefix prefix) {
+    private static void acceptMaterials(CreativeModeTab.Output output, Form form) {
         for (Material material : ModMaterials.ALL) {
-            if (material.registersItem(prefix)) {
-                output.accept(MaterialItems.get(prefix, material).get());
-            }
+            material.item(form).ifPresent(item -> output.accept(item.get()));
         }
     }
 }
