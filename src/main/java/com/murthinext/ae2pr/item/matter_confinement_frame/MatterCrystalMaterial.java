@@ -5,21 +5,20 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
 import org.joml.Vector3d;
 
-final class MatterSphereMaterial {
+public final class MatterCrystalMaterial {
 
     private final Vector3d light;
     private final Vector3d halfway;
     private final Vector3d reflectionTint;
     private final double ambient;
     private final double diffuse;
-    private final double internalGlow;
-    private final double edgeDepth;
+    private final double opacity;
+    private final double edgeOpacity;
     private final double specular;
     private final double specularPower;
-    private final double softReflection;
     private final double rimStrength;
 
-    MatterSphereMaterial(JsonObject settings) {
+    public MatterCrystalMaterial(JsonObject settings) {
         var direction = settings.getAsJsonArray("light_direction");
         light = new Vector3d(
                         direction.get(0).getAsDouble(),
@@ -34,39 +33,35 @@ final class MatterSphereMaterial {
                 tint.get(2).getAsDouble());
         ambient = GsonHelper.getAsDouble(settings, "ambient");
         diffuse = GsonHelper.getAsDouble(settings, "diffuse");
-        internalGlow = GsonHelper.getAsDouble(settings, "internal_glow");
-        edgeDepth = GsonHelper.getAsDouble(settings, "edge_depth");
+        opacity = GsonHelper.getAsDouble(settings, "opacity");
+        edgeOpacity = GsonHelper.getAsDouble(settings, "edge_opacity");
         specular = GsonHelper.getAsDouble(settings, "specular");
         double roughness = Mth.clamp(GsonHelper.getAsDouble(settings, "roughness"), 0.1, 1);
         specularPower = 2 / (roughness * roughness) - 2;
-        softReflection = GsonHelper.getAsDouble(settings, "soft_reflection");
         rimStrength = GsonHelper.getAsDouble(settings, "rim_strength");
     }
 
-    Lighting shade(double x, double y, double z) {
-        double facing = Math.abs(z);
-        double illumination = Math.max(0, light.dot(x, y, facing));
-        double reflection = Math.max(0, halfway.dot(x, y, facing));
-        double edge = 1 - facing;
-        double body = (ambient + diffuse * illumination) * (1 - edgeDepth * edge * edge)
-                + internalGlow * facing * facing * (1 - 0.5 * illumination);
-        double highlight = specular * Math.pow(reflection, specularPower)
-                + softReflection * Math.pow(reflection, specularPower * 0.25);
-        double rim = rimStrength * Math.pow(edge, 5) * (0.35 + 0.65 * Math.max(0, -light.x * x - light.y * y));
+    public Lighting shade(Vector3d normal) {
+        double edge = 1 - Math.abs(normal.z);
+        double body = ambient + diffuse * Math.max(0, light.dot(normal));
+        double highlight = specular * Math.pow(Math.max(0, halfway.dot(normal)), specularPower);
+        double rim = rimStrength * edge * edge;
+        double alpha = Mth.lerp(edge * edge, opacity, edgeOpacity) + highlight * (1 - edgeOpacity);
         return new Lighting(
+                (int) Math.round(Mth.clamp(alpha, 0, 1) * 255),
                 body * (1 - Math.min(0.9, highlight + rim)),
                 highlight + rim * reflectionTint.x,
                 highlight + rim * reflectionTint.y,
                 highlight + rim * reflectionTint.z);
     }
 
-    record Lighting(double body, double redReflection, double greenReflection, double blueReflection) {
+    public record Lighting(int alpha, double body, double redReflection, double greenReflection, double blueReflection) {
 
-        int color(double[] pigment) {
+        public int color(double[] pigment) {
             int red = toSrgb(pigment[0] * body + redReflection);
             int green = toSrgb(pigment[1] * body + greenReflection);
             int blue = toSrgb(pigment[2] * body + blueReflection);
-            return 0xFF000000 | blue << 16 | green << 8 | red;
+            return alpha << 24 | blue << 16 | green << 8 | red;
         }
 
         private static int toSrgb(double linear) {

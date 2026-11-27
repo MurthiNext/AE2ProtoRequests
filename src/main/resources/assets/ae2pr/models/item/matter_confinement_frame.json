@@ -1,18 +1,23 @@
 {
   "parent": "minecraft:block/block",
   "loader": "ae2pr:matter_confinement_frame",
+  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "ae2pr:item/matter_confinement_frame_model",
     "frame": "ae2pr:item/matter_confinement_frame_model",
     "matter": "ae2pr:item/confined_matter_surface"
   },
-  "sphere": {
+  "crystal": {
     "radius": 3.0,
-    "segments": 64,
-    "rings": 32,
+    "sides": 12,
+    "rotation": 12,
+    "spin_degrees_per_second": 8,
+    "table_radius": 0.47,
+    "table_height": 0.92,
+    "shoulder_height": 0.35,
     "key_color_count": 3,
     "flow_speed": 0.18,
-    "animation_fps": 60,
+    "animation_fps": 24,
     "palette": {
       "white": "e0e0e0",
       "orange": "eca23c",
@@ -32,22 +37,21 @@
       "black": "272727"
     },
     "material": {
-      "ambient": 0.14,
-      "diffuse": 0.6,
-      "internal_glow": 0.26,
-      "edge_depth": 0.45,
-      "roughness": 0.21,
-      "specular": 0.7,
-      "soft_reflection": 0.11,
-      "rim_strength": 0.18,
+      "opacity": 0.46,
+      "edge_opacity": 0.75,
+      "ambient": 0.26,
+      "diffuse": 0.74,
+      "roughness": 0.34,
+      "specular": 0.72,
+      "rim_strength": 0.24,
       "light_direction": [
         -0.42,
         0.58,
         0.7
       ],
       "reflection_tint": [
-        0.78,
-        0.86,
+        0.68,
+        0.88,
         1.0
       ]
     }

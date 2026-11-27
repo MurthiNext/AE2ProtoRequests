@@ -6,13 +6,13 @@ import java.util.*;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
 
-final class MatterSpherePaintPattern {
+public final class MatterColorPattern {
 
     private final Map<AEColor, KeyColor> colors = new EnumMap<>(AEColor.class);
     private final int keyColorCount;
     private final double flowSpeed;
 
-    MatterSpherePaintPattern(JsonObject settings) {
+    public MatterColorPattern(JsonObject settings) {
         keyColorCount = Mth.clamp(GsonHelper.getAsInt(settings, "key_color_count"), 1, 3);
         flowSpeed = Mth.clamp(GsonHelper.getAsDouble(settings, "flow_speed"), 0, 2.0);
         var palette = GsonHelper.getAsJsonObject(settings, "palette");
@@ -31,7 +31,7 @@ final class MatterSpherePaintPattern {
         }
     }
 
-    Palette createPalette(Map<AEColor, Integer> contents) {
+    public Palette createPalette(Map<AEColor, Integer> contents) {
         var selected = new ArrayList<>(colors.values().stream()
                 .filter(color -> contents.getOrDefault(color.color(), 0) > 0)
                 .sorted(Comparator.<KeyColor>comparingInt(color -> contents.get(color.color()))
@@ -65,7 +65,7 @@ final class MatterSpherePaintPattern {
         return new Palette(List.copyOf(stops));
     }
 
-    final class Palette {
+    public final class Palette {
 
         private final List<Stop> stops;
         private final double start;
@@ -77,7 +77,11 @@ final class MatterSpherePaintPattern {
             span = stops.get(stops.size() - 1).position() - start;
         }
 
-        void sample(double x, double y, double z, double seconds, double[] result) {
+        public boolean isAnimated() {
+            return stops.size() > 1 && flowSpeed > 0;
+        }
+
+        public void sample(double x, double y, double z, double seconds, double[] result) {
             double time = seconds * flowSpeed;
             double axisY = 0.35 + 0.15 * Math.sin(time * 0.4);
             double horizontal = Math.sqrt(1 - axisY * axisY);
