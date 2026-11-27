@@ -7,13 +7,13 @@
   ],
   "key": {
     "A": {
-      "item": "ae2:logic_processor"
+      "item": "ae2pr:logistics_processor"
     },
     "B": {
       "item": "ae2:smooth_sky_stone_block"
     },
     "C": {
-      "item": "ae2pr:meteor_steel_ingot"
+      "tag": "forge:plates/meteor_steel"
     }
   },
   "result": {

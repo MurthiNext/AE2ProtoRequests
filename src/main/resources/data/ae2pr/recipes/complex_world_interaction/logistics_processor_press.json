@@ -1,0 +1,22 @@
+{
+  "type": "ae2pr:complex_world_interaction",
+  "circumstance": {
+    "type": "explosion"
+  },
+  "item_inputs": [
+    {
+      "item": "ae2:engineering_processor_press",
+      "count": 1
+    },
+    {
+      "item": "minecraft:hopper",
+      "count": 4
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2pr:logistics_processor_press",
+      "count": 1
+    }
+  ]
+}

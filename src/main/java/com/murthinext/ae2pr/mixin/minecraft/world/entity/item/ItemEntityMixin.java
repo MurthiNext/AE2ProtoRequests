@@ -33,7 +33,8 @@ public abstract class ItemEntityMixin implements WorldInteractionEntity {
     @Inject(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
     private void ae2pr$onHurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         ItemEntity item = (ItemEntity) (Object) this;
-        if ((source.is(DamageTypeTags.IS_EXPLOSION) && ComplexWorldInteractions.tryExplosion(item))
+        if ((source.is(DamageTypeTags.IS_EXPLOSION)
+                        && ComplexWorldInteractions.tryExplosion(item, source.getDirectEntity()))
                 || (source.is(DamageTypeTags.IS_FIRE) && ComplexWorldInteractions.protectFromFire(item))) {
             cir.setReturnValue(false);
         }

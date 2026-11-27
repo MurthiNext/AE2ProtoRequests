@@ -35,8 +35,14 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.AEV_ENERGY_CARD.get());
                         output.accept(ModItems.COLLAPSED_ITEM_STORAGE_CELL.get());
 
-                        // 材料 / 中间产物
+                        // 材料 / 催化剂
                         output.accept(ModItems.SINGLE_PLATE_PRESS.get());
+                        output.accept(ModItems.LOGISTICS_PROCESSOR_PRESS.get());
+                        output.accept(ModItems.MATTER_CONFINEMENT_FRAME.get());
+
+                        // 材料 / 中间产物
+                        output.accept(ModItems.PRINTED_LOGISTICS_PROCESSOR.get());
+                        output.accept(ModItems.LOGISTICS_PROCESSOR.get());
                         output.accept(ModItems.ZIRCON_CIRCUIT_BOARD.get());
                         output.accept(ModItems.ZIRCON_PRINTED_CIRCUIT_BOARD.get());
                         output.accept(ModItems.CARBON_FIBER.get());
@@ -45,7 +51,6 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.DIAMOND_SOC_WAFER.get());
                         output.accept(ModItems.DIAMOND_SOC.get());
                         output.accept(ModItems.FINE_FLUIX_WIRE.get());
-                        output.accept(ModItems.MATTER_CONFINEMENT_FRAME.get());
                         output.accept(ModItems.CRYSTALINE.get());
 
                         // 电路板

@@ -1,5 +1,6 @@
 package com.murthinext.ae2pr.integration.jei.category;
 
+import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.Ids;
@@ -126,7 +127,7 @@ public class ComplexWorldInteractionCategory implements IRecipeCategory<ComplexW
     private static void addCatalyst(IRecipeLayoutBuilder builder, ComplexWorldInteractionRecipe recipe) {
         IRecipeSlotBuilder catalyst = builder.addSlot(RecipeIngredientRole.CATALYST, CATALYST_X, INTERACTION_Y);
         if (recipe.getCircumstance().isExplosion()) {
-            catalyst.addItemStack(new ItemStack(Items.TNT));
+            catalyst.addItemStack(new ItemStack(Items.TNT)).addItemStack(AEBlocks.TINY_TNT.stack());
             return;
         }
         recipe.getCircumstance().getFluids().forEach(fluid -> catalyst.addFluidStack(fluid, FluidType.BUCKET_VOLUME));

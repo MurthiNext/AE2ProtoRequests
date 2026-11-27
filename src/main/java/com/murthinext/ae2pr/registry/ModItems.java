@@ -199,6 +199,15 @@ public final class ModItems {
     public static final RegistryObject<Item> SINGLE_PLATE_PRESS =
             ITEMS.register("single_plate_press", () -> new Item(new Item.Properties()));
 
+    public static final RegistryObject<Item> LOGISTICS_PROCESSOR_PRESS =
+            ITEMS.register("logistics_processor_press", () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> PRINTED_LOGISTICS_PROCESSOR =
+            ITEMS.register("printed_logistics_processor", () -> new Item(new Item.Properties()));
+
+    public static final RegistryObject<Item> LOGISTICS_PROCESSOR =
+            ITEMS.register("logistics_processor", () -> new Item(new Item.Properties()));
+
     public static final RegistryObject<Item> DIAMOND_WAFER =
             ITEMS.register("diamond_wafer", () -> new Item(new Item.Properties()));
 

@@ -1,5 +1,6 @@
 package com.murthinext.ae2pr.logic.world_interaction;
 
+import appeng.core.definitions.AEEntities;
 import com.murthinext.ae2pr.api.recipe.ItemInput;
 import com.murthinext.ae2pr.api.recipe.ItemOutput;
 import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
@@ -8,6 +9,8 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -15,6 +18,7 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.Nullable;
 
 public final class ComplexWorldInteractions {
 
@@ -92,7 +96,7 @@ public final class ComplexWorldInteractions {
                 .anyMatch(recipe -> recipe.getCircumstance().matches(fluid) && recipe.canTrigger(item.getItem()));
     }
 
-    public static boolean tryExplosion(ItemEntity item) {
+    public static boolean tryExplosion(ItemEntity item, @Nullable Entity source) {
         Level level = item.level();
         if (level.isClientSide || item.isRemoved() || item.getItem().isEmpty()) {
             return false;
@@ -100,6 +104,9 @@ public final class ComplexWorldInteractions {
         if (item instanceof WorldInteractionEntity interaction
                 && interaction.ae2pr$getWorldInteractionProgress().isProtectedFromExplosion(level.getGameTime())) {
             return true;
+        }
+        if (source == null || (source.getType() != EntityType.TNT && source.getType() != AEEntities.TINY_TNT_PRIMED)) {
+            return false;
         }
         List<ItemEntity> nearby = null;
         for (ComplexWorldInteractionRecipe recipe :
