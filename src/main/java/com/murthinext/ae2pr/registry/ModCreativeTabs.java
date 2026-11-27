@@ -87,7 +87,7 @@ public final class ModCreativeTabs {
                         output.accept(MaterialFluids.get(ModMaterials.LIQUID_FLUIX_CRYSTAL)
                                 .bucket()
                                 .get());
-                        output.accept(MaterialFluids.get(ModMaterials.LIQUID_AMETHYST)
+                        output.accept(MaterialFluids.get(ModMaterials.AMETHYST)
                                 .bucket()
                                 .get());
                         output.accept(MaterialFluids.get(ModMaterials.LIQUID_CRYSTALINE)
@@ -190,7 +190,7 @@ public final class ModCreativeTabs {
 
     private static void acceptMaterials(CreativeModeTab.Output output, TagPrefix prefix) {
         for (Material material : ModMaterials.ALL) {
-            if (material.has(prefix)) {
+            if (material.registersItem(prefix)) {
                 output.accept(MaterialItems.get(prefix, material).get());
             }
         }

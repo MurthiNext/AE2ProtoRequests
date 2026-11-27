@@ -9,13 +9,11 @@ import com.murthinext.ae2pr.api.material.TagPrefix;
 import com.murthinext.ae2pr.registry.ModItems;
 import com.murthinext.ae2pr.registry.ModMaterials;
 import java.util.function.Consumer;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -35,16 +33,16 @@ public class MaterialRecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> writer) {
         for (Material material : ModMaterials.ALL) {
-            if (!material.has(TagPrefix.INGOT)) {
+            if (!material.registersItem(TagPrefix.INGOT)) {
                 continue;
             }
 
             Item ingot = MaterialItems.get(TagPrefix.INGOT, material).get();
-            TagKey<Item> ingotTag = forgeTag("ingots/" + material.id());
+            TagKey<Item> ingotTag = TagPrefix.INGOT.tag(material.id());
 
-            if (material.has(TagPrefix.DUST)) {
+            if (material.registersItem(TagPrefix.DUST)) {
                 Item dust = MaterialItems.get(TagPrefix.DUST, material).get();
-                TagKey<Item> dustTag = forgeTag("dusts/" + material.id());
+                TagKey<Item> dustTag = TagPrefix.DUST.tag(material.id());
 
                 SimpleCookingRecipeBuilder.smelting(Ingredient.of(dustTag), RecipeCategory.MISC, ingot, 0.7F, 200)
                         .unlockedBy("has_dust", has(dustTag))
@@ -58,7 +56,7 @@ public class MaterialRecipeProvider extends RecipeProvider {
                         .save(writer, Ids.of("inscriber/" + material.id() + "_dust"));
             }
 
-            if (material.has(TagPrefix.PLATE)) {
+            if (material.registersItem(TagPrefix.PLATE)) {
                 Item plate = MaterialItems.get(TagPrefix.PLATE, material).get();
 
                 InscriberRecipeBuilder.inscribe(ingotTag, plate, 1)
@@ -75,9 +73,5 @@ public class MaterialRecipeProvider extends RecipeProvider {
                         1)
                 .setMode(InscriberProcessType.INSCRIBE)
                 .save(writer, Ids.of("inscriber/amethyst_dust"));
-    }
-
-    private static TagKey<Item> forgeTag(String path) {
-        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", path));
     }
 }

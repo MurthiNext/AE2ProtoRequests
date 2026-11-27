@@ -372,6 +372,8 @@
   "tooltip.ae2pr.crystal_workstation.desc": "Really not a Precision Assembler!",
   "gui.ae2pr.crystal_workstation.mode.etching": "Etching",
   "gui.ae2pr.crystal_workstation.mode.cutting": "Cutting",
+  "gui.ae2pr.matter_phase_transformer.mode.melting": "Melting",
+  "gui.ae2pr.matter_phase_transformer.mode.mixing": "Mixing",
   "config.jade.plugin_ae2pr.crystal_workstation": "Crystal Workstation",
   "block.ae2pr.jig": "Jig",
   "subtitle.ae2pr.jig_processing": "Jig washes",

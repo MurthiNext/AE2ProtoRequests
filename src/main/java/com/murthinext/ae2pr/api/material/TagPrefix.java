@@ -1,25 +1,27 @@
 package com.murthinext.ae2pr.api.material;
 
-import java.util.List;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
 /**
- * 材质的形态模板：决定物品 id 后缀与物品类型。
+ * 材质的形态模板：决定默认的物品 ID 和 Forge 标签。
  */
 public final class TagPrefix {
 
-    public static final TagPrefix INGOT = new TagPrefix("ingot", "%s_ingot");
-    public static final TagPrefix PLATE = new TagPrefix("plate", "%s_plate");
-    public static final TagPrefix DUST = new TagPrefix("dust", "%s_dust");
-
-    public static final List<TagPrefix> VALUES = List.of(INGOT, PLATE, DUST);
+    public static final TagPrefix INGOT = new TagPrefix("ingot", "ingots");
+    public static final TagPrefix PLATE = new TagPrefix("plate", "plates");
+    public static final TagPrefix DUST = new TagPrefix("dust", "dusts");
+    public static final TagPrefix GEM = new TagPrefix("gem", "gems");
+    public static final TagPrefix BLOCK = new TagPrefix("block", "storage_blocks");
 
     private final String name;
-    private final String idPattern;
+    private final String tagDirectory;
 
-    private TagPrefix(String name, String idPattern) {
+    private TagPrefix(String name, String tagDirectory) {
         this.name = name;
-        this.idPattern = idPattern;
+        this.tagDirectory = tagDirectory;
     }
 
     public String name() {
@@ -27,10 +29,11 @@ public final class TagPrefix {
     }
 
     public String idFor(String materialId) {
-        return idPattern.formatted(materialId);
+        return materialId + "_" + name;
     }
 
-    public Item createItem(Material material) {
-        return new MaterialItem(new Item.Properties(), material);
+    public TagKey<Item> tag(String materialId) {
+        return TagKey.create(
+                Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", tagDirectory + "/" + materialId));
     }
 }

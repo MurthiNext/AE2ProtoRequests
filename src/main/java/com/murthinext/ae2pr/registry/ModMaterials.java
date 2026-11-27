@@ -4,9 +4,12 @@ import com.murthinext.ae2pr.api.material.FluidSpec;
 import com.murthinext.ae2pr.api.material.Material;
 import com.murthinext.ae2pr.api.material.MaterialFluids;
 import com.murthinext.ae2pr.api.material.MaterialItems;
+import com.murthinext.ae2pr.api.material.TagPrefix;
 import java.util.List;
 
 public final class ModMaterials {
+
+    private static final int CRYSTALS_PER_BLOCK = 4;
 
     public static Material METEOR_STEEL;
     public static Material ZIRCONIUM;
@@ -28,7 +31,6 @@ public final class ModMaterials {
     public static Material BARIUM_SULFATE;
     public static Material LIQUID_CERTUS_QUARTZ;
     public static Material LIQUID_FLUIX_CRYSTAL;
-    public static Material LIQUID_AMETHYST;
     public static Material LIQUID_CRYSTALINE;
     public static Material CRYSTAL_ADHESIVE;
 
@@ -52,6 +54,7 @@ public final class ModMaterials {
                 .ingot()
                 .plate()
                 .dust()
+                .optionalStorageBlock()
                 .color(0xDDEDF4)
                 .fluid(FluidSpec.lava("liquid_zirconium", 8, 2600, 5000, 400)));
         ZIRCONIUM_IRON_ALLOY = MaterialItems.register(
@@ -62,9 +65,12 @@ public final class ModMaterials {
                         .dust()
                         .color(0x6B7BB5)
                         .build());
-        AMETHYST = MaterialItems.register(
-                ModItems.ITEMS,
-                Material.builder("amethyst").dust().color(0xC78DF3).build());
+        AMETHYST = both(Material.builder("amethyst")
+                .dust()
+                .tag(TagPrefix.GEM, "forge:gems/amethyst")
+                .item(TagPrefix.BLOCK, "minecraft:amethyst_block", CRYSTALS_PER_BLOCK)
+                .color(0xC78DF3)
+                .fluid(FluidSpec.water("liquid_amethyst", 8, 2000, 3000, 400)));
         AMETHYST_STEEL = MaterialItems.register(
                 ModItems.ITEMS,
                 Material.builder("amethyst_steel")
@@ -131,14 +137,17 @@ public final class ModMaterials {
                 Material.builder("barium_sulfate").dust().color(0xDCE0E5).build());
 
         LIQUID_CERTUS_QUARTZ = fluid(Material.builder("liquid_certus_quartz")
+                .tag(TagPrefix.GEM, "ae2:all_certus_quartz")
+                .tag(TagPrefix.DUST, "forge:dusts/certus_quartz")
+                .tag(TagPrefix.BLOCK, "forge:storage_blocks/certus_quartz", CRYSTALS_PER_BLOCK)
                 .color(0x94B7FF)
                 .fluid(FluidSpec.water("liquid_certus_quartz", 8, 2000, 3000, 400)));
         LIQUID_FLUIX_CRYSTAL = fluid(Material.builder("liquid_fluix_crystal")
+                .tag(TagPrefix.GEM, "ae2:all_fluix")
+                .tag(TagPrefix.DUST, "forge:dusts/fluix")
+                .item(TagPrefix.BLOCK, "ae2:fluix_block", CRYSTALS_PER_BLOCK)
                 .color(0xAD94FF)
                 .fluid(FluidSpec.water("liquid_fluix_crystal", 8, 2000, 3000, 400)));
-        LIQUID_AMETHYST = fluid(Material.builder("liquid_amethyst")
-                .color(0xC78DF3)
-                .fluid(FluidSpec.water("liquid_amethyst", 8, 2000, 3000, 400)));
         LIQUID_CRYSTALINE = fluid(Material.builder("liquid_crystaline")
                 .color(0x94CDFF)
                 .fluid(FluidSpec.water("liquid_crystaline", 8, 2000, 3000, 400)));
@@ -164,7 +173,11 @@ public final class ModMaterials {
                 GOLD_OXIDE,
                 PSEUDO_STRONTIANITE,
                 STRONTIUM_CARBONATE,
-                BARIUM_SULFATE);
+                BARIUM_SULFATE,
+                LIQUID_CERTUS_QUARTZ,
+                LIQUID_FLUIX_CRYSTAL,
+                LIQUID_CRYSTALINE,
+                CRYSTAL_ADHESIVE);
     }
 
     private static Material both(Material.Builder builder) {

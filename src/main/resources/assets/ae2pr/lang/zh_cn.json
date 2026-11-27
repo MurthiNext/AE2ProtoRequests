@@ -372,6 +372,8 @@
   "tooltip.ae2pr.crystal_workstation.desc": "真不是什么精密组装机！",
   "gui.ae2pr.crystal_workstation.mode.etching": "蚀刻",
   "gui.ae2pr.crystal_workstation.mode.cutting": "切割",
+  "gui.ae2pr.matter_phase_transformer.mode.melting": "熔化",
+  "gui.ae2pr.matter_phase_transformer.mode.mixing": "混合",
   "config.jade.plugin_ae2pr.crystal_workstation": "晶能工作站",
   "block.ae2pr.jig": "跳汰机",
   "subtitle.ae2pr.jig_processing": "跳汰机：冲洗",

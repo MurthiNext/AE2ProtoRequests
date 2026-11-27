@@ -29,6 +29,7 @@ import com.murthinext.ae2pr.machine.integrated_mass_fabricator.IntegratedMassFab
 import com.murthinext.ae2pr.machine.jig.JigControllerBlockEntity;
 import com.murthinext.ae2pr.machine.jig.JigStructure;
 import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerControllerBlockEntity;
+import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerMode;
 import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerStructure;
 import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryControllerBlockEntity;
 import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryMode;
@@ -67,7 +68,8 @@ public final class ModMachines {
     public static RecipeDefinition<MachineRecipe> JIG_RECIPE;
     public static RecipeDefinition<MachineRecipe> CRYSTAL_REACTION_CHAMBER_RECIPE;
     public static RecipeDefinition<MachineRecipe> HIGH_REACTIVITY_LAVA_SMELTER_RECIPE;
-    public static RecipeDefinition<MachineRecipe> MATTER_PHASE_TRANSFORMER_RECIPE;
+    public static RecipeDefinition<MachineRecipe> MATTER_PHASE_TRANSFORMER_MELTING_RECIPE;
+    public static RecipeDefinition<MachineRecipe> MATTER_PHASE_TRANSFORMER_MIXING_RECIPE;
     public static RecipeDefinition<MachineRecipe> CRYSTAL_WORKSTATION_ETCHING_RECIPE;
     public static RecipeDefinition<MachineRecipe> CRYSTAL_WORKSTATION_CUTTING_RECIPE;
     public static RecipeDefinition<CrystalAssemblyLineRecipe> CRYSTAL_ASSEMBLY_LINE_RECIPE;
@@ -126,15 +128,10 @@ public final class ModMachines {
                         .itemOutputs(1, 2)
                         .fluidOutputs(0, 0)
                         .build());
-        MATTER_PHASE_TRANSFORMER_RECIPE = RecipeDefinition.simple(
-                "matter_phase_transformer",
-                200,
-                RecipeConstraints.builder()
-                        .itemInputs(1, -1)
-                        .fluidInputs(0, 0)
-                        .fluidOutputs(1, 1)
-                        .requireEnergy()
-                        .build());
+        MATTER_PHASE_TRANSFORMER_MELTING_RECIPE = RecipeDefinition.simple(
+                MatterPhaseTransformerMode.MELTING.recipeTypeId().getPath(), 200, phaseTransformerConstraints(1, 1));
+        MATTER_PHASE_TRANSFORMER_MIXING_RECIPE = RecipeDefinition.simple(
+                MatterPhaseTransformerMode.MIXING.recipeTypeId().getPath(), 200, phaseTransformerConstraints(2, -1));
         CRYSTAL_WORKSTATION_ETCHING_RECIPE =
                 RecipeDefinition.simple("crystal_workstation_etching", 200, workstationConstraints());
         CRYSTAL_WORKSTATION_CUTTING_RECIPE =
@@ -185,14 +182,15 @@ public final class ModMachines {
                         ServerConfig::assemblyBaseParallel,
                         CRYSTAL_ASSEMBLY_LINE_RECIPE::type)
                 .parallelPerRepeatSlice(ServerConfig::assemblyParallelPerRepeatSlice);
-        MATTER_PHASE_TRANSFORMER = MultiblockMachineDefinition.standard(
+        MATTER_PHASE_TRANSFORMER = MultiblockMachineDefinition.withModes(
                         "matter_phase_transformer",
                         MatterPhaseTransformerControllerBlockEntity.class,
                         MatterPhaseTransformerControllerBlockEntity::new,
                         ModMachines::stoneProperties,
                         () -> MatterPhaseTransformerStructure.INSTANCE,
                         ServerConfig::matterPhaseTransformerBaseParallel,
-                        MATTER_PHASE_TRANSFORMER_RECIPE::type)
+                        MatterPhaseTransformerMode.MELTING::recipeType,
+                        List.of(MatterPhaseTransformerMode.values()))
                 .coreLight(ModMachines.CRYSTAL_REACTOR_CORE);
         HIGH_REACTIVITY_LAVA_SMELTER = MultiblockMachineDefinition.customMenu(
                 "high_reactivity_lava_smelter",
@@ -263,6 +261,16 @@ public final class ModMachines {
                 INTEGRATED_MASS_FABRICATOR,
                 NAMING_FACTORY,
                 CRYSTAL_REACTOR);
+    }
+
+    private static RecipeConstraints phaseTransformerConstraints(int minItemInputs, int maxItemInputs) {
+        return RecipeConstraints.builder()
+                .itemInputs(minItemInputs, maxItemInputs)
+                .fluidInputs(0, 0)
+                .itemOutputs(0, 0)
+                .fluidOutputs(1, 1)
+                .requireEnergy()
+                .build();
     }
 
     private static RecipeConstraints workstationConstraints() {

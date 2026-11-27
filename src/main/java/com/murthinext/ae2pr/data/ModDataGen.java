@@ -14,6 +14,7 @@ public final class ModDataGen {
         if (event.includeServer()) {
             var generator = event.getGenerator();
             generator.addProvider(true, new MaterialRecipeProvider(generator.getPackOutput()));
+            generator.addProvider(true, new MeltingRecipeProvider(generator.getPackOutput()));
             generator.addProvider(true, new ReactionRecipeProvider(generator.getPackOutput()));
         }
     }

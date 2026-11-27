@@ -20,6 +20,7 @@ import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationShell;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterRenderer;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterScreen;
 import com.murthinext.ae2pr.machine.jig.JigRenderer;
+import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerMode;
 import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerRenderer;
 import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryMode;
 import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryRenderer;
@@ -71,7 +72,12 @@ public final class MachineClients {
                         MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.CRYSTAL_ASSEMBLY_LINE));
         register(
                 ModMachines.MATTER_PHASE_TRANSFORMER,
-                Style.ember(ModGuide.MATTER_PHASE_TRANSFORMER_PAGE, 0xFFC46B),
+                Style.ember(ModGuide.MATTER_PHASE_TRANSFORMER_PAGE, 0xFFC46B)
+                        .withModeIcons(Map.of(
+                                MatterPhaseTransformerMode.MELTING,
+                                new MachineModeButton.TextureIcon(Ids.of("textures/gui/melting.png")),
+                                MatterPhaseTransformerMode.MIXING,
+                                new MachineModeButton.TextureIcon(Ids.of("textures/gui/mixing.png")))),
                 MachineScreen::new,
                 controller -> {
                     controller.clientTick();

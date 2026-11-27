@@ -16,15 +16,19 @@ public final class MaterialItems {
      * 按材质声明的形态向给定注册表登记物品，返回该材质本身，便于在注册类里直接声明字段。
      */
     public static Material register(DeferredRegister<Item> items, Material material) {
-        for (TagPrefix prefix : TagPrefix.VALUES) {
-            if (!material.has(prefix)) {
+        for (MaterialForm form : material.forms()) {
+            if (!form.registersItem()) {
                 continue;
             }
+            TagPrefix prefix = form.prefix();
             Key key = new Key(prefix, material);
             if (REGISTRY.containsKey(key)) {
                 throw new IllegalStateException("Duplicate item for %s %s".formatted(prefix.name(), material.id()));
             }
-            REGISTRY.put(key, items.register(prefix.idFor(material.id()), () -> prefix.createItem(material)));
+            REGISTRY.put(
+                    key,
+                    items.register(
+                            prefix.idFor(material.id()), () -> new MaterialItem(new Item.Properties(), material)));
         }
         return material;
     }

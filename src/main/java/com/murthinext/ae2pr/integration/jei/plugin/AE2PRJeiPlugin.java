@@ -10,6 +10,7 @@ import com.murthinext.ae2pr.integration.jei.recipe.MultiblockPreviewRecipe;
 import com.murthinext.ae2pr.integration.jei.transfer.CrystalAssemblyLinePatternTransferHandler;
 import com.murthinext.ae2pr.integration.jei.transfer.MultiblockPatternTransferHandler;
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationMode;
+import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerMode;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.registry.ModRecipes;
 import java.util.Collection;
@@ -68,11 +69,8 @@ public class AE2PRJeiPlugin implements IModPlugin {
                         ModMachines.HIGH_REACTIVITY_LAVA_SMELTER_RECIPE.type(),
                         HighReactivityLavaSmelterCategory::new,
                         ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.item().getDefaultInstance()),
-                new MachineCategory(
-                        MatterPhaseTransformerCategory.RECIPE_TYPE,
-                        ModMachines.MATTER_PHASE_TRANSFORMER_RECIPE.type(),
-                        MatterPhaseTransformerCategory::new,
-                        ModMachines.MATTER_PHASE_TRANSFORMER.item().getDefaultInstance()),
+                phaseTransformerCategory(MatterPhaseTransformerMode.MELTING),
+                phaseTransformerCategory(MatterPhaseTransformerMode.MIXING),
                 new MachineCategory(
                         IntegratedMassFabricatorCategory.RECIPE_TYPE,
                         ModMachines.INTEGRATED_MASS_FABRICATOR_RECIPE.type(),
@@ -83,6 +81,14 @@ public class AE2PRJeiPlugin implements IModPlugin {
                         ModMachines.CRYSTAL_ASSEMBLY_LINE_RECIPE.type(),
                         CrystalAssemblyLineCategory::new,
                         ModMachines.CRYSTAL_ASSEMBLY_LINE.block().asItem().getDefaultInstance()));
+    }
+
+    private static MachineCategory phaseTransformerCategory(MatterPhaseTransformerMode mode) {
+        return new MachineCategory(
+                MatterPhaseTransformerCategory.recipeType(mode),
+                mode.recipeType(),
+                helper -> new MatterPhaseTransformerCategory(helper, mode),
+                ModMachines.MATTER_PHASE_TRANSFORMER.item().getDefaultInstance());
     }
 
     @Override

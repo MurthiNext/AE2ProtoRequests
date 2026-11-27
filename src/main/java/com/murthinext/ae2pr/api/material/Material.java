@@ -1,23 +1,26 @@
 package com.murthinext.ae2pr.api.material;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * 材质数据：描述“这个材质存在哪些形态”以及运行时着色。
- * 物品本身由 {@link MaterialItems} 批量生成。
+ * 仅本模组声明生成的物品由 {@link MaterialItems} 注册。
  */
 public final class Material {
 
     private final String id;
-    private final Set<TagPrefix> prefixes;
+    private final Map<TagPrefix, MaterialForm> forms;
     private final int color;
     private final String modelSet;
     private final FluidSpec fluid;
 
-    private Material(String id, Set<TagPrefix> prefixes, int color, String modelSet, FluidSpec fluid) {
+    private Material(String id, Map<TagPrefix, MaterialForm> forms, int color, String modelSet, FluidSpec fluid) {
         this.id = id;
-        this.prefixes = Set.copyOf(prefixes);
+        this.forms = Collections.unmodifiableMap(new LinkedHashMap<>(forms));
         this.color = color;
         this.modelSet = modelSet;
         this.fluid = fluid;
@@ -27,8 +30,13 @@ public final class Material {
         return id;
     }
 
-    public boolean has(TagPrefix prefix) {
-        return prefixes.contains(prefix);
+    public Collection<MaterialForm> forms() {
+        return forms.values();
+    }
+
+    public boolean registersItem(TagPrefix prefix) {
+        MaterialForm form = forms.get(prefix);
+        return form != null && form.registersItem();
     }
 
     public String modelSet() {
@@ -75,7 +83,7 @@ public final class Material {
     public static final class Builder {
 
         private final String id;
-        private final Set<TagPrefix> prefixes = new LinkedHashSet<>();
+        private final Map<TagPrefix, MaterialForm> forms = new LinkedHashMap<>();
         private int color = 0xFFFFFF;
         private String modelSet = "metallic";
         private FluidSpec fluid;
@@ -85,17 +93,42 @@ public final class Material {
         }
 
         public Builder ingot() {
-            prefixes.add(TagPrefix.INGOT);
-            return this;
+            return registerItem(TagPrefix.INGOT);
         }
 
         public Builder plate() {
-            prefixes.add(TagPrefix.PLATE);
-            return this;
+            return registerItem(TagPrefix.PLATE);
         }
 
         public Builder dust() {
-            prefixes.add(TagPrefix.DUST);
+            return registerItem(TagPrefix.DUST);
+        }
+
+        public Builder item(TagPrefix prefix, String itemId, int units) {
+            return addForm(prefix, ResourceLocation.parse(itemId), units, MaterialForm.Source.EXISTING_ITEM);
+        }
+
+        public Builder tag(TagPrefix prefix, String tagId) {
+            return tag(prefix, tagId, 1);
+        }
+
+        public Builder tag(TagPrefix prefix, String tagId, int units) {
+            return addForm(prefix, ResourceLocation.parse(tagId), units, MaterialForm.Source.ITEM_TAG);
+        }
+
+        public Builder optionalStorageBlock() {
+            return addForm(TagPrefix.BLOCK, TagPrefix.BLOCK.tag(id).location(), 9, MaterialForm.Source.OPTIONAL_TAG);
+        }
+
+        private Builder registerItem(TagPrefix prefix) {
+            return addForm(prefix, prefix.tag(id).location(), 1, MaterialForm.Source.REGISTERED_ITEM);
+        }
+
+        private Builder addForm(
+                TagPrefix prefix, ResourceLocation ingredientId, int units, MaterialForm.Source source) {
+            if (forms.putIfAbsent(prefix, new MaterialForm(prefix, ingredientId, units, source)) != null) {
+                throw new IllegalArgumentException("Duplicate material form %s for %s".formatted(prefix.name(), id));
+            }
             return this;
         }
 
@@ -115,7 +148,7 @@ public final class Material {
         }
 
         public Material build() {
-            return new Material(id, prefixes, color, modelSet, fluid);
+            return new Material(id, forms, color, modelSet, fluid);
         }
     }
 }

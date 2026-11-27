@@ -9,7 +9,7 @@
         }
       ],
       "recipe": {
-        "type": "ae2pr:matter_phase_transformer",
+        "type": "ae2pr:matter_phase_transformer_mixing",
         "duration": 100,
         "item_inputs": [
           {
