@@ -4,6 +4,7 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.BlockProperties;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleDefinition;
 import com.murthinext.ae2pr.block.AlienLavaBlock;
+import com.murthinext.ae2pr.block.CarbonFiberMachineFrameBlock;
 import com.murthinext.ae2pr.block.ComputerCasingBlock;
 import com.murthinext.ae2pr.block.DisassemblableBlock;
 import com.murthinext.ae2pr.block.DisassemblableGlassBlock;
@@ -93,6 +94,9 @@ public final class ModBlocks {
 
     public static final RegistryObject<Block> XPV_MACHINE_CASING =
             BLOCKS.register("xpv_machine_casing", () -> new DisassemblableBlock(casingProperties()));
+
+    public static final RegistryObject<CarbonFiberMachineFrameBlock> CARBON_FIBER_MACHINE_FRAME =
+            BLOCKS.register("carbon_fiber_machine_frame", CarbonFiberMachineFrameBlock::new);
 
     public static final RegistryObject<Block> CRYSTAL_ENERGY_CASING =
             BLOCKS.register("crystal_energy_casing", () -> new DisassemblableBlock(casingProperties()));

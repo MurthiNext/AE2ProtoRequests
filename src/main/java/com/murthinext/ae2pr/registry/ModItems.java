@@ -133,6 +133,9 @@ public final class ModItems {
 
     public static final RegistryObject<BlockItem> XPV_MACHINE_CASING = blockItem(ModBlocks.XPV_MACHINE_CASING);
 
+    public static final RegistryObject<BlockItem> CARBON_FIBER_MACHINE_FRAME =
+            blockItem(ModBlocks.CARBON_FIBER_MACHINE_FRAME);
+
     public static final RegistryObject<BlockItem> CRYSTAL_ENERGY_CASING = blockItem(ModBlocks.CRYSTAL_ENERGY_CASING);
 
     public static final RegistryObject<BlockItem> CRYSTAL_ENERGY_INJECTION_CASING =

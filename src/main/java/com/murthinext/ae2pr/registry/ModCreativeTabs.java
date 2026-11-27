@@ -135,6 +135,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get());
                         output.accept(ModItems.AEV_MACHINE_CASING.get());
                         output.accept(ModItems.XPV_MACHINE_CASING.get());
+                        output.accept(ModItems.CARBON_FIBER_MACHINE_FRAME.get());
                         output.accept(ModItems.CRYSTAL_ENERGY_CASING.get());
                         output.accept(ModItems.CRYSTAL_ENERGY_INJECTION_CASING.get());
                         output.accept(ModItems.STABILITY_CASING.get());
