@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.data;
+package com.murthinext.ae2pr.data.advanced_ae;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -19,7 +19,7 @@ import net.minecraft.util.GsonHelper;
 /**
  * 把 AdvancedAE 反应仓配方转写成水晶反应仓配方，配方中出现的其他模组物品自动补 mod_loaded 条件。
  */
-public class AaeReactionRecipeProvider implements DataProvider {
+public class ReactionRecipeProvider implements DataProvider {
 
     private static final int DURATION = 100;
     private static final String RECIPE_TYPE = "ae2pr:crystal_reaction_chamber";
@@ -30,7 +30,7 @@ public class AaeReactionRecipeProvider implements DataProvider {
 
     private final PackOutput output;
 
-    public AaeReactionRecipeProvider(PackOutput output) {
+    public ReactionRecipeProvider(PackOutput output) {
         this.output = output;
     }
 
@@ -40,7 +40,7 @@ public class AaeReactionRecipeProvider implements DataProvider {
                 output.getOutputFolder(PackOutput.Target.DATA_PACK).resolve("ae2pr/recipes/crystal_reaction_chamber");
         Map<String, Integer> usedIds = new HashMap<>();
         List<CompletableFuture<?>> writes = new ArrayList<>();
-        for (AaeReactionRecipes.Reaction reaction : AaeReactionRecipes.readAll()) {
+        for (ReactionRecipes.Reaction reaction : ReactionRecipes.readAll()) {
             JsonObject recipe = convert(reaction);
             Set<String> mods = requiredMods(reaction);
             JsonObject json = mods.isEmpty() ? recipe : conditional(recipe, mods);
@@ -54,7 +54,7 @@ public class AaeReactionRecipeProvider implements DataProvider {
         return "AE2 Proto Requests AdvancedAE Reaction Chamber Recipes";
     }
 
-    private static JsonObject convert(AaeReactionRecipes.Reaction reaction) {
+    private static JsonObject convert(ReactionRecipes.Reaction reaction) {
         JsonObject json = new JsonObject();
         json.addProperty("type", RECIPE_TYPE);
         json.addProperty("duration", DURATION);
@@ -134,7 +134,7 @@ public class AaeReactionRecipeProvider implements DataProvider {
     }
 
     // 配方里出现的其他模组命名空间都需要对应的模组
-    private static Set<String> requiredMods(AaeReactionRecipes.Reaction reaction) {
+    private static Set<String> requiredMods(ReactionRecipes.Reaction reaction) {
         Set<String> mods = new LinkedHashSet<>(reaction.conditions());
         for (JsonObject input : reaction.inputs()) {
             collectNamespaces(GsonHelper.getAsJsonObject(input, "ingredient"), mods);
@@ -165,7 +165,7 @@ public class AaeReactionRecipeProvider implements DataProvider {
     }
 
     // 同名产物按读取顺序加序号，保证输出文件名稳定
-    private static String nextId(AaeReactionRecipes.Reaction reaction, Map<String, Integer> usedIds) {
+    private static String nextId(ReactionRecipes.Reaction reaction, Map<String, Integer> usedIds) {
         ResourceLocation outputId = ResourceLocation.parse(GsonHelper.getAsString(reaction.output(), "id"));
         String base = reaction.source() + "_" + outputId.getPath();
         int index = usedIds.merge(base, 1, Integer::sum);

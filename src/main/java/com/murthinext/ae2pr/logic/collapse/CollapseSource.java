@@ -3,7 +3,7 @@ package com.murthinext.ae2pr.logic.collapse;
 import appeng.api.behaviors.GenericInternalInventory;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.GenericStack;
-import com.murthinext.ae2pr.api.collapse.Collapsible;
+
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.resources.ResourceLocation;

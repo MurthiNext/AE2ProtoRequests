@@ -1,6 +1,7 @@
 package com.murthinext.ae2pr.data;
 
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.data.advanced_ae.ReactionRecipeProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -13,7 +14,7 @@ public final class ModDataGen {
         if (event.includeServer()) {
             var generator = event.getGenerator();
             generator.addProvider(true, new MaterialRecipeProvider(generator.getPackOutput()));
-            generator.addProvider(true, new AaeReactionRecipeProvider(generator.getPackOutput()));
+            generator.addProvider(true, new ReactionRecipeProvider(generator.getPackOutput()));
         }
     }
 

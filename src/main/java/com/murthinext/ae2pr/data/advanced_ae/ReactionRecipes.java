@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.data;
+package com.murthinext.ae2pr.data.advanced_ae;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * 数据生成阶段直接读取模组文件中的反应仓配方，不加载这些模组。
  */
-public final class AaeReactionRecipes {
+public final class ReactionRecipes {
 
     private static final String JARS_PROPERTY = "ae2pr.recipeSources";
     private static final List<String> RECIPE_DIRS = List.of("data/advanced_ae/recipes/", "data/advanced_ae/recipe/");
@@ -33,7 +33,7 @@ public final class AaeReactionRecipes {
     private static final String CONDITIONAL_TYPE = "forge:conditional";
     private static final String MOD_LOADED_CONDITION = "forge:mod_loaded";
 
-    private AaeReactionRecipes() {}
+    private ReactionRecipes() {}
 
     public record Reaction(
             String source,
