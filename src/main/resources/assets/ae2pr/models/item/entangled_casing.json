@@ -1,6 +1,6 @@
 {
-  "parent": "ae2pr:block/entangled_casing",
-  "textures": {
-    "all": "ae2pr:block/entangled_casing"
-  }
+    "parent": "ae2pr:block/entangled_casing",
+    "textures": {
+        "all": "ae2pr:block/entangled_casing"
+    }
 }

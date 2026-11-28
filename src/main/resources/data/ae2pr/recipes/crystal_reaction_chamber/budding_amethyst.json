@@ -1,27 +1,27 @@
 {
-  "type": "ae2pr:crystal_reaction_chamber",
-  "duration": 100,
-  "energy": 5000000,
-  "item_inputs": [
-    {
-      "tag": "forge:storage_blocks/amethyst",
-      "count": 4
-    },
-    {
-      "item": "ae2pr:crystaline",
-      "count": 4
-    }
-  ],
-  "fluid_inputs": [
-    {
-      "fluid": "minecraft:water",
-      "amount": 32000
-    }
-  ],
-  "item_outputs": [
-    {
-      "item": "minecraft:budding_amethyst",
-      "count": 4
-    }
-  ]
+    "type": "ae2pr:crystal_reaction_chamber",
+    "duration": 100,
+    "energy": 5000000,
+    "item_inputs": [
+        {
+            "tag": "forge:storage_blocks/amethyst",
+            "count": 4
+        },
+        {
+            "item": "ae2pr:crystaline",
+            "count": 4
+        }
+    ],
+    "fluid_inputs": [
+        {
+            "fluid": "minecraft:water",
+            "amount": 32000
+        }
+    ],
+    "item_outputs": [
+        {
+            "item": "minecraft:budding_amethyst",
+            "count": 4
+        }
+    ]
 }

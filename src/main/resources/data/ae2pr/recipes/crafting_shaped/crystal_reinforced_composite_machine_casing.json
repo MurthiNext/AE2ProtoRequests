@@ -1,23 +1,23 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "CAC",
-    "ABA",
-    "CAC"
-  ],
-  "key": {
-    "A": {
-      "tag": "ae2:all_certus_quartz"
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "CAC",
+        "ABA",
+        "CAC"
+    ],
+    "key": {
+        "A": {
+            "tag": "ae2:all_certus_quartz"
+        },
+        "B": {
+            "item": "ae2pr:dense_sky_stone_block"
+        },
+        "C": {
+            "item": "ae2pr:meteor_steel_ingot"
+        }
     },
-    "B": {
-      "item": "ae2pr:dense_sky_stone_block"
-    },
-    "C": {
-      "item": "ae2pr:meteor_steel_ingot"
+    "result": {
+        "item": "ae2pr:crystal_reinforced_composite_machine_casing",
+        "count": 2
     }
-  },
-  "result": {
-    "item": "ae2pr:crystal_reinforced_composite_machine_casing",
-    "count": 2
-  }
 }

@@ -1,15 +1,15 @@
 {
-  "type": "ae2:inscriber",
-  "ingredients": {
-    "middle": {
-      "tag": "forge:ingots/amethyst_steel"
+    "type": "ae2:inscriber",
+    "ingredients": {
+        "middle": {
+            "tag": "forge:ingots/amethyst_steel"
+        },
+        "top": {
+            "item": "ae2pr:single_plate_press"
+        }
     },
-    "top": {
-      "item": "ae2pr:single_plate_press"
+    "mode": "inscribe",
+    "result": {
+        "item": "ae2pr:amethyst_steel_plate"
     }
-  },
-  "mode": "inscribe",
-  "result": {
-    "item": "ae2pr:amethyst_steel_plate"
-  }
 }

@@ -1,20 +1,20 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "BAB",
-    "ABA",
-    "BAB"
-  ],
-  "key": {
-    "A": {
-      "item": "ae2pr:crystal_glass"
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "BAB",
+        "ABA",
+        "BAB"
+    ],
+    "key": {
+        "A": {
+            "item": "ae2pr:crystal_glass"
+        },
+        "B": {
+            "item": "ae2pr:zircon_dust"
+        }
     },
-    "B": {
-      "item": "ae2pr:zircon_dust"
+    "result": {
+        "item": "ae2pr:fireproof_crystal_glass",
+        "count": 4
     }
-  },
-  "result": {
-    "item": "ae2pr:fireproof_crystal_glass",
-    "count": 4
-  }
 }

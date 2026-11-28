@@ -1,7 +1,7 @@
 {
-  "replace": false,
-  "values": [
-    "ae2pr:alien_lava",
-    "ae2pr:flowing_alien_lava"
-  ]
+    "replace": false,
+    "values": [
+        "ae2pr:alien_lava",
+        "ae2pr:flowing_alien_lava"
+    ]
 }

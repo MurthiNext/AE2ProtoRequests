@@ -1,14 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "ae2:level_emitter"
-    },
-    {
-      "item": "ae2:engineering_processor"
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "ae2:level_emitter"
+        },
+        {
+            "item": "ae2:engineering_processor"
+        }
+    ],
+    "result": {
+        "item": "ae2pr:multi_level_emitter"
     }
-  ],
-  "result": {
-    "item": "ae2pr:multi_level_emitter"
-  }
 }

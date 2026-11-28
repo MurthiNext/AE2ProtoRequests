@@ -1,16 +1,16 @@
 {
-  "type": "ae2pr:matter_phase_transformer_melting",
-  "energy": 50000,
-  "fluid_outputs": [
-    {
-      "amount": 144,
-      "fluid": "ae2pr:liquid_fluix_crystal"
-    }
-  ],
-  "item_inputs": [
-    {
-      "count": 1,
-      "tag": "ae2:all_fluix"
-    }
-  ]
+    "type": "ae2pr:matter_phase_transformer_melting",
+    "energy": 50000,
+    "fluid_outputs": [
+        {
+            "amount": 144,
+            "fluid": "ae2pr:liquid_fluix_crystal"
+        }
+    ],
+    "item_inputs": [
+        {
+            "count": 1,
+            "tag": "ae2:all_fluix"
+        }
+    ]
 }

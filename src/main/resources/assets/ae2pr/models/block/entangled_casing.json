@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "ae2pr:block/entangled_casing_idle"
-  }
+    "parent": "minecraft:block/cube_all",
+    "textures": {
+        "all": "ae2pr:block/entangled_casing_idle"
+    }
 }

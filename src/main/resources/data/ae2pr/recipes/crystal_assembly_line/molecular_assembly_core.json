@@ -1,27 +1,27 @@
 {
-  "type": "ae2pr:crystal_assembly_line",
-  "duration": 60,
-  "energy": 100000,
-  "module_requirements": [
-    {
-      "module": "ae2pr:charging",
-      "min_level": 1
-    }
-  ],
-  "item_inputs": [
-    {
-      "item": "ae2:molecular_assembler",
-      "count": 1
-    },
-    {
-      "item": "ae2pr:high_energy_singularity",
-      "count": 1
-    }
-  ],
-  "item_outputs": [
-    {
-      "item": "ae2pr:molecular_assembly_core",
-      "count": 1
-    }
-  ]
+    "type": "ae2pr:crystal_assembly_line",
+    "duration": 60,
+    "energy": 100000,
+    "module_requirements": [
+        {
+            "module": "ae2pr:charging",
+            "min_level": 1
+        }
+    ],
+    "item_inputs": [
+        {
+            "item": "ae2:molecular_assembler",
+            "count": 1
+        },
+        {
+            "item": "ae2pr:high_energy_singularity",
+            "count": 1
+        }
+    ],
+    "item_outputs": [
+        {
+            "item": "ae2pr:molecular_assembly_core",
+            "count": 1
+        }
+    ]
 }

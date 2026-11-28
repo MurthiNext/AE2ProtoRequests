@@ -1,36 +1,36 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
+    "type": "forge:conditional",
+    "recipes": [
         {
-          "type": "forge:mod_loaded",
-          "modid": "advanced_ae"
+            "conditions": [
+                {
+                    "type": "forge:mod_loaded",
+                    "modid": "advanced_ae"
+                }
+            ],
+            "recipe": {
+                "type": "ae2pr:crystal_reaction_chamber",
+                "duration": 100,
+                "energy": 20000,
+                "fluid_inputs": [
+                    {
+                        "amount": 4000,
+                        "fluid": "minecraft:water"
+                    }
+                ],
+                "fluid_outputs": [
+                    {
+                        "amount": 1000,
+                        "fluid": "advanced_ae:quantum_infusion_source"
+                    }
+                ],
+                "item_inputs": [
+                    {
+                        "count": 1,
+                        "item": "advanced_ae:quantum_infused_dust"
+                    }
+                ]
+            }
         }
-      ],
-      "recipe": {
-        "type": "ae2pr:crystal_reaction_chamber",
-        "duration": 100,
-        "energy": 20000,
-        "fluid_inputs": [
-          {
-            "amount": 4000,
-            "fluid": "minecraft:water"
-          }
-        ],
-        "fluid_outputs": [
-          {
-            "amount": 1000,
-            "fluid": "advanced_ae:quantum_infusion_source"
-          }
-        ],
-        "item_inputs": [
-          {
-            "count": 1,
-            "item": "advanced_ae:quantum_infused_dust"
-          }
-        ]
-      }
-    }
-  ]
+    ]
 }

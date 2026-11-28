@@ -1,5 +1,5 @@
 {
-  "textures": {
-    "particle": "ae2pr:block/fluid/alien_lava_still"
-  }
+    "textures": {
+        "particle": "ae2pr:block/fluid/alien_lava_still"
+    }
 }

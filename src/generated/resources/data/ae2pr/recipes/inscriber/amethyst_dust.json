@@ -1,12 +1,12 @@
 {
-  "type": "ae2:inscriber",
-  "ingredients": {
-    "middle": {
-      "item": "minecraft:amethyst_shard"
+    "type": "ae2:inscriber",
+    "ingredients": {
+        "middle": {
+            "item": "minecraft:amethyst_shard"
+        }
+    },
+    "mode": "inscribe",
+    "result": {
+        "item": "ae2pr:amethyst_dust"
     }
-  },
-  "mode": "inscribe",
-  "result": {
-    "item": "ae2pr:amethyst_dust"
-  }
 }

@@ -1,24 +1,24 @@
 {
-  "type": "ae2pr:high_reactivity_lava_smelter",
-  "duration": 300,
-  "item_inputs": [
-    {
-      "tag": "forge:dusts/zircon",
-      "count": 16
-    },
-    {
-      "tag": "forge:dusts/carbon",
-      "count": 6
-    }
-  ],
-  "item_outputs": [
-    {
-      "item": "ae2pr:zirconium_ingot",
-      "count": 12
-    },
-    {
-      "item": "ae2pr:carbon_zirconium_mixture_dust",
-      "count": 4
-    }
-  ]
+    "type": "ae2pr:high_reactivity_lava_smelter",
+    "duration": 300,
+    "item_inputs": [
+        {
+            "tag": "forge:dusts/zircon",
+            "count": 16
+        },
+        {
+            "tag": "forge:dusts/carbon",
+            "count": 6
+        }
+    ],
+    "item_outputs": [
+        {
+            "item": "ae2pr:zirconium_ingot",
+            "count": 12
+        },
+        {
+            "item": "ae2pr:carbon_zirconium_mixture_dust",
+            "count": 4
+        }
+    ]
 }

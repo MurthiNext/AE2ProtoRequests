@@ -1,20 +1,20 @@
 {
-  "type": "ae2pr:high_reactivity_lava_smelter",
-  "duration": 600,
-  "item_inputs": [
-    {
-      "item": "minecraft:iron_ingot",
-      "count": 10
-    },
-    {
-      "tag": "forge:dusts/amethyst",
-      "count": 8
-    }
-  ],
-  "item_outputs": [
-    {
-      "item": "ae2pr:amethyst_steel_ingot",
-      "count": 10
-    }
-  ]
+    "type": "ae2pr:high_reactivity_lava_smelter",
+    "duration": 600,
+    "item_inputs": [
+        {
+            "item": "minecraft:iron_ingot",
+            "count": 10
+        },
+        {
+            "tag": "forge:dusts/amethyst",
+            "count": 8
+        }
+    ],
+    "item_outputs": [
+        {
+            "item": "ae2pr:amethyst_steel_ingot",
+            "count": 10
+        }
+    ]
 }

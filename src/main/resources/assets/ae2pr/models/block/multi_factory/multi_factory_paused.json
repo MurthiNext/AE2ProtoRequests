@@ -1,7 +1,7 @@
 {
-  "parent": "ae2pr:block/multi_factory/multi_factory",
-  "textures": {
-    "overlay_front": "ae2pr:block/controller_front/amethyst_process_paused",
-    "overlay_front_emissive": "ae2pr:block/controller_front/amethyst_process_paused_emissive"
-  }
+    "parent": "ae2pr:block/multi_factory/multi_factory",
+    "textures": {
+        "overlay_front": "ae2pr:block/controller_front/amethyst_process_paused",
+        "overlay_front_emissive": "ae2pr:block/controller_front/amethyst_process_paused_emissive"
+    }
 }

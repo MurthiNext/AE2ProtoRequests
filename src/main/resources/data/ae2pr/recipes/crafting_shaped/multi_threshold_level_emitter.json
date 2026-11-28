@@ -1,25 +1,25 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " B ",
-    "DCD",
-    " A "
-  ],
-  "key": {
-    "A": {
-      "item": "ae2:calculation_processor"
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " B ",
+        "DCD",
+        " A "
+    ],
+    "key": {
+        "A": {
+            "item": "ae2:calculation_processor"
+        },
+        "B": {
+            "item": "ae2:engineering_processor"
+        },
+        "C": {
+            "item": "ae2:level_emitter"
+        },
+        "D": {
+            "item": "minecraft:redstone_torch"
+        }
     },
-    "B": {
-      "item": "ae2:engineering_processor"
-    },
-    "C": {
-      "item": "ae2:level_emitter"
-    },
-    "D": {
-      "item": "minecraft:redstone_torch"
+    "result": {
+        "item": "ae2pr:multi_threshold_level_emitter"
     }
-  },
-  "result": {
-    "item": "ae2pr:multi_threshold_level_emitter"
-  }
 }

@@ -1,14 +1,19 @@
 {
-  "entry": "about_kanata",
-  "title": "关于：Kanata",
-  "position": 1,
-  "links": ["ae2pr:maybe_introduction"],
-  "layout": {
-    "relative_to": "ae2pr:maybe_introduction",
-    "anchor": "up-right",
-    "distance": [1, 0.75]
-  },
-  "visible_when": {
-    "completed": "ae2pr:maybe_introduction"
-  }
+    "entry": "about_kanata",
+    "title": "关于：Kanata",
+    "position": 1,
+    "links": [
+        "ae2pr:maybe_introduction"
+    ],
+    "layout": {
+        "relative_to": "ae2pr:maybe_introduction",
+        "anchor": "up-right",
+        "distance": [
+            1,
+            0.75
+        ]
+    },
+    "visible_when": {
+        "completed": "ae2pr:maybe_introduction"
+    }
 }

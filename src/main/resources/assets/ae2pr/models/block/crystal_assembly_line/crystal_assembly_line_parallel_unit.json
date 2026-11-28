@@ -1,8 +1,8 @@
 {
-  "render_type": "cutout_mipped",
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "ae2pr:block/crystal_assembly_line/parallel_unit"
-  },
-  "ambientocclusion": true
+    "render_type": "cutout_mipped",
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "ae2pr:block/crystal_assembly_line/parallel_unit"
+    },
+    "ambientocclusion": true
 }

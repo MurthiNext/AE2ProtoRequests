@@ -1,25 +1,25 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "DCD",
-    "ABA",
-    "DCD"
-  ],
-  "key": {
-    "A": {
-      "item": "ae2:export_bus"
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "DCD",
+        "ABA",
+        "DCD"
+    ],
+    "key": {
+        "A": {
+            "item": "ae2:export_bus"
+        },
+        "B": {
+            "item": "ae2pr:crystal_reinforced_composite_machine_casing"
+        },
+        "C": {
+            "item": "minecraft:bucket"
+        },
+        "D": {
+            "item": "ae2:spatial_cell_component_2"
+        }
     },
-    "B": {
-      "item": "ae2pr:crystal_reinforced_composite_machine_casing"
-    },
-    "C": {
-      "item": "minecraft:bucket"
-    },
-    "D": {
-      "item": "ae2:spatial_cell_component_2"
+    "result": {
+        "item": "ae2pr:certus_quartz_crystal_output_hatch"
     }
-  },
-  "result": {
-    "item": "ae2pr:certus_quartz_crystal_output_hatch"
-  }
 }

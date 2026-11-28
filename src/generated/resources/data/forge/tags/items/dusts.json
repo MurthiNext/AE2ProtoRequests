@@ -1,22 +1,22 @@
 {
-  "values": [
-    "#forge:dusts/meteor_steel",
-    "#forge:dusts/zirconium",
-    "#forge:dusts/zirconium_iron_alloy",
-    "#forge:dusts/amethyst_steel",
-    "#forge:dusts/crystal_steel",
-    "#forge:dusts/strontium",
-    "#forge:dusts/barium",
-    "#forge:dusts/amethyst",
-    "#forge:dusts/coal",
-    "#forge:dusts/carbon",
-    "#forge:dusts/carbon_zirconium_mixture",
-    "#forge:dusts/zircon",
-    "#forge:dusts/copper_oxide",
-    "#forge:dusts/iron_oxide",
-    "#forge:dusts/gold_oxide",
-    "#forge:dusts/pseudo_strontianite",
-    "#forge:dusts/strontium_carbonate",
-    "#forge:dusts/barium_sulfate"
-  ]
+    "values": [
+        "#forge:dusts/meteor_steel",
+        "#forge:dusts/zirconium",
+        "#forge:dusts/zirconium_iron_alloy",
+        "#forge:dusts/amethyst_steel",
+        "#forge:dusts/crystal_steel",
+        "#forge:dusts/strontium",
+        "#forge:dusts/barium",
+        "#forge:dusts/amethyst",
+        "#forge:dusts/coal",
+        "#forge:dusts/carbon",
+        "#forge:dusts/carbon_zirconium_mixture",
+        "#forge:dusts/zircon",
+        "#forge:dusts/copper_oxide",
+        "#forge:dusts/iron_oxide",
+        "#forge:dusts/gold_oxide",
+        "#forge:dusts/pseudo_strontianite",
+        "#forge:dusts/strontium_carbonate",
+        "#forge:dusts/barium_sulfate"
+    ]
 }

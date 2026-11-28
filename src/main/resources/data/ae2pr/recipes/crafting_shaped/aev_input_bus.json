@@ -1,22 +1,22 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "CAC",
-    "ABA",
-    "CAC"
-  ],
-  "key": {
-    "A": {
-      "item": "ae2:import_bus"
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "CAC",
+        "ABA",
+        "CAC"
+    ],
+    "key": {
+        "A": {
+            "item": "ae2:import_bus"
+        },
+        "B": {
+            "item": "ae2pr:aev_machine_casing"
+        },
+        "C": {
+            "item": "ae2:cell_component_1k"
+        }
     },
-    "B": {
-      "item": "ae2pr:aev_machine_casing"
-    },
-    "C": {
-      "item": "ae2:cell_component_1k"
+    "result": {
+        "item": "ae2pr:aev_input_bus"
     }
-  },
-  "result": {
-    "item": "ae2pr:aev_input_bus"
-  }
 }

@@ -1,145 +1,253 @@
 {
-  "sources": [
-    {
-      "type": "single",
-      "resource": "ae2pr:block/crystal_reinforced_composite_machine_casing_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/crystal_glass_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/fireproof_crystal_glass_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/aev_machine_casing_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/xpv_machine_casing_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/crystal_energy_casing_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/zirconia_corundum_bricks_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/zirconium_iron_alloy_machine_casing_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/stability_casing_ctm"
-    },
-    {
-      "type": "unstitch",
-      "resource": "ae2pr:block/entangled_casing",
-      "divisor_y": 8,
-      "regions": [
-        { "sprite": "ae2pr:block/entangled_casing_idle", "x": 0, "y": 0, "width": 1, "height": 1 }
-      ]
-    },
-    {
-      "type": "unstitch",
-      "resource": "ae2pr:block/entangled_casing_ctm",
-      "divisor_y": 8,
-      "regions": [
-        { "sprite": "ae2pr:block/entangled_casing_idle_ctm", "x": 0, "y": 0, "width": 1, "height": 1 }
-      ]
-    },
-    {
-      "type": "unstitch",
-      "resource": "ae2pr:ctm/entangled_casing_pulse",
-      "divisor_x": 4,
-      "divisor_y": 16,
-      "regions": [
-        { "sprite": "ae2pr:block/entangled_casing_pulse/0", "x": 0, "y": 0, "width": 1, "height": 1 },
-        { "sprite": "ae2pr:block/entangled_casing_pulse/1", "x": 0, "y": 2, "width": 1, "height": 1 },
-        { "sprite": "ae2pr:block/entangled_casing_pulse/2", "x": 0, "y": 4, "width": 1, "height": 1 },
-        { "sprite": "ae2pr:block/entangled_casing_pulse/3", "x": 0, "y": 6, "width": 1, "height": 1 },
-        { "sprite": "ae2pr:block/entangled_casing_pulse/4", "x": 0, "y": 8, "width": 1, "height": 1 },
-        { "sprite": "ae2pr:block/entangled_casing_pulse/5", "x": 0, "y": 10, "width": 1, "height": 1 },
-        { "sprite": "ae2pr:block/entangled_casing_pulse/6", "x": 0, "y": 12, "width": 1, "height": 1 },
-        { "sprite": "ae2pr:block/entangled_casing_pulse/7", "x": 0, "y": 14, "width": 1, "height": 1 },
-        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_0", "x": 2, "y": 0, "width": 2, "height": 2 },
-        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_1", "x": 2, "y": 2, "width": 2, "height": 2 },
-        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_2", "x": 2, "y": 4, "width": 2, "height": 2 },
-        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_3", "x": 2, "y": 6, "width": 2, "height": 2 },
-        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_4", "x": 2, "y": 8, "width": 2, "height": 2 },
-        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_5", "x": 2, "y": 10, "width": 2, "height": 2 },
-        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_6", "x": 2, "y": 12, "width": 2, "height": 2 },
-        { "sprite": "ae2pr:block/entangled_casing_pulse/ctm_7", "x": 2, "y": 14, "width": 2, "height": 2 }
-      ]
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/me_computer_casing/front_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/me_computer_casing/back_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/me_computer_casing/side_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/me_computer_casing/top_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/me_computer_casing/bottom_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/me_advanced_computer_casing/front_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/me_advanced_computer_casing/back_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/me_advanced_computer_casing/side_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/me_advanced_computer_casing/top_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/me_advanced_computer_casing/bottom_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/meteor_steel_pipe_block/side_ctm"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/crystal_workstation/panel_face"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/naming_factory/machine"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/naming_factory/rod"
-    },
-    {
-      "type": "single",
-      "resource": "ae2pr:block/naming_factory/glass"
-    },
-    {
-      "type": "directory",
-      "source": "block/multi_factory/multi_factory",
-      "prefix": "block/multi_factory/"
-    }
-  ]
+    "sources": [
+        {
+            "type": "single",
+            "resource": "ae2pr:block/crystal_reinforced_composite_machine_casing_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/crystal_glass_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/fireproof_crystal_glass_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/aev_machine_casing_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/xpv_machine_casing_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/crystal_energy_casing_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/zirconia_corundum_bricks_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/zirconium_iron_alloy_machine_casing_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/stability_casing_ctm"
+        },
+        {
+            "type": "unstitch",
+            "resource": "ae2pr:block/entangled_casing",
+            "divisor_y": 8,
+            "regions": [
+                {
+                    "sprite": "ae2pr:block/entangled_casing_idle",
+                    "x": 0,
+                    "y": 0,
+                    "width": 1,
+                    "height": 1
+                }
+            ]
+        },
+        {
+            "type": "unstitch",
+            "resource": "ae2pr:block/entangled_casing_ctm",
+            "divisor_y": 8,
+            "regions": [
+                {
+                    "sprite": "ae2pr:block/entangled_casing_idle_ctm",
+                    "x": 0,
+                    "y": 0,
+                    "width": 1,
+                    "height": 1
+                }
+            ]
+        },
+        {
+            "type": "unstitch",
+            "resource": "ae2pr:ctm/entangled_casing_pulse",
+            "divisor_x": 4,
+            "divisor_y": 16,
+            "regions": [
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/0",
+                    "x": 0,
+                    "y": 0,
+                    "width": 1,
+                    "height": 1
+                },
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/1",
+                    "x": 0,
+                    "y": 2,
+                    "width": 1,
+                    "height": 1
+                },
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/2",
+                    "x": 0,
+                    "y": 4,
+                    "width": 1,
+                    "height": 1
+                },
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/3",
+                    "x": 0,
+                    "y": 6,
+                    "width": 1,
+                    "height": 1
+                },
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/4",
+                    "x": 0,
+                    "y": 8,
+                    "width": 1,
+                    "height": 1
+                },
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/5",
+                    "x": 0,
+                    "y": 10,
+                    "width": 1,
+                    "height": 1
+                },
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/6",
+                    "x": 0,
+                    "y": 12,
+                    "width": 1,
+                    "height": 1
+                },
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/7",
+                    "x": 0,
+                    "y": 14,
+                    "width": 1,
+                    "height": 1
+                },
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/ctm_0",
+                    "x": 2,
+                    "y": 0,
+                    "width": 2,
+                    "height": 2
+                },
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/ctm_1",
+                    "x": 2,
+                    "y": 2,
+                    "width": 2,
+                    "height": 2
+                },
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/ctm_2",
+                    "x": 2,
+                    "y": 4,
+                    "width": 2,
+                    "height": 2
+                },
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/ctm_3",
+                    "x": 2,
+                    "y": 6,
+                    "width": 2,
+                    "height": 2
+                },
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/ctm_4",
+                    "x": 2,
+                    "y": 8,
+                    "width": 2,
+                    "height": 2
+                },
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/ctm_5",
+                    "x": 2,
+                    "y": 10,
+                    "width": 2,
+                    "height": 2
+                },
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/ctm_6",
+                    "x": 2,
+                    "y": 12,
+                    "width": 2,
+                    "height": 2
+                },
+                {
+                    "sprite": "ae2pr:block/entangled_casing_pulse/ctm_7",
+                    "x": 2,
+                    "y": 14,
+                    "width": 2,
+                    "height": 2
+                }
+            ]
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/me_computer_casing/front_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/me_computer_casing/back_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/me_computer_casing/side_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/me_computer_casing/top_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/me_computer_casing/bottom_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/me_advanced_computer_casing/front_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/me_advanced_computer_casing/back_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/me_advanced_computer_casing/side_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/me_advanced_computer_casing/top_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/me_advanced_computer_casing/bottom_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/meteor_steel_pipe_block/side_ctm"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/crystal_workstation/panel_face"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/naming_factory/machine"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/naming_factory/rod"
+        },
+        {
+            "type": "single",
+            "resource": "ae2pr:block/naming_factory/glass"
+        },
+        {
+            "type": "directory",
+            "source": "block/multi_factory/multi_factory",
+            "prefix": "block/multi_factory/"
+        }
+    ]
 }

@@ -1,15 +1,17 @@
 {
-  "$schema": "schema.json",
-  "includes": ["level_emitter.json"],
-  "text": {
-    "dialog_title": {
-      "text": {
-        "translate": "gui.ae2pr.multi_level_emitter"
-      },
-      "position": {
-        "left": 8,
-        "top": 6
-      }
+    "$schema": "schema.json",
+    "includes": [
+        "level_emitter.json"
+    ],
+    "text": {
+        "dialog_title": {
+            "text": {
+                "translate": "gui.ae2pr.multi_level_emitter"
+            },
+            "position": {
+                "left": 8,
+                "top": 6
+            }
+        }
     }
-  }
 }

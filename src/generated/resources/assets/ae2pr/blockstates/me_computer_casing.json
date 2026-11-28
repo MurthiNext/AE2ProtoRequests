@@ -1,0 +1,23 @@
+{
+    "variants": {
+        "facing=east": {
+            "model": "ae2pr:block/me_computer_casing",
+            "uvlock": true,
+            "y": 90
+        },
+        "facing=north": {
+            "model": "ae2pr:block/me_computer_casing",
+            "uvlock": true
+        },
+        "facing=south": {
+            "model": "ae2pr:block/me_computer_casing",
+            "uvlock": true,
+            "y": 180
+        },
+        "facing=west": {
+            "model": "ae2pr:block/me_computer_casing",
+            "uvlock": true,
+            "y": 270
+        }
+    }
+}

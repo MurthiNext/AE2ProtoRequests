@@ -1,14 +1,19 @@
 {
-  "entry": "maybe_introduction",
-  "title": "背景介绍？",
-  "position": 1,
-  "links": ["ae2pr:welcome"],
-  "layout": {
-    "relative_to": "ae2pr:welcome",
-    "anchor": "center-right",
-    "distance": [1, 1]
-  },
-  "visible_when": {
-    "completed": "ae2pr:welcome"
-  }
+    "entry": "maybe_introduction",
+    "title": "背景介绍？",
+    "position": 1,
+    "links": [
+        "ae2pr:welcome"
+    ],
+    "layout": {
+        "relative_to": "ae2pr:welcome",
+        "anchor": "center-right",
+        "distance": [
+            1,
+            1
+        ]
+    },
+    "visible_when": {
+        "completed": "ae2pr:welcome"
+    }
 }

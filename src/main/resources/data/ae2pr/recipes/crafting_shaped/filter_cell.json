@@ -1,25 +1,25 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "BCB",
-    "CAC",
-    "DDD"
-  ],
-  "key": {
-    "A": {
-      "tag": "ae2:all_fluix"
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "BCB",
+        "CAC",
+        "DDD"
+    ],
+    "key": {
+        "A": {
+            "tag": "ae2:all_fluix"
+        },
+        "B": {
+            "item": "ae2:quartz_glass"
+        },
+        "C": {
+            "tag": "forge:dusts/redstone"
+        },
+        "D": {
+            "tag": "forge:ingots/iron"
+        }
     },
-    "B": {
-      "item": "ae2:quartz_glass"
-    },
-    "C": {
-      "tag": "forge:dusts/redstone"
-    },
-    "D": {
-      "tag": "forge:ingots/iron"
+    "result": {
+        "item": "ae2pr:filter_cell"
     }
-  },
-  "result": {
-    "item": "ae2pr:filter_cell"
-  }
 }

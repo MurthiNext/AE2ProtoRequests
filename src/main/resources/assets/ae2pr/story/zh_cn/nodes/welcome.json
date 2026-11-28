@@ -1,9 +1,9 @@
 {
-  "entry": "welcome",
-  "title": "初次见面，欢迎回来",
-  "position": 0,
-  "layout": {
-    "x": 42,
-    "y": 140
-  }
+    "entry": "welcome",
+    "title": "初次见面，欢迎回来",
+    "position": 0,
+    "layout": {
+        "x": 42,
+        "y": 140
+    }
 }

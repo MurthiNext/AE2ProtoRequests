@@ -1,14 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "ae2pr:filter_cell"
-    },
-    {
-      "item": "ae2:engineering_processor"
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "ae2pr:filter_cell"
+        },
+        {
+            "item": "ae2:engineering_processor"
+        }
+    ],
+    "result": {
+        "item": "ae2pr:advanced_filter_cell"
     }
-  ],
-  "result": {
-    "item": "ae2pr:advanced_filter_cell"
-  }
 }

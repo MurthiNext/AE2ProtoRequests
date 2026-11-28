@@ -1,33 +1,53 @@
 {
-  "textures": {
-    "indicator": "ae2pr:part/level_emitter_sides_status_on"
-  },
-  "elements": [
-    {
-      "from": [7, 7, 4],
-      "to": [9, 9, 5],
-      "faces": {
-        "down": {
-          "texture": "#indicator",
-          "tintindex": 3,
-          "forge_data": { "block_light": 15, "sky_light": 15 }
-        },
-        "up": {
-          "texture": "#indicator",
-          "tintindex": 3,
-          "forge_data": { "block_light": 15, "sky_light": 15 }
-        },
-        "east": {
-          "texture": "#indicator",
-          "tintindex": 3,
-          "forge_data": { "block_light": 15, "sky_light": 15 }
-        },
-        "west": {
-          "texture": "#indicator",
-          "tintindex": 3,
-          "forge_data": { "block_light": 15, "sky_light": 15 }
+    "textures": {
+        "indicator": "ae2pr:part/level_emitter_sides_status_on"
+    },
+    "elements": [
+        {
+            "from": [
+                7,
+                7,
+                4
+            ],
+            "to": [
+                9,
+                9,
+                5
+            ],
+            "faces": {
+                "down": {
+                    "texture": "#indicator",
+                    "tintindex": 3,
+                    "forge_data": {
+                        "block_light": 15,
+                        "sky_light": 15
+                    }
+                },
+                "up": {
+                    "texture": "#indicator",
+                    "tintindex": 3,
+                    "forge_data": {
+                        "block_light": 15,
+                        "sky_light": 15
+                    }
+                },
+                "east": {
+                    "texture": "#indicator",
+                    "tintindex": 3,
+                    "forge_data": {
+                        "block_light": 15,
+                        "sky_light": 15
+                    }
+                },
+                "west": {
+                    "texture": "#indicator",
+                    "tintindex": 3,
+                    "forge_data": {
+                        "block_light": 15,
+                        "sky_light": 15
+                    }
+                }
+            }
         }
-      }
-    }
-  ]
+    ]
 }

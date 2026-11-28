@@ -1,11 +1,11 @@
 {
-  "values": [
-    "#forge:ingots/meteor_steel",
-    "#forge:ingots/zirconium",
-    "#forge:ingots/zirconium_iron_alloy",
-    "#forge:ingots/amethyst_steel",
-    "#forge:ingots/crystal_steel",
-    "#forge:ingots/strontium",
-    "#forge:ingots/barium"
-  ]
+    "values": [
+        "#forge:ingots/meteor_steel",
+        "#forge:ingots/zirconium",
+        "#forge:ingots/zirconium_iron_alloy",
+        "#forge:ingots/amethyst_steel",
+        "#forge:ingots/crystal_steel",
+        "#forge:ingots/strontium",
+        "#forge:ingots/barium"
+    ]
 }

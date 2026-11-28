@@ -1,15 +1,15 @@
 {
-  "type": "ae2:inscriber",
-  "ingredients": {
-    "middle": {
-      "tag": "forge:ingots/zirconium"
+    "type": "ae2:inscriber",
+    "ingredients": {
+        "middle": {
+            "tag": "forge:ingots/zirconium"
+        },
+        "top": {
+            "item": "ae2pr:single_plate_press"
+        }
     },
-    "top": {
-      "item": "ae2pr:single_plate_press"
+    "mode": "inscribe",
+    "result": {
+        "item": "ae2pr:zirconium_plate"
     }
-  },
-  "mode": "inscribe",
-  "result": {
-    "item": "ae2pr:zirconium_plate"
-  }
 }

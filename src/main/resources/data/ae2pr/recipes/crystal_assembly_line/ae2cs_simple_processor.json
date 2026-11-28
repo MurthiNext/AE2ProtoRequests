@@ -1,38 +1,38 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
+    "type": "forge:conditional",
+    "recipes": [
         {
-          "type": "forge:mod_loaded",
-          "modid": "ae2cs"
+            "conditions": [
+                {
+                    "type": "forge:mod_loaded",
+                    "modid": "ae2cs"
+                }
+            ],
+            "recipe": {
+                "type": "ae2pr:crystal_assembly_line",
+                "duration": 50,
+                "energy": 51200,
+                "item_inputs": [
+                    {
+                        "tag": "forge:plates/silicon",
+                        "count": 32
+                    },
+                    {
+                        "tag": "forge:dusts/redstone",
+                        "count": 32
+                    },
+                    {
+                        "item": "ae2cs:simple_circuit_print",
+                        "count": 32
+                    }
+                ],
+                "item_outputs": [
+                    {
+                        "item": "ae2cs:simple_processor",
+                        "count": 32
+                    }
+                ]
+            }
         }
-      ],
-      "recipe": {
-        "type": "ae2pr:crystal_assembly_line",
-        "duration": 50,
-        "energy": 51200,
-        "item_inputs": [
-          {
-            "tag": "forge:plates/silicon",
-            "count": 32
-          },
-          {
-            "tag": "forge:dusts/redstone",
-            "count": 32
-          },
-          {
-            "item": "ae2cs:simple_circuit_print",
-            "count": 32
-          }
-        ],
-        "item_outputs": [
-          {
-            "item": "ae2cs:simple_processor",
-            "count": 32
-          }
-        ]
-      }
-    }
-  ]
+    ]
 }

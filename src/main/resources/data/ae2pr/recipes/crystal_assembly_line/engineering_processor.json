@@ -1,25 +1,25 @@
 {
-  "type": "ae2pr:crystal_assembly_line",
-  "duration": 50,
-  "energy": 51200,
-  "item_inputs": [
-    {
-      "tag": "forge:plates/silicon",
-      "count": 32
-    },
-    {
-      "tag": "forge:dusts/redstone",
-      "count": 32
-    },
-    {
-      "item": "ae2:printed_engineering_processor",
-      "count": 32
-    }
-  ],
-  "item_outputs": [
-    {
-      "item": "ae2:engineering_processor",
-      "count": 32
-    }
-  ]
+    "type": "ae2pr:crystal_assembly_line",
+    "duration": 50,
+    "energy": 51200,
+    "item_inputs": [
+        {
+            "tag": "forge:plates/silicon",
+            "count": 32
+        },
+        {
+            "tag": "forge:dusts/redstone",
+            "count": 32
+        },
+        {
+            "item": "ae2:printed_engineering_processor",
+            "count": 32
+        }
+    ],
+    "item_outputs": [
+        {
+            "item": "ae2:engineering_processor",
+            "count": 32
+        }
+    ]
 }

@@ -1,44 +1,44 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
+    "type": "forge:conditional",
+    "recipes": [
         {
-          "type": "forge:mod_loaded",
-          "modid": "advanced_ae"
+            "conditions": [
+                {
+                    "type": "forge:mod_loaded",
+                    "modid": "advanced_ae"
+                }
+            ],
+            "recipe": {
+                "type": "ae2pr:crystal_reaction_chamber",
+                "duration": 100,
+                "energy": 200000,
+                "fluid_inputs": [
+                    {
+                        "amount": 100,
+                        "fluid": "minecraft:lava"
+                    }
+                ],
+                "item_inputs": [
+                    {
+                        "count": 1,
+                        "item": "ae2:singularity"
+                    },
+                    {
+                        "count": 2,
+                        "tag": "forge:dusts/ender_pearl"
+                    },
+                    {
+                        "count": 2,
+                        "item": "ae2:sky_dust"
+                    }
+                ],
+                "item_outputs": [
+                    {
+                        "count": 2,
+                        "item": "advanced_ae:shattered_singularity"
+                    }
+                ]
+            }
         }
-      ],
-      "recipe": {
-        "type": "ae2pr:crystal_reaction_chamber",
-        "duration": 100,
-        "energy": 200000,
-        "fluid_inputs": [
-          {
-            "amount": 100,
-            "fluid": "minecraft:lava"
-          }
-        ],
-        "item_inputs": [
-          {
-            "count": 1,
-            "item": "ae2:singularity"
-          },
-          {
-            "count": 2,
-            "tag": "forge:dusts/ender_pearl"
-          },
-          {
-            "count": 2,
-            "item": "ae2:sky_dust"
-          }
-        ],
-        "item_outputs": [
-          {
-            "count": 2,
-            "item": "advanced_ae:shattered_singularity"
-          }
-        ]
-      }
-    }
-  ]
+    ]
 }

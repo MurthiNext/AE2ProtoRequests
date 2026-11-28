@@ -1,6 +1,6 @@
 {
-  "parent": "ae2pr:block/machine_part/input_bus",
-  "textures": {
-    "all": "ae2pr:block/aev_machine_casing"
-  }
+    "parent": "ae2pr:block/machine_part/input_bus",
+    "textures": {
+        "all": "ae2pr:block/aev_machine_casing"
+    }
 }

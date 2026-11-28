@@ -1,44 +1,44 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
+    "type": "forge:conditional",
+    "recipes": [
         {
-          "type": "forge:mod_loaded",
-          "modid": "appflux"
+            "conditions": [
+                {
+                    "type": "forge:mod_loaded",
+                    "modid": "appflux"
+                }
+            ],
+            "recipe": {
+                "type": "ae2pr:crystal_reaction_chamber",
+                "duration": 100,
+                "energy": 20000,
+                "fluid_inputs": [
+                    {
+                        "amount": 500,
+                        "fluid": "minecraft:water"
+                    }
+                ],
+                "item_inputs": [
+                    {
+                        "count": 16,
+                        "item": "minecraft:redstone_block"
+                    },
+                    {
+                        "count": 16,
+                        "item": "ae2:fluix_crystal"
+                    },
+                    {
+                        "count": 16,
+                        "item": "minecraft:glowstone_dust"
+                    }
+                ],
+                "item_outputs": [
+                    {
+                        "count": 64,
+                        "item": "appflux:redstone_crystal"
+                    }
+                ]
+            }
         }
-      ],
-      "recipe": {
-        "type": "ae2pr:crystal_reaction_chamber",
-        "duration": 100,
-        "energy": 20000,
-        "fluid_inputs": [
-          {
-            "amount": 500,
-            "fluid": "minecraft:water"
-          }
-        ],
-        "item_inputs": [
-          {
-            "count": 16,
-            "item": "minecraft:redstone_block"
-          },
-          {
-            "count": 16,
-            "item": "ae2:fluix_crystal"
-          },
-          {
-            "count": 16,
-            "item": "minecraft:glowstone_dust"
-          }
-        ],
-        "item_outputs": [
-          {
-            "count": 64,
-            "item": "appflux:redstone_crystal"
-          }
-        ]
-      }
-    }
-  ]
+    ]
 }

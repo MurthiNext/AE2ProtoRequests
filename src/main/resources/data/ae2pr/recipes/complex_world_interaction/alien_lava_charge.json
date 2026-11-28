@@ -1,21 +1,21 @@
 {
-  "type": "ae2pr:complex_world_interaction",
-  "circumstance": {
-    "type": "fluid",
-    "tag": "minecraft:lava",
-    "source_only": true
-  },
-  "item_inputs": [
-    {
-      "item": "ae2:sky_dust",
-      "count": 32
-    }
-  ],
-  "item_outputs": [],
-  "fluid_outputs": [
-    {
-      "amount": 1000,
-      "fluid": "ae2pr:alien_lava"
-    }
-  ]
+    "type": "ae2pr:complex_world_interaction",
+    "circumstance": {
+        "type": "fluid",
+        "tag": "minecraft:lava",
+        "source_only": true
+    },
+    "item_inputs": [
+        {
+            "item": "ae2:sky_dust",
+            "count": 32
+        }
+    ],
+    "item_outputs": [],
+    "fluid_outputs": [
+        {
+            "amount": 1000,
+            "fluid": "ae2pr:alien_lava"
+        }
+    ]
 }

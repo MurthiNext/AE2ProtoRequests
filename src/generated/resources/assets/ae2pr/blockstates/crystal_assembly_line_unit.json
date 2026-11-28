@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "active=false": {
+            "model": "ae2pr:block/crystal_assembly_line/crystal_assembly_line_unit"
+        },
+        "active=true": {
+            "model": "ae2pr:block/crystal_assembly_line/crystal_assembly_line_unit_active"
+        }
+    }
+}

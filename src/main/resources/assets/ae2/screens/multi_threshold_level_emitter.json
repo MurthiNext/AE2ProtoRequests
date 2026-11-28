@@ -1,33 +1,35 @@
 {
-  "$schema": "schema.json",
-  "includes": ["level_emitter.json"],
-  "text": {
-    "dialog_title": {
-      "text": {
-        "translate": "gui.ae2pr.multi_threshold_level_emitter"
-      },
-      "position": {
-        "left": 8,
-        "top": 6
-      }
-    },
-    "upper_label": {
-      "text": {
-        "translate": "gui.ae2pr.multi_threshold_level_emitter.upper"
-      },
-      "position": {
-        "left": 8,
-        "top": 26
-      }
-    },
-    "lower_label": {
-      "text": {
-        "translate": "gui.ae2pr.multi_threshold_level_emitter.lower"
-      },
-      "position": {
-        "left": 8,
-        "top": 58
-      }
+    "$schema": "schema.json",
+    "includes": [
+        "level_emitter.json"
+    ],
+    "text": {
+        "dialog_title": {
+            "text": {
+                "translate": "gui.ae2pr.multi_threshold_level_emitter"
+            },
+            "position": {
+                "left": 8,
+                "top": 6
+            }
+        },
+        "upper_label": {
+            "text": {
+                "translate": "gui.ae2pr.multi_threshold_level_emitter.upper"
+            },
+            "position": {
+                "left": 8,
+                "top": 26
+            }
+        },
+        "lower_label": {
+            "text": {
+                "translate": "gui.ae2pr.multi_threshold_level_emitter.lower"
+            },
+            "position": {
+                "left": 8,
+                "top": 58
+            }
+        }
     }
-  }
 }

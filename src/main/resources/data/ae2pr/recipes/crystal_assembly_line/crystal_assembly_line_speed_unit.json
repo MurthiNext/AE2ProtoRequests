@@ -1,25 +1,25 @@
 {
-  "type": "ae2pr:crystal_assembly_line",
-  "duration": 100,
-  "energy": 1000000,
-  "item_inputs": [
-    {
-      "item": "ae2pr:crystal_assembly_line_unit",
-      "count": 1
-    },
-    {
-      "item": "ae2:speed_card",
-      "count": 32
-    },
-    {
-      "tag": "ae2pr:circuits/aev_d1",
-      "count": 2
-    }
-  ],
-  "item_outputs": [
-    {
-      "item": "ae2pr:crystal_assembly_line_speed_unit",
-      "count": 1
-    }
-  ]
+    "type": "ae2pr:crystal_assembly_line",
+    "duration": 100,
+    "energy": 1000000,
+    "item_inputs": [
+        {
+            "item": "ae2pr:crystal_assembly_line_unit",
+            "count": 1
+        },
+        {
+            "item": "ae2:speed_card",
+            "count": 32
+        },
+        {
+            "tag": "ae2pr:circuits/aev_d1",
+            "count": 2
+        }
+    ],
+    "item_outputs": [
+        {
+            "item": "ae2pr:crystal_assembly_line_speed_unit",
+            "count": 1
+        }
+    ]
 }

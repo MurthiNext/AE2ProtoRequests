@@ -1,25 +1,25 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "BCB",
-    "ADA",
-    "BCB"
-  ],
-  "key": {
-    "A": {
-      "tag": "ae2:all_fluix"
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "BCB",
+        "ADA",
+        "BCB"
+    ],
+    "key": {
+        "A": {
+            "tag": "ae2:all_fluix"
+        },
+        "B": {
+            "item": "ae2pr:aev_machine_casing"
+        },
+        "C": {
+            "tag": "ae2pr:circuits/aev"
+        },
+        "D": {
+            "item": "ae2pr:crystal_assembly_line_unit"
+        }
     },
-    "B": {
-      "item": "ae2pr:aev_machine_casing"
-    },
-    "C": {
-      "tag": "ae2pr:circuits/aev"
-    },
-    "D": {
-      "item": "ae2pr:crystal_assembly_line_unit"
+    "result": {
+        "item": "ae2pr:crystal_assembly_line"
     }
-  },
-  "result": {
-    "item": "ae2pr:crystal_assembly_line"
-  }
 }

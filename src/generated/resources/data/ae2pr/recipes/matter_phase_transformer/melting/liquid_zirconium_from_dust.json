@@ -1,16 +1,16 @@
 {
-  "type": "ae2pr:matter_phase_transformer_melting",
-  "energy": 50000,
-  "fluid_outputs": [
-    {
-      "amount": 144,
-      "fluid": "ae2pr:liquid_zirconium"
-    }
-  ],
-  "item_inputs": [
-    {
-      "count": 1,
-      "tag": "forge:dusts/zirconium"
-    }
-  ]
+    "type": "ae2pr:matter_phase_transformer_melting",
+    "energy": 50000,
+    "fluid_outputs": [
+        {
+            "amount": 144,
+            "fluid": "ae2pr:liquid_zirconium"
+        }
+    ],
+    "item_inputs": [
+        {
+            "count": 1,
+            "tag": "forge:dusts/zirconium"
+        }
+    ]
 }

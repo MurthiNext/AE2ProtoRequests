@@ -1,0 +1,16 @@
+{
+    "values": [
+        "ae2pr:meteor_steel_block",
+        "ae2pr:meteor_steel_pipe_block",
+        "ae2pr:zircon_block",
+        "ae2pr:filter_press_plate",
+        "ae2pr:molecular_assembly_core",
+        "ae2pr:zirconia_corundum_bricks",
+        "ae2pr:filter_press",
+        "ae2pr:jig",
+        "ae2pr:crystal_reaction_chamber",
+        "ae2pr:matter_phase_transformer",
+        "ae2pr:high_reactivity_lava_smelter",
+        "ae2pr:crystal_workstation"
+    ]
+}

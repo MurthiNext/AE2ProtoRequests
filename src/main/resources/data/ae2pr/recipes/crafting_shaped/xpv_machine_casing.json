@@ -1,20 +1,20 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "BBB",
-    "BAB",
-    "BBB"
-  ],
-  "key": {
-    "A": {
-      "item": "ae2pr:carbon_fiber_machine_frame"
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "BBB",
+        "BAB",
+        "BBB"
+    ],
+    "key": {
+        "A": {
+            "item": "ae2pr:carbon_fiber_machine_frame"
+        },
+        "B": {
+            "tag": "forge:plates/strontium"
+        }
     },
-    "B": {
-      "tag": "forge:plates/strontium"
+    "result": {
+        "item": "ae2pr:xpv_machine_casing",
+        "count": 2
     }
-  },
-  "result": {
-    "item": "ae2pr:xpv_machine_casing",
-    "count": 2
-  }
 }

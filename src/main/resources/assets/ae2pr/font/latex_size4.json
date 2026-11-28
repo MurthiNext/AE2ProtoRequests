@@ -5,7 +5,10 @@
             "file": "ae2pr:katex_size4.ttf",
             "size": 30.6384,
             "oversample": 2,
-            "shift": [0, -7.8724]
+            "shift": [
+                0,
+                -7.8724
+            ]
         },
         {
             "type": "reference",

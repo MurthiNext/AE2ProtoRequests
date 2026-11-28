@@ -17,14 +17,18 @@ public final class ModDataGen {
 
         if (event.includeServer()) {
             generator.addProvider(true, new MaterialRecipeProvider(output));
-            generator.addProvider(true, new MeltingRecipeProvider(output));
             generator.addProvider(
                     true, new MaterialTagProvider(output, event.getLookupProvider(), ae2pr.MODID, existingFileHelper));
             generator.addProvider(true, new ReactionRecipeProvider(output));
+            generator.addProvider(true, ModBlockLoot.provider(output));
+            generator.addProvider(
+                    true, new ModBlockTagsProvider(output, event.getLookupProvider(), existingFileHelper));
         }
 
         if (event.includeClient()) {
             generator.addProvider(true, new MaterialModelProvider(output, ae2pr.MODID, existingFileHelper));
+            generator.addProvider(true, new ModItemModelProvider(output, ae2pr.MODID, existingFileHelper));
+            generator.addProvider(true, new ModBlockStateProvider(output, ae2pr.MODID, existingFileHelper));
         }
     }
 

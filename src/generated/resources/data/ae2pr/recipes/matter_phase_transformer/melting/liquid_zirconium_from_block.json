@@ -1,25 +1,25 @@
 {
-  "type": "ae2pr:matter_phase_transformer_melting",
-  "conditions": [
-    {
-      "type": "forge:not",
-      "value": {
-        "type": "forge:tag_empty",
-        "tag": "forge:storage_blocks/zirconium"
-      }
-    }
-  ],
-  "energy": 450000,
-  "fluid_outputs": [
-    {
-      "amount": 1296,
-      "fluid": "ae2pr:liquid_zirconium"
-    }
-  ],
-  "item_inputs": [
-    {
-      "count": 1,
-      "tag": "forge:storage_blocks/zirconium"
-    }
-  ]
+    "type": "ae2pr:matter_phase_transformer_melting",
+    "conditions": [
+        {
+            "type": "forge:not",
+            "value": {
+                "type": "forge:tag_empty",
+                "tag": "forge:storage_blocks/zirconium"
+            }
+        }
+    ],
+    "energy": 450000,
+    "fluid_outputs": [
+        {
+            "amount": 1296,
+            "fluid": "ae2pr:liquid_zirconium"
+        }
+    ],
+    "item_inputs": [
+        {
+            "count": 1,
+            "tag": "forge:storage_blocks/zirconium"
+        }
+    ]
 }

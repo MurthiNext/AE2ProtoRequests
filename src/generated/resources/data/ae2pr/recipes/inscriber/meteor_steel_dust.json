@@ -1,12 +1,12 @@
 {
-  "type": "ae2:inscriber",
-  "ingredients": {
-    "middle": {
-      "tag": "forge:ingots/meteor_steel"
+    "type": "ae2:inscriber",
+    "ingredients": {
+        "middle": {
+            "tag": "forge:ingots/meteor_steel"
+        }
+    },
+    "mode": "inscribe",
+    "result": {
+        "item": "ae2pr:meteor_steel_dust"
     }
-  },
-  "mode": "inscribe",
-  "result": {
-    "item": "ae2pr:meteor_steel_dust"
-  }
 }

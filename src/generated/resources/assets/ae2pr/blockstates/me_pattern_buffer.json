@@ -1,0 +1,60 @@
+{
+    "variants": {
+        "facing=down,formed=false": {
+            "model": "ae2pr:block/me_pattern_buffer",
+            "uvlock": true,
+            "x": 90
+        },
+        "facing=down,formed=true": {
+            "model": "ae2pr:block/me_pattern_buffer_formed",
+            "uvlock": true,
+            "x": 90
+        },
+        "facing=east,formed=false": {
+            "model": "ae2pr:block/me_pattern_buffer",
+            "uvlock": true,
+            "y": 90
+        },
+        "facing=east,formed=true": {
+            "model": "ae2pr:block/me_pattern_buffer_formed",
+            "uvlock": true,
+            "y": 90
+        },
+        "facing=north,formed=false": {
+            "model": "ae2pr:block/me_pattern_buffer"
+        },
+        "facing=north,formed=true": {
+            "model": "ae2pr:block/me_pattern_buffer_formed"
+        },
+        "facing=south,formed=false": {
+            "model": "ae2pr:block/me_pattern_buffer",
+            "uvlock": true,
+            "y": 180
+        },
+        "facing=south,formed=true": {
+            "model": "ae2pr:block/me_pattern_buffer_formed",
+            "uvlock": true,
+            "y": 180
+        },
+        "facing=up,formed=false": {
+            "model": "ae2pr:block/me_pattern_buffer",
+            "uvlock": true,
+            "x": 270
+        },
+        "facing=up,formed=true": {
+            "model": "ae2pr:block/me_pattern_buffer_formed",
+            "uvlock": true,
+            "x": 270
+        },
+        "facing=west,formed=false": {
+            "model": "ae2pr:block/me_pattern_buffer",
+            "uvlock": true,
+            "y": 270
+        },
+        "facing=west,formed=true": {
+            "model": "ae2pr:block/me_pattern_buffer_formed",
+            "uvlock": true,
+            "y": 270
+        }
+    }
+}

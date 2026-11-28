@@ -1,24 +1,24 @@
 {
-  "type": "ae2pr:high_reactivity_lava_smelter",
-  "duration": 400,
-  "item_inputs": [
-    {
-      "item": "ae2pr:meteor_steel_ingot",
-      "count": 2
-    },
-    {
-      "item": "ae2pr:zircon_brick",
-      "count": 1
-    },
-    {
-      "item": "ae2:certus_quartz_dust",
-      "count": 16
-    }
-  ],
-  "item_outputs": [
-    {
-      "item": "ae2pr:zirconia_corundum_bricks",
-      "count": 1
-    }
-  ]
+    "type": "ae2pr:high_reactivity_lava_smelter",
+    "duration": 400,
+    "item_inputs": [
+        {
+            "item": "ae2pr:meteor_steel_ingot",
+            "count": 2
+        },
+        {
+            "item": "ae2pr:zircon_brick",
+            "count": 1
+        },
+        {
+            "item": "ae2:certus_quartz_dust",
+            "count": 16
+        }
+    ],
+    "item_outputs": [
+        {
+            "item": "ae2pr:zirconia_corundum_bricks",
+            "count": 1
+        }
+    ]
 }

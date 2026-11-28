@@ -1,22 +1,22 @@
 {
-  "type": "ae2pr:high_reactivity_lava_smelter",
-  "duration": 200,
-  "item_inputs": [
-    {
-      "item": "ae2:singularity",
-      "count": 1
-    }
-  ],
-  "fluid_inputs": [
-    {
-      "fluid": "ae2pr:liquid_crystaline",
-      "amount": 144
-    }
-  ],
-  "item_outputs": [
-    {
-      "item": "ae2pr:crystaline",
-      "count": 1
-    }
-  ]
+    "type": "ae2pr:high_reactivity_lava_smelter",
+    "duration": 200,
+    "item_inputs": [
+        {
+            "item": "ae2:singularity",
+            "count": 1
+        }
+    ],
+    "fluid_inputs": [
+        {
+            "fluid": "ae2pr:liquid_crystaline",
+            "amount": 144
+        }
+    ],
+    "item_outputs": [
+        {
+            "item": "ae2pr:crystaline",
+            "count": 1
+        }
+    ]
 }

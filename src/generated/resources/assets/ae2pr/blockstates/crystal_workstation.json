@@ -1,0 +1,76 @@
+{
+    "variants": {
+        "facing=east,paused=false,running=false": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation",
+            "uvlock": true,
+            "y": 90
+        },
+        "facing=east,paused=false,running=true": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation_active",
+            "uvlock": true,
+            "y": 90
+        },
+        "facing=east,paused=true,running=false": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation_paused",
+            "uvlock": true,
+            "y": 90
+        },
+        "facing=east,paused=true,running=true": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation_active",
+            "uvlock": true,
+            "y": 90
+        },
+        "facing=north,paused=false,running=false": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation"
+        },
+        "facing=north,paused=false,running=true": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation_active"
+        },
+        "facing=north,paused=true,running=false": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation_paused"
+        },
+        "facing=north,paused=true,running=true": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation_active"
+        },
+        "facing=south,paused=false,running=false": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation",
+            "uvlock": true,
+            "y": 180
+        },
+        "facing=south,paused=false,running=true": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation_active",
+            "uvlock": true,
+            "y": 180
+        },
+        "facing=south,paused=true,running=false": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation_paused",
+            "uvlock": true,
+            "y": 180
+        },
+        "facing=south,paused=true,running=true": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation_active",
+            "uvlock": true,
+            "y": 180
+        },
+        "facing=west,paused=false,running=false": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation",
+            "uvlock": true,
+            "y": 270
+        },
+        "facing=west,paused=false,running=true": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation_active",
+            "uvlock": true,
+            "y": 270
+        },
+        "facing=west,paused=true,running=false": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation_paused",
+            "uvlock": true,
+            "y": 270
+        },
+        "facing=west,paused=true,running=true": {
+            "model": "ae2pr:block/crystal_workstation/crystal_workstation_active",
+            "uvlock": true,
+            "y": 270
+        }
+    }
+}

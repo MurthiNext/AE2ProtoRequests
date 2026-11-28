@@ -1,16 +1,16 @@
 {
-  "type": "ae2pr:matter_phase_transformer_melting",
-  "energy": 200000,
-  "fluid_outputs": [
-    {
-      "amount": 576,
-      "fluid": "ae2pr:liquid_amethyst"
-    }
-  ],
-  "item_inputs": [
-    {
-      "count": 1,
-      "item": "minecraft:amethyst_block"
-    }
-  ]
+    "type": "ae2pr:matter_phase_transformer_melting",
+    "energy": 200000,
+    "fluid_outputs": [
+        {
+            "amount": 576,
+            "fluid": "ae2pr:liquid_amethyst"
+        }
+    ],
+    "item_inputs": [
+        {
+            "count": 1,
+            "item": "minecraft:amethyst_block"
+        }
+    ]
 }

@@ -1,19 +1,19 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " A ",
-    "ABA",
-    " A "
-  ],
-  "key": {
-    "A": {
-      "item": "ae2:molecular_assembler"
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " A ",
+        "ABA",
+        " A "
+    ],
+    "key": {
+        "A": {
+            "item": "ae2:molecular_assembler"
+        },
+        "B": {
+            "item": "ae2pr:crystal_assembly_line_casing"
+        }
     },
-    "B": {
-      "item": "ae2pr:crystal_assembly_line_casing"
+    "result": {
+        "item": "ae2pr:crystal_assembly_line_unit"
     }
-  },
-  "result": {
-    "item": "ae2pr:crystal_assembly_line_unit"
-  }
 }

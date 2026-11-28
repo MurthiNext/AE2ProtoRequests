@@ -1,18 +1,18 @@
 {
-  "type": "ae2:inscriber",
-  "ingredients": {
-    "bottom": {
-      "item": "ae2:printed_silicon"
+    "type": "ae2:inscriber",
+    "ingredients": {
+        "bottom": {
+            "item": "ae2:printed_silicon"
+        },
+        "middle": {
+            "item": "minecraft:redstone"
+        },
+        "top": {
+            "item": "ae2pr:printed_logistics_processor"
+        }
     },
-    "middle": {
-      "item": "minecraft:redstone"
-    },
-    "top": {
-      "item": "ae2pr:printed_logistics_processor"
+    "mode": "press",
+    "result": {
+        "item": "ae2pr:logistics_processor"
     }
-  },
-  "mode": "press",
-  "result": {
-    "item": "ae2pr:logistics_processor"
-  }
 }

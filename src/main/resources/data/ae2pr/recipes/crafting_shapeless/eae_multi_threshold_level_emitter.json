@@ -1,27 +1,27 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
+    "type": "forge:conditional",
+    "recipes": [
         {
-          "type": "forge:mod_loaded",
-          "modid": "expatternprovider"
+            "conditions": [
+                {
+                    "type": "forge:mod_loaded",
+                    "modid": "expatternprovider"
+                }
+            ],
+            "recipe": {
+                "type": "minecraft:crafting_shapeless",
+                "ingredients": [
+                    {
+                        "item": "expatternprovider:threshold_level_emitter"
+                    },
+                    {
+                        "item": "ae2:engineering_processor"
+                    }
+                ],
+                "result": {
+                    "item": "ae2pr:multi_threshold_level_emitter"
+                }
+            }
         }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shapeless",
-        "ingredients": [
-          {
-            "item": "expatternprovider:threshold_level_emitter"
-          },
-          {
-            "item": "ae2:engineering_processor"
-          }
-        ],
-        "result": {
-          "item": "ae2pr:multi_threshold_level_emitter"
-        }
-      }
-    }
-  ]
+    ]
 }

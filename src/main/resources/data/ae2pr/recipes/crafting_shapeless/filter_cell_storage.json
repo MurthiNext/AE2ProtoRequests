@@ -1,14 +1,14 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "ae2:item_cell_housing"
-    },
-    {
-      "tag": "ae2:all_fluix"
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        {
+            "item": "ae2:item_cell_housing"
+        },
+        {
+            "tag": "ae2:all_fluix"
+        }
+    ],
+    "result": {
+        "item": "ae2pr:filter_cell"
     }
-  ],
-  "result": {
-    "item": "ae2pr:filter_cell"
-  }
 }

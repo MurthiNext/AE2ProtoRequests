@@ -1,24 +1,24 @@
 {
-  "type": "ae2pr:high_reactivity_lava_smelter",
-  "duration": 100,
-  "item_inputs": [
-    {
-      "item": "ae2pr:zirconium_ingot",
-      "count": 1
-    },
-    {
-      "tag": "forge:silicon",
-      "count": 2
-    },
-    {
-      "item": "minecraft:iron_ingot",
-      "count": 4
-    }
-  ],
-  "item_outputs": [
-    {
-      "item": "ae2pr:zirconium_iron_alloy_ingot",
-      "count": 5
-    }
-  ]
+    "type": "ae2pr:high_reactivity_lava_smelter",
+    "duration": 100,
+    "item_inputs": [
+        {
+            "item": "ae2pr:zirconium_ingot",
+            "count": 1
+        },
+        {
+            "tag": "forge:silicon",
+            "count": 2
+        },
+        {
+            "item": "minecraft:iron_ingot",
+            "count": 4
+        }
+    ],
+    "item_outputs": [
+        {
+            "item": "ae2pr:zirconium_iron_alloy_ingot",
+            "count": 5
+        }
+    ]
 }

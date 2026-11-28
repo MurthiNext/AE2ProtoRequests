@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "ae2pr:block/stability_casing"
-  }
+    "parent": "minecraft:block/cube_all",
+    "textures": {
+        "all": "ae2pr:block/stability_casing"
+    }
 }

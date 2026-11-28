@@ -1,31 +1,31 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "FDF",
-    "BCB",
-    "EAE"
-  ],
-  "key": {
-    "A": {
-      "tag": "ae2:all_fluix"
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "FDF",
+        "BCB",
+        "EAE"
+    ],
+    "key": {
+        "A": {
+            "tag": "ae2:all_fluix"
+        },
+        "B": {
+            "item": "ae2:crafting_accelerator"
+        },
+        "C": {
+            "item": "ae2:engineering_processor"
+        },
+        "D": {
+            "tag": "ae2:interface"
+        },
+        "E": {
+            "tag": "forge:ingots/copper"
+        },
+        "F": {
+            "tag": "forge:ingots/iron"
+        }
     },
-    "B": {
-      "item": "ae2:crafting_accelerator"
-    },
-    "C": {
-      "item": "ae2:engineering_processor"
-    },
-    "D": {
-      "tag": "ae2:interface"
-    },
-    "E": {
-      "tag": "forge:ingots/copper"
-    },
-    "F": {
-      "tag": "forge:ingots/iron"
+    "result": {
+        "item": "ae2pr:redstone_requester"
     }
-  },
-  "result": {
-    "item": "ae2pr:redstone_requester"
-  }
 }

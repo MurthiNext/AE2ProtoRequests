@@ -1,25 +1,33 @@
 {
-  "textures": {
-    "indicator": "ae2pr:part/level_emitter_sides_status_off"
-  },
-  "elements": [
-    {
-      "from": [7, 7, 4],
-      "to": [9, 9, 5],
-      "faces": {
-        "down": {
-          "texture": "#indicator"
-        },
-        "up": {
-          "texture": "#indicator"
-        },
-        "east": {
-          "texture": "#indicator"
-        },
-        "west": {
-          "texture": "#indicator"
+    "textures": {
+        "indicator": "ae2pr:part/level_emitter_sides_status_off"
+    },
+    "elements": [
+        {
+            "from": [
+                7,
+                7,
+                4
+            ],
+            "to": [
+                9,
+                9,
+                5
+            ],
+            "faces": {
+                "down": {
+                    "texture": "#indicator"
+                },
+                "up": {
+                    "texture": "#indicator"
+                },
+                "east": {
+                    "texture": "#indicator"
+                },
+                "west": {
+                    "texture": "#indicator"
+                }
+            }
         }
-      }
-    }
-  ]
+    ]
 }
