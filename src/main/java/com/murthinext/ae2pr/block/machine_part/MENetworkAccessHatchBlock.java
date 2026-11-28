@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.block.machine_part;
 
 import appeng.block.AEBaseEntityBlock;
 import com.murthinext.ae2pr.api.wrench.Wrenchable;
-import com.murthinext.ae2pr.block.StabilityCasingBlock;
+import com.murthinext.ae2pr.block.casing.StabilityCasingBlock;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

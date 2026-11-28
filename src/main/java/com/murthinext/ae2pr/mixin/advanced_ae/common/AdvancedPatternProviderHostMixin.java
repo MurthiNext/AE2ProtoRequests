@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.mixin.advanced_ae.common;
 
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.IUpgradeableObject;
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import com.murthinext.ae2pr.item.upgrade.SuperStackSupport;
 import net.pedroksl.advanced_ae.common.logic.AdvPatternProviderLogic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;

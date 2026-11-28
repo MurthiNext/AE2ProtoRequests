@@ -5,7 +5,7 @@ import appeng.api.parts.SelectedPart;
 import appeng.api.upgrades.IUpgradeableObject;
 import appeng.items.materials.UpgradeCardItem;
 import appeng.util.InteractionUtil;
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import com.murthinext.ae2pr.item.upgrade.SuperStackSupport;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;

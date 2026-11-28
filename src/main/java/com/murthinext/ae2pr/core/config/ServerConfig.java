@@ -10,7 +10,7 @@ import com.murthinext.ae2pr.api.upgrade.MachineUpgradeDefinition;
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineStructure;
 import com.murthinext.ae2pr.core.network.ServerConfigSyncPacket;
-import com.murthinext.ae2pr.core.registry.ModNetwork;
+import com.murthinext.ae2pr.core.network.ModNetwork;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;

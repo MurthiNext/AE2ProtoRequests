@@ -8,7 +8,7 @@ import static com.murthinext.ae2pr.block.machine_part.MachinePartBlock.STYLE;
 import com.murthinext.ae2pr.api.BlockProperties;
 import com.murthinext.ae2pr.api.wrench.WrenchTags;
 import com.murthinext.ae2pr.api.wrench.Wrenchable;
-import com.murthinext.ae2pr.block.StabilityCasingBlock;
+import com.murthinext.ae2pr.block.casing.StabilityCasingBlock;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

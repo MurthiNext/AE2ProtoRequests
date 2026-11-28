@@ -8,8 +8,8 @@ import static com.murthinext.ae2pr.block.machine_part.MEPatternBufferBlockEntity
 import static com.murthinext.ae2pr.block.machine_part.MEPatternBufferBlockEntity.SIZE;
 
 import appeng.api.crafting.PatternDetailsHelper;
-import com.murthinext.ae2pr.core.network.PatternBufferFluidPacket;
-import com.murthinext.ae2pr.core.registry.ModNetwork;
+import com.murthinext.ae2pr.block.machine_part.network.PatternBufferFluidPacket;
+import com.murthinext.ae2pr.core.network.ModNetwork;
 import com.murthinext.nextui.layout.PlayerInventoryLayout;
 import java.util.Arrays;
 import net.minecraft.core.BlockPos;

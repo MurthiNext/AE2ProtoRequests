@@ -4,15 +4,15 @@ import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.item.ComputationCellComponentItem;
 import com.murthinext.ae2pr.item.CrystalProcessorItem;
-import com.murthinext.ae2pr.item.collapsed_storage_cell.CollapsedItemStorageCellItem;
+import com.murthinext.ae2pr.item.cell.collapsed.CollapsedCellItem;
 import com.murthinext.ae2pr.item.crystaline.CrystalineItem;
-import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
-import com.murthinext.ae2pr.item.filter_cell.FilterCellItem;
-import com.murthinext.ae2pr.item.level_emitter.MultiLevelEmitterPartItem;
-import com.murthinext.ae2pr.item.level_emitter.MultiThresholdLevelEmitterPartItem;
+import com.murthinext.ae2pr.item.cell.filter.AdvancedFilterCellItem;
+import com.murthinext.ae2pr.item.cell.filter.FilterCellItem;
+import com.murthinext.ae2pr.cable_part.level_emitter.MultiLevelEmitterPartItem;
+import com.murthinext.ae2pr.cable_part.level_emitter.MultiThresholdLevelEmitterPartItem;
 import com.murthinext.ae2pr.item.matter_confinement_frame.MatterConfinementFrameItem;
 import com.murthinext.ae2pr.item.proto_terminal.ProtoTerminalItem;
-import com.murthinext.ae2pr.item.sky_dome_annihilation_plane.SkyDomeAnnihilationPlanePartItem;
+import com.murthinext.ae2pr.cable_part.sky_dome.SkyDomeAnnihilationPlanePartItem;
 import com.murthinext.ae2pr.item.upgrade.MachineUpgradeCardItem;
 import com.murthinext.ae2pr.item.upgrade.SuperStackCardItem;
 import net.minecraft.world.item.BucketItem;
@@ -49,8 +49,8 @@ public final class ModItems {
     public static final RegistryObject<MachineUpgradeCardItem> AEV_ENERGY_CARD = ITEMS.register(
             "aev_energy_card", () -> new MachineUpgradeCardItem(new Item.Properties(), ServerConfig.AEV_ENERGY));
 
-    public static final RegistryObject<CollapsedItemStorageCellItem> COLLAPSED_ITEM_STORAGE_CELL = ITEMS.register(
-            "collapsed_item_storage_cell", () -> new CollapsedItemStorageCellItem(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<CollapsedCellItem> COLLAPSED_ITEM_STORAGE_CELL = ITEMS.register(
+            "collapsed_item_storage_cell", () -> new CollapsedCellItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<ComputationCellComponentItem> COMPUTATION_CELL_COMPONENT_1TOPS = ITEMS.register(
             "computation_cell_component_1tops", () -> new ComputationCellComponentItem(new Item.Properties(), 4));

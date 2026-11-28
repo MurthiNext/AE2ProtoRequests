@@ -3,7 +3,7 @@ package com.murthinext.ae2pr.mixin.ae2.core.sync.network;
 import appeng.core.sync.BasePacket;
 import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.CraftingJobStatusPacket;
-import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
+import com.murthinext.ae2pr.integration.ae2.repeat_order.GeneralRepeatOrders;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

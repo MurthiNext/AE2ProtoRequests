@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.mixin.ae2.worldgen.meteorite;
 
 import appeng.worldgen.meteorite.MeteoriteBlockPutter;
 import appeng.worldgen.meteorite.MeteoritePlacer;
-import com.murthinext.ae2pr.block.meteorite.MeteoriteOres;
+import com.murthinext.ae2pr.block.ore.MeteoriteOres;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.core.BlockPos;

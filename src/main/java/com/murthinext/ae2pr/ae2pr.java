@@ -12,19 +12,20 @@ import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.MachineRegistries;
 import com.murthinext.ae2pr.api.machine.MachineTuning;
 import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
-import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterPart;
-import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterPart;
-import com.murthinext.ae2pr.block.meteorite.MeteoriteOres;
-import com.murthinext.ae2pr.block.sky_dome_annihilation_plane.SkyDomeAnnihilationPlanePart;
-import com.murthinext.ae2pr.fluid.AlienLavaInteractions;
-import com.murthinext.ae2pr.item.collapsed_storage_cell.CollapsedItemStorageCellGuiHandler;
-import com.murthinext.ae2pr.item.collapsed_storage_cell.CollapsedItemStorageCellHandler;
-import com.murthinext.ae2pr.logic.collapse.CollapseEvents;
-import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
-import com.murthinext.ae2pr.logic.wrench.WrenchInteractions;
+import com.murthinext.ae2pr.cable_part.level_emitter.MultiLevelEmitterPart;
+import com.murthinext.ae2pr.cable_part.level_emitter.MultiThresholdLevelEmitterPart;
+import com.murthinext.ae2pr.block.ore.MeteoriteOres;
+import com.murthinext.ae2pr.cable_part.sky_dome.SkyDomeAnnihilationPlanePart;
+import com.murthinext.ae2pr.block.alien_lava.AlienLavaInteractions;
+import com.murthinext.ae2pr.item.cell.collapsed.CollapsedCellGuiHandler;
+import com.murthinext.ae2pr.item.cell.collapsed.CollapsedCellHandler;
+import com.murthinext.ae2pr.item.cell.collapsed.CollapseEvents;
+import com.murthinext.ae2pr.integration.ae2.repeat_order.GeneralRepeatOrders;
+import com.murthinext.ae2pr.item.upgrade.SuperStackSupport;
+import com.murthinext.ae2pr.api.WrenchInteractions;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryBlockEntity;
 import com.murthinext.ae2pr.core.config.ServerConfig;
+import com.murthinext.ae2pr.core.network.ModNetwork;
 import com.murthinext.ae2pr.core.registry.*;
 import java.util.Objects;
 import net.minecraftforge.api.distmarker.Dist;
@@ -108,8 +109,8 @@ public class ae2pr {
 
             SuperStackSupport.registerUpgrades();
 
-            StorageCells.addCellHandler(new CollapsedItemStorageCellHandler());
-            StorageCells.addCellGuiHandler(new CollapsedItemStorageCellGuiHandler());
+            StorageCells.addCellHandler(new CollapsedCellHandler());
+            StorageCells.addCellGuiHandler(new CollapsedCellGuiHandler());
             StorageCellModels.registerModel(
                     ModItems.COLLAPSED_ITEM_STORAGE_CELL.get(), Ids.of("block/drive/collapsed_item_storage_cell"));
 

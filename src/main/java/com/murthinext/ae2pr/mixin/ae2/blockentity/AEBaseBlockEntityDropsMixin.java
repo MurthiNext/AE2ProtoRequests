@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.mixin.ae2.blockentity;
 
 import appeng.blockentity.AEBaseBlockEntity;
-import com.murthinext.ae2pr.logic.collapse.CollapseHandler;
+import com.murthinext.ae2pr.item.cell.collapsed.CollapseHandler;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;

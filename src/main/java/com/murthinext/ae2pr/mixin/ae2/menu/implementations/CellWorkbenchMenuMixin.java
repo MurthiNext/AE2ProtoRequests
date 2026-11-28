@@ -3,7 +3,7 @@ package com.murthinext.ae2pr.mixin.ae2.menu.implementations;
 import appeng.blockentity.misc.CellWorkbenchBlockEntity;
 import appeng.menu.implementations.CellWorkbenchMenu;
 import appeng.menu.implementations.UpgradeableMenu;
-import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
+import com.murthinext.ae2pr.item.cell.filter.AdvancedFilterCellItem;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;

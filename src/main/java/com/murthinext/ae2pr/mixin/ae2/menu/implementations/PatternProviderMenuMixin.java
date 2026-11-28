@@ -4,7 +4,7 @@ import appeng.helpers.patternprovider.PatternProviderLogic;
 import appeng.helpers.patternprovider.PatternProviderLogicHost;
 import appeng.menu.AEBaseMenu;
 import appeng.menu.implementations.PatternProviderMenu;
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import com.murthinext.ae2pr.item.upgrade.SuperStackSupport;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import org.spongepowered.asm.mixin.Final;

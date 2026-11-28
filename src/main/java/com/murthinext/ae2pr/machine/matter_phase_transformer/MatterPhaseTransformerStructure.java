@@ -5,7 +5,7 @@ import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
 import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.api.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
-import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
+import com.murthinext.ae2pr.block.feature.HighEnergyCoreBlock;
 import com.murthinext.ae2pr.core.registry.ModBlocks;
 import com.murthinext.ae2pr.core.registry.ModMachines;
 import net.minecraft.core.BlockPos;

@@ -1,8 +1,8 @@
 package com.murthinext.ae2pr.mixin.minecraft.world.entity.item;
 
-import com.murthinext.ae2pr.logic.world_interaction.ComplexWorldInteractions;
-import com.murthinext.ae2pr.logic.world_interaction.WorldInteractionEntity;
-import com.murthinext.ae2pr.logic.world_interaction.WorldInteractionProgress;
+import com.murthinext.ae2pr.recipe.world_interaction.ComplexWorldInteractions;
+import com.murthinext.ae2pr.recipe.world_interaction.WorldInteractionEntity;
+import com.murthinext.ae2pr.recipe.world_interaction.WorldInteractionProgress;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.item.ItemEntity;

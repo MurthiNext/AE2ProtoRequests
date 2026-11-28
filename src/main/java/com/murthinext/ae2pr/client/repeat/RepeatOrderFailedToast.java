@@ -3,7 +3,7 @@ package com.murthinext.ae2pr.client.repeat;
 import appeng.api.client.AEKeyRendering;
 import appeng.api.stacks.AEKey;
 import com.murthinext.ae2pr.api.text.AmountText;
-import com.murthinext.ae2pr.logic.repeat.FailureReason;
+import com.murthinext.ae2pr.integration.ae2.repeat_order.FailureReason;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;

@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.mixin.ae2cs.common.me.logic;
 
 import appeng.util.ConfigInventory;
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import com.murthinext.ae2pr.item.upgrade.SuperStackSupport;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;

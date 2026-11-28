@@ -4,7 +4,7 @@ import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.IUpgradeableObject;
 import appeng.api.upgrades.UpgradeInventories;
 import appeng.helpers.patternprovider.PatternProviderReturnInventory;
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import com.murthinext.ae2pr.item.upgrade.SuperStackSupport;
 import java.util.List;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;

@@ -1,8 +1,8 @@
 package com.murthinext.ae2pr.core.registry;
 
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.block.level_emitter.MultiLevelEmitterMenu;
-import com.murthinext.ae2pr.block.level_emitter.MultiThresholdLevelEmitterMenu;
+import com.murthinext.ae2pr.cable_part.level_emitter.MultiLevelEmitterMenu;
+import com.murthinext.ae2pr.cable_part.level_emitter.MultiThresholdLevelEmitterMenu;
 import com.murthinext.ae2pr.block.machine_part.FluidHatchMenu;
 import com.murthinext.ae2pr.block.machine_part.ItemBusMenu;
 import com.murthinext.ae2pr.block.machine_part.MEPatternBufferMenu;

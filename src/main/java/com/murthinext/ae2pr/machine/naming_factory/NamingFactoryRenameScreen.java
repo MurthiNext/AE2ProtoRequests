@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.machine.naming_factory;
 
-import com.murthinext.ae2pr.core.network.NamingFactoryRenamePacket;
-import com.murthinext.ae2pr.core.registry.ModNetwork;
+import com.murthinext.ae2pr.machine.naming_factory.network.NamingFactoryRenamePacket;
+import com.murthinext.ae2pr.core.network.ModNetwork;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;

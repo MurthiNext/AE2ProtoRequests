@@ -5,7 +5,7 @@ import appeng.client.gui.me.common.MEStorageScreen;
 import appeng.items.tools.powered.WirelessTerminalItem;
 import appeng.util.SearchInventoryEvent;
 import com.murthinext.ae2pr.core.config.ServerConfig;
-import com.murthinext.ae2pr.logic.repeat.FailureReason;
+import com.murthinext.ae2pr.integration.ae2.repeat_order.FailureReason;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.client.Minecraft;

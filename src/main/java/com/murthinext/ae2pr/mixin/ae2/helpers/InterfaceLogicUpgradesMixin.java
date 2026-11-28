@@ -4,7 +4,7 @@ import appeng.api.networking.IManagedGridNode;
 import appeng.helpers.InterfaceLogic;
 import appeng.helpers.InterfaceLogicHost;
 import appeng.util.ConfigInventory;
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import com.murthinext.ae2pr.item.upgrade.SuperStackSupport;
 import net.minecraft.world.item.Item;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

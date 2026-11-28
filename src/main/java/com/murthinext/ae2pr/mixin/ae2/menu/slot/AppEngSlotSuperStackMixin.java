@@ -5,7 +5,7 @@ import appeng.helpers.externalstorage.GenericStackInv;
 import appeng.menu.AEBaseMenu;
 import appeng.menu.slot.AppEngSlot;
 import appeng.util.ConfigMenuInventory;
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import com.murthinext.ae2pr.item.upgrade.SuperStackSupport;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

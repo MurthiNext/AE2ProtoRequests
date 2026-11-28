@@ -10,7 +10,7 @@ import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.RecipeConstraints;
 import com.murthinext.ae2pr.api.machine.RecipeSpec;
 import com.murthinext.ae2pr.api.machine.singleblock.SingleblockMachineDefinition;
-import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
+import com.murthinext.ae2pr.block.feature.HighEnergyCoreBlock;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineControllerBlockEntity;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineRecipe;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineStructure;
@@ -20,7 +20,7 @@ import com.murthinext.ae2pr.machine.crystal_reactor.CrystalReactorCoreBlockEntit
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationControllerBlockEntity;
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationMode;
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationStructure;
-import com.murthinext.ae2pr.machine.filter_press.FilterPressStructure;
+import com.murthinext.ae2pr.block.feature.filter_press.FilterPressStructure;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterControllerBlockEntity;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterMenu;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterStructure;

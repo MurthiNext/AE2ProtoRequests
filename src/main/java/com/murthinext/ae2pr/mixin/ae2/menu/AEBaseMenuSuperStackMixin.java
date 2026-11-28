@@ -14,7 +14,7 @@ import appeng.menu.slot.DisabledSlot;
 import appeng.menu.slot.FakeSlot;
 import appeng.menu.slot.InaccessibleSlot;
 import appeng.util.ConfigMenuInventory;
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import com.murthinext.ae2pr.item.upgrade.SuperStackSupport;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;

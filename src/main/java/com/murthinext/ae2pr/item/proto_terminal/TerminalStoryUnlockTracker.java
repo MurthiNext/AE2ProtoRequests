@@ -1,8 +1,8 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.core.network.TerminalStoryUnlockPacket;
-import com.murthinext.ae2pr.core.registry.ModNetwork;
+import com.murthinext.ae2pr.item.proto_terminal.network.TerminalStoryUnlockPacket;
+import com.murthinext.ae2pr.core.network.ModNetwork;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

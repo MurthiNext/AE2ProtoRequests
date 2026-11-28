@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.mixin.ae2.core.sync.packets;
 
 import appeng.api.stacks.AEKey;
 import appeng.core.sync.packets.CraftingJobStatusPacket;
-import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
+import com.murthinext.ae2pr.integration.ae2.repeat_order.GeneralRepeatOrders;
 import java.util.UUID;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

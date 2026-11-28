@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.mixin.extendedae.common.inventory;
 
 import appeng.api.stacks.AEKey;
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import com.murthinext.ae2pr.item.upgrade.SuperStackSupport;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;

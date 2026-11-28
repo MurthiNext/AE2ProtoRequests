@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.core.registry;
 
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.effect.ScreenCorruptionEffect;
+import com.murthinext.ae2pr.effect.screen_corruption.ScreenCorruptionEffect;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

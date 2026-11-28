@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.machine.matter_phase_transformer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
+import com.murthinext.ae2pr.block.feature.HighEnergyCoreBlock;
 import com.murthinext.ae2pr.core.registry.ModMachines;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;

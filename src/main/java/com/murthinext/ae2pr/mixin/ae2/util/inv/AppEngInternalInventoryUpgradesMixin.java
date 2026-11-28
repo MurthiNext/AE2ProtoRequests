@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.mixin.ae2.util.inv;
 
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.util.inv.AppEngInternalInventory;
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import com.murthinext.ae2pr.item.upgrade.SuperStackSupport;
 import java.util.Arrays;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;

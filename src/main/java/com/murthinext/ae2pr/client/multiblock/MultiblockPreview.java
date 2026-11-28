@@ -6,7 +6,7 @@ import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleInstance;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleSnapshot;
-import com.murthinext.ae2pr.block.FilterPressPlateBlock;
+import com.murthinext.ae2pr.block.feature.filter_press.FilterPressPlateBlock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;

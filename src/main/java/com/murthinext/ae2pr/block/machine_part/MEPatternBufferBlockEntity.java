@@ -13,7 +13,7 @@ import com.murthinext.ae2pr.api.machine.port.ChannelRequest;
 import com.murthinext.ae2pr.api.machine.port.MachinePart;
 import com.murthinext.ae2pr.api.machine.port.PartInventory;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
-import com.murthinext.ae2pr.logic.collapse.CollapseHandler;
+import com.murthinext.ae2pr.item.cell.collapsed.CollapseHandler;
 import com.murthinext.ae2pr.core.registry.ModBlockEntities;
 import java.math.BigInteger;
 import java.util.ArrayList;

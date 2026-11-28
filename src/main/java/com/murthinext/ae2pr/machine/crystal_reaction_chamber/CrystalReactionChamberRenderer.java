@@ -4,7 +4,7 @@ import appeng.core.definitions.AEBlocks;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.client.effect.EmissiveCubeRenderer;
+import com.murthinext.ae2pr.machine.crystal_workstation.EmissiveCubeRenderer;
 import com.murthinext.ae2pr.core.registry.ModMachines;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;

@@ -4,7 +4,7 @@ import appeng.api.stacks.AEKey;
 import appeng.api.stacks.AEKeyType;
 import appeng.api.stacks.GenericStack;
 import appeng.helpers.externalstorage.GenericStackInv;
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import com.murthinext.ae2pr.item.upgrade.SuperStackSupport;
 import java.util.function.BooleanSupplier;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;

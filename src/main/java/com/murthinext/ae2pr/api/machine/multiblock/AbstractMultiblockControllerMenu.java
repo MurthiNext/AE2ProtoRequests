@@ -5,7 +5,7 @@ import com.murthinext.ae2pr.api.machine.MachineDefinition;
 import com.murthinext.ae2pr.api.machine.MachineStats;
 import com.murthinext.ae2pr.api.machine.port.ChannelStatus;
 import com.murthinext.ae2pr.core.network.MachineStatsPacket;
-import com.murthinext.ae2pr.core.registry.ModNetwork;
+import com.murthinext.ae2pr.core.network.ModNetwork;
 import com.murthinext.nextui.layout.PlayerInventoryLayout;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

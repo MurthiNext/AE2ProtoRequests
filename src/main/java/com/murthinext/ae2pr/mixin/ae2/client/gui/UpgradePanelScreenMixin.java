@@ -9,7 +9,7 @@ import appeng.client.gui.widgets.UpgradesPanel;
 import appeng.core.localization.GuiText;
 import appeng.menu.SlotSemantics;
 import appeng.menu.slot.AppEngSlot;
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import com.murthinext.ae2pr.item.upgrade.SuperStackSupport;
 import com.murthinext.ae2pr.mixin.ae2.accessor.WidgetContainerAccessor;
 import java.util.ArrayList;
 import java.util.List;

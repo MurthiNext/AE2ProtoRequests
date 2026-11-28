@@ -6,7 +6,7 @@ import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineStr
 import com.murthinext.ae2pr.machine.crystal_reaction_chamber.CrystalReactionChamberStructure;
 import com.murthinext.ae2pr.machine.crystal_reactor.CrystalReactorStructure;
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationStructure;
-import com.murthinext.ae2pr.machine.filter_press.FilterPressStructure;
+import com.murthinext.ae2pr.block.feature.filter_press.FilterPressStructure;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterStructure;
 import com.murthinext.ae2pr.machine.integrated_mass_fabricator.IntegratedMassFabricatorStructure;
 import com.murthinext.ae2pr.machine.jig.JigStructure;

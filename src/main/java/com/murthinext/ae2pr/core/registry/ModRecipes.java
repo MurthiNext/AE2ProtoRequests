@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.core.registry;
 
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
+import com.murthinext.ae2pr.recipe.world_interaction.ComplexWorldInteractionRecipe;
 import com.murthinext.ae2pr.recipe.MatterConfinementFrameFillingRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.RecipeSerializer;

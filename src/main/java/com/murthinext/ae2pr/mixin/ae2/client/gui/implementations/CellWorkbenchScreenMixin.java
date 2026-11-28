@@ -7,7 +7,7 @@ import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.AETextField;
 import appeng.menu.SlotSemantics;
 import appeng.menu.implementations.CellWorkbenchMenu;
-import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
+import com.murthinext.ae2pr.item.cell.filter.AdvancedFilterCellItem;
 import com.murthinext.ae2pr.mixin.ae2.accessor.AEBaseMenuInvoker;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;

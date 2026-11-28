@@ -6,7 +6,7 @@ import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.api.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
 import com.murthinext.ae2pr.api.multiblock.StructureResult;
-import com.murthinext.ae2pr.block.StabilityCasingBlock;
+import com.murthinext.ae2pr.block.casing.StabilityCasingBlock;
 import com.murthinext.ae2pr.core.registry.ModBlocks;
 import com.murthinext.ae2pr.core.registry.ModMachines;
 import java.util.List;

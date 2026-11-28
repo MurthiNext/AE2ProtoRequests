@@ -1,6 +1,6 @@
 package com.murthinext.ae2pr.client.repeat;
 
-import com.murthinext.ae2pr.core.network.CpuRoundInfo;
+import com.murthinext.ae2pr.integration.ae2.repeat_order.CpuRoundInfo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

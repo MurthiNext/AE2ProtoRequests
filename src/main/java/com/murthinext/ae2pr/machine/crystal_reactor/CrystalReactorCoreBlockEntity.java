@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.machine.crystal_reactor;
 
 import com.murthinext.ae2pr.core.config.ServerConfig;
-import com.murthinext.ae2pr.block.HighEnergyCoreBlock;
+import com.murthinext.ae2pr.block.feature.HighEnergyCoreBlock;
 import com.murthinext.ae2pr.core.registry.ModMachines;
 import java.util.List;
 import net.minecraft.core.BlockPos;

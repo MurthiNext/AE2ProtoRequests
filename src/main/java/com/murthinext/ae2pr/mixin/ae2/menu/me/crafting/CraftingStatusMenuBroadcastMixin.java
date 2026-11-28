@@ -2,12 +2,12 @@ package com.murthinext.ae2pr.mixin.ae2.menu.me.crafting;
 
 import appeng.me.cluster.implementations.CraftingCPUCluster;
 import appeng.menu.me.crafting.CraftingStatusMenu;
-import com.murthinext.ae2pr.logic.repeat.GeneralRepeatOrders;
-import com.murthinext.ae2pr.logic.repeat.RepeatOrderHost;
+import com.murthinext.ae2pr.integration.ae2.repeat_order.GeneralRepeatOrders;
+import com.murthinext.ae2pr.integration.ae2.repeat_order.RepeatOrderHost;
 import com.murthinext.ae2pr.mixin.ae2.accessor.CraftingStatusMenuAccessor;
-import com.murthinext.ae2pr.core.network.CpuRoundInfo;
-import com.murthinext.ae2pr.core.network.RepeatOrderStatusPacket;
-import com.murthinext.ae2pr.core.registry.ModNetwork;
+import com.murthinext.ae2pr.integration.ae2.repeat_order.CpuRoundInfo;
+import com.murthinext.ae2pr.integration.ae2.repeat_order.network.RepeatOrderStatusPacket;
+import com.murthinext.ae2pr.core.network.ModNetwork;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.server.level.ServerPlayer;

@@ -6,7 +6,7 @@ import appeng.menu.SlotSemantic;
 import appeng.menu.SlotSemantics;
 import appeng.menu.slot.AppEngSlot;
 import appeng.menu.slot.RestrictedInputSlot;
-import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
+import com.murthinext.ae2pr.item.upgrade.SuperStackSupport;
 import net.minecraft.world.inventory.Slot;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

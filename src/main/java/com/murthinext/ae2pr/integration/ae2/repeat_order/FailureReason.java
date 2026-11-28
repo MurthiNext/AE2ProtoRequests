@@ -1,0 +1,26 @@
+package com.murthinext.ae2pr.integration.ae2.repeat_order;
+
+import appeng.api.networking.crafting.CraftingSubmitErrorCode;
+import org.jetbrains.annotations.Nullable;
+
+public enum FailureReason {
+    MISSING_MATERIAL,
+    CPU_TOO_SMALL,
+    CPU_BUSY,
+    CPU_OFFLINE,
+    NO_CPU,
+    UNKNOWN;
+
+    public static FailureReason fromCode(@Nullable CraftingSubmitErrorCode code) {
+        if (code == null) {
+            return UNKNOWN;
+        }
+        return switch (code) {
+            case CPU_TOO_SMALL -> CPU_TOO_SMALL;
+            case CPU_BUSY -> CPU_BUSY;
+            case CPU_OFFLINE -> CPU_OFFLINE;
+            case NO_CPU_FOUND, NO_SUITABLE_CPU_FOUND -> NO_CPU;
+            case INCOMPLETE_PLAN, MISSING_INGREDIENT -> MISSING_MATERIAL;
+        };
+    }
+}

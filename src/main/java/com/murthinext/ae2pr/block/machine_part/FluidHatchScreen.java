@@ -2,8 +2,8 @@ package com.murthinext.ae2pr.block.machine_part;
 
 import com.murthinext.ae2pr.api.machine.client.CustomIngredientSource;
 import com.murthinext.ae2pr.api.machine.client.FluidStackDisplay;
-import com.murthinext.ae2pr.core.network.HatchTankClickPacket;
-import com.murthinext.ae2pr.core.registry.ModNetwork;
+import com.murthinext.ae2pr.block.machine_part.network.HatchTankClickPacket;
+import com.murthinext.ae2pr.core.network.ModNetwork;
 import com.murthinext.nextui.client.GuiFluids;
 import java.util.ArrayList;
 import java.util.List;

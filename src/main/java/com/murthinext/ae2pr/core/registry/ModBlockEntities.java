@@ -4,7 +4,7 @@ import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MEPatternBufferBlockEntity;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
-import com.murthinext.ae2pr.block.molecular_assembly_core.MolecularAssemblyCoreBlockEntity;
+import com.murthinext.ae2pr.block.feature.molecular_assembly_core.MolecularAssemblyCoreBlockEntity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
