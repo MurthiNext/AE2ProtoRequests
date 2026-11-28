@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.machine.crystal_reactor;
 
 import appeng.core.definitions.AEBlocks;
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;

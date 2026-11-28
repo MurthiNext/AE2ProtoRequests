@@ -5,7 +5,7 @@ import static com.murthinext.ae2pr.requester.RequesterUtils.f;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.guidebook.PageAnchor;
 import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.registry.ModGuide;
+import com.murthinext.ae2pr.core.registry.ModGuide;
 import com.murthinext.ae2pr.requester.RedstoneRequesterMenu;
 import com.murthinext.ae2pr.requester.RequesterConstants;
 import com.murthinext.ae2pr.requester.client.abstraction.AbstractRedstoneRequesterScreen;

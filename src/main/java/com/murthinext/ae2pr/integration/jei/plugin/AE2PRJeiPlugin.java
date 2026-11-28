@@ -11,8 +11,8 @@ import com.murthinext.ae2pr.integration.jei.transfer.CrystalAssemblyLinePatternT
 import com.murthinext.ae2pr.integration.jei.transfer.MultiblockPatternTransferHandler;
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationMode;
 import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerMode;
-import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.registry.ModRecipes;
+import com.murthinext.ae2pr.core.registry.ModMachines;
+import com.murthinext.ae2pr.core.registry.ModRecipes;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;

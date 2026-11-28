@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.client.effect;
 
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.registry.ModEffects;
+import com.murthinext.ae2pr.core.registry.ModEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;

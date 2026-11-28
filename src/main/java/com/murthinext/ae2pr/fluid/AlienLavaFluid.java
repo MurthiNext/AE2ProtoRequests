@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.fluid;
 
 import appeng.core.definitions.AEBlocks;
-import com.murthinext.ae2pr.registry.ModBlocks;
+import com.murthinext.ae2pr.core.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;

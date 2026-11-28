@@ -12,7 +12,7 @@ import com.murthinext.ae2pr.machine.integrated_mass_fabricator.IntegratedMassFab
 import com.murthinext.ae2pr.machine.jig.JigStructure;
 import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerStructure;
 import com.murthinext.ae2pr.machine.multi_factory.MultiFactoryStructure;
-import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.core.registry.ModMachines;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;

@@ -1,11 +1,11 @@
 package com.murthinext.ae2pr.machine.crystal_assembly_line;
 
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.api.machine.MachineStat;
 import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.api.machine.part.InputGroup;
-import com.murthinext.ae2pr.api.machine.part.MachinePart;
+import com.murthinext.ae2pr.api.machine.port.InputGroup;
+import com.murthinext.ae2pr.api.machine.port.MachinePart;
 import com.murthinext.ae2pr.api.multiblock.StructureResult;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleSnapshot;
 import com.murthinext.ae2pr.api.recipe.FluidInput;
@@ -13,7 +13,7 @@ import com.murthinext.ae2pr.api.recipe.ItemInput;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
-import com.murthinext.ae2pr.registry.ModModules;
+import com.murthinext.ae2pr.core.registry.ModModules;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;

@@ -3,7 +3,7 @@ package com.murthinext.ae2pr.block.level_emitter;
 import appeng.api.config.RedstoneMode;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.AETextField;
-import com.murthinext.ae2pr.registry.ModGuide;
+import com.murthinext.ae2pr.core.registry.ModGuide;
 import java.util.function.Consumer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

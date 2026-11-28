@@ -1,9 +1,9 @@
 package com.murthinext.ae2pr.machine.high_reactivity_lava_smelter;
 
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.api.machine.MachineDefinition;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
-import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.core.registry.ModMachines;
 import com.murthinext.nextui.layout.PlayerInventoryLayout;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;

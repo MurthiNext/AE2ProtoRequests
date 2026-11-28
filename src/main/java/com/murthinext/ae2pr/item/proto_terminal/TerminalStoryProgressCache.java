@@ -1,10 +1,10 @@
 package com.murthinext.ae2pr.item.proto_terminal;
 
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.network.TerminalStoryRequestPacket;
-import com.murthinext.ae2pr.network.TerminalStoryUpdatePacket;
-import com.murthinext.ae2pr.network.TerminalStoryWatchPacket;
-import com.murthinext.ae2pr.registry.ModNetwork;
+import com.murthinext.ae2pr.core.network.TerminalStoryRequestPacket;
+import com.murthinext.ae2pr.core.network.TerminalStoryUpdatePacket;
+import com.murthinext.ae2pr.core.network.TerminalStoryWatchPacket;
+import com.murthinext.ae2pr.core.registry.ModNetwork;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedHashSet;

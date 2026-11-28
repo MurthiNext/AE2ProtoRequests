@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.block.entangled_casing;
 
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.registry.ModBlocks;
+import com.murthinext.ae2pr.core.registry.ModBlocks;
 import it.unimi.dsi.fastutil.longs.Long2LongMaps;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;

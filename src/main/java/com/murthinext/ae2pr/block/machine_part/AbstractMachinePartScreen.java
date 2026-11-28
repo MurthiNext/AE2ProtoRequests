@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.block.machine_part;
 
 import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 import com.murthinext.ae2pr.api.machine.client.AutoTransferButton;
-import com.murthinext.ae2pr.registry.ModGuide;
+import com.murthinext.ae2pr.core.registry.ModGuide;
 import com.murthinext.nextui.client.GuiSidebar;
 import com.murthinext.nextui.client.GuiTooltips;
 import java.util.List;

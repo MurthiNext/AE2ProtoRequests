@@ -15,7 +15,7 @@ import static com.murthinext.ae2pr.block.machine_part.MEPatternBufferMenu.SHARED
 import com.murthinext.ae2pr.api.machine.client.AbstractMachineScreen;
 import com.murthinext.ae2pr.api.machine.client.FluidStackDisplay;
 import com.murthinext.ae2pr.api.machine.client.GuiTextures;
-import com.murthinext.ae2pr.registry.ModGuide;
+import com.murthinext.ae2pr.core.registry.ModGuide;
 import com.murthinext.nextui.client.GuiExtraAreas;
 import com.murthinext.nextui.client.GuiFluids;
 import com.murthinext.nextui.client.GuiPanels;

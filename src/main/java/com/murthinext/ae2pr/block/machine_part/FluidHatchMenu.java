@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.block.machine_part;
 
-import com.murthinext.ae2pr.network.MachinePartFluidPacket;
-import com.murthinext.ae2pr.registry.ModNetwork;
+import com.murthinext.ae2pr.core.network.MachinePartFluidPacket;
+import com.murthinext.ae2pr.core.registry.ModNetwork;
 import com.murthinext.nextui.layout.PlayerInventoryLayout;
 import java.util.List;
 import net.minecraft.core.BlockPos;

@@ -3,7 +3,7 @@ package com.murthinext.ae2pr.integration.jei.category;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.integration.jei.recipe.MultiblockPreviewRecipe;
 import com.murthinext.ae2pr.integration.jei.widget.MultiblockPreviewWidget;
-import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.core.registry.ModMachines;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;

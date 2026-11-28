@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.client.sound;
 
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
-import com.murthinext.ae2pr.registry.ModSounds;
+import com.murthinext.ae2pr.core.registry.ModSounds;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -2,8 +2,8 @@ package com.murthinext.ae2pr;
 
 import com.murthinext.ae2pr.api.machine.MachineDefinition;
 import com.murthinext.ae2pr.api.multiblock.StructureHooks;
-import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.registry.ModNetwork;
+import com.murthinext.ae2pr.core.registry.ModMachines;
+import com.murthinext.ae2pr.core.registry.ModNetwork;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.world.level.block.Block;

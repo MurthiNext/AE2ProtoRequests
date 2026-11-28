@@ -1,6 +1,6 @@
 package com.murthinext.ae2pr.api.machine;
 
-import com.murthinext.ae2pr.api.machine.part.ChannelRequest;
+import com.murthinext.ae2pr.api.machine.port.ChannelRequest;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 

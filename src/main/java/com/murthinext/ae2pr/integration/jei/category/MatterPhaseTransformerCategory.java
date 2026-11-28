@@ -5,7 +5,7 @@ import com.murthinext.ae2pr.api.machine.MachineRecipe;
 import com.murthinext.ae2pr.integration.jei.JeiRecipeInfo;
 import com.murthinext.ae2pr.integration.jei.render.AnimatedTextureDrawable;
 import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerMode;
-import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.core.registry.ModMachines;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;

@@ -13,7 +13,7 @@ import appeng.crafting.execution.CraftingCpuLogic;
 import appeng.crafting.execution.ExecutingCraftingJob;
 import appeng.me.cluster.implementations.CraftingCPUCluster;
 import appeng.me.service.CraftingService;
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.logic.repeat.FailureReason;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderBinding;

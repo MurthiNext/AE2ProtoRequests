@@ -1,6 +1,6 @@
 package com.murthinext.ae2pr.machine.high_reactivity_lava_smelter;
 
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;

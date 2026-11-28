@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.fluid;
 
 import appeng.core.definitions.AEBlocks;
-import com.murthinext.ae2pr.registry.ModFluids;
+import com.murthinext.ae2pr.core.registry.ModFluids;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.fluids.FluidInteractionRegistry;
 

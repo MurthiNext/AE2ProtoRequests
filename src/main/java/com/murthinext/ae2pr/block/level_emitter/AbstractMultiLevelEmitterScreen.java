@@ -66,7 +66,7 @@ public abstract class AbstractMultiLevelEmitterScreen<T extends AbstractMultiLev
 
     @Override
     protected void openHelp() {
-        com.murthinext.ae2pr.registry.ModGuide.openAt(helpPage());
+        com.murthinext.ae2pr.core.registry.ModGuide.openAt(helpPage());
     }
 
     // 返回非空即可让 AE2 帮助按钮显示

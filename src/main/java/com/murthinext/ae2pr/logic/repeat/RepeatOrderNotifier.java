@@ -2,10 +2,10 @@ package com.murthinext.ae2pr.logic.repeat;
 
 import appeng.api.features.IPlayerRegistry;
 import appeng.api.stacks.AEKey;
-import com.murthinext.ae2pr.network.RepeatOrderFailedPacket;
-import com.murthinext.ae2pr.network.RepeatOrderFinishedPacket;
-import com.murthinext.ae2pr.network.RepeatOrderRoundPacket;
-import com.murthinext.ae2pr.registry.ModNetwork;
+import com.murthinext.ae2pr.core.network.RepeatOrderFailedPacket;
+import com.murthinext.ae2pr.core.network.RepeatOrderFinishedPacket;
+import com.murthinext.ae2pr.core.network.RepeatOrderRoundPacket;
+import com.murthinext.ae2pr.core.registry.ModNetwork;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;

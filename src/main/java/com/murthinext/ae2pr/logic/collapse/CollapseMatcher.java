@@ -1,6 +1,6 @@
 package com.murthinext.ae2pr.logic.collapse;
 
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.ae2pr;
 import java.util.ArrayList;
 import java.util.HashSet;

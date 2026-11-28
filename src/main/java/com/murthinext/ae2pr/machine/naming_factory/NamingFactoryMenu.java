@@ -3,7 +3,7 @@ package com.murthinext.ae2pr.machine.naming_factory;
 import appeng.core.definitions.AEItems;
 import com.murthinext.ae2pr.api.machine.MachineDefinition;
 import com.murthinext.ae2pr.api.machine.singleblock.AbstractSingleblockMachineMenu;
-import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.core.registry.ModMachines;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;

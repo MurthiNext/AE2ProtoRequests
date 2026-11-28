@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.block.machine_part;
 
-import com.murthinext.ae2pr.api.machine.part.MachinePart;
-import com.murthinext.ae2pr.registry.ModBlockEntities;
+import com.murthinext.ae2pr.api.machine.port.MachinePart;
+import com.murthinext.ae2pr.core.registry.ModBlockEntities;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;

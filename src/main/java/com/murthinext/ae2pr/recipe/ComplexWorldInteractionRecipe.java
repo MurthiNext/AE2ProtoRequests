@@ -9,7 +9,7 @@ import com.murthinext.ae2pr.api.recipe.ItemOutput;
 import com.murthinext.ae2pr.api.recipe.RecipeJson;
 import com.murthinext.ae2pr.api.recipe.RecipeNetwork;
 import com.murthinext.ae2pr.api.recipe.WorldInteractionCircumstance;
-import com.murthinext.ae2pr.registry.ModRecipes;
+import com.murthinext.ae2pr.core.registry.ModRecipes;
 import java.util.List;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

@@ -5,7 +5,7 @@ import appeng.client.gui.me.crafting.CraftAmountScreen;
 import appeng.client.gui.style.ScreenStyle;
 import appeng.client.gui.widgets.AETextField;
 import appeng.menu.me.crafting.CraftAmountMenu;
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.client.repeat.RepeatOrderButton;
 import com.murthinext.ae2pr.logic.repeat.RepeatOrderConstants;

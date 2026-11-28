@@ -10,7 +10,7 @@ import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEParts;
 import appeng.helpers.InterfaceLogic;
 import appeng.helpers.externalstorage.GenericStackInv;
-import com.murthinext.ae2pr.registry.ModItems;
+import com.murthinext.ae2pr.core.registry.ModItems;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;

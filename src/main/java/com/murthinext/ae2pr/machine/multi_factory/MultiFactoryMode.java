@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.machine.multi_factory;
 
 import appeng.recipes.handlers.ChargerRecipe;
 import appeng.recipes.handlers.InscriberRecipe;
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.api.machine.Mode;
 import com.murthinext.ae2pr.api.machine.RecipeSpec;
 import net.minecraft.world.item.crafting.RecipeType;

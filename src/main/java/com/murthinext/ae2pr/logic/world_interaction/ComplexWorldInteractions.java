@@ -4,7 +4,7 @@ import appeng.core.definitions.AEEntities;
 import com.murthinext.ae2pr.api.recipe.ItemInput;
 import com.murthinext.ae2pr.api.recipe.ItemOutput;
 import com.murthinext.ae2pr.recipe.ComplexWorldInteractionRecipe;
-import com.murthinext.ae2pr.registry.ModRecipes;
+import com.murthinext.ae2pr.core.registry.ModRecipes;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;

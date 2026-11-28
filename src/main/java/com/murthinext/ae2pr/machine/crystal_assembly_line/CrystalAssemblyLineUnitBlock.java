@@ -1,12 +1,12 @@
 package com.murthinext.ae2pr.machine.crystal_assembly_line;
 
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleDefinition;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleProvider;
 import com.murthinext.ae2pr.api.multiblock.module.ModuleType;
 import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.api.wrench.Wrenchable;
-import com.murthinext.ae2pr.registry.ModModules;
+import com.murthinext.ae2pr.core.registry.ModModules;
 import java.util.List;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;

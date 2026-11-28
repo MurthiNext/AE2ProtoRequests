@@ -4,7 +4,7 @@ import appeng.api.stacks.AEKey;
 import appeng.client.gui.me.common.MEStorageScreen;
 import appeng.items.tools.powered.WirelessTerminalItem;
 import appeng.util.SearchInventoryEvent;
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.logic.repeat.FailureReason;
 import java.util.HashMap;
 import java.util.Map;

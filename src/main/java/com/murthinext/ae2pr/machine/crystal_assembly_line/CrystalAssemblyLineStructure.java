@@ -1,14 +1,14 @@
 package com.murthinext.ae2pr.machine.crystal_assembly_line;
 
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.api.multiblock.AbstractStructureFacade;
 import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
 import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.api.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
-import com.murthinext.ae2pr.registry.ModBlocks;
-import com.murthinext.ae2pr.registry.ModMachines;
-import com.murthinext.ae2pr.registry.ModModules;
+import com.murthinext.ae2pr.core.registry.ModBlocks;
+import com.murthinext.ae2pr.core.registry.ModMachines;
+import com.murthinext.ae2pr.core.registry.ModModules;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;

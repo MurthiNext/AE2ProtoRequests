@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.block.sky_dome_annihilation_plane;
 
 import appeng.api.parts.IPartHost;
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import java.util.ArrayDeque;
 import java.util.HashSet;
 import net.minecraft.core.BlockPos;

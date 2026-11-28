@@ -1,11 +1,11 @@
 package com.murthinext.ae2pr.machine.crystal_reactor;
 
 import appeng.core.definitions.AEBlocks;
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.api.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
-import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.core.registry.ModMachines;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;

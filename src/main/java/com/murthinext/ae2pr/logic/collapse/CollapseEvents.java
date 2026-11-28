@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.logic.collapse;
 
 import appeng.blockentity.AEBaseBlockEntity;
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;

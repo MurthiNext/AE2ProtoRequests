@@ -3,7 +3,7 @@ package com.murthinext.ae2pr.item.collapsed_storage_cell;
 import appeng.api.storage.cells.ICellHandler;
 import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.cells.StorageCell;
-import com.murthinext.ae2pr.registry.ModItems;
+import com.murthinext.ae2pr.core.registry.ModItems;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 

@@ -8,7 +8,7 @@ import com.murthinext.ae2pr.api.multiblock.module.ModuleRequirement;
 import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.integration.jei.JeiRecipeInfo;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineRecipe;
-import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.core.registry.ModMachines;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

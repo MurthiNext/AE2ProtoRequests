@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.machine.naming_factory;
 
 import appeng.core.definitions.AEItems;
 import appeng.items.materials.NamePressItem;
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.api.machine.singleblock.AbstractSingleblockMachineBlockEntity;
 import com.murthinext.ae2pr.api.machine.singleblock.SingleblockMachineDefinition;
 import net.minecraft.core.BlockPos;

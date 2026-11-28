@@ -1,15 +1,15 @@
 package com.murthinext.ae2pr.integration.jade;
 
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
 import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.api.machine.part.ChannelStatus;
+import com.murthinext.ae2pr.api.machine.port.ChannelStatus;
 import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterControllerBlockEntity;
-import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.core.registry.ModMachines;
 import java.util.Map;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;

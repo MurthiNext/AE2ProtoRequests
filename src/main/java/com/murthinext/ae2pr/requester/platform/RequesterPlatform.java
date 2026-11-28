@@ -1,6 +1,6 @@
 package com.murthinext.ae2pr.requester.platform;
 
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.requester.network.DragAndDropPacket;
 import com.murthinext.ae2pr.requester.network.RequestUpdatePacket;
 import com.murthinext.ae2pr.requester.network.RequesterNetwork;

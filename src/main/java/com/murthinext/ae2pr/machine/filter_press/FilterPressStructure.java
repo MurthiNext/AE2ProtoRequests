@@ -5,8 +5,8 @@ import com.murthinext.ae2pr.api.multiblock.MachinePartFacade;
 import com.murthinext.ae2pr.api.multiblock.MultiblockPattern;
 import com.murthinext.ae2pr.api.multiblock.RelativeDirection;
 import com.murthinext.ae2pr.api.multiblock.StructurePredicate;
-import com.murthinext.ae2pr.registry.ModBlocks;
-import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.core.registry.ModBlocks;
+import com.murthinext.ae2pr.core.registry.ModMachines;
 
 public final class FilterPressStructure extends AbstractStructureFacade {
 

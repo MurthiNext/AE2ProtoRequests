@@ -1,10 +1,10 @@
 package com.murthinext.ae2pr.requester.setup;
 
 import com.murthinext.ae2pr.ae2pr;
-import com.murthinext.ae2pr.registry.ModBlockEntities;
-import com.murthinext.ae2pr.registry.ModBlocks;
-import com.murthinext.ae2pr.registry.ModItems;
-import com.murthinext.ae2pr.registry.ModMenus;
+import com.murthinext.ae2pr.core.registry.ModBlockEntities;
+import com.murthinext.ae2pr.core.registry.ModBlocks;
+import com.murthinext.ae2pr.core.registry.ModItems;
+import com.murthinext.ae2pr.core.registry.ModMenus;
 import com.murthinext.ae2pr.requester.RedstoneRequesterBlock;
 import com.murthinext.ae2pr.requester.RedstoneRequesterBlockEntity;
 import com.murthinext.ae2pr.requester.RedstoneRequesterMenu;

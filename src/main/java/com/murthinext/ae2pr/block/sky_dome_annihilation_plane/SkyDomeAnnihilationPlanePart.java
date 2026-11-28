@@ -20,7 +20,7 @@ import appeng.parts.AEBasePart;
 import appeng.parts.PartModel;
 import appeng.parts.automation.PlaneConnectionHelper;
 import appeng.parts.automation.PlaneModelData;
-import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.core.config.ServerConfig;
 import com.murthinext.ae2pr.api.Ids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

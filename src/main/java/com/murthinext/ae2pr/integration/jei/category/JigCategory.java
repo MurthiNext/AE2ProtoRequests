@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.integration.jei.category;
 
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.machine.MachineRecipe;
-import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.core.registry.ModMachines;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.world.item.ItemStack;

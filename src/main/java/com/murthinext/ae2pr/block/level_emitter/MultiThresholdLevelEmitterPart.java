@@ -12,7 +12,7 @@ import appeng.menu.locator.MenuLocators;
 import appeng.parts.PartModel;
 import appeng.util.prioritylist.IPartitionList;
 import com.murthinext.ae2pr.api.Ids;
-import com.murthinext.ae2pr.registry.ModMenus;
+import com.murthinext.ae2pr.core.registry.ModMenus;
 import java.util.function.Predicate;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
