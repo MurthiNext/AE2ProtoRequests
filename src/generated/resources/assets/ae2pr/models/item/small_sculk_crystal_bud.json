@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "ae2pr:block/small_sculk_crystal_bud"
+    }
+}

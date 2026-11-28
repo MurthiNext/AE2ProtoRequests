@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "": {
+            "model": "ae2pr:block/sculk_crystal_block"
+        }
+    }
+}

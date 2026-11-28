@@ -9,6 +9,7 @@ import com.murthinext.ae2pr.block.feature.filter_press.FilterPressPlateBlock;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MEPatternBufferBlock;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock;
+import com.murthinext.ae2pr.block.sculk.SculkCrystalClusterBlock;
 import com.murthinext.ae2pr.core.registry.ModBlocks;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineUnitBlock;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryBlock;
@@ -66,6 +67,8 @@ public final class ModBlockStateProvider extends BlockStateProvider {
                 active(block, path);
             } else if (block instanceof HighEnergyCoreBlock) {
                 lit(block, existing("block/" + path));
+            } else if (block instanceof SculkCrystalClusterBlock) {
+                crossFacing(block, existing("block/" + path));
             } else {
                 simpleBlock(block, existing(modelPath(path)));
             }
@@ -169,6 +172,24 @@ public final class ModBlockStateProvider extends BlockStateProvider {
         VariantBlockStateBuilder builder = getVariantBuilder(block);
         for (boolean lit : BOOLEANS) {
             builder.partialState().with(HighEnergyCoreBlock.LIT, lit).setModels(new ConfiguredModel(model));
+        }
+    }
+
+    private void crossFacing(Block block, ModelFile model) {
+        VariantBlockStateBuilder builder = getVariantBuilder(block);
+        for (Direction facing : Direction.values()) {
+            ConfiguredModel.Builder<?> entry = ConfiguredModel.builder().modelFile(model);
+            switch (facing) {
+                case DOWN -> entry.rotationX(180);
+                case NORTH -> entry.rotationX(90);
+                case SOUTH -> entry.rotationX(90).rotationY(180);
+                case EAST -> entry.rotationX(90).rotationY(90);
+                case WEST -> entry.rotationX(90).rotationY(270);
+                default -> {}
+            }
+            builder.partialState()
+                    .with(BlockStateProperties.FACING, facing)
+                    .setModels(entry.build());
         }
     }
 

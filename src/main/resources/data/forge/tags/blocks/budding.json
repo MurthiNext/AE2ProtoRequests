@@ -1,0 +1,9 @@
+{
+    "replace": false,
+    "values": [
+        "ae2pr:flawless_budding_sculk_crystal",
+        "ae2pr:flawed_budding_sculk_crystal",
+        "ae2pr:chipped_budding_sculk_crystal",
+        "ae2pr:damaged_budding_sculk_crystal"
+    ]
+}

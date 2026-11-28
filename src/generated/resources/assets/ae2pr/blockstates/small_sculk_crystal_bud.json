@@ -1,0 +1,30 @@
+{
+    "variants": {
+        "facing=down": {
+            "model": "ae2pr:block/small_sculk_crystal_bud",
+            "x": 180
+        },
+        "facing=east": {
+            "model": "ae2pr:block/small_sculk_crystal_bud",
+            "x": 90,
+            "y": 90
+        },
+        "facing=north": {
+            "model": "ae2pr:block/small_sculk_crystal_bud",
+            "x": 90
+        },
+        "facing=south": {
+            "model": "ae2pr:block/small_sculk_crystal_bud",
+            "x": 90,
+            "y": 180
+        },
+        "facing=up": {
+            "model": "ae2pr:block/small_sculk_crystal_bud"
+        },
+        "facing=west": {
+            "model": "ae2pr:block/small_sculk_crystal_bud",
+            "x": 90,
+            "y": 270
+        }
+    }
+}

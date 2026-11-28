@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.core.datagen;
 
 import com.murthinext.ae2pr.api.material.Material;
 import com.murthinext.ae2pr.api.material.MaterialForm;
+import com.murthinext.ae2pr.api.material.MaterialItem;
 import com.murthinext.ae2pr.core.registry.ModBlocks;
 import com.murthinext.ae2pr.core.registry.ModItems;
 import com.murthinext.ae2pr.core.registry.ModMaterials;
@@ -40,6 +41,12 @@ public final class ModItemModelProvider extends ItemModelProvider {
     private static final Map<String, String> PARENT_OVERRIDES =
             Map.of("meteor_steel_pipe_block", "meteor_steel_pipe_block/meteor_steel_pipe_block_axis_y");
 
+    private static final Set<String> CROSS_ITEMS = Set.of(
+            "small_sculk_crystal_bud",
+            "medium_sculk_crystal_bud",
+            "large_sculk_crystal_bud",
+            "sculk_crystal_cluster");
+
     private static final Set<String> BESPOKE = Set.of(
             "entangled_casing",
             "alien_lava_bucket",
@@ -59,6 +66,10 @@ public final class ModItemModelProvider extends ItemModelProvider {
         for (RegistryObject<Block> entry : ModBlocks.BLOCKS.getEntries()) {
             String path = entry.getId().getPath();
             if (entry.get().asItem() == Items.AIR || BESPOKE.contains(path)) {
+                continue;
+            }
+            if (CROSS_ITEMS.contains(path)) {
+                withExistingParent(path, mcLoc("item/generated")).texture("layer0", modLoc("block/" + path));
                 continue;
             }
             withExistingParent(path, modLoc("block/" + blockParent(path)));
@@ -90,7 +101,8 @@ public final class ModItemModelProvider extends ItemModelProvider {
         Set<String> paths = new HashSet<>();
         for (Material material : ModMaterials.ALL) {
             for (MaterialForm form : material.forms()) {
-                if (form.origin() instanceof MaterialForm.Origin.Own) {
+                if (form.origin() instanceof MaterialForm.Origin.Own own
+                        && own.item().get() instanceof MaterialItem) {
                     paths.add(form.form().itemId(material.id()));
                 }
             }

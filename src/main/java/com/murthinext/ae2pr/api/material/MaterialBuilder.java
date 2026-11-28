@@ -23,6 +23,7 @@ public final class MaterialBuilder {
     private final Map<Form, MaterialForm> forms = new LinkedHashMap<>();
     private int color = 0xFFFFFF;
     private String modelSet = "metallic";
+    private String dustOverlay;
     private FluidSpec fluidSpec;
     private Material material;
     private boolean registered;
@@ -42,6 +43,16 @@ public final class MaterialBuilder {
 
     public MaterialBuilder dust() {
         return own(Form.DUST);
+    }
+
+    public MaterialBuilder gem() {
+        return own(Form.GEM);
+    }
+
+    // 绑定已注册物品，仍按自有形态参与标签与配方生成
+    public MaterialBuilder gem(RegistryObject<Item> item) {
+        return addForm(new MaterialForm(
+                Form.GEM, new MaterialForm.Origin.Own(item, Form.GEM.tag(id)), Form.GEM.defaultAmountMb()));
     }
 
     public MaterialBuilder item(Form form, String itemId) {
@@ -87,6 +98,11 @@ public final class MaterialBuilder {
         return this;
     }
 
+    public MaterialBuilder dustOverlay(String texture) {
+        this.dustOverlay = texture;
+        return this;
+    }
+
     public MaterialBuilder fluid(FluidSpec fluidSpec) {
         this.fluidSpec = fluidSpec;
         return this;
@@ -101,7 +117,7 @@ public final class MaterialBuilder {
             throw new IllegalStateException("Material must declare at least one form or fluid: " + id);
         }
 
-        material = new Material(id, forms, color, modelSet);
+        material = new Material(id, forms, color, modelSet, dustOverlay);
         if (fluidSpec != null) {
             String texture = TEXTURE_ROOT + modelSet + "/liquid";
             FluidSet fluidSet = FluidSet.of(

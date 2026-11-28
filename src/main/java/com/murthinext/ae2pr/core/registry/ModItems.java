@@ -149,6 +149,9 @@ public final class ModItems {
     public static final RegistryObject<CrystalineItem> CRYSTALINE =
             ITEMS.register("crystaline", () -> new CrystalineItem(new Item.Properties()));
 
+    public static final RegistryObject<Item> SCULK_CRYSTAL =
+            ITEMS.register("sculk_crystal", () -> new Item(new Item.Properties()));
+
     public static final RegistryObject<Item> ZIRCON_BRICK =
             ITEMS.register("zircon_brick", () -> new Item(new Item.Properties()));
 }

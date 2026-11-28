@@ -33,6 +33,7 @@ public final class ModMaterials {
     public static Material BARIUM_SULFATE;
     public static Material CERTUS_QUARTZ;
     public static Material FLUIX_CRYSTAL;
+    public static Material SCULK_CRYSTAL;
     public static Material CRYSTALINE;
     public static Material CRYSTAL_ADHESIVE;
 
@@ -110,7 +111,12 @@ public final class ModMaterials {
                 .dust()
                 .color(0x6F818D)
                 .register();
-        ZIRCON = MATERIALS.define("zircon").dust().color(0xE8E8E8).register();
+        ZIRCON = MATERIALS
+                .define("zircon")
+                .gem(ModItems.ZIRCON)
+                .dust()
+                .color(0xE8E8E8)
+                .register();
         COPPER_OXIDE = MATERIALS.define("copper_oxide").dust().color(0x33363A).register();
         IRON_OXIDE = MATERIALS.define("iron_oxide").dust().color(0xA55837).register();
         GOLD_OXIDE = MATERIALS.define("gold_oxide").dust().color(0xAF8D2E).register();
@@ -139,6 +145,15 @@ public final class ModMaterials {
                 .item(Form.BLOCK, "ae2:fluix_block", CRYSTALS_PER_BLOCK * Form.INGOT.defaultAmountMb())
                 .color(0xAD94FF)
                 .fluid(FluidSpec.water("liquid_fluix_crystal", 8, 2000, 3000, 400))
+                .register();
+        SCULK_CRYSTAL = MATERIALS
+                .define("sculk_crystal")
+                .gem(ModItems.SCULK_CRYSTAL)
+                .item(Form.BLOCK, "ae2pr:sculk_crystal_block", CRYSTALS_PER_BLOCK * Form.INGOT.defaultAmountMb())
+                .dust()
+                .color(0x3FB39E)
+                .dustOverlay("ae2pr:item/sculk_dust_specks")
+                .fluid(FluidSpec.water("liquid_sculk_crystal", 8, 2000, 3000, 400))
                 .register();
         CRYSTALINE = MATERIALS
                 .define("crystaline")

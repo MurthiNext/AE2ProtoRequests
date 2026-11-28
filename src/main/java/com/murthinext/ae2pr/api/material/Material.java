@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * 材质数据：描述“这个材质存在哪些形态”以及运行时着色。
@@ -19,13 +20,21 @@ public final class Material {
     private final Map<Form, MaterialForm> forms;
     private final int color;
     private final String modelSet;
+    @Nullable
+    private final String dustOverlay;
     private FluidSet fluidSet;
 
-    Material(String id, Map<Form, MaterialForm> forms, int color, String modelSet) {
+    Material(
+            String id,
+            Map<Form, MaterialForm> forms,
+            int color,
+            String modelSet,
+            @Nullable String dustOverlay) {
         this.id = id;
         this.forms = Collections.unmodifiableMap(new LinkedHashMap<>(forms));
         this.color = color;
         this.modelSet = modelSet;
+        this.dustOverlay = dustOverlay;
     }
 
     public String id() {
@@ -54,6 +63,10 @@ public final class Material {
 
     public String modelSet() {
         return modelSet;
+    }
+
+    public Optional<String> dustOverlay() {
+        return Optional.ofNullable(dustOverlay);
     }
 
     public int color() {

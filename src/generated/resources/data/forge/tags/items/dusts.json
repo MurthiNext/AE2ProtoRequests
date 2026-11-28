@@ -17,6 +17,7 @@
         "#forge:dusts/gold_oxide",
         "#forge:dusts/pseudo_strontianite",
         "#forge:dusts/strontium_carbonate",
-        "#forge:dusts/barium_sulfate"
+        "#forge:dusts/barium_sulfate",
+        "#forge:dusts/sculk_crystal"
     ]
 }

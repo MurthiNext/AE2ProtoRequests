@@ -1,0 +1,45 @@
+{
+    "type": "minecraft:block",
+    "pools": [
+        {
+            "bonus_rolls": 0.0,
+            "entries": [
+                {
+                    "type": "minecraft:alternatives",
+                    "children": [
+                        {
+                            "type": "minecraft:item",
+                            "conditions": [
+                                {
+                                    "condition": "minecraft:match_tool",
+                                    "predicate": {
+                                        "enchantments": [
+                                            {
+                                                "enchantment": "minecraft:silk_touch",
+                                                "levels": {
+                                                    "min": 1
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "name": "ae2pr:large_sculk_crystal_bud"
+                        },
+                        {
+                            "type": "minecraft:item",
+                            "conditions": [
+                                {
+                                    "condition": "minecraft:survives_explosion"
+                                }
+                            ],
+                            "name": "ae2pr:sculk_crystal_dust"
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1.0
+        }
+    ],
+    "random_sequence": "ae2pr:blocks/large_sculk_crystal_bud"
+}

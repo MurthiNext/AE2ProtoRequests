@@ -49,6 +49,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.DIAMOND_SOC_WAFER.get());
                         output.accept(ModItems.DIAMOND_SOC.get());
                         output.accept(ModItems.FINE_FLUIX_WIRE.get());
+                        output.accept(ModItems.SCULK_CRYSTAL.get());
                         output.accept(ModItems.CRYSTALINE.get());
 
                         // 电路板

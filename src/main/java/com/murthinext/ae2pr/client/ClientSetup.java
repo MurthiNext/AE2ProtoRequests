@@ -18,9 +18,12 @@ import com.murthinext.ae2pr.item.matter_confinement_frame.MatterConfinementFrame
 import com.murthinext.ae2pr.cable_part.sky_dome.SkyDomeAnnihilationPlaneModel;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryRenderer;
 import com.murthinext.ae2pr.core.registry.ModBlockEntities;
+import com.murthinext.ae2pr.core.registry.ModBlocks;
 import com.murthinext.ae2pr.core.registry.ModMaterials;
 import com.murthinext.ae2pr.core.registry.ModMenus;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -58,6 +61,16 @@ public final class ClientSetup {
             MenuScreens.register(ModMenus.MACHINE_PART_ITEM_BUS.get(), ItemBusScreen::new);
             MenuScreens.register(ModMenus.MACHINE_PART_FLUID_HATCH.get(), FluidHatchScreen::new);
             MenuScreens.register(ModMenus.ME_PATTERN_BUFFER.get(), MEPatternBufferScreen::new);
+        });
+    }
+
+    @SubscribeEvent
+    public static void registerRenderLayers(FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.SMALL_SCULK_CRYSTAL_BUD.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.MEDIUM_SCULK_CRYSTAL_BUD.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.LARGE_SCULK_CRYSTAL_BUD.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(ModBlocks.SCULK_CRYSTAL_CLUSTER.get(), RenderType.cutout());
         });
     }
 

@@ -19,6 +19,9 @@ import com.murthinext.ae2pr.block.machine_part.MachinePartBlock.Storage;
 import com.murthinext.ae2pr.block.machine_part.MachinePartBlock.Tier;
 import com.murthinext.ae2pr.block.ore.MeteoriteOreBlock;
 import com.murthinext.ae2pr.block.feature.molecular_assembly_core.MolecularAssemblyCoreBlock;
+import com.murthinext.ae2pr.block.sculk.BuddingSculkCrystalBlock;
+import com.murthinext.ae2pr.block.sculk.BuddingSculkCrystalBlock.Quality;
+import com.murthinext.ae2pr.block.sculk.SculkCrystalClusterBlock;
 import com.murthinext.ae2pr.item.VoltageBlockItem;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineModuleBlock;
 import com.murthinext.ae2pr.machine.crystal_assembly_line.CrystalAssemblyLineUnitBlock;
@@ -192,6 +195,35 @@ public final class ModBlocks {
             BlockGroup.ORE,
             () -> new MeteoriteOreBlock(meteoriteOreProperties(), UniformInt.of(3, 7)));
 
+    public static final BlockDef<BuddingSculkCrystalBlock> FLAWLESS_BUDDING_SCULK_CRYSTAL =
+            buddingSculkCrystal("flawless_budding_sculk_crystal", Quality.FLAWLESS);
+
+    public static final BlockDef<BuddingSculkCrystalBlock> FLAWED_BUDDING_SCULK_CRYSTAL =
+            buddingSculkCrystal("flawed_budding_sculk_crystal", Quality.FLAWED);
+
+    public static final BlockDef<BuddingSculkCrystalBlock> CHIPPED_BUDDING_SCULK_CRYSTAL =
+            buddingSculkCrystal("chipped_budding_sculk_crystal", Quality.CHIPPED);
+
+    public static final BlockDef<BuddingSculkCrystalBlock> DAMAGED_BUDDING_SCULK_CRYSTAL =
+            buddingSculkCrystal("damaged_budding_sculk_crystal", Quality.DAMAGED);
+
+    public static final BlockDef<SculkCrystalClusterBlock> SMALL_SCULK_CRYSTAL_BUD = sculkCrystalCluster(
+            "small_sculk_crystal_bud", 3, 4, SoundType.SMALL_AMETHYST_BUD, 1);
+
+    public static final BlockDef<SculkCrystalClusterBlock> MEDIUM_SCULK_CRYSTAL_BUD = sculkCrystalCluster(
+            "medium_sculk_crystal_bud", 4, 3, SoundType.MEDIUM_AMETHYST_BUD, 2);
+
+    public static final BlockDef<SculkCrystalClusterBlock> LARGE_SCULK_CRYSTAL_BUD = sculkCrystalCluster(
+            "large_sculk_crystal_bud", 5, 3, SoundType.LARGE_AMETHYST_BUD, 4);
+
+    public static final BlockDef<SculkCrystalClusterBlock> SCULK_CRYSTAL_CLUSTER = sculkCrystalCluster(
+            "sculk_crystal_cluster", 7, 3, SoundType.AMETHYST_CLUSTER, 5);
+
+    public static final BlockDef<Block> SCULK_CRYSTAL_BLOCK = block(
+            "sculk_crystal_block",
+            BlockGroup.STORAGE_BLOCK,
+            () -> new Block(sculkCrystalBlockProperties()));
+
     public static final BlockDef<Block> METEOR_STEEL_BLOCK = block(
             "meteor_steel_block", BlockGroup.STORAGE_BLOCK, () -> new Block(storageBlockProperties(MapColor.METAL)));
 
@@ -280,6 +312,46 @@ public final class ModBlocks {
                 .strength(50.0F, 150.0F)
                 .requiresCorrectToolForDrops()
                 .forceSolidOn();
+    }
+
+    private static BlockDef<BuddingSculkCrystalBlock> buddingSculkCrystal(String path, Quality quality) {
+        return block(
+                path,
+                BlockGroup.ORE,
+                () -> new BuddingSculkCrystalBlock(
+                        quality,
+                        Block.Properties.of()
+                                .mapColor(MapColor.COLOR_CYAN)
+                                .strength(3.0F, 5.0F)
+                                .sound(SoundType.STONE)
+                                .randomTicks()
+                                .pushReaction(PushReaction.DESTROY)
+                                .requiresCorrectToolForDrops()));
+    }
+
+    private static BlockDef<SculkCrystalClusterBlock> sculkCrystalCluster(
+            String path, int height, int inset, SoundType sound, int light) {
+        return block(
+                path,
+                BlockGroup.ORE,
+                () -> new SculkCrystalClusterBlock(
+                        height,
+                        inset,
+                        Block.Properties.of()
+                                .mapColor(MapColor.COLOR_CYAN)
+                                .strength(1.5F)
+                                .sound(sound)
+                                .lightLevel(state -> light)
+                                .forceSolidOn()
+                                .requiresCorrectToolForDrops()));
+    }
+
+    private static Block.Properties sculkCrystalBlockProperties() {
+        return Block.Properties.of()
+                .mapColor(MapColor.COLOR_CYAN)
+                .strength(3.0F, 5.0F)
+                .sound(SoundType.STONE)
+                .requiresCorrectToolForDrops();
     }
 
     private static Block.Properties casingProperties() {

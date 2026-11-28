@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:block/cross",
+    "textures": {
+        "cross": "ae2pr:block/sculk_crystal_cluster"
+    }
+}
