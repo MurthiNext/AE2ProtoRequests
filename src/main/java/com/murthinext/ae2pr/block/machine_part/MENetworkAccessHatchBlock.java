@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.block.machine_part;
 
 import appeng.block.AEBaseEntityBlock;
 import com.murthinext.ae2pr.api.wrench.Wrenchable;
+import com.murthinext.ae2pr.block.StabilityCasingBlock;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,17 +35,19 @@ public class MENetworkAccessHatchBlock extends AEBaseEntityBlock<MENetworkAccess
                 .mapColor(MapColor.METAL)
                 .strength(3.0F)
                 .sound(SoundType.METAL)
+                .lightLevel(StabilityCasingBlock::fieldLight)
                 .requiresCorrectToolForDrops());
         registerDefaultState(stateDefinition
                 .any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(FORMED, false)
+                .setValue(StabilityCasingBlock.FIELD_LIT, false)
                 .setValue(STYLE, MachinePartBlock.DEFAULT_STYLE));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, FORMED, STYLE);
+        builder.add(FACING, FORMED, STYLE, StabilityCasingBlock.FIELD_LIT);
     }
 
     @Override

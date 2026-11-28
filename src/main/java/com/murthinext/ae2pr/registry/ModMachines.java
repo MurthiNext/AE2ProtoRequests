@@ -25,6 +25,7 @@ import com.murthinext.ae2pr.machine.filter_press.FilterPressStructure;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterControllerBlockEntity;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterMenu;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterStructure;
+import com.murthinext.ae2pr.machine.integrated_mass_fabricator.IntegratedMassFabricatorControllerBlockEntity;
 import com.murthinext.ae2pr.machine.integrated_mass_fabricator.IntegratedMassFabricatorStructure;
 import com.murthinext.ae2pr.machine.jig.JigControllerBlockEntity;
 import com.murthinext.ae2pr.machine.jig.JigStructure;
@@ -98,7 +99,9 @@ public final class ModMachines {
     public static MultiblockMachineDefinition<
                     MultiFactoryControllerBlockEntity, MachineMenu<MultiFactoryControllerBlockEntity>>
             MULTI_FACTORY;
-    public static MultiblockMachineDefinition<MachineControllerBlockEntity, MachineMenu<MachineControllerBlockEntity>>
+    public static MultiblockMachineDefinition<
+                    IntegratedMassFabricatorControllerBlockEntity,
+                    MachineMenu<IntegratedMassFabricatorControllerBlockEntity>>
             INTEGRATED_MASS_FABRICATOR;
     public static SingleblockMachineDefinition<NamingFactoryBlock, NamingFactoryBlockEntity, NamingFactoryMenu>
             NAMING_FACTORY;
@@ -224,6 +227,8 @@ public final class ModMachines {
                 List.of(MultiFactoryMode.values()));
         INTEGRATED_MASS_FABRICATOR = MultiblockMachineDefinition.standard(
                 "integrated_mass_fabricator",
+                IntegratedMassFabricatorControllerBlockEntity.class,
+                IntegratedMassFabricatorControllerBlockEntity::new,
                 ModMachines::metalProperties,
                 () -> IntegratedMassFabricatorStructure.INSTANCE,
                 () -> 1,

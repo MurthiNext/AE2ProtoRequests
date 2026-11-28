@@ -1,0 +1,26 @@
+{
+  "type": "ae2pr:integrated_mass_fabricator",
+  "duration": 40,
+  "energy": 640000,
+  "item_inputs": [
+    {
+      "type": "forge:nbt",
+      "item": "ae2pr:matter_confinement_frame",
+      "count": 1,
+      "catalyst": true,
+      "nbt": "{Matter:{purple:32}}"
+    }
+  ],
+  "fluid_inputs": [
+    {
+      "fluid": "minecraft:water",
+      "amount": 1
+    }
+  ],
+  "item_outputs": [
+    {
+      "item": "ae2:singularity",
+      "count": 64
+    }
+  ]
+}

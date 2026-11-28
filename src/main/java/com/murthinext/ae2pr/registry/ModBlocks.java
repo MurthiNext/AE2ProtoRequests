@@ -10,6 +10,7 @@ import com.murthinext.ae2pr.block.DisassemblableBlock;
 import com.murthinext.ae2pr.block.DisassemblableGlassBlock;
 import com.murthinext.ae2pr.block.FilterPressPlateBlock;
 import com.murthinext.ae2pr.block.MeteorSteelPipeBlock;
+import com.murthinext.ae2pr.block.StabilityCasingBlock;
 import com.murthinext.ae2pr.block.entangled_casing.EntangledCasingBlock;
 import com.murthinext.ae2pr.block.machine_part.MENetworkAccessHatchBlock;
 import com.murthinext.ae2pr.block.machine_part.MEPatternBufferBlock;
@@ -105,7 +106,7 @@ public final class ModBlocks {
             BLOCKS.register("crystal_energy_injection_casing", () -> new DisassemblableBlock(casingProperties()));
 
     public static final RegistryObject<Block> STABILITY_CASING =
-            BLOCKS.register("stability_casing", () -> new DisassemblableBlock(casingProperties()));
+            BLOCKS.register("stability_casing", () -> new StabilityCasingBlock(casingProperties()));
 
     public static final RegistryObject<Block> ENTANGLED_CASING =
             BLOCKS.register("entangled_casing", () -> new EntangledCasingBlock(casingProperties()));

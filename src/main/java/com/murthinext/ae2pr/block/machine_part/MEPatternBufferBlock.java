@@ -8,6 +8,7 @@ import static com.murthinext.ae2pr.block.machine_part.MachinePartBlock.STYLE;
 import com.murthinext.ae2pr.api.BlockProperties;
 import com.murthinext.ae2pr.api.wrench.WrenchTags;
 import com.murthinext.ae2pr.api.wrench.Wrenchable;
+import com.murthinext.ae2pr.block.StabilityCasingBlock;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -36,17 +37,18 @@ import org.jetbrains.annotations.Nullable;
 public final class MEPatternBufferBlock extends Block implements EntityBlock, Wrenchable {
 
     public MEPatternBufferBlock() {
-        super(BlockProperties.metal(MapColor.METAL));
+        super(BlockProperties.metal(MapColor.METAL).lightLevel(StabilityCasingBlock::fieldLight));
         registerDefaultState(stateDefinition
                 .any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(FORMED, false)
+                .setValue(StabilityCasingBlock.FIELD_LIT, false)
                 .setValue(STYLE, DEFAULT_STYLE));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, FORMED, STYLE);
+        builder.add(FACING, FORMED, STYLE, StabilityCasingBlock.FIELD_LIT);
     }
 
     @Override

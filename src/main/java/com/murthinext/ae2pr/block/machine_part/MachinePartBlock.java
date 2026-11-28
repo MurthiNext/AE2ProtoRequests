@@ -5,6 +5,7 @@ import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.api.text.Voltage;
 import com.murthinext.ae2pr.api.wrench.WrenchTags;
 import com.murthinext.ae2pr.api.wrench.Wrenchable;
+import com.murthinext.ae2pr.block.StabilityCasingBlock;
 import com.murthinext.ae2pr.logic.collapse.CollapseHandler;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -81,6 +82,7 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
                 .mapColor(MapColor.METAL)
                 .strength(3.0F)
                 .sound(SoundType.METAL)
+                .lightLevel(StabilityCasingBlock::fieldLight)
                 .requiresCorrectToolForDrops());
         this.tier = tier;
         this.storage = storage;
@@ -89,12 +91,13 @@ public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
                 .any()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(FORMED, false)
+                .setValue(StabilityCasingBlock.FIELD_LIT, false)
                 .setValue(STYLE, DEFAULT_STYLE));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, FORMED, STYLE);
+        builder.add(FACING, FORMED, STYLE, StabilityCasingBlock.FIELD_LIT);
     }
 
     @Override

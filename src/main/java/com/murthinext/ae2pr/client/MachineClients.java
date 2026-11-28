@@ -19,6 +19,7 @@ import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationRender
 import com.murthinext.ae2pr.machine.crystal_workstation.CrystalWorkstationShell;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterRenderer;
 import com.murthinext.ae2pr.machine.high_reactivity_lava_smelter.HighReactivityLavaSmelterScreen;
+import com.murthinext.ae2pr.machine.integrated_mass_fabricator.IntegratedMassFabricatorRenderer;
 import com.murthinext.ae2pr.machine.jig.JigRenderer;
 import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerMode;
 import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerRenderer;
@@ -161,6 +162,8 @@ public final class MachineClients {
                 ModMachines.CRYSTAL_WORKSTATION.blockEntityType(), CrystalWorkstationRenderer::new);
         event.registerBlockEntityRenderer(ModMachines.JIG.blockEntityType(), JigRenderer::new);
         event.registerBlockEntityRenderer(ModMachines.MULTI_FACTORY.blockEntityType(), MultiFactoryRenderer::new);
+        event.registerBlockEntityRenderer(
+                ModMachines.INTEGRATED_MASS_FABRICATOR.blockEntityType(), IntegratedMassFabricatorRenderer::new);
     }
 
     public record Style(ResourceLocation guidePage, GuiTheme theme, Map<Mode, MachineModeButton.Icon> modeIcons)
