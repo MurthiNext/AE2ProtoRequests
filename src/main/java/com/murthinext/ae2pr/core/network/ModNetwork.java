@@ -6,20 +6,18 @@ import com.murthinext.ae2pr.block.machine_part.network.BusSlotClickPacket;
 import com.murthinext.ae2pr.block.machine_part.network.HatchTankClickPacket;
 import com.murthinext.ae2pr.block.machine_part.network.MachinePartFluidPacket;
 import com.murthinext.ae2pr.block.machine_part.network.MachinePartStackPacket;
-import com.murthinext.ae2pr.core.network.MachineStatsPacket;
-import com.murthinext.ae2pr.machine.naming_factory.network.NamingFactoryRenamePacket;
 import com.murthinext.ae2pr.block.machine_part.network.PatternBufferFluidPacket;
+import com.murthinext.ae2pr.effect.screen_corruption.network.ScreenCorruptionImpactPacket;
 import com.murthinext.ae2pr.integration.ae2.repeat_order.network.RepeatOrderFailedPacket;
 import com.murthinext.ae2pr.integration.ae2.repeat_order.network.RepeatOrderFinishedPacket;
 import com.murthinext.ae2pr.integration.ae2.repeat_order.network.RepeatOrderRoundPacket;
 import com.murthinext.ae2pr.integration.ae2.repeat_order.network.RepeatOrderStatusPacket;
-import com.murthinext.ae2pr.effect.screen_corruption.network.ScreenCorruptionImpactPacket;
-import com.murthinext.ae2pr.core.network.ServerConfigSyncPacket;
-import com.murthinext.ae2pr.item.proto_terminal.network.TerminalStoryRequestPacket;
-import com.murthinext.ae2pr.item.proto_terminal.network.TerminalStorySyncPacket;
-import com.murthinext.ae2pr.item.proto_terminal.network.TerminalStoryUnlockPacket;
-import com.murthinext.ae2pr.item.proto_terminal.network.TerminalStoryUpdatePacket;
-import com.murthinext.ae2pr.item.proto_terminal.network.TerminalStoryWatchPacket;
+import com.murthinext.ae2pr.item.proto_terminal.network.StoryRequestPacket;
+import com.murthinext.ae2pr.item.proto_terminal.network.StorySyncPacket;
+import com.murthinext.ae2pr.item.proto_terminal.network.StoryUnlockPacket;
+import com.murthinext.ae2pr.item.proto_terminal.network.StoryUpdatePacket;
+import com.murthinext.ae2pr.item.proto_terminal.network.StoryWatchPacket;
+import com.murthinext.ae2pr.machine.naming_factory.network.NamingFactoryRenamePacket;
 import java.util.Optional;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -123,42 +121,42 @@ public final class ModNetwork {
 
         CHANNEL.registerMessage(
                 nextMessageId++,
-                TerminalStoryRequestPacket.class,
-                TerminalStoryRequestPacket::encode,
-                TerminalStoryRequestPacket::decode,
-                TerminalStoryRequestPacket::handle,
+                StoryRequestPacket.class,
+                StoryRequestPacket::encode,
+                StoryRequestPacket::decode,
+                StoryRequestPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
         CHANNEL.registerMessage(
                 nextMessageId++,
-                TerminalStoryUpdatePacket.class,
-                TerminalStoryUpdatePacket::encode,
-                TerminalStoryUpdatePacket::decode,
-                TerminalStoryUpdatePacket::handle,
+                StoryUpdatePacket.class,
+                StoryUpdatePacket::encode,
+                StoryUpdatePacket::decode,
+                StoryUpdatePacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
         CHANNEL.registerMessage(
                 nextMessageId++,
-                TerminalStoryWatchPacket.class,
-                TerminalStoryWatchPacket::encode,
-                TerminalStoryWatchPacket::decode,
-                TerminalStoryWatchPacket::handle,
+                StoryWatchPacket.class,
+                StoryWatchPacket::encode,
+                StoryWatchPacket::decode,
+                StoryWatchPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_SERVER));
 
         CHANNEL.registerMessage(
                 nextMessageId++,
-                TerminalStorySyncPacket.class,
-                TerminalStorySyncPacket::encode,
-                TerminalStorySyncPacket::decode,
-                TerminalStorySyncPacket::handle,
+                StorySyncPacket.class,
+                StorySyncPacket::encode,
+                StorySyncPacket::decode,
+                StorySyncPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 
         CHANNEL.registerMessage(
                 nextMessageId++,
-                TerminalStoryUnlockPacket.class,
-                TerminalStoryUnlockPacket::encode,
-                TerminalStoryUnlockPacket::decode,
-                TerminalStoryUnlockPacket::handle,
+                StoryUnlockPacket.class,
+                StoryUnlockPacket::encode,
+                StoryUnlockPacket::decode,
+                StoryUnlockPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 
         CHANNEL.registerMessage(

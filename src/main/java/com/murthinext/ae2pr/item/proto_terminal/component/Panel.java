@@ -1,0 +1,252 @@
+package com.murthinext.ae2pr.item.proto_terminal.component;
+
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.murthinext.ae2pr.item.proto_terminal.render.ShapeRenderer;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.util.Mth;
+import org.joml.Matrix4f;
+
+// 终端面板
+public final class Panel {
+
+    static final int BACKGROUND = 0xFF030817;
+    public static final int PANEL = 0xFF070E1D;
+    public static final int DETAIL_BACKGROUND = 0xFF02040C;
+    public static final int BORDER = 0xFF6190B9;
+    public static final int ACCENT = 0xFF9AC8E8;
+    public static final int TEXT = 0xFFD2E6FA;
+    static final int MUTED = 0xFF8AA6C4;
+    // 未解锁剧情块的暗淡配色
+    public static final int LOCKED_PANEL = 0xFF05080F;
+    public static final int LOCKED_BORDER = 0xFF35506B;
+    public static final int LOCKED_ACCENT = 0xFF5B7791;
+    public static final int LOCKED_TEXT = 0xFF7C90A6;
+    public static final float EDGE_SLOPE = 38.0F / 324;
+
+    private Panel() {}
+
+    public static float slant(float height) {
+        return height * EDGE_SLOPE;
+    }
+
+    public static void panel(
+            GuiGraphics graphics, float x, float y, int width, int height, float slant, int fill, int border) {
+        if (width <= slant || height <= 0 || (fill | border) >>> 24 == 0) {
+            return;
+        }
+        graphics.drawManaged(() -> {
+            if (ShapeRenderer.isReady()) {
+                ShapeRenderer.panel(graphics, x, y, width, height, slant, fill, border);
+            } else {
+                quad(graphics, x + slant, y, x, y + height, x + width - slant, y + height, x + width, y, fill, fill);
+                outline(graphics, x, y, width, height, slant, border);
+            }
+        });
+    }
+
+    static void cosmicPanel(
+            GuiGraphics graphics,
+            int x,
+            int y,
+            int width,
+            int height,
+            float slant,
+            float progress,
+            int spaceY,
+            int spaceHeight) {
+        if (width <= slant || height <= 0 || progress <= 0) {
+            return;
+        }
+        graphics.drawManaged(() -> {
+            for (int top = y; top < y + height; ) {
+                int bottom = Math.min(y + height, spaceY + (Math.floorDiv(top - spaceY, 8) + 1) * 8);
+                float leftTop = x + slant * (1 - (top - y) / (float) height);
+                float leftBottom = x + slant * (1 - (bottom - y) / (float) height);
+                quad(
+                        graphics,
+                        leftTop,
+                        top,
+                        leftBottom,
+                        bottom,
+                        leftBottom + width - slant,
+                        bottom,
+                        leftTop + width - slant,
+                        top,
+                        spaceColor(top, spaceY, spaceHeight),
+                        spaceColor(bottom, spaceY, spaceHeight));
+                top = bottom;
+            }
+            if (progress >= 1) {
+                outline(graphics, x, y, width, height, slant, BORDER);
+            }
+        });
+    }
+
+    static int spaceColor(int y, int spaceY, int spaceHeight) {
+        float position = Mth.clamp((y - spaceY) / (float) Math.max(1, spaceHeight - 1), 0, 1);
+        float glow = Mth.sin(position * (float) Math.PI);
+        return 0xFF000000
+                | (3 + Math.round(glow * 3)) << 16
+                | (7 + Math.round(glow * 7)) << 8
+                | (19 + Math.round(glow * 13));
+    }
+
+    // 沿水平段与斜段逐步绘制剧情连线；vertical 指示是否走上下竖直段
+    public static void connection(
+            GuiGraphics graphics,
+            float x1,
+            float y1,
+            float x2,
+            float y2,
+            float nodeSlant,
+            int nodeHeight,
+            boolean vertical,
+            float progress,
+            int color,
+            float width) {
+        if (progress <= 0) {
+            return;
+        }
+        float middle = vertical ? (y1 + y2) / 2.0F : (x1 + x2) / 2.0F;
+        float diagonal = vertical ? -(x2 - x1) * nodeHeight / nodeSlant : -(y2 - y1) * nodeSlant / nodeHeight;
+        float[] xs = vertical
+                ? new float[] {x1, x1, x2, x2}
+                : new float[] {x1, middle - diagonal / 2, middle + diagonal / 2, x2};
+        float[] ys = vertical
+                ? new float[] {y1, middle - diagonal / 2, middle + diagonal / 2, y2}
+                : new float[] {y1, y1, y2, y2};
+        float[] lengths = new float[3];
+        float total = 0;
+        for (int i = 0; i < 3; i++) {
+            lengths[i] = (float) Math.hypot(xs[i + 1] - xs[i], ys[i + 1] - ys[i]);
+            total += lengths[i];
+        }
+        float remaining = total * Mth.clamp(progress, 0, 1);
+        for (int i = 0; i < 3 && remaining > 0; i++) {
+            if (lengths[i] == 0) {
+                continue;
+            }
+            float fraction = Math.min(1, remaining / lengths[i]);
+            line(
+                    graphics,
+                    xs[i],
+                    ys[i],
+                    xs[i] + (xs[i + 1] - xs[i]) * fraction,
+                    ys[i] + (ys[i + 1] - ys[i]) * fraction,
+                    color,
+                    width);
+            remaining -= lengths[i];
+        }
+    }
+
+    public static void line(GuiGraphics graphics, float x1, float y1, float x2, float y2, int color) {
+        line(graphics, x1, y1, x2, y2, color, 1);
+    }
+
+    public static void line(GuiGraphics graphics, float x1, float y1, float x2, float y2, int color, float width) {
+        if (ShapeRenderer.isReady()) {
+            ShapeRenderer.line(graphics, x1, y1, x2, y2, color, width);
+        } else {
+            pixelLine(graphics, x1, y1, x2, y2, color, width);
+        }
+    }
+
+    public static void pixelLine(GuiGraphics graphics, float x1, float y1, float x2, float y2, int color, float width) {
+        float length = (float) Math.hypot(x2 - x1, y2 - y1);
+        if (length <= 0 || color >>> 24 == 0) {
+            return;
+        }
+        float nx = -(y2 - y1) / length * width / 2;
+        float ny = (x2 - x1) / length * width / 2;
+        quad(graphics, x1 + nx, y1 + ny, x2 + nx, y2 + ny, x2 - nx, y2 - ny, x1 - nx, y1 - ny, color, color);
+    }
+
+    public static void outline(GuiGraphics graphics, float x, float y, int width, int height, float slant, int color) {
+        if (width <= slant || height <= 0 || color >>> 24 == 0) {
+            return;
+        }
+        if (ShapeRenderer.isReady()) {
+            ShapeRenderer.panel(graphics, x, y, width, height, slant, 0, color);
+            return;
+        }
+        float slope = slant / (float) Math.max(1, height);
+        quad(graphics, x + slant, y, x + slant - slope, y + 1, x + width - slope, y + 1, x + width, y, color, color);
+        quad(
+                graphics,
+                x + slope,
+                y + height - 1,
+                x,
+                y + height,
+                x + width - slant,
+                y + height,
+                x + width - slant + slope,
+                y + height - 1,
+                color,
+                color);
+        quad(graphics, x + slant, y, x, y + height, x + 1, y + height, x + slant + 1, y, color, color);
+        quad(
+                graphics,
+                x + width - 1,
+                y,
+                x + width - slant - 1,
+                y + height,
+                x + width - slant,
+                y + height,
+                x + width,
+                y,
+                color,
+                color);
+    }
+
+    private static void quad(
+            GuiGraphics graphics,
+            float x1,
+            float y1,
+            float x2,
+            float y2,
+            float x3,
+            float y3,
+            float x4,
+            float y4,
+            int topColor,
+            int bottomColor) {
+        Matrix4f matrix = graphics.pose().last().pose();
+        VertexConsumer vertices = graphics.bufferSource().getBuffer(RenderType.gui());
+        vertex(vertices, matrix, x1, y1, topColor);
+        vertex(vertices, matrix, x2, y2, bottomColor);
+        vertex(vertices, matrix, x3, y3, bottomColor);
+        vertex(vertices, matrix, x4, y4, topColor);
+    }
+
+    private static void vertex(VertexConsumer vertices, Matrix4f matrix, float x, float y, int color) {
+        vertices.vertex(matrix, x, y, 0)
+                .color(color >> 16 & 255, color >> 8 & 255, color & 255, color >>> 24)
+                .endVertex();
+    }
+
+    public static boolean contains(double pointX, double pointY, float x, float y, int width, int height, float slant) {
+        if (height <= 0 || pointY < y || pointY >= y + height) {
+            return false;
+        }
+        double offset = slant * (1 - (pointY - y) / height);
+        return pointX >= x + offset && pointX < x + offset + width - slant;
+    }
+
+    public static int alpha(int color, float opacity) {
+        return (Mth.clamp(Math.round(opacity * 255), 0, 255) << 24) | (color & 0xFFFFFF);
+    }
+
+    public static int mix(int from, int to, float progress) {
+        float value = Mth.clamp(progress, 0, 1);
+        int red = Math.round(Mth.lerp(value, from >> 16 & 255, to >> 16 & 255));
+        int green = Math.round(Mth.lerp(value, from >> 8 & 255, to >> 8 & 255));
+        int blue = Math.round(Mth.lerp(value, from & 255, to & 255));
+        return 0xFF000000 | red << 16 | green << 8 | blue;
+    }
+
+    public static float ease(float progress) {
+        float value = Mth.clamp(progress, 0, 1);
+        return 1 - (1 - value) * (1 - value) * (1 - value);
+    }
+}

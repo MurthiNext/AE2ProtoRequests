@@ -7,7 +7,7 @@ import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderRounds;
 import com.murthinext.ae2pr.client.repeat.ClientRepeatOrderState;
 import com.murthinext.ae2pr.client.tooltip.FormulaTooltip;
 import com.murthinext.ae2pr.client.tooltip.TooltipRenderer;
-import com.murthinext.ae2pr.item.proto_terminal.TerminalStoryProgressCache;
+import com.murthinext.ae2pr.item.proto_terminal.story.ProgressCache;
 import com.murthinext.ae2pr.item.upgrade.MachineUpgradeCardItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -61,6 +61,6 @@ public final class ClientEvents {
         ClientRepeatOrderState.clear();
         ClientRepeatOrderFailures.clear();
         ClientRepeatOrderRounds.clear();
-        TerminalStoryProgressCache.reset();
+        ProgressCache.reset();
     }
 }

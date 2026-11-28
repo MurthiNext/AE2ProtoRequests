@@ -30,12 +30,12 @@ public final class MatterConfinementFrameModel implements IUnbakedGeometry<Matte
     public static final IGeometryLoader<MatterConfinementFrameModel> LOADER =
             (json, context) -> new MatterConfinementFrameModel(
                     ElementsModel.Loader.INSTANCE.read(json, context),
-                    new MatterCrystal(json.getAsJsonObject("crystal")));
+                    new Crystal(json.getAsJsonObject("crystal")));
 
     private final ElementsModel frame;
-    private final MatterCrystal crystal;
+    private final Crystal crystal;
 
-    private MatterConfinementFrameModel(ElementsModel frame, MatterCrystal crystal) {
+    private MatterConfinementFrameModel(ElementsModel frame, Crystal crystal) {
         this.frame = frame;
         this.crystal = crystal;
     }
@@ -58,11 +58,11 @@ public final class MatterConfinementFrameModel implements IUnbakedGeometry<Matte
 
         private final BakedModel frame;
         private final TextureAtlasSprite matter;
-        private final MatterCrystal crystal;
+        private final Crystal crystal;
         private final Cache<Map<AEColor, Integer>, FilledModel> models =
                 CacheBuilder.newBuilder().maximumSize(32).build();
 
-        private ContentsOverrides(BakedModel frame, TextureAtlasSprite matter, MatterCrystal crystal) {
+        private ContentsOverrides(BakedModel frame, TextureAtlasSprite matter, Crystal crystal) {
             this.frame = frame;
             this.matter = matter;
             this.crystal = crystal;
@@ -106,5 +106,5 @@ public final class MatterConfinementFrameModel implements IUnbakedGeometry<Matte
         }
     }
 
-    private record FilledModel(BakedModel model, MatterCrystal.Surface surface) {}
+    private record FilledModel(BakedModel model, Crystal.Surface surface) {}
 }

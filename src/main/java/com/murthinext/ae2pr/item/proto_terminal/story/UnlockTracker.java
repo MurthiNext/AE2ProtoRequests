@@ -1,0 +1,78 @@
+package com.murthinext.ae2pr.item.proto_terminal.story;
+
+import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.core.network.ModNetwork;
+import com.murthinext.ae2pr.item.proto_terminal.network.StoryUnlockPacket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+@Mod.EventBusSubscriber(modid = ae2pr.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+public final class UnlockTracker {
+
+    private static final int INTERVAL_TICKS = 20;
+
+    private static final class Watch {
+
+        private final List<String> conditions;
+        private Set<String> satisfied;
+
+        private Watch(List<String> conditions, Set<String> satisfied) {
+            this.conditions = conditions;
+            this.satisfied = satisfied;
+        }
+    }
+
+    private static final Map<UUID, Watch> watches = new HashMap<>();
+    private static int tick;
+
+    private UnlockTracker() {}
+
+    public static void watch(ServerPlayer player, List<String> keys) {
+        if (keys.isEmpty()) {
+            watches.remove(player.getUUID());
+            return;
+        }
+        List<String> satisfied = UnlockCondition.satisfied(player, keys);
+        watches.put(player.getUUID(), new Watch(List.copyOf(keys), new HashSet<>(satisfied)));
+        ModNetwork.sendToPlayer(player, new StoryUnlockPacket(satisfied));
+    }
+
+    @SubscribeEvent
+    public static void tick(TickEvent.ServerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END || watches.isEmpty() || ++tick % INTERVAL_TICKS != 0) {
+            return;
+        }
+        List<UUID> stale = new ArrayList<>();
+        for (Map.Entry<UUID, Watch> entry : watches.entrySet()) {
+            ServerPlayer player = event.getServer().getPlayerList().getPlayer(entry.getKey());
+            if (player == null) {
+                stale.add(entry.getKey());
+                continue;
+            }
+            Watch watch = entry.getValue();
+            List<String> satisfied = UnlockCondition.satisfied(player, watch.conditions);
+            if (watch.satisfied.equals(new HashSet<>(satisfied))) {
+                continue;
+            }
+            watch.satisfied = new HashSet<>(satisfied);
+            ModNetwork.sendToPlayer(player, new StoryUnlockPacket(satisfied));
+        }
+        stale.forEach(watches::remove);
+    }
+
+    @SubscribeEvent
+    public static void stopped(ServerStoppedEvent event) {
+        watches.clear();
+        tick = 0;
+    }
+}

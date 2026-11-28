@@ -2,6 +2,8 @@ package com.murthinext.ae2pr.item.proto_terminal;
 
 import com.murthinext.ae2pr.api.ClientHooks;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
+import com.murthinext.ae2pr.item.proto_terminal.multiblock.Assembler;
+import com.murthinext.ae2pr.item.proto_terminal.screen.TerminalScreen;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -39,7 +41,7 @@ public class ProtoTerminalItem extends Item {
             return InteractionResult.SUCCESS;
         }
         if (player instanceof ServerPlayer serverPlayer) {
-            MultiblockAssembler.assemble(serverPlayer, context.getClickedPos(), machine, context.getHand());
+            Assembler.assemble(serverPlayer, context.getClickedPos(), machine, context.getHand());
         }
         return InteractionResult.CONSUME;
     }
