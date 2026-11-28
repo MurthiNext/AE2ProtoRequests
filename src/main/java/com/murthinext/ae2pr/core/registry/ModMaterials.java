@@ -149,7 +149,6 @@ public final class ModMaterials {
                 .storageBlock(ModBlocks.SCULK_CRYSTAL_BLOCK.itemHolder())
                 .dust()
                 .color(0x3FB39E)
-                .dustOverlay("ae2pr:item/sculk_dust_specks")
                 .fluid(FluidSpec.water("liquid_sculk_crystal", 8, 2000, 3000, 400))
                 .register();
         CRYSTALINE = MATERIALS

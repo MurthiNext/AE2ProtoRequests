@@ -49,10 +49,9 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.DIAMOND_SOC_WAFER.get());
                         output.accept(ModItems.DIAMOND_SOC.get());
                         output.accept(ModItems.FINE_FLUIX_WIRE.get());
-                        output.accept(ModItems.SCULK_CRYSTAL.get());
                         output.accept(ModItems.CRYSTALINE.get());
 
-                        // 电路板
+                        // 带电压的电路板
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_1TOPS.get());
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_4TOPS.get());
                         output.accept(ModItems.COMPUTATION_CELL_COMPONENT_16TOPS.get());
@@ -70,7 +69,10 @@ public final class ModCreativeTabs {
                         // 锭
                         acceptMaterials(output, Form.INGOT);
                         output.accept(ModItems.ZIRCON_BRICK.get());
+
+                        // 宝石
                         output.accept(ModItems.ZIRCON.get());
+                        output.accept(ModItems.SCULK_CRYSTAL.get());
 
                         // 粉末
                         acceptMaterials(output, Form.DUST);
