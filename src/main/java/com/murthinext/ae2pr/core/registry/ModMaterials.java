@@ -49,6 +49,7 @@ public final class ModMaterials {
                 .ingot()
                 .plate()
                 .dust()
+                .storageBlock(9, ModBlocks.METEOR_STEEL_BLOCK.itemHolder())
                 .color(0xE1EBF8)
                 .modelSet("meteor")
                 .register();
@@ -114,6 +115,7 @@ public final class ModMaterials {
         ZIRCON = MATERIALS
                 .define("zircon")
                 .gem(ModItems.ZIRCON)
+                .storageBlock(CRYSTALS_PER_BLOCK, ModBlocks.ZIRCON_BLOCK.itemHolder())
                 .dust()
                 .color(0xE8E8E8)
                 .register();
@@ -149,7 +151,7 @@ public final class ModMaterials {
         SCULK_CRYSTAL = MATERIALS
                 .define("sculk_crystal")
                 .gem(ModItems.SCULK_CRYSTAL)
-                .item(Form.BLOCK, "ae2pr:sculk_crystal_block", CRYSTALS_PER_BLOCK * Form.INGOT.defaultAmountMb())
+                .storageBlock(CRYSTALS_PER_BLOCK, ModBlocks.SCULK_CRYSTAL_BLOCK.itemHolder())
                 .dust()
                 .color(0x3FB39E)
                 .dustOverlay("ae2pr:item/sculk_dust_specks")

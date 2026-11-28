@@ -57,7 +57,7 @@ public final class Material {
         return form(form).map(MaterialForm::ownsItem).orElse(false);
     }
 
-    public Optional<RegistryObject<Item>> item(Form form) {
+    public Optional<RegistryObject<? extends Item>> item(Form form) {
         return form(form).flatMap(MaterialForm::ownItem);
     }
 

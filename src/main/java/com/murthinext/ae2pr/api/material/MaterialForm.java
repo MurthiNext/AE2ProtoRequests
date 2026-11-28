@@ -39,7 +39,7 @@ public record MaterialForm(Form form, Origin origin, int amountMb) {
         return ((Origin.ExternalTag) origin).tag().location();
     }
 
-    public Optional<RegistryObject<Item>> ownItem() {
+    public Optional<RegistryObject<? extends Item>> ownItem() {
         return origin instanceof Origin.Own own ? Optional.of(own.item()) : Optional.empty();
     }
 
@@ -49,7 +49,7 @@ public record MaterialForm(Form form, Origin origin, int amountMb) {
 
     public sealed interface Origin {
 
-        record Own(RegistryObject<Item> item, TagKey<Item> tag) implements Origin {}
+        record Own(RegistryObject<? extends Item> item, TagKey<Item> tag) implements Origin {}
 
         record ExternalItem(ResourceLocation id) implements Origin {}
 

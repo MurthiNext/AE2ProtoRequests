@@ -13,10 +13,13 @@ import com.murthinext.ae2pr.core.registry.ModMachines;
 import com.murthinext.ae2pr.core.registry.ModMaterials;
 import com.murthinext.ae2pr.machine.matter_phase_transformer.MatterPhaseTransformerMode;
 import java.util.function.Consumer;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -31,7 +34,8 @@ import net.minecraftforge.common.crafting.conditions.TagEmptyCondition;
 /**
  * 材料配方：
  * - 有锭 + 粉的材料：粉可熔炼/高炉烧成锭，锭可在压印器中直接压成粉；
- * - 有锭 + 板的材料：锭配合单层板压印模板压成板。
+ * - 有锭 + 板的材料：锭配合单层板压印模板压成板；
+ * - 有存储方块的材料：按块内物品数生成 2×2 / 3×3 与分解配方。
  */
 public class MaterialRecipeProvider extends RecipeProvider {
 
@@ -86,6 +90,7 @@ public class MaterialRecipeProvider extends RecipeProvider {
         }
 
         for (Material material : ModMaterials.ALL) {
+            storageBlockRecipes(writer, material);
             if (!material.hasFluid()) {
                 continue;
             }
@@ -94,13 +99,53 @@ public class MaterialRecipeProvider extends RecipeProvider {
             }
         }
 
-        // 紫水晶碎片研磨成粉
         InscriberRecipeBuilder.inscribe(
                         Ingredient.of(Items.AMETHYST_SHARD),
                         ModMaterials.AMETHYST.item(Form.DUST).orElseThrow().get(),
                         1)
                 .setMode(InscriberProcessType.INSCRIBE)
                 .save(writer, Ids.of("inscriber/amethyst_dust"));
+    }
+
+    private static void storageBlockRecipes(Consumer<FinishedRecipe> writer, Material material) {
+        MaterialForm blockForm = material.form(Form.BLOCK).orElse(null);
+        if (blockForm == null || !blockForm.ownsItem()) {
+            return;
+        }
+        MaterialForm unitForm = material.form(Form.GEM)
+                .filter(MaterialForm::ownsItem)
+                .or(() -> material.form(Form.INGOT).filter(MaterialForm::ownsItem))
+                .orElse(null);
+        if (unitForm == null || blockForm.amountMb() % unitForm.amountMb() != 0) {
+            return;
+        }
+        int itemsPerBlock = blockForm.amountMb() / unitForm.amountMb();
+        if (itemsPerBlock != 4 && itemsPerBlock != 9) {
+            return;
+        }
+
+        Item blockItem = blockForm.ownItem().orElseThrow().get();
+        Item unitItem = unitForm.ownItem().orElseThrow().get();
+        TagKey<Item> unitTag = unitForm.ownTag().orElseThrow();
+
+        ShapedRecipeBuilder packer = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, blockItem)
+                .define('A', unitTag)
+                .unlockedBy("has_" + unitForm.form().name(), has(unitTag));
+        if (itemsPerBlock == 4) {
+            packer.pattern("AA").pattern("AA");
+        } else {
+            packer.pattern("AAA").pattern("AAA").pattern("AAA");
+        }
+        packer.save(writer, Ids.of("crafting_shaped/" + material.id() + "_block"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, unitItem, itemsPerBlock)
+                .requires(blockItem)
+                .unlockedBy("has_block", has(blockItem))
+                .save(writer, Ids.of("crafting_shapeless/" + itemPath(unitItem) + "_from_block"));
+    }
+
+    private static String itemPath(Item item) {
+        return BuiltInRegistries.ITEM.getKey(item).getPath();
     }
 
     // 材料形态 → 流体，由 material.fluid() 推导

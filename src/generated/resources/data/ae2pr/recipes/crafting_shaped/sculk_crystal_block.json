@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "key": {
+        "A": {
+            "tag": "forge:gems/sculk_crystal"
+        }
+    },
+    "pattern": [
+        "AA",
+        "AA"
+    ],
+    "result": {
+        "item": "ae2pr:sculk_crystal_block"
+    },
+    "show_notification": true
+}

@@ -1,13 +1,20 @@
 package com.murthinext.ae2pr.core.datagen;
 
 import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.material.Form;
+import com.murthinext.ae2pr.api.material.Material;
+import com.murthinext.ae2pr.api.material.MaterialForm;
 import com.murthinext.ae2pr.core.registry.ModBlocks;
+import com.murthinext.ae2pr.core.registry.ModMaterials;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
@@ -64,6 +71,20 @@ public final class ModBlockTagsProvider extends BlockTagsProvider {
                 case IRON -> tag(BlockTags.NEEDS_IRON_TOOL).add(entry.get());
                 case NONE -> {}
             }
+        }
+
+        for (Material material : ModMaterials.ALL) {
+            material.form(Form.BLOCK)
+                    .flatMap(MaterialForm::ownItem)
+                    .ifPresent(holder -> {
+                        if (holder.get() instanceof BlockItem blockItem) {
+                            Block block = blockItem.getBlock();
+                            var storageBlockTag = BlockTags.create(ResourceLocation.fromNamespaceAndPath(
+                                    "forge", "storage_blocks/" + material.id()));
+                            tag(storageBlockTag).add(block);
+                            tag(Tags.Blocks.STORAGE_BLOCKS).addTag(storageBlockTag);
+                        }
+                    });
         }
     }
 }

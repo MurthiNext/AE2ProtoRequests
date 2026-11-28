@@ -10,7 +10,7 @@
     "item_inputs": [
         {
             "count": 1,
-            "item": "ae2pr:sculk_crystal_block"
+            "tag": "forge:storage_blocks/sculk_crystal"
         }
     ]
 }

@@ -1,16 +1,18 @@
 {
     "type": "minecraft:crafting_shaped",
-    "pattern": [
-        "AAA",
-        "AAA",
-        "AAA"
-    ],
+    "category": "misc",
     "key": {
         "A": {
             "tag": "forge:ingots/meteor_steel"
         }
     },
+    "pattern": [
+        "AAA",
+        "AAA",
+        "AAA"
+    ],
     "result": {
         "item": "ae2pr:meteor_steel_block"
-    }
+    },
+    "show_notification": true
 }

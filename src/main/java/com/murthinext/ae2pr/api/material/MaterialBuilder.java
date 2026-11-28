@@ -49,10 +49,24 @@ public final class MaterialBuilder {
         return own(Form.GEM);
     }
 
-    // 绑定已注册物品，仍按自有形态参与标签与配方生成
-    public MaterialBuilder gem(RegistryObject<Item> item) {
+    public MaterialBuilder gem(RegistryObject<? extends Item> item) {
         return addForm(new MaterialForm(
                 Form.GEM, new MaterialForm.Origin.Own(item, Form.GEM.tag(id)), Form.GEM.defaultAmountMb()));
+    }
+
+    public MaterialBuilder storageBlock(int itemsPerBlock, RegistryObject<? extends Item> item) {
+        if (itemsPerBlock != 4 && itemsPerBlock != 9) {
+            throw new IllegalArgumentException("Storage block must contain 4 or 9 items: " + id);
+        }
+        MaterialForm unit = forms.get(Form.GEM);
+        if (unit == null) {
+            unit = forms.get(Form.INGOT);
+        }
+        if (unit == null) {
+            throw new IllegalStateException("Storage block requires a gem or ingot form: " + id);
+        }
+        return addForm(new MaterialForm(
+                Form.BLOCK, new MaterialForm.Origin.Own(item, Form.BLOCK.tag(id)), itemsPerBlock * unit.amountMb()));
     }
 
     public MaterialBuilder item(Form form, String itemId) {
