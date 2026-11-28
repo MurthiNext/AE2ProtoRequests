@@ -18,7 +18,7 @@ public class MultiFactoryControllerBlockEntity extends ModeMachineBlockEntity<Mu
 
     public MultiFactoryControllerBlockEntity(
             MultiblockMachineDefinition<MultiFactoryControllerBlockEntity> definition, BlockPos pos, BlockState state) {
-        super(definition, pos, state, List.of(MultiFactoryMode.values()));
+        super(definition, pos, state);
     }
 
     @Override

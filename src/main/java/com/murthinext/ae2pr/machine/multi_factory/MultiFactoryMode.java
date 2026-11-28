@@ -4,29 +4,29 @@ import appeng.recipes.handlers.ChargerRecipe;
 import appeng.recipes.handlers.InscriberRecipe;
 import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.api.machine.Mode;
+import com.murthinext.ae2pr.api.machine.RecipeSpec;
 import net.minecraft.world.item.crafting.RecipeType;
+import org.jetbrains.annotations.Nullable;
 
-// 通式加工厂工作模式，直接对应 AE2 原生配方类型
 public enum MultiFactoryMode implements Mode {
-    INSCRIBING("inscribing", InscriberRecipe.TYPE),
-    CHARGING("charging", ChargerRecipe.TYPE);
+    INSCRIBING(InscriberRecipe.TYPE),
+    CHARGING(ChargerRecipe.TYPE);
 
-    private final String id;
     private final RecipeType<?> recipeType;
 
-    MultiFactoryMode(String id, RecipeType<?> recipeType) {
-        this.id = id;
+    MultiFactoryMode(RecipeType<?> recipeType) {
         this.recipeType = recipeType;
     }
 
     @Override
-    public String id() {
-        return id;
+    public String machineId() {
+        return "multi_factory";
     }
 
     @Override
-    public String translationKey() {
-        return "gui.ae2pr.multi_factory.mode." + id;
+    @Nullable
+    public RecipeSpec<?> recipe() {
+        return null;
     }
 
     @Override

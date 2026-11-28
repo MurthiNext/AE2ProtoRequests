@@ -1,15 +1,15 @@
 package com.murthinext.ae2pr.api.machine;
 
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
 import com.murthinext.ae2pr.api.multiblock.AbstractStructureFacade;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,12 +23,20 @@ public final class MultiblockMachineDefinition<E extends AbstractMultiblockContr
     private final Supplier<Block.Properties> properties;
     private final Supplier<? extends AbstractStructureFacade> structure;
     private final IntSupplier parallel;
-    private final Supplier<? extends RecipeType<?>> recipeType;
-    private IntSupplier parallelPerRepeatSlice = () -> 0;
-    private Consumer<E> clientTicker = controller -> {};
-    // 核心方块运行指示灯谓词，未配置表示不处理
+    private final IntSupplier parallelPerRepeatSlice;
+
     @Nullable
-    private CoreLight coreLight;
+    private final Class<? extends Enum<?>> modeType;
+
+    @Nullable
+    private final RecipeDefinition<?> recipe;
+
+    private final Map<Mode, RecipeDefinition<?>> modeRecipes;
+
+    @Nullable
+    private final CoreLight coreLight;
+
+    private Consumer<E> clientTicker = controller -> {};
 
     private MultiblockMachineDefinition(
             String id,
@@ -37,109 +45,56 @@ public final class MultiblockMachineDefinition<E extends AbstractMultiblockContr
             Supplier<Block.Properties> properties,
             Supplier<? extends AbstractStructureFacade> structure,
             IntSupplier parallel,
-            Supplier<? extends RecipeType<?>> recipeType,
+            IntSupplier parallelPerRepeatSlice,
+            @Nullable Class<? extends Enum<?>> modeType,
+            @Nullable RecipeSpec<?> recipeSpec,
             List<Mode> modes,
-            Function<MachineDefinition<E>, MenuHandle<E, ?>> menuFactory) {
+            Function<MachineDefinition<E>, MenuHandle<E, ?>> menuFactory,
+            @Nullable CoreLight coreLight) {
         super(id, id, entityClass, menuFactory, 4, modes);
         this.controllerFactory = controllerFactory;
         this.properties = properties;
         this.structure = structure;
         this.parallel = parallel;
-        this.recipeType = recipeType;
-    }
-
-    public static MultiblockMachineDefinition<MachineControllerBlockEntity> standard(
-            String id,
-            Supplier<Block.Properties> properties,
-            Supplier<? extends AbstractStructureFacade> structure,
-            IntSupplier parallel,
-            Supplier<? extends RecipeType<?>> recipeType) {
-        return build(
-                id,
-                MachineControllerBlockEntity.class,
-                MachineControllerBlockEntity::new,
-                properties,
-                structure,
-                parallel,
-                recipeType,
-                List.of());
-    }
-
-    public static <E extends AbstractMultiblockControllerBlockEntity> MultiblockMachineDefinition<E> standard(
-            String id,
-            Class<E> entityClass,
-            ControllerFactory<E> controllerFactory,
-            Supplier<Block.Properties> properties,
-            Supplier<? extends AbstractStructureFacade> structure,
-            IntSupplier parallel,
-            Supplier<? extends RecipeType<?>> recipeType) {
-        return build(id, entityClass, controllerFactory, properties, structure, parallel, recipeType, List.of());
-    }
-
-    public static <T extends Enum<T> & Mode, E extends AbstractMultiblockControllerBlockEntity>
-            MultiblockMachineDefinition<E> withModes(
-                    String id,
-                    Class<E> entityClass,
-                    ControllerFactory<E> controllerFactory,
-                    Supplier<Block.Properties> properties,
-                    Supplier<? extends AbstractStructureFacade> structure,
-                    IntSupplier parallel,
-                    Supplier<? extends RecipeType<?>> recipeType,
-                    List<T> modes) {
-        if (modes.isEmpty()) {
-            throw new IllegalArgumentException("Machine must have at least one mode: " + id);
-        }
-        for (int index = 0; index < modes.size(); index++) {
-            if (modes.get(index).ordinal() != index) {
-                throw new IllegalArgumentException("Machine modes must follow enum order: " + id);
+        this.parallelPerRepeatSlice = parallelPerRepeatSlice;
+        this.modeType = modeType;
+        this.coreLight = coreLight;
+        this.recipe = recipeSpec == null ? null : recipeSpec.declare(id);
+        Map<Mode, RecipeDefinition<?>> modeRecipes = new HashMap<>();
+        for (Mode mode : modes) {
+            RecipeSpec<?> modeRecipe = mode.recipe();
+            if (modeRecipe == null) {
+                continue;
             }
+            RecipeDefinition<?> definition = modeRecipe.declare(id + "_" + mode.id());
+            modeRecipes.put(mode, definition);
+            MachineRecipeTypes.bind(mode, definition);
         }
-        return build(
-                id, entityClass, controllerFactory, properties, structure, parallel, recipeType, List.copyOf(modes));
+        this.modeRecipes = Map.copyOf(modeRecipes);
     }
 
-    public static <E extends AbstractMultiblockControllerBlockEntity, M extends AbstractMultiblockControllerMenu<E>>
-            MultiblockMachineDefinition<E> customMenu(
-                    String id,
-                    Class<E> entityClass,
-                    ControllerFactory<E> controllerFactory,
-                    Supplier<Block.Properties> properties,
-                    Supplier<? extends AbstractStructureFacade> structure,
-                    IntSupplier parallel,
-                    Supplier<? extends RecipeType<?>> recipeType,
-                    Supplier<MenuType<M>> menuTypeFactory,
-                    MenuHandle.MenuFactory<E, M> menuFactory) {
+    public static <E extends AbstractMultiblockControllerBlockEntity> MultiblockMachineDefinition<E> of(
+            MachineSpec<E> spec) {
+        Mode[] modes =
+                spec.modeType() == null ? new Mode[0] : (Mode[]) spec.modeType().getEnumConstants();
+        if (spec.modeType() != null && modes.length == 0) {
+            throw new IllegalArgumentException("Machine must have at least one mode: " + spec.id());
+        }
+        Function<MachineDefinition<E>, MenuHandle<E, ?>> menu =
+                spec.menu() == null ? MultiblockMachineDefinition::defaultMenu : spec.menu();
         return new MultiblockMachineDefinition<>(
-                id,
-                entityClass,
-                controllerFactory,
-                properties,
-                structure,
-                parallel,
-                recipeType,
-                List.of(),
-                definition -> MenuHandle.register(definition, menuTypeFactory, menuFactory));
-    }
-
-    private static <E extends AbstractMultiblockControllerBlockEntity> MultiblockMachineDefinition<E> build(
-            String id,
-            Class<E> entityClass,
-            ControllerFactory<E> controllerFactory,
-            Supplier<Block.Properties> properties,
-            Supplier<? extends AbstractStructureFacade> structure,
-            IntSupplier parallel,
-            Supplier<? extends RecipeType<?>> recipeType,
-            List<Mode> modes) {
-        return new MultiblockMachineDefinition<>(
-                id,
-                entityClass,
-                controllerFactory,
-                properties,
-                structure,
-                parallel,
-                recipeType,
-                modes,
-                MultiblockMachineDefinition::defaultMenu);
+                spec.id(),
+                spec.entityClass(),
+                spec.controller(),
+                spec.properties(),
+                spec.structure(),
+                spec.parallel(),
+                spec.parallelPerRepeatSlice(),
+                spec.modeType(),
+                spec.recipe(),
+                List.of(modes),
+                menu,
+                spec.coreLight());
     }
 
     private static <E extends AbstractMultiblockControllerBlockEntity> MenuHandle<E, MachineMenu<E>> defaultMenu(
@@ -169,17 +124,39 @@ public final class MultiblockMachineDefinition<E extends AbstractMultiblockContr
         return parallel.getAsInt();
     }
 
-    public MultiblockMachineDefinition<E> parallelPerRepeatSlice(IntSupplier parallel) {
-        this.parallelPerRepeatSlice = parallel;
-        return this;
+    @SuppressWarnings("unchecked") // modeType 与 modes 同源，由 MachineSpec 在构造期保证
+    public <T extends Enum<T> & Mode> Class<T> modeType() {
+        if (modeType == null) {
+            throw new IllegalStateException("Machine has no modes: " + id());
+        }
+        return (Class<T>) modeType;
     }
 
     public int parallelPerRepeatSlice() {
         return parallelPerRepeatSlice.getAsInt();
     }
 
+    @Nullable
+    public RecipeDefinition<?> recipe() {
+        return recipe;
+    }
+
+    public RecipeDefinition<?> recipe(Mode mode) {
+        RecipeDefinition<?> modeRecipe = modeRecipes.get(mode);
+        if (modeRecipe == null) {
+            throw new IllegalStateException("Mode has no recipe: " + id() + "/" + mode.id());
+        }
+        return modeRecipe;
+    }
+
     public RecipeType<?> recipeType() {
-        return recipeType.get();
+        if (recipe != null) {
+            return recipe.type();
+        }
+        if (!modes().isEmpty()) {
+            return modes().get(0).recipeType();
+        }
+        throw new IllegalStateException("Machine has no recipe: " + id());
     }
 
     public void clientTicker(Consumer<E> ticker) {
@@ -188,12 +165,6 @@ public final class MultiblockMachineDefinition<E extends AbstractMultiblockContr
 
     public void clientTick(E controller) {
         clientTicker.accept(controller);
-    }
-
-    // 声明核心方块使用 HighEnergyCoreBlock 的运行指示灯
-    public MultiblockMachineDefinition<E> coreLight(CoreLight predicate) {
-        this.coreLight = predicate;
-        return this;
     }
 
     @Nullable

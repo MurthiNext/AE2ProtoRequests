@@ -15,6 +15,8 @@ public record RecipeConstraints(
         boolean energyRequired) {
 
     public static final RecipeConstraints NONE = builder().build();
+    public static final RecipeConstraints ENERGY_ONLY =
+            builder().requireEnergy().build();
 
     public static Builder builder() {
         return new Builder();

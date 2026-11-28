@@ -1,7 +1,6 @@
 package com.murthinext.ae2pr.api.machine;
 
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -12,14 +11,14 @@ public abstract class ModeMachineBlockEntity<T extends Enum<T> & Mode> extends A
 
     private static final String MODE_ID = "mode";
 
-    private final List<T> modes;
+    private final T[] modes;
     private T mode;
 
-    protected ModeMachineBlockEntity(
-            MultiblockMachineDefinition<?> definition, BlockPos pos, BlockState state, List<T> modes) {
+    @SuppressWarnings("unchecked")
+    protected ModeMachineBlockEntity(MultiblockMachineDefinition<?> definition, BlockPos pos, BlockState state) {
         super(definition, pos, state);
-        this.modes = List.copyOf(modes);
-        this.mode = this.modes.get(0);
+        this.modes = (T[]) definition.modeType().getEnumConstants();
+        this.mode = modes[0];
     }
 
     public final T getMode() {
@@ -36,8 +35,8 @@ public abstract class ModeMachineBlockEntity<T extends Enum<T> & Mode> extends A
         if (level == null || level.isClientSide || isBusy()) {
             return false;
         }
-        int next = modes.indexOf(mode) + 1;
-        mode = modes.get(next >= modes.size() ? 0 : next);
+        int next = mode.ordinal() + 1;
+        mode = modes[next >= modes.length ? 0 : next];
         clearPause();
         markStateChanged();
         return true;
@@ -59,6 +58,6 @@ public abstract class ModeMachineBlockEntity<T extends Enum<T> & Mode> extends A
                 return;
             }
         }
-        mode = modes.get(0);
+        mode = modes[0];
     }
 }

@@ -3,7 +3,6 @@ package com.murthinext.ae2pr.machine.matter_phase_transformer;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
 import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
 import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
-import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,7 +19,7 @@ public class MatterPhaseTransformerControllerBlockEntity extends ModeMachineBloc
             MultiblockMachineDefinition<MatterPhaseTransformerControllerBlockEntity> definition,
             BlockPos pos,
             BlockState state) {
-        super(definition, pos, state, List.of(MatterPhaseTransformerMode.values()));
+        super(definition, pos, state);
     }
 
     @Override

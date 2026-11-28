@@ -51,34 +51,34 @@ public class AE2PRJeiPlugin implements IModPlugin {
         return List.of(
                 new MachineCategory(
                         JigCategory.RECIPE_TYPE,
-                        ModMachines.JIG_RECIPE.type(),
+                        ModMachines.JIG.recipe().type(),
                         JigCategory::new,
                         ModMachines.JIG.item().getDefaultInstance()),
                 new MachineCategory(
                         FilterPressCategory.RECIPE_TYPE,
-                        ModMachines.FILTER_PRESS_RECIPE.type(),
+                        ModMachines.FILTER_PRESS.recipe().type(),
                         FilterPressCategory::new,
                         ModMachines.FILTER_PRESS.item().getDefaultInstance()),
                 new MachineCategory(
                         CrystalReactionChamberCategory.RECIPE_TYPE,
-                        ModMachines.CRYSTAL_REACTION_CHAMBER_RECIPE.type(),
+                        ModMachines.CRYSTAL_REACTION_CHAMBER.recipe().type(),
                         CrystalReactionChamberCategory::new,
                         ModMachines.CRYSTAL_REACTION_CHAMBER.item().getDefaultInstance()),
                 new MachineCategory(
                         HighReactivityLavaSmelterCategory.RECIPE_TYPE,
-                        ModMachines.HIGH_REACTIVITY_LAVA_SMELTER_RECIPE.type(),
+                        ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.recipe().type(),
                         HighReactivityLavaSmelterCategory::new,
                         ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.item().getDefaultInstance()),
                 phaseTransformerCategory(MatterPhaseTransformerMode.MELTING),
                 phaseTransformerCategory(MatterPhaseTransformerMode.MIXING),
                 new MachineCategory(
                         IntegratedMassFabricatorCategory.RECIPE_TYPE,
-                        ModMachines.INTEGRATED_MASS_FABRICATOR_RECIPE.type(),
+                        ModMachines.INTEGRATED_MASS_FABRICATOR.recipe().type(),
                         IntegratedMassFabricatorCategory::new,
                         ModMachines.INTEGRATED_MASS_FABRICATOR.item().getDefaultInstance()),
                 new MachineCategory(
                         CrystalAssemblyLineCategory.RECIPE_TYPE,
-                        ModMachines.CRYSTAL_ASSEMBLY_LINE_RECIPE.type(),
+                        ModMachines.CRYSTAL_ASSEMBLY_LINE.recipe().type(),
                         CrystalAssemblyLineCategory::new,
                         ModMachines.CRYSTAL_ASSEMBLY_LINE.block().asItem().getDefaultInstance()));
     }
@@ -89,6 +89,12 @@ public class AE2PRJeiPlugin implements IModPlugin {
                 mode.recipeType(),
                 helper -> new MatterPhaseTransformerCategory(helper, mode),
                 ModMachines.MATTER_PHASE_TRANSFORMER.item().getDefaultInstance());
+    }
+
+    private static CrystalWorkstationMode[] workstationModes() {
+        return ModMachines.CRYSTAL_WORKSTATION
+                .<CrystalWorkstationMode>modeType()
+                .getEnumConstants();
     }
 
     @Override
@@ -102,7 +108,7 @@ public class AE2PRJeiPlugin implements IModPlugin {
         for (MachineCategory machine : machines()) {
             registration.addRecipeCategories(machine.factory().apply(guiHelper));
         }
-        for (CrystalWorkstationMode mode : CrystalWorkstationMode.values()) {
+        for (CrystalWorkstationMode mode : workstationModes()) {
             registration.addRecipeCategories(new CrystalWorkstationCategory(guiHelper, mode));
         }
         registration.addRecipeCategories(new MultiblockPreviewCategory(guiHelper));
@@ -114,7 +120,7 @@ public class AE2PRJeiPlugin implements IModPlugin {
         for (MachineCategory machine : machines()) {
             addRecipes(registration, machine.jeiType(), machine.vanillaType());
         }
-        for (CrystalWorkstationMode mode : CrystalWorkstationMode.values()) {
+        for (CrystalWorkstationMode mode : workstationModes()) {
             addRecipes(registration, CrystalWorkstationCategory.recipeType(mode), mode.recipeType());
         }
         registration.addRecipes(MultiblockPreviewCategory.RECIPE_TYPE, MultiblockPreviewRecipe.recipes());
@@ -167,7 +173,7 @@ public class AE2PRJeiPlugin implements IModPlugin {
         for (MachineCategory machine : machines()) {
             types.put(machine.vanillaType(), machine.jeiType());
         }
-        for (CrystalWorkstationMode mode : CrystalWorkstationMode.values()) {
+        for (CrystalWorkstationMode mode : workstationModes()) {
             types.put(mode.recipeType(), CrystalWorkstationCategory.recipeType(mode));
         }
         types.put(InscriberRecipe.TYPE, AE2_INSCRIBER);

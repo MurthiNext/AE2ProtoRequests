@@ -2,33 +2,36 @@ package com.murthinext.ae2pr.machine.crystal_workstation;
 
 import com.murthinext.ae2pr.api.machine.MachineRecipe;
 import com.murthinext.ae2pr.api.machine.Mode;
-import com.murthinext.ae2pr.registry.ModMachines;
-import net.minecraft.world.item.crafting.RecipeType;
+import com.murthinext.ae2pr.api.machine.RecipeConstraints;
+import com.murthinext.ae2pr.api.machine.RecipeSpec;
 
 public enum CrystalWorkstationMode implements Mode {
-    ETCHING("etching"),
-    CUTTING("cutting");
+    ETCHING(RecipeSpec.simple(200, workstationConstraints())),
+    CUTTING(RecipeSpec.simple(200, workstationConstraints()));
 
-    private final String id;
+    private final RecipeSpec<MachineRecipe> recipe;
 
-    CrystalWorkstationMode(String id) {
-        this.id = id;
+    CrystalWorkstationMode(RecipeSpec<MachineRecipe> recipe) {
+        this.recipe = recipe;
     }
 
     @Override
-    public String id() {
-        return id;
+    public String machineId() {
+        return "crystal_workstation";
     }
 
     @Override
-    public String translationKey() {
-        return "gui.ae2pr.crystal_workstation.mode." + id;
+    public RecipeSpec<MachineRecipe> recipe() {
+        return recipe;
     }
 
-    @Override
-    public RecipeType<MachineRecipe> recipeType() {
-        return this == ETCHING
-                ? ModMachines.CRYSTAL_WORKSTATION_ETCHING_RECIPE.type()
-                : ModMachines.CRYSTAL_WORKSTATION_CUTTING_RECIPE.type();
+    private static RecipeConstraints workstationConstraints() {
+        return RecipeConstraints.builder()
+                .itemInputs(0, 6)
+                .fluidInputs(0, 3)
+                .itemOutputs(0, 6)
+                .fluidOutputs(0, 3)
+                .requireEnergy()
+                .build();
     }
 }
