@@ -1,6 +1,7 @@
 package com.murthinext.ae2pr.api.machine.singleblock;
 
 import com.murthinext.ae2pr.api.machine.MachineDefinition;
+import com.murthinext.ae2pr.api.machine.MenuHandle;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Function;
@@ -10,15 +11,12 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-public final class SingleblockMachineDefinition<
-                B extends AbstractSingleblockMachineBlock<E>,
-                E extends AbstractSingleblockMachineBlockEntity,
-                M extends AbstractSingleblockMachineMenu<E>>
-        extends MachineDefinition<B, E, M> {
+public final class SingleblockMachineDefinition<E extends AbstractSingleblockMachineBlockEntity>
+        extends MachineDefinition<E> {
 
     private final Supplier<Block.Properties> blockProperties;
-    private final Function<SingleblockMachineDefinition<B, E, M>, B> blockFactory;
-    private final EntityFactory<B, E, M> entityFactory;
+    private final Function<SingleblockMachineDefinition<E>, AbstractSingleblockMachineBlock<E>> blockFactory;
+    private final EntityFactory<E> entityFactory;
     private final int slots;
     private final DoubleSupplier powerCapacity;
 
@@ -26,14 +24,13 @@ public final class SingleblockMachineDefinition<
             String id,
             Class<E> entityClass,
             Supplier<Block.Properties> blockProperties,
-            Function<SingleblockMachineDefinition<B, E, M>, B> blockFactory,
-            EntityFactory<B, E, M> entityFactory,
-            Supplier<MenuType<M>> menuTypeFactory,
-            MenuFactory<E, M> menuFactory,
+            Function<SingleblockMachineDefinition<E>, AbstractSingleblockMachineBlock<E>> blockFactory,
+            EntityFactory<E> entityFactory,
+            Function<MachineDefinition<E>, MenuHandle<E, ?>> menuFactory,
             int speedUpgrades,
             int slots,
             DoubleSupplier powerCapacity) {
-        super(id, id, entityClass, definition -> menuTypeFactory.get(), menuFactory, speedUpgrades, List.of());
+        super(id, id, entityClass, menuFactory, speedUpgrades, List.of());
         this.blockProperties = blockProperties;
         this.blockFactory = blockFactory;
         this.entityFactory = entityFactory;
@@ -41,18 +38,15 @@ public final class SingleblockMachineDefinition<
         this.powerCapacity = powerCapacity;
     }
 
-    public static <
-                    B extends AbstractSingleblockMachineBlock<E>,
-                    E extends AbstractSingleblockMachineBlockEntity,
-                    M extends AbstractSingleblockMachineMenu<E>>
-            SingleblockMachineDefinition<B, E, M> create(
+    public static <E extends AbstractSingleblockMachineBlockEntity, M extends AbstractSingleblockMachineMenu<E>>
+            SingleblockMachineDefinition<E> create(
                     String id,
                     Class<E> entityClass,
                     Supplier<Block.Properties> blockProperties,
-                    Function<SingleblockMachineDefinition<B, E, M>, B> blockFactory,
-                    EntityFactory<B, E, M> entityFactory,
+                    Function<SingleblockMachineDefinition<E>, AbstractSingleblockMachineBlock<E>> blockFactory,
+                    EntityFactory<E> entityFactory,
                     Supplier<MenuType<M>> menuTypeFactory,
-                    MenuFactory<E, M> menuFactory,
+                    MenuHandle.MenuFactory<E, M> menuFactory,
                     int speedUpgrades,
                     int slots,
                     DoubleSupplier powerCapacity) {
@@ -62,8 +56,7 @@ public final class SingleblockMachineDefinition<
                 blockProperties,
                 blockFactory,
                 entityFactory,
-                menuTypeFactory,
-                menuFactory,
+                definition -> MenuHandle.register(definition, menuTypeFactory, menuFactory),
                 speedUpgrades,
                 slots,
                 powerCapacity);
@@ -83,7 +76,7 @@ public final class SingleblockMachineDefinition<
     }
 
     @Override
-    protected B createBlock() {
+    protected AbstractSingleblockMachineBlock<E> createBlock() {
         return blockFactory.apply(this);
     }
 
@@ -92,11 +85,14 @@ public final class SingleblockMachineDefinition<
         return entityFactory.create(this, pos, state);
     }
 
+    @Override
+    @SuppressWarnings("unchecked") // 方块由 blockFactory 创建，类型由构造参数保证
+    public AbstractSingleblockMachineBlock<E> block() {
+        return (AbstractSingleblockMachineBlock<E>) super.block();
+    }
+
     @FunctionalInterface
-    public interface EntityFactory<
-            B extends AbstractSingleblockMachineBlock<E>,
-            E extends AbstractSingleblockMachineBlockEntity,
-            M extends AbstractSingleblockMachineMenu<E>> {
-        E create(SingleblockMachineDefinition<B, E, M> definition, BlockPos pos, BlockState state);
+    public interface EntityFactory<E extends AbstractSingleblockMachineBlockEntity> {
+        E create(SingleblockMachineDefinition<E> definition, BlockPos pos, BlockState state);
     }
 }

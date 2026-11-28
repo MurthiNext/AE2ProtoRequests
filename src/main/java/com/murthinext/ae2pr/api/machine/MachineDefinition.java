@@ -18,19 +18,16 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class MachineDefinition<B extends Block, E extends BlockEntity, M extends AbstractContainerMenu> {
+public abstract class MachineDefinition<E extends BlockEntity> {
 
     private final String id;
     private final Class<E> entityClass;
-    private final RegistryObject<B> block;
+    private final RegistryObject<? extends Block> block;
     private final RegistryObject<BlockItem> item;
     private final RegistryObject<BlockEntityType<E>> blockEntityType;
 
     @Nullable
-    private final RegistryObject<MenuType<M>> menuType;
-
-    @Nullable
-    private final MenuFactory<E, M> menuFactory;
+    private final MenuHandle<E, ?> menu;
 
     private final int speedUpgrades;
     private final List<Mode> modes;
@@ -39,16 +36,11 @@ public abstract class MachineDefinition<B extends Block, E extends BlockEntity, 
             String id,
             String entityId,
             Class<E> entityClass,
-            @Nullable Function<MachineDefinition<B, E, M>, MenuType<M>> menuTypeFactory,
-            @Nullable MenuFactory<E, M> menuFactory,
+            @Nullable Function<MachineDefinition<E>, MenuHandle<E, ?>> menuFactory,
             int speedUpgrades,
             List<Mode> modes) {
-        if ((menuTypeFactory == null) != (menuFactory == null)) {
-            throw new IllegalArgumentException("Menu type and factory must be configured together: " + id);
-        }
         this.id = id;
         this.entityClass = entityClass;
-        this.menuFactory = menuFactory;
         this.speedUpgrades = speedUpgrades;
         this.modes = modes;
         this.block = registerBlock(id, this::createBlock);
@@ -57,14 +49,13 @@ public abstract class MachineDefinition<B extends Block, E extends BlockEntity, 
                 entityId,
                 () -> BlockEntityType.Builder.of(this::createBlockEntity, block())
                         .build(null));
-        this.menuType = menuTypeFactory == null ? null : registerMenu(id, () -> menuTypeFactory.apply(this));
+        this.menu = menuFactory == null ? null : menuFactory.apply(this);
     }
 
-    // 注册表以 DeferredRegister<Block> 保存，按具体方块类型转发
-    @SuppressWarnings("unchecked")
-    private static <B extends Block> RegistryObject<B> registerBlock(String id, Supplier<? extends B> factory) {
+    // 注册表以 DeferredRegister<Block> 保存，具体方块类型由定义子类协变收窄
+    private static RegistryObject<? extends Block> registerBlock(String id, Supplier<? extends Block> factory) {
         DeferredRegister<Block> registry = MachineRegistries.blocks();
-        return (RegistryObject<B>) registry.register(id, (Supplier<Block>) factory);
+        return registry.register(id, factory);
     }
 
     @SuppressWarnings("unchecked")
@@ -75,34 +66,21 @@ public abstract class MachineDefinition<B extends Block, E extends BlockEntity, 
                 (RegistryObject<?>) registry.register(id, (Supplier<BlockEntityType<?>>) (Supplier<?>) factory);
     }
 
-    @SuppressWarnings("unchecked")
-    private static <M extends AbstractContainerMenu> RegistryObject<MenuType<M>> registerMenu(
-            String id, Supplier<MenuType<M>> factory) {
-        DeferredRegister<MenuType<?>> registry = MachineRegistries.menus();
-        return (RegistryObject<MenuType<M>>)
-                (RegistryObject<?>) registry.register(id, (Supplier<MenuType<?>>) (Supplier<?>) factory);
+    final <M extends AbstractContainerMenu> RegistryObject<MenuType<M>> registerMenu(Supplier<MenuType<M>> factory) {
+        return MachineRegistries.menus().register(id, factory);
     }
 
-    public static <B extends Block, E extends BlockEntity, M extends AbstractContainerMenu>
-            MachineDefinition<B, E, M> custom(
-                    String id,
-                    String entityId,
-                    Class<E> entityClass,
-                    Supplier<B> blockFactory,
-                    BiFunction<BlockPos, BlockState, E> entityFactory,
-                    @Nullable Supplier<MenuType<M>> menuTypeFactory,
-                    @Nullable MenuFactory<E, M> menuFactory,
-                    int speedUpgrades) {
-        return new MachineDefinition<>(
-                id,
-                entityId,
-                entityClass,
-                menuTypeFactory == null ? null : definition -> menuTypeFactory.get(),
-                menuFactory,
-                speedUpgrades,
-                List.of()) {
+    public static <E extends BlockEntity> MachineDefinition<E> custom(
+            String id,
+            String entityId,
+            Class<E> entityClass,
+            Supplier<? extends Block> blockFactory,
+            BiFunction<BlockPos, BlockState, E> entityFactory,
+            @Nullable Function<MachineDefinition<E>, MenuHandle<E, ?>> menuFactory,
+            int speedUpgrades) {
+        return new MachineDefinition<>(id, entityId, entityClass, menuFactory, speedUpgrades, List.of()) {
             @Override
-            protected B createBlock() {
+            protected Block createBlock() {
                 return blockFactory.get();
             }
 
@@ -113,7 +91,7 @@ public abstract class MachineDefinition<B extends Block, E extends BlockEntity, 
         };
     }
 
-    protected abstract B createBlock();
+    protected abstract Block createBlock();
 
     protected abstract E createBlockEntity(BlockPos pos, BlockState state);
 
@@ -121,11 +99,11 @@ public abstract class MachineDefinition<B extends Block, E extends BlockEntity, 
         return id;
     }
 
-    public final B block() {
+    public Block block() {
         return block.get();
     }
 
-    public final RegistryObject<B> blockHolder() {
+    public final RegistryObject<? extends Block> blockHolder() {
         return block;
     }
 
@@ -145,11 +123,8 @@ public abstract class MachineDefinition<B extends Block, E extends BlockEntity, 
         return blockEntityType;
     }
 
-    public final MenuType<M> menuType() {
-        if (menuType == null) {
-            throw new IllegalStateException("Machine has no menu: " + id);
-        }
-        return menuType.get();
+    public final <M extends AbstractContainerMenu> MenuType<M> menuType() {
+        return this.<M>menu().type().get();
     }
 
     public final int speedUpgrades() {
@@ -167,18 +142,21 @@ public abstract class MachineDefinition<B extends Block, E extends BlockEntity, 
                 : null;
     }
 
-    public final M createMenu(int id, Inventory inventory, @Nullable E controller) {
-        if (menuFactory == null) {
+    public final AbstractContainerMenu createMenu(int id, Inventory inventory, @Nullable E controller) {
+        if (menu == null) {
             throw new IllegalStateException("Machine has no menu: " + this.id);
         }
         if (controller != null && controller(controller) != controller) {
             throw new IllegalArgumentException("Controller does not belong to machine: " + this.id);
         }
-        return menuFactory.create(this, id, inventory, controller);
+        return menu.factory().create(this, id, inventory, controller);
     }
 
-    @FunctionalInterface
-    public interface MenuFactory<E extends BlockEntity, M extends AbstractContainerMenu> {
-        M create(MachineDefinition<?, E, M> definition, int id, Inventory inventory, @Nullable E controller);
+    @SuppressWarnings("unchecked") // 声明点已保证 M 与实际注册的菜单类型一致
+    public final <M extends AbstractContainerMenu> MenuHandle<E, M> menu() {
+        if (menu == null) {
+            throw new IllegalStateException("Machine has no menu: " + id);
+        }
+        return (MenuHandle<E, M>) menu;
     }
 }

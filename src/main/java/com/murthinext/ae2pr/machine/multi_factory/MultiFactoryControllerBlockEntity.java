@@ -1,9 +1,9 @@
 package com.murthinext.ae2pr.machine.multi_factory;
 
 import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
+import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
-import com.murthinext.ae2pr.registry.ModMachines;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -16,8 +16,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class MultiFactoryControllerBlockEntity extends ModeMachineBlockEntity<MultiFactoryMode> {
 
-    public MultiFactoryControllerBlockEntity(BlockPos pos, BlockState state) {
-        super(ModMachines.MULTI_FACTORY, pos, state, List.of(MultiFactoryMode.values()));
+    public MultiFactoryControllerBlockEntity(
+            MultiblockMachineDefinition<MultiFactoryControllerBlockEntity> definition, BlockPos pos, BlockState state) {
+        super(definition, pos, state, List.of(MultiFactoryMode.values()));
     }
 
     @Override

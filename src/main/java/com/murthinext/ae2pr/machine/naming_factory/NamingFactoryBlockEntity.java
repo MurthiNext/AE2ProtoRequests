@@ -47,7 +47,7 @@ public class NamingFactoryBlockEntity extends AbstractSingleblockMachineBlockEnt
     private int pressTicks = PRESS_TICKS;
     private int retractTicks = RETRACT_TICKS;
 
-    public NamingFactoryBlockEntity(SingleblockMachineDefinition<?, ?, ?> definition, BlockPos pos, BlockState state) {
+    public NamingFactoryBlockEntity(SingleblockMachineDefinition<?> definition, BlockPos pos, BlockState state) {
         super(definition, pos, state);
     }
 

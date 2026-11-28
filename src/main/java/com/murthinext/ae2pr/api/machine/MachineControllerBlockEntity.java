@@ -6,7 +6,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public final class MachineControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
-    public MachineControllerBlockEntity(MultiblockMachineDefinition<?, ?> definition, BlockPos pos, BlockState state) {
+    public MachineControllerBlockEntity(
+            MultiblockMachineDefinition<MachineControllerBlockEntity> definition, BlockPos pos, BlockState state) {
         super(definition, pos, state);
     }
 }

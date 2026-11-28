@@ -42,9 +42,9 @@ public final class MachineBlock<E extends AbstractMultiblockControllerBlockEntit
     public static final BooleanProperty RUNNING = BooleanProperty.create("running");
     public static final BooleanProperty PAUSED = BooleanProperty.create("paused");
 
-    private final MultiblockMachineDefinition<E, ?> definition;
+    private final MultiblockMachineDefinition<E> definition;
 
-    public MachineBlock(MultiblockMachineDefinition<E, ?> definition, Properties properties) {
+    public MachineBlock(MultiblockMachineDefinition<E> definition, Properties properties) {
         super(properties);
         this.definition = definition;
         registerDefaultState(stateDefinition
@@ -55,7 +55,7 @@ public final class MachineBlock<E extends AbstractMultiblockControllerBlockEntit
                 .setValue(PAUSED, false));
     }
 
-    public MultiblockMachineDefinition<E, ?> definition() {
+    public MultiblockMachineDefinition<E> definition() {
         return definition;
     }
 

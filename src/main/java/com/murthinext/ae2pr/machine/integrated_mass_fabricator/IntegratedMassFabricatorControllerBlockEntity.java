@@ -1,15 +1,18 @@
 package com.murthinext.ae2pr.machine.integrated_mass_fabricator;
 
+import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.registry.ModMachines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
 public final class IntegratedMassFabricatorControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
-    public IntegratedMassFabricatorControllerBlockEntity(BlockPos pos, BlockState state) {
-        super(ModMachines.INTEGRATED_MASS_FABRICATOR, pos, state);
+    public IntegratedMassFabricatorControllerBlockEntity(
+            MultiblockMachineDefinition<IntegratedMassFabricatorControllerBlockEntity> definition,
+            BlockPos pos,
+            BlockState state) {
+        super(definition, pos, state);
     }
 
     BlockPos floorCenter() {

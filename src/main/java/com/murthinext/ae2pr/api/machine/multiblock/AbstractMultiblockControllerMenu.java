@@ -57,7 +57,7 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
     private static final int FLAG_BUSY = 8;
 
     protected final T controller;
-    private final MachineDefinition<?, T, ?> definition;
+    private final MachineDefinition<T> definition;
     protected final boolean clientSide;
     private final SimpleContainerData data;
     private final int playerSlotFirst;
@@ -67,7 +67,7 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
     private MachineStats machineStats;
 
     protected AbstractMultiblockControllerMenu(
-            MachineDefinition<?, T, ?> definition,
+            MachineDefinition<T> definition,
             int id,
             Inventory playerInventory,
             @Nullable T controller,
@@ -219,7 +219,7 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
         }
     }
 
-    public MachineDefinition<?, T, ?> definition() {
+    public MachineDefinition<T> definition() {
         return definition;
     }
 
@@ -267,7 +267,7 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
 
     @Nullable
     protected static <C extends AbstractMultiblockControllerBlockEntity> C readController(
-            Player player, FriendlyByteBuf buffer, MachineDefinition<?, C, ?> definition) {
+            Player player, FriendlyByteBuf buffer, MachineDefinition<C> definition) {
         var blockEntity = player.level().getBlockEntity(buffer.readBlockPos());
         return definition.controller(blockEntity);
     }

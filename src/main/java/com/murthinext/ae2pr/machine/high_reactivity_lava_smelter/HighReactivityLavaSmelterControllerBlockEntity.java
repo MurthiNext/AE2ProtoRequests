@@ -1,9 +1,9 @@
 package com.murthinext.ae2pr.machine.high_reactivity_lava_smelter;
 
 import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
-import com.murthinext.ae2pr.registry.ModMachines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -53,8 +53,11 @@ public class HighReactivityLavaSmelterControllerBlockEntity extends AbstractMult
     };
     private final LazyOptional<IItemHandler> dustCapability = LazyOptional.of(() -> dustSlot);
 
-    public HighReactivityLavaSmelterControllerBlockEntity(BlockPos pos, BlockState state) {
-        super(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER, pos, state);
+    public HighReactivityLavaSmelterControllerBlockEntity(
+            MultiblockMachineDefinition<HighReactivityLavaSmelterControllerBlockEntity> definition,
+            BlockPos pos,
+            BlockState state) {
+        super(definition, pos, state);
     }
 
     @Override

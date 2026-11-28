@@ -1,6 +1,7 @@
 package com.murthinext.ae2pr.machine.high_reactivity_lava_smelter;
 
 import com.murthinext.ae2pr.ServerConfig;
+import com.murthinext.ae2pr.api.machine.MachineDefinition;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
 import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.nextui.layout.PlayerInventoryLayout;
@@ -24,12 +25,16 @@ public class HighReactivityLavaSmelterMenu
     private static final int DATA_DURABILITY = DATA_COUNT;
 
     public HighReactivityLavaSmelterMenu(
-            int id, Inventory playerInventory, HighReactivityLavaSmelterControllerBlockEntity controller) {
-        super(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER, id, playerInventory, controller, 1);
+            MachineDefinition<HighReactivityLavaSmelterControllerBlockEntity> definition,
+            int id,
+            Inventory playerInventory,
+            HighReactivityLavaSmelterControllerBlockEntity controller) {
+        super(definition, id, playerInventory, controller, 1);
     }
 
     public HighReactivityLavaSmelterMenu(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
         this(
+                ModMachines.HIGH_REACTIVITY_LAVA_SMELTER,
                 id,
                 playerInventory,
                 readController(playerInventory.player, buffer, ModMachines.HIGH_REACTIVITY_LAVA_SMELTER));

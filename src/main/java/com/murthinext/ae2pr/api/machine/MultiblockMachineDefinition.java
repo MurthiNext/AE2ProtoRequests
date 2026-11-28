@@ -4,7 +4,6 @@ import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerB
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerMenu;
 import com.murthinext.ae2pr.api.multiblock.AbstractStructureFacade;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntSupplier;
@@ -17,9 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import org.jetbrains.annotations.Nullable;
 
-public final class MultiblockMachineDefinition<
-                E extends AbstractMultiblockControllerBlockEntity, M extends AbstractMultiblockControllerMenu<E>>
-        extends MachineDefinition<MachineBlock<E>, E, M> {
+public final class MultiblockMachineDefinition<E extends AbstractMultiblockControllerBlockEntity>
+        extends MachineDefinition<E> {
 
     private final ControllerFactory<E> controllerFactory;
     private final Supplier<Block.Properties> properties;
@@ -41,9 +39,8 @@ public final class MultiblockMachineDefinition<
             IntSupplier parallel,
             Supplier<? extends RecipeType<?>> recipeType,
             List<Mode> modes,
-            Function<MachineDefinition<MachineBlock<E>, E, M>, MenuType<M>> menuTypeFactory,
-            MenuFactory<E, M> menuFactory) {
-        super(id, id, entityClass, menuTypeFactory, menuFactory, 4, modes);
+            Function<MachineDefinition<E>, MenuHandle<E, ?>> menuFactory) {
+        super(id, id, entityClass, menuFactory, 4, modes);
         this.controllerFactory = controllerFactory;
         this.properties = properties;
         this.structure = structure;
@@ -51,13 +48,12 @@ public final class MultiblockMachineDefinition<
         this.recipeType = recipeType;
     }
 
-    public static MultiblockMachineDefinition<MachineControllerBlockEntity, MachineMenu<MachineControllerBlockEntity>>
-            standard(
-                    String id,
-                    Supplier<Block.Properties> properties,
-                    Supplier<? extends AbstractStructureFacade> structure,
-                    IntSupplier parallel,
-                    Supplier<? extends RecipeType<?>> recipeType) {
+    public static MultiblockMachineDefinition<MachineControllerBlockEntity> standard(
+            String id,
+            Supplier<Block.Properties> properties,
+            Supplier<? extends AbstractStructureFacade> structure,
+            IntSupplier parallel,
+            Supplier<? extends RecipeType<?>> recipeType) {
         return build(
                 id,
                 MachineControllerBlockEntity.class,
@@ -69,31 +65,22 @@ public final class MultiblockMachineDefinition<
                 List.of());
     }
 
-    public static <E extends AbstractMultiblockControllerBlockEntity>
-            MultiblockMachineDefinition<E, MachineMenu<E>> standard(
-                    String id,
-                    Class<E> entityClass,
-                    BiFunction<BlockPos, BlockState, E> controllerFactory,
-                    Supplier<Block.Properties> properties,
-                    Supplier<? extends AbstractStructureFacade> structure,
-                    IntSupplier parallel,
-                    Supplier<? extends RecipeType<?>> recipeType) {
-        return build(
-                id,
-                entityClass,
-                (definition, pos, state) -> controllerFactory.apply(pos, state),
-                properties,
-                structure,
-                parallel,
-                recipeType,
-                List.of());
+    public static <E extends AbstractMultiblockControllerBlockEntity> MultiblockMachineDefinition<E> standard(
+            String id,
+            Class<E> entityClass,
+            ControllerFactory<E> controllerFactory,
+            Supplier<Block.Properties> properties,
+            Supplier<? extends AbstractStructureFacade> structure,
+            IntSupplier parallel,
+            Supplier<? extends RecipeType<?>> recipeType) {
+        return build(id, entityClass, controllerFactory, properties, structure, parallel, recipeType, List.of());
     }
 
     public static <T extends Enum<T> & Mode, E extends AbstractMultiblockControllerBlockEntity>
-            MultiblockMachineDefinition<E, MachineMenu<E>> withModes(
+            MultiblockMachineDefinition<E> withModes(
                     String id,
                     Class<E> entityClass,
-                    BiFunction<BlockPos, BlockState, E> controllerFactory,
+                    ControllerFactory<E> controllerFactory,
                     Supplier<Block.Properties> properties,
                     Supplier<? extends AbstractStructureFacade> structure,
                     IntSupplier parallel,
@@ -108,42 +95,11 @@ public final class MultiblockMachineDefinition<
             }
         }
         return build(
-                id,
-                entityClass,
-                (definition, pos, state) -> controllerFactory.apply(pos, state),
-                properties,
-                structure,
-                parallel,
-                recipeType,
-                List.copyOf(modes));
+                id, entityClass, controllerFactory, properties, structure, parallel, recipeType, List.copyOf(modes));
     }
 
     public static <E extends AbstractMultiblockControllerBlockEntity, M extends AbstractMultiblockControllerMenu<E>>
-            MultiblockMachineDefinition<E, M> customMenu(
-                    String id,
-                    Class<E> entityClass,
-                    BiFunction<BlockPos, BlockState, E> controllerFactory,
-                    Supplier<Block.Properties> properties,
-                    Supplier<? extends AbstractStructureFacade> structure,
-                    IntSupplier parallel,
-                    Supplier<? extends RecipeType<?>> recipeType,
-                    Supplier<MenuType<M>> menuTypeFactory,
-                    MenuFactory<E, M> menuFactory) {
-        return new MultiblockMachineDefinition<>(
-                id,
-                entityClass,
-                (definition, pos, state) -> controllerFactory.apply(pos, state),
-                properties,
-                structure,
-                parallel,
-                recipeType,
-                List.of(),
-                definition -> menuTypeFactory.get(),
-                menuFactory);
-    }
-
-    private static <E extends AbstractMultiblockControllerBlockEntity>
-            MultiblockMachineDefinition<E, MachineMenu<E>> build(
+            MultiblockMachineDefinition<E> customMenu(
                     String id,
                     Class<E> entityClass,
                     ControllerFactory<E> controllerFactory,
@@ -151,7 +107,29 @@ public final class MultiblockMachineDefinition<
                     Supplier<? extends AbstractStructureFacade> structure,
                     IntSupplier parallel,
                     Supplier<? extends RecipeType<?>> recipeType,
-                    List<Mode> modes) {
+                    Supplier<MenuType<M>> menuTypeFactory,
+                    MenuHandle.MenuFactory<E, M> menuFactory) {
+        return new MultiblockMachineDefinition<>(
+                id,
+                entityClass,
+                controllerFactory,
+                properties,
+                structure,
+                parallel,
+                recipeType,
+                List.of(),
+                definition -> MenuHandle.register(definition, menuTypeFactory, menuFactory));
+    }
+
+    private static <E extends AbstractMultiblockControllerBlockEntity> MultiblockMachineDefinition<E> build(
+            String id,
+            Class<E> entityClass,
+            ControllerFactory<E> controllerFactory,
+            Supplier<Block.Properties> properties,
+            Supplier<? extends AbstractStructureFacade> structure,
+            IntSupplier parallel,
+            Supplier<? extends RecipeType<?>> recipeType,
+            List<Mode> modes) {
         return new MultiblockMachineDefinition<>(
                 id,
                 entityClass,
@@ -161,7 +139,14 @@ public final class MultiblockMachineDefinition<
                 parallel,
                 recipeType,
                 modes,
-                definition -> IForgeMenuType.create(
+                MultiblockMachineDefinition::defaultMenu);
+    }
+
+    private static <E extends AbstractMultiblockControllerBlockEntity> MenuHandle<E, MachineMenu<E>> defaultMenu(
+            MachineDefinition<E> definition) {
+        return MenuHandle.register(
+                definition,
+                () -> IForgeMenuType.create(
                         (menuId, inventory, buffer) -> new MachineMenu<>(definition, menuId, inventory, buffer)),
                 MachineMenu::new);
     }
@@ -184,7 +169,7 @@ public final class MultiblockMachineDefinition<
         return parallel.getAsInt();
     }
 
-    public MultiblockMachineDefinition<E, M> parallelPerRepeatSlice(IntSupplier parallel) {
+    public MultiblockMachineDefinition<E> parallelPerRepeatSlice(IntSupplier parallel) {
         this.parallelPerRepeatSlice = parallel;
         return this;
     }
@@ -206,7 +191,7 @@ public final class MultiblockMachineDefinition<
     }
 
     // 声明核心方块使用 HighEnergyCoreBlock 的运行指示灯
-    public MultiblockMachineDefinition<E, M> coreLight(CoreLight predicate) {
+    public MultiblockMachineDefinition<E> coreLight(CoreLight predicate) {
         this.coreLight = predicate;
         return this;
     }
@@ -217,7 +202,7 @@ public final class MultiblockMachineDefinition<
     }
 
     @FunctionalInterface
-    private interface ControllerFactory<E extends AbstractMultiblockControllerBlockEntity> {
-        E create(MultiblockMachineDefinition<E, ?> definition, BlockPos pos, BlockState state);
+    public interface ControllerFactory<E extends AbstractMultiblockControllerBlockEntity> {
+        E create(MultiblockMachineDefinition<E> definition, BlockPos pos, BlockState state);
     }
 }

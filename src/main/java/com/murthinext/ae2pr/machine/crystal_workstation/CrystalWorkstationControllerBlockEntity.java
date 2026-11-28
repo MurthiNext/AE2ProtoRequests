@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.machine.crystal_workstation;
 
 import com.murthinext.ae2pr.api.machine.MachineBlock;
 import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
-import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
@@ -15,8 +15,11 @@ public class CrystalWorkstationControllerBlockEntity extends ModeMachineBlockEnt
     private float previousTide = IDLE_TIDE;
     private float tide = IDLE_TIDE;
 
-    public CrystalWorkstationControllerBlockEntity(BlockPos pos, BlockState state) {
-        super(ModMachines.CRYSTAL_WORKSTATION, pos, state, List.of(CrystalWorkstationMode.values()));
+    public CrystalWorkstationControllerBlockEntity(
+            MultiblockMachineDefinition<CrystalWorkstationControllerBlockEntity> definition,
+            BlockPos pos,
+            BlockState state) {
+        super(definition, pos, state, List.of(CrystalWorkstationMode.values()));
     }
 
     @Override

@@ -16,7 +16,7 @@ public abstract class ModeMachineBlockEntity<T extends Enum<T> & Mode> extends A
     private T mode;
 
     protected ModeMachineBlockEntity(
-            MultiblockMachineDefinition<?, ?> definition, BlockPos pos, BlockState state, List<T> modes) {
+            MultiblockMachineDefinition<?> definition, BlockPos pos, BlockState state, List<T> modes) {
         super(definition, pos, state);
         this.modes = List.copyOf(modes);
         this.mode = this.modes.get(0);

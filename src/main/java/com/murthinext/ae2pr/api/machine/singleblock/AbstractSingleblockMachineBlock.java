@@ -36,15 +36,15 @@ public abstract class AbstractSingleblockMachineBlock<E extends AbstractSinglebl
 
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    private final SingleblockMachineDefinition<?, E, ?> definition;
+    private final SingleblockMachineDefinition<E> definition;
 
-    protected AbstractSingleblockMachineBlock(SingleblockMachineDefinition<?, E, ?> definition) {
+    protected AbstractSingleblockMachineBlock(SingleblockMachineDefinition<E> definition) {
         super(definition.properties());
         this.definition = definition;
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
-    public SingleblockMachineDefinition<?, E, ?> definition() {
+    public SingleblockMachineDefinition<E> definition() {
         return definition;
     }
 

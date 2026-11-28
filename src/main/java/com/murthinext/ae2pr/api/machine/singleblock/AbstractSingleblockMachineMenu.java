@@ -25,12 +25,12 @@ public abstract class AbstractSingleblockMachineMenu<E extends AbstractSingleblo
     @Nullable
     protected final E machine;
 
-    private final MachineDefinition<?, E, ?> definition;
+    private final MachineDefinition<E> definition;
     private final int upgradeSlotStart;
     private final int playerSlotStart;
 
     protected AbstractSingleblockMachineMenu(
-            MachineDefinition<?, E, ?> definition, int id, Inventory playerInventory, @Nullable E machine) {
+            MachineDefinition<E> definition, int id, Inventory playerInventory, @Nullable E machine) {
         super(definition.menuType(), id);
         this.definition = definition;
         this.machine = machine;
@@ -56,7 +56,7 @@ public abstract class AbstractSingleblockMachineMenu<E extends AbstractSingleblo
         return machine;
     }
 
-    public MachineDefinition<?, E, ?> definition() {
+    public MachineDefinition<E> definition() {
         return definition;
     }
 
@@ -132,7 +132,7 @@ public abstract class AbstractSingleblockMachineMenu<E extends AbstractSingleblo
 
     @Nullable
     protected static <E extends AbstractSingleblockMachineBlockEntity> E readMachine(
-            Player player, FriendlyByteBuf buffer, MachineDefinition<?, E, ?> definition) {
+            Player player, FriendlyByteBuf buffer, MachineDefinition<E> definition) {
         BlockEntity entity = player.level().getBlockEntity(buffer.readBlockPos());
         return definition.controller(entity);
     }

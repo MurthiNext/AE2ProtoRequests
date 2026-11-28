@@ -1,15 +1,18 @@
 package com.murthinext.ae2pr.machine.crystal_reaction_chamber;
 
+import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.registry.ModMachines;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
 public class CrystalReactionChamberControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
-    public CrystalReactionChamberControllerBlockEntity(BlockPos pos, BlockState state) {
-        super(ModMachines.CRYSTAL_REACTION_CHAMBER, pos, state);
+    public CrystalReactionChamberControllerBlockEntity(
+            MultiblockMachineDefinition<CrystalReactionChamberControllerBlockEntity> definition,
+            BlockPos pos,
+            BlockState state) {
+        super(definition, pos, state);
     }
 
     public BlockPos getBuddingQuartzPos() {

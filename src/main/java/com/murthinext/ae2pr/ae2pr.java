@@ -98,7 +98,7 @@ public class ae2pr {
                 if (machine.speedUpgrades() > 0) {
                     Upgrades.add(AEItems.SPEED_CARD, machine.block(), machine.speedUpgrades());
                 }
-                if (machine instanceof MultiblockMachineDefinition<?, ?>) {
+                if (machine instanceof MultiblockMachineDefinition<?>) {
                     Upgrades.add(ModItems.AEV_SPEED_CARD.get(), machine.block(), machine.speedUpgrades());
                     Upgrades.add(ModItems.AEV_PARALLEL_CARD.get(), machine.block(), machine.speedUpgrades());
                     Upgrades.add(ModItems.AEV_ENERGY_CARD.get(), machine.block(), machine.speedUpgrades());

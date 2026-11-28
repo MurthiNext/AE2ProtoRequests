@@ -139,10 +139,10 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     @Nullable
     private ResourceLocation jobRecipeId;
 
-    private final MultiblockMachineDefinition<?, ?> definition;
+    private final MultiblockMachineDefinition<?> definition;
 
     protected AbstractMultiblockControllerBlockEntity(
-            MultiblockMachineDefinition<?, ?> definition, BlockPos pos, BlockState state) {
+            MultiblockMachineDefinition<?> definition, BlockPos pos, BlockState state) {
         super(definition.blockEntityType(), pos, state);
         this.definition = definition;
         this.structureFacade = definition.structure();
@@ -153,6 +153,10 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
 
     public String machineKey() {
         return definition.id();
+    }
+
+    protected final MultiblockMachineDefinition<?> definition() {
+        return definition;
     }
 
     protected RecipeType<?> recipeType() {

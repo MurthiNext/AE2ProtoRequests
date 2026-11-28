@@ -2,6 +2,7 @@ package com.murthinext.ae2pr.machine.crystal_assembly_line;
 
 import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.api.machine.MachineStat;
+import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
 import com.murthinext.ae2pr.api.machine.part.InputGroup;
 import com.murthinext.ae2pr.api.machine.part.MachinePart;
@@ -12,7 +13,6 @@ import com.murthinext.ae2pr.api.recipe.ItemInput;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 import com.murthinext.ae2pr.api.text.AmountText;
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
-import com.murthinext.ae2pr.registry.ModMachines;
 import com.murthinext.ae2pr.registry.ModModules;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +33,11 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
     private ModuleSnapshot modules = ModuleSnapshot.EMPTY;
     private final List<UnitCell> unitCells = new ArrayList<>();
 
-    public CrystalAssemblyLineControllerBlockEntity(BlockPos pos, BlockState state) {
-        super(ModMachines.CRYSTAL_ASSEMBLY_LINE, pos, state);
+    public CrystalAssemblyLineControllerBlockEntity(
+            MultiblockMachineDefinition<CrystalAssemblyLineControllerBlockEntity> definition,
+            BlockPos pos,
+            BlockState state) {
+        super(definition, pos, state);
     }
 
     @Override
@@ -60,7 +63,7 @@ public class CrystalAssemblyLineControllerBlockEntity extends AbstractMultiblock
                     1,
                     baseSpeedMultiplier()));
         } else if (type == MachineUpgradeType.PARALLEL) {
-            double base = ModMachines.CRYSTAL_ASSEMBLY_LINE.maxParallel();
+            double base = definition().maxParallel();
             long repeatBonus = repeatSliceParallelBonus();
             double extended = Math.min(Integer.MAX_VALUE, base + repeatBonus);
             if (repeatBonus > 0) {

@@ -24,7 +24,7 @@ public class NamingFactoryMenu extends AbstractSingleblockMachineMenu<NamingFact
     private static final int OUTPUT_Y = 74;
 
     public NamingFactoryMenu(
-            MachineDefinition<?, NamingFactoryBlockEntity, NamingFactoryMenu> definition,
+            MachineDefinition<NamingFactoryBlockEntity> definition,
             int id,
             Inventory playerInventory,
             @Nullable NamingFactoryBlockEntity machine) {
@@ -32,11 +32,9 @@ public class NamingFactoryMenu extends AbstractSingleblockMachineMenu<NamingFact
     }
 
     public static NamingFactoryMenu create(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
+        MachineDefinition<NamingFactoryBlockEntity> definition = ModMachines.NAMING_FACTORY;
         return new NamingFactoryMenu(
-                ModMachines.NAMING_FACTORY,
-                id,
-                playerInventory,
-                readMachine(playerInventory.player, buffer, ModMachines.NAMING_FACTORY));
+                definition, id, playerInventory, readMachine(playerInventory.player, buffer, definition));
     }
 
     @Override

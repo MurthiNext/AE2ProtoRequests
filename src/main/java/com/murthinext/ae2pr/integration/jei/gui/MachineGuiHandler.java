@@ -40,7 +40,7 @@ public class MachineGuiHandler implements IGuiContainerHandler<AbstractContainer
     }
 
     private static RecipeType<?> recipeType(AbstractMultiblockControllerMenu<?> menu) {
-        if (!(menu.definition() instanceof MultiblockMachineDefinition<?, ?> definition)) {
+        if (!(menu.definition() instanceof MultiblockMachineDefinition<?> definition)) {
             return null;
         }
         Mode mode = menu instanceof MachineMenu<?> machineMenu ? machineMenu.getMode() : null;

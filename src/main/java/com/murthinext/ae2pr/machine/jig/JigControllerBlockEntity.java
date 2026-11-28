@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.machine.jig;
 
+import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.multiblock.AbstractMultiblockControllerBlockEntity;
-import com.murthinext.ae2pr.registry.ModMachines;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -10,8 +10,9 @@ import net.minecraft.world.phys.AABB;
 
 public class JigControllerBlockEntity extends AbstractMultiblockControllerBlockEntity {
 
-    public JigControllerBlockEntity(BlockPos pos, BlockState state) {
-        super(ModMachines.JIG, pos, state);
+    public JigControllerBlockEntity(
+            MultiblockMachineDefinition<JigControllerBlockEntity> definition, BlockPos pos, BlockState state) {
+        super(definition, pos, state);
     }
 
     public Direction getFlowDirection() {

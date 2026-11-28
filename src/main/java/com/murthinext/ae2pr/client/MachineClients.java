@@ -43,7 +43,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 
 public final class MachineClients {
 
-    private static final Map<MachineDefinition<?, ?, ?>, Style> STYLES = new IdentityHashMap<>();
+    private static final Map<MachineDefinition<?>, Style> STYLES = new IdentityHashMap<>();
 
     private MachineClients() {}
 
@@ -133,16 +133,16 @@ public final class MachineClients {
 
     private static <E extends AbstractMultiblockControllerBlockEntity, M extends AbstractMultiblockControllerMenu<E>>
             void register(
-                    MultiblockMachineDefinition<E, M> definition,
+                    MultiblockMachineDefinition<E> definition,
                     Style style,
                     ScreenFactory<M> screenFactory,
                     Consumer<E> clientTicker) {
         STYLES.put(definition, style);
         definition.clientTicker(clientTicker);
-        MenuScreens.register(definition.menuType(), screenFactory::create);
+        MenuScreens.register(definition.<M>menu().type().get(), screenFactory::create);
     }
 
-    public static Style style(MachineDefinition<?, ?, ?> definition) {
+    public static Style style(MachineDefinition<?> definition) {
         Style style = STYLES.get(definition);
         if (style == null) {
             throw new IllegalStateException("Missing machine screen style: " + definition.id());

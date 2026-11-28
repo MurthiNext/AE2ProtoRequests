@@ -2,7 +2,7 @@ package com.murthinext.ae2pr.machine.matter_phase_transformer;
 
 import com.murthinext.ae2pr.api.machine.MachineBlock;
 import com.murthinext.ae2pr.api.machine.ModeMachineBlockEntity;
-import com.murthinext.ae2pr.registry.ModMachines;
+import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -16,8 +16,11 @@ public class MatterPhaseTransformerControllerBlockEntity extends ModeMachineBloc
     private FluidStack melt = FluidStack.EMPTY;
     private boolean refreshMelt = true;
 
-    public MatterPhaseTransformerControllerBlockEntity(BlockPos pos, BlockState state) {
-        super(ModMachines.MATTER_PHASE_TRANSFORMER, pos, state, List.of(MatterPhaseTransformerMode.values()));
+    public MatterPhaseTransformerControllerBlockEntity(
+            MultiblockMachineDefinition<MatterPhaseTransformerControllerBlockEntity> definition,
+            BlockPos pos,
+            BlockState state) {
+        super(definition, pos, state, List.of(MatterPhaseTransformerMode.values()));
     }
 
     @Override

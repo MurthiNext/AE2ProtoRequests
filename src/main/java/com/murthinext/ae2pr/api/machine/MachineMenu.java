@@ -18,12 +18,12 @@ public final class MachineMenu<E extends AbstractMultiblockControllerBlockEntity
 
     private final List<Mode> modes;
 
-    public MachineMenu(MachineDefinition<?, E, ?> definition, int id, Inventory inventory, @Nullable E controller) {
+    public MachineMenu(MachineDefinition<E> definition, int id, Inventory inventory, @Nullable E controller) {
         super(definition, id, inventory, controller, definition.modes().isEmpty() ? 0 : 1);
         this.modes = definition.modes();
     }
 
-    public MachineMenu(MachineDefinition<?, E, ?> definition, int id, Inventory inventory, FriendlyByteBuf buffer) {
+    public MachineMenu(MachineDefinition<E> definition, int id, Inventory inventory, FriendlyByteBuf buffer) {
         this(definition, id, inventory, readController(inventory.player, buffer, definition));
     }
 

@@ -12,8 +12,7 @@ import net.minecraft.world.level.Level;
 // 名称压印工厂方块
 public class NamingFactoryBlock extends AbstractSingleblockMachineBlock<NamingFactoryBlockEntity> {
 
-    public NamingFactoryBlock(
-            SingleblockMachineDefinition<NamingFactoryBlock, NamingFactoryBlockEntity, NamingFactoryMenu> definition) {
+    public NamingFactoryBlock(SingleblockMachineDefinition<NamingFactoryBlockEntity> definition) {
         super(definition);
     }
 

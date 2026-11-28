@@ -5,7 +5,6 @@ import com.murthinext.ae2pr.api.BlockProperties;
 import com.murthinext.ae2pr.api.machine.CoreLight;
 import com.murthinext.ae2pr.api.machine.MachineControllerBlockEntity;
 import com.murthinext.ae2pr.api.machine.MachineDefinition;
-import com.murthinext.ae2pr.api.machine.MachineMenu;
 import com.murthinext.ae2pr.api.machine.MachineRecipe;
 import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
 import com.murthinext.ae2pr.api.machine.RecipeConstraints;
@@ -39,7 +38,6 @@ import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryBlock;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryBlockEntity;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryMenu;
 import java.util.List;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
@@ -76,39 +74,20 @@ public final class ModMachines {
     public static RecipeDefinition<CrystalAssemblyLineRecipe> CRYSTAL_ASSEMBLY_LINE_RECIPE;
     public static RecipeDefinition<MachineRecipe> INTEGRATED_MASS_FABRICATOR_RECIPE;
 
-    public static MultiblockMachineDefinition<MachineControllerBlockEntity, MachineMenu<MachineControllerBlockEntity>>
-            FILTER_PRESS;
-    public static MultiblockMachineDefinition<JigControllerBlockEntity, MachineMenu<JigControllerBlockEntity>> JIG;
-    public static MultiblockMachineDefinition<
-                    CrystalReactionChamberControllerBlockEntity,
-                    MachineMenu<CrystalReactionChamberControllerBlockEntity>>
-            CRYSTAL_REACTION_CHAMBER;
-    public static MultiblockMachineDefinition<
-                    CrystalAssemblyLineControllerBlockEntity, MachineMenu<CrystalAssemblyLineControllerBlockEntity>>
-            CRYSTAL_ASSEMBLY_LINE;
-    public static MultiblockMachineDefinition<
-                    MatterPhaseTransformerControllerBlockEntity,
-                    MachineMenu<MatterPhaseTransformerControllerBlockEntity>>
-            MATTER_PHASE_TRANSFORMER;
-    public static MultiblockMachineDefinition<
-                    HighReactivityLavaSmelterControllerBlockEntity, HighReactivityLavaSmelterMenu>
+    public static MultiblockMachineDefinition<MachineControllerBlockEntity> FILTER_PRESS;
+    public static MultiblockMachineDefinition<JigControllerBlockEntity> JIG;
+    public static MultiblockMachineDefinition<CrystalReactionChamberControllerBlockEntity> CRYSTAL_REACTION_CHAMBER;
+    public static MultiblockMachineDefinition<CrystalAssemblyLineControllerBlockEntity> CRYSTAL_ASSEMBLY_LINE;
+    public static MultiblockMachineDefinition<MatterPhaseTransformerControllerBlockEntity> MATTER_PHASE_TRANSFORMER;
+    public static MultiblockMachineDefinition<HighReactivityLavaSmelterControllerBlockEntity>
             HIGH_REACTIVITY_LAVA_SMELTER;
-    public static MultiblockMachineDefinition<
-                    CrystalWorkstationControllerBlockEntity, MachineMenu<CrystalWorkstationControllerBlockEntity>>
-            CRYSTAL_WORKSTATION;
-    public static MultiblockMachineDefinition<
-                    MultiFactoryControllerBlockEntity, MachineMenu<MultiFactoryControllerBlockEntity>>
-            MULTI_FACTORY;
-    public static MultiblockMachineDefinition<
-                    IntegratedMassFabricatorControllerBlockEntity,
-                    MachineMenu<IntegratedMassFabricatorControllerBlockEntity>>
-            INTEGRATED_MASS_FABRICATOR;
-    public static SingleblockMachineDefinition<NamingFactoryBlock, NamingFactoryBlockEntity, NamingFactoryMenu>
-            NAMING_FACTORY;
-    public static MachineDefinition<HighEnergyCoreBlock, CrystalReactorCoreBlockEntity, AbstractContainerMenu>
-            CRYSTAL_REACTOR;
+    public static MultiblockMachineDefinition<CrystalWorkstationControllerBlockEntity> CRYSTAL_WORKSTATION;
+    public static MultiblockMachineDefinition<MultiFactoryControllerBlockEntity> MULTI_FACTORY;
+    public static MultiblockMachineDefinition<IntegratedMassFabricatorControllerBlockEntity> INTEGRATED_MASS_FABRICATOR;
+    public static SingleblockMachineDefinition<NamingFactoryBlockEntity> NAMING_FACTORY;
+    public static MachineDefinition<CrystalReactorCoreBlockEntity> CRYSTAL_REACTOR;
 
-    public static List<MachineDefinition<?, ?, ?>> ALL;
+    public static List<MachineDefinition<?>> ALL;
 
     private static boolean registered;
 
@@ -210,8 +189,7 @@ public final class ModMachines {
                 ServerConfig::highReactivityLavaSmelterBaseParallel,
                 HIGH_REACTIVITY_LAVA_SMELTER_RECIPE::type,
                 () -> HighReactivityLavaSmelterMenu.TYPE,
-                (definition, id, inventory, controller) ->
-                        new HighReactivityLavaSmelterMenu(id, inventory, controller));
+                HighReactivityLavaSmelterMenu::new);
         CRYSTAL_WORKSTATION = MultiblockMachineDefinition.withModes(
                         "crystal_workstation",
                         CrystalWorkstationControllerBlockEntity.class,
@@ -256,7 +234,6 @@ public final class ModMachines {
                 CrystalReactorCoreBlockEntity.class,
                 () -> new HighEnergyCoreBlock(metalProperties()),
                 CrystalReactorCoreBlockEntity::new,
-                null,
                 null,
                 0);
 

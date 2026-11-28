@@ -60,7 +60,7 @@ public abstract class AbstractSingleblockMachineBlockEntity extends AENetworkPow
     private final SideConfig sideConfig = new SideConfig();
 
     protected AbstractSingleblockMachineBlockEntity(
-            SingleblockMachineDefinition<?, ?, ?> definition, BlockPos pos, BlockState state) {
+            SingleblockMachineDefinition<?> definition, BlockPos pos, BlockState state) {
         super(definition.blockEntityType(), pos, state);
         this.slotCount = definition.slots();
         this.items = NonNullList.withSize(slotCount, ItemStack.EMPTY);
