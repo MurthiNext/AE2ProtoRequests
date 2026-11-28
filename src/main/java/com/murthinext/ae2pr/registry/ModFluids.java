@@ -33,7 +33,7 @@ public final class ModFluids {
     private static ForgeFlowingFluid.Properties alienLavaProperties() {
         return new ForgeFlowingFluid.Properties(ALIEN_LAVA_TYPE, ALIEN_LAVA, FLOWING_ALIEN_LAVA)
                 .bucket(ModItems.ALIEN_LAVA_BUCKET)
-                .block(ModBlocks.ALIEN_LAVA)
+                .block(ModBlocks.ALIEN_LAVA.holder())
                 .slopeFindDistance(2)
                 .levelDecreasePerBlock(2)
                 .tickRate(30)

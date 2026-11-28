@@ -45,20 +45,38 @@ import org.jetbrains.annotations.Nullable;
 public class MachinePartBlock extends Block implements EntityBlock, Wrenchable {
 
     public enum Tier {
-        QUARTZ(1, 32 * 1024, 1, 16 * 1024 * 1000),
-        AEV(4, 2048, 2, 1024 * 1000),
-        XPV(9, 4096, 4, 4096 * 1000);
+        QUARTZ("certus_quartz_crystal", false, 1, 32 * 1024, 1, 16 * 1024 * 1000),
+        AEV("aev", true, 4, 2048, 2, 1024 * 1000),
+        XPV("xpv", true, 9, 4096, 4, 4096 * 1000);
 
+        private final String idPrefix;
+        private final boolean dualHatch;
         private final int itemSlots;
         private final int itemCapacity;
         private final int fluidTanks;
         final int fluidCapacity;
 
-        Tier(int itemSlots, int itemCapacity, int fluidTanks, int fluidCapacity) {
+        Tier(
+                String idPrefix,
+                boolean dualHatch,
+                int itemSlots,
+                int itemCapacity,
+                int fluidTanks,
+                int fluidCapacity) {
+            this.idPrefix = idPrefix;
+            this.dualHatch = dualHatch;
             this.itemSlots = itemSlots;
             this.itemCapacity = itemCapacity;
             this.fluidTanks = fluidTanks;
             this.fluidCapacity = fluidCapacity;
+        }
+
+        public String idPrefix() {
+            return idPrefix;
+        }
+
+        public boolean hasDualHatch() {
+            return dualHatch;
         }
     }
 

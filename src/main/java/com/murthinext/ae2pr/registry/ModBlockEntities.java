@@ -24,8 +24,8 @@ public final class ModBlockEntities {
                     "certus_quartz_crystal_machine_part",
                     () -> BlockEntityType.Builder.of(
                                     MachinePartBlock::createBlockEntity,
-                                    ModBlocks.MACHINE_PARTS.stream()
-                                            .map(RegistryObject::get)
+                                    ModBlocks.machineParts().stream()
+                                            .map(BlockDef::get)
                                             .toArray(Block[]::new))
                             .build(null));
 

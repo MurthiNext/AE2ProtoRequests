@@ -15,8 +15,8 @@ final class MachinePartAppearance {
     static void install() {
         StructureHooks.install(
                 () -> Stream.concat(
-                                ModBlocks.MACHINE_PARTS.stream().map(entry -> (Block) entry.get()),
-                                Stream.of(ModBlocks.ME_PATTERN_BUFFER.get()))
+                                ModBlocks.machineParts().stream().map(BlockDef::get),
+                                Stream.<Block>of(ModBlocks.ME_PATTERN_BUFFER.get()))
                         .toList(),
                 ModBlocks.ME_NETWORK_ACCESS_HATCH::get,
                 MachinePartAppearance::apply);

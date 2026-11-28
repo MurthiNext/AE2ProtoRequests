@@ -24,11 +24,11 @@ public final class ModMenus {
     public static final RegistryObject<MenuType<MultiThresholdLevelEmitterMenu>> MULTI_THRESHOLD_LEVEL_EMITTER =
             MENUS.register("multi_threshold_level_emitter", () -> MultiThresholdLevelEmitterMenu.TYPE);
 
-    public static final RegistryObject<MenuType<ItemBusMenu>> CERTUS_QUARTZ_CRYSTAL_ITEM_BUS =
-            MENUS.register("certus_quartz_crystal_item_bus", () -> ItemBusMenu.TYPE);
+    public static final RegistryObject<MenuType<ItemBusMenu>> MACHINE_PART_ITEM_BUS =
+            MENUS.register("machine_part_item_bus", () -> ItemBusMenu.TYPE);
 
-    public static final RegistryObject<MenuType<FluidHatchMenu>> CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH =
-            MENUS.register("certus_quartz_crystal_input_hatch", () -> FluidHatchMenu.TYPE);
+    public static final RegistryObject<MenuType<FluidHatchMenu>> MACHINE_PART_FLUID_HATCH =
+            MENUS.register("machine_part_fluid_hatch", () -> FluidHatchMenu.TYPE);
 
     public static final RegistryObject<MenuType<MEPatternBufferMenu>> ME_PATTERN_BUFFER =
             MENUS.register("me_pattern_buffer", () -> MEPatternBufferMenu.TYPE);

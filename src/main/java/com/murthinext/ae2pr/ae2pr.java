@@ -57,17 +57,7 @@ public class ae2pr {
         ModMaterials.register();
         ModMachines.register();
         ModBlocks.installStructureHooks();
-        ModBlocks.BLOCKS.register(modEventBus);
-        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
-        ModItems.ITEMS.register(modEventBus);
-        ModMenus.MENUS.register(modEventBus);
-        ModFluids.FLUID_TYPES.register(modEventBus);
-        ModFluids.FLUIDS.register(modEventBus);
-        ModRecipes.RECIPE_TYPES.register(modEventBus);
-        ModRecipes.SERIALIZERS.register(modEventBus);
-        ModSounds.SOUNDS.register(modEventBus);
-        ModEffects.EFFECTS.register(modEventBus);
-        ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
+        ModRegistries.registerAll(modEventBus);
 
         context.registerConfig(
                 net.minecraftforge.fml.config.ModConfig.Type.SERVER, ServerConfig.SPEC, ServerConfig.FILE_NAME);
@@ -132,7 +122,7 @@ public class ae2pr {
                             null,
                             null);
             appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(
-                    networkAccessHatchType, ModItems.ME_NETWORK_ACCESS_HATCH.get());
+                    networkAccessHatchType, ModBlocks.ME_NETWORK_ACCESS_HATCH.item());
             ModMachines.NAMING_FACTORY
                     .block()
                     .setBlockEntity(NamingFactoryBlockEntity.class, namingFactoryType, null, null);

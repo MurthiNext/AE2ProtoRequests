@@ -55,8 +55,8 @@ public final class ClientSetup {
                     MultiThresholdLevelEmitterScreen::new,
                     "/screens/multi_threshold_level_emitter.json");
             MachineClients.registerScreens();
-            MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_ITEM_BUS.get(), ItemBusScreen::new);
-            MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), FluidHatchScreen::new);
+            MenuScreens.register(ModMenus.MACHINE_PART_ITEM_BUS.get(), ItemBusScreen::new);
+            MenuScreens.register(ModMenus.MACHINE_PART_FLUID_HATCH.get(), FluidHatchScreen::new);
             MenuScreens.register(ModMenus.ME_PATTERN_BUFFER.get(), MEPatternBufferScreen::new);
         });
     }

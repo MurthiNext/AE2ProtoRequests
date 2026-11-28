@@ -1,5 +1,6 @@
 package com.murthinext.ae2pr.block.meteorite;
 
+import com.murthinext.ae2pr.registry.BlockDef;
 import com.murthinext.ae2pr.registry.ModBlocks;
 import java.util.List;
 import net.minecraft.util.RandomSource;
@@ -8,11 +9,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.registries.RegistryObject;
 
 public final class MeteoriteOres {
 
-    private record OreEntry(RegistryObject<MeteoriteOreBlock> block, int weight) {}
+    private record OreEntry(BlockDef<MeteoriteOreBlock> block, int weight) {}
 
     // 原版稀有度权重，总和 100
     private static final List<OreEntry> VANILLA_ORES = List.of(

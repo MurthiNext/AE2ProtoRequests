@@ -4,7 +4,6 @@ import com.murthinext.ae2pr.ServerConfig;
 import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.item.ComputationCellComponentItem;
 import com.murthinext.ae2pr.item.CrystalProcessorItem;
-import com.murthinext.ae2pr.item.VoltageBlockItem;
 import com.murthinext.ae2pr.item.collapsed_storage_cell.CollapsedItemStorageCellItem;
 import com.murthinext.ae2pr.item.crystaline.CrystalineItem;
 import com.murthinext.ae2pr.item.filter_cell.AdvancedFilterCellItem;
@@ -16,11 +15,9 @@ import com.murthinext.ae2pr.item.proto_terminal.ProtoTerminalItem;
 import com.murthinext.ae2pr.item.sky_dome_annihilation_plane.SkyDomeAnnihilationPlanePartItem;
 import com.murthinext.ae2pr.item.upgrade.MachineUpgradeCardItem;
 import com.murthinext.ae2pr.item.upgrade.SuperStackCardItem;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -30,10 +27,6 @@ public final class ModItems {
     private ModItems() {}
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ae2pr.MODID);
-
-    private static RegistryObject<BlockItem> blockItem(RegistryObject<? extends Block> block) {
-        return ITEMS.register(block.getId().getPath(), () -> new VoltageBlockItem(block.get(), new Item.Properties()));
-    }
 
     public static final RegistryObject<FilterCellItem> FILTER_CELL =
             ITEMS.register("filter_cell", () -> new FilterCellItem(new Item.Properties().stacksTo(1)));
@@ -87,105 +80,6 @@ public final class ModItems {
             ITEMS.register(
                     "multi_threshold_level_emitter",
                     () -> new MultiThresholdLevelEmitterPartItem(new Item.Properties()));
-
-    public static final RegistryObject<BlockItem> CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING =
-            blockItem(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING);
-
-    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_CASING =
-            blockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_CASING);
-
-    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_UNIT =
-            blockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_UNIT);
-
-    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT =
-            blockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT);
-
-    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT =
-            blockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT);
-
-    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT =
-            blockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT);
-
-    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT =
-            blockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT);
-
-    public static final RegistryObject<BlockItem> CRYSTAL_ASSEMBLY_LINE_GRATING =
-            blockItem(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING);
-
-    public static final RegistryObject<BlockItem> CRYSTAL_GLASS = blockItem(ModBlocks.CRYSTAL_GLASS);
-
-    public static final RegistryObject<BlockItem> FIREPROOF_CRYSTAL_GLASS =
-            blockItem(ModBlocks.FIREPROOF_CRYSTAL_GLASS);
-
-    public static final RegistryObject<BlockItem> CERTUS_QUARTZ_CRYSTAL_INPUT_BUS =
-            blockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS);
-
-    public static final RegistryObject<BlockItem> CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH =
-            blockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH);
-
-    public static final RegistryObject<BlockItem> CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS =
-            blockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS);
-
-    public static final RegistryObject<BlockItem> CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH =
-            blockItem(ModBlocks.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH);
-
-    public static final RegistryObject<BlockItem> AEV_MACHINE_CASING = blockItem(ModBlocks.AEV_MACHINE_CASING);
-
-    public static final RegistryObject<BlockItem> XPV_MACHINE_CASING = blockItem(ModBlocks.XPV_MACHINE_CASING);
-
-    public static final RegistryObject<BlockItem> CARBON_FIBER_MACHINE_FRAME =
-            blockItem(ModBlocks.CARBON_FIBER_MACHINE_FRAME);
-
-    public static final RegistryObject<BlockItem> CRYSTAL_ENERGY_CASING = blockItem(ModBlocks.CRYSTAL_ENERGY_CASING);
-
-    public static final RegistryObject<BlockItem> CRYSTAL_ENERGY_INJECTION_CASING =
-            blockItem(ModBlocks.CRYSTAL_ENERGY_INJECTION_CASING);
-
-    public static final RegistryObject<BlockItem> STABILITY_CASING = blockItem(ModBlocks.STABILITY_CASING);
-
-    public static final RegistryObject<BlockItem> ENTANGLED_CASING = blockItem(ModBlocks.ENTANGLED_CASING);
-
-    public static final RegistryObject<BlockItem> ZIRCONIUM_IRON_ALLOY_MACHINE_CASING =
-            blockItem(ModBlocks.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING);
-
-    public static final RegistryObject<BlockItem> ME_COMPUTER_CASING = blockItem(ModBlocks.ME_COMPUTER_CASING);
-
-    public static final RegistryObject<BlockItem> ME_ADVANCED_COMPUTER_CASING =
-            blockItem(ModBlocks.ME_ADVANCED_COMPUTER_CASING);
-
-    public static final RegistryObject<BlockItem> AEV_INPUT_BUS = blockItem(ModBlocks.AEV_INPUT_BUS);
-
-    public static final RegistryObject<BlockItem> AEV_OUTPUT_BUS = blockItem(ModBlocks.AEV_OUTPUT_BUS);
-
-    public static final RegistryObject<BlockItem> AEV_INPUT_HATCH = blockItem(ModBlocks.AEV_INPUT_HATCH);
-
-    public static final RegistryObject<BlockItem> AEV_OUTPUT_HATCH = blockItem(ModBlocks.AEV_OUTPUT_HATCH);
-
-    public static final RegistryObject<BlockItem> AEV_DUAL_INPUT_HATCH = blockItem(ModBlocks.AEV_DUAL_INPUT_HATCH);
-
-    public static final RegistryObject<BlockItem> AEV_DUAL_OUTPUT_HATCH = blockItem(ModBlocks.AEV_DUAL_OUTPUT_HATCH);
-
-    public static final RegistryObject<BlockItem> XPV_INPUT_BUS = blockItem(ModBlocks.XPV_INPUT_BUS);
-
-    public static final RegistryObject<BlockItem> XPV_OUTPUT_BUS = blockItem(ModBlocks.XPV_OUTPUT_BUS);
-
-    public static final RegistryObject<BlockItem> XPV_INPUT_HATCH = blockItem(ModBlocks.XPV_INPUT_HATCH);
-
-    public static final RegistryObject<BlockItem> XPV_OUTPUT_HATCH = blockItem(ModBlocks.XPV_OUTPUT_HATCH);
-
-    public static final RegistryObject<BlockItem> XPV_DUAL_INPUT_HATCH = blockItem(ModBlocks.XPV_DUAL_INPUT_HATCH);
-
-    public static final RegistryObject<BlockItem> XPV_DUAL_OUTPUT_HATCH = blockItem(ModBlocks.XPV_DUAL_OUTPUT_HATCH);
-
-    public static final RegistryObject<BlockItem> ME_NETWORK_ACCESS_HATCH =
-            blockItem(ModBlocks.ME_NETWORK_ACCESS_HATCH);
-
-    public static final RegistryObject<BlockItem> ME_PATTERN_BUFFER = blockItem(ModBlocks.ME_PATTERN_BUFFER);
-
-    public static final RegistryObject<BlockItem> LOGISTICS_CONTROL_CASING =
-            blockItem(ModBlocks.LOGISTICS_CONTROL_CASING);
-
-    public static final RegistryObject<BlockItem> FILTER_PRESS_PLATE = blockItem(ModBlocks.FILTER_PRESS_PLATE);
 
     public static final RegistryObject<Item> FINE_FLUIX_WIRE =
             ITEMS.register("fine_fluix_wire", () -> new Item(new Item.Properties()));
@@ -250,40 +144,11 @@ public final class ModItems {
                     ModFluids.ALIEN_LAVA,
                     new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
-    public static final RegistryObject<BlockItem> METEORITE_IRON_ORE = blockItem(ModBlocks.METEORITE_IRON_ORE);
-
-    public static final RegistryObject<BlockItem> METEORITE_COPPER_ORE = blockItem(ModBlocks.METEORITE_COPPER_ORE);
-
-    public static final RegistryObject<BlockItem> METEORITE_GOLD_ORE = blockItem(ModBlocks.METEORITE_GOLD_ORE);
-
-    public static final RegistryObject<BlockItem> METEORITE_LAPIS_ORE = blockItem(ModBlocks.METEORITE_LAPIS_ORE);
-
-    public static final RegistryObject<BlockItem> METEORITE_DIAMOND_ORE = blockItem(ModBlocks.METEORITE_DIAMOND_ORE);
-
-    public static final RegistryObject<BlockItem> METEORITE_EMERALD_ORE = blockItem(ModBlocks.METEORITE_EMERALD_ORE);
-
-    public static final RegistryObject<BlockItem> METEORITE_ZIRCON_ORE = blockItem(ModBlocks.METEORITE_ZIRCON_ORE);
-
     public static final RegistryObject<Item> ZIRCON = ITEMS.register("zircon", () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<CrystalineItem> CRYSTALINE =
             ITEMS.register("crystaline", () -> new CrystalineItem(new Item.Properties()));
 
-    public static final RegistryObject<BlockItem> METEOR_STEEL_BLOCK = blockItem(ModBlocks.METEOR_STEEL_BLOCK);
-
-    public static final RegistryObject<BlockItem> METEOR_STEEL_PIPE_BLOCK =
-            blockItem(ModBlocks.METEOR_STEEL_PIPE_BLOCK);
-
-    public static final RegistryObject<BlockItem> ZIRCON_BLOCK = blockItem(ModBlocks.ZIRCON_BLOCK);
-
-    public static final RegistryObject<BlockItem> DENSE_SKY_STONE_BLOCK = blockItem(ModBlocks.DENSE_SKY_STONE_BLOCK);
-
     public static final RegistryObject<Item> ZIRCON_BRICK =
             ITEMS.register("zircon_brick", () -> new Item(new Item.Properties()));
-
-    public static final RegistryObject<BlockItem> MOLECULAR_ASSEMBLY_CORE =
-            blockItem(ModBlocks.MOLECULAR_ASSEMBLY_CORE);
-
-    public static final RegistryObject<BlockItem> ZIRCONIA_CORUNDUM_BRICKS =
-            blockItem(ModBlocks.ZIRCONIA_CORUNDUM_BRICKS);
 }

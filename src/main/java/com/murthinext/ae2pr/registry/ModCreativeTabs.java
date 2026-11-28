@@ -89,18 +89,10 @@ public final class ModCreativeTabs {
                                 ModFluids.COARSE_METEORITE_SOLUTION.bucket().get());
 
                         // 储存方块
-                        output.accept(ModItems.METEOR_STEEL_BLOCK.get());
-                        output.accept(ModItems.ZIRCON_BLOCK.get());
-                        output.accept(ModItems.DENSE_SKY_STONE_BLOCK.get());
+                        acceptGroup(output, BlockGroup.STORAGE_BLOCK);
 
                         // 矿石
-                        output.accept(ModItems.METEORITE_IRON_ORE.get());
-                        output.accept(ModItems.METEORITE_COPPER_ORE.get());
-                        output.accept(ModItems.METEORITE_GOLD_ORE.get());
-                        output.accept(ModItems.METEORITE_LAPIS_ORE.get());
-                        output.accept(ModItems.METEORITE_DIAMOND_ORE.get());
-                        output.accept(ModItems.METEORITE_EMERALD_ORE.get());
-                        output.accept(ModItems.METEORITE_ZIRCON_ORE.get());
+                        acceptGroup(output, BlockGroup.ORE);
 
                         // 线缆部件
                         output.accept(ModItems.MULTI_LEVEL_EMITTER.get());
@@ -120,62 +112,29 @@ public final class ModCreativeTabs {
                         output.accept(ModMachines.FILTER_PRESS.item());
                         output.accept(ModMachines.MULTI_FACTORY.item());
                         output.accept(ModMachines.INTEGRATED_MASS_FABRICATOR.item());
-
-                        // 多方块结构 - 普通结构方块
-                        output.accept(ModItems.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get());
-                        output.accept(ModItems.AEV_MACHINE_CASING.get());
-                        output.accept(ModItems.XPV_MACHINE_CASING.get());
-                        output.accept(ModItems.CARBON_FIBER_MACHINE_FRAME.get());
-                        output.accept(ModItems.CRYSTAL_ENERGY_CASING.get());
-                        output.accept(ModItems.CRYSTAL_ENERGY_INJECTION_CASING.get());
-                        output.accept(ModItems.STABILITY_CASING.get());
-                        output.accept(ModItems.ENTANGLED_CASING.get());
-                        output.accept(ModItems.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING.get());
-                        output.accept(ModItems.ME_COMPUTER_CASING.get());
-                        output.accept(ModItems.ME_ADVANCED_COMPUTER_CASING.get());
-                        output.accept(ModItems.ZIRCONIA_CORUNDUM_BRICKS.get());
-                        output.accept(ModItems.CRYSTAL_GLASS.get());
-                        output.accept(ModItems.FIREPROOF_CRYSTAL_GLASS.get());
-
-                        // 多方块结构 - 特色结构方块
-                        output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_UNIT.get());
-                        output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_CHARGING_UNIT.get());
-                        output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_ADVANCED_CHARGING_UNIT.get());
-                        output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_PARALLEL_UNIT.get());
-                        output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_SPEED_UNIT.get());
-                        output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_CASING.get());
-                        output.accept(ModItems.CRYSTAL_ASSEMBLY_LINE_GRATING.get());
-                        output.accept(ModItems.LOGISTICS_CONTROL_CASING.get());
-                        output.accept(ModItems.METEOR_STEEL_PIPE_BLOCK.get());
-                        output.accept(ModItems.FILTER_PRESS_PLATE.get());
                         output.accept(ModMachines.CRYSTAL_REACTOR.item());
-                        output.accept(ModItems.MOLECULAR_ASSEMBLY_CORE.get());
+
+                        // 多方块结构 - 机壳 / 玻璃 / 特色
+                        acceptGroup(output, BlockGroup.CASING);
+                        acceptGroup(output, BlockGroup.GLASS);
+                        acceptGroup(output, BlockGroup.FEATURE);
 
                         // 多方块结构 - 仓室
-                        output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_INPUT_BUS.get());
-                        output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get());
-                        output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_OUTPUT_BUS.get());
-                        output.accept(ModItems.CERTUS_QUARTZ_CRYSTAL_OUTPUT_HATCH.get());
-                        output.accept(ModItems.ME_NETWORK_ACCESS_HATCH.get());
-                        output.accept(ModItems.ME_PATTERN_BUFFER.get());
-                        output.accept(ModItems.AEV_INPUT_BUS.get());
-                        output.accept(ModItems.AEV_INPUT_HATCH.get());
-                        output.accept(ModItems.AEV_OUTPUT_BUS.get());
-                        output.accept(ModItems.AEV_OUTPUT_HATCH.get());
-                        output.accept(ModItems.AEV_DUAL_INPUT_HATCH.get());
-                        output.accept(ModItems.AEV_DUAL_OUTPUT_HATCH.get());
-                        output.accept(ModItems.XPV_INPUT_BUS.get());
-                        output.accept(ModItems.XPV_INPUT_HATCH.get());
-                        output.accept(ModItems.XPV_OUTPUT_BUS.get());
-                        output.accept(ModItems.XPV_OUTPUT_HATCH.get());
-                        output.accept(ModItems.XPV_DUAL_INPUT_HATCH.get());
-                        output.accept(ModItems.XPV_DUAL_OUTPUT_HATCH.get());
+                        acceptGroup(output, BlockGroup.MACHINE_PART);
                     })
                     .build());
 
     private static void acceptMaterials(CreativeModeTab.Output output, Form form) {
         for (Material material : ModMaterials.ALL) {
             material.item(form).ifPresent(item -> output.accept(item.get()));
+        }
+    }
+
+    private static void acceptGroup(CreativeModeTab.Output output, BlockGroup group) {
+        for (BlockDef<?> def : ModBlocks.group(group)) {
+            if (def.hasItem()) {
+                output.accept(def.item());
+            }
         }
     }
 }
