@@ -8,8 +8,6 @@ import java.util.List;
 
 public final class ModMaterials {
 
-    private static final int CRYSTALS_PER_BLOCK = 4;
-
     private static final MaterialRegistry MATERIALS =
             new MaterialRegistry(ModItems.ITEMS, ModFluids.FLUID_TYPES, ModFluids.FLUIDS);
 
@@ -49,7 +47,7 @@ public final class ModMaterials {
                 .ingot()
                 .plate()
                 .dust()
-                .storageBlock(9, ModBlocks.METEOR_STEEL_BLOCK.itemHolder())
+                .storageBlock(ModBlocks.METEOR_STEEL_BLOCK.itemHolder())
                 .color(0xE1EBF8)
                 .modelSet("meteor")
                 .register();
@@ -58,7 +56,7 @@ public final class ModMaterials {
                 .ingot()
                 .plate()
                 .dust()
-                .optionalTag(Form.BLOCK, "forge:storage_blocks/zirconium", Form.BLOCK.defaultAmountMb())
+                .optionalStorageBlockTag("forge:storage_blocks/zirconium")
                 .color(0xDDEDF4)
                 .fluid(FluidSpec.lava("liquid_zirconium", 8, 2600, 5000, 400))
                 .register();
@@ -101,7 +99,7 @@ public final class ModMaterials {
                 .define("amethyst")
                 .dust()
                 .tag(Form.GEM, "forge:gems/amethyst")
-                .item(Form.BLOCK, "minecraft:amethyst_block", CRYSTALS_PER_BLOCK * Form.INGOT.defaultAmountMb())
+                .storageBlock("minecraft:amethyst_block")
                 .color(0xC78DF3)
                 .fluid(FluidSpec.water("liquid_amethyst", 8, 2000, 3000, 400))
                 .register();
@@ -115,7 +113,7 @@ public final class ModMaterials {
         ZIRCON = MATERIALS
                 .define("zircon")
                 .gem(ModItems.ZIRCON)
-                .storageBlock(CRYSTALS_PER_BLOCK, ModBlocks.ZIRCON_BLOCK.itemHolder())
+                .storageBlock(ModBlocks.ZIRCON_BLOCK.itemHolder())
                 .dust()
                 .color(0xE8E8E8)
                 .register();
@@ -133,10 +131,7 @@ public final class ModMaterials {
                 .define("certus_quartz")
                 .tag(Form.GEM, "ae2:all_certus_quartz")
                 .tag(Form.DUST, "forge:dusts/certus_quartz")
-                .tag(
-                        Form.BLOCK,
-                        "forge:storage_blocks/certus_quartz",
-                        CRYSTALS_PER_BLOCK * Form.INGOT.defaultAmountMb())
+                .storageBlockTag("forge:storage_blocks/certus_quartz")
                 .color(0x94B7FF)
                 .fluid(FluidSpec.water("liquid_certus_quartz", 8, 2000, 3000, 400))
                 .register();
@@ -144,14 +139,14 @@ public final class ModMaterials {
                 .define("fluix_crystal")
                 .tag(Form.GEM, "ae2:all_fluix")
                 .tag(Form.DUST, "forge:dusts/fluix")
-                .item(Form.BLOCK, "ae2:fluix_block", CRYSTALS_PER_BLOCK * Form.INGOT.defaultAmountMb())
+                .storageBlock("ae2:fluix_block")
                 .color(0xAD94FF)
                 .fluid(FluidSpec.water("liquid_fluix_crystal", 8, 2000, 3000, 400))
                 .register();
         SCULK_CRYSTAL = MATERIALS
                 .define("sculk_crystal")
                 .gem(ModItems.SCULK_CRYSTAL)
-                .storageBlock(CRYSTALS_PER_BLOCK, ModBlocks.SCULK_CRYSTAL_BLOCK.itemHolder())
+                .storageBlock(ModBlocks.SCULK_CRYSTAL_BLOCK.itemHolder())
                 .dust()
                 .color(0x3FB39E)
                 .dustOverlay("ae2pr:item/sculk_dust_specks")

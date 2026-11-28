@@ -54,19 +54,39 @@ public final class MaterialBuilder {
                 Form.GEM, new MaterialForm.Origin.Own(item, Form.GEM.tag(id)), Form.GEM.defaultAmountMb()));
     }
 
-    public MaterialBuilder storageBlock(int itemsPerBlock, RegistryObject<? extends Item> item) {
-        if (itemsPerBlock != 4 && itemsPerBlock != 9) {
-            throw new IllegalArgumentException("Storage block must contain 4 or 9 items: " + id);
-        }
+    public MaterialBuilder storageBlock(RegistryObject<? extends Item> item) {
+        return storageBlock(new MaterialForm.Origin.Own(item, Form.BLOCK.tag(id)));
+    }
+
+    public MaterialBuilder storageBlock(String itemId) {
+        return storageBlock(new MaterialForm.Origin.ExternalItem(ResourceLocation.parse(itemId)));
+    }
+
+    public MaterialBuilder storageBlockTag(String tagId) {
+        return storageBlockTag(tagId, false);
+    }
+
+    public MaterialBuilder optionalStorageBlockTag(String tagId) {
+        return storageBlockTag(tagId, true);
+    }
+
+    private MaterialBuilder storageBlockTag(String tagId, boolean optional) {
+        return storageBlock(new MaterialForm.Origin.ExternalTag(
+                TagKey.create(Registries.ITEM, ResourceLocation.parse(tagId)), optional));
+    }
+
+    // 宝石 4 件、锭 9 件一块，流体量随基础形态自动推导
+    private MaterialBuilder storageBlock(MaterialForm.Origin origin) {
         MaterialForm unit = forms.get(Form.GEM);
+        int itemsPerBlock = 4;
         if (unit == null) {
             unit = forms.get(Form.INGOT);
+            itemsPerBlock = 9;
         }
         if (unit == null) {
             throw new IllegalStateException("Storage block requires a gem or ingot form: " + id);
         }
-        return addForm(new MaterialForm(
-                Form.BLOCK, new MaterialForm.Origin.Own(item, Form.BLOCK.tag(id)), itemsPerBlock * unit.amountMb()));
+        return addForm(new MaterialForm(Form.BLOCK, origin, itemsPerBlock * unit.amountMb()));
     }
 
     public MaterialBuilder item(Form form, String itemId) {
