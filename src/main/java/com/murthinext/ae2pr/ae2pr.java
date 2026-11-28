@@ -6,21 +6,25 @@ import appeng.api.storage.StorageCells;
 import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.items.parts.PartModelsHelper;
-import com.mojang.logging.LogUtils;
 import com.murthinext.ae2pr.api.ClientHooks;
 import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.api.Log;
+import com.murthinext.ae2pr.api.machine.CollapseSink;
 import com.murthinext.ae2pr.api.machine.MachineRegistries;
 import com.murthinext.ae2pr.api.machine.MachineTuning;
 import com.murthinext.ae2pr.api.machine.MultiblockMachineDefinition;
+import com.murthinext.ae2pr.api.upgrade.UpgradeModifier;
 import com.murthinext.ae2pr.cable_part.level_emitter.MultiLevelEmitterPart;
 import com.murthinext.ae2pr.cable_part.level_emitter.MultiThresholdLevelEmitterPart;
 import com.murthinext.ae2pr.block.ore.MeteoriteOres;
 import com.murthinext.ae2pr.cable_part.sky_dome.SkyDomeAnnihilationPlanePart;
 import com.murthinext.ae2pr.block.alien_lava.AlienLavaInteractions;
+import com.murthinext.ae2pr.item.cell.collapsed.CollapseEvents;
+import com.murthinext.ae2pr.item.cell.collapsed.CollapseHandler;
 import com.murthinext.ae2pr.item.cell.collapsed.CollapsedCellGuiHandler;
 import com.murthinext.ae2pr.item.cell.collapsed.CollapsedCellHandler;
-import com.murthinext.ae2pr.item.cell.collapsed.CollapseEvents;
 import com.murthinext.ae2pr.integration.ae2.repeat_order.GeneralRepeatOrders;
+import com.murthinext.ae2pr.item.upgrade.MachineUpgrades;
 import com.murthinext.ae2pr.item.upgrade.SuperStackSupport;
 import com.murthinext.ae2pr.api.WrenchInteractions;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryBlockEntity;
@@ -42,8 +46,8 @@ import org.slf4j.Logger;
 @Mod(ae2pr.MODID)
 public class ae2pr {
 
-    public static final String MODID = "ae2pr";
-    public static final Logger LOGGER = LogUtils.getLogger();
+    public static final String MODID = Ids.MODID;
+    public static final Logger LOGGER = Log.LOGGER;
 
     public ae2pr(FMLJavaModLoadingContext context) {
         var modEventBus = context.getModEventBus();
@@ -58,6 +62,8 @@ public class ae2pr {
 
         ModMaterials.register();
         ModMachines.register();
+        CollapseSink.install(CollapseHandler::dropBufferedContents);
+        UpgradeModifier.install(MachineUpgrades::apply);
         ModBlocks.installStructureHooks();
         ModRegistries.registerAll(modEventBus);
 

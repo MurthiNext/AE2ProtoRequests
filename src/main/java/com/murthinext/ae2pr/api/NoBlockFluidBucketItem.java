@@ -1,4 +1,4 @@
-package com.murthinext.ae2pr.item;
+package com.murthinext.ae2pr.api;
 
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;

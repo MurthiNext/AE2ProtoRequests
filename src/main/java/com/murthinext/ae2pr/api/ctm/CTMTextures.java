@@ -1,7 +1,7 @@
 package com.murthinext.ae2pr.api.ctm;
 
-import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.api.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -96,7 +96,7 @@ public final class CTMTextures {
             GRIDS_BY_SPRITE.put(baseSprite.contents().name(), grid);
         }
         if (!missing.isEmpty()) {
-            ae2pr.LOGGER.warn(
+            Log.LOGGER.warn(
                     "Connected texture atlas is missing, affected blocks will use plain textures: {}", missing);
         }
     }

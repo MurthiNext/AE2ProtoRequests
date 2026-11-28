@@ -3,9 +3,8 @@ package com.murthinext.ae2pr.api.machine.multiblock;
 import appeng.api.upgrades.Upgrades;
 import com.murthinext.ae2pr.api.machine.MachineDefinition;
 import com.murthinext.ae2pr.api.machine.MachineStats;
+import com.murthinext.ae2pr.api.machine.MachineStatsSender;
 import com.murthinext.ae2pr.api.machine.port.ChannelStatus;
-import com.murthinext.ae2pr.core.network.MachineStatsPacket;
-import com.murthinext.ae2pr.core.network.ModNetwork;
 import com.murthinext.nextui.layout.PlayerInventoryLayout;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -140,7 +139,7 @@ public abstract class AbstractMultiblockControllerMenu<T extends AbstractMultibl
                 MachineStats current = controller.getMachineStats();
                 if (!current.equals(machineStats)) {
                     machineStats = current;
-                    ModNetwork.sendToPlayer(player, new MachineStatsPacket(containerId, current));
+                    MachineStatsSender.send(player, containerId, current);
                 }
             }
         }

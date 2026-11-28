@@ -7,8 +7,9 @@ import appeng.api.stacks.GenericStack;
 import appeng.api.upgrades.IUpgradeInventory;
 import appeng.api.upgrades.IUpgradeableObject;
 import appeng.api.upgrades.UpgradeInventories;
-import com.murthinext.ae2pr.ae2pr;
 import com.murthinext.ae2pr.api.EnergyAmount;
+import com.murthinext.ae2pr.api.Log;
+import com.murthinext.ae2pr.api.machine.CollapseSink;
 import com.murthinext.ae2pr.api.machine.ControllerHost;
 import com.murthinext.ae2pr.api.machine.CoreLight;
 import com.murthinext.ae2pr.api.machine.MachineBlock;
@@ -31,8 +32,7 @@ import com.murthinext.ae2pr.api.recipe.ItemInput;
 import com.murthinext.ae2pr.api.recipe.ItemOutput;
 import com.murthinext.ae2pr.api.recipe.MultiblockRecipe;
 import com.murthinext.ae2pr.api.upgrade.MachineUpgradeType;
-import com.murthinext.ae2pr.item.cell.collapsed.CollapseHandler;
-import com.murthinext.ae2pr.item.upgrade.MachineUpgrades;
+import com.murthinext.ae2pr.api.upgrade.UpgradeModifier;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -164,7 +164,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     }
 
     public int maxParallel() {
-        return (int) MachineUpgrades.apply(upgrades, MachineUpgradeType.PARALLEL, baseParallel());
+        return (int) UpgradeModifier.apply(upgrades, MachineUpgradeType.PARALLEL, baseParallel());
     }
 
     private double baseParallel() {
@@ -216,7 +216,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             }
             if (!remaining.isEmpty()) {
                 // 启动前已检查，兜底掉落避免产物丢失
-                ae2pr.LOGGER.warn(
+                Log.LOGGER.warn(
                         "{} output could not be inserted into output buses, dropped {}", machineKey(), remaining);
                 Block.popResource(level, worldPosition, remaining);
             }
@@ -238,7 +238,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
             }
             if (!remaining.isEmpty()) {
                 // 启动前已检查，兜底记录避免产物丢失
-                ae2pr.LOGGER.warn(
+                Log.LOGGER.warn(
                         "{} output could not be stored in output hatches, discarded {}", machineKey(), remaining);
             }
         }
@@ -404,7 +404,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
     protected double energyCost(Match match) {
         double perParallel = match.recipe().getEnergyPerParallel();
         return EnergyAmount.clamp(
-                MachineUpgrades.apply(upgrades, MachineUpgradeType.ENERGY, perParallel) * match.parallel());
+                UpgradeModifier.apply(upgrades, MachineUpgradeType.ENERGY, perParallel) * match.parallel());
     }
 
     private void finishJob() {
@@ -487,7 +487,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         for (GenericStack stack : meOutput) {
             drops.merge(stack.what(), BigInteger.valueOf(stack.amount()), BigInteger::add);
         }
-        CollapseHandler.dropBufferedContents(
+        CollapseSink.dropBufferedContents(
                 level,
                 worldPosition,
                 BuiltInRegistries.BLOCK.getKey(getBlockState().getBlock()),
@@ -704,7 +704,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
 
     public double getSpeedMultiplier() {
         double base = baseSpeedMultiplier();
-        return MachineUpgrades.apply(
+        return UpgradeModifier.apply(
                 upgrades, MachineUpgradeType.SPEED, base, base * MachineTuning.speedPerCard(), null);
     }
 
@@ -730,7 +730,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         List<MachineStat.Source> speedSources = new ArrayList<>();
         speedSources.add(new MachineStat.Source(Component.translatable("gui.ae2pr.multiblock.data.base"), 1, 1));
         collectBaseStatSources(MachineUpgradeType.SPEED, speedSources);
-        double speed = MachineUpgrades.apply(
+        double speed = UpgradeModifier.apply(
                 upgrades, MachineUpgradeType.SPEED, speedBase, speedBase * MachineTuning.speedPerCard(), speedSources);
 
         List<MachineStat.Source> parallelSources = new ArrayList<>();
@@ -740,7 +740,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
                 definition.maxParallel()));
         collectBaseStatSources(MachineUpgradeType.PARALLEL, parallelSources);
         double parallel =
-                MachineUpgrades.apply(upgrades, MachineUpgradeType.PARALLEL, baseParallel(), 0, parallelSources);
+                UpgradeModifier.apply(upgrades, MachineUpgradeType.PARALLEL, baseParallel(), 0, parallelSources);
 
         MultiblockRecipe recipe = currentRecipe();
         boolean recipeBasis = recipe != null && recipe.getEnergyPerParallel() > 0;
@@ -749,7 +749,7 @@ public abstract class AbstractMultiblockControllerBlockEntity extends BlockEntit
         energySources.add(new MachineStat.Source(
                 Component.translatable("gui.ae2pr.multiblock.data.base"), energyBase, energyBase));
         double energy = usesRecipeEnergy()
-                ? MachineUpgrades.apply(upgrades, MachineUpgradeType.ENERGY, energyBase, 0, energySources)
+                ? UpgradeModifier.apply(upgrades, MachineUpgradeType.ENERGY, energyBase, 0, energySources)
                 : energyBase;
         return new MachineStats(
                 new MachineStat(speed, speedSources),

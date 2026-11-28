@@ -1,6 +1,7 @@
 package com.murthinext.ae2pr.core.network;
 
 import com.murthinext.ae2pr.api.Ids;
+import com.murthinext.ae2pr.api.machine.MachineStatsSender;
 import com.murthinext.ae2pr.block.machine_part.network.BusSlotClickPacket;
 import com.murthinext.ae2pr.block.machine_part.network.HatchTankClickPacket;
 import com.murthinext.ae2pr.block.machine_part.network.MachinePartFluidPacket;
@@ -47,6 +48,8 @@ public final class ModNetwork {
             throw new IllegalStateException("ModNetwork already registered");
         }
         registered = true;
+        MachineStatsSender.install(
+                (player, containerId, stats) -> sendToPlayer(player, new MachineStatsPacket(containerId, stats)));
         CHANNEL.registerMessage(
                 nextMessageId++,
                 ServerConfigSyncPacket.class,

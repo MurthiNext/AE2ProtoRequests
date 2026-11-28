@@ -1,6 +1,6 @@
 package com.murthinext.ae2pr.api.upgrade;
 
-import com.murthinext.ae2pr.ae2pr;
+import com.murthinext.ae2pr.api.Log;
 import com.murthinext.ae2pr.api.math.LatexFormula;
 import java.util.function.Supplier;
 
@@ -37,7 +37,7 @@ public final class MachineUpgradeDefinition {
                 warned = false;
             } catch (IllegalArgumentException exception) {
                 if (!warned) {
-                    ae2pr.LOGGER.warn("Invalid formula {} for upgrade {}; using default", source, id);
+                    Log.LOGGER.warn("Invalid formula {} for upgrade {}; using default", source, id);
                     warned = true;
                 }
                 if (formula == null || !formula.source().equals(fallback)) {
@@ -52,7 +52,7 @@ public final class MachineUpgradeDefinition {
         double result = formula().evaluate(value);
         if (!Double.isFinite(result)) {
             if (!warned) {
-                ae2pr.LOGGER.warn(
+                Log.LOGGER.warn(
                         "Upgrade {} produced a non-finite result for x={}; ignoring this application", id, value);
                 warned = true;
             }

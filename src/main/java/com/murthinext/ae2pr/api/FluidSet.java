@@ -1,6 +1,5 @@
 package com.murthinext.ae2pr.api;
 
-import com.murthinext.ae2pr.item.NoBlockFluidBucketItem;
 import java.util.function.Supplier;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
