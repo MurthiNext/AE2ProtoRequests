@@ -37,9 +37,16 @@ public final class ModNetwork {
 
     private static int nextMessageId;
 
+    private static boolean registered;
+
     private ModNetwork() {}
 
-    public static void register() {
+    // 重复注册会产生 ID 冲突，这里一次性完成
+    public static synchronized void register() {
+        if (registered) {
+            throw new IllegalStateException("ModNetwork already registered");
+        }
+        registered = true;
         CHANNEL.registerMessage(
                 nextMessageId++,
                 ServerConfigSyncPacket.class,
@@ -174,6 +181,10 @@ public final class ModNetwork {
                 PatternBufferFluidPacket::decode,
                 PatternBufferFluidPacket::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+    }
+
+    public static int messageCount() {
+        return nextMessageId;
     }
 
     public static void sendToPlayer(ServerPlayer player, Object packet) {

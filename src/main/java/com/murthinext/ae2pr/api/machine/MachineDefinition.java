@@ -125,12 +125,24 @@ public abstract class MachineDefinition<B extends Block, E extends BlockEntity, 
         return block.get();
     }
 
+    public final RegistryObject<B> blockHolder() {
+        return block;
+    }
+
     public final BlockItem item() {
         return item.get();
     }
 
+    public final RegistryObject<BlockItem> itemHolder() {
+        return item;
+    }
+
     public final BlockEntityType<E> blockEntityType() {
         return blockEntityType.get();
+    }
+
+    public final RegistryObject<BlockEntityType<E>> blockEntityTypeHolder() {
+        return blockEntityType;
     }
 
     public final MenuType<M> menuType() {

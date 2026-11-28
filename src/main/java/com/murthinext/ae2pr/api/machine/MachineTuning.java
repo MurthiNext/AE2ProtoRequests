@@ -8,9 +8,15 @@ public final class MachineTuning {
     private static DoubleSupplier speedPerCard = () -> 0.0D;
     private static DoubleSupplier energyMultiplierPerCard = () -> 1.0D;
 
+    private static boolean installed;
+
     private MachineTuning() {}
 
-    public static void install(DoubleSupplier speedPerCard, DoubleSupplier energyMultiplierPerCard) {
+    public static synchronized void install(DoubleSupplier speedPerCard, DoubleSupplier energyMultiplierPerCard) {
+        if (installed) {
+            throw new IllegalStateException("Machine tuning already installed");
+        }
+        installed = true;
         MachineTuning.speedPerCard = speedPerCard;
         MachineTuning.energyMultiplierPerCard = energyMultiplierPerCard;
     }

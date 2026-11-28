@@ -18,15 +18,21 @@ public final class MachineRegistries {
     private static DeferredRegister<RecipeType<?>> recipeTypes;
     private static DeferredRegister<RecipeSerializer<?>> recipeSerializers;
 
+    private static boolean installed;
+
     private MachineRegistries() {}
 
-    public static void install(
+    public static synchronized void install(
             DeferredRegister<Block> blocks,
             DeferredRegister<Item> items,
             DeferredRegister<BlockEntityType<?>> blockEntities,
             DeferredRegister<MenuType<?>> menus,
             DeferredRegister<RecipeType<?>> recipeTypes,
             DeferredRegister<RecipeSerializer<?>> recipeSerializers) {
+        if (installed) {
+            throw new IllegalStateException("Machine registries already installed");
+        }
+        installed = true;
         MachineRegistries.blocks = blocks;
         MachineRegistries.items = items;
         MachineRegistries.blockEntities = blockEntities;

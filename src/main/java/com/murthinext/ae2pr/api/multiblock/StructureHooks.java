@@ -1,6 +1,7 @@
 package com.murthinext.ae2pr.api.multiblock;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -19,39 +20,47 @@ public final class StructureHooks {
         void apply(Level level, BlockPos pos, boolean formed, int style, boolean active);
     }
 
-    private static Supplier<List<Block>> parts = List::of;
+    private record Hooks(
+            Supplier<List<Block>> parts,
+            @Nullable Supplier<Block> networkAccessHatch,
+            @Nullable PartAppearance partAppearance) {}
 
-    @Nullable
-    private static Supplier<Block> networkAccessHatch;
-
-    @Nullable
-    private static PartAppearance partAppearance;
+    private static volatile Hooks hooks;
 
     private StructureHooks() {}
 
-    public static void install(
+    // 只允许安装一次，避免结构谓词读取到被覆盖的仓室表
+    public static synchronized void install(
             Supplier<List<Block>> parts,
             @Nullable Supplier<Block> networkAccessHatch,
             @Nullable PartAppearance partAppearance) {
-        if (parts != null) {
-            StructureHooks.parts = parts;
+        if (hooks != null) {
+            throw new IllegalStateException("StructureHooks already installed");
         }
-        StructureHooks.networkAccessHatch = networkAccessHatch;
-        StructureHooks.partAppearance = partAppearance;
+        hooks = new Hooks(Objects.requireNonNull(parts, "parts"), networkAccessHatch, partAppearance);
     }
 
     public static List<Block> parts() {
-        return parts.get();
+        var value = hooks;
+        if (value == null) {
+            throw new IllegalStateException(
+                    "StructureHooks must be installed before any structure pattern is initialized");
+        }
+        return value.parts().get();
     }
 
     @Nullable
     public static Block networkAccessHatch() {
-        return networkAccessHatch == null ? null : networkAccessHatch.get();
+        var value = hooks;
+        return value == null || value.networkAccessHatch() == null
+                ? null
+                : value.networkAccessHatch().get();
     }
 
     public static void applyPartAppearance(Level level, BlockPos pos, boolean formed, int style, boolean active) {
-        if (partAppearance != null) {
-            partAppearance.apply(level, pos, formed, style, active);
+        var value = hooks;
+        if (value != null && value.partAppearance() != null) {
+            value.partAppearance().apply(level, pos, formed, style, active);
         }
     }
 }

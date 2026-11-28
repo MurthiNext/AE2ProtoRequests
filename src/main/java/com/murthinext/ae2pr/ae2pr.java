@@ -7,6 +7,7 @@ import appeng.api.upgrades.Upgrades;
 import appeng.core.definitions.AEItems;
 import appeng.items.parts.PartModelsHelper;
 import com.mojang.logging.LogUtils;
+import com.murthinext.ae2pr.api.ClientHooks;
 import com.murthinext.ae2pr.api.Ids;
 import com.murthinext.ae2pr.api.machine.MachineRegistries;
 import com.murthinext.ae2pr.api.machine.MachineTuning;
@@ -24,6 +25,7 @@ import com.murthinext.ae2pr.logic.upgrade.SuperStackSupport;
 import com.murthinext.ae2pr.logic.wrench.WrenchInteractions;
 import com.murthinext.ae2pr.machine.naming_factory.NamingFactoryBlockEntity;
 import com.murthinext.ae2pr.registry.*;
+import java.util.Objects;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -70,9 +72,12 @@ public class ae2pr {
         context.registerConfig(
                 net.minecraftforge.fml.config.ModConfig.Type.SERVER, ServerConfig.SPEC, ServerConfig.FILE_NAME);
 
-        PartModels.registerModels(PartModelsHelper.createModels(MultiLevelEmitterPart.class));
-        PartModels.registerModels(PartModelsHelper.createModels(MultiThresholdLevelEmitterPart.class));
-        PartModels.registerModels(PartModelsHelper.createModels(SkyDomeAnnihilationPlanePart.class));
+        // AE2 在 ModelEvent.RegisterAdditional 时冻结 part models，注册时机必须留在构造期
+        ClientHooks.run(() -> () -> {
+            PartModels.registerModels(PartModelsHelper.createModels(MultiLevelEmitterPart.class));
+            PartModels.registerModels(PartModelsHelper.createModels(MultiThresholdLevelEmitterPart.class));
+            PartModels.registerModels(PartModelsHelper.createModels(SkyDomeAnnihilationPlanePart.class));
+        });
         ModNetwork.register();
 
         MinecraftForge.EVENT_BUS.addListener(GeneralRepeatOrders::onServerTick);
@@ -99,7 +104,7 @@ public class ae2pr {
             Upgrades.add(AEItems.CRAFTING_CARD, multiLevelEmitterItem, 1);
             Upgrades.add(AEItems.FUZZY_CARD, multiThresholdLevelEmitterItem, 1);
             Upgrades.add(AEItems.CRAFTING_CARD, multiThresholdLevelEmitterItem, 1);
-            for (var machine : ModMachines.ALL) {
+            for (var machine : Objects.requireNonNull(ModMachines.ALL, "ModMachines.register() not called")) {
                 if (machine.speedUpgrades() > 0) {
                     Upgrades.add(AEItems.SPEED_CARD, machine.block(), machine.speedUpgrades());
                 }
@@ -133,6 +138,8 @@ public class ae2pr {
                     .setBlockEntity(NamingFactoryBlockEntity.class, namingFactoryType, null, null);
             appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(
                     namingFactoryType, ModMachines.NAMING_FACTORY.item());
+
+            ModSelfCheck.run();
         });
     }
 }

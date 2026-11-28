@@ -110,10 +110,16 @@ public final class ModMachines {
 
     public static List<MachineDefinition<?, ?, ?>> ALL;
 
+    private static boolean registered;
+
     private ModMachines() {}
 
     // 静态字段不做初始化，由模组构造阶段显式调用，避免首次访问落在注册事件之后
-    public static void register() {
+    public static synchronized void register() {
+        if (registered) {
+            throw new IllegalStateException("ModMachines already registered");
+        }
+        registered = true;
         FILTER_PRESS_RECIPE = RecipeDefinition.simple(
                 "filter_press", 200, RecipeConstraints.builder().requireEnergy().build());
         JIG_RECIPE = RecipeDefinition.simple(

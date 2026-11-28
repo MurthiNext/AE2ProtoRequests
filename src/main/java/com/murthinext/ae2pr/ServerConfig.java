@@ -12,6 +12,7 @@ import com.murthinext.ae2pr.network.ServerConfigSyncPacket;
 import com.murthinext.ae2pr.registry.ModNetwork;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.network.PacketDistributor;
@@ -93,6 +94,8 @@ public final class ServerConfig {
     public static final MachineUpgradeDefinition AEV_ENERGY;
 
     static final ForgeConfigSpec SPEC;
+
+    private static final AtomicBoolean FALLBACK_WARNED = new AtomicBoolean();
 
     static {
         BUILDER.push("repeatOrder");
@@ -254,7 +257,13 @@ public final class ServerConfig {
 
     // 客户端在进入服务器前还未收到同步配置，此时回退到默认值
     private static <T> T read(ForgeConfigSpec.ConfigValue<T> value) {
-        return SPEC.isLoaded() ? value.get() : value.getDefault();
+        if (SPEC.isLoaded()) {
+            return value.get();
+        }
+        if (FALLBACK_WARNED.compareAndSet(false, true)) {
+            ae2pr.LOGGER.warn("Server config not loaded yet, falling back to defaults");
+        }
+        return value.getDefault();
     }
 
     // 服务端已运行时的配置重载不会由 Forge 重发，这里补一次全量同步

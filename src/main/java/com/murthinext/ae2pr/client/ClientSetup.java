@@ -45,16 +45,20 @@ public final class ClientSetup {
 
     @SubscribeEvent
     public static void registerScreens(FMLClientSetupEvent event) {
-        InitScreens.register(
-                ModMenus.MULTI_LEVEL_EMITTER.get(), MultiLevelEmitterScreen::new, "/screens/multi_level_emitter.json");
-        InitScreens.register(
-                ModMenus.MULTI_THRESHOLD_LEVEL_EMITTER.get(),
-                MultiThresholdLevelEmitterScreen::new,
-                "/screens/multi_threshold_level_emitter.json");
-        event.enqueueWork(MachineClients::registerScreens);
-        MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_ITEM_BUS.get(), ItemBusScreen::new);
-        MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), FluidHatchScreen::new);
-        MenuScreens.register(ModMenus.ME_PATTERN_BUFFER.get(), MEPatternBufferScreen::new);
+        event.enqueueWork(() -> {
+            InitScreens.register(
+                    ModMenus.MULTI_LEVEL_EMITTER.get(),
+                    MultiLevelEmitterScreen::new,
+                    "/screens/multi_level_emitter.json");
+            InitScreens.register(
+                    ModMenus.MULTI_THRESHOLD_LEVEL_EMITTER.get(),
+                    MultiThresholdLevelEmitterScreen::new,
+                    "/screens/multi_threshold_level_emitter.json");
+            MachineClients.registerScreens();
+            MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_ITEM_BUS.get(), ItemBusScreen::new);
+            MenuScreens.register(ModMenus.CERTUS_QUARTZ_CRYSTAL_INPUT_HATCH.get(), FluidHatchScreen::new);
+            MenuScreens.register(ModMenus.ME_PATTERN_BUFFER.get(), MEPatternBufferScreen::new);
+        });
     }
 
     @SubscribeEvent
