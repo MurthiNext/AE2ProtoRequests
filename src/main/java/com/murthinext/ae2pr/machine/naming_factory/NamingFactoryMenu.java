@@ -32,7 +32,7 @@ public class NamingFactoryMenu extends AbstractSingleblockMachineMenu<NamingFact
     }
 
     public static NamingFactoryMenu create(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
-        MachineDefinition<NamingFactoryBlockEntity> definition = ModMachines.NAMING_FACTORY;
+        MachineDefinition<NamingFactoryBlockEntity> definition = ModMachines.namingFactory();
         return new NamingFactoryMenu(
                 definition, id, playerInventory, readMachine(playerInventory.player, buffer, definition));
     }

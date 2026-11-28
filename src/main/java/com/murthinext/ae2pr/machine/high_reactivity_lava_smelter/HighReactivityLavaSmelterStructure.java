@@ -23,7 +23,10 @@ public final class HighReactivityLavaSmelterStructure extends AbstractStructureF
             .slice("BBBB", "G##B", "G##B", "BPBB", "BLLB", "#PB#", "#P##", "#P##")
             .slice("BBBB", "G##B", "G##B", "BPBB", "BLLB", "#BB#", "####", "####")
             .slice("BBBB", "BBBB", "BBBB", "BBBB", "#BB#", "####", "####", "####")
-            .where('C', StructurePredicate.blocks(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.block()))
+            .where(
+                    'C',
+                    StructurePredicate.blocks(
+                            ModMachines.highReactivityLavaSmelter().block()))
             .where('B', StructurePredicate.casingWithParts(ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get()))
             .where('G', StructurePredicate.blocks(ModBlocks.FIREPROOF_CRYSTAL_GLASS.get()))
             .where(

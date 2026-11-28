@@ -28,11 +28,14 @@ public final class MatterPhaseTransformerStructure extends AbstractStructureFaca
             .slice("#BBB#", "BBLBB", "BG#GB", "BG#GB", "GG#GG", "GGKGG", "GG#GG", "BG#GB", "BG#GB", "BBLBB", "#BBB#")
             .slice("#BBB#", "##B##", "##G##", "##G##", "##G##", "#GGG#", "##G##", "##G##", "##G##", "##B##", "#BBB#")
             .slice("#####", "##B##", "##B##", "##B##", "##G##", "##G##", "##G##", "##B##", "##B##", "##B##", "#####")
-            .where('C', StructurePredicate.blocks(ModMachines.MATTER_PHASE_TRANSFORMER.block()))
+            .where(
+                    'C',
+                    StructurePredicate.blocks(
+                            ModMachines.matterPhaseTransformer().block()))
             .where('B', StructurePredicate.casingWithParts(ModBlocks.ZIRCONIA_CORUNDUM_BRICKS.get()))
             .where('G', StructurePredicate.blocks(ModBlocks.FIREPROOF_CRYSTAL_GLASS.get()))
             .where('L', StructurePredicate.blocks(ModBlocks.LOGISTICS_CONTROL_CASING.get()))
-            .where('K', StructurePredicate.blocks(ModMachines.CRYSTAL_REACTOR.block()))
+            .where('K', StructurePredicate.blocks(ModMachines.crystalReactor().block()))
             .where('#', StructurePredicate.any())
             .build();
 
@@ -45,7 +48,7 @@ public final class MatterPhaseTransformerStructure extends AbstractStructureFaca
     @Override
     protected void onPartCell(Level level, BlockPos pos, boolean formed, boolean active) {
         var state = level.getBlockState(pos);
-        if (state.is(ModMachines.CRYSTAL_REACTOR.block())
+        if (state.is(ModMachines.crystalReactor().block())
                 && state.getValue(HighEnergyCoreBlock.PHASE_HIDDEN) != formed) {
             level.setBlock(pos, state.setValue(HighEnergyCoreBlock.PHASE_HIDDEN, formed), Block.UPDATE_CLIENTS);
         }

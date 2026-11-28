@@ -26,7 +26,7 @@ public final class CrystalReactorStructure {
             .slice("#S#", "SSS", "#S#")
             .where('C', StructurePredicate.blocks(AEBlocks.QUARTZ_BLOCK.block()))
             .where('S', StructurePredicate.blocks(AEBlocks.SKY_STONE_BLOCK.block()))
-            .where('K', StructurePredicate.blocks(ModMachines.CRYSTAL_REACTOR.block()))
+            .where('K', StructurePredicate.blocks(ModMachines.crystalReactor().block()))
             .where('#', StructurePredicate.any())
             .build();
 

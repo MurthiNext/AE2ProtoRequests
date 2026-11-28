@@ -16,7 +16,7 @@ public class JigCategory extends AbstractSimpleMachineCategory {
         super(
                 guiHelper,
                 RECIPE_TYPE,
-                new ItemStack(ModMachines.JIG.item()),
+                new ItemStack(ModMachines.jig().item()),
                 "block.ae2pr.jig",
                 "textures/gui/jei/jig_process.png");
     }

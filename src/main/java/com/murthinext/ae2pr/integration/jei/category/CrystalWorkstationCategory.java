@@ -42,7 +42,7 @@ public class CrystalWorkstationCategory extends AbstractMachineCategory<MachineR
     private final IDrawable process;
 
     public CrystalWorkstationCategory(IGuiHelper guiHelper, CrystalWorkstationMode mode) {
-        super(guiHelper, new ItemStack(ModMachines.CRYSTAL_WORKSTATION.item()), WIDTH, HEIGHT);
+        super(guiHelper, new ItemStack(ModMachines.crystalWorkstation().item()), WIDTH, HEIGHT);
         this.mode = mode;
         this.process = new AnimatedTextureDrawable(
                 Ids.of("textures/gui/jei/crystal_workstation_" + mode.id() + "_process.png"),
@@ -64,7 +64,7 @@ public class CrystalWorkstationCategory extends AbstractMachineCategory<MachineR
     @Override
     public Component getTitle() {
         return JeiRecipeInfo.titleWithMode(
-                ModMachines.CRYSTAL_WORKSTATION.item().getDescription(), mode.displayName());
+                ModMachines.crystalWorkstation().item().getDescription(), mode.displayName());
     }
 
     @Override

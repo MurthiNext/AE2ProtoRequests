@@ -51,21 +51,21 @@ public final class MultiblockJadePlugin implements IWailaPlugin {
     private static final String KEY_MODE = "mode";
     private static final String KEY_DURABILITY = "durability";
     private static final Map<String, Integer> PROGRESS_COLORS = Map.of(
-            ModMachines.CRYSTAL_ASSEMBLY_LINE.id(),
+            ModMachines.crystalAssemblyLine().id(),
             0xFF3E9BC8,
-            ModMachines.CRYSTAL_REACTION_CHAMBER.id(),
+            ModMachines.crystalReactionChamber().id(),
             0xFF55A3A8,
-            ModMachines.CRYSTAL_WORKSTATION.id(),
+            ModMachines.crystalWorkstation().id(),
             0xFF55A3A8,
-            ModMachines.JIG.id(),
+            ModMachines.jig().id(),
             0xFF7DA9D2,
-            ModMachines.FILTER_PRESS.id(),
+            ModMachines.filterPress().id(),
             0xFF7DA9D2,
-            ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.id(),
+            ModMachines.highReactivityLavaSmelter().id(),
             0xFFE0681C,
-            ModMachines.MATTER_PHASE_TRANSFORMER.id(),
+            ModMachines.matterPhaseTransformer().id(),
             0xFF62D0DA,
-            ModMachines.MULTI_FACTORY.id(),
+            ModMachines.multiFactory().id(),
             0xFFA47BD6);
 
     private final ServerData serverData = new ServerData();

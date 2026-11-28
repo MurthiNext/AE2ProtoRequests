@@ -35,7 +35,7 @@ public final class IntegratedMassFabricatorCategory extends AbstractMachineCateg
     private final IDrawable process;
 
     public IntegratedMassFabricatorCategory(IGuiHelper guiHelper) {
-        super(guiHelper, ModMachines.INTEGRATED_MASS_FABRICATOR.item().getDefaultInstance(), WIDTH, HEIGHT);
+        super(guiHelper, ModMachines.integratedMassFabricator().item().getDefaultInstance(), WIDTH, HEIGHT);
         process = new AnimatedTextureDrawable(
                 Ids.of("textures/gui/jei/integrated_mass_fabricator_process.png"), PROCESS_W, PROCESS_H, 40, 70);
     }
@@ -47,7 +47,7 @@ public final class IntegratedMassFabricatorCategory extends AbstractMachineCateg
 
     @Override
     public Component getTitle() {
-        return ModMachines.INTEGRATED_MASS_FABRICATOR.block().getName();
+        return ModMachines.integratedMassFabricator().block().getName();
     }
 
     @Override

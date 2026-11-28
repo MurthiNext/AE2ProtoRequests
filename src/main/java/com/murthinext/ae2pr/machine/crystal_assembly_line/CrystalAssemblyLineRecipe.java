@@ -39,12 +39,12 @@ public class CrystalAssemblyLineRecipe extends AbstractMultiblockRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModMachines.CRYSTAL_ASSEMBLY_LINE.recipe().serializer();
+        return ModMachines.crystalAssemblyLine().recipe().serializer();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return ModMachines.CRYSTAL_ASSEMBLY_LINE.recipe().type();
+        return ModMachines.crystalAssemblyLine().recipe().type();
     }
 
     public static class Serializer extends AbstractMultiblockRecipeSerializer<CrystalAssemblyLineRecipe> {

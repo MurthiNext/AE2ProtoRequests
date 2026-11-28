@@ -51,7 +51,7 @@ public class MatterPhaseTransformerRenderer
         }
         BlockPos core = controller.getCorePos();
         var coreState = level.getBlockState(core);
-        if (!coreState.is(ModMachines.CRYSTAL_REACTOR.block())
+        if (!coreState.is(ModMachines.crystalReactor().block())
                 || !coreState.getValue(HighEnergyCoreBlock.PHASE_HIDDEN)) {
             return;
         }

@@ -26,7 +26,7 @@ public class HighReactivityLavaSmelterCategory extends AbstractMachineCategory<M
     private static final int COLOR_TEXT = 0x404040;
 
     public HighReactivityLavaSmelterCategory(IGuiHelper guiHelper) {
-        super(guiHelper, new ItemStack(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.block()), WIDTH, HEIGHT);
+        super(guiHelper, new ItemStack(ModMachines.highReactivityLavaSmelter().block()), WIDTH, HEIGHT);
     }
 
     @Override

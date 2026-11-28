@@ -31,7 +31,7 @@ public class CrystalReactorCoreBlockEntity extends BlockEntity {
     private int soundBudget;
 
     public CrystalReactorCoreBlockEntity(BlockPos pos, BlockState state) {
-        super(ModMachines.CRYSTAL_REACTOR.blockEntityType(), pos, state);
+        super(ModMachines.crystalReactor().blockEntityType(), pos, state);
     }
 
     public boolean isActive() {
@@ -68,7 +68,7 @@ public class CrystalReactorCoreBlockEntity extends BlockEntity {
         if (level == null || level.isClientSide || !active) {
             return;
         }
-        if (!getBlockState().is(ModMachines.CRYSTAL_REACTOR.block())) {
+        if (!getBlockState().is(ModMachines.crystalReactor().block())) {
             active = false;
             return;
         }
@@ -112,7 +112,7 @@ public class CrystalReactorCoreBlockEntity extends BlockEntity {
         if (state.isAir() || state.getDestroySpeed(level, pos) < 0) {
             return;
         }
-        if (state.is(ModMachines.CRYSTAL_REACTOR.block())) {
+        if (state.is(ModMachines.crystalReactor().block())) {
             return;
         }
         if (soundBudget > 0) {

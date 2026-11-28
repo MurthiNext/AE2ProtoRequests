@@ -33,7 +33,7 @@ public final class CrystalWorkstationCtm {
     public static List<BakedQuad> appearance(
             List<BakedQuad> quads, @Nullable Direction side, BlockAndTintGetter level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
-        if (state.is(ModMachines.CRYSTAL_WORKSTATION.block())) {
+        if (state.is(ModMachines.crystalWorkstation().block())) {
             return state.getValue(MachineBlock.FORMED) ? controller(quads, level, pos) : null;
         }
         CrystalWorkstationShell.Look look = CrystalWorkstationShell.look(pos);
@@ -157,7 +157,7 @@ public final class CrystalWorkstationCtm {
     private static boolean bordersController(BlockAndTintGetter level, BlockPos pos) {
         for (Direction direction : Direction.values()) {
             BlockState neighbor = level.getBlockState(pos.relative(direction));
-            if (neighbor.is(ModMachines.CRYSTAL_WORKSTATION.block()) && neighbor.getValue(MachineBlock.FORMED)) {
+            if (neighbor.is(ModMachines.crystalWorkstation().block()) && neighbor.getValue(MachineBlock.FORMED)) {
                 return true;
             }
         }
@@ -168,7 +168,7 @@ public final class CrystalWorkstationCtm {
         if (CrystalWorkstationShell.isInjection(neighbor)) {
             return true;
         }
-        if (neighborState.is(ModMachines.CRYSTAL_WORKSTATION.block())) {
+        if (neighborState.is(ModMachines.crystalWorkstation().block())) {
             return neighborState.getValue(MachineBlock.FORMED);
         }
         return MachineCtm.connects(

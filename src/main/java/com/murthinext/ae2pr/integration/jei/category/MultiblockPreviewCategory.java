@@ -26,7 +26,8 @@ public class MultiblockPreviewCategory implements IRecipeCategory<MultiblockPrev
     private final IDrawable icon;
 
     public MultiblockPreviewCategory(IGuiHelper guiHelper) {
-        icon = guiHelper.createDrawableItemStack(new ItemStack(ModMachines.CRYSTAL_ASSEMBLY_LINE.block()));
+        icon = guiHelper.createDrawableItemStack(
+                new ItemStack(ModMachines.crystalAssemblyLine().block()));
     }
 
     @Override

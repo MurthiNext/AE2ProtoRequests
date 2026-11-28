@@ -37,7 +37,7 @@ public class CrystalReactionChamberCategory extends AbstractMachineCategory<Mach
     private final IDrawable process;
 
     public CrystalReactionChamberCategory(IGuiHelper guiHelper) {
-        super(guiHelper, new ItemStack(ModMachines.CRYSTAL_REACTION_CHAMBER.block()), WIDTH, HEIGHT);
+        super(guiHelper, new ItemStack(ModMachines.crystalReactionChamber().block()), WIDTH, HEIGHT);
         process = new AnimatedTextureDrawable(
                 Ids.of("textures/gui/jei/crystal_reaction_chamber_process.png"), PROCESS_W, PROCESS_H, 40, 50);
     }

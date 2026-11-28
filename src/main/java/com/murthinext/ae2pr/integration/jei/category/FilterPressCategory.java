@@ -16,7 +16,7 @@ public class FilterPressCategory extends AbstractSimpleMachineCategory {
         super(
                 guiHelper,
                 RECIPE_TYPE,
-                new ItemStack(ModMachines.FILTER_PRESS.block()),
+                new ItemStack(ModMachines.filterPress().block()),
                 "block.ae2pr.filter_press",
                 "textures/gui/jei/filter_press_process.png");
     }

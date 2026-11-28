@@ -49,7 +49,7 @@ public class CrystalWorkstationRenderer implements BlockEntityRenderer<CrystalWo
             return;
         }
         BlockPos core = controller.getCorePos();
-        if (!level.getBlockState(core).is(ModMachines.CRYSTAL_REACTOR.block())) {
+        if (!level.getBlockState(core).is(ModMachines.crystalReactor().block())) {
             return;
         }
         // 核心方块被模型层隐藏后才接管其渲染，避免未同步时出现重影
@@ -75,7 +75,12 @@ public class CrystalWorkstationRenderer implements BlockEntityRenderer<CrystalWo
         var water = buffers.getBuffer(CrystalWorkstationTideSurface.MATERIAL);
         var left = tide.render(pose.last(), water, sideAxis.getOpposite(), depthAxis, tideTime, activity);
         var right = tide.render(
-                pose.last(), water, sideAxis, depthAxis, tideTime + CrystalWorkstationTideSurface.SIDE_OFFSET_TICKS, activity);
+                pose.last(),
+                water,
+                sideAxis,
+                depthAxis,
+                tideTime + CrystalWorkstationTideSurface.SIDE_OFFSET_TICKS,
+                activity);
         CrystalWorkstationInfusion.render(pose.last(), buffers, core, left, right, contact, activity);
         pose.popPose();
     }

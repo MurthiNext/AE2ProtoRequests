@@ -208,7 +208,10 @@ public final class IntegratedMassFabricatorStructure extends AbstractStructureFa
                     ".............",
                     "SSSSSSSSSSSSS")
             .where('.', StructurePredicate.any())
-            .where('K', StructurePredicate.blocks(ModMachines.INTEGRATED_MASS_FABRICATOR.block()))
+            .where(
+                    'K',
+                    StructurePredicate.blocks(
+                            ModMachines.integratedMassFabricator().block()))
             .where('S', StructurePredicate.casingWithParts(ModBlocks.STABILITY_CASING.get()))
             .where('G', StructurePredicate.blocks(ModBlocks.CRYSTAL_GLASS.get()))
             .where('E', StructurePredicate.blocks(ModBlocks.ENTANGLED_CASING.get()))

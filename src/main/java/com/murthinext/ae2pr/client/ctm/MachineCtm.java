@@ -224,29 +224,30 @@ public final class MachineCtm implements CtmBinding {
 
     @Nullable
     public static MachinePartFacade facade(BlockState state) {
-        if (state.is(ModMachines.JIG.block()) && state.getValue(MachineBlock.FORMED)) {
+        if (state.is(ModMachines.jig().block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIUM_IRON;
         }
-        if (state.is(ModMachines.FILTER_PRESS.block()) && state.getValue(MachineBlock.FORMED)) {
+        if (state.is(ModMachines.filterPress().block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIUM_IRON;
         }
-        if (state.is(ModMachines.INTEGRATED_MASS_FABRICATOR.block()) && state.getValue(MachineBlock.FORMED)) {
+        if (state.is(ModMachines.integratedMassFabricator().block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.STABILITY;
         }
-        if ((state.is(ModMachines.CRYSTAL_WORKSTATION.block()) || state.is(ModMachines.MULTI_FACTORY.block()))
+        if ((state.is(ModMachines.crystalWorkstation().block())
+                        || state.is(ModMachines.multiFactory().block()))
                 && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.CRYSTAL_ENERGY;
         }
-        if (state.is(ModMachines.CRYSTAL_ASSEMBLY_LINE.block()) && state.getValue(MachineBlock.FORMED)) {
+        if (state.is(ModMachines.crystalAssemblyLine().block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.CRYSTAL;
         }
-        if (state.is(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.block()) && state.getValue(MachineBlock.FORMED)) {
+        if (state.is(ModMachines.highReactivityLavaSmelter().block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIA;
         }
-        if (state.is(ModMachines.MATTER_PHASE_TRANSFORMER.block()) && state.getValue(MachineBlock.FORMED)) {
+        if (state.is(ModMachines.matterPhaseTransformer().block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.ZIRCONIA;
         }
-        if (state.is(ModMachines.CRYSTAL_REACTION_CHAMBER.block()) && state.getValue(MachineBlock.FORMED)) {
+        if (state.is(ModMachines.crystalReactionChamber().block()) && state.getValue(MachineBlock.FORMED)) {
             return MachinePartFacade.CRYSTAL;
         }
         if (state.getBlock() instanceof MachinePartBlock && state.getValue(MachinePartBlock.FORMED)) {
@@ -270,31 +271,31 @@ public final class MachineCtm implements CtmBinding {
     @Nullable
     private static TextureAtlasSprite facadeBaseSprite(BlockState state) {
         Block block = state.getBlock();
-        if (block == ModMachines.MULTI_FACTORY.block()) {
+        if (block == ModMachines.multiFactory().block()) {
             return CtmTextures.baseSprite(MULTI_FACTORY_CONTROLLER_CASING);
         }
-        if (block == ModMachines.JIG.block()) {
+        if (block == ModMachines.jig().block()) {
             return CtmTextures.baseSprite(JIG_CONTROLLER_CASING);
         }
-        if (block == ModMachines.FILTER_PRESS.block()) {
+        if (block == ModMachines.filterPress().block()) {
             return CtmTextures.baseSprite(FILTER_PRESS_CONTROLLER_CASING);
         }
-        if (block == ModMachines.INTEGRATED_MASS_FABRICATOR.block()) {
+        if (block == ModMachines.integratedMassFabricator().block()) {
             return CtmTextures.baseSprite(INTEGRATED_MASS_FABRICATOR_CONTROLLER_CASING);
         }
-        if (block == ModMachines.CRYSTAL_WORKSTATION.block()) {
+        if (block == ModMachines.crystalWorkstation().block()) {
             return CtmTextures.baseSprite(CRYSTAL_WORKSTATION_CONTROLLER_CASING);
         }
-        if (block == ModMachines.CRYSTAL_ASSEMBLY_LINE.block()) {
+        if (block == ModMachines.crystalAssemblyLine().block()) {
             return CtmTextures.baseSprite(CRYSTAL_ASSEMBLY_LINE_CONTROLLER_CASING);
         }
-        if (block == ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.block()) {
+        if (block == ModMachines.highReactivityLavaSmelter().block()) {
             return CtmTextures.baseSprite(HIGH_REACTIVITY_LAVA_SMELTER_CONTROLLER_CASING);
         }
-        if (block == ModMachines.MATTER_PHASE_TRANSFORMER.block()) {
+        if (block == ModMachines.matterPhaseTransformer().block()) {
             return CtmTextures.baseSprite(MATTER_PHASE_TRANSFORMER_CONTROLLER_CASING);
         }
-        if (block == ModMachines.CRYSTAL_REACTION_CHAMBER.block()) {
+        if (block == ModMachines.crystalReactionChamber().block()) {
             return CtmTextures.baseSprite(CRYSTAL_REACTION_CONTROLLER_CASING);
         }
         if (block == ModBlocks.ME_NETWORK_ACCESS_HATCH.get() || block == ModBlocks.ME_PATTERN_BUFFER.get()) {

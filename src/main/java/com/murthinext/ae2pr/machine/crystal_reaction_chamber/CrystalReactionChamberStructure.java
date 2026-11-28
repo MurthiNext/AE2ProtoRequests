@@ -22,13 +22,16 @@ public final class CrystalReactionChamberStructure extends AbstractStructureFaca
             .slice("#SSS#", "B###B", "B#F#B", "B###B", "SEGES", "#BBB#")
             .slice("#SSS#", "B###B", "B###B", "B###B", "SDDDS", "#BBB#")
             .slice("S###S", "SBBBS", "SBBBS", "SBBBS", "#SSS#", "#####")
-            .where('K', StructurePredicate.blocks(ModMachines.CRYSTAL_REACTION_CHAMBER.block()))
+            .where(
+                    'K',
+                    StructurePredicate.blocks(
+                            ModMachines.crystalReactionChamber().block()))
             .where('S', StructurePredicate.casingWithParts(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()))
             .where('B', StructurePredicate.blocks(ModBlocks.CRYSTAL_GLASS.get()))
             .where('D', StructurePredicate.blocks(ModBlocks.METEOR_STEEL_BLOCK.get()))
             .where('E', StructurePredicate.blocks(ModBlocks.LOGISTICS_CONTROL_CASING.get()))
             .where('F', StructurePredicate.blocks(AEBlocks.FLAWLESS_BUDDING_QUARTZ.block()))
-            .where('G', StructurePredicate.blocks(ModMachines.CRYSTAL_REACTOR.block()))
+            .where('G', StructurePredicate.blocks(ModMachines.crystalReactor().block()))
             .where('#', StructurePredicate.any())
             .build();
 

@@ -37,7 +37,7 @@ public class MatterPhaseTransformerCategory extends AbstractMachineCategory<Mach
     private final IDrawable process;
 
     public MatterPhaseTransformerCategory(IGuiHelper guiHelper, MatterPhaseTransformerMode mode) {
-        super(guiHelper, new ItemStack(ModMachines.MATTER_PHASE_TRANSFORMER.block()), WIDTH, HEIGHT);
+        super(guiHelper, new ItemStack(ModMachines.matterPhaseTransformer().block()), WIDTH, HEIGHT);
         this.mode = mode;
         process = new AnimatedTextureDrawable(
                 Ids.of("textures/gui/jei/matter_phase_transformer_process.png"), PROCESS_W, PROCESS_H, 40, 50);
@@ -60,7 +60,7 @@ public class MatterPhaseTransformerCategory extends AbstractMachineCategory<Mach
     @Override
     public Component getTitle() {
         return JeiRecipeInfo.titleWithMode(
-                ModMachines.MATTER_PHASE_TRANSFORMER.item().getDescription(), mode.displayName());
+                ModMachines.matterPhaseTransformer().item().getDescription(), mode.displayName());
     }
 
     @Override

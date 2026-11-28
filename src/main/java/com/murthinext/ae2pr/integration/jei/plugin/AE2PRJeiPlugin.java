@@ -51,36 +51,36 @@ public class AE2PRJeiPlugin implements IModPlugin {
         return List.of(
                 new MachineCategory(
                         JigCategory.RECIPE_TYPE,
-                        ModMachines.JIG.recipe().type(),
+                        ModMachines.jig().recipe().type(),
                         JigCategory::new,
-                        ModMachines.JIG.item().getDefaultInstance()),
+                        ModMachines.jig().item().getDefaultInstance()),
                 new MachineCategory(
                         FilterPressCategory.RECIPE_TYPE,
-                        ModMachines.FILTER_PRESS.recipe().type(),
+                        ModMachines.filterPress().recipe().type(),
                         FilterPressCategory::new,
-                        ModMachines.FILTER_PRESS.item().getDefaultInstance()),
+                        ModMachines.filterPress().item().getDefaultInstance()),
                 new MachineCategory(
                         CrystalReactionChamberCategory.RECIPE_TYPE,
-                        ModMachines.CRYSTAL_REACTION_CHAMBER.recipe().type(),
+                        ModMachines.crystalReactionChamber().recipe().type(),
                         CrystalReactionChamberCategory::new,
-                        ModMachines.CRYSTAL_REACTION_CHAMBER.item().getDefaultInstance()),
+                        ModMachines.crystalReactionChamber().item().getDefaultInstance()),
                 new MachineCategory(
                         HighReactivityLavaSmelterCategory.RECIPE_TYPE,
-                        ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.recipe().type(),
+                        ModMachines.highReactivityLavaSmelter().recipe().type(),
                         HighReactivityLavaSmelterCategory::new,
-                        ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.item().getDefaultInstance()),
+                        ModMachines.highReactivityLavaSmelter().item().getDefaultInstance()),
                 phaseTransformerCategory(MatterPhaseTransformerMode.MELTING),
                 phaseTransformerCategory(MatterPhaseTransformerMode.MIXING),
                 new MachineCategory(
                         IntegratedMassFabricatorCategory.RECIPE_TYPE,
-                        ModMachines.INTEGRATED_MASS_FABRICATOR.recipe().type(),
+                        ModMachines.integratedMassFabricator().recipe().type(),
                         IntegratedMassFabricatorCategory::new,
-                        ModMachines.INTEGRATED_MASS_FABRICATOR.item().getDefaultInstance()),
+                        ModMachines.integratedMassFabricator().item().getDefaultInstance()),
                 new MachineCategory(
                         CrystalAssemblyLineCategory.RECIPE_TYPE,
-                        ModMachines.CRYSTAL_ASSEMBLY_LINE.recipe().type(),
+                        ModMachines.crystalAssemblyLine().recipe().type(),
                         CrystalAssemblyLineCategory::new,
-                        ModMachines.CRYSTAL_ASSEMBLY_LINE.block().asItem().getDefaultInstance()));
+                        ModMachines.crystalAssemblyLine().block().asItem().getDefaultInstance()));
     }
 
     private static MachineCategory phaseTransformerCategory(MatterPhaseTransformerMode mode) {
@@ -88,11 +88,11 @@ public class AE2PRJeiPlugin implements IModPlugin {
                 MatterPhaseTransformerCategory.recipeType(mode),
                 mode.recipeType(),
                 helper -> new MatterPhaseTransformerCategory(helper, mode),
-                ModMachines.MATTER_PHASE_TRANSFORMER.item().getDefaultInstance());
+                ModMachines.matterPhaseTransformer().item().getDefaultInstance());
     }
 
     private static CrystalWorkstationMode[] workstationModes() {
-        return ModMachines.CRYSTAL_WORKSTATION
+        return ModMachines.crystalWorkstation()
                 .<CrystalWorkstationMode>modeType()
                 .getEnumConstants();
     }
@@ -135,10 +135,10 @@ public class AE2PRJeiPlugin implements IModPlugin {
         for (MachineCategory machine : machines()) {
             addCatalyst(registration, machine.jeiType(), machine.catalyst());
         }
-        ItemStack workstation = ModMachines.CRYSTAL_WORKSTATION.item().getDefaultInstance();
+        ItemStack workstation = ModMachines.crystalWorkstation().item().getDefaultInstance();
         addCatalyst(registration, CrystalWorkstationCategory.ETCHING, workstation);
         addCatalyst(registration, CrystalWorkstationCategory.CUTTING, workstation);
-        ItemStack multiFactory = ModMachines.MULTI_FACTORY.item().getDefaultInstance();
+        ItemStack multiFactory = ModMachines.multiFactory().item().getDefaultInstance();
         addCatalyst(registration, AE2_INSCRIBER, multiFactory);
         addCatalyst(registration, AE2_CHARGER, multiFactory);
     }

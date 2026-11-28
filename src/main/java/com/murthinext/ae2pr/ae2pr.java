@@ -87,14 +87,14 @@ public class ae2pr {
             var multiLevelEmitterItem = ModItems.MULTI_LEVEL_EMITTER.get();
             var multiThresholdLevelEmitterItem = ModItems.MULTI_THRESHOLD_LEVEL_EMITTER.get();
             var networkAccessHatchType = ModBlockEntities.ME_NETWORK_ACCESS_HATCH.get();
-            var namingFactoryType = ModMachines.NAMING_FACTORY.blockEntityType();
+            var namingFactoryType = ModMachines.namingFactory().blockEntityType();
 
             Upgrades.add(AEItems.FUZZY_CARD, ModItems.FILTER_CELL.get(), 1);
             Upgrades.add(AEItems.FUZZY_CARD, multiLevelEmitterItem, 1);
             Upgrades.add(AEItems.CRAFTING_CARD, multiLevelEmitterItem, 1);
             Upgrades.add(AEItems.FUZZY_CARD, multiThresholdLevelEmitterItem, 1);
             Upgrades.add(AEItems.CRAFTING_CARD, multiThresholdLevelEmitterItem, 1);
-            for (var machine : Objects.requireNonNull(ModMachines.ALL, "ModMachines.register() not called")) {
+            for (var machine : Objects.requireNonNull(ModMachines.all(), "ModMachines.register() not called")) {
                 if (machine.speedUpgrades() > 0) {
                     Upgrades.add(AEItems.SPEED_CARD, machine.block(), machine.speedUpgrades());
                 }
@@ -123,11 +123,11 @@ public class ae2pr {
                             null);
             appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(
                     networkAccessHatchType, ModBlocks.ME_NETWORK_ACCESS_HATCH.item());
-            ModMachines.NAMING_FACTORY
+            ModMachines.namingFactory()
                     .block()
                     .setBlockEntity(NamingFactoryBlockEntity.class, namingFactoryType, null, null);
             appeng.blockentity.AEBaseBlockEntity.registerBlockEntityItem(
-                    namingFactoryType, ModMachines.NAMING_FACTORY.item());
+                    namingFactoryType, ModMachines.namingFactory().item());
 
             ModSelfCheck.run();
         });

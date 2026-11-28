@@ -100,19 +100,19 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.SKY_DOME_ANNIHILATION_PLANE.get());
 
                         // 单方块机器
-                        output.accept(ModMachines.NAMING_FACTORY.item());
+                        output.accept(ModMachines.namingFactory().item());
 
                         // 多方块结构 - 主机
-                        output.accept(ModMachines.CRYSTAL_ASSEMBLY_LINE.item());
-                        output.accept(ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.item());
-                        output.accept(ModMachines.MATTER_PHASE_TRANSFORMER.item());
-                        output.accept(ModMachines.CRYSTAL_REACTION_CHAMBER.item());
-                        output.accept(ModMachines.CRYSTAL_WORKSTATION.item());
-                        output.accept(ModMachines.JIG.item());
-                        output.accept(ModMachines.FILTER_PRESS.item());
-                        output.accept(ModMachines.MULTI_FACTORY.item());
-                        output.accept(ModMachines.INTEGRATED_MASS_FABRICATOR.item());
-                        output.accept(ModMachines.CRYSTAL_REACTOR.item());
+                        output.accept(ModMachines.crystalAssemblyLine().item());
+                        output.accept(ModMachines.highReactivityLavaSmelter().item());
+                        output.accept(ModMachines.matterPhaseTransformer().item());
+                        output.accept(ModMachines.crystalReactionChamber().item());
+                        output.accept(ModMachines.crystalWorkstation().item());
+                        output.accept(ModMachines.jig().item());
+                        output.accept(ModMachines.filterPress().item());
+                        output.accept(ModMachines.multiFactory().item());
+                        output.accept(ModMachines.integratedMassFabricator().item());
+                        output.accept(ModMachines.crystalReactor().item());
 
                         // 多方块结构 - 机壳 / 玻璃 / 特色
                         acceptGroup(output, BlockGroup.CASING);

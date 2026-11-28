@@ -22,7 +22,7 @@ public final class JigStructure extends AbstractStructureFacade {
             .slice("#SSS#", "SSLSS", "S###S", "SGGGS", "S###S", "S###S")
             .slice("##S##", "#SSS#", "S###S", "SGGGS", "S###S", "S###S")
             .slice("#####", "##S##", "#SSS#", "#SSS#", "#SSS#", "#SSS#")
-            .where('K', StructurePredicate.blocks(ModMachines.JIG.block()))
+            .where('K', StructurePredicate.blocks(ModMachines.jig().block()))
             .where('S', StructurePredicate.casingWithParts(ModBlocks.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING.get()))
             .where('L', StructurePredicate.blocks(ModBlocks.LOGISTICS_CONTROL_CASING.get()))
             .where('G', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get()))

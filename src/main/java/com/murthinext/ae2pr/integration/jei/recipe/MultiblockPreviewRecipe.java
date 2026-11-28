@@ -36,30 +36,33 @@ public record MultiblockPreviewRecipe(
         return List.of(
                 of(
                         "crystal_assembly_line",
-                        ModMachines.CRYSTAL_ASSEMBLY_LINE.block(),
+                        ModMachines.crystalAssemblyLine().block(),
                         CrystalAssemblyLineStructure.PATTERN,
                         CrystalAssemblyLineStructure.INSTANCE::maxRepeatSlices),
                 of(
                         "crystal_reaction_chamber",
-                        ModMachines.CRYSTAL_REACTION_CHAMBER.block(),
+                        ModMachines.crystalReactionChamber().block(),
                         CrystalReactionChamberStructure.PATTERN),
-                of("crystal_workstation", ModMachines.CRYSTAL_WORKSTATION.block(), CrystalWorkstationStructure.PATTERN),
-                of("jig", ModMachines.JIG.block(), JigStructure.PATTERN),
-                of("filter_press", ModMachines.FILTER_PRESS.block(), FilterPressStructure.PATTERN),
+                of(
+                        "crystal_workstation",
+                        ModMachines.crystalWorkstation().block(),
+                        CrystalWorkstationStructure.PATTERN),
+                of("jig", ModMachines.jig().block(), JigStructure.PATTERN),
+                of("filter_press", ModMachines.filterPress().block(), FilterPressStructure.PATTERN),
                 of(
                         "high_reactivity_lava_smelter",
-                        ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.block(),
+                        ModMachines.highReactivityLavaSmelter().block(),
                         HighReactivityLavaSmelterStructure.PATTERN),
                 of(
                         "matter_phase_transformer",
-                        ModMachines.MATTER_PHASE_TRANSFORMER.block(),
+                        ModMachines.matterPhaseTransformer().block(),
                         MatterPhaseTransformerStructure.PATTERN),
-                of("multi_factory", ModMachines.MULTI_FACTORY.block(), MultiFactoryStructure.PATTERN),
+                of("multi_factory", ModMachines.multiFactory().block(), MultiFactoryStructure.PATTERN),
                 of(
                         "integrated_mass_fabricator",
-                        ModMachines.INTEGRATED_MASS_FABRICATOR.block(),
+                        ModMachines.integratedMassFabricator().block(),
                         IntegratedMassFabricatorStructure.PATTERN),
-                of("crystal_reactor", ModMachines.CRYSTAL_REACTOR.block(), CrystalReactorStructure.PATTERN));
+                of("crystal_reactor", ModMachines.crystalReactor().block(), CrystalReactorStructure.PATTERN));
     }
 
     public List<ItemStack> ingredients() {

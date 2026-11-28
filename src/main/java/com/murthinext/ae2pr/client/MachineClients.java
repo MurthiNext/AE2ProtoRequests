@@ -51,28 +51,28 @@ public final class MachineClients {
         MachineStyles.install(STYLES::get);
         GuideOpener.install(ModGuide::openAt);
         register(
-                ModMachines.FILTER_PRESS,
+                ModMachines.filterPress(),
                 Style.crystal(ModGuide.FILTER_PRESS_PAGE, 0x9CD3FF),
                 MachineScreen::new,
                 controller -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.FILTER_PRESS));
         register(
-                ModMachines.JIG,
+                ModMachines.jig(),
                 Style.crystal(ModGuide.JIG_PAGE, 0x9CD3FF),
                 MachineScreen::new,
                 controller -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.JIG));
         register(
-                ModMachines.CRYSTAL_REACTION_CHAMBER,
+                ModMachines.crystalReactionChamber(),
                 Style.crystal(ModGuide.CRYSTAL_REACTION_CHAMBER_PAGE, 0x8EE6E0),
                 MachineScreen::new,
                 controller -> MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.CRYSTAL_REACTION));
         register(
-                ModMachines.CRYSTAL_ASSEMBLY_LINE,
+                ModMachines.crystalAssemblyLine(),
                 Style.crystal(ModGuide.CRYSTAL_ASSEMBLY_LINE_PAGE, 0x55FFFF),
                 MachineScreen::new,
                 controller ->
                         MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.CRYSTAL_ASSEMBLY_LINE));
         register(
-                ModMachines.MATTER_PHASE_TRANSFORMER,
+                ModMachines.matterPhaseTransformer(),
                 Style.ember(ModGuide.MATTER_PHASE_TRANSFORMER_PAGE, 0xFFC46B)
                         .withModeIcons(Map.of(
                                 MatterPhaseTransformerMode.MELTING,
@@ -85,13 +85,13 @@ public final class MachineClients {
                     MachineProcessingSounds.tick(controller, MachineProcessingSounds.Type.MATTER_PHASE_TRANSFORMER);
                 });
         register(
-                ModMachines.HIGH_REACTIVITY_LAVA_SMELTER,
+                ModMachines.highReactivityLavaSmelter(),
                 Style.ember(ModGuide.HIGH_REACTIVITY_LAVA_SMELTER_PAGE, 0xFFC46B),
                 HighReactivityLavaSmelterScreen::new,
                 controller -> MachineProcessingSounds.tick(
                         controller, MachineProcessingSounds.Type.HIGH_REACTIVITY_LAVA_SMELTER));
         register(
-                ModMachines.CRYSTAL_WORKSTATION,
+                ModMachines.crystalWorkstation(),
                 Style.crystal(ModGuide.CRYSTAL_WORKSTATION_PAGE, 0x8EE6E0)
                         .withModeIcons(Map.of(
                                 CrystalWorkstationMode.ETCHING,
@@ -109,7 +109,7 @@ public final class MachineClients {
                                     : MachineProcessingSounds.Type.CRYSTAL_WORKSTATION_CUTTING);
                 });
         register(
-                ModMachines.MULTI_FACTORY,
+                ModMachines.multiFactory(),
                 Style.crystal(ModGuide.MULTI_FACTORY_PAGE, 0xCDA6F0)
                         .withModeIcons(Map.of(
                                 MultiFactoryMode.INSCRIBING,
@@ -123,12 +123,12 @@ public final class MachineClients {
                                 ? MachineProcessingSounds.Type.MULTI_FACTORY_INSCRIBING
                                 : MachineProcessingSounds.Type.MULTI_FACTORY_CHARGING));
         register(
-                ModMachines.INTEGRATED_MASS_FABRICATOR,
+                ModMachines.integratedMassFabricator(),
                 Style.crystal(ModGuide.INTEGRATED_MASS_FABRICATOR_PAGE, 0xCDA6F0),
                 MachineScreen::new,
                 controller -> {});
-        MenuScreens.register(ModMachines.NAMING_FACTORY.menuType(), NamingFactoryScreen::new);
-        STYLES.put(ModMachines.NAMING_FACTORY, Style.crystal(ModGuide.NAMING_FACTORY_PAGE, 0x55FFFF));
+        MenuScreens.register(ModMachines.namingFactory().menuType(), NamingFactoryScreen::new);
+        STYLES.put(ModMachines.namingFactory(), Style.crystal(ModGuide.NAMING_FACTORY_PAGE, 0x55FFFF));
     }
 
     private static <E extends AbstractMultiblockControllerBlockEntity, M extends AbstractMultiblockControllerMenu<E>>
@@ -151,19 +151,19 @@ public final class MachineClients {
     }
 
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(ModMachines.NAMING_FACTORY.blockEntityType(), NamingFactoryRenderer::new);
+        event.registerBlockEntityRenderer(ModMachines.namingFactory().blockEntityType(), NamingFactoryRenderer::new);
         event.registerBlockEntityRenderer(
-                ModMachines.HIGH_REACTIVITY_LAVA_SMELTER.blockEntityType(), HighReactivityLavaSmelterRenderer::new);
+                ModMachines.highReactivityLavaSmelter().blockEntityType(), HighReactivityLavaSmelterRenderer::new);
         event.registerBlockEntityRenderer(
-                ModMachines.MATTER_PHASE_TRANSFORMER.blockEntityType(), MatterPhaseTransformerRenderer::new);
+                ModMachines.matterPhaseTransformer().blockEntityType(), MatterPhaseTransformerRenderer::new);
         event.registerBlockEntityRenderer(
-                ModMachines.CRYSTAL_REACTION_CHAMBER.blockEntityType(), CrystalReactionChamberRenderer::new);
+                ModMachines.crystalReactionChamber().blockEntityType(), CrystalReactionChamberRenderer::new);
         event.registerBlockEntityRenderer(
-                ModMachines.CRYSTAL_WORKSTATION.blockEntityType(), CrystalWorkstationRenderer::new);
-        event.registerBlockEntityRenderer(ModMachines.JIG.blockEntityType(), JigRenderer::new);
-        event.registerBlockEntityRenderer(ModMachines.MULTI_FACTORY.blockEntityType(), MultiFactoryRenderer::new);
+                ModMachines.crystalWorkstation().blockEntityType(), CrystalWorkstationRenderer::new);
+        event.registerBlockEntityRenderer(ModMachines.jig().blockEntityType(), JigRenderer::new);
+        event.registerBlockEntityRenderer(ModMachines.multiFactory().blockEntityType(), MultiFactoryRenderer::new);
         event.registerBlockEntityRenderer(
-                ModMachines.INTEGRATED_MASS_FABRICATOR.blockEntityType(), IntegratedMassFabricatorRenderer::new);
+                ModMachines.integratedMassFabricator().blockEntityType(), IntegratedMassFabricatorRenderer::new);
     }
 
     public record Style(ResourceLocation guidePage, GuiTheme theme, Map<Mode, MachineModeButton.Icon> modeIcons)

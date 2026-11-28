@@ -56,7 +56,7 @@ public class CrystalAssemblyLineCategory extends AbstractMachineCategory<Crystal
     private static final ResourceLocation PIPE_TEXTURE = Ids.of("textures/gui/jei/crystal_assembly_line_pipes.png");
 
     public CrystalAssemblyLineCategory(IGuiHelper guiHelper) {
-        super(guiHelper, new ItemStack(ModMachines.CRYSTAL_ASSEMBLY_LINE.block()), WIDTH, HEIGHT);
+        super(guiHelper, new ItemStack(ModMachines.crystalAssemblyLine().block()), WIDTH, HEIGHT);
     }
 
     @Override

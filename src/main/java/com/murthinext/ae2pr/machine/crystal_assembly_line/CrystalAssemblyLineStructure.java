@@ -26,17 +26,24 @@ public final class CrystalAssemblyLineStructure extends AbstractStructureFacade 
             .slice("FIF", "RTR", "SAG", "#Y#")
             .sliceRepeatable(MIN_REPEAT_SLICES, MAX_REPEAT_SLICES, "FIF", "RTR", "DAG", "#Y#")
             .slice("FOF", "RTR", "DAG", "#Y#")
-            .where('S', StructurePredicate.blocks(ModMachines.CRYSTAL_ASSEMBLY_LINE.block()))
+            .where(
+                    'S',
+                    StructurePredicate.blocks(ModMachines.crystalAssemblyLine().block()))
             .where(
                     'F',
                     StructurePredicate.blocks(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get())
                             .or(StructurePredicate.blocks(ModBlocks.ME_PATTERN_BUFFER.get()))
-                            .or(StructurePredicate.blocks(ModBlocks.QUARTZ_PARTS.inputHatch().get()))
+                            .or(StructurePredicate.blocks(
+                                    ModBlocks.QUARTZ_PARTS.inputHatch().get()))
                             .or(StructurePredicate.blocks(ModBlocks.ME_NETWORK_ACCESS_HATCH.get())
                                     .maxCount(1)))
             .where('Y', StructurePredicate.blocks(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()))
-            .where('I', StructurePredicate.blocks(ModBlocks.QUARTZ_PARTS.inputBus().get()))
-            .where('O', StructurePredicate.blocks(ModBlocks.QUARTZ_PARTS.outputBus().get()))
+            .where(
+                    'I',
+                    StructurePredicate.blocks(ModBlocks.QUARTZ_PARTS.inputBus().get()))
+            .where(
+                    'O',
+                    StructurePredicate.blocks(ModBlocks.QUARTZ_PARTS.outputBus().get()))
             .where('A', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_CASING.get()))
             .where('G', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get()))
             .where('D', StructurePredicate.blocks(ModBlocks.CRYSTAL_ASSEMBLY_LINE_GRATING.get()))

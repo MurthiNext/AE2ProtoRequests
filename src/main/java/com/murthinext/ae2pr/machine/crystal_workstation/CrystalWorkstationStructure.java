@@ -24,12 +24,14 @@ public final class CrystalWorkstationStructure extends AbstractStructureFacade {
             .slice("AAAAAAAAA", "C#######C", "C###G###C", "C#######C", "AAAAAAAAA")
             .slice("AAAAAAAAA", "CDDDDDDDC", "CDDDDDDDC", "CDDDDDDDC", "AAAAAAAAA")
             .slice("AAAAAAAAA", "B#######B", "B#######B", "B#######B", "AAAAAAAAA")
-            .where('K', StructurePredicate.blocks(ModMachines.CRYSTAL_WORKSTATION.block()))
+            .where(
+                    'K',
+                    StructurePredicate.blocks(ModMachines.crystalWorkstation().block()))
             .where('A', StructurePredicate.casingWithParts(ModBlocks.CRYSTAL_ENERGY_CASING.get()))
             .where('B', StructurePredicate.blocks(ModBlocks.CRYSTAL_REINFORCED_COMPOSITE_MACHINE_CASING.get()))
             .where('C', StructurePredicate.blocks(ModBlocks.CRYSTAL_ENERGY_INJECTION_CASING.get()))
             .where('D', StructurePredicate.blocks(ModBlocks.CRYSTAL_GLASS.get()))
-            .where('G', StructurePredicate.blocks(ModMachines.CRYSTAL_REACTOR.block()))
+            .where('G', StructurePredicate.blocks(ModMachines.crystalReactor().block()))
             .where('#', StructurePredicate.any())
             .build();
 

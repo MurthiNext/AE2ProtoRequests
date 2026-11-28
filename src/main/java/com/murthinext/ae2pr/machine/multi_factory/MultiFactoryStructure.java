@@ -18,7 +18,7 @@ public final class MultiFactoryStructure extends AbstractStructureFacade {
             .slice("###", "#K#", "###")
             .slice("###", "#G#", "###")
             .slice("###", "###", "###")
-            .where('K', StructurePredicate.blocks(ModMachines.MULTI_FACTORY.block()))
+            .where('K', StructurePredicate.blocks(ModMachines.multiFactory().block()))
             .where('#', StructurePredicate.casingWithParts(ModBlocks.CRYSTAL_ENERGY_CASING.get()))
             .where('G', StructurePredicate.blocks(ModBlocks.MOLECULAR_ASSEMBLY_CORE.get()))
             .build();

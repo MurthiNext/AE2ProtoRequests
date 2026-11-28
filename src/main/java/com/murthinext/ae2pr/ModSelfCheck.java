@@ -18,10 +18,9 @@ public final class ModSelfCheck {
             return;
         }
         List<String> missing = new ArrayList<>();
-        List<MachineDefinition<?>> machines = ModMachines.ALL;
-        if (machines == null || machines.isEmpty()) {
-            missing.add("ModMachines.ALL");
-            machines = List.of();
+        List<MachineDefinition<?>> machines = ModMachines.all();
+        if (machines.isEmpty()) {
+            missing.add("ModMachines.all()");
         }
         for (var machine : machines) {
             if (!machine.blockHolder().isPresent()) {

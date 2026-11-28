@@ -19,7 +19,7 @@ public final class FilterPressStructure extends AbstractStructureFacade {
             .sliceRepeatable(5, 32, "SSSSS", "ASASA", "AAPAA", "AAPAA")
             .slice("SSSSS", "SSLSS", "SLLLS", "SSSSS")
             .slice("#SSS#", "#SSS#", "#SSS#", "#SSS#")
-            .where('K', StructurePredicate.blocks(ModMachines.FILTER_PRESS.block()))
+            .where('K', StructurePredicate.blocks(ModMachines.filterPress().block()))
             .where('S', StructurePredicate.casingWithParts(ModBlocks.ZIRCONIUM_IRON_ALLOY_MACHINE_CASING.get()))
             .where('L', StructurePredicate.blocks(ModBlocks.LOGISTICS_CONTROL_CASING.get()))
             .where(

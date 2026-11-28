@@ -34,10 +34,10 @@ public class HighReactivityLavaSmelterMenu
 
     public HighReactivityLavaSmelterMenu(int id, Inventory playerInventory, FriendlyByteBuf buffer) {
         this(
-                ModMachines.HIGH_REACTIVITY_LAVA_SMELTER,
+                ModMachines.highReactivityLavaSmelter(),
                 id,
                 playerInventory,
-                readController(playerInventory.player, buffer, ModMachines.HIGH_REACTIVITY_LAVA_SMELTER));
+                readController(playerInventory.player, buffer, ModMachines.highReactivityLavaSmelter()));
     }
 
     @Override

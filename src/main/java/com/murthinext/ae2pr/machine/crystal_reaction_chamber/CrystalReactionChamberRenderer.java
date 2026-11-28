@@ -56,7 +56,10 @@ public class CrystalReactionChamberRenderer
                 .getPosition()
                 .subtract(Vec3.atCenterOf(quartz));
         renderArcs(pose.last(), buffers.getBuffer(RenderType.lightning()), view, time, quartz.asLong());
-        if (controller.getLevel().getBlockState(controller.getCorePos()).is(ModMachines.CRYSTAL_REACTOR.block())) {
+        if (controller
+                .getLevel()
+                .getBlockState(controller.getCorePos())
+                .is(ModMachines.crystalReactor().block())) {
             pose.translate(0, 2, 0);
             renderCore(pose, buffers.getBuffer(CORE));
         }
